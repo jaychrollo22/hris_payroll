@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\AttendanceController;
 use Illuminate\Http\Request;
+use App\Handbook;
 
 class HomeController extends Controller
 {
@@ -27,10 +28,12 @@ class HomeController extends Controller
         $attendance_controller = new AttendanceController;
         $sevendays = date('Y-m-d',strtotime("-5 days"));
         $date_ranges = $attendance_controller->dateRange($sevendays,date('Y-m-d',strtotime("-1 day")));
+        $handbook = Handbook::orderBy('id','desc')->first();
         return view('dashboards.home',
         array(
             'header' => '',
             'date_ranges' => $date_ranges,
+            'handbook' => $handbook,
         ));
     }
 
@@ -38,10 +41,11 @@ class HomeController extends Controller
     {
 
         
-
+        $handbook = Handbook::orderBy('id','desc')->first();
         return view('dashboards.dashboard_manager',
         array(
             'header' => 'dashboard-manager',
+            'handbook' => $handbook,
         ));
     }
 }

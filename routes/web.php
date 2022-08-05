@@ -56,6 +56,9 @@ Route::group( ['middleware' => 'auth'], function()
     //handbooks
     Route::get('handbooks','HandbookController@view');
     Route::post('new-handbook','HandbookController@newhandbook');
+
+    //Holidays
+    Route::get('holidays','HolidayController@view');
     
 
 

@@ -36,22 +36,8 @@
                             <div class="media">
                                 <i class="ti-book icon-md text-info d-flex align-self-center mr-3"></i>
                                 <div class="media-body">
-                                  <p class="card-text">Handbook updated {{date('m.d.y')}}</p>
-                                  <button type="button" class="btn btn-outline-primary btn-fw btn-sm">View Handbook</button>
-                                </div>
-                              </div>
-                          </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 mb-4  stretch-card transparent">
-                        <div class="card">
-                          <div class="card-body">
-                            <h3 class="card-title">NO IN / OUT</h3>
-                            <div class="media">
-                                <i class="ti-user icon-md text-info d-flex align-self-center mr-3"></i>
-                                <div class="media-body">
-                                  <p class="card-text"><span class='badge badge-warning'>2</span> as {{date('F d,Y')}}</p>
-                                  <button type="button" class="btn btn-outline-primary btn-fw btn-sm">View </button>
+                                  <p class="card-text">Handbook updated {{date('m.d.y',strtotime($handbook->created_at))}}</p>
+                                  <a href="{{url($handbook->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-primary btn-fw btn-sm">View Handbook</button></a>
                                 </div>
                               </div>
                           </div>
@@ -75,24 +61,6 @@
                     <div class="card-body">
                       <p class="mb-4">Absent this Month</p>
                       <p class="fs-30 mb-2">2</p>
-                      <p>as of {{date('F Y')}}</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 mb-4 stretch-card transparent">
-                  <div class="card card-light-blue">
-                    <div class="card-body">
-                      <p class="mb-4">Active accountabilities</p>
-                      <p class="fs-30 mb-2">1</p>
-                      {{-- <p>2.00% (30 days)</p> --}}
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 mb-4 stretch-card transparent">
-                  <div class="card card-light-danger">
-                    <div class="card-body">
-                      <p class="mb-4">Approved Overtime this month</p>
-                      <p class="fs-30 mb-2">10 hrs</p>
                       <p>as of {{date('F Y')}}</p>
                     </div>
                   </div>

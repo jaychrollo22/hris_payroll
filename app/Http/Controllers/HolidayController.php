@@ -7,4 +7,8 @@ use Illuminate\Http\Request;
 class HolidayController extends Controller
 {
     //
+    public function view()
+    {
+        
+    }
 }

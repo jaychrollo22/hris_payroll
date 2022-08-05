@@ -10,16 +10,16 @@ class HandbookController extends Controller
     //
     public function view()
     {
+        $handbooks = Handbook::with('userinfo')->orderBy('created_at','desc')->get();
         return view('handbooks.handbooks',
         array(
             'header' => 'Handbooks',
+            'handbooks' => $handbooks,
         ));
     }
 
     public function newhandbook(Request $request)
     {
-        // dd($request->all());
-
         $handbook = new Handbook;
         $handbook->remarks = $request->reason;
         $handbook->created_by = auth()->user()->id;
@@ -35,6 +35,5 @@ class HandbookController extends Controller
 
         Alert::success('Successfully save.')->persistent('Dismiss');  
         return back();
-        
     }
 }

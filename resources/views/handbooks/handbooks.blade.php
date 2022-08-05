@@ -24,7 +24,14 @@
                       </tr>
                     </thead>
                     <tbody>
-                      
+                      @foreach($handbooks as $handbook)
+                      <tr>
+                        <td>{{date('F d, Y',strtotime($handbook->created_at))}}</td>
+                        <td><a href="{{url($handbook->attachment)}}" target='_blank'>Attachment</a></td> 
+                        <td>{{$handbook->userinfo->name}}</td>
+                        <td>{{$handbook->remarks}}</td>
+                      </tr>
+                      @endforeach
                     </tbody>
                   </table>
                 </div>
