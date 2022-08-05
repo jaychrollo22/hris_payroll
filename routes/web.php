@@ -48,6 +48,14 @@ Route::group( ['middleware' => 'auth'], function()
 
     //DTR Correction
     Route::get('dtr-correction','DailytimerecordController@dtr');
+
+
+    //employees
+    Route::get('employees','EmployeeController@view');
+
+    //handbooks
+    Route::get('handbooks','HandbookController@view');
+    Route::post('new-handbook','HandbookController@newhandbook');
     
 
 

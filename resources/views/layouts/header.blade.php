@@ -166,15 +166,15 @@
                 <hr>
                 <h5>Admin</h5>
               </li>
-              <li class="nav-item">
+              <li class="nav-item @if($header == 'employees') active @endif ">
                 <a class="nav-link" href="{{url('/employees')}}" onclick='show()'>
                   <i class="icon-head menu-icon"></i>
                   <span class="menu-title">Employees</span>
                 </a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item @if($header == 'Handbooks') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="false" aria-controls="ui-basic">
-                  <i class="icon-settings menu-icon"></i>
+                  <i class="icon-anchor menu-icon"></i>
                   <span class="menu-title">Settings</span>
                   <i class="menu-arrow"></i>
                 </a>
@@ -248,5 +248,6 @@
             document.getElementById('logout-form').submit();
         }
     </script>
+     @include('sweetalert::alert')
 </body>
 </html>

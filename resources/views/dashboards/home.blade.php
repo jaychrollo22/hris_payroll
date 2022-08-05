@@ -104,31 +104,31 @@
             <div class="col-md-4 stretch-card ">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-title mb-0">Attendance ( 1 Week )</p>
+                  <p class="card-title mb-0">Attendances</p>
                   <div class="table-responsive">
-                    <table class="table table-borderless">
+                    <table class="table table-hover table-bordered">
                       <thead>
                         <tr>
-                          <th class="pl-0  pb-2 border-bottom">Date</th>
-                          <th class="border-bottom pb-2">In</th>
-                          <th class="border-bottom pb-2">Out</th>
-                          <th class="border-bottom pb-2">Remarks</th>
+                          <th>Date</th>
+                          <th>In</th>
+                          <th>Out</th>
                         </tr>
                       </thead>
                       <tbody>
+                        @foreach(array_reverse($date_ranges) as $date_range)
                         <tr>
-                          <td class="pl-0">{{date('F d, Y',strtotime('-1 day',strtotime (date('Y-m-d'))))}}</td>
-                          <td></td>
-                          <td ></td>
+                          <td class=" @if((date('l',strtotime($date_range)) == "Saturday") || (date('l',strtotime($date_range)) == "Sunday")) bg-danger text-white @endif">{{date('M d - l',strtotime($date_range))}}</td>
+                          <td></td> 
                           <td ></td>
                         </tr>
+                        @endforeach
                       </tbody>
                     </table>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-4 stretch-card ">
+            <div class="col-md-4 ">
                     <div class="card">
                         <div class="card-body">
                         <p class="card-title">Available Leave Credits</p>
@@ -155,7 +155,7 @@
                         </div>
                     </div>
             </div>
-            <div class="col-md-4 stretch-card ">
+            <div class="col-md-4  ">
               <div class="card">
                 <div class="card-body">
                   <p class="card-title">Birthday Celebrants </p>
