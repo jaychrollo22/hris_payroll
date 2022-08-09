@@ -59,6 +59,8 @@ Route::group( ['middleware' => 'auth'], function()
 
     //Holidays
     Route::get('holidays','HolidayController@view');
+    Route::post('new-holiday','HolidayController@new');
+    Route::get('delete-holiday/{id}','HolidayController@delete_holiday');
     
 
 

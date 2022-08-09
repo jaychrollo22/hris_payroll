@@ -216,38 +216,50 @@
       </div>
       <!-- container-scroller -->
 
-
+        @include('sweetalert::alert')
         <!-- plugins:js -->
         <script src="{{asset('body_css/vendors/js/vendor.bundle.base.js')}}"></script>
         <!-- endinject -->
         <!-- Plugin js for this page -->
         <script src="{{asset('body_css/vendors/chart.js/Chart.min.js')}}"></script>
-        <script src="{{asset('body_css/vendors/datatables.net/jquery.dataTables.js')}}"></script>
-        <script src="{{asset('body_css/vendors/datatables.net-bs4/dataTables.bootstrap4.js')}}"></script>
-        <script src="{{asset('body_css/js/dataTables.select.min.js')}}"></script>
+    
         <script src="{{asset('body_css/vendors/select2/select2.min.js')}}"></script>
         <!-- End plugin js for this page -->
         <!-- inject:js -->
+      
+        <!-- endinject -->
+        <!-- Custom js for this page-->
+        <script src="{{asset('body_css/js/dashboard.js')}}"></script>
+        <script src="{{asset('body_css/js/select2.js')}}"></script>
+
+
+        <script src="{{asset('body_css/vendors/datatables.net/jquery.dataTables.js')}}"></script>
+        <script src="{{asset('body_css/vendors/datatables.net-bs4/dataTables.bootstrap4.js')}}"></script>
+        <script src="{{asset('body_css/js/dataTables.select.min.js')}}"></script>
+
         <script src="{{asset('body_css/js/off-canvas.js')}}"></script>
         <script src="{{asset('body_css/js/hoverable-collapse.js')}}"></script>
         <script src="{{asset('body_css/js/template.js')}}"></script>
         <script src="{{asset('body_css/js/settings.js')}}"></script>
         <script src="{{asset('body_css/js/todolist.js')}}"></script>
-        <!-- endinject -->
-        <!-- Custom js for this page-->
-        <script src="{{asset('body_css/js/dashboard.js')}}"></script>
-        <script src="{{asset('body_css/js/select2.js')}}"></script>
-    <script type='text/javascript'>
-        function show() {
-            document.getElementById("loader").style.display="block";
-        }
+        <script type='text/javascript'>
+            function show() {
+                document.getElementById("loader").style.display="block";
+            }
 
-        function logout()
-        {
-            event.preventDefault();
-            document.getElementById('logout-form').submit();
-        }
-    </script>
+            function logout()
+            {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+            $( document ).ready(function() {
+
+              $(document).ready(function() {
+              $('.tablewithSearch').DataTable();
+              });
+            }); 
+        </script>
+        
      @include('sweetalert::alert')
 </body>
 </html>
