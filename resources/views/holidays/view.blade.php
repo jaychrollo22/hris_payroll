@@ -37,9 +37,9 @@
                                 @if($holiday->status == "Permanent") 
                                     {{$holiday->status}}
                                 @else
-                                <button type="button" class="btn btn-info btn-rounded btn-icon" href="#edit_holiday{{$holiday->id}}" data-toggle="modal" title='EDIT'>
-                                    <i class="ti-pencil-alt"></i>
-                                  </button>
+                                    <button type="button" class="btn btn-info btn-rounded btn-icon" href="#edit_holiday{{$holiday->id}}" data-toggle="modal" title='EDIT'>
+                                        <i class="ti-pencil-alt"></i>
+                                    </button>
                                     <a href="delete-holiday/{{$holiday->id}}">
                                         <button  title='DELETE' onclick="return confirm('Are you sure you want to delete this holiday?')" class="btn btn-rounded btn-danger btn-icon">
                                             <i class="ti-trash"></i>
@@ -48,6 +48,7 @@
                                 @endif
                             </td>
                         </tr>
+                        @include('holidays.edit_holiday')
                         @endforeach
                     </tbody>
                   </table>

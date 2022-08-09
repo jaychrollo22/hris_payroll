@@ -16,4 +16,13 @@ class LeaveController extends Controller
             'leave_types' => $leave_types,
         ));
     }
+    public function leaveDetails ()
+    {
+        $leave_types = Leave::get();
+        return view('leaves.leave_types',
+        array(
+            'header' => 'Handbooks',
+            'leave_types' => $leave_types,
+        ));
+    }
 }

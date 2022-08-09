@@ -36,7 +36,7 @@ class HolidayController extends Controller
         $new_holiday->holiday_date = $request->date;
         $new_holiday->save();
 
-        Alert::success('', 'New Holiday Store');
+        Alert::success('Successfully Store')->persistent('Dismiss');
         return back();
     }
     
@@ -44,6 +44,17 @@ class HolidayController extends Controller
     {
         $holiday = Holiday::find($id)->delete();
         Alert::success('Successfully Deleted')->persistent('Dismiss');
+        return back();
+    }
+    public function edit_holiday(Request $request,$id)
+    {
+        $new_holiday = Holiday::findOrfail($id);
+        $new_holiday->holiday_name = $request->holiday_name;
+        $new_holiday->holiday_type = $request->holiday_type;
+        $new_holiday->holiday_date = $request->holiday_date;
+        $new_holiday->save();
+
+        Alert::success('Successfully updated')->persistent('Dismiss');
         return back();
     }
     
