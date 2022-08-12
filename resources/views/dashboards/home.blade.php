@@ -22,7 +22,7 @@
                             <div class="media">
                                 <i class="ti-time icon-md text-info d-flex align-self-center mr-3"></i>
                                 <div class="media-body">
-                                  <p class="card-text">Time In : @if($attendance_now->time_in){{date('h:i A',strtotime($attendance_now->time_in))}} <br> Estimated Out : {{date('h:i A', strtotime($attendance_now->time_in . " +10 hours +30 minutes"))}} @else NO IN @endif</p>
+                                  <p class="card-text">Time In : @if($attendance_now != null){{date('h:i A',strtotime($attendance_now->time_in))}} <br> Estimated Out : {{date('h:i A', strtotime($attendance_now->time_in . " +10 hours +30 minutes"))}} @else NO Time In @endif</p>
                                   <span id="span"></span> <button type="button" class="btn btn-outline-danger btn-fw btn-sm">Time Out</button>
                                 </div>
                               </div>
@@ -45,28 +45,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 transparent">
-              <div class="row">
-                <div class="col-md-3 mb-4 stretch-card transparent">
-                  <div class="card card-tale">
-                    <div class="card-body">
-                      <p class="mb-4">Late this month</p>
-                      <p class="fs-30 mb-2">30 min/s</p>
-                      <p>as of {{date('F Y')}}</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-3 mb-4 stretch-card transparent">
-                  <div class="card card-dark-blue">
-                    <div class="card-body">
-                      <p class="mb-4">Absent this Month</p>
-                      <p class="fs-30 mb-2">2</p>
-                      <p>as of {{date('F Y')}}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>     
           <div class="row">
             <div class="col-md-4 stretch-card ">
@@ -86,8 +64,11 @@
                         @foreach(array_reverse($date_ranges) as $date_range)
                         <tr>
                           <td class=" @if((date('l',strtotime($date_range)) == "Saturday") || (date('l',strtotime($date_range)) == "Sunday")) bg-danger text-white @endif">{{date('M d - l',strtotime($date_range))}}</td>
-                          <td></td> 
-                          <td ></td>
+                            @php
+                              $time_in = $attendances->whereBetween('time_in',[$date_range." 00:00:00", $date_range." 23:59:59"])->first();
+                            @endphp
+                          <td>@if($time_in != null){{date('h:i A',strtotime($time_in->time_in))}}@endif</td>
+                          <td>@if($time_in != null){{date('h:i A',strtotime($time_in->time_out))}}@endif</td>
                         </tr>
                         @endforeach
                       </tbody>

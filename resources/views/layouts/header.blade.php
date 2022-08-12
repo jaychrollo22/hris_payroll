@@ -27,23 +27,155 @@
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="{{asset('body_css/css/vertical-layout-light/style.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
 <!-- endinject -->
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
     <style>
-        .loader {
-            position: fixed;
-            left: 0px;
-            top: 0px;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background: url("{{ asset('login_css/images/loader.gif')}}") 50% 50% no-repeat white ;
-            opacity: .8;
-            background-size:120px 120px;
-        }
+      .loader {
+          position: fixed;
+          left: 0px;
+          top: 0px;
+          width: 100%;
+          height: 100%;
+          z-index: 9999;
+          background: url("{{ asset('login_css/images/loader.gif')}}") 50% 50% no-repeat white ;
+          opacity: .8;
+          background-size:120px 120px;
+      }
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+    display: none;
+}
+
+#msform fieldset .form-card {
+    text-align: left;
+    color: #9E9E9E;
+}
+
+
+
+#msform .action-button:hover, #msform .action-button:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px skyblue;
+}
+
+
+#msform .action-button-previous:hover, #msform .action-button-previous:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #616161;
+}
+
+/*Dropdown List Exp Date*/
+select.list-dt {
+    border: none;
+    outline: 0;
+    border-bottom: 1px solid #ccc;
+    padding: 2px 5px 3px 5px;
+    margin: 2px;
+}
+
+select.list-dt:focus {
+    border-bottom: 2px solid skyblue;
+}
+
+/*The background card*/
+.card {
+    z-index: 0;
+    border: none;
+    border-radius: 0.5rem;
+    position: relative;
+}
+
+/*FieldSet headings*/
+.fs-title {
+    font-size: 25px;
+    color: #2C3E50;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: left;
+}
+
+/*progressbar*/
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: lightgrey;
+}
+
+#progressbar .active {
+    color: #000000;
+}
+
+#progressbar li {
+    list-style-type: none;
+    font-size: 12px;
+    width: 25%;
+    float: left;
+    position: relative;
+}
+
+/*Icons in the ProgressBar*/
+#progressbar #account:before {
+    font-family: FontAwesome;
+    content: "\f007";
+}
+
+#progressbar #personal:before {
+    font-family: FontAwesome;
+    content: "\f007";
+}
+
+#progressbar #payment:before {
+    font-family: FontAwesome;
+    content: "\f09d";
+}
+
+#progressbar #confirm:before {
+    font-family: FontAwesome;
+    content: "\f090";
+}
+
+.user:before {
+    font-family: FontAwesome;
+    content:"\f02d";
+}
+.employment:before {
+    font-family: FontAwesome;
+    content:"\f0f0";
+}
+
+/*ProgressBar before any progress*/
+#progressbar li:before {
+    width: 50px;
+    height: 50px;
+    line-height: 45px;
+    display: block;
+    font-size: 18px;
+    color: #ffffff;
+    background: lightgray;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    padding: 2px;
+}
+
+/*ProgressBar connectors*/
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: lightgray;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    z-index: -1;
+}
+
+/*Color number of the step and the connector before it*/
+#progressbar li.active:before, #progressbar li.active:after {
+    background: skyblue;
+}
+
     </style>
 </head>
 <body>
@@ -259,7 +391,79 @@
               });
             }); 
         </script>
+        </div>
+<script>
+
+$(document).ready(function(){
+    
+    var current_fs, next_fs, previous_fs; //fieldsets
+    var opacity;
+    
+    $(".next").click(function(){
         
+        current_fs = $(this).parent();
+        next_fs = $(this).parent().next();
+        //Add Class Active
+        $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+        
+        //show the next fieldset
+        next_fs.show(); 
+        //hide the current fieldset with style
+        current_fs.animate({opacity: 0}, {
+            step: function(now) {
+                // for making fielset appear animation
+                opacity = 1 - now;
+    
+                current_fs.css({
+                    'display': 'none',
+                    'position': 'relative'
+                });
+                next_fs.css({'opacity': opacity});
+            }, 
+            duration: 600
+        });
+    });
+    
+    $(".previous").click(function(){
+        
+        current_fs = $(this).parent();
+        previous_fs = $(this).parent().prev();
+        
+        //Remove class active
+        $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+        
+        //show the previous fieldset
+        previous_fs.show();
+    
+        //hide the current fieldset with style
+        current_fs.animate({opacity: 0}, {
+            step: function(now) {
+                // for making fielset appear animation
+                opacity = 1 - now;
+    
+                current_fs.css({
+                    'display': 'none',
+                    'position': 'relative'
+                });
+                previous_fs.css({'opacity': opacity});
+            }, 
+            duration: 600
+        });
+    });
+    
+    $('.radio-group .radio').click(function(){
+        $(this).parent().find('.radio').removeClass('selected');
+        $(this).addClass('selected');
+    });
+    
+    $(".submit").click(function(){
+        return false;
+    })
+        
+    });
+
+    
+</script>
      @include('sweetalert::alert')
 </body>
 </html>
