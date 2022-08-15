@@ -22,8 +22,9 @@
                             <div class="media">
                                 <i class="ti-time icon-md text-info d-flex align-self-center mr-3"></i>
                                 <div class="media-body">
-                                  <p class="card-text">Time In : @if($attendance_now != null){{date('h:i A',strtotime($attendance_now->time_in))}} <br> Estimated Out : {{date('h:i A', strtotime($attendance_now->time_in . " +10 hours +30 minutes"))}} @else NO Time In @endif</p>
-                                  <span id="span"></span> <button type="button" class="btn btn-outline-danger btn-fw btn-sm">Time Out</button>
+                                  <p class="card-text">Time In : @if($attendance_now != null){{date('h:i A',strtotime($attendance_now->time_in))}} <br> Estimated Out : {{date('h:i A', strtotime($attendance_now->time_in . " +10 hours +30 minutes"))}} @else NO TIME IN @endif</p>
+                                  <span id="span"></span>
+                                   {{-- <button type="button" class="btn btn-outline-danger btn-fw btn-sm">Time Out</button> --}}
                                 </div>
                               </div>
                           </div>
@@ -51,6 +52,13 @@
               <div class="card">
                 <div class="card-body">
                   <p class="card-title mb-0">Attendances</p>
+                  <div class="col-md-12 ">
+                    <small>
+                        <div class='redbox1 align-self-center'></div><i class='pl-1 pr-1'>Rest Day</i> 
+                        <div class='orangebox1 '></div><i class='pl-1 pr-1'>No In / No Out</i>
+                    </small>
+      
+                  </div>
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead>
@@ -66,9 +74,47 @@
                           <td class=" @if((date('l',strtotime($date_range)) == "Saturday") || (date('l',strtotime($date_range)) == "Sunday")) bg-danger text-white @endif">{{date('M d - l',strtotime($date_range))}}</td>
                             @php
                               $time_in = $attendances->whereBetween('time_in',[$date_range." 00:00:00", $date_range." 23:59:59"])->first();
+                              $time_out = null;
+                              if($time_in == null)
+                              {
+                                $time_out = $attendances->whereBetween('time_out',[$date_range." 00:00:00", $date_range." 23:59:59"])->where('time_in',null)->first();
+                              }
                             @endphp
-                          <td>@if($time_in != null){{date('h:i A',strtotime($time_in->time_in))}}@endif</td>
-                          <td>@if($time_in != null){{date('h:i A',strtotime($time_in->time_out))}}@endif</td>
+
+                          
+                          @if($time_in != null)
+                            <td>
+                              {{date('h:i A',strtotime($time_in->time_in))}}
+                            </td>
+                            @if($time_in->time_out != null)
+                              <td>
+                                {{date('h:i A',strtotime($time_in->time_out))}} 
+                              </td>
+                            @else
+                              <td class='bg-warning'>
+                              </td>
+                            @endif
+                          @else
+                          
+                            @if((date('l',strtotime($date_range)) == "Saturday") || (date('l',strtotime($date_range)) == "Sunday")) 
+                            <td></td>
+                            <td></td>
+                            @else
+                            <td class='bg-warning'>
+                            </td>
+                            @if($time_out == null)
+                              <td class='bg-warning'>
+                              </td>
+                            @else
+                              <td >
+                                {{date('h:i A',strtotime($time_out->time_out))}} 
+                              </td>
+                            @endif
+
+                           
+                            @endif
+                          @endif
+
                         </tr>
                         @endforeach
                       </tbody>
@@ -76,33 +122,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 ">
-                    <div class="card">
-                        <div class="card-body">
-                        <p class="card-title">Available Leave Credits</p>
-                            <div class="charts-data">
-                                <div class="mt-3">
-                                <p class="mb-0">Sick Leave</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="progress progress-md flex-grow-1 mr-4">
-                                    <div class="progress-bar bg-inf0" role="progressbar" style="width:40%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <p class="mb-0">2</p>
-                                </div>
-                                </div>
-                                <div class="mt-3">
-                                <p class="mb-0">Vacation Leave</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="progress progress-md flex-grow-1 mr-4">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 40%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <p class="mb-0">2</p>
-                                </div>
-                                </div>
-                            </div>  
-                        </div>
-                    </div>
             </div>
             <div class="col-md-4  ">
               <div class="card">

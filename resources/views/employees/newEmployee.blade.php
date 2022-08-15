@@ -161,6 +161,10 @@
                                 Hired Date
                                 <input type="date" name="biometric_code" class='form-control form-control-sm' placeholder="Start Date"/>
                               </div>
+                              <div class='col-md-4'>
+                                Work Email
+                                <input type="email" name="work_email" class='form-control form-control-sm' placeholder="Work Email"/>
+                              </div>
                             </div>
                             <hr>
                             <div class='row mb-2'>

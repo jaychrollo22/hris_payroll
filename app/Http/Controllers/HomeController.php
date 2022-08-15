@@ -26,7 +26,7 @@ class HomeController extends Controller
     {
 
         $attendance_controller = new AttendanceController;
-        $sevendays = date('Y-m-d',strtotime("-5 days"));
+        $sevendays = date('Y-m-d',strtotime("-7 days"));
         $attendance_now = $attendance_controller->get_attendances(date('Y-m-d'),date('Y-m-d'))->first();
         $attendances = $attendance_controller->get_attendances($sevendays,date('Y-m-d',strtotime("-1 day")));
         $date_ranges = $attendance_controller->dateRange($sevendays,date('Y-m-d',strtotime("-1 day")));

@@ -67,6 +67,9 @@ Route::group( ['middleware' => 'auth'], function()
 
 
     Route::get('leavee-employees','LeaveController@leaveDetails');
+
+    //Schedules
+    Route::get('schedules','ScheduleController@schedules');
     
 
 

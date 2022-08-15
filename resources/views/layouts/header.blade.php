@@ -45,6 +45,40 @@
           opacity: .8;
           background-size:120px 120px;
       }
+
+      .redbox1
+        {
+            background-color: lightgrey;
+            width: 15px;
+            height: 15px;
+            border: 10px solid red;
+            display: inline-block;
+            
+        }
+        .orangebox
+        {
+            background-color: lightgrey;
+            width: 15px;
+            height: 15px;
+            border: 10px solid orange;
+            float:right;
+        }
+        .orangebox1
+        {
+            background-color: lightgrey;
+            width: 15px;
+            height: 15px;
+            border: 10px solid orange;
+            display: inline-block;
+        }
+        .green
+        {
+            background-color: lightgrey;
+            width: 15px;
+            height: 15px;
+            border: 10px solid green;
+            display: inline-block;
+        }
 /*Hide all except first fieldset*/
 #msform fieldset:not(:first-of-type) {
     display: none;
