@@ -99,14 +99,14 @@
                     <tbody>
                         @foreach($employees as $employee)
                           <tr>
-                            <td>Action</td>
+                            <td></td>
                             <td>
                               <small><img class="rounded-circle" style='width:34px;height:34px;' src='{{URL::asset($employee->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
                               {{$employee->first_name}} {{$employee->last_name}}
                             </td> 
-                            <td>Department</td>
-                            <td>Classification</td>
-                            <td>Approver</td>
+                            <td>@if($employee->department){{$employee->department->name}}@endif</td>
+                            <td>{{$employee->classification}}</td>
+                            <td>Immediate Supervisor</td>
                             <td>Subbordinates</td>
                             <td>Status </td>
                           </tr>

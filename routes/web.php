@@ -13,7 +13,10 @@
 Auth::routes();
 Route::group( ['middleware' => 'auth'], function()
 {
-
+    //Users
+    Route::get('account-setting','UserController@accountSetting');
+    Route::post('upload-avatar','UserController@uploadAvatar');
+    Route::post('upload-signature','UserController@uploadSignature');
 
     //employees
     Route::get('/dashboard', 'HomeController@index')->name('home');
@@ -70,6 +73,7 @@ Route::group( ['middleware' => 'auth'], function()
 
     //Schedules
     Route::get('schedules','ScheduleController@schedules');
+    Route::post('new-schedule','ScheduleController@newSchedule');
     
 
 

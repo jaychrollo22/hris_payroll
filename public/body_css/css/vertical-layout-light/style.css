@@ -8910,6 +8910,9 @@ select {
 [role="button"] {
   cursor: pointer;
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 
 select {
   word-wrap: normal;

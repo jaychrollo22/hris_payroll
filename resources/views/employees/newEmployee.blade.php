@@ -45,7 +45,7 @@
                               <div class='row mb-2'>
                                 <div class='col-md-3'>
                                   Suffix
-                                  <input type="text" name="suffic" class='form-control form-control-sm' placeholder="Suffix"/>
+                                  <input type="text" name="suffix" class='form-control form-control-sm' placeholder="Suffix"/>
                                 </div>
                                 <div class='col-md-3'>
                                   Nickname
@@ -118,11 +118,15 @@
                             <h2 class="fs-title">Employment Information</h2>
                             <div class='row mb-2'>
                               <div class='col-md-4'>
+                                Position
+                                <input type="text" name="position" class='form-control form-control-sm' placeholder="POSITION"/>
+                              </div>
+                              <div class='col-md-4'>
                                 Department
                                 <select data-placeholder="Department" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='department' required>
                                     <option value="">--Select Department--</option>
                                     @foreach($departments as $department)
-                                      <option value="{{$department->id}}">{{$department->code}} - {{$department->name}}</option>
+                                      <option value="{{$department->name}}">{{$department->code}} - {{$department->name}}</option>
                                     @endforeach
                                 </select>
                               </div>
@@ -131,7 +135,7 @@
                                 <select data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='classification' required>
                                   <option value="">--Select Classification--</option>
                                   @foreach($classifications as $classification)
-                                    <option value="{{$classification->id}}">{{$classification->name}}</option>
+                                    <option value="{{$classification->name}}">{{$classification->name}}</option>
                                   @endforeach
                               </select>
                               </div>
@@ -140,7 +144,7 @@
                                 <select data-placeholder="Level" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='level' required>
                                   <option value="">--Select Level--</option>
                                   @foreach($levels as $level)
-                                    <option value="{{$level->id}}">{{$level->name}}</option>
+                                    <option value="{{$level->name}}">{{$level->name}}</option>
                                   @endforeach
                                 </select>
                               </div>
@@ -158,12 +162,21 @@
                                 <input type="text" name="biometric_code" class='form-control form-control-sm' placeholder="BIOMETRIC CODE"/>
                               </div>
                               <div class='col-md-4'>
-                                Hired Date
+                               Date Hired
                                 <input type="date" name="biometric_code" class='form-control form-control-sm' placeholder="Start Date"/>
                               </div>
                               <div class='col-md-4'>
                                 Work Email
                                 <input type="email" name="work_email" class='form-control form-control-sm' placeholder="Work Email"/>
+                              </div>
+                              <div class='col-md-4'>
+                                Schedule
+                                <select data-placeholder="Schedule Period" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='schedule' required>
+                                  <option value="">-- Schedule Period --</option>
+                                  @foreach($schedules as $schedule)
+                                    <option value="{{$schedule->id}}">{{$schedule->schedule_name}}</option>
+                                  @endforeach
+                                </select>
                               </div>
                             </div>
                             <hr>
@@ -305,7 +318,6 @@
                               </div>
                               <div class="col-lg-3 text-center">
                                 <img id='signature' src="{{URL::asset('/images/signature.png')}}" class="rounded-square circle-border m-b-md border" alt="profile" height='125px;' width='225px;'>
-                               
                               </div>
                               <div class="col-lg-3 align-self-center text-left">
                                 <label title="Upload signature file" for="inputSignature" class="btn btn-primary btn-sm ">

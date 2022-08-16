@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Classification;
 use App\Employee;
 use App\Department;
+use App\Schedule;
 use App\Level;
 use App\Bank;
 use App\User;
@@ -17,7 +18,8 @@ class EmployeeController extends Controller
     {
         $classifications = Classification::get();
 
-        $employees = Employee::get();
+        $employees = Employee::with('department')->get();
+        $schedules = Schedule::get();
         $banks = Bank::get();
         $users = User::get();
         $levels = Level::get();
@@ -33,6 +35,7 @@ class EmployeeController extends Controller
             'levels' => $levels,
             'users' => $users,
             'banks' => $banks,
+            'schedules' => $schedules,
         ));
     }
 }

@@ -247,7 +247,7 @@ select.list-dt:focus {
               
               <li class="nav-item nav-profile dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                  <img src="body_css/images/faces/face28.jpg"  alt="profile"/>
+                  <img class="rounded-circle" style='width:34px;height:34px;' src='{{URL::asset(auth()->user()->employee->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';">
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                   <a class="dropdown-item" href="{{url('account-setting')}}">
@@ -495,9 +495,11 @@ $(document).ready(function(){
     })
         
     });
+    
 
     
 </script>
-     @include('sweetalert::alert')
+
+@include('sweetalert::alert')
 </body>
 </html>
