@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\IclockTransation;
 use App\Attendance;
+use App\ScheduleData;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -25,6 +26,7 @@ class AttendanceController extends Controller
         $date_range =  $this->dateRange( $from_date, $to_date);
         $attendances =  $this->get_attendances($from_date,$to_date);
         }
+        $schedules = ScheduleData::where('schedule_id',auth()->user()->employee->schedule_id)->get();
         // dd($attendances);
         return view('attendances.view_attendance',
         array(
@@ -33,6 +35,7 @@ class AttendanceController extends Controller
             'to_date' => $to_date,
             'date_range' => $date_range,
             'attendances' => $attendances,
+            'schedules' => $schedules,
         ));
     }
     

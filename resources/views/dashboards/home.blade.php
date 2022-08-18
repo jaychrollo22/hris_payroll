@@ -71,7 +71,7 @@
                       <tbody>
                         @foreach(array_reverse($date_ranges) as $date_range)
                         <tr>
-                          <td class=" @if((date('l',strtotime($date_range)) == "Saturday") || (date('l',strtotime($date_range)) == "Sunday")) bg-danger text-white @endif">{{date('M d - l',strtotime($date_range))}}</td>
+                          <td class=" @if(in_array(date('l',strtotime($date_range)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('M d - l',strtotime($date_range))}}</td>
                             @php
                               $time_in = $attendances->whereBetween('time_in',[$date_range." 00:00:00", $date_range." 23:59:59"])->first();
                               $time_out = null;
@@ -123,22 +123,33 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4  ">
+            <div class="col-md-4">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-title">Birthday Celebrants </p>
+                  <p class="card-title">Birthday Celebrants ({{date('M Y')}})</p>
                   <ul class="icon-data-list">
+                    @foreach($birth_date_celebrants as $emp)
                     <li>
                       <div class="d-flex">
-                        <img src="body_css/images/faces/face1.jpg" alt="user">
+                        <img class="rounded-circle" style='width:40px;height:40px;' src='{{URL::asset($emp->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';">
                         <div>
-                          <p class="text-info mb-1">Renz Christian Cabato</p>
-                          <p class="mb-0">Department</p>
-                          <small>{{date('F d')}}</small>
+                          <p class="text-info mb-1">{{$emp->first_name}} {{$emp->last_name}}</p>
+                          <p class="mb-0">{{$emp->department->name}}</p>
+                          <small>{{date('F d',strtotime($emp->birth_date))}}</small>
                         </div>
                       </div>
                     </li>
-                   
+                    @endforeach
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Announcements</h4>
+                  <ul class="list-star">
+                    <li><a href=''>Announcement Title</a></li>
                   </ul>
                 </div>
               </div>

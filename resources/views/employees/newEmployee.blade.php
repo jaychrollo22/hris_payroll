@@ -236,7 +236,7 @@
                                       <select data-placeholder="Bank Name" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='bank_name' required>
                                         <option value="">-- Bank Name --</option>
                                         @foreach($banks as $bank)
-                                        <option value="{{$bank->bank_code}}">{{$bank->bank_name}}</option>
+                                        <option value="{{$bank->bank_name}}">{{$bank->bank_name}} - {{$bank->bank_code}}</option>
                                         @endforeach
                                       </select>
                                     </div>

@@ -489,10 +489,6 @@ $(document).ready(function(){
         $(this).parent().find('.radio').removeClass('selected');
         $(this).addClass('selected');
     });
-    
-    $(".submit").click(function(){
-        return false;
-    })
         
     });
     

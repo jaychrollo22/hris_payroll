@@ -11,4 +11,12 @@ class Employee extends Model
     {
         return $this->belongsTo(Department::class);
     }
+    public function payment_info()
+    {
+        return $this->hasOne(PaymentInformation::class);
+    }
+    public function ScheduleData()
+    {
+        return $this->hasMany(ScheduleData::class,'schedule_id','id');
+    }
 }

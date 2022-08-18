@@ -5,6 +5,7 @@ use App\User;
 use App\Employee;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -12,8 +13,7 @@ class UserController extends Controller
 
     public function accountSetting()
     {
-        $user = User::where('id',auth()->user()->id)->with('employee.department')->first();
-        
+        $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.ScheduleData')->first();
         return view('users.user_settings',
         array(
             'header' => 'user1',
@@ -54,6 +54,20 @@ class UserController extends Controller
             Alert::success('Successfully signature uploaded.')->persistent('Dismiss');
             return back();
             
+        }
+    }
+    public function get_salary(Request $request)
+    {
+        // return $request;
+        $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info')->first();
+        $data = Hash::check($request->password_salary, $user->password);
+        if($data == true)
+        {
+            return $user;
+        }
+        else
+        {
+            return $request;
         }
     }
 }

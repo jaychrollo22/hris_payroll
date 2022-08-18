@@ -20,17 +20,17 @@
                       @foreach($classifications as $class)
                       <tr>
                         <td>{{$class->name}}</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td>{{$employees->where('classification',$class->name)->where('gender','Male')->where('status','Active')->count()}}</td>
+                        <td>{{$employees->where('classification',$class->name)->where('gender','Female')->where('status','Active')->count()}}</td>
+                        <td>{{$employees->where('classification',$class->name)->where('status','Active')->count()}}</td>
                       </tr>
                       @endforeach
                      
                       <tr>
                         <td></td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td>{{$employees->where('gender','Male')->where('status','Active')->count()}}</td>
+                        <td>{{$employees->where('gender','Female')->where('status','Active')->count()}}</td>
+                        <td>{{$employees->where('status','Active')->count()}}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -71,7 +71,7 @@
                 
                   <div class="media-body">
                     <h4 class="mb-4">Active</h4>
-                    <h2 class="card-text">0</h2>
+                    <h2 class="card-text">{{$employees->where('status','Active')->count()}}</h2>
                   </div>
                 </div>
               </div>
@@ -108,7 +108,7 @@
                             <td>{{$employee->classification}}</td>
                             <td>Immediate Supervisor</td>
                             <td>Subbordinates</td>
-                            <td>Status </td>
+                            <td>{{$employee->status}} </td>
                           </tr>
                         @endforeach
                     </tbody>
