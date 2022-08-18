@@ -17,7 +17,7 @@ class Employee extends Model
     }
     public function ScheduleData()
     {
-        return $this->hasMany(ScheduleData::class,'schedule_id','id');
+        return $this->hasMany(ScheduleData::class,'schedule_id','schedule_id');
     }
     public function immediate_sup_data()
     {

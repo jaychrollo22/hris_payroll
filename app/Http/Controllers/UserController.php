@@ -27,7 +27,7 @@ class UserController extends Controller
 
     public function uploadAvatar(Request $request)
     {
-        $employee = Employee::where('id',auth()->user()->id)->first();
+        $employee = Employee::where('user_id',auth()->user()->id)->first();
         if($request->hasFile('file'))
         {
             $attachment = $request->file('file');
@@ -44,7 +44,7 @@ class UserController extends Controller
     }
     public function uploadSignature(Request $request)
     {
-        $employee = Employee::where('id',auth()->user()->id)->first();
+        $employee = Employee::where('user_id',auth()->user()->id)->first();
         if($request->hasFile('signature'))
         {
             $attachment = $request->file('signature');
