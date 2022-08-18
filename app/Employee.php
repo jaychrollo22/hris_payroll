@@ -19,4 +19,9 @@ class Employee extends Model
     {
         return $this->hasMany(ScheduleData::class,'schedule_id','id');
     }
+    public function immediate_sup_data()
+    {
+        return $this->belongsTo(User::class,'immediate_sup','id');
+    }
+  
 }

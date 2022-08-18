@@ -41,4 +41,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Employee::class,'id','user_id');
     }
+    public function approvers()
+    {
+        return $this->hasMany(EmployeeApprover::class,'user_id','id');
+    }
+    public function subbordinates()
+    {
+        return $this->hasMany(Employee::class,'immediate_sup','id');
+    }
 }

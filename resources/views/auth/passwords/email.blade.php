@@ -20,7 +20,17 @@
                 <input  class="form-control" id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Email Address" required autofocus>
               
               </div>
-             
+              @if($errors->any())
+                    <div class="form-group alert alert-danger alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        <strong>{{$errors->first()}}</strong>
+                    </div>
+                @endif
+                @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+              @endif
               <input type="submit" value="{{ __('Send Password Reset Link') }}" class="btn text-white btn-block btn-primary">
               <br>
               <div class="d-flex mb-5 align-items-center">

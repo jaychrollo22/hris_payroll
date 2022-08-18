@@ -13,13 +13,16 @@ class UserController extends Controller
 
     public function accountSetting()
     {
-        $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.ScheduleData')->first();
+        $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+
+       
+
         return view('users.user_settings',
         array(
             'header' => 'user1',
             'user' => $user,
         ));
-
+    
     }
 
     public function uploadAvatar(Request $request)

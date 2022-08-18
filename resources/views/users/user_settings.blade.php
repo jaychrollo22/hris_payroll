@@ -259,6 +259,7 @@
               </div>
             </div>
             <div class="col-lg-3 grid-margin">
+            @if($user->employee->immediate_sup)
               <div class="card">
                 <div class="card-body text-left">
                     <div class="template-demo">
@@ -269,10 +270,10 @@
                             <ul class="icon-data-list">
                                 <li class=''>
                                   <div class="d-flex  align-self-center">
-                                    <img src="body_css/images/faces/face1.jpg" alt="user">
+                                    <small><img class="rounded-circle" style='width:38px;height:38px;' src='{{$user->employee->immediate_sup_data->employee->avatar}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
                                     <div>
-                                      <p class="text-info mb-1">Renz Christian Cabato</p>
-                                      <p class="mb-0">Department</p>
+                                      <p class="text-info mb-1">{{$user->employee->immediate_sup_data->name}}</p>
+                                      <p class="mb-0">{{$user->employee->immediate_sup_data->employee->department->name}}</p>
                                       {{-- <small>August 16</small> --}}
                                     </div>
                                   </div>
@@ -282,6 +283,9 @@
                     </div>
                 </div>
               </div>
+              @endif
+
+              @if(!empty($user->approvers))
               <div class="card  mt-3">
                 <div class="card-body text-left">
                     <div class="template-demo">
@@ -290,23 +294,26 @@
                                 <strong><h4>HR Forms Approver</h4></strong>
                             </div>
                             <ul class="icon-data-list">
-                                <li class=''>
+                                @foreach($user->approvers as $approver)
+                                <li >
                                   <div class="d-flex  align-self-center">
-                                    <p class='align-self-center mr-3'>1</p>
-                                    <img src="body_css/images/faces/face1.jpg" alt="user">
+                                    <p class='align-self-center mr-3'>{{$approver->level}}</p>
+                                    <small><img class="rounded-circle" style='width:38px;height:38px;' src='{{$approver->approver_data->employee->avatar}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
                                     <div>
-                                      <p class="text-info mb-1">Renz Christian Cabato</p>
-                                      <p class="mb-0">Department</p>
+                                      <p class="text-info mb-1">{{$approver->approver_data->name}}</p>
+                                      <p class="mb-0">{{$approver->approver_data->employee->department->name}}</p>
                                       {{-- <small>August 16</small> --}}
                                     </div>
                                   </div>
                                 </li>
-                               
-                              </ul>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
                 </div>
               </div>
+              @endif
+              @if(!empty($user->subbordinates))
               <div class="card mt-3">
                 <div class="card-body text-left">
                     <div class="template-demo">
@@ -314,10 +321,25 @@
                             <div class='col-md-12 text-center'>
                                 <strong><h4>Subbordinate</h4></strong>
                             </div>
+                            <ul class="icon-data-list">
+                                @foreach($user->subbordinates as $subbordinate)
+                                <li >
+                                  <div class="d-flex  align-self-center">
+                                    <small><img class="rounded-circle" style='width:38px;height:38px;' src='{{$subbordinate->avatar}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
+                                    <div>
+                                      <p class="text-info mb-1">{{$subbordinate->first_name}} {{$subbordinate->last_name}}</p>
+                                      <p class="mb-0">{{$subbordinate->position}}</p>
+                                      {{-- <small>August 16</small> --}}
+                                    </div>
+                                  </div>
+                                </li>
+                                @endforeach
+                            </ul>
                         </div>
                     </div>
                 </div>
               </div>
+              @endif
             </div>
         </div>
     </div>

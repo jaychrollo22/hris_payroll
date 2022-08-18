@@ -15,7 +15,7 @@
                     <input type="password" id='password_salary' name="password_salary" class='form-control form-control-sm' placeholder="Password" required/>
                 </div>
             </div>
-            <div id='result' class='row'>
+            <div id='result' class='row '>
               
             </div>
           </div>
@@ -50,7 +50,7 @@
                 {
                   
                     element.classList.add("invisible");
-                    $('#result').append('<button type="button" class="btn btn-inverse-success btn-fw col-md-12">Success</button><div class="col-md-6">Monthly Rate : '+data.employee.payment_info.monthly_rate+'</div><div class="col-md-6">Daily Rate : '+data.employee.payment_info.daily_rate+'</div>');
+                    $('#result').append('<div class="col-md-6 border">Monthly Rate : '+Number(data.employee.payment_info.monthly_rate).toLocaleString('en')+'</div><div class="col-md-6 border">Daily Rate : '+Number(parseFloat(data.employee.payment_info.daily_rate).toLocaleString('en'))+'</div>');
                 }
                
             });
