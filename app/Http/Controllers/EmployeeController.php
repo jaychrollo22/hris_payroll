@@ -18,7 +18,7 @@ class EmployeeController extends Controller
     {
         $classifications = Classification::get();
 
-        $employees = Employee::with('department')->get();
+        $employees = Employee::with('department','payment_info','ScheduleData','immediate_sup_data','user_info')->get();
         $schedules = Schedule::get();
         $banks = Bank::get();
         $users = User::get();

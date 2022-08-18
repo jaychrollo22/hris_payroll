@@ -5,6 +5,7 @@ use App\Http\Controllers\AttendanceController;
 use Illuminate\Http\Request;
 use App\Handbook;
 use App\Employee;
+use App\Announcement;
 use App\ScheduleData;
 
 class HomeController extends Controller
@@ -33,12 +34,21 @@ class HomeController extends Controller
         $attendances = $attendance_controller->get_attendances($sevendays,date('Y-m-d',strtotime("-1 day")));
         $date_ranges = $attendance_controller->dateRange($sevendays,date('Y-m-d',strtotime("-1 day")));
         $handbook = Handbook::orderBy('id','desc')->first();
-        // dd(date('m'));
+        $employees_under = auth()->user()->subbordinates;
+        // dd(auth()->user()->employee);
+        $attendance_employees = $attendance_controller->get_attendances_employees(date('Y-m-d'),date('Y-m-d'),$employees_under->pluck('employee_number')->toArray());
+        // dd($attendance_employees);
+        $announcements = Announcement::with('user')->where('expired',null)
+        ->orWhere('expired',">=",date('Y-m-d'))->get();
+        
         $birth_date_celebrants = Employee::with('department')->where('status','Active')
         ->whereMonth('birth_date','=',date('m'))
+        ->orderBy('birth_date','asc')
         ->get();
-        // dd($birth_date_celebrants);
+
+
         $schedules = ScheduleData::where('schedule_id',auth()->user()->employee->schedule_id)->get();
+
         return view('dashboards.home',
         array(
             'header' => '',
@@ -48,6 +58,8 @@ class HomeController extends Controller
             'attendances' => $attendances,
             'birth_date_celebrants' => $birth_date_celebrants,
             'schedules' => $schedules,
+            'announcements' => $announcements ,
+            'attendance_employees' => $attendance_employees ,
         ));
     }
 

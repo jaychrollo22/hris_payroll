@@ -75,6 +75,12 @@ Route::group( ['middleware' => 'auth'], function()
     //Schedules
     Route::get('schedules','ScheduleController@schedules');
     Route::post('new-schedule','ScheduleController@newSchedule');
+
+
+    //Announcement
+    Route::get('announcements','AnnouncementController@view');
+    Route::post('new-announcement','AnnouncementController@new');
+    Route::get('delete-announcement/{id}','AnnouncementController@delete');
     
 
 

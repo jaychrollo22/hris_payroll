@@ -48,7 +48,7 @@
             </div>
           </div>     
           <div class="row">
-            <div class="col-md-4 stretch-card ">
+            <div class="col-md-4 ">
               <div class="card">
                 <div class="card-body">
                   <p class="card-title mb-0">Attendances</p>
@@ -122,14 +122,14 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card">
+
+              
+              <div class="card mt-3">
                 <div class="card-body">
                   <p class="card-title">Birthday Celebrants ({{date('M Y')}})</p>
                   <ul class="icon-data-list">
                     @foreach($birth_date_celebrants as $emp)
-                    <li>
+                    <li class='zoom'>
                       <div class="d-flex">
                         <img class="rounded-circle" style='width:40px;height:40px;' src='{{URL::asset($emp->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';">
                         <div>
@@ -144,17 +144,53 @@
                 </div>
               </div>
             </div>
+            <div class="col-md-4">
+             
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title">Subordinates ({{date('M d, Y')}})</p>
+                  
+                    <div class="table-responsive" >
+                      <table class="table table-hover table-bordered " >
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>In</th>
+                            <th>Out</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach(auth()->user()->subbordinates as $emp)
+                          <tr>
+                            <td>{{$emp->first_name}} {{$emp->last_name}} </td>
+                            @php
+                                // dd($attendance_employees);
+                                $time_in = $attendance_employees->where('employee_code',$emp->employee_number)->first();
+                            @endphp
+                            <td>@if($time_in){{date('h:i a',strtotime($time_in->time_in))}}@endif</td>
+                            <td>@if($time_in){{$time_in->time_out}}@endif</td>
+                          </tr>
+                          @endforeach
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+              </div>
+            </div>
             <div class="col-md-4 grid-margin">
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Announcements</h4>
                   <ul class="list-star">
-                    <li><a href=''>Announcement Title</a></li>
+                    @foreach($announcements as $announcement)
+                      <li><a href="{{url($announcement->attachment)}}" target='_blank'>{{$announcement->announcement_title}} </a> by {{$announcement->user->name}} </li>
+                    @endforeach
                   </ul>
                 </div>
               </div>
             </div>
           </div>
+          
         
          
     </div>

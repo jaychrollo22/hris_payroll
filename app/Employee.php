@@ -23,5 +23,9 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class,'immediate_sup','id');
     }
+    public function user_info()
+    {
+        return $this->belongsTo(User::class);
+    }
   
 }

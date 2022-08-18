@@ -27,7 +27,7 @@
                         <div class="template-demo">
                             <div class='row'>
                                 <div class='col-md-12 text-center'>
-                                    <strong><h3>Schedule</h3></strong>
+                                    <strong><h3><i class="fa fa-calendar" aria-hidden="true"></i> Schedule</h3></strong>
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>
@@ -73,7 +73,7 @@
                     <div class="template-demo">
                         <div class='row m-2'>
                             <div class='col-md-12 text-center'>
-                                <strong><h2>Personal Information</h2></strong>
+                                <strong><h2><i class="fa fa-user" aria-hidden="true"></i> Personal Information</h2></strong>
                             </div>
                         </div>
                         <div class='row m-2 border-bottom'>
@@ -144,7 +144,12 @@
                                 <small>Birth </small>
                             </div>
                             <div class='col-md-9'>
-                                <small> Date :  {{date('F d, Y',strtotime(auth()->user()->employee->birth_date))}} </small><br>
+                                @php
+                                    $d1 = new DateTime(auth()->user()->employee->birth_date);
+                                    $d2 = new DateTime();
+                                    $diff = $d2->diff($d1);
+                                @endphp
+                                <small> Date :  {{date('F d, Y',strtotime(auth()->user()->employee->birth_date))}} : {{$diff->y}} Years Old</small><br>
                                 <small> Place :  {{auth()->user()->employee->birth_place}} </small>
                             </div>
                         </div>
@@ -156,7 +161,7 @@
                     <div class="template-demo">
                         <div class='row m-2'>
                             <div class='col-md-12 text-center'>
-                                <strong><h3>Employment Information</h3></strong>
+                                <strong><h3><i class="fa fa-user-plus" aria-hidden="true"></i> Employment Information</h3></strong>
                             </div>
                         </div>
                         <div class='row  m-2 border-bottom'>
@@ -206,6 +211,34 @@
                                 {{$date_diff->format('%y Year %m months %d days')}}
                             </div>
                         </div>
+                        <div class='row  m-2 border-bottom'>
+                            <div class='col-md-3'>
+                                <small>SSS</small>
+                            </div>
+                            <div class='col-md-3'>
+                                <small>{{auth()->user()->employee->sss_number}}</small>
+                            </div>
+                            <div class='col-md-3'>
+                                <small>HDMF</small>
+                            </div>
+                            <div class='col-md-3'>
+                                <small>{{auth()->user()->employee->hdmf_number}}</small>
+                            </div>
+                        </div>
+                        <div class='row  m-2 border-bottom'>
+                            <div class='col-md-3'>
+                                <small>PHILHEALTH</small>
+                            </div>
+                            <div class='col-md-3'>
+                                <small>{{auth()->user()->employee->phil_number}}</small>
+                            </div>
+                            <div class='col-md-3'>
+                                <small>TIN</small>
+                            </div>
+                            <div class='col-md-3'>
+                                <small>{{auth()->user()->employee->tax_number}}</small>
+                            </div>
+                        </div>
                     </div>
                 </div>
               </div>
@@ -214,7 +247,7 @@
                     <div class="template-demo">
                         <div class='row m-2'>
                             <div class='col-md-12 text-center'>
-                                <strong><h3>Payment Information</h3></strong>
+                                <strong><h3><i class="fa fa-money" aria-hidden="true"></i> Payment Information</h3></strong>
                             </div>
                         </div>
                         <div class='row  m-2 border-bottom'>
@@ -297,7 +330,7 @@
                                 @foreach($user->approvers as $approver)
                                 <li >
                                   <div class="d-flex  align-self-center">
-                                    <p class='align-self-center mr-3'>{{$approver->level}}</p>
+                                    <p class='align-self-center mr-3'>lvl {{$approver->level}}</p>
                                     <small><img class="rounded-circle" style='width:38px;height:38px;' src='{{$approver->approver_data->employee->avatar}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
                                     <div>
                                       <p class="text-info mb-1">{{$approver->approver_data->name}}</p>
@@ -319,7 +352,7 @@
                     <div class="template-demo">
                         <div class='row m-2'>
                             <div class='col-md-12 text-center'>
-                                <strong><h4>Subbordinate</h4></strong>
+                                <strong><h4>Subordinates</h4></strong>
                             </div>
                             <ul class="icon-data-list">
                                 @foreach($user->subbordinates as $subbordinate)

@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <link rel="shortcut icon" href="{{asset('images/icon.png')}}">
+    <link rel="shortcut icon" href="{{asset('images/brand_logo.png')}}">
     <!-- Scripts -->
     {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 <!-- plugins:css -->
@@ -209,6 +209,10 @@ select.list-dt:focus {
 #progressbar li.active:before, #progressbar li.active:after {
     background: skyblue;
 }
+/* .rounded-circle:hover {
+  transition: transform .2s; 
+  transform: scale(3.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+} */
 
     </style>
 </head>
@@ -224,8 +228,8 @@ select.list-dt:focus {
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
           <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo mr-5" href="{{url('/')}}"><img src="images/obanana_brand.png" class="mr-2" alt="logo"/></a>
-            <a class="navbar-brand brand-logo-mini" href="{{url('/')}}"><img src="images/icon.png" alt="logo"/></a>
+            <a class="navbar-brand brand-logo mr-5" href="{{url('/')}}"><img src="images/brand.png" class="mr-2" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="{{url('/')}}"><img src="images/brand_logo.png" alt="logo"/></a>
           </div>
           <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -351,6 +355,7 @@ select.list-dt:focus {
                     <li class="nav-item"> <a class="nav-link" href="{{url('/allowances')}}">Allowances</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/handbooks')}}">Handbook</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/leavee-employees')}}">Leaves</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{url('/announcements')}}">Announcements</a></li>
                   </ul>
                 </div>
               </li>
