@@ -12,7 +12,7 @@
             <div class="col-md-8">
               <div class="mb-4">
               <h3>Reset Password </h3>
-              <p class="mb-4"><strong>Hotel Management System</strong></p>
+              <p class="mb-4"><strong>Payroll and Timekeeping System</strong></p>
             </div>
             <form method="POST" action="{{ route('password.update') }}" aria-label="{{ __('Login') }}" onsubmit='show()'>
                 @csrf
