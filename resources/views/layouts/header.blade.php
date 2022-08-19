@@ -295,7 +295,7 @@ select.list-dt:focus {
                   <span class="menu-title">Attendances</span>
                 </a>
               </li>
-              {{-- <li class="nav-item @if($header == 'forms') active @endif">
+              <li class="nav-item @if($header == 'forms') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-layout menu-icon"></i>
                   <span class="menu-title">Forms</span>
@@ -310,24 +310,24 @@ select.list-dt:focus {
                     <li class="nav-item "> <a class="nav-link " href="{{url('/dtr-correction')}}">DTR Correction</a></li>
                   </ul>
                 </div>
-              </li> --}}
-              {{-- <li class="nav-item">
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="{{url('/payslips')}}" onclick='show()'>
                   <i class="icon-briefcase menu-icon"></i>
                   <span class="menu-title">Payslips</span>
                 </a>
-              </li> --}}
+              </li>
               @if((auth()->user()->subbordinates->count()) != 0)
               <li class="nav-item">
                 <hr>
                 <h5>Manager</h5>
               </li>
-              {{-- <li class="nav-item @if($header == 'for-approval') active @endif">
+              <li class="nav-item @if($header == 'for-approval') active @endif">
                 <a class="nav-link" href="{{url('/for-approval')}}" onclick='show()'>
                   <i class="icon-check menu-icon"></i>
                   <span class="menu-title">For Approval</span>
                 </a>
-              </li> --}}
+              </li>
               <li class="nav-item @if($header == 'subordinates') active @endif">
                 <a class="nav-link" href="{{url('/subordinates')}}" onclick='show()'>
                   <i class="icon-monitor menu-icon"></i>
