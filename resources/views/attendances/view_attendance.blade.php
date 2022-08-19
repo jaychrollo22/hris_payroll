@@ -16,7 +16,7 @@
                       <div class="form-group row">
                         <label class="col-sm-4 col-form-label text-right">From</label>
                         <div class="col-sm-8">
-                          <input type="date" value='{{$from_date}}' class="form-control" name="from" max='{{date('Y-m-d')}}' required/>
+                          <input type="date" value='{{$from_date}}' class="form-control" name="from" max='{{date('Y-m-d')}}' onchange='get_min(this.value);' required/>
                         </div>
                       </div>
                     </div>
@@ -24,7 +24,7 @@
                       <div class="form-group row">
                         <label class="col-sm-4 col-form-label text-right">To</label>
                         <div class="col-sm-8">
-                          <input type="date" value='{{$to_date}}'  class="form-control" name="to" max='{{date('Y-m-d')}}' required/>
+                          <input type="date" value='{{$to_date}}'  class="form-control"  id='to' name="to" max='{{date('Y-m-d')}}' required/>
                         </div>
                       </div>
                     </div>
@@ -183,4 +183,10 @@
         </div>
     </div>
 </div>
+<script>
+  function get_min(value)
+  {
+    document.getElementById("to").min = value;
+  }
+</script>
 @endsection
