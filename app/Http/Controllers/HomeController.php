@@ -30,8 +30,8 @@ class HomeController extends Controller
 
         $attendance_controller = new AttendanceController;
         $sevendays = date('Y-m-d',strtotime("-7 days"));
-        $attendance_now = $attendance_controller->get_attendances(date('Y-m-d'),date('Y-m-d'))->first();
-        $attendances = $attendance_controller->get_attendances($sevendays,date('Y-m-d',strtotime("-1 day")));
+        $attendance_now = $attendance_controller->get_attendances(date('Y-m-d'),date('Y-m-d'),auth()->user()->employee->employee_number)->first();
+        $attendances = $attendance_controller->get_attendances($sevendays,date('Y-m-d',strtotime("-1 day")),auth()->user()->employee->employee_number);
         $date_ranges = $attendance_controller->dateRange($sevendays,date('Y-m-d',strtotime("-1 day")));
         $handbook = Handbook::orderBy('id','desc')->first();
         $employees_under = auth()->user()->subbordinates;

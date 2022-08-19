@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <link rel="shortcut icon" href="{{asset('images/brand_logo.png')}}">
+    <link rel="shortcut icon" href="{{asset('images/icon.png')}}">
     <!-- Scripts -->
     {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 <!-- plugins:css -->
@@ -223,13 +223,14 @@ select.list-dt:focus {
         <main class="py-4">
         </main>
     </div> --}}
-
+  
     <div class="container-scroller">
+    
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
           <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo mr-5" href="{{url('/')}}"><img src="images/brand.png" class="mr-2" alt="logo"/></a>
-            <a class="navbar-brand brand-logo-mini" href="{{url('/')}}"><img src="images/brand_logo.png" alt="logo"/></a>
+            <a class="navbar-brand brand-logo mr-5" href="{{url('/')}}"><img src="images/obanana_brand.png" class="mr-2" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="{{url('/')}}"><img src="images/icon.png" alt="logo"/></a>
           </div>
           <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -294,13 +295,13 @@ select.list-dt:focus {
                   <span class="menu-title">Attendances</span>
                 </a>
               </li>
-              <li class="nav-item @if($header == 'forms') active @endif">
+              {{-- <li class="nav-item @if($header == 'forms') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-layout menu-icon"></i>
                   <span class="menu-title">Forms</span>
                   <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="forms">
+                <div class="collapse @if($header == 'forms') show @endif" id="forms">
                   <ul class="nav flex-column sub-menu">
                     <li class="nav-item "> <a class="nav-link active" href="{{url('/leave')}}">Leave</a></li>
                     <li class="nav-item "> <a class="nav-link " href="{{url('/overtime')}}">Overtime</a></li>
@@ -309,29 +310,32 @@ select.list-dt:focus {
                     <li class="nav-item "> <a class="nav-link " href="{{url('/dtr-correction')}}">DTR Correction</a></li>
                   </ul>
                 </div>
-              </li>
-              <li class="nav-item">
+              </li> --}}
+              {{-- <li class="nav-item">
                 <a class="nav-link" href="{{url('/payslips')}}" onclick='show()'>
                   <i class="icon-briefcase menu-icon"></i>
                   <span class="menu-title">Payslips</span>
                 </a>
-              </li>
+              </li> --}}
+              @if((auth()->user()->subbordinates->count()) != 0)
               <li class="nav-item">
                 <hr>
                 <h5>Manager</h5>
               </li>
-              <li class="nav-item @if($header == 'dashboard-manager') active @endif">
-                <a class="nav-link" href="{{url('/dashboard-manager')}}" onclick='show()'>
-                  <i class="icon-grid menu-icon"></i>
-                  <span class="menu-title">Dashboard</span>
-                </a>
-              </li>
-              <li class="nav-item @if($header == 'for-approval') active @endif">
-                <a class="nav-link" href="{{url('/dashboard-manager')}}" onclick='show()'>
+              {{-- <li class="nav-item @if($header == 'for-approval') active @endif">
+                <a class="nav-link" href="{{url('/for-approval')}}" onclick='show()'>
                   <i class="icon-check menu-icon"></i>
                   <span class="menu-title">For Approval</span>
                 </a>
+              </li> --}}
+              <li class="nav-item @if($header == 'subordinates') active @endif">
+                <a class="nav-link" href="{{url('/subordinates')}}" onclick='show()'>
+                  <i class="icon-monitor menu-icon"></i>
+                  <span class="menu-title">Subordinates</span>
+                </a>
               </li>
+              @endif
+              @if(auth()->user()->role == 'Admin')
               <li class="nav-item">
                 <hr>
                 <h5>Admin</h5>
@@ -348,7 +352,7 @@ select.list-dt:focus {
                   <span class="menu-title">Settings</span>
                   <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="settings">
+                <div class="collapse @if($header == 'Handbooks') show @endif"" id="settings">
                   <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{url('/holidays')}}">Holidays</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/schedules')}}">Schedules</a></li>
@@ -356,6 +360,7 @@ select.list-dt:focus {
                     <li class="nav-item"> <a class="nav-link" href="{{url('/handbooks')}}">Handbook</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/leavee-employees')}}">Leaves</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/announcements')}}">Announcements</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{url('/logos')}}">Logos</a></li>
                   </ul>
                 </div>
               </li>
@@ -365,16 +370,8 @@ select.list-dt:focus {
                   <span class="menu-title">Reports</span>
                   <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="reports">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/leave')}}">Leave</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/overtime')}}">Overtime</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/work-from-home')}}">Work from home</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/official-business')}}">Official Business</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/dtr-correction')}}">DTR Correction</a></li>
-                  </ul>
-                </div>
               </li>
+              @endif
             </ul>
           </nav>
           <!-- partial -->

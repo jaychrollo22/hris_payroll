@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\IclockTransation;
 use App\Attendance;
+use App\Employee;
 use App\ScheduleData;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,13 +25,41 @@ class AttendanceController extends Controller
         if($from_date != null)
         {
         $date_range =  $this->dateRange( $from_date, $to_date);
-        $attendances =  $this->get_attendances($from_date,$to_date);
+        $attendances =  $this->get_attendances($from_date,$to_date,auth()->user()->employee->employee_number);
         }
         $schedules = ScheduleData::where('schedule_id',auth()->user()->employee->schedule_id)->get();
         // dd($attendances);
         return view('attendances.view_attendance',
         array(
             'header' => 'attendances',
+            'from_date' => $from_date,
+            'to_date' => $to_date,
+            'date_range' => $date_range,
+            'attendances' => $attendances,
+            'schedules' => $schedules,
+        ));
+    }
+    public function subordinates(Request $request)
+    {
+        //  
+        $from_date = $request->from;
+        $to_date = $request->to;
+        $date_range =  [];
+        $attendances = [];
+        $schedules = [];
+        if($from_date != null)
+        {
+        $date_range =  $this->dateRange( $from_date, $to_date);
+        $attendances =  $this->get_attendances($from_date,$to_date,$request->employee);
+        $schedule_id = Employee::where('employee_number',$request->employee)->first();
+        // dd($schedule_id);
+        $schedules = ScheduleData::where('schedule_id',$schedule_id->schedule_id)->get();
+        }
+    
+        // dd($attendances);
+        return view('attendances.subordinates_attendances',
+        array(
+            'header' => 'subordinates',
             'from_date' => $from_date,
             'to_date' => $to_date,
             'date_range' => $date_range,
@@ -53,10 +82,9 @@ class AttendanceController extends Controller
         return $dates;
     }
 
-    public function get_attendances($from_date,$to_date){
-        
-
-        $attendances = Attendance::where('employee_code',auth()->user()->employee->employee_number)
+    public function get_attendances($from_date,$to_date,$id)
+    {
+        $attendances = Attendance::where('employee_code',$id)
         ->orderBy('time_in','asc')
         ->where(function($q) use ($from_date, $to_date) {
             $q->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
@@ -65,11 +93,8 @@ class AttendanceController extends Controller
         ->get();
 
         return $attendances;
-
     }
     public function get_attendances_employees($from_date,$to_date,$employees){
-        
-
         $attendances = Attendance::whereIn('employee_code',$employees)
         ->orderBy('time_in','asc')
         ->where(function($q) use ($from_date, $to_date) {

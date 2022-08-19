@@ -122,34 +122,10 @@
                   </div>
                 </div>
               </div>
-
-              
+              @if((auth()->user()->subbordinates->count()) != 0)
               <div class="card mt-3">
                 <div class="card-body">
-                  <p class="card-title">Birthday Celebrants ({{date('M Y')}})</p>
-                  <ul class="icon-data-list">
-                    @foreach($birth_date_celebrants as $emp)
-                    <li class='zoom'>
-                      <div class="d-flex">
-                        <img class="rounded-circle" style='width:40px;height:40px;' src='{{URL::asset($emp->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';">
-                        <div>
-                          <p class="text-info mb-1">{{$emp->first_name}} {{$emp->last_name}}</p>
-                          <p class="mb-0">{{$emp->department->name}}</p>
-                          <small>{{date('F d',strtotime($emp->birth_date))}}</small>
-                        </div>
-                      </div>
-                    </li>
-                    @endforeach
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-             
-              <div class="card">
-                <div class="card-body">
-                  <p class="card-title">Subordinates ({{date('M d, Y')}})</p>
-                  
+                  <p class="card-title">Subordinates <small>({{date('M d, Y')}})</small></p>
                     <div class="table-responsive" >
                       <table class="table table-hover table-bordered " >
                         <thead>
@@ -168,7 +144,7 @@
                                 $time_in = $attendance_employees->where('employee_code',$emp->employee_number)->first();
                             @endphp
                             <td>@if($time_in){{date('h:i a',strtotime($time_in->time_in))}}@endif</td>
-                            <td>@if($time_in){{$time_in->time_out}}@endif</td>
+                            <td>@if($time_in){{date('h:i a',strtotime($time_in->time_out))}}@endif</td>
                           </tr>
                           @endforeach
                         </tbody>
@@ -176,6 +152,30 @@
                     </div>
                 </div>
               </div>
+              @endif
+            </div>
+            <div class="col-md-4">
+              <div class="card">
+                
+                <div class="card-body">
+                  <p class="card-title">Birthday Celebrants <small>({{date('M Y')}})</small></p>
+                  <ul class="icon-data-list">
+                    @foreach($birth_date_celebrants as $emp)
+                    <li class='zoom'>
+                      <div class="d-flex">
+                        <img class="rounded-circle" style='width:40px;height:40px;' src='{{URL::asset($emp->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';">
+                        <div>
+                          <p class="text-info mb-1">{{$emp->first_name}} {{$emp->last_name}}</p>
+                          <p class="mb-0">{{$emp->department->name}}</p>
+                          <small>{{date('F d',strtotime($emp->birth_date))}}</small>
+                        </div>
+                      </div>
+                    </li>
+                    @endforeach
+                  </ul>
+                </div>
+              </div>
+           
             </div>
             <div class="col-md-4 grid-margin">
               <div class="card">

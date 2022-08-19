@@ -81,6 +81,12 @@ Route::group( ['middleware' => 'auth'], function()
     Route::get('announcements','AnnouncementController@view');
     Route::post('new-announcement','AnnouncementController@new');
     Route::get('delete-announcement/{id}','AnnouncementController@delete');
+
+    //Logos
+    Route::get('logos','SettingController@view');
+
+    //Manager
+    Route::get('subordinates','AttendanceController@subordinates');
     
 
 

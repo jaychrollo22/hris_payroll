@@ -242,6 +242,7 @@
                     </div>
                 </div>
               </div>
+              @if(auth()->user()->employee->payment_info)
               <div class="card mt-3">
                 <div class="card-body text-left">
                     <div class="template-demo">
@@ -290,6 +291,7 @@
                     </div>
                 </div>
               </div>
+              @endif
             </div>
             <div class="col-lg-3 grid-margin">
             @if($user->employee->immediate_sup)
@@ -356,13 +358,12 @@
                             </div>
                             <ul class="icon-data-list">
                                 @foreach($user->subbordinates as $subbordinate)
-                                <li >
+                                <li>
                                   <div class="d-flex  align-self-center">
                                     <small><img class="rounded-circle" style='width:38px;height:38px;' src='{{$subbordinate->avatar}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
                                     <div>
                                       <p class="text-info mb-1">{{$subbordinate->first_name}} {{$subbordinate->last_name}}</p>
                                       <p class="mb-0">{{$subbordinate->position}}</p>
-                                      {{-- <small>August 16</small> --}}
                                     </div>
                                   </div>
                                 </li>
