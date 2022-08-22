@@ -84,6 +84,8 @@ Route::group( ['middleware' => 'auth'], function()
 
     //Logos
     Route::get('logos','SettingController@view');
+    Route::post('upload-icon','SettingController@uploadIcon');
+    Route::post('upload-logo','SettingController@uploadLogo');
 
     //Manager
     Route::get('subordinates','AttendanceController@subordinates');

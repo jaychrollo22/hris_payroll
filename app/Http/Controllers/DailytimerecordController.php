@@ -10,7 +10,7 @@ class DailytimerecordController extends Controller
 
     public function dtr ()
     {
-        return view('forms.officialbusiness.officialbusiness',
+        return view('forms.dtr.dtr',
         array(
             'header' => 'forms',
         )); 

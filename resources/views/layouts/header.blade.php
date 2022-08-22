@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <link rel="shortcut icon" href="{{asset('images/icon.png')}}">
+    <link rel="shortcut icon" href="{{ URL::asset(config('logo.logos')::first()->icon)}}">
     <!-- Scripts -->
     {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 <!-- plugins:css -->
@@ -229,8 +229,8 @@ select.list-dt:focus {
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
           <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo mr-5" href="{{url('/')}}"><img src="images/obanana_brand.png" class="mr-2" alt="logo"/></a>
-            <a class="navbar-brand brand-logo-mini" href="{{url('/')}}"><img src="images/icon.png" alt="logo"/></a>
+            <a class="navbar-brand brand-logo mr-5" href="{{url('/')}}"><img src="{{ URL::asset(config('logo.logos')::first()->logo)}}" class="mr-2" alt="logo"/></a>
+            <a class="navbar-brand brand-logo-mini" href="{{url('/')}}"><img src="{{ URL::asset(config('logo.logos')::first()->icon)}}" alt="logo"/></a>
           </div>
           <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -422,9 +422,16 @@ select.list-dt:focus {
             }
             $( document ).ready(function() {
 
-              $(document).ready(function() {
-              $('.tablewithSearch').DataTable();
-              });
+              $('.tablewithSearch').DataTable(
+              
+              );
+              $('.tablewithSearchonly').DataTable(
+                {
+                  "paging": false,
+                  "sDom": "lfrti"
+
+                }
+              );
             }); 
         </script>
         </div>

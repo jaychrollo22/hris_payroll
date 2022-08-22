@@ -14,7 +14,7 @@
             Approver : 
           </div>
           <div class='col-md-9'>
-            Renz Christian Cabato
+            {{auth()->user()->employee->immediate_sup_data->name}}
           </div>
           
         </div>
@@ -23,15 +23,15 @@
                Date
             </div>
             <div class='col-md-4'>
-              <input type="date" name='date_from' class="form-control" requried>
+              <input type="date" name='date_from' class="form-control" min='{{date('Y-m-d')}}' requried>
             </div>
-            <div class="col-sm-2">
-                <div class="form-check">
-                  <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios1" value="" >
-                    Beforeshift OT
-                  <i class="input-helper"></i></label>
-                </div>
+              <div class="col-sm-2">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios1" value="" >
+                      Beforeshift OT
+                    <i class="input-helper"></i></label>
+                  </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-check">

@@ -14,7 +14,7 @@
             Approver : 
           </div>
           <div class='col-md-9'>
-            Renz Christian Cabato
+            {{auth()->user()->employee->immediate_sup_data->name}}
           </div>
         </div>
         <div class="form-group row">
