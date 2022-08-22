@@ -66,7 +66,6 @@
             <div class="card text-success">
               <div class="card-body">
                 <div class="media">
-                
                   <div class="media-body">
                     <h4 class="mb-4">New Approved</h4>
                     <h2 class="card-text">0</h2>

@@ -311,7 +311,7 @@ select.list-dt:focus {
                   </ul>
                 </div>
               </li>
-              <li class="nav-item">
+              <li class="nav-item @if($header == 'payslips') show @endif">
                 <a class="nav-link" href="{{url('/payslips')}}" onclick='show()'>
                   <i class="icon-briefcase menu-icon"></i>
                   <span class="menu-title">Payslips</span>
@@ -441,32 +441,76 @@ $(document).ready(function(){
     
     var current_fs, next_fs, previous_fs; //fieldsets
     var opacity;
-    
+  
     $(".next").click(function(){
-        
-        current_fs = $(this).parent();
+      current_fs = $(this).parent();
         next_fs = $(this).parent().next();
+        var fld = $(this).closest("fieldset").attr('id');
+            // alert(fld);
+        var isValid = true;    
+        var classname = 'required';    
+        $( '#'+fld+ ' .'+classname + '').each(function (i, obj)  
+        {    
+            if (obj.value == '')  
+            {    
+                isValid = false;    
+                return isValid;    
+            }    
+        });    
+        
+        if (!isValid)  
+        {    
+            $('#'+fld+ ' .'+classname + '').each(function (i, obj)  
+            {    
+                if (obj.value == '')  
+                {    
+                   
+                    var d = (obj.className).includes("js-example-basic-single");
+                    if(d == false)
+                    {
+                    // return false;
+                    obj.style.border = '1px solid red';    
+                    }
+                    else
+                    {
+                      
+                      $("select[name='"+obj.getAttribute("name")+"']").next("span").css('border', '1px solid red');
+                      console.log(obj.getAttribute("name"));
+                    }
+                }  
+                else  
+                {    
+                  $("select[name='"+obj.getAttribute("name")+"']").next("span").css('border', '1px solid #CED4DA');
+                    obj.style.border = '1px solid #CED4DA';    
+                }    
+            });    
+        } 
+        if (isValid)  
+        {    
+           
+       
         //Add Class Active
         $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+          next_fs.show(); 
+            //hide the current fieldset with style
+            current_fs.animate({opacity: 0}, {
+                step: function(now) {
+                    // for making fielset appear animation
+                    opacity = 1 - now;
         
-        //show the next fieldset
-        next_fs.show(); 
-        //hide the current fieldset with style
-        current_fs.animate({opacity: 0}, {
-            step: function(now) {
-                // for making fielset appear animation
-                opacity = 1 - now;
-    
-                current_fs.css({
-                    'display': 'none',
-                    'position': 'relative'
-                });
-                next_fs.css({'opacity': opacity});
-            }, 
-            duration: 600
+                    current_fs.css({
+                        'display': 'none',
+                        'position': 'relative'
+                    });
+                    next_fs.css({'opacity': opacity});
+                }, 
+                duration: 600
+            });
+        }    
+        return isValid;   
+        
         });
-    });
-    
+        
     $(".previous").click(function(){
         
         current_fs = $(this).parent();

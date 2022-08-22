@@ -38,4 +38,9 @@ class EmployeeController extends Controller
             'schedules' => $schedules,
         ));
     }
+
+    public function new(Request $request)
+    {
+        dd($request->all());
+    }
 }

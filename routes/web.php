@@ -56,6 +56,11 @@ Route::group( ['middleware' => 'auth'], function()
 
     //employees
     Route::get('employees','EmployeeController@view');
+    Route::post('new-employee','EmployeeController@new');
+
+
+    //Payslips
+    Route::get('payslips','PayslipController@view');
 
     //handbooks
     Route::get('handbooks','HandbookController@view');

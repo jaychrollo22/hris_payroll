@@ -12,7 +12,8 @@
         <div class="card">
             <div class="row">
                 <div class="col-md-12 mx-0">
-                  <form id="msform" class='text-center'>
+                  <form id="msform" class='text-center' method='post' onsubmit='show()' action='{{url('/new-employee')}}' enctype="multipart/form-data">
+                    {{ csrf_field() }}
                       <!-- progressbar -->
                       <ul id="progressbar">
                           <li class="active user" id="account" class=''><strong>Personal</strong></li>
@@ -20,40 +21,40 @@
                           <li id="payment"><strong>Government</strong></li>
                           <li id="confirm"><strong>Gallery</strong></li>
                       </ul>
-                      <fieldset class='text-right'>
+                      <fieldset class='text-right' id='personal_information'>
                           <div class="form-card">
                               <h2 class="fs-title">Personal Information</h2>
                               <div class='row mb-2'>
                                 <div class='col-md-3'>
                                   First Name 
-                                  <input type="text" name="first_name" class='form-control form-control-sm' placeholder="First Name"/>
+                                  <input type="text" name="first_name" class='form-control form-control-sm required' placeholder="First Name" required/>
                                 </div>
                                 <div class='col-md-3'>
                                   Middle Name
-                                  <input type="text" name="middle_name" class='form-control form-control-sm' placeholder="Middle Name"/>
+                                  <input type="text" name="middle_name" class='form-control form-control-sm ' placeholder="Middle Name"/>
                                 </div>
                                 <div class='col-md-2'>
                                   Middle Initial
-                                  <input type="text" name="middile_initial" class='form-control form-control-sm' placeholder="Middle Initial"/>
+                                  <input type="text" name="middile_initial" class='form-control form-control-sm ' placeholder="Middle Initial"/>
                                 </div>
                                 <div class='col-md-4'>
                                   Last Name
-                                  <input type="text" name="last_name" class='form-control form-control-sm' placeholder="Last Name"/>
+                                  <input type="text" name="last_name" class='form-control form-control-sm required' placeholder="Last Name" required/>
                                 </div>
                             
                               </div>
                               <div class='row mb-2'>
                                 <div class='col-md-3'>
                                   Suffix
-                                  <input type="text" name="suffix" class='form-control form-control-sm' placeholder="Suffix"/>
+                                  <input type="text" name="suffix" class='form-control form-control-sm ' placeholder="Suffix"/>
                                 </div>
                                 <div class='col-md-3'>
                                   Nickname
-                                  <input type="email" name="nickname" class='form-control form-control-sm' placeholder="Nickname"/>
+                                  <input type="text" name="nickname" class='form-control form-control-sm required' placeholder="Nickname" required/>
                                 </div>
                                 <div class='col-md-2'>
                                   Marital Status
-                                  <select class='form-control required form-control-sm' name='marital_status' required>
+                                  <select class='form-control required form-control-sm ' name='marital_status' required>
                                     <option value=''>--Select Marital Status--</option>
                                     @foreach($marital_statuses as $marital_status)
                                         <option value='{{$marital_status->name}}'>{{$marital_status->name}}</option>
@@ -62,7 +63,7 @@
                                 </div>
                                 <div class='col-md-2'>
                                   Religion
-                                  <input type="text" name="religion" class='form-control form-control-sm' placeholder="Religion"/>
+                                  <input type="text" name="religion" class='form-control form-control-sm required' placeholder="Religion"/>
                                 </div>
                                 <div class='col-md-2'>
                                   Gender
@@ -79,12 +80,12 @@
                               <div class="row mb-2">
                                 <div class="col-md-3"> 
                                   Birth date
-                                  <input type="date" name="birthdate" class='form-control form-control-sm ' max='{{date('Y-m-d', strtotime('-18 year'))}}' placeholder="BirthDate"/>
+                                  <input type="date" name="birthdate" class='form-control form-control-sm required' max='{{date('Y-m-d', strtotime('-18 year'))}}' placeholder="BirthDate"/>
                                 </div>
                               
                                 <div class="col-md-3"> 
                                   Birth Place 
-                                  <input type="text" name="birthdate" class='form-control form-control-sm 'placeholder="Manila"/>
+                                  <input type="text" name="birthplace" class='form-control form-control-sm required'placeholder="Manila"/>
                                 </div>
                             </div>
                             <hr>
@@ -92,38 +93,38 @@
                             <div class='row mb-2'>
                               <div class='col-md-4'>
                                 Personal Email
-                                  <input type="email" name="personal_email" class='form-control form-control-sm' placeholder="Personal Email"/>
+                                  <input type="email" name="personal_email" class='form-control form-control-sm required' placeholder="Personal Email"/>
                                 </div>
                               <div class='col-md-4'>
                                 Personal Contact Number
-                                  <input type="number" name="personal_email" class='form-control form-control-sm' placeholder="Personal Contact Number"/>
+                                  <input type="number" name="personal_number" class='form-control form-control-sm required' placeholder="Personal Contact Number"/>
                                 </div>
                             </div>
                             <div class='row mb-2'>
                               <div class='col-md-6'>
                                 Current Address
-                                <input type="email" name="current_address" class='form-control form-control-sm' placeholder="Current Address"/>
+                                <input type="text" name="current_address" class='form-control form-control-sm required' placeholder="Current Address"/>
                               </div>
                               <div class='col-md-6'>
                                 <input onclick='same_as_current(this.value)' type="checkbox" class="ml-1 form-check-input" id="same_as"> <label class='ml-4 mb-0' for='same_as'><small><i>Same as Current Address</i></small></label>
-                                <input type="text" id='permanent_address' name="permanent_address" class='form-control form-control-sm' placeholder="Permanent Address" required/>
+                                <input type="text" id='permanent_address' name="permanent_address" class='form-control form-control-sm required' placeholder="Permanent Address" required/>
                               </div>
                             </div>
                             <hr>
                           </div>
                           <input type="button" name="next" class="next action-button btn btn-info" value="Next"/>
                       </fieldset>
-                      <fieldset class='text-right'>
+                      <fieldset class='text-right' id='employment_information'>
                           <div class="form-card">
                             <h2 class="fs-title">Employment Information</h2>
                             <div class='row mb-2'>
                               <div class='col-md-4'>
                                 Position
-                                <input type="text" name="position" class='form-control form-control-sm' placeholder="POSITION"/>
+                                <input type="text" name="position" class='form-control form-control-sm required' placeholder="POSITION"/>
                               </div>
                               <div class='col-md-4'>
                                 Department
-                                <select data-placeholder="Department" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='department' required>
+                                <select data-placeholder="Department" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='department' required>
                                     <option value="">--Select Department--</option>
                                     @foreach($departments as $department)
                                       <option value="{{$department->name}}">{{$department->code}} - {{$department->name}}</option>
@@ -132,7 +133,7 @@
                               </div>
                               <div class='col-md-4'>
                                 Classification
-                                <select data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='classification' required>
+                                <select data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='classification' required>
                                   <option value="">--Select Classification--</option>
                                   @foreach($classifications as $classification)
                                     <option value="{{$classification->name}}">{{$classification->name}}</option>
@@ -141,7 +142,7 @@
                               </div>
                               <div class='col-md-4'>
                                 Level
-                                <select data-placeholder="Level" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='level' required>
+                                <select data-placeholder="Level" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='level' required>
                                   <option value="">--Select Level--</option>
                                   @foreach($levels as $level)
                                     <option value="{{$level->name}}">{{$level->name}}</option>
@@ -150,7 +151,7 @@
                               </div>
                               <div class='col-md-4'>
                                 Immediate Supervisor
-                                <select data-placeholder=" Immediate Supervisor" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='immediate_supervisor' required>
+                                <select data-placeholder=" Immediate Supervisor" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='immediate_supervisor' required>
                                   <option value="">-- Immediate Supervisor--</option>
                                     @foreach($users as $user)
                                       <option value="{{$user->id}}">{{$user->name}}</option>
@@ -159,19 +160,19 @@
                               </div>
                               <div class='col-md-4'>
                                 Biometric Code
-                                <input type="text" name="biometric_code" class='form-control form-control-sm' placeholder="BIOMETRIC CODE"/>
+                                <input type="text" name="biometric_code" class='form-control form-control-sm required' placeholder="BIOMETRIC CODE"/>
                               </div>
                               <div class='col-md-4'>
                                Date Hired
-                                <input type="date" name="biometric_code" class='form-control form-control-sm' placeholder="Start Date"/>
+                                <input type="date" name="date_hired" class='form-control form-control-sm required' placeholder="Start Date"/>
                               </div>
                               <div class='col-md-4'>
                                 Work Email
-                                <input type="email" name="work_email" class='form-control form-control-sm' placeholder="Work Email"/>
+                                <input type="email" name="work_email" class='form-control form-control-sm required' placeholder="Work Email"/>
                               </div>
                               <div class='col-md-4'>
                                 Schedule
-                                <select data-placeholder="Schedule Period" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='schedule' required>
+                                <select data-placeholder="Schedule Period" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='schedule' required>
                                   <option value="">-- Schedule Period --</option>
                                   @foreach($schedules as $schedule)
                                     <option value="{{$schedule->id}}">{{$schedule->schedule_name}}</option>
@@ -242,17 +243,17 @@
                                     </div>
                                     <div class='col-md-6'>
                                       Account Number
-                                      <input type="text" name="account_number" class='form-control form-control-sm' placeholder="Bank Account"/>
+                                      <input type="text" name="account_number" class='form-control form-control-sm required' placeholder="Bank Account"/>
                                     </div>
                                 </div>
                                 <div class='row'> 
                                     <div class='col-md-6'>
                                       Monthly Rate
-                                      <input type="text" name="monthy_rate" class='form-control form-control-sm' placeholder="Monthly Rate"/>
+                                      <input type="text" name="monthy_rate" class='form-control form-control-sm required' placeholder="Monthly Rate"/>
                                     </div>
                                     <div class='col-md-6'>
                                       Daily Rate
-                                      <input type="text" name="account_number" class='form-control form-control-sm' placeholder="Daily Rate"/>
+                                      <input type="text" name="account_number" class='form-control form-control-sm required' placeholder="Daily Rate"/>
                                     </div>
                                 </div>
                                </div>
@@ -262,25 +263,25 @@
                           <input type="button" name="previous" class="previous action-button-previous btn btn-secondary" value="Previous"/>
                           <input type="button" name="next" class="next action-button btn btn-info" value="Next Step"/>
                       </fieldset>
-                      <fieldset class='text-right'>
+                      <fieldset class='text-right' id='government_information'>
                           <div class="form-card">
                             <h2 class="fs-title">Government Information</h2>
                             <div class='row mb-2'>
                               <div class='col-md-3'>
                                 SSS
-                                <input type='text' name='sss' class='form-control form-control-sm' value=''>
+                                <input type='text' name='sss' class='form-control form-control-sm required' value=''>
                               </div>
                               <div class='col-md-3'>
                                 Philhealth
-                                <input type='text' name='philhealth' class='form-control form-control-sm' value=''>
+                                <input type='text' name='philhealth' class='form-control form-control-sm required' value=''>
                               </div>
                               <div class='col-md-3'>
                                 Pagibig
-                                <input type='text' name='pagibig' class='form-control form-control-sm' value=''>
+                                <input type='text' name='pagibig' class='form-control form-control-sm required' value=''>
                               </div>
                               <div class='col-md-3'>
                                 TIN
-                                <input type='text' name='tin' class='form-control form-control-sm' value=''>
+                                <input type='text' name='tin' class='form-control form-control-sm required' value=''>
                               </div>
                             </div>
                             <hr>
@@ -296,7 +297,7 @@
                           <input type="button" name="previous" class="previous action-button-previous btn btn-secondary" value="Previous"/>
                           <input type="button" name="next" class="next action-button btn btn-info" value="Next Step"/>
                       </fieldset>
-                      <fieldset class='text-right'>
+                      <fieldset class='text-right' id='images'> 
                           <div class="form-card">
                             <hr>
                             <div class="form-group row">
@@ -335,7 +336,7 @@
                             <hr>
                           </div>
                           <input type="button" name="previous" class="previous action-button-previous btn btn-secondary" value="Previous"/>
-                          <input type="button" name="submit" class="btn btn-info" value="Save"/>
+                          <button type="submit" class="btn btn-primary">Save</button>
                       </fieldset>
                   </form>
               </div>
@@ -357,12 +358,17 @@
       document.getElementById("permanent_address").readOnly = true;
       document.getElementById("permanent_address").required = false;
       document.getElementById("permanent_address").value = "";
+      document.getElementById("permanent_address").classList.remove("required");
+      document.getElementById("permanent_address").style.border = '1px solid #CED4DA';    
+      
+
      }
      else
      {
       document.getElementById("permanent_address").readOnly = false;
       document.getElementById("permanent_address").required = true;
       document.getElementById("permanent_address").value = "";
+      document.getElementById("permanent_address").classList.add("required");
      }
    
     

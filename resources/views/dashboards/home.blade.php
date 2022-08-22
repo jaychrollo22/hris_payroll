@@ -22,7 +22,15 @@
                             <div class="media">
                                 <i class="ti-time icon-md text-info d-flex align-self-center mr-3"></i>
                                 <div class="media-body">
-                                  <p class="card-text">Time In : @if($attendance_now != null){{date('h:i A',strtotime($attendance_now->time_in))}} <br> Estimated Out : {{date('h:i A', strtotime($attendance_now->time_in . " +10 hours +30 minutes"))}} @else NO TIME IN @endif</p>
+                                  <p class="card-text">Time In : 
+                                    @if($attendance_now != null){{date('h:i A',strtotime($attendance_now->time_in))}} <br>
+                                      @if($attendance_now->time_out == null )
+                                       Estimated Out : {{date('h:i A', strtotime($attendance_now->time_in . " +10 hours +30 minutes"))}} 
+                                       @else
+                                       Time Out : {{date('h:i A',strtotime($attendance_now->time_out))}}
+                                       @endif
+                                     @else NO TIME IN 
+                                     @endif</p>
                                   <span id="span"></span>
                                    {{-- <button type="button" class="btn btn-outline-danger btn-fw btn-sm">Time Out</button> --}}
                                 </div>
