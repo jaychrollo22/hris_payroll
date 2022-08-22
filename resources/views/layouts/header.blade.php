@@ -311,7 +311,7 @@ select.list-dt:focus {
                   </ul>
                 </div>
               </li>
-              <li class="nav-item @if($header == 'payslips') show @endif">
+              <li class="nav-item @if($header == 'payslips') active @endif">
                 <a class="nav-link" href="{{url('/payslips')}}" onclick='show()'>
                   <i class="icon-briefcase menu-icon"></i>
                   <span class="menu-title">Payslips</span>
