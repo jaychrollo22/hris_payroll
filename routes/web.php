@@ -72,9 +72,7 @@ Route::group( ['middleware' => 'auth'], function()
     Route::get('delete-holiday/{id}','HolidayController@delete_holiday');
     Route::post('edit-holiday/{id}','HolidayController@edit_holiday');
 
-
-
-
+    //formsLeave
     Route::get('leavee-employees','LeaveController@leaveDetails');
 
     //Schedules
@@ -94,6 +92,9 @@ Route::group( ['middleware' => 'auth'], function()
 
     //Manager
     Route::get('subordinates','AttendanceController@subordinates');
+
+    //Allowances
+    Route::get('allowances','AllowanceController@viewAllowances');
     
 
 

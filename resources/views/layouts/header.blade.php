@@ -291,7 +291,7 @@ select.list-dt:focus {
               </li>
               <li class="nav-item @if($header == 'attendances') active @endif">
                 <a class="nav-link" href="{{url('/attendances')}}" onclick='show()'>
-                  <i class="icon-clock menu-icon"></i>
+                  <i class="icon-watch menu-icon"></i>
                   <span class="menu-title">Attendances</span>
                 </a>
               </li>
@@ -348,7 +348,7 @@ select.list-dt:focus {
               </li>
               <li class="nav-item @if($header == 'Handbooks') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="false" aria-controls="ui-basic">
-                  <i class="icon-anchor menu-icon"></i>
+                  <i class="icon-cog menu-icon"></i>
                   <span class="menu-title">Settings</span>
                   <i class="menu-arrow"></i>
                 </a>

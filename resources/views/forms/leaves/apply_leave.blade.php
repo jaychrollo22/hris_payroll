@@ -14,7 +14,7 @@
             Approver : 
           </div>
           <div class='col-md-9'>
-            {{auth()->user()->employee->immediate_sup_data->name}}
+            @if(auth()->user()->employee->immediate_sup_data){{auth()->user()->employee->immediate_sup_data->name}} @else No Approver @endif
           </div>
         </div>
         <div class="form-group row">

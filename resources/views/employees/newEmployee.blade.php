@@ -127,7 +127,7 @@
                                 <select data-placeholder="Department" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='department' required>
                                     <option value="">--Select Department--</option>
                                     @foreach($departments as $department)
-                                      <option value="{{$department->name}}">{{$department->code}} - {{$department->name}}</option>
+                                      <option value="{{$department->id}}">{{$department->code}} - {{$department->name}}</option>
                                     @endforeach
                                 </select>
                               </div>
