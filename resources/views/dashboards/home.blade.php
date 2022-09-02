@@ -1,5 +1,4 @@
 @extends('layouts.header')
-
 @section('content')
 <div class="main-panel">
     <div class="content-wrapper">
@@ -201,7 +200,7 @@
                       <h4 class="card-title">Announcements</h4>
                       <ul class="list-star">
                         @foreach($announcements as $announcement)
-                          <li><a href="{{url($announcement->attachment)}}" target='_blank'>{{$announcement->announcement_title}} </a> <Br> <small>by {{$announcement->user->name}} </small></li>
+                          <li><a href="{{url($announcement->attachment)}}" target='_blank' data-bs-toggle="tooltip" data-bs-placement="top" title="{{$announcement->user->name}}">{{$announcement->announcement_title}} </a> </li>
                         @endforeach
                       </ul>
                     </div>
@@ -214,19 +213,23 @@
        
           </div>
     </div>
-  </div>
-  <script>
-    var span = document.getElementById('span');
+</div>
+<script>
+  var span = document.getElementById('span');
 
-    function time() {
-    var d = new Date();
-    var s = d.getSeconds();
-    var m = d.getMinutes();
-    var h = d.getHours();
-    span.textContent = 
-        ("0" + h).substr(-2) + ":" + ("0" + m).substr(-2) + ":" + ("0" + s).substr(-2);
-    }
+  function time() {
+  var d = new Date();
+  var s = d.getSeconds();
+  var m = d.getMinutes();
+  var h = d.getHours();
+  span.textContent = 
+      ("0" + h).substr(-2) + ":" + ("0" + m).substr(-2) + ":" + ("0" + s).substr(-2);
+  }
 
-    setInterval(time, 1000);
-  </script>
+  setInterval(time, 1000);
+</script>
+@endsection
+@section('footer')
+<script src="{{asset('./body_css/js/tooltips.js')}}"></script>
+<script src="{{asset('./body_css/js/popover.js')}}"></script>
 @endsection

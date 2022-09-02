@@ -8,6 +8,7 @@ use App\Schedule;
 use App\Level;
 use App\Bank;
 use App\User;
+use App\PersonnelEmployee;
 use App\MaritalStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -104,5 +105,10 @@ class EmployeeController extends Controller
         }
 
         return $emp_code;
+    }
+
+    public function employees_biotime()
+    {
+        $employees = PersonnelEmployee::get();
     }
 }

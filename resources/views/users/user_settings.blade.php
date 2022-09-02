@@ -73,7 +73,7 @@
                     <div class="template-demo">
                         <div class='row m-2'>
                             <div class='col-md-12 text-center'>
-                                <strong><h2><i class="fa fa-user" aria-hidden="true"></i> Personal Information</h2></strong>
+                                <strong><h3><i class="fa fa-user" aria-hidden="true"></i> Personal Information</h3></strong>
                             </div>
                         </div>
                         <div class='row m-2 border-bottom'>
@@ -294,7 +294,7 @@
               @endif
             </div>
             <div class="col-lg-3 grid-margin">
-            @if($user->employee->immediate_sup)
+            @if($user->employee->immediate_sup != null)
               <div class="card">
                 <div class="card-body text-left">
                     <div class="template-demo">
@@ -319,8 +319,7 @@
                 </div>
               </div>
               @endif
-
-              @if(!empty($user->approvers))
+              @if(!$user->approvers)
               <div class="card  mt-3">
                 <div class="card-body text-left">
                     <div class="template-demo">

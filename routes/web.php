@@ -99,3 +99,6 @@ Route::group( ['middleware' => 'auth'], function()
 
 
 });
+
+
+Route::get('get-employees','EmployeeController@employees_biotime');

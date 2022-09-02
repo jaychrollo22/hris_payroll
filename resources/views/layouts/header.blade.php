@@ -209,20 +209,13 @@ select.list-dt:focus {
 #progressbar li.active:before, #progressbar li.active:after {
     background: skyblue;
 }
-/* .rounded-circle:hover {
-  transition: transform .2s; 
-  transform: scale(3.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-} */
+
 
     </style>
 </head>
 <body>
     <div id = "loader" style="display:none;" class="loader">
     </div>
-    {{-- <div id="app">
-        <main class="py-4">
-        </main>
-    </div> --}}
   
     <div class="container-scroller">
     
@@ -410,6 +403,11 @@ select.list-dt:focus {
         <script src="{{asset('body_css/js/template.js')}}"></script>
         <script src="{{asset('body_css/js/settings.js')}}"></script>
         <script src="{{asset('body_css/js/todolist.js')}}"></script>
+
+
+        @yield('footer')
+
+        
         <script type='text/javascript'>
             function show() {
                 document.getElementById("loader").style.display="block";
