@@ -98,6 +98,8 @@ Route::group( ['middleware' => 'auth'], function()
 
     //Biometrics
     Route::get('get-biometrics','EmployeeController@employees_biotime');
+    Route::post('new-biocode','EmployeeController@newBio');
+    Route::post('update-biocode','EmployeeController@updatebiocode');
     
 });
 
