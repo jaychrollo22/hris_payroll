@@ -339,19 +339,25 @@ select.list-dt:focus {
                   <span class="menu-title">Employees</span>
                 </a>
               </li>
-              <li class="nav-item @if($header == 'Handbooks') active @endif">
+              <li class="nav-item @if($header == 'biometrics') active @endif ">
+                <a class="nav-link" href="{{url('/get-biomterics')}}" onclick='show()'>
+                  <i class="icon-head menu-icon"></i>
+                  <span class="menu-title">Biometrics</span>
+                </a>
+              </li>
+              <li class="nav-item @if($header == 'settings') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-cog menu-icon"></i>
                   <span class="menu-title">Settings</span>
                   <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse @if($header == 'Handbooks') show @endif"" id="settings">
+                <div class="collapse" id="settings">
                   <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{url('/holidays')}}">Holidays</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/schedules')}}">Schedules</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/allowances')}}">Allowances</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/handbooks')}}">Handbook</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/leavee-employees')}}">Leaves</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{url('/leavee')}}">Leaves</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/announcements')}}">Announcements</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/logos')}}">Logos</a></li>
                   </ul>

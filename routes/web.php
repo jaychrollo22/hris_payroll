@@ -95,10 +95,10 @@ Route::group( ['middleware' => 'auth'], function()
 
     //Allowances
     Route::get('allowances','AllowanceController@viewAllowances');
+
+    //Biometrics
+    Route::get('get-biomterics','EmployeeController@employees_biotime');
     
-
-
 });
 
 
-Route::get('get-employees','EmployeeController@employees_biotime');
