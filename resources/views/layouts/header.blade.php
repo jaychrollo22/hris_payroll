@@ -340,8 +340,8 @@ select.list-dt:focus {
                 </a>
               </li>
               <li class="nav-item @if($header == 'biometrics') active @endif ">
-                <a class="nav-link" href="{{url('/get-biomterics')}}" onclick='show()'>
-                  <i class="icon-head menu-icon"></i>
+                <a class="nav-link" href="{{url('/get-biometrics')}}" onclick='show()'>
+                  <i class="icon-contract menu-icon"></i>
                   <span class="menu-title">Biometrics</span>
                 </a>
               </li>
@@ -357,7 +357,7 @@ select.list-dt:focus {
                     <li class="nav-item"> <a class="nav-link" href="{{url('/schedules')}}">Schedules</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/allowances')}}">Allowances</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/handbooks')}}">Handbook</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/leavee')}}">Leaves</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{url('/leavee-settings')}}">Leaves</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/announcements')}}">Announcements</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/logos')}}">Logos</a></li>
                   </ul>

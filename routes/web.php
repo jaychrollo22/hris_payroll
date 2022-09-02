@@ -73,7 +73,7 @@ Route::group( ['middleware' => 'auth'], function()
     Route::post('edit-holiday/{id}','HolidayController@edit_holiday');
 
     //formsLeave
-    Route::get('leavee-employees','LeaveController@leaveDetails');
+    Route::get('leavee-settings','LeaveController@leaveDetails');
 
     //Schedules
     Route::get('schedules','ScheduleController@schedules');
@@ -97,7 +97,7 @@ Route::group( ['middleware' => 'auth'], function()
     Route::get('allowances','AllowanceController@viewAllowances');
 
     //Biometrics
-    Route::get('get-biomterics','EmployeeController@employees_biotime');
+    Route::get('get-biometrics','EmployeeController@employees_biotime');
     
 });
 
