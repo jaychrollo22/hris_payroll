@@ -9,9 +9,11 @@ use App\Level;
 use App\Bank;
 use App\User;
 use App\PersonnelEmployee;
+use App\IclockTransation;
 use App\MaritalStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class EmployeeController extends Controller
 {
@@ -110,5 +112,53 @@ class EmployeeController extends Controller
     public function employees_biotime()
     {
         $employees = PersonnelEmployee::get();
+        
+        return view('employees.view_employees_biometrics',
+        array(
+            'header' => 'biometrics',
+            'employees' => $employees,
+        ));
     }
+
+    public function newBio(Request $request)
+    {
+        // dd($request->all());
+
+        $new_emp = new PersonnelEmployee;
+        $new_emp->emp_code = $request->emp_code;
+        $new_emp->first_name = $request->first_name;
+        $new_emp->last_name = $request->last_name;
+        $new_emp->status = 0;
+        $new_emp->dev_privilege = 0;
+        $new_emp->self_password = 'pbkdf2_sha256$36000$Gj09deAAUqW7$ih9vyun8PPwxvbG1+bhxB0TIQF+2IUfdhiDUf0AS0o4=';
+        $new_emp->hire_date = date('Y-m-d');
+        $new_emp->verify_mode = 0;
+        $new_emp->is_admin = 0;
+        $new_emp->app_role = 1;
+        $new_emp->is_active = 1;
+        $new_emp->department_id = 1;
+        $new_emp->enable_payroll = 0;
+        $new_emp->deleted = 0;
+        $new_emp->save();
+
+        Alert::success('Successfully Store')->persistent('Dismiss');
+        return back();
+    }
+
+    public function updatebiocode(Request $request)
+    {
+        // dd($request->all());
+
+        $emp = PersonnelEmployee::where('emp_code',$request->emp_code)->first();
+        $emp->first_name = $request->first_name;
+        $emp->last_name = $request->last_name;
+        $emp->save();
+
+      
+
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
+    }
+
+    
 }
