@@ -91,6 +91,7 @@ class EmployeeController extends Controller
     
 
     public function generate_emp_code($table,$code,$year)
+    
     {
         // dd($table);
         $data = Employee::whereYear('original_date_hired',"=",$year)->orderBy('id','desc')->first();
@@ -116,6 +117,38 @@ class EmployeeController extends Controller
         return view('employees.view_employees_biometrics',
         array(
             'header' => 'biometrics',
+            'employees' => $employees,
+        ));
+    }
+
+    public function employee_attendance(Request $request)
+    {
+        $attendance_controller = new AttendanceController;
+        $employees = PersonnelEmployee::get();
+        $from_date = $request->from;
+        $to_date = $request->to;
+        $date_range =  [];
+        $attendances = [];
+        $schedules = [];
+        if($from_date != null)
+        {
+        $date_range =  $attendance_controller->dateRange( $from_date, $to_date);
+        $attendances =  $attendance_controller->get_attendances($from_date,$to_date,$request->employee);
+        $schedule_id = Employee::where('employee_number',$request->employee)->first();
+        // dd($schedule_id);
+        $schedules = ScheduleData::where('schedule_id',$schedule_id->schedule_id)->get();
+        }
+        if($schedule_id == null)
+        {
+
+        }
+        else
+        {
+
+        }
+        return view('employees.view_employees_biometrics',
+        array(
+            'header' => 'biometrics-attendances',
             'employees' => $employees,
         ));
     }
