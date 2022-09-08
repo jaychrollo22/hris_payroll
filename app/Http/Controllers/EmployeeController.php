@@ -8,6 +8,7 @@ use App\Schedule;
 use App\Level;
 use App\Bank;
 use App\User;
+use App\ScheduleData;
 use App\PersonnelEmployee;
 use App\IclockTransation;
 use App\MaritalStatus;
@@ -118,6 +119,7 @@ class EmployeeController extends Controller
         array(
             'header' => 'biometrics',
             'employees' => $employees,
+            
         ));
     }
 
@@ -130,26 +132,29 @@ class EmployeeController extends Controller
         $date_range =  [];
         $attendances = [];
         $schedules = [];
+        $emp_code = $request->employee;
+        $schedule_id = null;
+        $emp_data = null;
         if($from_date != null)
         {
+        $emp_data = PersonnelEmployee::where('emp_code',$request->employee)->first();
         $date_range =  $attendance_controller->dateRange( $from_date, $to_date);
         $attendances =  $attendance_controller->get_attendances($from_date,$to_date,$request->employee);
-        $schedule_id = Employee::where('employee_number',$request->employee)->first();
-        // dd($schedule_id);
-        $schedules = ScheduleData::where('schedule_id',$schedule_id->schedule_id)->get();
+       
+        $schedules = ScheduleData::where('schedule_id',1)->get();
         }
-        if($schedule_id == null)
-        {
-
-        }
-        else
-        {
-
-        }
-        return view('employees.view_employees_biometrics',
+        
+        return view('attendances.employee_attendance',
         array(
             'header' => 'biometrics-attendances',
             'employees' => $employees,
+            'from_date' => $from_date,
+            'to_date' => $to_date,
+            'date_range' => $date_range,
+            'attendances' => $attendances,
+            'schedules' => $schedules,
+            'emp_code' => $emp_code,
+            'emp_data' => $emp_data,
         ));
     }
 

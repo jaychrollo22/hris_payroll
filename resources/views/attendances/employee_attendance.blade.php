@@ -19,7 +19,7 @@
                             <select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='employee' required>
                                 <option value="">-- Select Employee --</option>
                                  @foreach($employees as $emp)
-                                    <option value="{{$emp->emp_code}}">{{$emp->first_name}} {{$emp->last_name}}</option>
+                                    <option value="{{$emp->emp_code}}">{{$emp->emp_code}} - {{$emp->first_name}} {{$emp->last_name}}</option>
                                  @endforeach
                               </select>
                         </div>
@@ -47,8 +47,11 @@
                   </div>
                   </form>
                 </p>
+                @if($date_range)
+                        <button class='btn btn-info' onclick="exportTableToExcel('employee_attendance','{{$emp_data->first_name}} - {{$emp_data->last_name}} : {{$from_date}} - {{$to_date}}')">Export</button>
+                        @endif
                 <div class="table-responsive">
-                  <table class="table table-hover table-bordered">
+                  <table border="1" class="table table-hover table-bordered  tablewithSearch" id='employee_attendance'>
                     <thead>
                       <tr>
                         <th>Employee Code</th>
@@ -65,10 +68,11 @@
                       </tr>
                     </thead>
                     <tbody>
+                      
                         @foreach(array_reverse($date_range) as $date_r)
                         <tr>
-                            <th>{{$request->employee}}</th>
-                            <th>Employee Name</th>
+                            <th>{{$emp_code}}</th>
+                            <th>{{$emp_data->first_name}} {{$emp_data->last_name}}</th>
                           {{-- {{dd($schedules->pluck('name'))}} --}}
                           <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('M d - l',strtotime($date_r))}}</td>
                           @php
