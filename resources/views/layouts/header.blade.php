@@ -252,17 +252,10 @@ select.list-dt:focus {
             <ul class="navbar-nav mr-lg-2">
               <li class="nav-item nav-search d-none d-lg-block">
                 <div class="input-group">
-                  {{-- <div class="input-group-prepend hover-cursor" id="navbar-search-icon">
-                    <span class="input-group-text" id="search">
-                      <i class="icon-search"></i>
-                    </span>
-                  </div> --}}
-                  {{-- <input type="text" class="form-control" id="navbar-search-input" placeholder="Search now" aria-label="search" aria-describedby="search"> --}}
                 </div>
               </li>
             </ul>
             <ul class="navbar-nav navbar-nav-right">
-              
               <li class="nav-item nav-profile dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
                   <img class="rounded-circle" style='width:34px;height:34px;' src='{{URL::asset(auth()->user()->employee->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';">
@@ -308,7 +301,7 @@ select.list-dt:focus {
                   <span class="menu-title">Attendances</span>
                 </a>
               </li>
-              <li class="nav-item @if($header == 'forms') active @endif">
+              {{-- <li class="nav-item @if($header == 'forms') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-layout menu-icon"></i>
                   <span class="menu-title">Forms</span>
@@ -323,15 +316,15 @@ select.list-dt:focus {
                     <li class="nav-item "> <a class="nav-link " href="{{url('/dtr-correction')}}">DTR Correction</a></li>
                   </ul>
                 </div>
-              </li>
-              <li class="nav-item @if($header == 'payslips') active @endif">
+              </li> --}}
+              {{-- <li class="nav-item @if($header == 'payslips') active @endif">
                 <a class="nav-link" href="{{url('/payslips')}}" onclick='show()'>
                   <i class="icon-briefcase menu-icon"></i>
                   <span class="menu-title">Payslips</span>
                 </a>
-              </li>
+              </li> --}}
               @if((auth()->user()->subbordinates->count()) != 0)
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <hr>
                 <h5>Manager</h5>
               </li>
@@ -346,32 +339,32 @@ select.list-dt:focus {
                   <i class="icon-monitor menu-icon"></i>
                   <span class="menu-title">Subordinates</span>
                 </a>
-              </li>
+              </li> --}}
               @endif
               @if(auth()->user()->role == 'Admin')
               <li class="nav-item">
                 <hr>
                 <h5>Admin</h5>
               </li>
-              <li class="nav-item @if($header == 'employees') active @endif ">
+              {{-- <li class="nav-item @if($header == 'employees') active @endif ">
                 <a class="nav-link" href="{{url('/employees')}}" onclick='show()'>
                   <i class="icon-head menu-icon"></i>
                   <span class="menu-title">Employees</span>
                 </a>
-              </li>
+              </li> --}}
               <li class="nav-item @if($header == 'biometrics') active @endif ">
                 <a class="nav-link" href="{{url('/get-biometrics')}}" onclick='show()'>
                   <i class="icon-contract menu-icon"></i>
                   <span class="menu-title">Biometrics</span>
                 </a>
               </li>
-              <li class="nav-item @if($header == 'biometrics-attendances') active @endif ">
-                <a class="nav-link" href="{{url('/biometrics-attendances')}}" onclick='show()'>
+              <li class="nav-item @if($header == 'biologs-employee') active @endif ">
+                <a class="nav-link" href="{{url('/biologs-employee')}}" onclick='show()'>
                   <i class="icon-contract menu-icon"></i>
-                  <span class="menu-title">Employees Attendance</span>
+                  <span class="menu-title">Biologs Per Employee</span>
                 </a>
               </li>
-              <li class="nav-item @if($header == 'settings') active @endif">
+              {{-- <li class="nav-item @if($header == 'settings') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-cog menu-icon"></i>
                   <span class="menu-title">Settings</span>
@@ -388,14 +381,14 @@ select.list-dt:focus {
                     <li class="nav-item"> <a class="nav-link" href="{{url('/logos')}}">Logos</a></li>
                   </ul>
                 </div>
-              </li>
-              <li class="nav-item">
+              </li> --}}
+              {{-- <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-file menu-icon"></i>
                   <span class="menu-title">Reports</span>
                   <i class="menu-arrow"></i>
                 </a>
-              </li>
+              </li> --}}
               @endif
             </ul>
           </nav>
