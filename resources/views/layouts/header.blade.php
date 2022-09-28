@@ -364,17 +364,13 @@ select.list-dt:focus {
                   <span class="menu-title">Biologs Per Employee</span>
                 </a>
               </li>
-<<<<<<< HEAD
                <li class="nav-item @if($header == 'bio-per-location') active @endif ">
                 <a class="nav-link" href="{{url('/bio-per-location')}}" onclick='show()'>
                   <i class="icon-contract menu-icon"></i>
                   <span class="menu-title">Biologs Per Location</span>
                 </a>
               </li>
-              {{-- <li class="nav-item @if($header == 'settings') active @endif">
-=======
               <li class="nav-item @if($header == 'settings') active @endif">
->>>>>>> d06f2246004a25bac8a4496dde52d962c0ff6bf5
                 <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-cog menu-icon"></i>
                   <span class="menu-title">Settings</span>
