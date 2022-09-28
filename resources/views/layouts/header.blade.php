@@ -301,7 +301,7 @@ select.list-dt:focus {
                   <span class="menu-title">Attendances</span>
                 </a>
               </li>
-              {{-- <li class="nav-item @if($header == 'forms') active @endif">
+              <li class="nav-item @if($header == 'forms') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-layout menu-icon"></i>
                   <span class="menu-title">Forms</span>
@@ -316,15 +316,15 @@ select.list-dt:focus {
                     <li class="nav-item "> <a class="nav-link " href="{{url('/dtr-correction')}}">DTR Correction</a></li>
                   </ul>
                 </div>
-              </li> --}}
-              {{-- <li class="nav-item @if($header == 'payslips') active @endif">
+              </li>
+              <li class="nav-item @if($header == 'payslips') active @endif">
                 <a class="nav-link" href="{{url('/payslips')}}" onclick='show()'>
                   <i class="icon-briefcase menu-icon"></i>
                   <span class="menu-title">Payslips</span>
                 </a>
-              </li> --}}
+              </li>
               @if((auth()->user()->subbordinates->count()) != 0)
-              {{-- <li class="nav-item">
+              <li class="nav-item">
                 <hr>
                 <h5>Manager</h5>
               </li>
@@ -339,7 +339,7 @@ select.list-dt:focus {
                   <i class="icon-monitor menu-icon"></i>
                   <span class="menu-title">Subordinates</span>
                 </a>
-              </li> --}}
+              </li>
               @endif
               @if(auth()->user()->role == 'Admin')
               <li class="nav-item">
@@ -364,7 +364,7 @@ select.list-dt:focus {
                   <span class="menu-title">Biologs Per Employee</span>
                 </a>
               </li>
-              {{-- <li class="nav-item @if($header == 'settings') active @endif">
+              <li class="nav-item @if($header == 'settings') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-cog menu-icon"></i>
                   <span class="menu-title">Settings</span>
@@ -381,7 +381,7 @@ select.list-dt:focus {
                     <li class="nav-item"> <a class="nav-link" href="{{url('/logos')}}">Logos</a></li>
                   </ul>
                 </div>
-              </li> --}}
+              </li>
               {{-- <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-file menu-icon"></i>
