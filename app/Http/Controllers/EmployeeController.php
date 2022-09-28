@@ -12,6 +12,7 @@ use App\ScheduleData;
 use App\PersonnelEmployee;
 use App\IclockTransation;
 use App\MaritalStatus;
+use App\IclockTerminal;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -140,7 +141,6 @@ class EmployeeController extends Controller
         $emp_data = PersonnelEmployee::where('emp_code',$request->employee)->first();
         $date_range =  $attendance_controller->dateRange( $from_date, $to_date);
         $attendances =  $attendance_controller->get_attendances($from_date,$to_date,$request->employee);
-       
         $schedules = ScheduleData::where('schedule_id',1)->get();
         }
         
@@ -157,7 +157,33 @@ class EmployeeController extends Controller
             'emp_data' => $emp_data,
         ));
     }
+    public function biologs_per_location(Request $request)
+    {
+    $terminals = IclockTerminal::get();
+    $from_date = $request->from;
+    $to_date = $request->to;
+    $attendances = array();
+    if($from_date != null)
+    {
+        $attendances = IclockTransation::whereBetween('punch_time',[$from_date,$to_date])
+        ->where('terminal_id',$request->location)
+        ->whereIn('punch_state', array(0,1))
+        ->with('emp_data','location')
+        ->orderBy('emp_code','desc')
+        ->orderBy('punch_time','asc')
+        ->get();
+        // dd($attendances);
+    }
 
+    return view('attendances.employee_attendance_location',
+        array(
+            'header' => 'bio-per-location',
+            'from_date' => $from_date,
+            'to_date' => $to_date,
+            'terminals' => $terminals,
+            'attendances' => $attendances,
+        ));
+    }
     public function newBio(Request $request)
     {
         // dd($request->all());
