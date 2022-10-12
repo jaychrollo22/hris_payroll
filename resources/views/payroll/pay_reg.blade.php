@@ -51,7 +51,7 @@
                             <tr>
                                 <td>{{date('M d, Y',strtotime($payroll->date_from))}} - {{date('M d, Y',strtotime($payroll->date_to))}}</td>
                                 <td>{{date('M d Y',strtotime($payroll->auditdate))}}</td>
-                                <td><a href='#' data-toggle="modal" data-target="#view_payroll"> {{count($payroll_employees->where('date_from',$payroll->date_from))}} </a></td>
+                                <td><a href='#' data-toggle="modal" data-target="#view_payroll{{$payroll->date_from}}"> {{count($payroll_employees->where('date_from',$payroll->date_from))}} </a></td>
                                 <td>{{number_format($payroll_employees->where('date_from',$payroll->date_from)->sum('gross_pay'),2)}}</td>
                                 <td>{{number_format($payroll_employees->where('date_from',$payroll->date_from)->sum('witholding_tax'),2)}}</td>
                                 <td>{{number_format($payroll_employees->where('date_from',$payroll->date_from)->sum('total_deduction'),2)}}</td>
@@ -66,6 +66,8 @@
         </div>
     </div>
 </div>
-@include('payroll.view_payroll')   
+@foreach($payrolls as $payroll)
+    @include('payroll.view_payroll')   
+@endforeach
 @include('payroll.upload_payroll')
 @endsection
