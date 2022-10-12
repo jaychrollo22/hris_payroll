@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Excel;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PayslipController extends Controller
 {
@@ -30,6 +31,7 @@ class PayslipController extends Controller
 
      $data = Excel::load($path)->get();
      dd($data);
-     return back()->with('success', 'Excel Data Imported successfully.');
+     Alert::success('Successfully Import')->persistent('Dismiss');
+     return back();
     }
 }
