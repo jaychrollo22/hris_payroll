@@ -29,7 +29,7 @@
                     <thead>
                         <tr>
                             <th>Payroll Date</th>
-                            <th>Date Uploaded</th>
+                            <th>Date Generated</th>
                             <th>Employee Count</th>
                             <th>Total Gross Pay</th>
                             <th>Tax Total</th>
@@ -47,16 +47,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                    
+                        @foreach($payrolls as $payroll)
+                            <tr>
+                                <td>{{date('M d, Y',strtotime($payroll->date_from))}} - {{date('M d, Y',strtotime($payroll->date_to))}}</td>
+                                <td>{{date('M d Y',strtotime($payroll->auditdate))}}</td>
+                                <td><a href='#' data-toggle="modal" data-target="#view_payroll"> {{count($payroll_employees->where('date_from',$payroll->date_from))}} </a></td>
+                                <td>{{number_format($payroll_employees->where('date_from',$payroll->date_from)->sum('gross_pay'),2)}}</td>
+                                <td>{{number_format($payroll_employees->where('date_from',$payroll->date_from)->sum('witholding_tax'),2)}}</td>
+                                <td>{{number_format($payroll_employees->where('date_from',$payroll->date_from)->sum('total_deduction'),2)}}</td>
+                                <td>{{number_format($payroll_employees->where('date_from',$payroll->date_from)->sum('netpay'),2)}}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
         </div>
-        
     </div>
 </div>
-
+@include('payroll.view_payroll')   
 @include('payroll.upload_payroll')
 @endsection

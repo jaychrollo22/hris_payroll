@@ -497,11 +497,14 @@ select.list-dt:focus {
               $('.tablewithSearch').DataTable(
                 {
                   "paging": false,
-                  "sDom": "lfrti"
+                  "sDom": "lfrti",
+                  "ordering": false
                   // "sDom": 'lfrti',
                   // 'buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
                 } 
               );
+
+           
               table.buttons().container().appendTo( '.tablewithSearch .col-md-6:eq(0)' );
               $('.tablewithSearchonly').DataTable(
                 {

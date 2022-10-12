@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Excel;
+use App\Payroll;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -19,9 +20,15 @@ class PayslipController extends Controller
     }
     public function payroll_datas()
     {
+        $payrolls = Payroll::select('date_from','date_to','auditdate')->orderBy('date_from','desc')->get()->unique('date_from');
+        $payroll_employees = Payroll::get();
+        
+        // dd($payrolls);
         return view('payroll.pay_reg',
         array(
             'header' => 'Payroll',
+            'payrolls' => $payrolls,
+            'payroll_employees' => $payroll_employees,
             
         ));
     }

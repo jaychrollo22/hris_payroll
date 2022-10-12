@@ -64,14 +64,14 @@
                     </thead>
                     <tbody>
                         @foreach($attendances as $attendance)
-                        <tr>
-                            <td>@if($attendance->emp_data){{$attendance->emp_data->first_name}} {{$attendance->emp_data->last_name}}@endif</td>
-                            <td>{{$attendance->emp_code}}</td>
-                            <td>{{date('Y-m-d',strtotime($attendance->punch_time))}}</td>
-                            <td>{{date('h:i A',strtotime($attendance->punch_time))}}</td>
-                            <td>{{($attendance->punch_state == 0) ? "Time In" : "Time Out"}}</td>
-                            <td>{{$attendance->location->alias}}</td>
-                        </tr>
+                          <tr>
+                              <td>@if($attendance->emp_data){{$attendance->emp_data->first_name}} {{$attendance->emp_data->last_name}}@endif</td>
+                              <td>{{$attendance->emp_code}}</td>
+                              <td>{{date('Y-m-d',strtotime($attendance->punch_time))}}</td>
+                              <td>{{date('h:i A',strtotime($attendance->punch_time))}}</td>
+                              <td>{{($attendance->punch_state == 0) ? "Time In" : "Time Out"}}</td>
+                              <td>{{$attendance->location->alias}}</td>
+                          </tr>
                         @endforeach
                     </tbody>
                   </table>
