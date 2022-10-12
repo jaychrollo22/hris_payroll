@@ -245,6 +245,7 @@ select.list-dt:focus {
             <a class="navbar-brand brand-logo mr-5" href="{{url('/')}}"><img src="{{ URL::asset(config('logo.logos')::first()->logo)}}" class="mr-2" alt="logo"/></a>
             <a class="navbar-brand brand-logo-mini" href="{{url('/')}}"><img src="{{ URL::asset(config('logo.logos')::first()->icon)}}" alt="logo"/></a>
           </div>
+      
           <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
               <span class="icon-menu"></span>
@@ -385,6 +386,18 @@ select.list-dt:focus {
                     <li class="nav-item"> <a class="nav-link" href="{{url('/leavee-settings')}}">Leaves</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/announcements')}}">Announcements</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/logos')}}">Logos</a></li>
+                  </ul>
+                </div>
+              </li>
+              <li class="nav-item @if($header == 'Payroll') active @endif">
+                <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
+                  <i class="icon-align-center menu-icon"></i>
+                  <span class="menu-title">Payroll</span>
+                  <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse" id="payroll">
+                  <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{{url('/pay-reg')}}">Payroll Register</a></li>
                   </ul>
                 </div>
               </li>
