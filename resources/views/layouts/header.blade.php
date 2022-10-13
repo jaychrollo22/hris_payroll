@@ -453,8 +453,6 @@ select.list-dt:focus {
 
 
         @yield('footer')
-
-        
         <script type='text/javascript'>
           function exportTableToExcel(tableID, filename = ''){
             var downloadLink;
@@ -499,11 +497,12 @@ select.list-dt:focus {
 
               $('.tablewithSearch').DataTable(
                 {
-                  "paging": false,
-                  "sDom": "lfrti",
-                  "ordering": false
-                  // "sDom": 'lfrti',
-                  // 'buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
+                  "ordering": false,
+                  "pageLength": 100,
+                  "paging":         false,
+                  "fixedColumns":   {
+                      "left": 2
+                  }
                 } 
               );
 
