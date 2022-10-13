@@ -13,8 +13,8 @@
                         Upload
                     </button>
                     
-                    <a href='{{url('payroll.xlsx)')}}' target='_blank'><button type="button" class="btn btn-primary btn-icon-text">
-                        <i class="ti-file btn-icon-prepend btn-sm"></i>
+                    <a href='{{url('payroll.xlsx)')}}' target='_blank'><button type="button" class="btn btn-primary btn-icon-text btn-sm">
+                        <i class="ti-file btn-icon-prepend "></i>
                         Download Format
                     </button></a>
                 </h4>
