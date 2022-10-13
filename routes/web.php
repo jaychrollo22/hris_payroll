@@ -106,6 +106,7 @@ Route::group( ['middleware' => 'auth'], function()
     //Payroll
     Route::get('pay-reg','PayslipController@payroll_datas');
     Route::post('pay-reg','PayslipController@import');
+    Route::post('upload-attendance','PayslipController@upload_attendance');
     
 });
 

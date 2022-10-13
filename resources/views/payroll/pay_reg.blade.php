@@ -61,15 +61,6 @@
                             <th>Tax Total</th>
                             <th>Total Deduction</th>
                             <th>Net Pay Total</th>
-                            {{-- <th>SSS Reg EE Total</th>
-                            <th>SSS MP EE Total</th>
-                            <th>PHIC EE Total</th>
-                            <th>HDMF EE Total</th>
-                            <th>SSS Reg Er Total</th>
-                            <th>SSS Mpf Er Total</th>
-                            <th>SSS Ec Total</th>
-                            <th>Phic ER Total</th>
-                            <th>HDMF ER Total</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -97,12 +88,11 @@
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">Timekeeping 
-                    <button type="button" class="btn btn-outline-danger btn-icon-text btn-sm"  data-toggle="modal" data-target="#timekeeping">
+                    <button type="button" class="btn btn-outline-danger btn-icon-text btn-sm"  data-toggle="modal" data-target="#timekeepingID">
                         <i class="ti-upload btn-icon-prepend"></i>                                                    
                         Upload
                     </button>
-                    
-                    <a href='{{url('timekeeping.xlsx')}}' target='_blank'><button type="button" class="btn btn-primary btn-icon-text btn-sm">
+                    <a href='{{url('att_summary.xlsx')}}' target='_blank'><button type="button" class="btn btn-primary btn-icon-text btn-sm">
                         <i class="ti-file btn-icon-prepend "></i>
                         Download Format
                     </button></a>
@@ -155,5 +145,6 @@
         @include('payroll.view_attendances')   
     @endforeach
     @include('payroll.upload_payroll')
+    <!-- @include('payroll.upload_attendance') -->
 @endsection
 

@@ -24,7 +24,7 @@ class PayslipController extends Controller
     {
         $payrolls = Payroll::select('date_from','date_to','auditdate','created_at')->orderBy('date_from','desc')->get()->unique('date_from');
         $payroll_employees = Payroll::orderBy('name','asc')->get();
-        $attendances =  AttSummary::get();
+        $attendances =  AttSummary::orderBy('employee','asc')->get();
         // dd($payrolls);
         return view('payroll.pay_reg',
         array(
@@ -34,6 +34,13 @@ class PayslipController extends Controller
             'attendances' => $attendances,
             
         ));
+    }
+    function upload_attendance(Request $request)
+    {
+        $path = $request->file('file')->getRealPath();
+        $data = Excel::load($path)->get();
+
+        
     }
     function import(Request $request)
     {
