@@ -68,7 +68,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                      @foreach($payroll_employees->where('date_from',$payroll->date_from) as $employee)
+                      @foreach($attendances->where('date_from',$payroll->date_from) as $employee)
                       <tr>
                         <td>{{$employee->name}}</td>
                         <td>{{$employee->emp_code}}</td>

@@ -6,6 +6,7 @@ use App\Payroll;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\DB;
+use App\AttSummary;
 
 class PayslipController extends Controller
 {
@@ -21,15 +22,16 @@ class PayslipController extends Controller
     }
     public function payroll_datas()
     {
-        $payrolls = Payroll::select('date_from','date_to','auditdate')->orderBy('date_from','desc')->get()->unique('date_from');
+        $payrolls = Payroll::select('date_from','date_to','auditdate','created_at')->orderBy('date_from','desc')->get()->unique('date_from');
         $payroll_employees = Payroll::orderBy('name','asc')->get();
-        
+        $attendances =  AttSummary::get();
         // dd($payrolls);
         return view('payroll.pay_reg',
         array(
             'header' => 'Payroll',
             'payrolls' => $payrolls,
             'payroll_employees' => $payroll_employees,
+            'attendances' => $attendances,
             
         ));
     }

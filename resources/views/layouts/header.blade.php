@@ -229,7 +229,9 @@ select.list-dt:focus {
 ::-webkit-scrollbar-thumb:hover {
   background: #555; 
 }
-
+.tab-content{
+   padding:20px;
+}
 
     </style>
 </head>
@@ -507,8 +509,7 @@ select.list-dt:focus {
               );
 
            
-              table.buttons().container().appendTo( '.tablewithSearch .col-md-6:eq(0)' );
-              $('.tablewithSearchonly').DataTable(
+             $('.tablewithSearchonly').DataTable(
                 {
                   "paging": false,
                   "sDom": "lfrti"
