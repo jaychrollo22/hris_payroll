@@ -12,6 +12,11 @@
                         <i class="ti-upload btn-icon-prepend"></i>                                                    
                         Upload
                     </button>
+                    
+                    <a href='{{url('payroll.xlsx)')}}' target='_blank'><button type="button" class="btn btn-primary btn-icon-text">
+                        <i class="ti-file btn-icon-prepend btn-sm"></i>
+                        Download Format
+                    </button></a>
                 </h4>
                 @if (count($errors))
                 @foreach($errors->all() as $error)
