@@ -6,7 +6,13 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <meta content="Holdings, Construction Company, Shipping, Logistics, Ship Building" name="keywords">
+    <meta content="Premium Infinite Ventures" property="og:title">
+    <meta content="Holdings, Construction Company, Shipping, Logistics, Ship Building" property="og:description">
+    <meta content="login_css/images/present.png" property="og:image">
+    <meta content="https://app.pivi.com.ph:8035/" property="og:url">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="shortcut icon" href="{{ URL::asset(config('logo.logos')::first()->icon)}}">
     <!-- Scripts -->
