@@ -102,7 +102,7 @@ Route::group( ['middleware' => 'auth'], function()
     Route::post('update-biocode','EmployeeController@updatebiocode');
     Route::get('biologs-employee','EmployeeController@employee_attendance');
     Route::get('bio-per-location','EmployeeController@biologs_per_location');
-    Route::get('pmi-local','EmployeeCOntroller@localbio');
+    Route::get('pmi-local','EmployeeController@localbio');
 
     //Payroll
     Route::get('pay-reg','PayslipController@payroll_datas');
