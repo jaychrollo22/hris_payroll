@@ -31,8 +31,8 @@ class SettingController extends Controller
         $attachment = $request->file('file');
         $original_name = $attachment->getClientOriginalName();
         $name = time().'_'.$attachment->getClientOriginalName();
-        $attachment->move(public_path().'/icons/', $name);
-        $file_name = '/icons/'.$name;
+        $attachment->move(public_path().'/images/', $name);
+        $file_name = '/images/'.$name;
         $setting->icon = $file_name;
         $setting->save();
         Alert::success('Successfully icon uploaded.')->persistent('Dismiss');
@@ -48,8 +48,8 @@ class SettingController extends Controller
         $attachment = $request->file('file');
         $original_name = $attachment->getClientOriginalName();
         $name = time().'_'.$attachment->getClientOriginalName();
-        $attachment->move(public_path().'/icons/', $name);
-        $file_name = '/icons/'.$name;
+        $attachment->move(public_path().'/images/', $name);
+        $file_name = '/images/'.$name;
         $setting->logo = $file_name;
         $setting->save();
         Alert::success('Successfully icon uploaded.')->persistent('Dismiss');
