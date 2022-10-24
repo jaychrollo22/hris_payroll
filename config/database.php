@@ -93,6 +93,17 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
         ],
+        'sqlsrv_local' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_HOST_SQL', 'localhost'),
+            'port' => env('DB_PORT_SQL', '1433'),
+            'database' => env('DB_DATABASE_SQL_LOCAL', 'forge'),
+            'username' => env('DB_USERNAME_SQL', 'forge'),
+            'password' => env('DB_PASSWORD_SQL', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
 
     ],
 

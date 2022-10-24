@@ -13,6 +13,7 @@ use App\PersonnelEmployee;
 use App\IclockTransation;
 use App\MaritalStatus;
 use App\IclockTerminal;
+use App\AttPunch;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -222,6 +223,31 @@ class EmployeeController extends Controller
 
         Alert::success('Successfully Updated')->persistent('Dismiss');
         return back();
+    }
+
+    public function localbio(Request $request)
+    {
+        // dd($request->all());
+        $from_date = $request->from;
+        $to_date = $request->to;
+        $attendances = array();
+        if($from_date != null)
+        {
+            $attendances = AttPunch::whereBetween('punch_time',[$from_date,date('Y-m-d',strtotime("+1 day", strtotime($to_date)))])
+            ->where('terminal_id',1004)
+            ->with('personal_data')
+            ->orderBy('employee_id','desc')
+            ->orderBy('punch_time','asc')
+            ->get();
+        }
+    
+        return view('attendances.pmi_local',
+            array(
+                'header' => 'pmi-local',
+                'from_date' => $from_date,
+                'to_date' => $to_date,
+                'attendances' => $attendances,
+            ));
     }
 
     
