@@ -160,30 +160,30 @@ class EmployeeController extends Controller
     }
     public function biologs_per_location(Request $request)
     {
-    $terminals = IclockTerminal::get();
-    $from_date = $request->from;
-    $to_date = $request->to;
-    $attendances = array();
-    if($from_date != null)
-    {
-        $attendances = IclockTransation::whereBetween('punch_time',[$from_date,$to_date])
-        ->where('terminal_id',$request->location)
-        ->whereIn('punch_state', array(0,1))
-        ->with('emp_data','location')
-        ->orderBy('emp_code','desc')
-        ->orderBy('punch_time','asc')
-        ->get();
-        // dd($attendances);
-    }
+        $terminals = IclockTerminal::get();
+        $from_date = $request->from;
+        $to_date = $request->to;
+        $attendances = array();
+        if($from_date != null)
+        {
+            $attendances = IclockTransation::whereBetween('punch_time',[$from_date,$to_date])
+            ->where('terminal_id',$request->location)
+            ->whereIn('punch_state', array(0,1))
+            ->with('emp_data','location')
+            ->orderBy('emp_code','desc')
+            ->orderBy('punch_time','asc')
+            ->get();
+            // dd($attendances);
+        }
 
-    return view('attendances.employee_attendance_location',
-        array(
-            'header' => 'bio-per-location',
-            'from_date' => $from_date,
-            'to_date' => $to_date,
-            'terminals' => $terminals,
-            'attendances' => $attendances,
-        ));
+        return view('attendances.employee_attendance_location',
+            array(
+                'header' => 'bio-per-location',
+                'from_date' => $from_date,
+                'to_date' => $to_date,
+                'terminals' => $terminals,
+                'attendances' => $attendances,
+            ));
     }
     public function newBio(Request $request)
     {

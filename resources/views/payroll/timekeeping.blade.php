@@ -15,23 +15,7 @@
                     </div>
                 @endforeach
             @endif
-        <ul class="nav  nav-pills nav-pills-custom" id="pills-tab-custom" >
-            <li class="nav-item ">
-                <a class="nav-link @if($header == 'Payroll')active @endif"   href="{{url('pay-reg')}}" >
-                Payroll
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @if($header == 'Timekeeping')active @endif"   href="{{url('timekeeping')}}"  >
-                Timekeeping
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @if($header == 'Employee-Profiles')active @endif"   href="{{url('employee-profiles')}}"  >
-                Employee Profile
-                </a>
-            </li>
-        </ul>
+       @include('links')
         <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
@@ -51,7 +35,6 @@
                     <thead>
                         <tr>
                             <th>Period Date</th>
-                            <th>Date Generated</th>
                             <th>Employee Count</th>
                             <th>Total Days Work</th>
                             <th>Total Days Absent</th>
@@ -63,7 +46,6 @@
                         @foreach($attendances->unique('period_from') as $att)
                             <tr>
                                 <td>{{date('M d, Y', strtotime($att->period_from))}} - {{date('M d, Y', strtotime($att->period_to))}}</td>
-                                <td>{{date('M d, Y',strtotime($att->created_at))}}</td>
                                 <td><a href='#' data-toggle="modal" data-target="#view_attendance{{$att->period_from}}">{{count($attendances->where('period_from',$att->period_from))}}</a></td>
                                 <td>{{number_format($attendances->where('period_from',$att->period_from)->sum('tot_days_work'),2)}}</td>
                                 <td>{{number_format($attendances->where('period_from',$att->period_from)->sum('tot_days_absent'),2)}}</td>

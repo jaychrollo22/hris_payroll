@@ -15,24 +15,7 @@
                     </div>
                 @endforeach
             @endif
-        <ul class="nav  nav-pills nav-pills-custom" id="pills-tab-custom" >
-            <li class="nav-item ">
-                <a class="nav-link @if($header == 'Payroll')active @endif"   href="{{url('pay-reg')}}" >
-                Payroll
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @if($header == 'Timekeeping')active @endif"   href="{{url('timekeeping')}}"  >
-                Timekeeping
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link @if($header == 'Employee-Profiles')active @endif"   href="{{url('employee-profiles')}}"  >
-                Employee Profile
-                </a>
-            </li>
-        </ul>
-    
+        @include('links')
         <div id="payroll" class="tab-pane  active">
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
@@ -54,7 +37,7 @@
                     <thead>
                         <tr>
                             <th>Payroll Date</th>
-                            <th>Date Generated</th>
+                            <!-- <th>Date Generated</th> -->
                             <th>Employee Count</th>
                             <th>Total Gross Pay</th>
                             <th>Tax Total</th>
@@ -66,7 +49,7 @@
                         @foreach($payrolls as $payroll)
                             <tr>
                                 <td>{{date('M d, Y',strtotime($payroll->date_from))}} - {{date('M d, Y',strtotime($payroll->date_to))}}</td>
-                                <td>{{date('M d, Y',strtotime($payroll->created_at))}}</td>
+                                <!-- <td>{{date('M d, Y',strtotime($payroll->created_at))}}</td> -->
                                 <td><a href='#' data-toggle="modal" data-target="#view_payroll{{$payroll->date_from}}"> {{count($payroll_employees->where('date_from',$payroll->date_from))}} </a></td>
                                 <td>{{number_format($payroll_employees->where('date_from',$payroll->date_from)->sum('gross_pay'),2)}}</td>
                                 <td>{{number_format($payroll_employees->where('date_from',$payroll->date_from)->sum('witholding_tax'),2)}}</td>

@@ -109,6 +109,11 @@ Route::group( ['middleware' => 'auth'], function()
     Route::get('timekeeping','PayslipController@attendances');
     Route::post('pay-reg','PayslipController@import');
     Route::post('upload-attendance','PayslipController@upload_attendance');
+
+
+    //13th month
+    Route::get('month-benefit','PayslipController@monthly_benefit');
+
     
 });
 

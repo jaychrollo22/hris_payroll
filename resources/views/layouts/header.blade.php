@@ -355,12 +355,12 @@ select.list-dt:focus {
                 <hr>
                 <h5>Admin</h5>
               </li>
-              {{-- <li class="nav-item @if($header == 'employees') active @endif ">
+              <li class="nav-item @if($header == 'employees') active @endif ">
                 <a class="nav-link" href="{{url('/employees')}}" onclick='show()'>
                   <i class="icon-head menu-icon"></i>
                   <span class="menu-title">Employees</span>
                 </a>
-              </li> --}}
+              </li>
               <li class="nav-item @if($header == 'biometrics') active @endif ">
                 <a class="nav-link" href="{{url('/get-biometrics')}}" onclick='show()'>
                   <i class="icon-contract menu-icon"></i>

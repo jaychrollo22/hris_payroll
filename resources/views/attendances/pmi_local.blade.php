@@ -56,10 +56,10 @@
                               <td>{{date('Y-m-d',strtotime($attendance->punch_time))}}</td>
                               <td>{{date('h:i A',strtotime($attendance->punch_time))}}</td>
                               <td>
-                              @if($attendance->work_state == 0) 
+                              @if($attendance->workstate == 0) 
                               Time In
-                              @elseif($attendance->work_state == 1)
-                              sTime Out
+                              @elseif($attendance->workstate == 1)
+                              Time Out
                               @else
 
                               @endif</td>
