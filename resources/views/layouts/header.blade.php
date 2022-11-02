@@ -354,35 +354,28 @@ select.list-dt:focus {
                 <hr>
                 <h5>Admin</h5>
               </li>
+              
               <li class="nav-item @if($header == 'employees') active @endif ">
                 <a class="nav-link" href="{{url('/employees')}}" onclick='show()'>
                   <i class="icon-head menu-icon"></i>
                   <span class="menu-title">Employees</span>
                 </a>
               </li>
-              <li class="nav-item @if($header == 'biometrics') active @endif ">
-                <a class="nav-link" href="{{url('/get-biometrics')}}" onclick='show()'>
-                  <i class="icon-contract menu-icon"></i>
+             
+              <li class="nav-item @if($header == 'biometrics') active @endif">
+                <a class="nav-link" data-toggle="collapse" href="#biometrics" aria-expanded="false" aria-controls="ui-basic">
+                  <i class="icon-cog menu-icon"></i>
                   <span class="menu-title">Biometrics</span>
+                  <i class="menu-arrow"></i>
                 </a>
-              </li>
-              <li class="nav-item @if($header == 'biologs-employee') active @endif ">
-                <a class="nav-link" href="{{url('/biologs-employee')}}" onclick='show()'>
-                  <i class="icon-contract menu-icon"></i>
-                  <span class="menu-title">Biologs Per Employee</span>
-                </a>
-              </li>
-               <li class="nav-item @if($header == 'bio-per-location') active @endif ">
-                <a class="nav-link" href="{{url('/bio-per-location')}}" onclick='show()'>
-                  <i class="icon-contract menu-icon"></i>
-                  <span class="menu-title">Biologs Per Location</span>
-                </a>
-              </li>
-               <li class="nav-item @if($header == 'pmi-local') active @endif ">
-                <a class="nav-link" href="{{url('/pmi-local')}}" onclick='show()'>
-                  <i class="icon-contract menu-icon"></i>
-                  <span class="menu-title">17th floor</span>
-                </a>
+                <div class="collapse" id="biometrics">
+                  <ul class="nav flex-column sub-menu">
+                    <li class="nav-item"> <a class="nav-link" href="{{url('/get-biometrics')}}">Biometrics</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{url('/biologs-employee')}}">Biologs Per Employee</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{url('/biologs-employee')}}">Biologs Per Location</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{url('/pmi-local')}}">17th floor</a></li>
+                  </ul>
+                </div>
               </li>
               <li class="nav-item @if($header == 'settings') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="false" aria-controls="ui-basic">

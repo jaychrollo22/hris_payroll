@@ -147,7 +147,7 @@ class EmployeeController extends Controller
         
         return view('attendances.employee_attendance',
         array(
-            'header' => 'biometrics-attendances',
+            'header' => 'biometrics',
             'employees' => $employees,
             'from_date' => $from_date,
             'to_date' => $to_date,
@@ -178,7 +178,7 @@ class EmployeeController extends Controller
 
         return view('attendances.employee_attendance_location',
             array(
-                'header' => 'bio-per-location',
+                'header' => 'biometrics',
                 'from_date' => $from_date,
                 'to_date' => $to_date,
                 'terminals' => $terminals,
@@ -243,7 +243,7 @@ class EmployeeController extends Controller
     
         return view('attendances.pmi_local',
             array(
-                'header' => 'pmi-local',
+                'header' => 'biometrics',
                 'from_date' => $from_date,
                 'to_date' => $to_date,
                 'attendances' => $attendances,
