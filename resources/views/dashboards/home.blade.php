@@ -1,4 +1,7 @@
 @extends('layouts.header')
+@section('css_header')
+<link rel="stylesheet" href="{{asset('./body_css/vendors/fullcalendar/fullcalendar.min.css')}}">
+@endsection
 @section('content')
 <div class="main-panel">
     <div class="content-wrapper">
@@ -159,12 +162,14 @@
                     </div>
                     @endif
                   </div>
-                  <div class="col-md-4">
-              
+                  <div class="col-md-8">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">Fullcalendar</h4>
+                          <div id="calendar" class="full-calendar"></div>
+                        </div>
+                      </div>
                  
-                  </div>
-                  <div class="col-md-4 grid-margin">
-                   
                   </div>
                 </div>
             </div>
@@ -232,4 +237,7 @@
 @section('footer')
 <script src="{{asset('./body_css/js/tooltips.js')}}"></script>
 <script src="{{asset('./body_css/js/popover.js')}}"></script>
+<script src="{{asset('./body_css/vendors/moment/moment.min.js')}}"></script>
+<script src="{{asset('./body_css/vendors/fullcalendar/fullcalendar.min.js')}}"></script>
+<script src="./body_css/js/calendar.js"></script>
 @endsection
