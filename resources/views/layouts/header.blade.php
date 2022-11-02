@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="{{asset('body_css/vendors/ti-icons/css/themify-icons.css')}}">
     <link rel="stylesheet" href="{{asset('body_css/vendors/css/vendor.bundle.base.css')}}">
     <!-- endinject -->
-
+    @yield('css_header')
     <!-- Plugin css for this page -->
     <link rel="stylesheet" href="{{asset('body_css/vendors/datatables.net-bs4/dataTables.bootstrap4.css')}}">
     <link rel="stylesheet" href="{{asset('body_css/vendors/ti-icons/css/themify-icons.css')}}">
@@ -33,12 +33,11 @@
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <link rel="stylesheet" href="{{asset('body_css/css/vertical-layout-light/style.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css">
 <!-- endinject -->
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+    {{-- <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css"> --}}
     <style>
       .loader {
           position: fixed;
