@@ -86,6 +86,7 @@
     </div>
 </div>
     @foreach($payrolls as $payroll)
+        <!-- <div>{{$payroll->date_from}}</div> -->
         @include('payroll.view_payroll')   
     @endforeach
     @foreach($attendances as $att)
