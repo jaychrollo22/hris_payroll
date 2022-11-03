@@ -94,9 +94,10 @@
                       <div class="card">
                         <div class="card-body">
                           <h4 class="card-title">Calendar Events<br>
-                            <span class="badge text-white m-2" style='background-color:#257e4a;'><small>Regular Holiday</small></span> 
-                            <span class="badge text-white m-2" style='background-color:#ff6600;'><small>Special Holiday</small></span> 
+                            <span class="badge text-white m-2" style='background-color:#257e4a;'><small>Regular Holidays</small></span> 
+                            <span class="badge text-white m-2" style='background-color:#ff6600;'><small>Special Holidays</small></span> 
                             <span class="badge text-white m-2" style='background-color:#ff0000;'><small>Events</small></span>
+                            <span class="badge text-white m-2" style='background-color:#003399;'><small>Birthday Celebrants</small></span>
                           </h4>
                           <div id="calendar" class="full-calendar"></div>
                         </div>
@@ -187,7 +188,7 @@
 @section('footer')
 <script>
       var holidays = {!! json_encode($holidays->toArray()) !!};
-      console.log(holidays);
+      var celebrants = {!! json_encode($birth_date_celebrants->toArray()) !!};
       const d = new Date();
       let year = d.getFullYear();
       var data_holidays = [];
@@ -217,6 +218,28 @@
             }
             
             data_holidays.push(data);
+      }
+      for(ii=0;ii<celebrants.length;ii++)
+      {
+        var birth_date = new Date(celebrants[ii].birth_date);
+        var month = birth_date.getUTCMonth() + 1; //months from 1-12
+        if(month < 10)
+        {
+          month = "0"+month;
+        }
+       
+        var day = hol_date.getUTCDate();
+        if(day < 10)
+        {
+          day = "0"+day;
+        }
+        console.log(celebrants[ii]);
+        var data = {};
+        data.title = celebrants[ii].first_name+" "+celebrants[ii].last_name;
+        data.start = year + "-"+month+"-"+day;
+        data.type = "Birthday";
+        data.color = '#003399';
+        data_holidays.push(data);
       }
       
 </script>
