@@ -228,7 +228,7 @@
           month = "0"+month;
         }
        
-        var day = hol_date.getUTCDate();
+        var day = birth_date.getUTCDate();
         if(day < 10)
         {
           day = "0"+day;
