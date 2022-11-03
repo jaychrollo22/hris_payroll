@@ -453,7 +453,7 @@ select.list-dt:focus {
 
         <script src="{{asset('body_css/js/off-canvas.js')}}"></script>
         <script src="{{asset('body_css/js/hoverable-collapse.js')}}"></script>
-        <script src="{{asset('body_css/js/template.js')}}"></script>
+        {{-- <script src="{{asset('body_css/js/template.js')}}"></script> --}}
         <script src="{{asset('body_css/js/settings.js')}}"></script>
         <script src="{{asset('body_css/js/todolist.js')}}"></script>
 

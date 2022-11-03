@@ -7,6 +7,7 @@ use App\Handbook;
 use App\Employee;
 use App\Announcement;
 use App\ScheduleData;
+use App\Holiday;
 
 class HomeController extends Controller
 {
@@ -47,6 +48,13 @@ class HomeController extends Controller
         ->orderBy('birth_date','asc')
         ->get();
 
+        $holidays = Holiday::where('status','Permanent')
+        ->orWhere(function ($query)
+        {
+            $query->where('status',null)->whereYear('holiday_date', '=', date('Y'));
+        })
+        ->orderBy('holiday_date','asc')->get();
+        // dd($holidays);
 
         $schedules = ScheduleData::where('schedule_id',auth()->user()->employee->schedule_id)->get();
 
@@ -61,6 +69,7 @@ class HomeController extends Controller
             'schedules' => $schedules,
             'announcements' => $announcements ,
             'attendance_employees' => $attendance_employees ,
+            'holidays' => $holidays ,
         ));
     }
 

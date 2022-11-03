@@ -17,7 +17,7 @@
           <div class="row">
             <div class="col-md-10  transparent">
                 <div class="row">
-                    <div class="col-md-3 mb-4  stretch-card transparent">
+                    <div class="col-md-4 mb-4  stretch-card transparent">
                         <div class="card">
                           <div class="card-body">
                             <h3 class="card-title">{{date('M d, Y')}}</h3>
@@ -40,7 +40,7 @@
                           </div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-4  stretch-card transparent">
+                    <div class="col-md-4 mb-4  stretch-card transparent">
                         <div class="card">
                           <div class="card-body">
                             <h3 class="card-title">Employee Handbook</h3>
@@ -57,81 +57,9 @@
                 </div>
                 <div class="row">
                   <div class="col-md-4 ">
-                    <div class="card">
-                      <div class="card-body">
-                        <p class="card-title mb-0">Attendances</p>
-                        <div class="col-md-12 ">
-                          <small>
-                              <div class='redbox1 align-self-center'></div><i class='pl-1 pr-1'>Rest Day</i> 
-                              <div class='orangebox1 '></div><i class='pl-1 pr-1'>No In / No Out</i>
-                          </small>
-            
-                        </div>
-                        <div class="table-responsive">
-                          <table class="table table-hover table-bordered">
-                            <thead>
-                              <tr>
-                                <th style='width:33%'>Date</th>
-                                <th style='width:33%'>In</th>
-                                <th style='width:33%'>Out</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              @foreach(array_reverse($date_ranges) as $date_range)
-                              <tr>
-                                <td class=" @if(in_array(date('l',strtotime($date_range)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('M d - l',strtotime($date_range))}}</td>
-                                  @php
-                                    $time_in = $attendances->whereBetween('time_in',[$date_range." 00:00:00", $date_range." 23:59:59"])->first();
-                                    $time_out = null;
-                                    if($time_in == null)
-                                    {
-                                      $time_out = $attendances->whereBetween('time_out',[$date_range." 00:00:00", $date_range." 23:59:59"])->where('time_in',null)->first();
-                                    }
-                                  @endphp
-      
-                                
-                                @if($time_in != null)
-                                  <td>
-                                    {{date('h:i A',strtotime($time_in->time_in))}}
-                                  </td>
-                                  @if($time_in->time_out != null)
-                                    <td>
-                                      {{date('h:i A',strtotime($time_in->time_out))}} 
-                                    </td>
-                                  @else
-                                    <td class='bg-warning'>
-                                    </td>
-                                  @endif
-                                @else
-                                
-                                  @if((date('l',strtotime($date_range)) == "Saturday") || (date('l',strtotime($date_range)) == "Sunday")) 
-                                  <td></td>
-                                  <td></td>
-                                  @else
-                                  <td class='bg-warning'>
-                                  </td>
-                                  @if($time_out == null)
-                                    <td class='bg-warning'>
-                                    </td>
-                                  @else
-                                    <td >
-                                      {{date('h:i A',strtotime($time_out->time_out))}} 
-                                    </td>
-                                  @endif
-      
-                                 
-                                  @endif
-                                @endif
-      
-                              </tr>
-                              @endforeach
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
+                    
                     @if((auth()->user()->subbordinates->count()) != 0)
-                    <div class="card mt-3">
+                    <div class="card">
                       <div class="card-body">
                         <p class="card-title ">Subordinates <small>({{date('M d, Y')}})</small></p>
                           <div class="table-responsive" >
@@ -165,11 +93,14 @@
                   <div class="col-md-8">
                       <div class="card">
                         <div class="card-body">
-                          <h4 class="card-title">Fullcalendar</h4>
+                          <h4 class="card-title">Calendar Events<br>
+                            <span class="badge text-white m-2" style='background-color:#257e4a;'><small>Regular Holiday</small></span> 
+                            <span class="badge text-white m-2" style='background-color:#ff6600;'><small>Special Holiday</small></span> 
+                            <span class="badge text-white m-2" style='background-color:#ff0000;'><small>Events</small></span>
+                          </h4>
                           <div id="calendar" class="full-calendar"></div>
                         </div>
                       </div>
-                 
                   </div>
                 </div>
             </div>
@@ -219,6 +150,25 @@
           </div>
     </div>
 </div>
+<div class="modal fade" id="event_data" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle"></h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         Description : <span id='modalBody'>
+        </span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
   var span = document.getElementById('span');
 
@@ -235,9 +185,45 @@
 </script>
 @endsection
 @section('footer')
+<script>
+      var holidays = {!! json_encode($holidays->toArray()) !!};
+      console.log(holidays);
+      const d = new Date();
+      let year = d.getFullYear();
+      var data_holidays = [];
+      for(i=0;i<holidays.length;i++)
+      {
+
+        var hol_date = new Date(holidays[i].holiday_date);
+        var month = hol_date.getUTCMonth() + 1; //months from 1-12
+        if(month < 10)
+        {
+          month = "0"+month;
+        }
+       
+        var day = hol_date.getUTCDate();
+        if(day < 10)
+        {
+          day = "0"+day;
+        }
+        var data = {};
+            data.title = holidays[i].holiday_name;
+            data.start = year + "-"+month+"-"+day;
+            data.type = holidays[i].holiday_type;
+            data.color = '#257e4a';
+            if(holidays[i].holiday_type == "Special Holiday")
+            {
+              data.color = '#ff6600';
+            }
+            
+            data_holidays.push(data);
+      }
+      
+</script>
 <script src="{{asset('./body_css/js/tooltips.js')}}"></script>
 <script src="{{asset('./body_css/js/popover.js')}}"></script>
 <script src="{{asset('./body_css/vendors/moment/moment.min.js')}}"></script>
 <script src="{{asset('./body_css/vendors/fullcalendar/fullcalendar.min.js')}}"></script>
-<script src="./body_css/js/calendar.js"></script>
+<script src="{{asset('./body_css/js/calendar.js')}}"></script>
+
 @endsection
