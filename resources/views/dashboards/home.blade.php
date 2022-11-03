@@ -96,8 +96,7 @@
                           <h4 class="card-title">Calendar Events<br>
                             <span class="badge text-white m-2" style='background-color:#257e4a;'><small>Regular Holidays</small></span> 
                             <span class="badge text-white m-2" style='background-color:#ff6600;'><small>Special Holidays</small></span> 
-                            <span class="badge text-white m-2" style='background-color:#ff0000;'><small>Events</small></span>
-                            <span class="badge text-white m-2" style='background-color:#003399;'><small>Birthday Celebrants</small></span>
+                            <span class="badge text-white m-2" style='background-color:#ff0000;'><small>Birthday Celebrants</small></span>
                           </h4>
                           <div id="calendar" class="full-calendar"></div>
                         </div>
@@ -106,30 +105,6 @@
                 </div>
             </div>
             <div class="col-md-2">
-              <div class='row'>
-                <div class="col-md-12">
-                <div class="card">
-                  
-                  <div class="card-body">
-                    <p class="card-title">Birthday Celebrants <small>({{date('M Y')}})</small></p>
-                    <ul class="icon-data-list">
-                      @foreach($birth_date_celebrants as $emp)
-                      <li class='zoom'>
-                        <div class="d-flex">
-                          <img class="rounded-circle" style='width:40px;height:40px;' src='{{URL::asset($emp->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';">
-                          <div>
-                            <p class="text-info mb-1">{{$emp->first_name}} {{$emp->last_name}}</p>
-                            <p class="mb-0">{{$emp->department->name}}</p>
-                            <small>{{date('F d',strtotime($emp->birth_date))}}</small>
-                          </div>
-                        </div>
-                      </li>
-                      @endforeach
-                    </ul>
-                  </div>
-                </div>
-                </div>
-              </div>
               <div class='row mt-2'>
                 <div class="col-md-12">
                   <div class="card">
@@ -216,7 +191,7 @@
             {
               data.color = '#ff6600';
             }
-            
+            data.imageurl = 'images/1666674015_1661130183_icon.png';
             data_holidays.push(data);
       }
       for(ii=0;ii<celebrants.length;ii++)
@@ -237,8 +212,9 @@
         var data = {};
         data.title = celebrants[ii].first_name+" "+celebrants[ii].last_name;
         data.start = year + "-"+month+"-"+day;
-        data.type = "Birthday";
+        data.type = "Birthday Celebrant";
         data.color = '#003399';
+        data.imageurl = '#ff0000';
         data_holidays.push(data);
       }
       

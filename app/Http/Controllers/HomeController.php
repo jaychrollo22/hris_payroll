@@ -44,7 +44,6 @@ class HomeController extends Controller
         ->orWhere('expired',">=",date('Y-m-d'))->get();
         
         $birth_date_celebrants = Employee::with('department')->where('status','Active')
-        ->whereMonth('birth_date','=',date('m'))
         ->orderBy('birth_date','asc')
         ->get();
 
