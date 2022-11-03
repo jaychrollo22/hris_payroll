@@ -213,8 +213,7 @@
         data.title = celebrants[ii].first_name+" "+celebrants[ii].last_name;
         data.start = year + "-"+month+"-"+day;
         data.type = "Birthday Celebrant";
-        data.color = '#003399';
-        data.imageurl = '#ff0000';
+        data.color = '#ff0000';
         data_holidays.push(data);
       }
       
