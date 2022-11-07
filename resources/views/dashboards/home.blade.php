@@ -93,7 +93,7 @@
                   <div class="col-md-8">
                       <div class="card">
                         <div class="card-body">
-                          <h4 class="card-title">Calendar Events<br>
+                          <h4 class="card-title">Calendar Events
                             <span class="badge text-white m-2" style='background-color:#257e4a;'><small>Regular Holidays</small></span> 
                             <span class="badge text-white m-2" style='background-color:#ff6600;'><small>Special Holidays</small></span> 
                             <span class="badge text-white m-2" style='background-color:#ff0000;'><small>Birthday Celebrants</small></span>

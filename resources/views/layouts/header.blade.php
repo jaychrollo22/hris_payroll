@@ -37,7 +37,8 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    {{-- <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css"> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
     <style>
       .loader {
           position: fixed;
@@ -378,12 +379,12 @@ select.list-dt:focus {
                 </div>
               </li>
               <li class="nav-item @if($header == 'settings') active @endif">
-                <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="false" aria-controls="ui-basic">
+                <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="@if($header == 'settings')true @else false @endif" aria-controls="ui-basic">
                   <i class="icon-cog menu-icon"></i>
                   <span class="menu-title">Settings</span>
                   <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse" id="settings">
+                <div class="collapse @if($header == 'settings') show @endif" id="settings">
                   <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{url('/holidays')}}">Holidays</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/schedules')}}">Schedules</a></li>
@@ -396,7 +397,7 @@ select.list-dt:focus {
                 </div>
               </li>
               @endif
-              @if(auth()->user()->role == 'Finance')
+              {{-- @if(auth()->user()->role == 'Finance') --}}
                 <li class="nav-item @if($header == 'Payroll') active @endif">
                   <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
                     <i class="icon-align-center menu-icon"></i>
@@ -409,7 +410,7 @@ select.list-dt:focus {
                     </ul>
                   </div>
                 </li>
-              @endif
+              {{-- @endif --}}
               {{-- <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-file menu-icon"></i>
@@ -503,12 +504,22 @@ select.list-dt:focus {
 
               $('.tablewithSearch').DataTable(
                 {
-                  "ordering": false,
+                  "ordering": true,
                   "pageLength": 100,
                   "paging":         false,
                   "fixedColumns":   {
                       "left": 2
                   }
+                } 
+              );
+              $('.employees-table').DataTable(
+                {
+                  // "ordering": true,
+                  // "pageLength": 100,
+                  // "paging":         false,
+                  // "fixedColumns":   {
+                  //     "left": 2
+                  // }
                 } 
               );
 

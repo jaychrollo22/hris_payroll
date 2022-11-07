@@ -84,7 +84,7 @@
               <div class="card-body">
                 <h4 class="card-title">Employees <button type="button" class="btn btn-outline-success btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#newEmployee"><i class="ti-plus btn-icon-prepend"></i></button></h4>
                 <div class="table-responsive">
-                  <table class="table table-hover table-bordered tablewithSearch">
+                  <table class="table table-hover table-bordered employees-table">
                     <thead>
                       <tr>
                         <th>Action</th>

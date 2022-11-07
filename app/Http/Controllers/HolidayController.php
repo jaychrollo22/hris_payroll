@@ -22,7 +22,7 @@ class HolidayController extends Controller
 
         return view('holidays.view',
         array(
-            'header' => 'Handbooks',
+            'header' => 'settings',
             'holidays' => $holidays,
             
         ));

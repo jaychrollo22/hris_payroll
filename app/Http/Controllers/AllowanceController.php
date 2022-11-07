@@ -10,5 +10,7 @@ class AllowanceController extends Controller
     public function viewAllowances()
     {
         $allowance = Allowance::get();
+
+        
     }
 }
