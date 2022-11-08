@@ -12,12 +12,12 @@ class AllowanceController extends Controller
     //
     public function viewAllowances()
     {
-        $allowance = Allowances::with('user')->get();
+        $allowances = Allowances::with('user')->get();
         return view(
             'allowances.allowances',
             array(
                 'header' => 'settings',
-                'allowance' => $allowance,
+                'allowances' => $allowances,
 
             )
         );
