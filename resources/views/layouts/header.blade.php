@@ -397,7 +397,7 @@ select.list-dt:focus {
                 </div>
               </li>
               @endif
-              {{-- @if(auth()->user()->role == 'Finance') --}}
+              @if(auth()->user()->role == 'Finance')
                 <li class="nav-item @if($header == 'Payroll') active @endif">
                   <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
                     <i class="icon-align-center menu-icon"></i>
@@ -410,7 +410,7 @@ select.list-dt:focus {
                     </ul>
                   </div>
                 </li>
-              {{-- @endif --}}
+              @endif
               {{-- <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-file menu-icon"></i>
