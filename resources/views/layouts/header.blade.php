@@ -373,7 +373,7 @@ select.list-dt:focus {
                   <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{url('/get-biometrics')}}">Biometrics</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/biologs-employee')}}">Per Employee</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/biologs-employee')}}">Per Location</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{url('/bio-per-location')}}">Per Location</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/pmi-local')}}">17th floor</a></li>
                   </ul>
                 </div>
