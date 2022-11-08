@@ -26,29 +26,29 @@
 									</tr>
 								</thead>
 								<tbody>
-									@foreach ($allowance as $allowances)
+									@foreach ($allowances as $allowance)
 										<tr>
-											<td>{{ $allowances->name }}</td>
-											<td> {{ date('M d Y ', strtotime($allowances->created_at)) }}</td>
-											<td id="tdId{{ $allowances->id }}">
-												@if ($allowances->status == 'Active')
-													<label id="status{{ $allowances->id }}" class="badge badge-success">{{ $allowances->status }}</label>
+											<td>{{ $allowance->name }}</td>
+											<td> {{ date('M d Y ', strtotime($allowance->created_at)) }}</td>
+											<td id="tdId{{ $allowance->id }}">
+												@if ($allowance->status == 'Active')
+													<label id="status{{ $allowance->id }}" class="badge badge-success">{{ $allowance->status }}</label>
 												@else
-													<label id="status{{ $allowances->id }}" class="badge badge-danger">{{ $allowances->status }}</label>
+													<label id="status{{ $allowance->id }}" class="badge badge-danger">{{ $allowance->status }}</label>
 												@endif
 											</td>
-											<td id="tdActionId{{ $allowances->id }}" data-id="{{ $allowances->id }}">
-												@if ($allowances->status == 'Active')
-													<button type="button" id="edit{{ $allowances->id }}" class="btn btn-info btn-rounded btn-icon"
-														data-target="#edit_allowance{{ $allowances->id }}" data-toggle="modal" title='Edit'>
+											<td id="tdActionId{{ $allowance->id }}" data-id="{{ $allowance->id }}">
+												@if ($allowance->status == 'Active')
+													<button type="button" id="edit{{ $allowance->id }}" class="btn btn-info btn-rounded btn-icon"
+														data-target="#edit_allowance{{ $allowance->id }}" data-toggle="modal" title='Edit'>
 														<i class="ti-pencil-alt"></i>
 													</button>
-													<button title='Disable' id="{{ $allowances->id }}" onclick="disable(this.id)"
+													<button title='Disable' id="{{ $allowance->id }}" onclick="disable(this.id)"
 														class="btn btn-rounded btn-danger btn-icon">
 														<i class="fa fa-ban"></i>
 													</button>
 												@else
-													<button title='Activate' id="{{ $allowances->id }}" onclick="activate(this.id)"
+													<button title='Activate' id="{{ $allowance->id }}" onclick="activate(this.id)"
 														class="btn btn-rounded btn-primary btn-icon">
 														<i class="fa fa-check"></i>
 													</button>
@@ -65,7 +65,9 @@
 		</div>
 	</div>
 	</div>
-	@include('allowances.edit_allowance')
+	@foreach ($allowances as $allowance)
+		@include('allowances.edit_allowance')
+	@endforeach
 	@include('allowances.new_allowance')
 @endsection
 @section('allowanceScript')
