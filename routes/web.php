@@ -11,13 +11,12 @@
 |
 */
 Auth::routes();
-Route::group( ['middleware' => 'auth'], function()
-{
+Route::group(['middleware' => 'auth'], function () {
     //Users
-    Route::get('account-setting','UserController@accountSetting');
-    Route::post('upload-avatar','UserController@uploadAvatar');
-    Route::post('upload-signature','UserController@uploadSignature');
-    Route::get('get-salary','UserController@get_salary');
+    Route::get('account-setting', 'UserController@accountSetting');
+    Route::post('upload-avatar', 'UserController@uploadAvatar');
+    Route::post('upload-signature', 'UserController@uploadSignature');
+    Route::get('get-salary', 'UserController@get_salary');
 
     //employees
     Route::get('/dashboard', 'HomeController@index')->name('home');
@@ -27,94 +26,94 @@ Route::group( ['middleware' => 'auth'], function()
     Route::get('/dashboard-manager', 'HomeController@managerDashboard');
     //admin
 
-    Route::get('attendances','AttendanceController@index');
+    Route::get('attendances', 'AttendanceController@index');
 
 
-    Route::get('get-attendance-bio','AttendanceController@get_attendances');
+    Route::get('get-attendance-bio', 'AttendanceController@get_attendances');
 
 
     //Leaves
-    Route::get('leave','LeaveController@leaves');
-    Route::get('post','LeaveController@leaves');
+    Route::get('leave', 'LeaveController@leaves');
+    Route::get('post', 'LeaveController@leaves');
 
 
     //Overtime
-    Route::get('overtime','OvertimeController@overtime');
+    Route::get('overtime', 'OvertimeController@overtime');
 
 
     //Work-from-home
-    Route::get('work-from-home','WorkfromhomeController@workfromhome');
+    Route::get('work-from-home', 'WorkfromhomeController@workfromhome');
 
 
     //official-business
-    Route::get('official-business','OfficialbusinessController@officialBusiness');
+    Route::get('official-business', 'OfficialbusinessController@officialBusiness');
 
 
     //DTR Correction
-    Route::get('dtr-correction','DailytimerecordController@dtr');
+    Route::get('dtr-correction', 'DailytimerecordController@dtr');
 
 
     //employees
-    Route::get('employees','EmployeeController@view');
-    Route::post('new-employee','EmployeeController@new');
+    Route::get('employees', 'EmployeeController@view');
+    Route::post('new-employee', 'EmployeeController@new');
 
 
     //Payslips
-    Route::get('payslips','PayslipController@view');
+    Route::get('payslips', 'PayslipController@view');
 
     //handbooks
-    Route::get('handbooks','HandbookController@view');
-    Route::post('new-handbook','HandbookController@newhandbook');
+    Route::get('handbooks', 'HandbookController@view');
+    Route::post('new-handbook', 'HandbookController@newhandbook');
 
     //Holidays
-    Route::get('holidays','HolidayController@view');
-    Route::post('new-holiday','HolidayController@new');
-    Route::get('delete-holiday/{id}','HolidayController@delete_holiday');
-    Route::post('edit-holiday/{id}','HolidayController@edit_holiday');
+    Route::get('holidays', 'HolidayController@view');
+    Route::post('new-holiday', 'HolidayController@new');
+    Route::get('delete-holiday/{id}', 'HolidayController@delete_holiday');
+    Route::post('edit-holiday/{id}', 'HolidayController@edit_holiday');
 
     //formsLeave
-    Route::get('leavee-settings','LeaveController@leaveDetails');
+    Route::get('leavee-settings', 'LeaveController@leaveDetails');
 
     //Schedules
-    Route::get('schedules','ScheduleController@schedules');
-    Route::post('new-schedule','ScheduleController@newSchedule');
+    Route::get('schedules', 'ScheduleController@schedules');
+    Route::post('new-schedule', 'ScheduleController@newSchedule');
 
 
     //Announcement
-    Route::get('announcements','AnnouncementController@view');
-    Route::post('new-announcement','AnnouncementController@new');
-    Route::get('delete-announcement/{id}','AnnouncementController@delete');
+    Route::get('announcements', 'AnnouncementController@view');
+    Route::post('new-announcement', 'AnnouncementController@new');
+    Route::get('delete-announcement/{id}', 'AnnouncementController@delete');
 
     //Logos
-    Route::get('logos','SettingController@view');
-    Route::post('upload-icon','SettingController@uploadIcon');
-    Route::post('upload-logo','SettingController@uploadLogo');
+    Route::get('logos', 'SettingController@view');
+    Route::post('upload-icon', 'SettingController@uploadIcon');
+    Route::post('upload-logo', 'SettingController@uploadLogo');
 
     //Manager
-    Route::get('subordinates','AttendanceController@subordinates');
+    Route::get('subordinates', 'AttendanceController@subordinates');
 
     //Allowances
-    Route::get('allowances','AllowanceController@viewAllowances');
+    Route::get('allowances', 'AllowanceController@viewAllowances');
+    Route::post('new-allowance', 'AllowanceController@new');
+    Route::get('disable-allowance/{id}', 'AllowanceController@disable_allowance');
+    Route::get('activate-allowance/{id}', 'AllowanceController@activate_allowance');
+    Route::post('edit-allowance/{id}', 'AllowanceController@edit_allowance');
 
     //Biometrics
-    Route::get('get-biometrics','EmployeeController@employees_biotime');
-    Route::post('new-biocode','EmployeeController@newBio');
-    Route::post('update-biocode','EmployeeController@updatebiocode');
-    Route::get('biologs-employee','EmployeeController@employee_attendance');
-    Route::get('bio-per-location','EmployeeController@biologs_per_location');
-    Route::get('pmi-local','EmployeeController@localbio');
+    Route::get('get-biometrics', 'EmployeeController@employees_biotime');
+    Route::post('new-biocode', 'EmployeeController@newBio');
+    Route::post('update-biocode', 'EmployeeController@updatebiocode');
+    Route::get('biologs-employee', 'EmployeeController@employee_attendance');
+    Route::get('bio-per-location', 'EmployeeController@biologs_per_location');
+    Route::get('pmi-local', 'EmployeeController@localbio');
 
     //Payroll
-    Route::get('pay-reg','PayslipController@payroll_datas');
-    Route::get('timekeeping','PayslipController@attendances');
-    Route::post('pay-reg','PayslipController@import');
-    Route::post('upload-attendance','PayslipController@upload_attendance');
+    Route::get('pay-reg', 'PayslipController@payroll_datas');
+    Route::get('timekeeping', 'PayslipController@attendances');
+    Route::post('pay-reg', 'PayslipController@import');
+    Route::post('upload-attendance', 'PayslipController@upload_attendance');
 
 
     //13th month
-    Route::get('month-benefit','PayslipController@monthly_benefit');
-
-    
+    Route::get('month-benefit', 'PayslipController@monthly_benefit');
 });
-
-
