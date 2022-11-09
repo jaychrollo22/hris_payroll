@@ -7,11 +7,12 @@
 			<div class="col-lg-12 grid-margin stretch-card">
 				<div class="card">
 					<div class="card-body">
-						<h4 class="card-title">Allowances</h4>
+						<h4 class="card-title">Departments</h4>
 						<p class="card-description">
-							<button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#newAllowance">
+							<button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal"
+								data-target="#newDepartment">
 								<i class="ti-plus btn-icon-prepend"></i>
-								New Allowance
+								New Department
 							</button>
 						</p>
 
@@ -19,36 +20,34 @@
 							<table class="table table-hover table-bordered tablewithSearch">
 								<thead>
 									<tr>
-										<th>Allowance Name</th>
+										<th>Department Name</th>
+										<th>Department Code</th>
 										<th>Date Created</th>
 										<th>Status</th>
 										<th>Action</th>
 									</tr>
 								</thead>
 								<tbody>
-									@foreach ($allowances as $allowance)
+									@foreach ($departments as $department)
 										<tr>
-											<td>{{ $allowance->name }}</td>
-											<td> {{ date('M d Y ', strtotime($allowance->created_at)) }}</td>
-											<td id="tdId{{ $allowance->id }}">
-												@if ($allowance->status == 'Active')
-													<label id="status{{ $allowance->id }}" class="badge badge-success">{{ $allowance->status }}</label>
+											<td>{{ $department->name }}</td>
+											<td>{{ $department->code }}</td>
+											<td>{{ $department->created_at }}</td>
+											<td id="tdId{{ $department->id }}">
+												@if ($department->status == 1)
+													<label id="status{{ $department->id }}" class="badge badge-success">Active</label>
 												@else
-													<label id="status{{ $allowance->id }}" class="badge badge-danger">{{ $allowance->status }}</label>
+													<label id="status{{ $department->id }}" class="badge badge-danger">Inactive</label>
 												@endif
 											</td>
-											<td id="tdActionId{{ $allowance->id }}" data-id="{{ $allowance->id }}">
-												@if ($allowance->status == 'Active')
-													<button type="button" id="edit{{ $allowance->id }}" class="btn btn-info btn-rounded btn-icon"
-														data-target="#edit_allowance{{ $allowance->id }}" data-toggle="modal" title='Edit'>
-														<i class="ti-pencil-alt"></i>
-													</button>
-													<button title='Disable' id="{{ $allowance->id }}" onclick="disable(this.id)"
+											<td id="tdActionId{{ $department->id }}" data-id="{{ $department->id }}">
+												@if ($department->status == 1)
+													<button title='Disable' id="{{ $department->id }}" onclick="disableDept(this.id)"
 														class="btn btn-rounded btn-danger btn-icon">
 														<i class="fa fa-ban"></i>
 													</button>
 												@else
-													<button title='Activate' id="{{ $allowance->id }}" onclick="activate(this.id)"
+													<button title='Activate' id="{{ $department->id }}" onclick="activateDept(this.id)"
 														class="btn btn-rounded btn-primary btn-icon">
 														<i class="fa fa-check"></i>
 													</button>
@@ -65,19 +64,16 @@
 		</div>
 	</div>
 	</div>
-	@foreach ($allowances as $allowance)
-		@include('allowances.edit_allowance')
-	@endforeach
-	@include('allowances.new_allowance')
+	@include('masterfiles.new_department')
 @endsection
-@section('allowanceScript')
+@section('masterfilesScript')
 	<script>
-		function disable(id) {
+		function disableDept(id) {
 			var element = document.getElementById('tdActionId' + id);
 			var dataID = element.getAttribute('data-id');
 			swal({
 					title: "Are you sure?",
-					text: "Once disabled, you will not be able to recover this imaginary file!",
+					text: "Once disable, you will not be able to recover this imaginary file!",
 					icon: "warning",
 					buttons: true,
 					dangerMode: true,
@@ -86,7 +82,7 @@
 					if (willDisable) {
 						document.getElementById("loader").style.display = "block";
 						$.ajax({
-							url: "disable-allowance/" + id,
+							url: "disable-department/" + id,
 							method: "GET",
 							data: {
 								id: id
@@ -96,14 +92,14 @@
 							},
 							success: function(data) {
 								document.getElementById("loader").style.display = "none";
-								swal("Allowance has been disable!", {
+								swal("Department has been disable!", {
 									icon: "success",
 								}).then(function() {
 									document.getElementById("tdId" + id).innerHTML =
 										"<label class='badge badge-danger'>Inactive</label>";
 									document.getElementById("tdActionId" + dataID).innerHTML =
 										"<button title='Activate' id='action" + id +
-										"' onclick='activate(" + id +
+										"' onclick='activateDept(" + id +
 										")' class = 'btn btn-rounded btn-primary btn-icon' ><i class ='fa fa-check' > </i></button > "
 
 								});
@@ -111,17 +107,17 @@
 						})
 
 					} else {
-						swal("Allowance is safe!");
+						swal("Department is safe!");
 					}
 				});
 		}
 
-		function activate(id) {
+		function activateDept(id) {
 			var element = document.getElementById('tdActionId' + id);
 			var dataID = element.getAttribute('data-id');
 			swal({
 					title: "Are you sure?",
-					text: "Once activated, you can edit and disable the allowance!",
+					text: "Once activated, you can disable the department!",
 					icon: "info",
 					buttons: true,
 					dangerMode: true,
@@ -130,7 +126,7 @@
 					if (willActivate) {
 						document.getElementById("loader").style.display = "block";
 						$.ajax({
-							url: "activate-allowance/" + id,
+							url: "enable-department/" + id,
 							method: "GET",
 							data: {
 								id: id
@@ -140,17 +136,14 @@
 							},
 							success: function(data) {
 								document.getElementById("loader").style.display = "none";
-								swal("Allowance has been activated!", {
+								swal("Department has been activated!", {
 									icon: "success",
 								}).then(function() {
 									document.getElementById("tdId" + id).innerHTML =
 										"<label class='badge badge-success'>Active</label>";
 									document.getElementById("tdActionId" + dataID).innerHTML =
-										"<button type='button' id='edit" + id +
-										"' class='btn btn-info btn-rounded btn-icon' data-target='#edit_allowance" +
-										id +
-										"' data-toggle='modal' title='Disable'>	<i class='ti-pencil-alt'></i></button> <button title='Disable' id='action" +
-										id + "' onclick = 'disable(" + id +
+										"<button title='Disable' id='action" +
+										id + "' onclick = 'disableDept(" + id +
 										")' class = 'btn btn-rounded btn-danger btn-icon'><i class='fa fa-ban'></i></button > ";
 									// document.getElementById(id).remove();
 								});
@@ -158,7 +151,7 @@
 						})
 
 					} else {
-						swal("Allowance is safe!");
+						swal("Department is safe!");
 					}
 				});
 		}
