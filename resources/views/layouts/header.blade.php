@@ -414,6 +414,37 @@
 					@endif
 
 					{{-- @if (auth()->user()->role == 'Finance') --}}
+					<li class="nav-item @if ($header == 'Payroll') active @endif">
+						<a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
+							<i class="icon-align-center menu-icon"></i>
+							<span class="menu-title">Payroll</span>
+							<i class="menu-arrow"></i>
+						</a>
+						<div class="collapse" id="payroll">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a></li>
+							</ul>
+						</div>
+					</li>
+					<li class="nav-item @if ($header == 'masterfiles') active @endif">
+						<a class="nav-link" data-toggle="collapse" href="#masterfiles" aria-expanded="false"
+							aria-controls="ui-basic">
+							<i class="icon-align-center menu-icon"></i>
+							<span class="menu-title">Masterfiles</span>
+							<i class="menu-arrow"></i>
+						</a>
+						<div class="collapse" id="masterfiles">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/company') }}">Company</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/department') }}">Department</a>
+								</li>
+							</ul>
+						</div>
+					</li>
+=======
 						<li class="nav-item @if ($header == 'Payroll') active @endif">
 							<a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
 								<i class="icon-align-center menu-icon"></i>
@@ -501,25 +532,25 @@
                 <hr>
                 <h5>Employee</h5>
               </li>
-              <li class="nav-item @if($header == '') active @endif">
+              <li class="nav-item @if ($header == '') active @endif">
                 <a class="nav-link" href="{{url('/')}}" onclick='show()'>
                   <i class="icon-grid menu-icon"></i>
                   <span class="menu-title">Dashboard</span>
                 </a>
               </li>
-              <li class="nav-item @if($header == 'attendances') active @endif">
+              <li class="nav-item @if ($header == 'attendances') active @endif">
                 <a class="nav-link" href="{{url('/attendances')}}" onclick='show()'>
                   <i class="icon-watch menu-icon"></i>
                   <span class="menu-title">Attendances</span>
                 </a>
               </li>
-              <li class="nav-item @if($header == 'forms') active @endif">
+              <li class="nav-item @if ($header == 'forms') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-layout menu-icon"></i>
                   <span class="menu-title">Forms</span>
                   <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse @if($header == 'forms') show @endif" id="forms">
+                <div class="collapse @if ($header == 'forms') show @endif" id="forms">
                   <ul class="nav flex-column sub-menu">
                     <li class="nav-item "> <a class="nav-link active" href="{{url('/leave')}}">Leave</a></li>
                     <li class="nav-item "> <a class="nav-link " href="{{url('/overtime')}}">Overtime</a></li>
@@ -529,44 +560,44 @@
                   </ul>
                 </div>
               </li>
-              <li class="nav-item @if($header == 'payslips') active @endif">
+              <li class="nav-item @if ($header == 'payslips') active @endif">
                 <a class="nav-link" href="{{url('/payslips')}}" onclick='show()'>
                   <i class="icon-briefcase menu-icon"></i>
                   <span class="menu-title">Payslips</span>
                 </a>
               </li>
-              @if((auth()->user()->subbordinates->count()) != 0)
+              @if (auth()->user()->subbordinates->count() != 0)
               <li class="nav-item">
                 <hr>
                 <h5>Manager</h5>
               </li>
-              <li class="nav-item @if($header == 'for-approval') active @endif">
+              <li class="nav-item @if ($header == 'for-approval') active @endif">
                 <a class="nav-link" href="{{url('/for-approval')}}" onclick='show()'>
                   <i class="icon-check menu-icon"></i>
                   <span class="menu-title">For Approval</span>
                 </a>
               </li>
-              <li class="nav-item @if($header == 'subordinates') active @endif">
+              <li class="nav-item @if ($header == 'subordinates') active @endif">
                 <a class="nav-link" href="{{url('/subordinates')}}" onclick='show()'>
                   <i class="icon-monitor menu-icon"></i>
                   <span class="menu-title">Subordinates</span>
                 </a>
               </li>
               @endif
-              @if(auth()->user()->role == 'Admin')
+              @if (auth()->user()->role == 'Admin')
               <li class="nav-item">
                 <hr>
                 <h5>Admin</h5>
               </li>
               
-              <li class="nav-item @if($header == 'employees') active @endif ">
+              <li class="nav-item @if ($header == 'employees') active @endif ">
                 <a class="nav-link" href="{{url('/employees')}}" onclick='show()'>
                   <i class="icon-head menu-icon"></i>
                   <span class="menu-title">Employees</span>
                 </a>
               </li>
              
-              <li class="nav-item @if($header == 'biometrics') active @endif">
+              <li class="nav-item @if ($header == 'biometrics') active @endif">
                 <a class="nav-link" data-toggle="collapse" href="#biometrics" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-cog menu-icon"></i>
                   <span class="menu-title">Biometrics</span>
@@ -581,13 +612,13 @@
                   </ul>
                 </div>
               </li>
-              <li class="nav-item @if($header == 'settings') active @endif">
-                <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="@if($header == 'settings')true @else false @endif" aria-controls="ui-basic">
+              <li class="nav-item @if ($header == 'settings') active @endif">
+                <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="@if ($header == 'settings')true @else false @endif" aria-controls="ui-basic">
                   <i class="icon-cog menu-icon"></i>
                   <span class="menu-title">Settings</span>
                   <i class="menu-arrow"></i>
                 </a>
-                <div class="collapse @if($header == 'settings') show @endif" id="settings">
+                <div class="collapse @if ($header == 'settings') show @endif" id="settings">
                   <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{url('/holidays')}}">Holidays</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{url('/schedules')}}">Schedules</a></li>
@@ -600,8 +631,8 @@
                 </div>
               </li>
               @endif
-              @if(auth()->user()->role == 'Finance')
-                <li class="nav-item @if($header == 'Payroll') active @endif">
+              @if (auth()->user()->role == 'Finance')
+                <li class="nav-item @if ($header == 'Payroll') active @endif">
                   <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
                     <i class="icon-align-center menu-icon"></i>
                     <span class="menu-title">Payroll</span>
@@ -662,7 +693,6 @@
 	<script src="{{ asset('body_css/js/todolist.js') }}"></script>
 	<script src="{{ asset('body_css/vendors/sweetalert/sweetalert.min.js') }}"></script>
 	{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.6/dist/sweetalert2.all.min.js"></script> --}}
-
 	@yield('footer')
 
 	<script type='text/javascript'>
@@ -844,6 +874,7 @@
 
 	@include('sweetalert::alert')
 	@yield('allowanceScript')
+	@yield('masterfilesScript')
 </body>
 
 </html>

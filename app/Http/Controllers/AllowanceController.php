@@ -24,11 +24,11 @@ class AllowanceController extends Controller
     }
     public function new(Request $request)
     {
-        $new_holiday = new Allowances;
-        $new_holiday->name = $request->allowance_name;
-        $new_holiday->add_by = Auth::user()->id;
-        $new_holiday->status = 'Active';
-        $new_holiday->save();
+        $new_allowance = new Allowances;
+        $new_allowance->name = $request->allowance_name;
+        $new_allowance->add_by = Auth::user()->id;
+        $new_allowance->status = 'Active';
+        $new_allowance->save();
 
         Alert::success('Successfully Store')->persistent('Dismiss');
         return back();
