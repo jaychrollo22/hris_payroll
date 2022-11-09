@@ -119,6 +119,15 @@
                             <h2 class="fs-title">Employment Information</h2>
                             <div class='row mb-2'>
                               <div class='col-md-4'>
+                                Company
+                                <select data-placeholder="Company" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='company' required>
+                                  <option value="">--Select Company--</option>
+                                  @foreach($companies as $company)
+                                    <option value="{{$company->id}}">{{$company->company_name}} - {{$company->company_code}}</option>
+                                  @endforeach
+                                </select>
+                              </div>
+                              <div class='col-md-4'>
                                 Position
                                 <input type="text" name="position" class='form-control form-control-sm required' placeholder="POSITION"/>
                               </div>
