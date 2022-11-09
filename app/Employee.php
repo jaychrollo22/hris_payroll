@@ -11,6 +11,10 @@ class Employee extends Model
     {
         return $this->belongsTo(Department::class);
     }
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
     public function payment_info()
     {
         return $this->hasOne(PaymentInformation::class);

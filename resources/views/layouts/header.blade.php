@@ -249,7 +249,6 @@
 </head>
 
 <body>
-<<<<<<< HEAD
 	<div id="loader" style="display:none;" class="loader">
 	</div>
 
@@ -367,7 +366,7 @@
 					@if (auth()->user()->role == 'Admin')
 						<li class="nav-item">
 							<hr>
-							<h5>Admin</h5>
+							<h5>Super Admin</h5>
 						</li>
 
 						<li class="nav-item @if ($header == 'employees') active @endif ">
@@ -415,33 +414,49 @@
 					@endif
 
 					{{-- @if (auth()->user()->role == 'Finance') --}}
-					<li class="nav-item @if ($header == 'Payroll') active @endif">
-						<a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
-							<i class="icon-align-center menu-icon"></i>
-							<span class="menu-title">Payroll</span>
-							<i class="menu-arrow"></i>
-						</a>
-						<div class="collapse" id="payroll">
-							<ul class="nav flex-column sub-menu">
-								<li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a></li>
-							</ul>
-						</div>
-					</li>
+						<li class="nav-item @if ($header == 'Payroll') active @endif">
+							<a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
+								<i class="icon-align-center menu-icon"></i>
+								<span class="menu-title">Payroll</span>
+								<i class="menu-arrow"></i>
+							</a>
+							<div class="collapse" id="payroll">
+								<ul class="nav flex-column sub-menu">
+									<li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a></li>
+								</ul>
+							</div>
+						</li>
+						<li class="nav-item @if($header == 'reports') active @endif">
+							<a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
+							  <i class="icon-paper menu-icon"></i>
+							  <span class="menu-title">Reports</span>
+							  <i class="menu-arrow"></i>
+							</a>
+							<div class="collapse" id="reports">
+							  <ul class="nav flex-column sub-menu">
+								<li class="nav-item"> <a class="nav-link" href="{{url('/employees')}}">Employees</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{url('/leave-reports')}}">Leave Reports</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{url('/total-expenses')}}">Total Expenses</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{url('/loans-report')}}">Loans Report</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{url('/incentive-report')}}">Incentive Reports</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{url('/payroll-report')}}">Payroll Reports</a></li>
+							  </ul>
+							</div>
+						  </li>
 					{{-- @endif --}}
+					
 					{{-- <li class="nav-item">
 =======
     <div id = "loader" style="display:none;" class="loader">
     </div>
   
     <div class="container-scroller">
-    
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
           <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
             <a class="navbar-brand brand-logo mr-5" href="{{url('/')}}"><img src="{{ URL::asset(config('logo.logos')::first()->logo)}}" class="mr-2" alt="logo"/></a>
             <a class="navbar-brand brand-logo-mini" href="{{url('/')}}"><img src="{{ URL::asset(config('logo.logos')::first()->icon)}}" alt="logo"/></a>
           </div>
-      
           <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
             <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
               <span class="icon-menu"></span>
@@ -600,7 +615,6 @@
                 </li>
               @endif
               {{-- <li class="nav-item">
->>>>>>> 3b7c5d42f0f7aa1b549436f576322ad4a5796363
                 <a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
                   <i class="icon-file menu-icon"></i>
                   <span class="menu-title">Reports</span>

@@ -89,6 +89,7 @@
                       <tr>
                         <th>Action</th>
                         <th>Image</th> 
+                        <th>Company</th> 
                         <th>Department</th>
                         <th>Classification</th>
                         <th>Immediate Supervisor</th>
@@ -101,7 +102,10 @@
                             <td></td>
                             <td>
                               <small><img class="rounded-circle" style='width:34px;height:34px;' src='{{URL::asset($employee->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
-                              {{$employee->first_name}} {{$employee->last_name}}
+                              {{$employee->first_name}} {{$employee->last_name}} </small>
+                            </td> 
+                            <td>
+                              @if($employee->company){{$employee->company->company_name}}@endif
                             </td> 
                             <td>@if($employee->department){{$employee->department->name}}@endif</td>
                             <td>{{$employee->classification}}</td>
