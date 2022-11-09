@@ -444,18 +444,6 @@
 							</ul>
 						</div>
 					</li>
-						<li class="nav-item @if ($header == 'Payroll') active @endif">
-							<a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
-								<i class="icon-align-center menu-icon"></i>
-								<span class="menu-title">Payroll</span>
-								<i class="menu-arrow"></i>
-							</a>
-							<div class="collapse" id="payroll">
-								<ul class="nav flex-column sub-menu">
-									<li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a></li>
-								</ul>
-							</div>
-						</li>
 						<li class="nav-item @if($header == 'reports') active @endif">
 							<a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
 							  <i class="icon-paper menu-icon"></i>
