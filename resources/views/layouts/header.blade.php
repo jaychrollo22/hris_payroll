@@ -436,33 +436,36 @@
 						<div class="collapse" id="masterfiles">
 							<ul class="nav flex-column sub-menu">
 								<li class="nav-item">
-									<a class="nav-link" href="{{ url('/company') }}">Company</a>
+									<a class="nav-link" href="{{ url('/company') }}">Companies</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="{{ url('/department') }}">Department</a>
+									<a class="nav-link" href="{{ url('/department') }}">Departments</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/loan-type') }}">Loan Types</a>
 								</li>
 							</ul>
 						</div>
 					</li>
-						<li class="nav-item @if($header == 'reports') active @endif">
-							<a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
-							  <i class="icon-paper menu-icon"></i>
-							  <span class="menu-title">Reports</span>
-							  <i class="menu-arrow"></i>
-							</a>
-							<div class="collapse" id="reports">
-							  <ul class="nav flex-column sub-menu">
-								<li class="nav-item"> <a class="nav-link" href="{{url('/employees')}}">Employees</a></li>
-								<li class="nav-item"> <a class="nav-link" href="{{url('/leave-reports')}}">Leave Reports</a></li>
-								<li class="nav-item"> <a class="nav-link" href="{{url('/total-expenses')}}">Total Expenses</a></li>
-								<li class="nav-item"> <a class="nav-link" href="{{url('/loans-report')}}">Loans Report</a></li>
-								<li class="nav-item"> <a class="nav-link" href="{{url('/incentive-report')}}">Incentive Reports</a></li>
-								<li class="nav-item"> <a class="nav-link" href="{{url('/payroll-report')}}">Payroll Reports</a></li>
-							  </ul>
-							</div>
-						  </li>
+					<li class="nav-item @if ($header == 'reports') active @endif">
+						<a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
+							<i class="icon-paper menu-icon"></i>
+							<span class="menu-title">Reports</span>
+							<i class="menu-arrow"></i>
+						</a>
+						<div class="collapse" id="reports">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/employees') }}">Employees</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/leave-reports') }}">Leave Reports</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/total-expenses') }}">Total Expenses</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/loans-report') }}">Loans Report</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/payroll-report') }}">Payroll Reports</a></li>
+							</ul>
+						</div>
+					</li>
 					{{-- @endif --}}
-					
+
 					{{-- <li class="nav-item">
 =======
     <div id = "loader" style="display:none;" class="loader">

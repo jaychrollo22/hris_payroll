@@ -123,6 +123,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('department', 'MasterfileController@department_index');
     Route::get('enable-department/{id}', 'MasterfileController@enable_department');
     Route::get('disable-department/{id}', 'MasterfileController@disable_department');
+    Route::get('loan-type', 'MasterfileController@loanTypes_index');
+    Route::post('newLoanType', 'MasterfileController@store_loanType');
+    Route::get('enable-loanType/{id}', 'MasterfileController@enable_loanType');
+    Route::get('disable-loanType/{id}', 'MasterfileController@disable_loanType');
 
     //13th month
     Route::get('month-benefit', 'PayslipController@monthly_benefit');
