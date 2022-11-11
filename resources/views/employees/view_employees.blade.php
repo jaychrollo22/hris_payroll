@@ -121,5 +121,11 @@
     </div>
 </div>
 @include('employees.newEmployee')
-@include('employees.capture_image')
+{{-- @include('employees.capture_image') --}}
+
+
+@endsection
+@section('footer')
+<script src="{{ asset('body_css/vendors/inputmask/jquery.inputmask.bundle.js') }}"></script>
+<script src="../../../../js/inputmask.js"></script>
 @endsection

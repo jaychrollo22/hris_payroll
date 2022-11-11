@@ -30,6 +30,10 @@
                                   <input type="text" name="first_name" class='form-control form-control-sm required' placeholder="First Name" required/>
                                 </div>
                                 <div class='col-md-3'>
+                                  SSS
+                                  <input type="text" name="first_name" data-inputmask-alias="99-9999-9999" class='form-control form-control-sm required' placeholder="First Name" required/>
+                                </div>
+                                <div class='col-md-3'>
                                   Middle Name
                                   <input type="text" name="middle_name" class='form-control form-control-sm ' placeholder="Middle Name"/>
                                 </div>
