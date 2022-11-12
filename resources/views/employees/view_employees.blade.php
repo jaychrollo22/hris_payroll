@@ -127,5 +127,6 @@
 @endsection
 @section('footer')
 <script src="{{ asset('body_css/vendors/inputmask/jquery.inputmask.bundle.js') }}"></script>
-<script src="../../../../js/inputmask.js"></script>
+<script src="{{ asset('body_css/vendors/inputmask/jquery.inputmask.bundle.js') }}"></script>
+<script src="{{ asset('body_css/js/inputmask.js') }}"></script>
 @endsection

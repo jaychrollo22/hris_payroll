@@ -30,10 +30,6 @@
                                   <input type="text" name="first_name" class='form-control form-control-sm required' placeholder="First Name" required/>
                                 </div>
                                 <div class='col-md-3'>
-                                  SSS
-                                  <input type="text" name="first_name" data-inputmask-alias="99-9999-9999" class='form-control form-control-sm required' placeholder="First Name" required/>
-                                </div>
-                                <div class='col-md-3'>
                                   Middle Name
                                   <input type="text" name="middle_name" class='form-control form-control-sm ' placeholder="Middle Name"/>
                                 </div>
@@ -273,19 +269,19 @@
                             <div class='row mb-2'>
                               <div class='col-md-3'>
                                 SSS
-                                <input type='text' name='sss' class='form-control form-control-sm required' value=''>
+                                <input type='text' name='sss'  data-inputmask-alias="99-9999999-9"  class='form-control form-control-sm required' value=''>
                               </div>
                               <div class='col-md-3'>
                                 Philhealth
-                                <input type='text' name='philhealth' class='form-control form-control-sm required' value=''>
+                                <input type='text' name='philhealth' data-inputmask-alias="9999-9999-9999" class='form-control form-control-sm required' value=''>
                               </div>
                               <div class='col-md-3'>
                                 Pagibig
-                                <input type='text' name='pagibig' class='form-control form-control-sm required' value=''>
+                                <input type='text' name='pagibig' data-inputmask-alias="9999-9999-9999" class='form-control form-control-sm required' value=''>
                               </div>
                               <div class='col-md-3'>
                                 TIN
-                                <input type='text' name='tin' class='form-control form-control-sm required' value=''>
+                                <input type='text' name='tin' data-inputmask-alias="999-999-999" class='form-control form-control-sm required' value=''>
                               </div>
                             </div>
                             <hr>
