@@ -7,11 +7,11 @@
 			<div class="col-lg-12 grid-margin stretch-card">
 				<div class="card">
 					<div class="card-body">
-						<h4 class="card-title">Allowances</h4>
+						<h4 class="card-title">Loan Types</h4>
 						<p class="card-description">
-							<button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#newAllowance">
+							<button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#newloanType">
 								<i class="ti-plus btn-icon-prepend"></i>
-								New Allowance
+								New Loan Type
 							</button>
 						</p>
 
@@ -19,36 +19,32 @@
 							<table class="table table-hover table-bordered tablewithSearch">
 								<thead>
 									<tr>
-										<th>Allowance Name</th>
+										<th>Loan Type</th>
 										<th>Date Created</th>
 										<th>Status</th>
 										<th>Action</th>
 									</tr>
 								</thead>
 								<tbody>
-									@foreach ($allowances as $allowance)
+									@foreach ($loanTypes as $loanType)
 										<tr>
-											<td>{{ $allowance->name }}</td>
-											<td> {{ date('M d Y ', strtotime($allowance->created_at)) }}</td>
-											<td id="tdId{{ $allowance->id }}">
-												@if ($allowance->status == 'Active')
-													<label id="status{{ $allowance->id }}" class="badge badge-success">{{ $allowance->status }}</label>
+											<td>{{ $loanType->loan_name }}</td>
+											<td>{{ date('M d Y ', strtotime($loanType->created_at)) }}</td>
+											<td id="tdId{{ $loanType->id }}">
+												@if ($loanType->status == 'Active')
+													<label id="status{{ $loanType->id }}" class="badge badge-success">{{ $loanType->status }}</label>
 												@else
-													<label id="status{{ $allowance->id }}" class="badge badge-danger">{{ $allowance->status }}</label>
+													<label id="status{{ $loanType->id }}" class="badge badge-danger">{{ $loanType->status }}</label>
 												@endif
 											</td>
-											<td id="tdActionId{{ $allowance->id }}" data-id="{{ $allowance->id }}">
-												@if ($allowance->status == 'Active')
-													<button type="button" id="edit{{ $allowance->id }}" class="btn btn-info btn-rounded btn-icon"
-														data-target="#edit_allowance{{ $allowance->id }}" data-toggle="modal" title='Edit'>
-														<i class="ti-pencil-alt"></i>
-													</button>
-													<button title='Disable' id="{{ $allowance->id }}" onclick="disable(this.id)"
+											<td id="tdActionId{{ $loanType->id }}" data-id="{{ $loanType->id }}">
+												@if ($loanType->status == 'Active')
+													<button title='Disable' id="{{ $loanType->id }}" onclick="disable(this.id)"
 														class="btn btn-rounded btn-danger btn-icon">
 														<i class="fa fa-ban"></i>
 													</button>
 												@else
-													<button title='Activate' id="{{ $allowance->id }}" onclick="activate(this.id)"
+													<button title='Activate' id="{{ $loanType->id }}" onclick="activate(this.id)"
 														class="btn btn-rounded btn-primary btn-icon">
 														<i class="fa fa-check"></i>
 													</button>
@@ -65,19 +61,19 @@
 		</div>
 	</div>
 	</div>
-	@foreach ($allowances as $allowance)
-		@include('allowances.edit_allowance')
-	@endforeach
-	@include('allowances.new_allowance')
+	{{-- @foreach ($companies as $company)
+		@include('loanTypes.edit_loanType')
+	@endforeach --}}
+	@include('masterfiles.new_loanType')
 @endsection
-@section('allowanceScript')
+@section('masterfilesScript')
 	<script>
 		function disable(id) {
 			var element = document.getElementById('tdActionId' + id);
 			var dataID = element.getAttribute('data-id');
 			swal({
 					title: "Are you sure?",
-					text: "Once disabled, you will not be able to recover this imaginary file!",
+					text: "Once disabled, you will not be able to use this in other modules!",
 					icon: "warning",
 					buttons: true,
 					dangerMode: true,
@@ -86,7 +82,7 @@
 					if (willDisable) {
 						document.getElementById("loader").style.display = "block";
 						$.ajax({
-							url: "disable-allowance/" + id,
+							url: "disable-loanType/" + id,
 							method: "GET",
 							data: {
 								id: id
@@ -96,7 +92,7 @@
 							},
 							success: function(data) {
 								document.getElementById("loader").style.display = "none";
-								swal("Allowance has been disable!", {
+								swal("Loan type has been disable!", {
 									icon: "success",
 								}).then(function() {
 									document.getElementById("tdId" + id).innerHTML =
@@ -111,7 +107,7 @@
 						})
 
 					} else {
-						swal("Allowance is safe!");
+						swal("Loan type is safe!");
 					}
 				});
 		}
@@ -121,7 +117,7 @@
 			var dataID = element.getAttribute('data-id');
 			swal({
 					title: "Are you sure?",
-					text: "Once activated, you can edit and disable the allowance!",
+					text: "Once activated, you can disable the loan type!",
 					icon: "info",
 					buttons: true,
 					dangerMode: true,
@@ -130,7 +126,7 @@
 					if (willActivate) {
 						document.getElementById("loader").style.display = "block";
 						$.ajax({
-							url: "activate-allowance/" + id,
+							url: "enable-loanType/" + id,
 							method: "GET",
 							data: {
 								id: id
@@ -140,16 +136,13 @@
 							},
 							success: function(data) {
 								document.getElementById("loader").style.display = "none";
-								swal("Allowance has been activated!", {
+								swal("Loan type has been activated!", {
 									icon: "success",
 								}).then(function() {
 									document.getElementById("tdId" + id).innerHTML =
 										"<label class='badge badge-success'>Active</label>";
 									document.getElementById("tdActionId" + dataID).innerHTML =
-										"<button type='button' id='edit" + id +
-										"' class='btn btn-info btn-rounded btn-icon' data-target='#edit_allowance" +
-										id +
-										"' data-toggle='modal' title='Disable'>	<i class='ti-pencil-alt'></i></button> <button title='Disable' id='action" +
+										"<button title='Disable' id='action" +
 										id + "' onclick = 'disable(" + id +
 										")' class = 'btn btn-rounded btn-danger btn-icon'><i class='fa fa-ban'></i></button > ";
 									// document.getElementById(id).remove();
@@ -158,7 +151,7 @@
 						})
 
 					} else {
-						swal("Allowance is safe!");
+						swal("Loan type is safe!");
 					}
 				});
 		}

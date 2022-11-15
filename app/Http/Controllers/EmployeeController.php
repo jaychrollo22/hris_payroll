@@ -8,6 +8,7 @@ use App\Schedule;
 use App\Level;
 use App\Bank;
 use App\User;
+use App\Company;
 use App\ScheduleData;
 use App\PersonnelEmployee;
 use App\IclockTransation;
@@ -25,13 +26,14 @@ class EmployeeController extends Controller
     {
         $classifications = Classification::get();
 
-        $employees = Employee::with('department','payment_info','ScheduleData','immediate_sup_data','user_info')->get();
+        $employees = Employee::with('department','payment_info','ScheduleData','immediate_sup_data','user_info','company')->get();
         $schedules = Schedule::get();
         $banks = Bank::get();
         $users = User::get();
         $levels = Level::get();
         $departments = Department::where('status',null)->get();
         $marital_statuses = MaritalStatus::get();
+        $companies = Company::get();
         return view('employees.view_employees',
         array(
             'header' => 'employees',
@@ -43,12 +45,15 @@ class EmployeeController extends Controller
             'users' => $users,
             'banks' => $banks,
             'schedules' => $schedules,
+            'companies' => $companies,
         ));
     }
 
     public function new(Request $request)
     {
         dd($request->all());
+        $company = Company::findOrfail($request->company);
+        
         $user = new User;
         $user->email = $request->work_email;
         $user->name = $request->first_name." ".$request->last_name;
@@ -57,7 +62,7 @@ class EmployeeController extends Controller
 
         $employee = new Employee;
         $employee->employee_number = $request->biometric_code;
-        $employee->employee_code = $this->generate_emp_code('Employee',"OBN",2022);
+        $employee->employee_code = $this->generate_emp_code('Employee',"OBN",date('Y'));
         $employee->user_id = $user->id;
         $employee->first_name = $request->first_name;
         $employee->first_name = $request->middle_name;
@@ -94,7 +99,6 @@ class EmployeeController extends Controller
     
 
     public function generate_emp_code($table,$code,$year)
-    
     {
         // dd($table);
         $data = Employee::whereYear('original_date_hired',"=",$year)->orderBy('id','desc')->first();

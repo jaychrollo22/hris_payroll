@@ -14,7 +14,7 @@
             Approver : 
           </div>
           <div class='col-md-9'>
-            {{auth()->user()->employee->immediate_sup_data->name}}
+            {{ (auth()->user()->employee->immediate_sup_data != null) ? auth()->user()->employee->immediate_sup_data->name : 'No Approver'}}
           </div>
           
         </div>
@@ -23,22 +23,22 @@
                Date
             </div>
             <div class='col-md-4'>
-              <input type="date" name='date_from' class="form-control" min='{{date('Y-m-d')}}' requried>
+              <input type="date" name='date_from' class="form-control" min='{{date('Y-m-d', strtotime("-3 days"))}}' requried>
             </div>
               <div class="col-sm-2">
                   <div class="form-check">
                     <label class="form-check-label">
-                      <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios1" value="" >
-                      Beforeshift OT
-                    <i class="input-helper"></i></label>
+                      <input type="radio" class="form-check-input" name="before_ot" id="before_ot" value="" >
+                        Beforeshift OT
+                      <i class="input-helper"></i></label>
                   </div>
               </div>
               <div class="col-sm-2">
                 <div class="form-check">
                   <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios2" checked="" value="option2">
+                    <input type="radio" class="form-check-input" name="before_ot" id="after_ot" checked="" value="option2">
                     Aftershift OT
-                  <i class="input-helper"></i></label>
+                    <i class="input-helper"></i></label>
                 </div>
               </div>
           </div>
@@ -78,7 +78,7 @@
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" {{ (auth()->user()->employee->immediate_sup_data != null) ? "" : 'disabled'}}>Save</button>
       </div>
     </div>
   </div>
