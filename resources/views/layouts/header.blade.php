@@ -245,6 +245,17 @@
 		.tab-content {
 			padding: 20px;
 		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		/* Firefox */
+		input[type=number] {
+			-moz-appearance: textfield;
+		}
 	</style>
 </head>
 
@@ -345,6 +356,12 @@
 							<span class="menu-title">Payslips</span>
 						</a>
 					</li>
+					<li class="nav-item @if ($header == 'Loans') active @endif">
+						<a class="nav-link" href="{{ url('/loans') }}" onclick='show()'>
+							<i class="fa fa-money menu-icon"></i>
+							<span class="menu-title">Loans</span>
+						</a>
+					</li>
 					@if (auth()->user()->subbordinates->count() != 0)
 						<li class="nav-item">
 							<hr>
@@ -423,6 +440,7 @@
 						<div class="collapse" id="payroll">
 							<ul class="nav flex-column sub-menu">
 								<li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/loan-reg') }}">Loan Register</a></li>
 							</ul>
 						</div>
 					</li>
@@ -683,6 +701,8 @@
 	<script src="{{ asset('body_css/js/todolist.js') }}"></script>
 	<script src="{{ asset('body_css/vendors/sweetalert/sweetalert.min.js') }}"></script>
 	{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.6/dist/sweetalert2.all.min.js"></script> --}}
+	{{-- <script src="{{ asset('body_css/js/form-validation.js') }}"></script>
+	<script src="{{ asset('body_css/js/bt-maxLength.js') }}"></script> --}}
 	@yield('footer')
 
 	<script type='text/javascript'>
@@ -865,6 +885,7 @@
 	@include('sweetalert::alert')
 	@yield('allowanceScript')
 	@yield('masterfilesScript')
+	@yield('loanRegScripts')
 </body>
 
 </html>

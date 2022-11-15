@@ -127,6 +127,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('newLoanType', 'MasterfileController@store_loanType');
     Route::get('enable-loanType/{id}', 'MasterfileController@enable_loanType');
     Route::get('disable-loanType/{id}', 'MasterfileController@disable_loanType');
+    // Loans
+    Route::get('loans', 'LoanController@index');
+    Route::get('loan-reg', 'LoanController@loan_reg');
+    Route::post('new-loan', 'LoanController@store_loanReg');
 
     //13th month
     Route::get('month-benefit', 'PayslipController@monthly_benefit');
