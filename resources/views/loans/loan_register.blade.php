@@ -23,7 +23,7 @@
 							@endforeach
 						@endif
 						<div class="table-responsive">
-							<table class="table table-hover table-bordered tablewithSearch">
+							<table class="table table-hover table-bordered" id="loanTbl">
 								<thead>
 									<tr>
 										<th>Loan Type</th>
@@ -87,6 +87,10 @@
 				});
 				$(this).find("#container").html(result);
 			});
+		});
+
+		$(document).ready(function() {
+			$('#loanTbl').DataTable();
 		});
 	</script>
 @endsection
