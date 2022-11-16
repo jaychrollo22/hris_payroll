@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Classification;
 use App\Employee;
 use App\Department;
@@ -22,47 +23,49 @@ use RealRashid\SweetAlert\Facades\Alert;
 class EmployeeController extends Controller
 {
     //
-    public function view ()
+    public function view()
     {
         $classifications = Classification::get();
 
-        $employees = Employee::with('department','payment_info','ScheduleData','immediate_sup_data','user_info','company')->get();
+        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company')->get();
         $schedules = Schedule::get();
         $banks = Bank::get();
         $users = User::get();
         $levels = Level::get();
-        $departments = Department::where('status',null)->get();
+        $departments = Department::where('status', null)->get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
-        return view('employees.view_employees',
-        array(
-            'header' => 'employees',
-            'classifications' => $classifications,
-            'employees' => $employees,
-            'marital_statuses' => $marital_statuses,
-            'departments' => $departments,
-            'levels' => $levels,
-            'users' => $users,
-            'banks' => $banks,
-            'schedules' => $schedules,
-            'companies' => $companies,
-        ));
+        return view(
+            'employees.view_employees',
+            array(
+                'header' => 'employees',
+                'classifications' => $classifications,
+                'employees' => $employees,
+                'marital_statuses' => $marital_statuses,
+                'departments' => $departments,
+                'levels' => $levels,
+                'users' => $users,
+                'banks' => $banks,
+                'schedules' => $schedules,
+                'companies' => $companies,
+            )
+        );
     }
 
     public function new(Request $request)
     {
         dd($request->all());
         $company = Company::findOrfail($request->company);
-        
+
         $user = new User;
         $user->email = $request->work_email;
-        $user->name = $request->first_name." ".$request->last_name;
+        $user->name = $request->first_name . " " . $request->last_name;
         $user->status = "Active";
         $user->save();
 
         $employee = new Employee;
         $employee->employee_number = $request->biometric_code;
-        $employee->employee_code = $this->generate_emp_code('Employee',"OBN",date('Y'));
+        $employee->employee_code = $this->generate_emp_code('Employee', "OBN", date('Y'));
         $employee->user_id = $user->id;
         $employee->first_name = $request->first_name;
         $employee->first_name = $request->middle_name;
@@ -92,26 +95,20 @@ class EmployeeController extends Controller
         $employee->name_suffix = $request->suffix;
         $employee->religion = $request->religion;
         $employee->save();
-        
-        
-        
     }
-    
 
-    public function generate_emp_code($table,$code,$year)
+
+    public function generate_emp_code($table, $code, $year)
     {
         // dd($table);
-        $data = Employee::whereYear('original_date_hired',"=",$year)->orderBy('id','desc')->first();
-        if($data == null)
-        {
-            $emp_code = $code."-".$year."-00001";
-        }
-        else
-        {
-            $code_data = explode("-",$data->employee_code);
+        $data = Employee::whereYear('original_date_hired', "=", $year)->orderBy('id', 'desc')->first();
+        if ($data == null) {
+            $emp_code = $code . "-" . $year . "-00001";
+        } else {
+            $code_data = explode("-", $data->employee_code);
             // dd($code_data);
-            $code_final = intval($code_data[2])+1;
-            $emp_code = $code."-".$year."-".str_pad($code_final,5, '0', STR_PAD_LEFT);
+            $code_final = intval($code_data[2]) + 1;
+            $emp_code = $code . "-" . $year . "-" . str_pad($code_final, 5, '0', STR_PAD_LEFT);
         }
 
         return $emp_code;
@@ -120,13 +117,15 @@ class EmployeeController extends Controller
     public function employees_biotime()
     {
         $employees = PersonnelEmployee::get();
-        
-        return view('employees.view_employees_biometrics',
-        array(
-            'header' => 'biometrics',
-            'employees' => $employees,
-            
-        ));
+
+        return view(
+            'employees.view_employees_biometrics',
+            array(
+                'header' => 'biometrics',
+                'employees' => $employees,
+
+            )
+        );
     }
 
     public function employee_attendance(Request $request)
@@ -141,26 +140,27 @@ class EmployeeController extends Controller
         $emp_code = $request->employee;
         $schedule_id = null;
         $emp_data = null;
-        if($from_date != null)
-        {
-        $emp_data = PersonnelEmployee::where('emp_code',$request->employee)->first();
-        $date_range =  $attendance_controller->dateRange( $from_date, $to_date);
-        $attendances =  $attendance_controller->get_attendances($from_date,$to_date,$request->employee);
-        $schedules = ScheduleData::where('schedule_id',1)->get();
+        if ($from_date != null) {
+            $emp_data = PersonnelEmployee::where('emp_code', $request->employee)->first();
+            $date_range =  $attendance_controller->dateRange($from_date, $to_date);
+            $attendances =  $attendance_controller->get_attendances($from_date, $to_date, $request->employee);
+            $schedules = ScheduleData::where('schedule_id', 1)->get();
         }
-        
-        return view('attendances.employee_attendance',
-        array(
-            'header' => 'biometrics',
-            'employees' => $employees,
-            'from_date' => $from_date,
-            'to_date' => $to_date,
-            'date_range' => $date_range,
-            'attendances' => $attendances,
-            'schedules' => $schedules,
-            'emp_code' => $emp_code,
-            'emp_data' => $emp_data,
-        ));
+
+        return view(
+            'attendances.employee_attendance',
+            array(
+                'header' => 'biometrics',
+                'employees' => $employees,
+                'from_date' => $from_date,
+                'to_date' => $to_date,
+                'date_range' => $date_range,
+                'attendances' => $attendances,
+                'schedules' => $schedules,
+                'emp_code' => $emp_code,
+                'emp_data' => $emp_data,
+            )
+        );
     }
     public function biologs_per_location(Request $request)
     {
@@ -168,26 +168,27 @@ class EmployeeController extends Controller
         $from_date = $request->from;
         $to_date = $request->to;
         $attendances = array();
-        if($from_date != null)
-        {
-            $attendances = IclockTransation::whereBetween('punch_time',[$from_date,$to_date])
-            ->where('terminal_id',$request->location)
-            ->whereIn('punch_state', array(0,1))
-            ->with('emp_data','location')
-            ->orderBy('emp_code','desc')
-            ->orderBy('punch_time','asc')
-            ->get();
+        if ($from_date != null) {
+            $attendances = IclockTransation::whereBetween('punch_time', [$from_date, $to_date])
+                ->where('terminal_id', $request->location)
+                ->whereIn('punch_state', array(0, 1))
+                ->with('emp_data', 'location')
+                ->orderBy('emp_code', 'desc')
+                ->orderBy('punch_time', 'asc')
+                ->get();
             // dd($attendances);
         }
 
-        return view('attendances.employee_attendance_location',
+        return view(
+            'attendances.employee_attendance_location',
             array(
                 'header' => 'biometrics',
                 'from_date' => $from_date,
                 'to_date' => $to_date,
                 'terminals' => $terminals,
                 'attendances' => $attendances,
-            ));
+            )
+        );
     }
     public function newBio(Request $request)
     {
@@ -218,12 +219,12 @@ class EmployeeController extends Controller
     {
         // dd($request->all());
 
-        $emp = PersonnelEmployee::where('emp_code',$request->emp_code)->first();
+        $emp = PersonnelEmployee::where('emp_code', $request->emp_code)->first();
         $emp->first_name = $request->first_name;
         $emp->last_name = $request->last_name;
         $emp->save();
 
-      
+
 
         Alert::success('Successfully Updated')->persistent('Dismiss');
         return back();
@@ -235,24 +236,31 @@ class EmployeeController extends Controller
         $from_date = $request->from;
         $to_date = $request->to;
         $attendances = array();
-        if($from_date != null)
-        {
-            $attendances = AttPunch::whereBetween('punch_time',[$from_date,date('Y-m-d',strtotime("+1 day", strtotime($to_date)))])
-            ->where('terminal_id',1004)
-            ->with('personal_data')
-            ->orderBy('employee_id','desc')
-            ->orderBy('punch_time','asc')
-            ->get();
+        if ($from_date != null) {
+            $attendances = AttPunch::whereBetween('punch_time', [$from_date, date('Y-m-d', strtotime("+1 day", strtotime($to_date)))])
+                ->where('terminal_id', 1004)
+                ->with('personal_data')
+                ->orderBy('employee_id', 'desc')
+                ->orderBy('punch_time', 'asc')
+                ->get();
         }
-    
-        return view('attendances.pmi_local',
+
+        return view(
+            'attendances.pmi_local',
             array(
                 'header' => 'biometrics',
                 'from_date' => $from_date,
                 'to_date' => $to_date,
                 'attendances' => $attendances,
-            ));
+            )
+        );
     }
+    // Reports
+    public function employee_report()
+    {
 
-    
+        return view('reports.employee_report', array(
+            'header' => 'reports',
+        ));
+    }
 }

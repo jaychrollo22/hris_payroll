@@ -64,7 +64,12 @@ class LoanController extends Controller
         Alert::success('Successfully Store')->persistent('Dismiss');
         return back();
     }
-
+    public function loan_report()
+    {
+        return view('reports.loan_report', array(
+            'header' => 'reports',
+        ));
+    }
     /**
      * Display the specified resource.
      *

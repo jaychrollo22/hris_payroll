@@ -421,6 +421,7 @@
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/holidays') }}">Holidays</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/schedules') }}">Schedules</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/allowances') }}">Allowances</a></li>
+									<li class="nav-item"> <a class="nav-link" href="{{ url('/incentives') }}">Incentives</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/handbooks') }}">Handbook</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/leavee-settings') }}">Leaves</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/announcements') }}">Announcements</a></li>
@@ -465,6 +466,9 @@
 								<li class="nav-item">
 									<a class="nav-link" href="{{ url('/employee-allowance') }}">Employee <br> Allowances</a>
 								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/employee-incentive') }}">Employee <br> Incentives</a>
+								</li>
 							</ul>
 						</div>
 					</li>
@@ -476,10 +480,10 @@
 						</a>
 						<div class="collapse" id="reports">
 							<ul class="nav flex-column sub-menu">
-								<li class="nav-item"> <a class="nav-link" href="{{ url('/employees') }}">Employees</a></li>
-								<li class="nav-item"> <a class="nav-link" href="{{ url('/leave-reports') }}">Leave Reports</a></li>
-								<li class="nav-item"> <a class="nav-link" href="{{ url('/total-expenses') }}">Total Expenses</a></li>
-								<li class="nav-item"> <a class="nav-link" href="{{ url('/loans-report') }}">Loans Report</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/employee-report') }}">Employees</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/leave-report') }}">Leave Reports</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li>
 								<li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li>
 								<li class="nav-item"> <a class="nav-link" href="{{ url('/payroll-report') }}">Payroll Reports</a></li>
 							</ul>
@@ -709,9 +713,11 @@
 
 	@include('sweetalert::alert')
 	@yield('allowanceScript')
+	@yield('incentivescript')
 	@yield('masterfilesScript')
 	@yield('loanRegScripts')
 	@yield('empAllowScript')
+	@yield('empIncentiveScript')
 </body>
 
 </html>
