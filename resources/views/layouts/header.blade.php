@@ -444,7 +444,7 @@
 							</ul>
 						</div>
 					</li>
-          <li class="nav-item @if ($header == 'masterfiles') active @endif">
+					<li class="nav-item @if ($header == 'masterfiles') active @endif">
 						<a class="nav-link" data-toggle="collapse" href="#masterfiles" aria-expanded="false"
 							aria-controls="ui-basic">
 							<i class="icon-align-center menu-icon"></i>
@@ -461,6 +461,9 @@
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="{{ url('/loan-type') }}">Loan Types</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/employee-allowance') }}">Employee <br> Allowances</a>
 								</li>
 							</ul>
 						</div>
@@ -708,6 +711,7 @@
 	@yield('allowanceScript')
 	@yield('masterfilesScript')
 	@yield('loanRegScripts')
+	@yield('empAllowScript')
 </body>
 
 </html>
