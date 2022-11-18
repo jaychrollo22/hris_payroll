@@ -14,7 +14,7 @@
 	<meta content="https://app.pivi.com.ph:8035/" property="og:url">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>{{ config('app.name', 'Laravel') }}</title>
+	<title>HRIS</title>
 	<link rel="shortcut icon" href="{{ URL::asset(config('logo.logos')::first()->icon) }}">
 	<!-- Scripts -->
 	{{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
@@ -349,7 +349,7 @@
 						<li class="nav-item">
 							<hr>
 							<h5>Manager</h5>
-						</li>
+						</li>											
 						<li class="nav-item @if ($header == 'for-approval') active @endif">
 							<a class="nav-link" href="{{ url('/for-approval') }}" onclick='show()'>
 								<i class="icon-check menu-icon"></i>
@@ -825,10 +825,14 @@
 
 		});
 	</script>
-
 	@include('sweetalert::alert')
 	@yield('allowanceScript')
 	@yield('masterfilesScript')
+	@yield('LeaveScript')
+	@yield('OvertimeScript')
+	@yield('wfhScript')
+	@yield('obScript')
+	@yield('dtrScript')
 </body>
 
 </html>
