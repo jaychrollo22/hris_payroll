@@ -464,10 +464,13 @@
 									<a class="nav-link" href="{{ url('/loan-type') }}">Loan Types</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="{{ url('/employee-allowance') }}">Employee <br> Allowances</a>
+									<a class="nav-link" href="{{ url('/employee-incentive') }}">Employee Incentives</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="{{ url('/employee-incentive') }}">Employee <br> Incentives</a>
+									<a class="nav-link" href="{{ url('/employee-allowance') }}">Employee Allowances</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/salary-management') }}">Salary Management</a>
 								</li>
 							</ul>
 						</div>
@@ -521,14 +524,20 @@
 
 	<script src="{{ asset('body_css/vendors/datatables.net/jquery.dataTables.js') }}"></script>
 	<script src="{{ asset('body_css/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
+	<script src="{{ asset('body_css/vendors/jquery.repeater/jquery.repeater.min.js') }}"></script>
+
 	<script src="{{ asset('body_css/js/dataTables.select.min.js') }}"></script>
 
 	<script src="{{ asset('body_css/js/off-canvas.js') }}"></script>
 	<script src="{{ asset('body_css/js/hoverable-collapse.js') }}"></script>
-	{{-- <script src="{{asset('body_css/js/template.js')}}"></script> --}}
+	<script src="{{ asset('body_css/js/template.js') }}"></script>
 	<script src="{{ asset('body_css/js/settings.js') }}"></script>
 	<script src="{{ asset('body_css/js/todolist.js') }}"></script>
+
+	<script src="{{ asset('body_css/js/tabs.js') }}"></script>
+	<script src="{{ asset('body_css/js/form-repeater.js') }}"></script>
 	<script src="{{ asset('body_css/vendors/sweetalert/sweetalert.min.js') }}"></script>
+
 	{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.6/dist/sweetalert2.all.min.js"></script> --}}
 	{{-- <script src="{{ asset('body_css/js/form-validation.js') }}"></script>
 	<script src="{{ asset('body_css/js/bt-maxLength.js') }}"></script> --}}
