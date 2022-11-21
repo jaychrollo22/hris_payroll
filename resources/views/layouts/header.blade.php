@@ -421,6 +421,7 @@
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/holidays') }}">Holidays</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/schedules') }}">Schedules</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/allowances') }}">Allowances</a></li>
+									<li class="nav-item"> <a class="nav-link" href="{{ url('/incentives') }}">Incentives</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/handbooks') }}">Handbook</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/leavee-settings') }}">Leaves</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/announcements') }}">Announcements</a></li>
@@ -463,7 +464,13 @@
 									<a class="nav-link" href="{{ url('/loan-type') }}">Loan Types</a>
 								</li>
 								<li class="nav-item">
-									<a class="nav-link" href="{{ url('/employee-allowance') }}">Employee <br> Allowances</a>
+									<a class="nav-link" href="{{ url('/employee-incentive') }}">Employee Incentives</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/employee-allowance') }}">Employee Allowances</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/salary-management') }}">Salary Management</a>
 								</li>
 							</ul>
 						</div>
@@ -476,10 +483,10 @@
 						</a>
 						<div class="collapse" id="reports">
 							<ul class="nav flex-column sub-menu">
-								<li class="nav-item"> <a class="nav-link" href="{{ url('/employees') }}">Employees</a></li>
-								<li class="nav-item"> <a class="nav-link" href="{{ url('/leave-reports') }}">Leave Reports</a></li>
-								<li class="nav-item"> <a class="nav-link" href="{{ url('/total-expenses') }}">Total Expenses</a></li>
-								<li class="nav-item"> <a class="nav-link" href="{{ url('/loans-report') }}">Loans Report</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/employee-report') }}">Employees</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/leave-report') }}">Leave Reports</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li>
 								<li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li>
 								<li class="nav-item"> <a class="nav-link" href="{{ url('/payroll-report') }}">Payroll Reports</a></li>
 							</ul>
@@ -517,14 +524,20 @@
 
 	<script src="{{ asset('body_css/vendors/datatables.net/jquery.dataTables.js') }}"></script>
 	<script src="{{ asset('body_css/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
+	<script src="{{ asset('body_css/vendors/jquery.repeater/jquery.repeater.min.js') }}"></script>
+
 	<script src="{{ asset('body_css/js/dataTables.select.min.js') }}"></script>
 
 	<script src="{{ asset('body_css/js/off-canvas.js') }}"></script>
 	<script src="{{ asset('body_css/js/hoverable-collapse.js') }}"></script>
-	{{-- <script src="{{asset('body_css/js/template.js')}}"></script> --}}
+	<script src="{{ asset('body_css/js/template.js') }}"></script>
 	<script src="{{ asset('body_css/js/settings.js') }}"></script>
 	<script src="{{ asset('body_css/js/todolist.js') }}"></script>
+
+	<script src="{{ asset('body_css/js/tabs.js') }}"></script>
+	<script src="{{ asset('body_css/js/form-repeater.js') }}"></script>
 	<script src="{{ asset('body_css/vendors/sweetalert/sweetalert.min.js') }}"></script>
+
 	{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.6/dist/sweetalert2.all.min.js"></script> --}}
 	{{-- <script src="{{ asset('body_css/js/form-validation.js') }}"></script>
 	<script src="{{ asset('body_css/js/bt-maxLength.js') }}"></script> --}}
@@ -708,6 +721,7 @@
 	</script>
 	@include('sweetalert::alert')
 	@yield('allowanceScript')
+	@yield('incentivescript')
 	@yield('masterfilesScript')
 	@yield('LeaveScript')
 	@yield('OvertimeScript')
@@ -717,6 +731,7 @@
 
 	@yield('loanRegScripts')
 	@yield('empAllowScript')
+	@yield('empIncentiveScript')
 </body>
 
 </html>

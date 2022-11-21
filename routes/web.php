@@ -110,6 +110,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('activate-allowance/{id}', 'AllowanceController@activate_allowance');
     Route::post('edit-allowance/{id}', 'AllowanceController@edit_allowance');
 
+    // Incentives
+    Route::get('incentives', 'IncentiveController@index');
+    Route::post('new-incentive', 'IncentiveController@store');
+    Route::get('disable-incentive/{id}', 'IncentiveController@disable_incentive');
+    Route::get('activate-incentive/{id}', 'IncentiveController@activate_incentive');
+    Route::post('edit-incentive/{id}', 'IncentiveController@update');
+
     //Biometrics
     Route::get('get-biometrics', 'EmployeeController@employees_biotime');
     Route::post('new-biocode', 'EmployeeController@newBio');
@@ -145,10 +152,28 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('new-employee-allowance', 'EmployeeAllowanceController@store');
     Route::get('disableEmp-allowance/{id}', 'EmployeeAllowanceController@disable');
 
+    // Employee Incentive
+    Route::get('employee-incentive', 'EmployeeIncentiveController@index');
+    Route::post('new-employee-incentive', 'EmployeeIncentiveController@store');
+    Route::get('disableEmp-incentive/{id}', 'EmployeeIncentiveController@disable');
+
+    // Adjustments
+    Route::get('salary-management', 'AdjustmentController@index');
+    Route::post('new-adjustment', 'AdjustmentController@store');
+    Route::get('disable-adjustment/{id}', 'AdjustmentController@disable');
+
     // Loans
     Route::get('loans', 'LoanController@index');
     Route::get('loan-reg', 'LoanController@loan_reg');
     Route::post('new-loan', 'LoanController@store_loanReg');
+
+    // Reports
+    Route::get('employee-report', 'EmployeeController@employee_report');
+    Route::get('leave-report', 'LeaveController@leave_report');
+    Route::get('totalExpense-report', 'PayrollController@totalExpense_report');
+    Route::get('loan-report', 'LoanController@loan_report');
+    Route::get('incentive-report', 'IncentiveController@incentive_report');
+    Route::get('payroll-report', 'PayrollController@payroll_report');
 
     //13th month
     Route::get('month-benefit', 'PayslipController@monthly_benefit');
