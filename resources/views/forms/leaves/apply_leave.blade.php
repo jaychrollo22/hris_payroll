@@ -8,13 +8,17 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+	<form method='POST' action='new-leave' onsubmit='show()'  enctype="multipart/form-data">
+				@csrf       
       <div class="modal-body">
         <div class="form-group row">
           <div class='col-md-2'>
-            Approver : 
+            Approver 
           </div>
           <div class='col-md-9'>
-            @if(auth()->user()->employee->immediate_sup_data){{auth()->user()->employee->immediate_sup_data->name}} @else No Approver @endif
+            @foreach($all_approvers as $approvers)
+              {{$approvers->approver_info->name}}<br>
+            @endforeach
           </div>
         </div>
         <div class="form-group row">
@@ -32,13 +36,13 @@
               <div class='row'>
                 <div class='col-md-6'>
                   <label class="form-check-label ">
-                    <input type="checkbox" class="form-check-input">
+                    <input type="checkbox" name="withpay" class="form-check-input" value="1">
                     With Pay
                 </label>
                 </div>
                 <div class='col-md-6'>
                   <label class="form-check-label ">
-                    <input type="checkbox" class="form-check-input">
+                    <input type="checkbox" name="halfday" class="form-check-input" value="1">
                     Halfday
                 </label>
                 </div>
@@ -50,13 +54,13 @@
                Date From 
             </div>
             <div class='col-md-4'>
-              <input type="date" name='date_from' class="form-control" requried>
+              <input type="date" name='date_from' class="form-control" required>
             </div>
             <div class='col-md-2'>
                Date To 
             </div>
             <div class='col-md-4'>
-              <input type="date" name='date_to' class="form-control" requried>
+              <input type="date" name='date_to' class="form-control" required>
             </div>
           </div>
           <div class="form-group row">
@@ -64,7 +68,7 @@
                Reason
             </div>
             <div class='col-md-10'>
-              <textarea  name='reason' class="form-control" rows='4' requried></textarea>
+              <textarea  name='reason' class="form-control" rows='4' required></textarea>
             </div>
           
           </div>
@@ -73,15 +77,16 @@
                Attachment
             </div>
             <div class='col-md-10'>
-              <input type="file" class="form-control"  placeholder="Upload Supporting Documents" multiple>
+              <input type="file" name="attachment" class="form-control"  placeholder="Upload Supporting Documents" multiple>
             </div>
           
           </div>
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Save</button>
       </div>
+  </form>
     </div>
   </div>
 </div>

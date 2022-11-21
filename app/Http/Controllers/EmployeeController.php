@@ -139,14 +139,17 @@ class EmployeeController extends Controller
         $schedules = [];
         $emp_code = $request->employee;
         $schedule_id = null;
-        $emp_data = null;
+        $emp_data = [];
         if ($from_date != null) {
-            $emp_data = PersonnelEmployee::where('emp_code', $request->employee)->first();
+            $emp_data = PersonnelEmployee::with(['attendances' => function ($query) use ($from_date, $to_date) {
+                $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                ->orderBy('time_in','asc');
+            }])->whereIn('emp_code', $request->employee)->get();
+            // dd($emp_data);
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
-            $attendances =  $attendance_controller->get_attendances($from_date, $to_date, $request->employee);
             $schedules = ScheduleData::where('schedule_id', 1)->get();
         }
-
+        
         return view(
             'attendances.employee_attendance',
             array(

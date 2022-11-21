@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\IclockTransation;
 use App\Attendance;
 use App\Employee;
+use App\PersonnelEmployee;
 use App\ScheduleData;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -94,7 +95,14 @@ class AttendanceController extends Controller
 
         return $attendances;
     }
-    public function get_attendances_employees($from_date,$to_date,$employees){
+    public function get_all_attendances($employees,$from_date,$to_date)
+    {
+          $employees = PersonnelEmployee::whereIn('employee_code',$employees)->get();
+
+          return $employees;
+    }
+    public function get_attendances_employees($from_date,$to_date,$employees)
+    {
         $attendances = Attendance::whereIn('employee_code',$employees)
         ->orderBy('time_in','asc')
         ->where(function($q) use ($from_date, $to_date) {
@@ -104,7 +112,6 @@ class AttendanceController extends Controller
         ->get();
 
         return $attendances;
-
     }
     /**
      * Store a newly created resource in storage.

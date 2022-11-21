@@ -46,10 +46,22 @@
                         <th>Undertime</th>
                         <th>Overtime</th>
                         <th>Approved Overtime</th>
+                        <th>Night Diff</th>
+                        <th>OT Night Diff</th>
                         <th>Remarks</th>
                       </tr>
                     </thead>
                     <tbody>
+                      @php
+                          $work =0;
+                          $lates =0;
+                          $undertimes =0;
+                          $overtimes =0;
+                          $approved_overtimes =0;
+                          $night_diffs =0;
+                          $ot_night_diffs =0;
+                          $night_diff_ot =0;
+                      @endphp
                         @foreach(array_reverse($date_range) as $date_r)
                         <tr>
                           {{-- {{dd($schedules->pluck('name'))}} --}}
@@ -113,10 +125,17 @@
                               <td></td>
                               <td></td>
                               <td></td>
+                              <td>
+                              </td>
+                              <td>
+                              </td>
                             @else
                               <td>@if($time_in != null)
                                     @if($time_in->time_out != null)
                                       {{round((((strtotime($time_in->time_out) - strtotime($time_in->time_in)))/3600),2)}} hrs 
+                                      @php
+                                           $work = $work + round((((strtotime($time_in->time_out) - strtotime($time_in->time_in)))/3600),2);
+                                      @endphp
                                     @endif
                                   @endif
                               </td>
@@ -141,10 +160,16 @@
                                       {{strtotime(date("2022-01-01 h:i".$time_in->time_in))}} <br> --}}
                                       <td>
                                           {{number_format($late_data)}} mins
+                                          @php
+                                              $lates = round($late_data,2);
+                                          @endphp
                                       </td>
                                       <td>
-                                        @if($undertime < 0)
+                                        @if($undertimes < 0)
                                          {{number_format($undertime*60*-1)}} mins
+                                         @php
+                                             $undertimes = round($undertimes*60*-1,2);
+                                         @endphp
                                         @else
                                          0 mins
                                         @endif
@@ -152,11 +177,24 @@
                                       <td>
                                         @if($overtime > .5)
                                           {{$overtime}} hrs
+                                          @php
+                                             $overtimes = round($overtime,2);
+                                          @endphp
                                         @else
                                           0 hrs
                                         @endif
                                       </td>
                                       <td>0 hrs</td>
+                                      <td>
+                                         0 hrs
+                                      </td>
+                                      <td>
+                                        @php
+                                         $night_diff_ot =  $night_diff_ot +  round(night_difference(strtotime($time_in->time_in),strtotime($time_in->time_out)),2);
+                                        echo  round(night_difference(strtotime($time_in->time_in),strtotime($time_in->time_out)),2)." hrs";
+                                      @endphp
+
+                                      </td>
                                       <td>
                                         <small>Time In : {{$time_in->device_in}} <br>
                                         Time Out : {{$time_in->device_out}}</small>
@@ -167,12 +205,24 @@
                                   <td></td>
                                   <td></td>
                                   <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  
                                   @endif
-                            
-                             
                             @endif
                         </tr>
                         @endforeach
+                        <tr>
+                          <td colspan='3'>Total</td>
+                          <td >{{$work}} hrs</td>
+                          <td >{{$lates}} mins</td>
+                          <td >{{$undertimes}} mins </td>
+                          <td >{{$overtimes}} hrs</td>
+                          <td >0 hrs</td>
+                          <td >0 hrs</td>
+                          <td >0 hrs</td>
+                          <td ></td>
+                        </tr>
                     </tbody>
                   </table>
                 </div>
@@ -183,6 +233,45 @@
         </div>
     </div>
 </div>
+@php
+function night_difference($start_work,$end_work)
+{
+    $start_night = mktime('22','00','00',date('m',$start_work),date('d',$start_work),date('Y',$start_work));
+    $end_night   = mktime('06','00','00',date('m',$start_work),date('d',$start_work) + 1,date('Y',$start_work));
+
+    if($start_work >= $start_night && $start_work <= $end_night)
+    {
+        if($end_work >= $end_night)
+        {
+            return ($end_night - $start_work) / 3600;
+        }
+        else
+        {
+            return ($end_work - $start_work) / 3600;
+        }
+    }
+    elseif($end_work >= $start_night && $end_work <= $end_night)
+    {
+        if($start_work <= $start_night)
+        {
+            return ($end_work - $start_night) / 3600;
+        }
+        else
+        {
+            return ($end_work - $start_work) / 3600;
+        }
+    }
+    else
+    {
+        if($start_work < $start_night && $end_work > $end_night)
+        {
+            return ($end_night - $start_night) / 3600;
+        }
+        return 0;
+    }
+}
+
+@endphp
 <script>
   function get_min(value)
   {
