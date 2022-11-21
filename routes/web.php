@@ -157,6 +157,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('new-employee-incentive', 'EmployeeIncentiveController@store');
     Route::get('disableEmp-incentive/{id}', 'EmployeeIncentiveController@disable');
 
+    // Employee Groups
+    Route::get('employee-companies', 'EmployeeCompanyController@index');
+    Route::post('new-employee-group', 'EmployeeCompanyController@store');
+    Route::get('disableEmp-incentive/{id}', 'EmployeeCompanyController@disable');
+
     // Adjustments
     Route::get('salary-management', 'AdjustmentController@index');
     Route::post('new-adjustment', 'AdjustmentController@store');
