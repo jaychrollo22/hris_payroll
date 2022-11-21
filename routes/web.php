@@ -124,6 +124,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('biologs-employee', 'EmployeeController@employee_attendance');
     Route::get('bio-per-location', 'EmployeeController@biologs_per_location');
     Route::get('pmi-local', 'EmployeeController@localbio');
+    Route::get('biometrics-per-company', 'EmployeeController@perCompany');
 
     //Payroll
     Route::get('pay-reg', 'PayslipController@payroll_datas');

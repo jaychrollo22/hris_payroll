@@ -406,10 +406,11 @@
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/biologs-employee') }}">Per Employee</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/biologs-employee') }}">Per Location</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/pmi-local') }}">17th floor</a></li>
+									<li class="nav-item"> <a class="nav-link" href="{{ url('/biometrics-per-company') }}">Per Company</a></li>
 								</ul>
 							</div>
 						</li>
-						<li class="nav-item @if ($header == 'settings') active @endif">
+						{{-- <li class="nav-item @if ($header == 'settings') active @endif">
 							<a class="nav-link" data-toggle="collapse" href="#settings"
 								aria-expanded="@if ($header == 'settings') true @else false @endif" aria-controls="ui-basic">
 								<i class="icon-cog menu-icon"></i>
@@ -428,11 +429,9 @@
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/logos') }}">Logos</a></li>
 								</ul>
 							</div>
-						</li>
+						</li> --}}
 					@endif
-
-					{{-- @if (auth()->user()->role == 'Finance') --}}
-					<li class="nav-item @if ($header == 'Payroll') active @endif">
+					{{-- <li class="nav-item @if ($header == 'Payroll') active @endif">
 						<a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
 							<i class="icon-align-center menu-icon"></i>
 							<span class="menu-title">Payroll</span>
@@ -444,7 +443,7 @@
 								<li class="nav-item"> <a class="nav-link" href="{{ url('/loan-reg') }}">Loan Register</a></li>
 							</ul>
 						</div>
-					</li>
+					</li> --}}
 					<li class="nav-item @if ($header == 'masterfiles') active @endif">
 						<a class="nav-link" data-toggle="collapse" href="#masterfiles" aria-expanded="false"
 							aria-controls="ui-basic">
@@ -454,7 +453,7 @@
 						</a>
 						<div class="collapse" id="masterfiles">
 							<ul class="nav flex-column sub-menu">
-								<li class="nav-item">
+								{{-- <li class="nav-item">
 									<a class="nav-link" href="{{ url('/company') }}">Companies</a>
 								</li>
 								<li class="nav-item">
@@ -471,14 +470,14 @@
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="{{ url('/salary-management') }}">Salary Management</a>
-								</li>
+								</li> --}}
 								<li class="nav-item">
 									<a class="nav-link" href="{{ url('/employee-companies') }}">Employee Groups</a>
 								</li>
 							</ul>
 						</div>
 					</li>
-					<li class="nav-item @if ($header == 'reports') active @endif">
+					{{-- <li class="nav-item @if ($header == 'reports') active @endif">
 						<a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
 							<i class="icon-paper menu-icon"></i>
 							<span class="menu-title">Reports</span>
@@ -494,7 +493,7 @@
 								<li class="nav-item"> <a class="nav-link" href="{{ url('/payroll-report') }}">Payroll Reports</a></li>
 							</ul>
 						</div>
-					</li>
+					</li> --}}
 
 				</ul>
 			</nav>

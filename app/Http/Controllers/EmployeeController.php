@@ -7,6 +7,7 @@ use App\Employee;
 use App\Department;
 use App\Schedule;
 use App\Level;
+use App\EmployeeCompany;
 use App\Bank;
 use App\User;
 use App\Company;
@@ -162,6 +163,44 @@ class EmployeeController extends Controller
                 'schedules' => $schedules,
                 'emp_code' => $emp_code,
                 'emp_data' => $emp_data,
+            )
+        );
+    }
+    public function perCompany(Request $request)
+    {
+        $companies = Company::whereHas('employee_company')->get();
+        $attendance_controller = new AttendanceController;
+        $from_date = $request->from;
+        $to_date = $request->to;
+        $date_range =  [];
+        $schedules = [];
+        $emp_data = [];
+        $attendances = [];
+        $employees = [];
+        $coompany = $request->company_id;
+        if ($from_date != null) {
+            
+            $company_employees = EmployeeCompany::where('company_id',$request->company)->pluck('emp_code')->toArray();
+            $emp_data = PersonnelEmployee::with(['attendances' => function ($query) use ($from_date, $to_date) {
+                $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                ->orderBy('time_in','asc');
+            }])->whereIn('emp_code', $company_employees)->get();
+            // dd($company_employees);
+            $schedules = ScheduleData::where('schedule_id', 1)->get();
+            $date_range =  $attendance_controller->dateRange($from_date, $to_date);
+        }
+
+        return view(
+            'attendances.employee_company',
+            array(
+                'header' => 'biometrics',
+                'from_date' => $from_date,
+                'to_date' => $to_date,
+                'date_range' => $date_range,
+                'attendances' => $attendances,
+                'schedules' => $schedules,
+                'emp_data' => $emp_data,
+                'companies' => $companies,
             )
         );
     }
