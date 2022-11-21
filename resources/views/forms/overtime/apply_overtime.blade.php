@@ -1,20 +1,25 @@
-<!-- Modal -->
-<div class="modal fade" id="applyLeave" tabindex="-1" role="dialog" aria-labelledby="applyLeaveData" aria-hidden="true">
+<div class="modal fade" id="applyovertime" tabindex="-1" role="dialog" aria-labelledby="otData" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="applyLeaveData">Apply Overtime</h5>
+        <h5 class="modal-title" id="otData">Apply Overtime</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+			<form method='POST' action='new-overtime' onsubmit='show()'  enctype="multipart/form-data">
+				@csrf      
       <div class="modal-body">
         <div class="form-group row">
           <div class='col-md-2'>
-            Approver : 
+            Approver 
           </div>
           <div class='col-md-9'>
-            {{ (auth()->user()->employee->immediate_sup_data != null) ? auth()->user()->employee->immediate_sup_data->name : 'No Approver'}}
+            <div class='col-md-9'>
+              @foreach($all_approvers as $approvers)
+                {{$approvers->approver_info->name}}<br>
+              @endforeach
+            </div>
           </div>
           
         </div>
@@ -23,24 +28,8 @@
                Date
             </div>
             <div class='col-md-4'>
-              <input type="date" name='date_from' class="form-control" min='{{date('Y-m-d', strtotime("-3 days"))}}' requried>
+              <input type="date" name='ot_date' class="form-control" min='{{date('Y-m-d', strtotime("-3 days"))}}' required>
             </div>
-              <div class="col-sm-2">
-                  <div class="form-check">
-                    <label class="form-check-label">
-                      <input type="radio" class="form-check-input" name="before_ot" id="before_ot" value="" >
-                        Beforeshift OT
-                      <i class="input-helper"></i></label>
-                  </div>
-              </div>
-              <div class="col-sm-2">
-                <div class="form-check">
-                  <label class="form-check-label">
-                    <input type="radio" class="form-check-input" name="before_ot" id="after_ot" checked="" value="option2">
-                    Aftershift OT
-                    <i class="input-helper"></i></label>
-                </div>
-              </div>
           </div>
            
           <div class="form-group row">
@@ -48,13 +37,13 @@
                Start Time
             </div>
             <div class='col-md-4'>
-              <input type="time" name='start_time' class="form-control" requried>
+              <input type="time" name='start_time' class="form-control" required>
             </div>
             <div class='col-md-2'>
                End Time
             </div>
             <div class='col-md-4'>
-              <input type="time" name='end_time' class="form-control" requried>
+              <input type="time" name='end_time' class="form-control" required>
             </div>
           </div>
           <div class="form-group row">
@@ -62,7 +51,7 @@
                Remarks
             </div>
             <div class='col-md-10'>
-              <textarea  name='reason' class="form-control" rows='4' requried></textarea>
+              <textarea  name='remarks' class="form-control" rows='4' required></textarea>
             </div>
           
           </div>
@@ -71,15 +60,16 @@
                Attachment
             </div>
             <div class='col-md-10'>
-              <input type="file" class="form-control"  placeholder="Upload Supporting Documents" multiple>
+              <input type="file" name="attachment" class="form-control"  placeholder="Upload Supporting Documents">
             </div>
           
           </div>
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" {{ (auth()->user()->employee->immediate_sup_data != null) ? "" : 'disabled'}}>Save</button>
+        <button type="submit" class="btn btn-primary" {{ (auth()->user()->employee->immediate_sup_data != null) ? "" : 'disabled'}}>Save</button>
       </div>
+    </form>      
     </div>
   </div>
 </div>
