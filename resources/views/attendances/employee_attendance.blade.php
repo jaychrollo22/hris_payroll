@@ -178,31 +178,31 @@
                                 {{-- {{strtotime("2022-01-01 ".$schedules[$id]->time_in_to)}} <br>
                                 {{strtotime(date("2022-01-01 h:i".$time_in->time_in))}} <br> --}}
                                 <td>
-                                    {{number_format($late_data)}} mins
-                                    @php
-                                        $lates = round($late_data,2);
-                                    @endphp
-                                </td>
-                                <td>
-                                  @if($undertime < 0)
-                                   {{number_format($undertime*60*-1)}} mins
-                                   @php
-                                       $undertimes = $undertimes + round($undertime*60*-1,2);
-                                   @endphp
-                                  @else
-                                   0 mins
-                                  @endif
-                                </td>
-                                <td>
-                                  @if($overtime > .5)
-                                    {{$overtime}} hrs
-                                    @php
-                                       $overtimes = round($overtime,2);
-                                    @endphp
-                                  @else
-                                    0 hrs
-                                  @endif
-                                </td>
+                                  {{number_format($late_data*60)}} hrs
+                                  @php
+                                      $lates = $lates+ round($late_data*60,2);
+                                  @endphp
+                              </td>
+                              <td>
+                                @if($undertime < 0)
+                                 {{number_format(($undertime*60*-1)*60,2)}} hrs
+                                 @php
+                                     $undertimes = $undertimes + round(($undertime*60*-1)*60,2);
+                                 @endphp
+                                @else
+                                 0 mins
+                                @endif
+                              </td>
+                              <td>
+                                @if($overtime > .5)
+                                  {{$overtime}} hrs
+                                  @php
+                                     $overtimes = $overtimes +round($overtime,2);
+                                  @endphp
+                                @else
+                                  0 hrs
+                                @endif
+                              </td>
                                 <td>0 hrs</td>
                                 <td>
                                    0 hrs
@@ -232,8 +232,8 @@
                         <tr>
                           <td colspan='3'>Total</td>
                           <td >{{$work}} hrs</td>
-                          <td >{{$lates}} mins</td>
-                          <td >{{$undertimes}} mins </td>
+                          <td >{{$lates}} hrs</td>
+                          <td >{{$undertimes}} hrs </td>
                           <td >{{$overtimes}} hrs</td>
                           <td >0 hrs</td>
                           <td >0 hrs</td>
