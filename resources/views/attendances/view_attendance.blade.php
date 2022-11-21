@@ -159,7 +159,7 @@
                                       {{-- {{strtotime("2022-01-01 ".$schedules[$id]->time_in_to)}} <br>
                                       {{strtotime(date("2022-01-01 h:i".$time_in->time_in))}} <br> --}}
                                       <td>
-                                        {{number_format($late_data/60)}} hrs
+                                        {{number_format($late_data/60,2)}} hrs
                                         @php
                                             $lates = $lates+ round($late_data/60,2);
                                         @endphp
