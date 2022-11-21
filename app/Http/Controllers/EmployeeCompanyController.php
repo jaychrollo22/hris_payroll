@@ -26,13 +26,19 @@ class EmployeeCompanyController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+        // $empComp = EmployeeCompany::where('emp_code', $request->emp_code)->get();
+        // dd($empComp->toArray());
         foreach ($request->emp_code as $emp_code) {
-            $newEmpGroup = new EmployeeCompany();
-            $newEmpGroup->emp_code = $emp_code;
-            $newEmpGroup->company_id = $request->company;
-            $newEmpGroup->save();
+            $empComp = EmployeeCompany::where('emp_code', $request->emp_code)->where('company_id', $request->company)->first();
+            if ($empComp == null) {
+                $newEmpGroup = new EmployeeCompany();
+                $newEmpGroup->emp_code = $emp_code;
+                $newEmpGroup->company_id = $request->company;
+                $newEmpGroup->save();
+                Alert::success('Successfully Store')->persistent('Dismiss');
+            }
         }
-        Alert::success('Successfully Store')->persistent('Dismiss');
+
         return back();
     }
 }
