@@ -185,10 +185,10 @@
                                     @endphp
                                 </td>
                                 <td>
-                                  @if($undertimes < 0)
+                                  @if($undertime < 0)
                                    {{number_format($undertime*60*-1)}} mins
                                    @php
-                                       $undertimes = round($undertimes*60*-1,2);
+                                       $undertimes = $undertimes + round($undertime*60*-1,2);
                                    @endphp
                                   @else
                                    0 mins
