@@ -124,13 +124,31 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('pay-reg', 'PayslipController@import');
     Route::post('upload-attendance', 'PayslipController@upload_attendance');
 
-    // Masterfiles
-    Route::get('company', 'MasterfileController@company_index');
-    Route::post('newCompany', 'MasterfileController@store_company');
-    Route::post('newDepartment', 'MasterfileController@store_department');
-    Route::get('department', 'MasterfileController@department_index');
-    Route::get('enable-department/{id}', 'MasterfileController@enable_department');
-    Route::get('disable-department/{id}', 'MasterfileController@disable_department');
+    // Company
+    Route::get('company', 'CompanyController@company_index');
+    Route::post('newCompany', 'CompanyController@store_company');
+
+    // Department
+    Route::post('newDepartment', 'DepartmentController@store_department');
+    Route::get('department', 'DepartmentController@department_index');
+    Route::get('enable-department/{id}', 'DepartmentController@enable_department');
+    Route::get('disable-department/{id}', 'DepartmentController@disable_department');
+
+    // Loan Type
+    Route::get('loan-type', 'LoanTypeController@loanTypes_index');
+    Route::post('newLoanType', 'LoanTypeController@store_loanType');
+    Route::get('enable-loanType/{id}', 'LoanTypeController@enable_loanType');
+    Route::get('disable-loanType/{id}', 'LoanTypeController@disable_loanType');
+
+    // Employee Allowance
+    Route::get('employee-allowance', 'EmployeeAllowanceController@index');
+    Route::post('new-employee-allowance', 'EmployeeAllowanceController@store');
+    Route::get('disableEmp-allowance/{id}', 'EmployeeAllowanceController@disable');
+
+    // Loans
+    Route::get('loans', 'LoanController@index');
+    Route::get('loan-reg', 'LoanController@loan_reg');
+    Route::post('new-loan', 'LoanController@store_loanReg');
 
     //13th month
     Route::get('month-benefit', 'PayslipController@monthly_benefit');

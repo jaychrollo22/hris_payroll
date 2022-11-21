@@ -245,6 +245,17 @@
 		.tab-content {
 			padding: 20px;
 		}
+
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		/* Firefox */
+		input[type=number] {
+			-moz-appearance: textfield;
+		}
 	</style>
 </head>
 
@@ -345,6 +356,12 @@
 							<span class="menu-title">Payslips</span>
 						</a>
 					</li>
+					<li class="nav-item @if ($header == 'Loans') active @endif">
+						<a class="nav-link" href="{{ url('/loans') }}" onclick='show()'>
+							<i class="fa fa-money menu-icon"></i>
+							<span class="menu-title">Loans</span>
+						</a>
+					</li>
 					@if (auth()->user()->subbordinates->count() != 0)
 						<li class="nav-item">
 							<hr>
@@ -423,189 +440,51 @@
 						<div class="collapse" id="payroll">
 							<ul class="nav flex-column sub-menu">
 								<li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/loan-reg') }}">Loan Register</a></li>
 							</ul>
 						</div>
 					</li>
-					{{-- @endif --}}
-					{{-- <li class="nav-item">
-=======
-    <div id = "loader" style="display:none;" class="loader">
-    </div>
-  
-    <div class="container-scroller">
-    
-        <!-- partial:partials/_navbar.html -->
-        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-          <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-            <a class="navbar-brand brand-logo mr-5" href="{{url('/')}}"><img src="{{ URL::asset(config('logo.logos')::first()->logo)}}" class="mr-2" alt="logo"/></a>
-            <a class="navbar-brand brand-logo-mini" href="{{url('/')}}"><img src="{{ URL::asset(config('logo.logos')::first()->icon)}}" alt="logo"/></a>
-          </div>
-      
-          <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
-              <span class="icon-menu"></span>
-            </button>
-            <ul class="navbar-nav mr-lg-2">
-              <li class="nav-item nav-search d-none d-lg-block">
-                <div class="input-group">
-                </div>
-              </li>
-            </ul>
-            <ul class="navbar-nav navbar-nav-right">
-              <li class="nav-item nav-profile dropdown">
-                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                  <img class="rounded-circle" style='width:34px;height:34px;' src='{{URL::asset(auth()->user()->employee->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';">
-                </a>
-                <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                  <a class="dropdown-item" href="{{url('account-setting')}}">
-                    <i class="ti-settings text-primary"></i>
-                    Account Settings
-                  </a>
-                  <a class="dropdown-item" href="{{ route('logout') }}"  onclick="logout(); show();">
-                    <i class="ti-power-off text-primary"></i>
-                    Logout
-                  </a>
-                  <form id="logout-form"  action="{{ route('logout') }}"  method="POST" style="display: none;">
-                    {{ csrf_field() }}
-                  </form>
-                </div>
-              </li>
-            </ul>
-            <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-              <span class="icon-menu"></span>
-            </button>
-          </div>
-        </nav>
-        <!-- partial -->
-        <div class="container-fluid page-body-wrapper">
-          <!-- partial:partials/_sidebar.html -->
-          <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <ul class="nav">
-              <li class="nav-item">
-                <hr>
-                <h5>Employee</h5>
-              </li>
-              <li class="nav-item @if($header == '') active @endif">
-                <a class="nav-link" href="{{url('/')}}" onclick='show()'>
-                  <i class="icon-grid menu-icon"></i>
-                  <span class="menu-title">Dashboard</span>
-                </a>
-              </li>
-              <li class="nav-item @if($header == 'attendances') active @endif">
-                <a class="nav-link" href="{{url('/attendances')}}" onclick='show()'>
-                  <i class="icon-watch menu-icon"></i>
-                  <span class="menu-title">Attendances</span>
-                </a>
-              </li>
-              <li class="nav-item @if($header == 'forms') active @endif">
-                <a class="nav-link" data-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="ui-basic">
-                  <i class="icon-layout menu-icon"></i>
-                  <span class="menu-title">Forms</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse @if($header == 'forms') show @endif" id="forms">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item "> <a class="nav-link active" href="{{url('/leave')}}">Leave</a></li>
-                    <li class="nav-item "> <a class="nav-link " href="{{url('/overtime')}}">Overtime</a></li>
-                    <li class="nav-item "> <a class="nav-link " href="{{url('/work-from-home')}}">Work from home</a></li>
-                    <li class="nav-item "> <a class="nav-link " href="{{url('/official-business')}}">Official Business</a></li>
-                    <li class="nav-item "> <a class="nav-link " href="{{url('/dtr-correction')}}">DTR Correction</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li class="nav-item @if($header == 'payslips') active @endif">
-                <a class="nav-link" href="{{url('/payslips')}}" onclick='show()'>
-                  <i class="icon-briefcase menu-icon"></i>
-                  <span class="menu-title">Payslips</span>
-                </a>
-              </li>
-              @if((auth()->user()->subbordinates->count()) != 0)
-              <li class="nav-item">
-                <hr>
-                <h5>Manager</h5>
-              </li>
-              <li class="nav-item @if($header == 'for-approval') active @endif">
-                <a class="nav-link" href="{{url('/for-approval')}}" onclick='show()'>
-                  <i class="icon-check menu-icon"></i>
-                  <span class="menu-title">For Approval</span>
-                </a>
-              </li>
-              <li class="nav-item @if($header == 'subordinates') active @endif">
-                <a class="nav-link" href="{{url('/subordinates')}}" onclick='show()'>
-                  <i class="icon-monitor menu-icon"></i>
-                  <span class="menu-title">Subordinates</span>
-                </a>
-              </li>
-              @endif
-              @if(auth()->user()->role == 'Admin')
-              <li class="nav-item">
-                <hr>
-                <h5>Admin</h5>
-              </li>
-              
-              <li class="nav-item @if($header == 'employees') active @endif ">
-                <a class="nav-link" href="{{url('/employees')}}" onclick='show()'>
-                  <i class="icon-head menu-icon"></i>
-                  <span class="menu-title">Employees</span>
-                </a>
-              </li>
-             
-              <li class="nav-item @if($header == 'biometrics') active @endif">
-                <a class="nav-link" data-toggle="collapse" href="#biometrics" aria-expanded="false" aria-controls="ui-basic">
-                  <i class="icon-cog menu-icon"></i>
-                  <span class="menu-title">Biometrics</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse" id="biometrics">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/get-biometrics')}}">Biometrics</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/biologs-employee')}}">Per Employee</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/bio-per-location')}}">Per Location</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/pmi-local')}}">17th floor</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li class="nav-item @if($header == 'settings') active @endif">
-                <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="@if($header == 'settings')true @else false @endif" aria-controls="ui-basic">
-                  <i class="icon-cog menu-icon"></i>
-                  <span class="menu-title">Settings</span>
-                  <i class="menu-arrow"></i>
-                </a>
-                <div class="collapse @if($header == 'settings') show @endif" id="settings">
-                  <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/holidays')}}">Holidays</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/schedules')}}">Schedules</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/allowances')}}">Allowances</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/handbooks')}}">Handbook</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/leavee-settings')}}">Leaves</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/announcements')}}">Announcements</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{url('/logos')}}">Logos</a></li>
-                  </ul>
-                </div>
-              </li>
-              @endif
-              @if(auth()->user()->role == 'Finance')
-                <li class="nav-item @if($header == 'Payroll') active @endif">
-                  <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
-                    <i class="icon-align-center menu-icon"></i>
-                    <span class="menu-title">Payroll</span>
-                    <i class="menu-arrow"></i>
-                  </a>
-                  <div class="collapse" id="payroll">
-                    <ul class="nav flex-column sub-menu">
-                      <li class="nav-item"> <a class="nav-link" href="{{url('/pay-reg')}}">Payroll Register</a></li>
-                    </ul>
-                  </div>
-                </li>
-              @endif
-              {{-- <li class="nav-item">
->>>>>>> 3b7c5d42f0f7aa1b549436f576322ad4a5796363
-                <a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
-                  <i class="icon-file menu-icon"></i>
-                  <span class="menu-title">Reports</span>
-                  <i class="menu-arrow"></i>
-                </a>
-              </li> --}}
+					<li class="nav-item @if ($header == 'masterfiles') active @endif">
+						<a class="nav-link" data-toggle="collapse" href="#masterfiles" aria-expanded="false"
+							aria-controls="ui-basic">
+							<i class="icon-align-center menu-icon"></i>
+							<span class="menu-title">Masterfiles</span>
+							<i class="menu-arrow"></i>
+						</a>
+						<div class="collapse" id="masterfiles">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/company') }}">Companies</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/department') }}">Departments</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/loan-type') }}">Loan Types</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/employee-allowance') }}">Employee <br> Allowances</a>
+								</li>
+							</ul>
+						</div>
+					</li>
+					<li class="nav-item @if ($header == 'reports') active @endif">
+						<a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
+							<i class="icon-paper menu-icon"></i>
+							<span class="menu-title">Reports</span>
+							<i class="menu-arrow"></i>
+						</a>
+						<div class="collapse" id="reports">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/employees') }}">Employees</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/leave-reports') }}">Leave Reports</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/total-expenses') }}">Total Expenses</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/loans-report') }}">Loans Report</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li>
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/payroll-report') }}">Payroll Reports</a></li>
+							</ul>
+						</div>
+					</li>
 
 				</ul>
 			</nav>
@@ -647,6 +526,8 @@
 	<script src="{{ asset('body_css/js/todolist.js') }}"></script>
 	<script src="{{ asset('body_css/vendors/sweetalert/sweetalert.min.js') }}"></script>
 	{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.6/dist/sweetalert2.all.min.js"></script> --}}
+	{{-- <script src="{{ asset('body_css/js/form-validation.js') }}"></script>
+	<script src="{{ asset('body_css/js/bt-maxLength.js') }}"></script> --}}
 	@yield('footer')
 
 	<script type='text/javascript'>
@@ -833,6 +714,9 @@
 	@yield('wfhScript')
 	@yield('obScript')
 	@yield('dtrScript')
+
+	@yield('loanRegScripts')
+	@yield('empAllowScript')
 </body>
 
 </html>

@@ -1,20 +1,19 @@
-<div class="modal fade" id="newAllowance" tabindex="-1" role="dialog" aria-labelledby="newAllowancelabel"
-	aria-hidden="true">
+<div class="modal fade" id="newloanType" tabindex="-1" role="dialog" aria-labelledby="newloanTypelabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="newAllowancelabel">New Allowance</h5>
+				<h5 class="modal-title" id="newloanTypelabel">New Loan Type</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<form method='POST' action='new-allowance' onsubmit='show()'>
+			<form method='POST' action='newLoanType' onsubmit='show()'>
 				@csrf
 				<div class="modal-body">
 					<div class="row">
 						<div class='col-md-12 form-group'>
-							Allowance name:
-							<input type="text" name='allowance_name' class="form-control" required>
+							Loan type:
+							<input type="text" name='loan_name' class="form-control" required>
 						</div>
 					</div>
 				</div>

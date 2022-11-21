@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Allowances;
+use App\Allowance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -12,7 +12,7 @@ class AllowanceController extends Controller
     //
     public function viewAllowances()
     {
-        $allowances = Allowances::with('user')->get();
+        $allowances = Allowance::with('user')->get();
         return view(
             'allowances.allowances',
             array(
@@ -24,7 +24,7 @@ class AllowanceController extends Controller
     }
     public function new(Request $request)
     {
-        $new_allowance = new Allowances;
+        $new_allowance = new Allowance;
         $new_allowance->name = $request->allowance_name;
         $new_allowance->add_by = Auth::user()->id;
         $new_allowance->status = 'Active';
@@ -35,7 +35,8 @@ class AllowanceController extends Controller
     }
     public function edit_allowance(Request $request, $id)
     {
-        $allowance = Allowances::findOrFail($id);
+        $allowance = Allowance::findOrFail($id);
+        // dd($allowance)->all();
         $allowance->name = $request->allowance_name;
         $allowance->add_by = Auth::user()->id;
         $allowance->save();
@@ -46,13 +47,13 @@ class AllowanceController extends Controller
     public function disable_allowance($id)
     {
 
-        Allowances::Where('id', $id)->update(['status' => 'Inactive']);
+        Allowance::Where('id', $id)->update(['status' => 'Inactive']);
         Alert::success('Allowance Inactive')->persistent('Dismiss');
         return back();
     }
     public function activate_allowance($id)
     {
-        Allowances::Where('id', $id)->update(['status' => 'Active']);
+        Allowance::Where('id', $id)->update(['status' => 'Active']);
         Alert::success('Allowance Activated')->persistent('Dismiss');
         return back();
     }
