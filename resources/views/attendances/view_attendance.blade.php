@@ -171,7 +171,7 @@
                                            $undertimes = $undertimes + round(($undertime*60*-1)*60,2);
                                        @endphp
                                       @else
-                                       0 mins
+                                       0 hrs
                                       @endif
                                     </td>
                                     <td>
