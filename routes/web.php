@@ -34,32 +34,40 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('get-attendance-bio', 'AttendanceController@get_attendances');
 
-
     //Leaves
-    Route::get('leave', 'LeaveController@leaves');
-    Route::get('post', 'LeaveController@leaves');
-
+    Route::get('leave', 'EmployeeLeaveController@leaveBalances');
+    Route::post('new-leave','EmployeeLeaveController@new');
+    Route::post('edit-leave/{id}', 'EmployeeLeaveController@edit_leave');
+    Route::get('disable-leave/{id}', 'EmployeeLeaveController@disable_leave');
 
     //Overtime
-    Route::get('overtime', 'OvertimeController@overtime');
-
+    Route::get('overtime','EmployeeOvertimeController@overtime');
+    Route::post('new-overtime','EmployeeOvertimeController@new');
+    Route::post('edit-overtime/{id}', 'EmployeeOvertimeController@edit_overtime');
+    Route::get('disable-overtime/{id}', 'EmployeeOvertimeController@disable_overtime');    
 
     //Work-from-home
-    Route::get('work-from-home', 'WorkfromhomeController@workfromhome');
-
+    Route::get('work-from-home', 'EmployeeWfhController@wfh');
+    Route::post('new-wfh','EmployeeWfhController@new');
 
     //official-business
-    Route::get('official-business', 'OfficialbusinessController@officialBusiness');
-
+    Route::get('official-business', 'EmployeeObController@ob');
+    Route::post('new-ob','EmployeeObController@new');
+    Route::post('edit-ob/{id}', 'EmployeeObController@edit_ob');
+    Route::get('disable-ob/{id}', 'EmployeeObController@disable_ob');       
 
     //DTR Correction
-    Route::get('dtr-correction', 'DailytimerecordController@dtr');
+    Route::get('dtr-correction', 'EmployeeDtrController@dtr');
+    Route::post('new-dtr','EmployeeDtrController@new');
+    Route::post('edit-dtr/{id}', 'EmployeeDtrController@edit_dtr');
+    Route::get('disable-dtr/{id}', 'EmployeeDtrController@disable_dtr');     
 
+    //FOR APPROVAL
+    Route::get('for-approval', 'FormApprovalController@form_approval');
 
     //employees
     Route::get('employees', 'EmployeeController@view');
     Route::post('new-employee', 'EmployeeController@new');
-
 
     //Payslips
     Route::get('payslips', 'PayslipController@view');
