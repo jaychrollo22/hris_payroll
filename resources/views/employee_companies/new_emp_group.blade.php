@@ -30,8 +30,7 @@
 								style='width:100%;' name='emp_code[]' required>
 								<option value="">--Select Employee--</option>
 								@foreach ($employees as $employee)
-									<option value="{{ $employee->employee_code }}">
-										{{ $employee->last_name . ', ' . $employee->first_name . ' ' . $employee->middle_name }}</option>
+									<option value="{{ $employee->emp_code }}"> {{ $employee->last_name . ', ' . $employee->first_name . ' ' . $employee->middle_name }} - {{ $employee->emp_code }}</option>
 								@endforeach
 							</select>
 						</div>

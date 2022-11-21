@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Company;
 use App\Employee;
+use App\PersonnelEmployee;
 use App\EmployeeCompany;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -15,7 +16,7 @@ class EmployeeCompanyController extends Controller
     {
         // $employeeCompanies = EmployeeCompany::all();
         $companies = Company::with('employee_company')->get();
-        $employees = Employee::all();
+        $employees = PersonnelEmployee::get();
         return view('employee_companies.index', array(
             'header' => 'masterfiles',
             'companies' => $companies,
