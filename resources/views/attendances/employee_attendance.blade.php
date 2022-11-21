@@ -180,14 +180,14 @@
                                 <td>
                                   {{number_format($late_data*60)}} hrs
                                   @php
-                                      $lates = $lates+ round($late_data*60,2);
+                                      $lates = $lates+ round($late_data/60,2);
                                   @endphp
                               </td>
                               <td>
                                 @if($undertime < 0)
-                                 {{number_format(($undertime*60*-1)*60,2)}} hrs
+                                 {{number_format(($undertime*60*-1)/60,2)}} hrs
                                  @php
-                                     $undertimes = $undertimes + round(($undertime*60*-1)*60,2);
+                                     $undertimes = $undertimes + round(($undertime*60*-1)/60,2);
                                  @endphp
                                 @else
                                  0 hrs
