@@ -33,7 +33,7 @@
                   <div class="control__indicator"></div>
                 </label>
                 <br>
-                <span class="ml-auto"><a  href="{{ route('password.request') }}" onclick='show()' class="forgot-pass">Forgot Password</a></span> 
+                <span class="ml-auto"><a  href="{{ route('password.request') }}" style="text-decoration:none;" onclick='show()' class="forgot-pass">Forgot Password</a></span> 
               </div>
               @if($errors->any())
                     <div class="form-group alert alert-danger alert-dismissable">
@@ -42,6 +42,10 @@
                     </div>
                 @endif
               <input type="submit" value="Log In" class="btn text-white btn-block btn-primary">
+              <div class="d-flex mb-5 align-items-center">
+                <a class="mx-auto" style="text-decoration:none;" href="{{ route('password.request') }}" data-toggle="modal" data-target="#regEmployee" class="forgot-pass">Don't have an account ? Register</a>
+              </div>
+             
 
               {{-- <span class="d-block text-left my-4 text-muted text-right"> or sign in with</span>
               
@@ -65,5 +69,5 @@
       </div>
     </div>
   </div>
-
+@include('auth.register_employee')
 @endsection

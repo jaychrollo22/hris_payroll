@@ -55,9 +55,9 @@ class EmployeeController extends Controller
 
     public function new(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $company = Company::findOrfail($request->company);
-
+// dd($company);
         $user = new User;
         $user->email = $request->work_email;
         $user->name = $request->first_name . " " . $request->last_name;
@@ -66,13 +66,14 @@ class EmployeeController extends Controller
 
         $employee = new Employee;
         $employee->employee_number = $request->biometric_code;
-        $employee->employee_code = $this->generate_emp_code('Employee', "OBN", date('Y'));
+        $employee->employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($request->date_hired)), $company->id);
         $employee->user_id = $user->id;
         $employee->first_name = $request->first_name;
         $employee->first_name = $request->middle_name;
         $employee->last_name = $request->last_name;
         $employee->classification = $request->classification;
         $employee->department_id = $request->department;
+        $employee->company_id = $request->company;
         $employee->position = $request->position;
         $employee->nick_name = $request->nickname;
         $employee->level = $request->level;
@@ -96,18 +97,29 @@ class EmployeeController extends Controller
         $employee->name_suffix = $request->suffix;
         $employee->religion = $request->religion;
         $employee->save();
+
+        $employeeCompany = new EmployeeCompany;
+        $employeeCompany->emp_code = $request->biometric_code;
+        $employeeCompany->schedule_id = 1;
+        $employeeCompany->company_id = $request->company;
+        $employeeCompany->save();
+
+
+        Alert::success('Successfully Registered')->persistent('Dismiss');
+        return back();
     }
 
 
-    public function generate_emp_code($table, $code, $year)
+    public function generate_emp_code($table, $code, $year, $compId)
     {
         // dd($table);
-        $data = Employee::whereYear('original_date_hired', "=", $year)->orderBy('id', 'desc')->first();
+        $data = Employee::whereYear('original_date_hired', "=", $year)->where('company_id', $compId)->orderBy('id', 'desc')->first();
+        //  dd($data);
         if ($data == null) {
             $emp_code = $code . "-" . $year . "-00001";
         } else {
             $code_data = explode("-", $data->employee_code);
-            // dd($code_data);
+            //  dd($code_data);
             $code_final = intval($code_data[2]) + 1;
             $emp_code = $code . "-" . $year . "-" . str_pad($code_final, 5, '0', STR_PAD_LEFT);
         }
