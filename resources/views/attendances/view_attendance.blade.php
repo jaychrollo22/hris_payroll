@@ -166,7 +166,7 @@
                                     </td>
                                     <td>
                                       @if($undertime < 0)
-                                       {{number_format(($undertime*60*-1)*60,2)}} hrs
+                                       {{number_format(($undertime*60*-1)/60,2)}} hrs
                                        @php
                                            $undertimes = $undertimes + round(($undertime*60*-1)/60,2);
                                        @endphp
