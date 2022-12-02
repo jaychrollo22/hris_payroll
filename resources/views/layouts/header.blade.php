@@ -333,7 +333,7 @@
 							<span class="menu-title">Attendances</span>
 						</a>
 					</li>
-					{{-- <li class="nav-item @if ($header == 'forms') active @endif">
+					<li class="nav-item @if ($header == 'forms') active @endif">
 						<a class="nav-link" data-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="ui-basic">
 							<i class="icon-layout menu-icon"></i>
 							<span class="menu-title">Forms</span>
@@ -349,7 +349,7 @@
 								<li class="nav-item "> <a class="nav-link " href="{{ url('/dtr-correction') }}">DTR Correction</a></li>
 							</ul>
 						</div>
-					</li> --}}
+					</li>
 					<li class="nav-item @if ($header == 'payslips') active @endif">
 						<a class="nav-link" href="{{ url('/payslips') }}" onclick='show()'>
 							<i class="icon-briefcase menu-icon"></i>
