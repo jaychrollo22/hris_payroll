@@ -340,7 +340,7 @@
 							<i class="menu-arrow"></i>
 						</a>
 						<div class="collapse @if ($header == 'forms') show @endif" id="forms">
-							<ul class="nav flex-column sub-menu">
+							<ul class="nav flex-column sub-menu @if ($header == 'forms') show @endif">
 								<li class="nav-item "> <a class="nav-link active" href="{{ url('/leave') }}">Leave</a></li>
 								<li class="nav-item "> <a class="nav-link " href="{{ url('/overtime') }}">Overtime</a></li>
 								<li class="nav-item "> <a class="nav-link " href="{{ url('/work-from-home') }}">Work from home</a></li>
@@ -424,7 +424,7 @@
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/allowances') }}">Allowances</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/incentives') }}">Incentives</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/handbooks') }}">Handbook</a></li>
-									<li class="nav-item"> <a class="nav-link" href="{{ url('/leavee-settings') }}">Leaves</a></li>
+									<li class="nav-item"> <a class="nav-link" href="{{ url('/leavee-settings') }}">Leave Type</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/announcements') }}">Announcements</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/logos') }}">Logos</a></li>
 								</ul>
@@ -453,7 +453,7 @@
 						</a>
 						<div class="collapse" id="masterfiles">
 							<ul class="nav flex-column sub-menu">
-								{{-- <li class="nav-item">
+								<li class="nav-item">
 									<a class="nav-link" href="{{ url('/company') }}">Companies</a>
 								</li>
 								<li class="nav-item">
@@ -470,7 +470,7 @@
 								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="{{ url('/salary-management') }}">Salary Management</a>
-								</li> --}}
+								</li>
 								<li class="nav-item">
 									<a class="nav-link" href="{{ url('/employee-companies') }}">Employee Groups</a>
 								</li>
