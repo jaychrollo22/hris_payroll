@@ -431,7 +431,7 @@
 							</div>
 						</li>
 					@endif
-					{{-- <li class="nav-item @if ($header == 'Payroll') active @endif">
+					<li class="nav-item @if ($header == 'Payroll') active @endif">
 						<a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
 							<i class="icon-align-center menu-icon"></i>
 							<span class="menu-title">Payroll</span>
@@ -439,11 +439,11 @@
 						</a>
 						<div class="collapse" id="payroll">
 							<ul class="nav flex-column sub-menu">
-								<li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a></li>
+								{{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a></li> --}}
 								<li class="nav-item"> <a class="nav-link" href="{{ url('/loan-reg') }}">Loan Register</a></li>
 							</ul>
 						</div>
-					</li> --}}
+					</li>
 					<li class="nav-item @if ($header == 'masterfiles') active @endif">
 						<a class="nav-link" data-toggle="collapse" href="#masterfiles" aria-expanded="false"
 							aria-controls="ui-basic">
@@ -480,7 +480,7 @@
 							</ul>
 						</div>
 					</li>
-					{{-- <li class="nav-item @if ($header == 'reports') active @endif">
+					<li class="nav-item @if ($header == 'reports') active @endif">
 						<a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
 							<i class="icon-paper menu-icon"></i>
 							<span class="menu-title">Reports</span>
@@ -496,7 +496,7 @@
 								<li class="nav-item"> <a class="nav-link" href="{{ url('/payroll-report') }}">Payroll Reports</a></li>
 							</ul>
 						</div>
-					</li> --}}
+					</li>
 
 				</ul>
 			</nav>
