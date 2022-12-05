@@ -474,6 +474,9 @@
 								<li class="nav-item">
 									<a class="nav-link" href="{{ url('/employee-companies') }}">Employee Groups</a>
 								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="{{ url('/employee-leave-credits') }}">Employee Leave Credits</a>
+								</li>
 							</ul>
 						</div>
 					</li>

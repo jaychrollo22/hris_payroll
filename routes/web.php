@@ -183,5 +183,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     //13th month
     Route::get('month-benefit', 'PayslipController@monthly_benefit');
+
+    // Employee Leave Credits
+    Route::get('employee-leave-credits', 'LeaveCreditsController@index');
+
+    
 });
 Route::post('new-employee', 'EmployeeController@new');

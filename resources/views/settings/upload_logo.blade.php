@@ -19,7 +19,7 @@
             <div class="row mt-3">
               <div class='col-md-12 text-center'>
                 <label title="Upload image file" for="asd" class="btn btn-primary btn-sm ">
-                    <input type="file" accept="image/*" name="file" id="asd" style="display:none"  onchange='upload_logo(this)'>
+                    <input type="file" accept="image/*" name="file" id="asd" style="display:none"  onchange='upload_logo(this)' >
                     Change Logo
                 </label>
               </div>
