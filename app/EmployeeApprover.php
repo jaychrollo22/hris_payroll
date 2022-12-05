@@ -11,6 +11,10 @@ class EmployeeApprover extends Model
     {
         return $this->belongsTo(User::class,'approver_id','id');
     }
+    public function approver_data()
+    {
+        return $this->belongsTo(User::class,'approver_id','id');
+    }
 
     public function user_info(){
 
