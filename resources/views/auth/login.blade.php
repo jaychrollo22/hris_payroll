@@ -69,5 +69,5 @@
       </div>
     </div>
   </div>
-{{-- @include('auth.register_employee') --}}
+@include('auth.register_employee')
 @endsection
