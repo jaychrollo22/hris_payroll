@@ -12,7 +12,7 @@
 							<button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal"
 								data-target="#newEmpIncentive">
 								<i class="ti-plus btn-icon-prepend"></i>
-								New Employee Incentive
+								New Employee Leave Credit
 							</button>
 						</p>
 						@if ($errors->any())

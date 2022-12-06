@@ -3,12 +3,12 @@
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="newLeaveCreditslabel">New Employee incentive</h5>
+				<h5 class="modal-title" id="newLeaveCreditslabel">New Employee Leave Credit</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<form method='POST' action='new-employee-incentive' onsubmit='show()'>
+			<form method='POST' action='new-employee-leave-credit' onsubmit='show()'>
 				@csrf
 				<div class="modal-body">
 					<div class="row">
@@ -38,7 +38,7 @@
 						</div>
 					</div>
 					<div class="row">
-          <div class="col-lg-6 form-group">
+          				{{-- <div class="col-lg-6 form-group">
 							<label for="type">Type</label>
 							<select class="form-control form-control-sm required js-example-basic-single "
 								style='width:100%;' name='type' aria-label="Disabled select example" disabled>
@@ -46,10 +46,10 @@
 									<option value="Add">➕</option>
 									<option value="Deduct">Deduct</option>
 							</select>
-						</div>
+						</div> --}}
 						<div class="col-lg-6 form-group">
-							<label for="count">Count</label>
-							<input type="number" class="form-control form-control-sm" name="count" id="count" required min="1"
+							<label for="count">Count (days)</label>
+							<input type="number" class="form-control form-control-sm" name="count" id="count" required min=".01" step='0.01'
 								value="{{ old('count') }}" placeholder="0.00">
 						</div>
 					</div>

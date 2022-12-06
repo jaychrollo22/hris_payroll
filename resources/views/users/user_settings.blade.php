@@ -8,7 +8,7 @@
                 <div class="card-body text-center">
                     <img class="rounded-circle" style='width:170px;height:170px;' src='{{URL::asset(auth()->user()->employee->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';">
                     
-                    <h3 class="card-text mt-3">{{auth()->user()->employee->first_name}} {{auth()->user()->employee->last_name}}</h3>
+                    <h3 class="card-text mt-3">{{auth()->user()->employee->first_name}} @if(auth()->user()->employee->middle_initial != null){{auth()->user()->employee->middle_initial}}.@endif {{auth()->user()->employee->last_name}}</h3>
                     <h4 class="card-text mt-2">{{auth()->user()->employee->position}}</h4>
                     <h5 class="card-text mt-2">Biometric Code : {{auth()->user()->employee->employee_number}}</h5>
                     <h5 class="card-text mt-2">Employee Code : {{auth()->user()->employee->employee_code}}</h5>
@@ -89,7 +89,7 @@
                                 <small> Full Name </small>
                             </div>
                             <div class='col-md-9'>
-                                {{auth()->user()->employee->first_name}} {{auth()->user()->employee->last_name}}
+                                {{auth()->user()->employee->first_name}} @if(auth()->user()->employee->middle_initial != null){{auth()->user()->employee->middle_initial}}.@endif {{auth()->user()->employee->last_name}}
                             </div>
                         </div>
                         <div class='row  m-2 border-bottom'>
