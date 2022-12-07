@@ -20,12 +20,10 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">13 Month 
-                 
-                </h4>
+                <h4 class="card-title">13 Month  <button class='btn btn-info' onclick="exportTableToExcel('monthly_pay','{{date('Y-m-d')}}')">Export</button></h4>
                
                 <div class="table-responsive">
-                  <table class="table table-hover table-bordered ">
+                  <table class="table table-hover table-bordered " id='monthly_pay'>
                     <thead>
                         <tr>
                             <th>Employee Code</th>
