@@ -127,7 +127,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('biometrics-per-company', 'EmployeeController@perCompany');
 
     //Payroll
-    // Route::get('pay-reg', 'PayslipController@payroll_datas');
+    Route::get('pay-reg', 'PayslipController@payroll_datas');
     Route::get('timekeeping', 'PayslipController@attendances');
     Route::post('pay-reg', 'PayslipController@import');
     Route::post('upload-attendance', 'PayslipController@upload_attendance');
