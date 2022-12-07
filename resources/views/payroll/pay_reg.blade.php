@@ -72,9 +72,6 @@
         <!-- <div>{{$payroll->date_from}}</div> -->
         @include('payroll.view_payroll')   
     @endforeach
-    @foreach($attendances as $att)
-        @include('payroll.view_attendances')   
-    @endforeach
     @include('payroll.upload_payroll')
     <!-- @include('payroll.upload_attendance') -->
 @endsection
