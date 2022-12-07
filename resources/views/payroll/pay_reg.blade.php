@@ -33,7 +33,7 @@
                 </h4>
                
                 <div class="table-responsive">
-                  <table class="table table-hover table-bordered tablewithSearch">
+                  <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
                             <th>Payroll Date</th>

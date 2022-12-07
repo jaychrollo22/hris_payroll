@@ -196,8 +196,9 @@ class PayslipController extends Controller
     }
     function monthly_benefit(Request $request)
     {
-        $payrolls = Payroll::select('date_from','date_to')->orderBy('date_from','desc')->get()->unique('date_from');
+        $payrolls = Payroll::select('emp_code')->orderBy('emp_code','asc')->get()->unique('emp_code');
+        dd($payrolls);
         
-       
+        
     }
 }
