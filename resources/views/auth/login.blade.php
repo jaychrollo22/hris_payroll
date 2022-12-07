@@ -43,7 +43,7 @@
                 @endif
               <input type="submit" value="Log In" class="btn text-white btn-block btn-primary">
               <div class="d-flex mb-5 align-items-center">
-                {{-- <a class="mx-auto" style="text-decoration:none;" href="{{ route('password.request') }}" data-toggle="modal" data-target="#regEmployee" class="forgot-pass">Don't have an account ? Register</a> --}}
+                <a class="mx-auto" style="text-decoration:none;" href="{{ route('password.request') }}" data-toggle="modal" data-target="#regEmployee" class="forgot-pass">Don't have an account ? Register</a>
               </div>
              
 
@@ -69,5 +69,5 @@
       </div>
     </div>
   </div>
-{{-- @include('auth.register_employee') --}}
+@include('auth.register_employee')
 @endsection
