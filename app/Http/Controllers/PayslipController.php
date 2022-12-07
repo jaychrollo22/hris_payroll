@@ -113,10 +113,10 @@ class PayslipController extends Controller
             // dd($data);
         foreach($data->toArray() as $key => $value)
         {
-            if($value['code'] != null)
+            if($value['empno'] != null)
             {
             $payroll = new Payroll;
-            $payroll->emp_code  = $value['code'];
+            $payroll->emp_code  = $value['empno'];
             $payroll->bank_acctno  = $value['bank_acount'];
             $payroll->bank  = $value['bank'];
             $payroll->name  = $value['name'];
@@ -125,7 +125,7 @@ class PayslipController extends Controller
             $payroll->company  = $value['group'];
             $payroll->department  = $value['department'];
             $payroll->location  = $value['location'];
-            $payroll->date_hired  = date('Y-m-d',strtotime($value['date_hired']));
+            $payroll->date_hired  = date('Y-m-d',strtotime($value['datehired']));
             $payroll->date_from  = date('Y-m-d',strtotime($value['cut_off_from']));
             $payroll->date_to  = date('Y-m-d',strtotime($value['cut_off_to']));
             $payroll->month_pay  = $value['monthly_basic_pay'];
@@ -147,12 +147,12 @@ class PayslipController extends Controller
             $payroll->gross_pay  = $value['grosspay'];
             $payroll->total_taxable  = $value['total_taxable'];
             $payroll->witholding_tax  = $value['witholding_tax'];
-            $payroll->sick_leave  = $value['sick_leave'];
-            $payroll->vacation_leave  = $value['vacation_leave'];
-            $payroll->wfhome  = $value['work_from_home'];
-            $payroll->offbusiness  = $value['official_business'];
-            $payroll->sick_leave_nopay  = $value['sick_leave_no_pay'];
-            $payroll->vacation_leave_nopay  = $value['vacation_leave_no_pay'];
+            // $payroll->sick_leave  = $value['sick_leave'];
+            // $payroll->vacation_leave  = $value['vacation_leave'];
+            // $payroll->wfhome  = $value['work_from_home'];
+            // $payroll->offbusiness  = $value['official_business'];
+            // $payroll->sick_leave_nopay  = $value['sick_leave_no_pay'];
+            // $payroll->vacation_leave_nopay  = $value['vacation_leave_no_pay'];
             $payroll->sss_regee  = $value['sss_reg_ee_jan15'];
             $payroll->sss_mpfee = $value['sss_mpf_ee_jan15'];
             $payroll->phic_ee  = $value['phic_ee_jan15'];
@@ -163,7 +163,7 @@ class PayslipController extends Controller
             $payroll->sss_cal_loan  = $value['sss_calamity_loan'];
             $payroll->sal_ded_tax  = $value['salary_deduction_taxable'];
             $payroll->sal_ded_nontax  = $value['salary_deduction_non_taxable'];
-            $payroll->sal_loan  = $value['salary_loan'];
+            // $payroll->sal_loan  = $value['salary_loan'];
             $payroll->com_loan  = $value['company_loan'];
             $payroll->omhas  = $value['omhas_advances_from_mac'];
             $payroll->coop_cbu  = $value['coop_cbu'];
@@ -179,10 +179,10 @@ class PayslipController extends Controller
             $payroll->phic_er  = $value['phic_erjan15'];
             $payroll->hdmf_er  = $value['hdmf_erjan15'];
             $payroll->payroll_status  = "N";
-            $payroll->tin_no  = $value['tin_no.'];
-            $payroll->phil_no = $value['philhealth_no.'];
-            $payroll->pagibig_no  = $value['pagibig_no.'];
-            $payroll->sss_no  = $value['sss_no.'];
+            // $payroll->tin_no  = $value['tin_no.'];
+            // $payroll->phil_no = $value['philhealth_no.'];
+            // $payroll->pagibig_no  = $value['pagibig_no.'];
+            // $payroll->sss_no  = $value['sss_no.'];
             $payroll->save();
             }
         }
