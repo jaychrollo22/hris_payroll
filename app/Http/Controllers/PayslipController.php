@@ -51,7 +51,7 @@ class PayslipController extends Controller
         $path = $request->file('file')->getRealPath();
         $data = Excel::load($path)->get();
 
-        // dd($data);
+        dd($data);
         if($data->count() > 0)
         {
             // dd($data);
@@ -108,7 +108,6 @@ class PayslipController extends Controller
         $path = $request->file('file')->getRealPath();
 
         $data = Excel::load($path)->get();
-        // dd($data);
         if($data->count() > 0)
         {
             // dd($data);
@@ -196,9 +195,23 @@ class PayslipController extends Controller
     }
     function monthly_benefit(Request $request)
     {
-        $payrolls = Payroll::select('emp_code')->orderBy('emp_code','asc')->get()->unique('emp_code');
-        dd($payrolls);
-        
-        
+        $employees = Payroll::select('emp_code','name')->orderBy('name','asc')->get()->unique('emp_code');
+        $payrolls = Payroll::whereYear('date_from',date('Y'))->get();
+        $year = date('Y-01-01');
+        $date = [];
+        for($m=0;$m<12 ;$m++)
+        {
+            $data_date = date('Y-m-15',strtotime($year));
+            $data_date_2 = date('Y-m-30',strtotime($year));
+            array_push($date,$data_date);
+            array_push($date,$data_date_2);
+            $year = date("Y-m-d",strtotime("+1 month",strtotime($year)));
+        }
+        return view('payroll.benefit',
+        array(
+            'header' => 'Month-Benefit',
+            'employees' => $employees,
+            
+        ));
     }
 }
