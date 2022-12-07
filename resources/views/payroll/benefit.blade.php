@@ -30,6 +30,9 @@
                         <tr>
                             <th>Employee Code</th>
                             <th>Name</th>
+                            <th>Basic Salary</th>
+                            <th>Gross Pay</th>
+                            <th>Allowances</th>
                             <th>13th Month</th>
                         </tr>
                     </thead>
@@ -38,7 +41,16 @@
                             <tr>
                                 <td>{{$employee->emp_code}}</td>
                                 <td>{{$employee->name}}</td>
-                                <td>0</td>
+                                <td>{{$employee->month_pay}}</td>
+                                <td>{{($payrolls->where('emp_code',$employee->emp_code)->sum('gross_pay'))+ $employee->semi_month_pay}}</td>
+                                <td>{{($payrolls->where('emp_code',$employee->emp_code)->sum('meal_allowance')) + ($payrolls->where('emp_code',$employee->emp_code)->sum('salary_allowance')) + ($payrolls->where('emp_code',$employee->emp_code)->sum('oot_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('inc_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('rel_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('disc_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('trans_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('load_allowance'))}}</td>
+                                <td>
+                                    @php
+                                        $gross_pay_total = ($payrolls->where('emp_code',$employee->emp_code)->sum('gross_pay'))+ $employee->semi_month_pay;
+                                        $total_allowances = ($payrolls->where('emp_code',$employee->emp_code)->sum('meal_allowance')) + ($payrolls->where('emp_code',$employee->emp_code)->sum('salary_allowance')) + ($payrolls->where('emp_code',$employee->emp_code)->sum('oot_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('inc_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('rel_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('disc_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('trans_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('load_allowance'));
+                                    @endphp
+                                    {{round(($gross_pay_total-$total_allowances)/12,2)}}
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
