@@ -10,7 +10,7 @@
 
       <div class="modal-body">
         <div class="table-responsive">
-          <table class="table table-hover table-bordered tablewithSearch">
+          <table class="table table-hover table-bordered">
             <thead>
               <tr>
                 <th>Name</th>
