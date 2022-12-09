@@ -194,16 +194,16 @@ class PayslipController extends Controller
     }
     function monthly_benefit(Request $request)
     {
-        $employees = Payroll::select('emp_code','name','semi_month_pay','month_pay')->orderBy('name','asc')->get()->unique('emp_code');
-        $payrolls = Payroll::whereYear('date_from',date('Y'))->get();
+        $employees = Payroll::select('emp_code','name','semi_month_pay','month_pay','department','location','bank_acctno','bank')->orderBy('name','asc')->orderBy('date_from','desc')->get()->unique('emp_code');
+        $payrolls = Payroll::whereYear('date_to',date('Y'))->get();
         $year = date('Y-01-01');
-        $date = [];
+        $dates = [];
         for($m=0;$m<12 ;$m++)
         {
             $data_date = date('Y-m-15',strtotime($year));
-            $data_date_2 = date('Y-m-30',strtotime($year));
-            array_push($date,$data_date);
-            array_push($date,$data_date_2);
+            $data_date_2 = date('Y-m-t',strtotime($year));
+            array_push($dates,$data_date);
+            array_push($dates,$data_date_2);
             $year = date("Y-m-d",strtotime("+1 month",strtotime($year)));
         }
         return view('payroll.benefit',
@@ -211,7 +211,7 @@ class PayslipController extends Controller
             'header' => 'Month-Benefit',
             'employees' => $employees,
             'payrolls' => $payrolls,
-            'date' => $date,
+            'dates' => $dates,
             
         ));
     }

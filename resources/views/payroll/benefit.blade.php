@@ -23,32 +23,46 @@
                 <h4 class="card-title">13 Month  <button class='btn btn-info' onclick="exportTableToExcel('monthly_pay','{{date('Y-m-d')}}')">Export</button></h4>
                
                 <div class="table-responsive">
-                  <table class="table table-hover table-bordered " id='monthly_pay'>
+                  <table class="table table-hover table-bordered  " border='1' id='monthly_pay'>
                     <thead>
                         <tr>
-                            <th>Employee Code</th>
                             <th>Name</th>
-                            <th>Basic Salary</th>
-                            <th>Gross Pay</th>
-                            <th>Allowances</th>
-                            <th>13th Month</th>
+                            <th>Company</th>
+                            <th>Department</th>
+                            <th>Location</th>
+                            <th>Account Number</th>
+                            <th>Bank</th>
+                            <th>Semi Month</th>
+                            @foreach($dates as $date)
+                            <th>{{date('M d, Y',strtotime($date))}}</th>
+                            @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($employees as $employee)
                             <tr>
-                                <td>{{$employee->emp_code}}</td>
                                 <td>{{$employee->name}}</td>
-                                <td>{{$employee->month_pay}}</td>
-                                <td>{{($payrolls->where('emp_code',$employee->emp_code)->sum('gross_pay'))+ $employee->semi_month_pay}}</td>
-                                <td>{{($payrolls->where('emp_code',$employee->emp_code)->sum('meal_allowance')) + ($payrolls->where('emp_code',$employee->emp_code)->sum('salary_allowance')) + ($payrolls->where('emp_code',$employee->emp_code)->sum('oot_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('inc_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('rel_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('disc_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('trans_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('load_allowance'))}}</td>
+                                <td>OBANANA</td>
+                                <td>{{$employee->department}}</td>
+                                <td>{{$employee->location}}</td>
+                                <td>{{$employee->bank_acctno}}</td>
+                                <td>{{$employee->bank}}</td>
+                                <td>{{$employee->semi_month_pay}}</td>
+                                @foreach($dates as $date)
                                 <td>
+                                    
                                     @php
-                                        $gross_pay_total = ($payrolls->where('emp_code',$employee->emp_code)->sum('gross_pay'))+ $employee->semi_month_pay - ($payrolls->where('emp_code',$employee->emp_code)->sum('overtime'));
-                                        $total_allowances = ($payrolls->where('emp_code',$employee->emp_code)->sum('meal_allowance')) + ($payrolls->where('emp_code',$employee->emp_code)->sum('salary_allowance')) + ($payrolls->where('emp_code',$employee->emp_code)->sum('oot_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('inc_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('rel_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('disc_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('trans_allowance'))+ ($payrolls->where('emp_code',$employee->emp_code)->sum('load_allowance'));
+                                        $pay = $payrolls->where('date_period',$date)->where('emp_code',$employee->emp_code)->first();
+                                        // dd($date);
+                                        $month = 0;
+                                        if($pay != null)
+                                        {
+                                            $month = $pay->gross_pay-$pay->load_allowance-$pay->trans_allowance-$pay->rel_allowance-$pay->inc_allowance-$pay->oot_allowance-$pay->salary_allowance-$pay->meal_allowance-$pay->overtime+$pay->salary_adjustment;
+                                        }
                                     @endphp
-                                    {{round(($gross_pay_total-$total_allowances)/12,2)}}
+                                    {{$month}}
                                 </td>
+                                @endforeach
                             </tr>
                         @endforeach
                     </tbody>
