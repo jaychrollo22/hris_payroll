@@ -26,29 +26,30 @@
                   <table class="table table-hover table-bordered  " border='1' id='monthly_pay'>
                     <thead>
                         <tr>
+                            
+                            <th>Semi Month</th>
                             <th>Name</th>
                             <th>Company</th>
                             <th>Department</th>
                             <th>Location</th>
                             <th>Account Number</th>
                             <th>Bank</th>
-                            <th>Semi Month</th>
                             @foreach($dates as $date)
                             <th>{{date('M d, Y',strtotime($date))}}</th>
                             @endforeach
-                            <th>Withholding Tax</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($employees as $employee)
                             <tr>
+                                
+                                <td>{{$employee->semi_month_pay}}</td>
                                 <td>{{$employee->name}}</td>
                                 <td>OBANANA</td>
                                 <td>{{$employee->department}}</td>
                                 <td>{{$employee->location}}</td>
                                 <td>{{$employee->bank_acctno}}</td>
                                 <td>{{$employee->bank}}</td>
-                                <td>{{$employee->semi_month_pay}}</td>
                                 @foreach($dates as $date)
                                 <td>
                                     
@@ -58,13 +59,12 @@
                                         $month = 0;
                                         if($pay != null)
                                         {
-                                            $month = $pay->gross_pay-$pay->load_allowance-$pay->trans_allowance-$pay->rel_allowance-$pay->inc_allowance-$pay->oot_allowance-$pay->salary_allowance-$pay->meal_allowance-$pay->overtime;
+                                            $month = $pay->gross_pay-$pay->load_allowance-$pay->trans_allowance-$pay->rel_allowance-$pay->oot_allowance-$pay->salary_allowance-$pay->meal_allowance-$pay->overtime;
                                         }
                                     @endphp
                                     {{$month}}
                                 </td>
                                 @endforeach
-                                <td>{{$pay = $payrolls->where('emp_code',$employee->emp_code)->sum('witholding_tax')}}</td>
                             </tr>
                         @endforeach
                     </tbody>
