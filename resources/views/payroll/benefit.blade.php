@@ -57,7 +57,7 @@
                                         $month = 0;
                                         if($pay != null)
                                         {
-                                            $month = $pay->gross_pay-$pay->load_allowance-$pay->trans_allowance-$pay->rel_allowance-$pay->inc_allowance-$pay->oot_allowance-$pay->salary_allowance-$pay->meal_allowance-$pay->overtime+$pay->salary_adjustment;
+                                            $month = $pay->gross_pay-$pay->load_allowance-$pay->trans_allowance-$pay->rel_allowance-$pay->inc_allowance-$pay->oot_allowance-$pay->salary_allowance-$pay->meal_allowance-$pay->overtime;
                                         }
                                     @endphp
                                     {{$month}}
