@@ -36,6 +36,7 @@
                             @foreach($dates as $date)
                             <th>{{date('M d, Y',strtotime($date))}}</th>
                             @endforeach
+                            <th>Withholding Tax</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,6 +64,7 @@
                                     {{$month}}
                                 </td>
                                 @endforeach
+                                <td>{{$pay = $payrolls->where('emp_code',$employee->emp_code)->sum('witholding_tax')}}</td>
                             </tr>
                         @endforeach
                     </tbody>
