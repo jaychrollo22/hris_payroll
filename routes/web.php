@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +19,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('upload-avatar', 'UserController@uploadAvatar');
     Route::post('upload-signature', 'UserController@uploadSignature');
     Route::get('get-salary', 'UserController@get_salary');
+    Route::post('updateInfo/{id}', 'UserController@updateInfo');
 
     //employees
     Route::get('/dashboard', 'HomeController@index')->name('home');
