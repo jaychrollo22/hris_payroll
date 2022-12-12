@@ -69,7 +69,7 @@ class EmployeeController extends Controller
         $employee->employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($request->date_hired)), $company->id);
         $employee->user_id = $user->id;
         $employee->first_name = $request->first_name;
-        $employee->first_name = $request->middle_name;
+        $employee->middle_name = $request->middle_name;
         $employee->last_name = $request->last_name;
         $employee->classification = $request->classification;
         $employee->department_id = $request->department;

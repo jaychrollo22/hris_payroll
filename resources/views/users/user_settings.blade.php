@@ -73,7 +73,8 @@
                     <div class="template-demo">
                         <div class='row m-2'>
                             <div class='col-md-12 text-center'>
-                                <strong><h3><i class="fa fa-user" aria-hidden="true"></i> Personal Information</h3></strong>
+                                <strong><h3><i class="fa fa-user" aria-hidden="true"></i> Personal Information 
+                               <button class="btn btn-icon btn-info btn-xs" title="Edit Information"  data-toggle="modal" data-target="#editInfo"><i class="fa fa-pencil"></i></button></h3></strong>
                             </div>
                         </div>
                         <div class='row m-2 border-bottom'>
@@ -379,5 +380,6 @@
 </div>
 @include('users.upload_avatar')
 @include('users.upload_signature')
+@include('users.edit_info')
 @include('users.view_salary')
 @endsection
