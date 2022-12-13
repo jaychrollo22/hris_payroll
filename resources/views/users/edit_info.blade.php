@@ -110,6 +110,7 @@
 						</div>
 						<hr>
 					</div>
+          </div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 						<button type="submit" class="btn btn-primary">Save</button>
@@ -144,37 +145,4 @@ function same_as_current(value)
     
  }
 
-  function add_approver()
-  {
-    var lastItemID = $('.approvers-data').children().last().attr('id');
-    var last_id = lastItemID.split("_");
-        finalLastId = parseInt(last_id[1]) + 1;
-                                 
-        var item = "<div class='row mb-2  mt-2 ' id='approver_"+finalLastId+"'>";
-            item+= "<div class='col-md-1  align-self-center'>";
-            item+= "<small class='align-items-center'>"+finalLastId+"</small>";
-            item+= "</div>";
-            item+= " <div class='col-md-11'>";
-            item+= " <select data-placeholder='Approver' class='form-control form-control-sm required js-example-basic-single' style='width:100%;' name='approver[]' required>";
-            item+= "<option value=''>-- Approver --</option>";
-            item+= " @foreach($users as $user)";
-            item+= "<option value='{{$user->id}}'>{{$user->name}}</option>";
-            item+= "@endforeach";
-            item+= "</select>";
-            item+= "</div>";
-            item+= "</div>";
-          
-            $(".approvers-data").append(item);
-            $(".js-example-basic-single").select2();
-
-  }
-  function remove_approver()
-  {
-    if($('div.approvers-data div.row').length > 1)
-    {
-    var lastItemID = $('.approvers-data').children().last().attr('id');
-    $('#'+lastItemID).remove();
-    }
-
-  }
 </script>
