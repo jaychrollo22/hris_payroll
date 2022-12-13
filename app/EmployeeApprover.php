@@ -1,12 +1,14 @@
 <?php
 
 namespace App;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
 class EmployeeApprover extends Model
 {
     //
+    use SoftDeletes;
+    protected $dates = ['deleted_at'];
     public function approver_info()
     {
         return $this->belongsTo(User::class,'approver_id','id');
