@@ -29,7 +29,7 @@ class UserController extends Controller
         $banks = Bank::get();
         $users = User::get();
         $levels = Level::get();
-        $departments = Department::where('status', null)->get();
+        $departments = Department::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
         $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
