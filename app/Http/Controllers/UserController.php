@@ -78,6 +78,29 @@ class UserController extends Controller
         return back();
 
     }
+    public function updateEmpInfo(Request $request, $id){
+
+        $employee = Employee::findOrFail($id);
+        $employee->company_id = $request->company;
+        $employee->position = $request->position;
+        $employee->department_id = $request->department;
+        $employee->classification = $request->classification;
+        $employee->phil_number = $request->philhealth;
+        $employee->level = $request->level;
+        $employee->immediate_sup = $request->immediate_supervisor;
+        $employee->sss_number = $request->sss;
+        $employee->tax_number = $request->tin;
+        $employee->hdmf_number = $request->pagibig;
+        $employee->original_date_hired = $request->date_hired;
+        $employee->personal_email = $request->personal_email;
+        $employee->immediate_sup = $request->immediate_supervisor;
+        $employee->schedule_id = $request->schedule;
+        $employee->employee_number = $request->biometric_code;
+        $employee->save();
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
+
+    }
 
     public function uploadAvatar(Request $request)
     {

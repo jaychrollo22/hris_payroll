@@ -20,6 +20,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('upload-signature', 'UserController@uploadSignature');
     Route::get('get-salary', 'UserController@get_salary');
     Route::post('updateInfo/{id}', 'UserController@updateInfo');
+    Route::post('updateEmpInfo/{id}', 'UserController@updateEmpInfo');
 
     //employees
     Route::get('/dashboard', 'HomeController@index')->name('home');
