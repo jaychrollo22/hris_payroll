@@ -99,12 +99,12 @@ class UserController extends Controller
         $employee->employee_number = $request->biometric_code;
         $employee->save();
 
-        $approver = EmployeeApprover::where('user_id',auth()->user()->id)->delete();
+        $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
         $level = 1;
         foreach($request->approver as  $approver)
         {
             $new_approver = new EmployeeApprover;
-            $new_approver->user_id = auth()->user()->id;
+            $new_approver->user_id = $employee->user_id;
             $new_approver->approver_id = $approver;
             $new_approver->level = $level;
             $new_approver->save();

@@ -13,7 +13,8 @@
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "~2.1.0",
-        "realrashid/sweet-alert": "^5.1"
+        "realrashid/sweet-alert": "^5.1",
+        "silviolleite/laravelpwa": "^2.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
