@@ -106,8 +106,8 @@ return [
         ],
         'mysql_srv' => [
             'driver' => 'sqlsrv',
-            'host' => env('DB_HOST_SQL', 'localhost'),
-            'port' => env('DB_PORT_SQL', '1433'),
+            'host' => env('DB_HOST_MySQL', 'localhost'),
+            'port' => env('DB_PORT_MySQL', '1433'),
             'database' => env('DB_DATABASE_MySQL', 'forge'),
             'username' => env('DB_USERNAME_MySQL', 'forge'),
             'password' => env('DB_PASSWORD_MySQL', ''),
