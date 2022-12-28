@@ -28,7 +28,7 @@
 										<label class="col-sm-4 col-form-label text-right">From</label>
 										<div class="col-sm-8">
 											<input type="date" value='' class="form-control form-control-sm" name="from"
-												max='{{ date('Y-m-d') }}' onchange='get_min(this.value);' required />
+												 onchange='get_min(this.value);' required />
 										</div>
 									</div>
 								</div>
@@ -37,7 +37,7 @@
 										<label class="col-sm-4 col-form-label text-right">To</label>
 										<div class="col-sm-8">
 											<input type="date" value='' class="form-control form-control-sm" id='to' name="to"
-												max='{{ date('Y-m-d') }}' required />
+												required />
 										</div>
 									</div>
 								</div>
