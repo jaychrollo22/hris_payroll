@@ -322,6 +322,7 @@ class EmployeeController extends Controller
 
     public function sync(Request $request)
     {
+        
         $terminals = iclockterminal_mysql::get();
         if($request->terminal)
         {
