@@ -326,7 +326,8 @@ class EmployeeController extends Controller
         $terminals = iclockterminal_mysql::get();
         if($request->terminal)
         {
-        $attendances = iclocktransactions_mysql::where('terminal_id','=',$request->terminal)->whereBetween('punch_time',[date('Y-m-d H:i:s',$request->from." 00:00:00"),date('Y-m-d H:i:s',$request->to." 23:59:59")])->get();
+            dd($request->all());
+        $attendances = iclocktransactions_mysql::where('terminal_id','=',$request->terminal)->whereBetween('punch_time',[date('Y-m-d H:i:s',$request->from."00:00:00"),date('Y-m-d H:i:s',$request->to." 23:59:59")])->get();
         foreach($attendances as $att)
             {
               if($att->punch_state == 0)
