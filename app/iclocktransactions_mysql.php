@@ -8,5 +8,5 @@ class iclocktransactions_mysql extends Model
 {
     //
     protected $connection = 'mysql_srv';
-    protected $table = 'iclock_terminal';
+    protected $table = 'iclock_transaction';
 }
