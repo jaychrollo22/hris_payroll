@@ -366,12 +366,22 @@
 						<li class="nav-item">
 							<hr>
 							<h5>Manager</h5>
-						</li>											
+						</li>	
 						<li class="nav-item @if ($header == 'for-approval') active @endif">
-							<a class="nav-link" href="{{ url('/for-approval') }}" onclick='show()'>
+							<a class="nav-link" data-toggle="collapse" href="#for-approval" aria-expanded="false" aria-controls="ui-basic">
 								<i class="icon-check menu-icon"></i>
 								<span class="menu-title">For Approval</span>
+								<i class="menu-arrow"></i>
 							</a>
+							<div class="collapse @if ($header == 'for-approval') show @endif" id="for-approval">
+								<ul class="nav flex-column sub-menu @if ($header == 'for-approval') show @endif">
+									<li class="nav-item "> <a class="nav-link active" href="{{ url('/for-leave') }}">Leave</a></li>
+									<li class="nav-item "> <a class="nav-link " href="{{ url('/for=overtime') }}">Overtime</a></li>
+									<li class="nav-item "> <a class="nav-link " href="{{ url('/for=work-from-home') }}">Work from home</a></li>
+									<li class="nav-item "> <a class="nav-link " href="{{ url('/for=official-business') }}">Official Business</a></li>
+									<li class="nav-item "> <a class="nav-link " href="{{ url('/for=dtr-correction') }}">DTR Correction</a></li>
+								</ul>
+							</div>
 						</li>
 						<li class="nav-item @if ($header == 'subordinates') active @endif">
 							<a class="nav-link" href="{{ url('/subordinates') }}" onclick='show()'>
@@ -405,8 +415,8 @@
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/get-biometrics') }}">Biometrics</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/biologs-employee') }}">Per Employee</a></li>
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location</a></li>
-									{{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/pmi-local') }}">17th floor</a></li> --}}
 									<li class="nav-item"> <a class="nav-link" href="{{ url('/biometrics-per-company') }}">Per Company</a></li>
+									<li class="nav-item"> <a class="nav-link" href="{{ url('/sync-biometrics') }}">Sync Biometrics</a></li>
 								</ul>
 							</div>
 						</li>

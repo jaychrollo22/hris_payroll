@@ -90,7 +90,8 @@
                         <th>Leave Type</th>
                         <th>with Pay </th>
                         <th>Reason </th>
-                        <th>Leave Count () </th>
+                        <th>Leave Count </th>
+                        <th>Approvers </th>
                         <th>Status </th>
                         <th>Action </th>
                       </tr>
@@ -101,7 +102,7 @@
                         <td>{{date('M d, Y', strtotime($employee_leave->created_at))}}</td>
                         <td>{{date('M d, Y', strtotime($employee_leave->date_from))}} to {{date('M d, Y', strtotime($employee_leave->date_to))}} </td>
                         <td>{{ $employee_leave->leave->leave_type }}</td>
-                     @if($employee_leave->withpay == 1)   
+                    @if($employee_leave->withpay == 1)   
                         <td>Yes</td>
                     @else
                         <td>No</td>
@@ -109,6 +110,15 @@
                                   
                         <td>{{ $employee_leave->reason }}</td>
                         <td>{{get_count_days($employee_leave->schedule,$employee_leave->date_from,$employee_leave->date_to)}}</td>
+                        <td id="tdStatus{{ $employee_leave->id }}">
+                            @foreach($employee_leave->approver as $approver)
+                              @if($employee_leave->level < $approver->level)
+                              {{$approver->approver_data->name}} -  <label class="badge badge-success">Approved</label>
+                              @else
+                              {{$approver->approver_data->name}} -  <label class="badge badge-warning">Pending</label>
+                              @endif<br> 
+                            @endforeach
+                        </td>
                         <td id="tdStatus{{ $employee_leave->id }}">
                           @if ($employee_leave->status == 'Pending')
                             <label class="badge badge-warning">{{ $employee_leave->status }}</label>
@@ -188,8 +198,6 @@ function get_count_days($data,$date_from,$date_to)
 @endphp  
 @foreach ($employee_leaves as $leave)
   @include('forms.leaves.edit_leave')
-@endforeach
-@foreach ($employee_leaves as $leave)
   @include('forms.leaves.view_leave') 
 @endforeach
   @include('forms.leaves.apply_leave') 

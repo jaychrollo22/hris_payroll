@@ -28,6 +28,6 @@ class EmployeeLeave extends Model
     
     public function approver()
     {
-        return $this->belongsTo(EmployeeApprover::class,'user_id','user_id');
+        return $this->hasMany(EmployeeApprover::class,'user_id','user_id');
     }       
 }

@@ -8,7 +8,7 @@
               <div class="card-body">
                 <div class="media">                
                   <div class="media-body">
-                    <h4 class="mb-4">Leave</h4>
+                    <h4 class="mb-4">For Appoval</h4>
                     <h2 class="card-text">0</h2>
                   </div>
                 </div>
@@ -20,67 +20,31 @@
               <div class="card-body">
                 <div class="media">                
                   <div class="media-body">
-                    <h4 class="mb-4">Overtime</h4>
-                    <h2 class="card-text">0</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> 
-          <div class='col-lg-2'>
-            <div class="card card-light-blue">
-              <div class="card-body">
-                <div class="media">                
-                  <div class="media-body">
-                    <h4 class="mb-4">Work From Home</h4>
-                    <h2 class="card-text">0</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class='col-lg-2'>
-            <div class="card card-light-danger">
-              <div class="card-body">
-                <div class="media">                
-                  <div class="media-body">
-                    <h4 class="mb-4">Official Business</h4>
-                    <h2 class="card-text">0</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> 
-          <div class='col-lg-2'>
-            <div class="card card-tale">
-              <div class="card-body">
-                <div class="media">                
-                  <div class="media-body">
-                    <h4 class="mb-4">DTR Correction</h4>
-                    <h2 class="card-text">0</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class='col-lg-2'>
-            <div class="card text-success">
-              <div class="card-body">
-                <div class="media">                
-                  <div class="media-body">
                     <h4 class="mb-4">Approved</h4>
                     <h2 class="card-text">0</h2>
                   </div>
                 </div>
               </div>
             </div>
-          </div>                      
+          </div> 
+          <div class='col-lg-2'>
+            <div class="card card-light-danger">
+              <div class="card-body">
+                <div class="media">                
+                  <div class="media-body">
+                    <h4 class="mb-4">Declined / Rejected</h4>
+                    <h2 class="card-text">0</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>            
         </div>
         <div class='row'>
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">For Approval</h4>
+                <h4 class="card-title">For Approval Leave</h4>
                 <p class="card-description">
                   {{-- <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#applyovertime">
                     <i class="ti-check btn-icon-prepend"></i>                                                    

@@ -65,6 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //FOR APPROVAL
     Route::get('for-approval', 'FormApprovalController@form_approval');
+    Route::get('for-leave','FormApprovalController@form_approval');
 
     //employees
     Route::get('employees', 'EmployeeController@view');
@@ -126,6 +127,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('bio-per-location', 'EmployeeController@biologs_per_location');
     Route::get('pmi-local', 'EmployeeController@localbio');
     Route::get('biometrics-per-company', 'EmployeeController@perCompany');
+    Route::get('sync-biometrics','EmployeeController@sync');
 
     //Payroll
     Route::get('pay-reg', 'PayslipController@payroll_datas');

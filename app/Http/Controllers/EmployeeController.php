@@ -6,6 +6,8 @@ use App\Classification;
 use App\Employee;
 use App\Department;
 use App\Schedule;
+use App\iclockterminal_mysql;
+use App\iclocktransactions_mysql;
 use App\Level;
 use App\EmployeeCompany;
 use App\Bank;
@@ -57,7 +59,7 @@ class EmployeeController extends Controller
     {
         // dd($request->all());
         $company = Company::findOrfail($request->company);
-// dd($company);
+        // dd($company);
         $user = new User;
         $user->email = $request->work_email;
         $user->name = $request->first_name . " " . $request->last_name;
@@ -315,6 +317,60 @@ class EmployeeController extends Controller
 
         return view('reports.employee_report', array(
             'header' => 'reports',
+        ));
+    }
+
+    public function sync(Request $request)
+    {
+        $terminals = iclockterminal_mysql::get();
+        if($request->terminal)
+        {
+        $attendances = iclocktransactions_mysql::where('terminal_id','=',$request->terminal)->whereBetween('punch_time',[date('Y-m-d H:i:s',$request->from." 00:00:00"),date('Y-m-d H:i:s',$request->to." 23:59:59")])->get();
+        foreach($attendances as $att)
+            {
+              if($att->punch_state == 0)
+                {
+                        $attend = Attendance::where('employee_code',$att->emp_code)->whereDate('time_in',date('Y-m-d', strtotime($att->punch_time)))->first();
+                        if($attend == null)
+                        {
+                            $attendance = new Attendance;
+                            $attendance->employee_code  = $att->emp_code;   
+                            $attendance->time_in = date('Y-m-d H:i:s',strtotime($att->punch_time));
+                            $attendance->device_in = $att->terminal_alias;
+                            $attendance->save(); 
+                        }
+                    
+                }
+                else if($att->punch_state == 1)
+                {
+                    $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $update = [
+                        'time_out' =>  date('Y-m-d H:i:s', strtotime($att->punch_time)),
+                        'device_out' => $att->terminal_alias,
+                        'last_id' =>$att->id,
+                    ];
+
+                    $attendance_in = Attendance::where('employee_code',$att->emp_code)
+                    ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
+                    Attendance::where('employee_code',$att->emp_code)
+                    ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                    ->update($update);
+
+                    if($attendance_in ==  null)
+                    {
+                        $attendance = new Attendance;
+                        $attendance->employee_code  = $att->emp_code;   
+                        $attendance->time_out = date('Y-m-d H:i:s', strtotime($att->punch_time));
+                        $attendance->device_out = $att->terminal_alias;
+                        $attendance->save(); 
+                    }
+                }
+            }
+        }
+        return view('employees.sync', array(
+            'header' => 'biometrics',
+            'terminals' => $terminals,
         ));
     }
 }
