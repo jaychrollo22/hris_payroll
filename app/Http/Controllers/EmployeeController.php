@@ -6,6 +6,7 @@ use App\Classification;
 use App\Employee;
 use App\Department;
 use App\Schedule;
+use App\Attendance;
 use App\iclockterminal_mysql;
 use App\iclocktransactions_mysql;
 use App\Level;
