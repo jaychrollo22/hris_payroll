@@ -105,7 +105,7 @@ return [
             'prefix_indexes' => true,
         ],
         'mysql_srv' => [
-            'driver' => 'sqlsrv',
+            'driver' => 'mysql_srv',
             'host' => env('DB_HOST_MySQL', 'localhost'),
             'port' => env('DB_PORT_MySQL', '1433'),
             'database' => env('DB_DATABASE_MySQL', 'forge'),
