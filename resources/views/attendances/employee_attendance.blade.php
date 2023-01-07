@@ -149,83 +149,96 @@
                         <td>
                         </td>
                       @else
-                        <td>@if($time_in != null)
-                              @if($time_in->time_out != null)
-                                {{round((((strtotime($time_in->time_out) - strtotime($time_in->time_in)))/3600),2)}} hrs 
+                      <td>
+                        @if($time_in != null)
+                            @if($time_in->time_out != null)
+                              @php
+                                  if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("07:00:00"))
+                                  {
+                                    $time_in_data = $time_in->time_in;
+                                  }
+                                  else
+                                  {
+                                    $time_in_data = date('Y-m-d 07:00:00',strtotime($time_in->time_in));
+                                  }
+                              @endphp
+                              {{round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2)}} hrs 
+                              @php
+                                  $work = $work + round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
+                              @endphp
+                            @endif
+                          @endif
+                      </td>
+                
+                          @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()))
+                              @php
+                                  $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
+                                  $late = (strtotime(date("2022-01-01 h:i",strtotime($time_in_data)))  - strtotime(date("2022-01-01 h:i",strtotime("2022-01-01 ".$schedules[$id]->time_in_to))))/60;
+                                  $working_minutes = (((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600);
+                                  $overtime = number_format($working_minutes - $schedules[$id]->working_hours,2);
+                                  if($late > 0)
+                                  {
+                                    $late_data = $late;
+                                  }
+                                  else {
+                                    $late_data = 0;
+                                    
+                                  }
+                                  $undertime = number_format($working_minutes - $schedules[$id]->working_hours + ($late_data/60),2);
+                              @endphp
+                              {{-- {{strtotime("2022-01-01 ".$schedules[$id]->time_in_to)}} <br>
+                              {{strtotime(date("2022-01-01 h:i".$time_in->time_in))}} <br> --}}
+                              <td>
+                                {{number_format($late_data/60,2)}} hrs
                                 @php
-                                     $work = $work + round((((strtotime($time_in->time_out) - strtotime($time_in->time_in)))/3600),2);
+                                    $lates = $lates+ round($late_data/60,2);
                                 @endphp
+                            </td>
+                            <td>
+                              @if($undertime < 0)
+                              {{number_format(($undertime*60*-1)/60,2)}} hrs
+                              @php
+                                  $undertimes = $undertimes + round(($undertime*60*-1)/60,2);
+                              @endphp
+                              @else
+                              0 hrs
                               @endif
-                            @endif
-                        </td>
-                   
-                            @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()))
+                            </td>
+                            <td>
+                              @if($overtime > .5)
+                                {{$overtime}} hrs
                                 @php
-                                    $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
-                                    $late = (strtotime(date("2022-01-01 h:i",strtotime($time_in->time_in)))  - strtotime(date("2022-01-01 h:i",strtotime("2022-01-01 ".$schedules[$id]->time_in_to))))/60;
-                                    $working_minutes = (((strtotime($time_in->time_out) - strtotime($time_in->time_in)))/3600);
-                                    $overtime = number_format($working_minutes - $schedules[$id]->working_hours,2);
-                                    if($late > 0)
-                                    {
-                                      $late_data = $late;
-                                    }
-                                    else {
-                                      $late_data = 0;
-                                      
-                                    }
-                                    $undertime = number_format($working_minutes - $schedules[$id]->working_hours + ($late_data/60),2);
+                                  $overtimes = $overtimes +round($overtime,2);
                                 @endphp
-                                {{-- {{strtotime("2022-01-01 ".$schedules[$id]->time_in_to)}} <br>
-                                {{strtotime(date("2022-01-01 h:i".$time_in->time_in))}} <br> --}}
-                                <td>
-                                  {{number_format($late_data/60,2)}} hrs
-                                  @php
-                                      $lates = $lates+ round($late_data/60,2);
-                                  @endphp
+                              @else
+                                0 hrs
+                              @endif
+                            </td>
+                              <td>0 hrs</td>
+                              <td>
+                                0 hrs
                               </td>
                               <td>
-                                @if($undertime < 0)
-                                 {{number_format(($undertime*60*-1)/60,2)}} hrs
-                                 @php
-                                     $undertimes = $undertimes + round(($undertime*60*-1)/60,2);
-                                 @endphp
-                                @else
-                                 0 hrs
-                                @endif
-                              </td>
-                              <td>
-                                @if($overtime > .5)
-                                  {{$overtime}} hrs
-                                  @php
-                                     $overtimes = $overtimes +round($overtime,2);
-                                  @endphp
-                                @else
-                                  0 hrs
-                                @endif
-                              </td>
-                                <td>0 hrs</td>
-                                <td>
-                                   0 hrs
-                                </td>
-                                <td>
-                                  @php
-                                   $night_diff_ot =  $night_diff_ot +  round(night_difference(strtotime($time_in->time_in),strtotime($time_in->time_out)),2);
-                                  echo  round(night_difference(strtotime($time_in->time_in),strtotime($time_in->time_out)),2)." hrs";
-                                @endphp
+                                @php
+                                $night_diff_ot =  $night_diff_ot +  round(night_difference(strtotime($time_in_data),strtotime($time_in->time_out)),2);
+                                echo  round(night_difference(strtotime($time_in_data),strtotime($time_in->time_out)),2)." hrs";
+                              @endphp
 
-                                </td>
-                                <td>
-                                  <small>Time In : {{$time_in->device_in}},Time Out : {{$time_in->device_out}}</small>
-                                </td>
-                            @else
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            @endif
+                              </td>
+                              <td>
+                                <small>Time In : {{$time_in->device_in}} <br>
+                                Time Out : {{$time_in->device_out}}</small>
+                              </td>
+                          @else
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          
+                          @endif
                       @endif
                         </tr>
                         @endforeach

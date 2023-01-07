@@ -132,9 +132,19 @@
                             @else
                               <td>@if($time_in != null)
                                     @if($time_in->time_out != null)
-                                      {{round((((strtotime($time_in->time_out) - strtotime($time_in->time_in)))/3600),2)}} hrs 
                                       @php
-                                           $work = $work + round((((strtotime($time_in->time_out) - strtotime($time_in->time_in)))/3600),2);
+                                          if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("07:00:00"))
+                                          {
+                                            $time_in_data = $time_in->time_in;
+                                          }
+                                          else
+                                          {
+                                            $time_in_data = date('Y-m-d 07:00:00',strtotime($time_in->time_in));
+                                          }
+                                      @endphp
+                                      {{round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2)}} hrs 
+                                      @php
+                                           $work = $work + round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
                                       @endphp
                                     @endif
                                   @endif
@@ -143,8 +153,8 @@
                                   @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()))
                                       @php
                                           $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
-                                          $late = (strtotime(date("2022-01-01 h:i",strtotime($time_in->time_in)))  - strtotime(date("2022-01-01 h:i",strtotime("2022-01-01 ".$schedules[$id]->time_in_to))))/60;
-                                          $working_minutes = (((strtotime($time_in->time_out) - strtotime($time_in->time_in)))/3600);
+                                          $late = (strtotime(date("2022-01-01 h:i",strtotime($time_in_data)))  - strtotime(date("2022-01-01 h:i",strtotime("2022-01-01 ".$schedules[$id]->time_in_to))))/60;
+                                          $working_minutes = (((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600);
                                           $overtime = number_format($working_minutes - $schedules[$id]->working_hours,2);
                                           if($late > 0)
                                           {
@@ -190,8 +200,8 @@
                                       </td>
                                       <td>
                                         @php
-                                         $night_diff_ot =  $night_diff_ot +  round(night_difference(strtotime($time_in->time_in),strtotime($time_in->time_out)),2);
-                                        echo  round(night_difference(strtotime($time_in->time_in),strtotime($time_in->time_out)),2)." hrs";
+                                         $night_diff_ot =  $night_diff_ot +  round(night_difference(strtotime($time_in_data),strtotime($time_in->time_out)),2);
+                                        echo  round(night_difference(strtotime($time_in_data),strtotime($time_in->time_out)),2)." hrs";
                                       @endphp
 
                                       </td>

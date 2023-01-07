@@ -27,7 +27,11 @@
                                   <p class="card-text">Time In : 
                                     @if($attendance_now != null){{date('h:i A',strtotime($attendance_now->time_in))}} <br>
                                       @if($attendance_now->time_out == null )
-                                       Estimated Out : {{date('h:i A', strtotime($attendance_now->time_in . " +10 hours +30 minutes"))}} 
+                                          @if (strtotime(date('H:i:00',strtotime($attendance_now->time_in))) >= strtotime("07:00:00"))
+                                            Estimated Out : {{date('h:i A', strtotime($attendance_now->time_in . " +10 hours +30 minutes"))}} 
+                                          @else
+                                            Estimated Out : 05:30 PM 
+                                          @endif
                                        @else
                                        Time Out : {{date('h:i A',strtotime($attendance_now->time_out))}}
                                        @endif
