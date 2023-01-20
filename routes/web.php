@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('get-attendance-bio', 'AttendanceController@get_attendances');
 
     //Leaves
-    Route::get('leave', 'EmployeeLeaveController@leaveBalances');
+    Route::get('file-leave', 'EmployeeLeaveController@leaveBalances');
     Route::post('new-leave','EmployeeLeaveController@new');
     Route::post('edit-leave/{id}', 'EmployeeLeaveController@edit_leave');
     Route::get('disable-leave/{id}', 'EmployeeLeaveController@disable_leave');

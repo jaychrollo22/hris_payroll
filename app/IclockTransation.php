@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class IclockTransation extends Model
 {
     //
-    protected $connection = 'sqlsrv';
+    protected $connection = 'mysql_srv';
     protected $table = 'iclock_transaction';
 
     public function emp_data()

@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class IclockTerminal extends Model
 {
     //
-    protected $connection = 'sqlsrv';
+    protected $connection = 'mysql_srv';
     protected $table = 'iclock_terminal';
 }

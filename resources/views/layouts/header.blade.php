@@ -341,7 +341,7 @@
 						</a>
 						<div class="collapse @if ($header == 'forms') show @endif" id="forms">
 							<ul class="nav flex-column sub-menu @if ($header == 'forms') show @endif">
-								<li class="nav-item "> <a class="nav-link active" href="{{ url('/leave') }}">Leave</a></li>
+								<li class="nav-item "> <a class="nav-link active" href="{{ url('/file-leave') }}">Leave</a></li>
 								<li class="nav-item "> <a class="nav-link " href="{{ url('/overtime') }}">Overtime</a></li>
 								<li class="nav-item "> <a class="nav-link " href="{{ url('/work-from-home') }}">Work from home</a></li>
 								<li class="nav-item "> <a class="nav-link " href="{{ url('/official-business') }}">Official Business</a>
@@ -449,7 +449,7 @@
 						</a>
 						<div class="collapse" id="payroll">
 							<ul class="nav flex-column sub-menu">
-								{{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a></li> --}}
+								<li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a></li>
 								<li class="nav-item"> <a class="nav-link" href="{{ url('/loan-reg') }}">Loan Register</a></li>
 							</ul>
 						</div>
