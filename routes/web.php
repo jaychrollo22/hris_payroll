@@ -193,3 +193,4 @@ Route::group(['middleware' => 'auth'], function () {
     
 });
 Route::post('new-employee', 'EmployeeController@new');
+Route::post('upload-employee', 'EmployeeController@upload');

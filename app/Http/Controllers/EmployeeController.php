@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Excel;
+use App\Imports\EmployeesImport;
 use App\Classification;
 use App\Employee;
 use App\Department;
@@ -112,6 +113,74 @@ class EmployeeController extends Controller
         return back();
     }
 
+    public function upload(Request $request){
+
+        $path = $request->file('file')->getRealPath();
+        $data = Excel::toArray(new EmployeesImport, $request->file('file'));
+        // return $data = Excel::load($path)->get();
+
+        if(count($data[0]) > 0)
+        {
+            $save_count = 0;
+            $not_save = [];
+            foreach($data[0] as $key => $value)
+            {
+                if($value['employee_number'] != null)
+                {
+                    $validate = Employee::where('employee_number',$value['employee_number'])->first();
+                    if(empty($validate)){
+
+                        $company = Company::findOrfail($value['company_id']);
+
+                        if($value['company_email']){
+                            $user = new User;
+                            $user->email = $value['company_email'];
+                            $user->name = $value['first_name'] . " " . $value['last_name'];
+                            $password = strtolower($value['first_name'] . '.'. $value['last_name']);
+                            $user->password = bcrypt($password);
+                            $user->status = "Active";
+                            $user->save();
+                        }
+
+                        $employee = new Employee;
+                        $employee->user_id = $user->id;
+                        $employee->employee_number = $value['employee_number'];
+                        $employee->employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
+                        $employee->first_name = $value['first_name'];
+                        $employee->last_name = $value['last_name'];
+                        $employee->middle_name = $value['middle_name'];
+                        $employee->name_suffix = $value['name_suffix'];
+                        $employee->classification = $value['classification'];
+                        $employee->department_id = $value['department_id'];
+                        $employee->company_id = $value['company_id'];
+                        $employee->original_date_hired = $value['original_date_hired'] ? date('Y-m-d',strtotime($value['original_date_hired'])) : "";
+                        $employee->status = "Active";
+                        $employee->save();
+
+                        $validate_company = EmployeeCompany::where('schedule_id',$value['employee_number'])->first();
+                        if(empty($validate_company)){
+                            $employeeCompany = new EmployeeCompany;
+                            $employeeCompany->emp_code = $value['employee_number'];
+                            $employeeCompany->schedule_id = 1;
+                            $employeeCompany->company_id = $value['company_id'];
+                            $employeeCompany->save();
+                        }
+
+                        $save_count++;
+                    }else{
+                        array_push($not_save,$value);
+                    }
+                    
+                }
+            }
+
+            // return $not_save;
+
+            Alert::success('Successfully Import Employees (' . $save_count. ')')->persistent('Dismiss');
+            return back();
+            
+        }
+    }
 
     public function generate_emp_code($table, $code, $year, $compId)
     {
