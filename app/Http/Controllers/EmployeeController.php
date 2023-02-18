@@ -129,21 +129,28 @@ class EmployeeController extends Controller
                 {
                     $validate = Employee::where('employee_number',$value['employee_number'])->first();
                     if(empty($validate)){
-
                         $company = Company::findOrfail($value['company_id']);
-
+                        $user_id = '';
                         if($value['company_email']){
-                            $user = new User;
-                            $user->email = $value['company_email'];
-                            $user->name = $value['first_name'] . " " . $value['last_name'];
-                            $password = strtolower($value['first_name'] . '.'. $value['last_name']);
-                            $user->password = bcrypt($password);
-                            $user->status = "Active";
-                            $user->save();
+                            $validate = User::where('email',$value['company_email'])->first();
+                            if(empty($validate)){
+                                $user = new User;
+                                $user->email = $value['company_email'];
+                                $user->name = $value['first_name'] . " " . $value['last_name'];
+                                $password = strtolower($value['first_name']) . '.'. strtolower($value['last_name']);
+                                $stripped_password = str_replace(' ', '', $password);
+                                $user->password = bcrypt($stripped_password);
+                                $user->status = "Active";
+                                $user->save();
+
+                                $user_id = $user->id;
+                            }else{
+                                $user_id = $validate->id;
+                            }
                         }
 
                         $employee = new Employee;
-                        $employee->user_id = $user->id;
+                        $employee->user_id = $user_id;
                         $employee->employee_number = $value['employee_number'];
                         $employee->employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
                         $employee->first_name = $value['first_name'];
@@ -187,12 +194,17 @@ class EmployeeController extends Controller
         // dd($table);
         $data = Employee::whereYear('original_date_hired', "=", $year)->where('company_id', $compId)->orderBy('id', 'desc')->first();
         //  dd($data);
-        if ($data == null) {
+        if (empty($data)) {
             $emp_code = $code . "-" . $year . "-00001";
         } else {
             $code_data = explode("-", $data->employee_code);
             //  dd($code_data);
-            $code_final = intval($code_data[2]) + 1;
+            if(count($code_data) > 1){
+                $code_final = intval($code_data[2]) + 1;
+            }else{
+                $code_final = "00001";
+            }
+            
             $emp_code = $code . "-" . $year . "-" . str_pad($code_final, 5, '0', STR_PAD_LEFT);
         }
 
