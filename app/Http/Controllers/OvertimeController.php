@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\EmployeeApproverController;
 use App\Employee;
 use App\Overtime;
+use App\EmployeeOvertime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -11,10 +12,18 @@ use RealRashid\SweetAlert\Facades\Alert;
 class OvertimeController extends Controller
 {
     //
+    public function index(){
+
+        $employee_overtimes = EmployeeOvertime::with('user','employee')->where('status','Approved')->get();
+        return view('overtimes.index',
+        array(
+            'header' => 'overtimes',
+            'employee_overtimes' => $employee_overtimes,
+        ));
+    }
 
     public function overtime ()
-    { 
-        
+    {   
         $get_approvers = new EmployeeApproverController;
         $overtimes = Overtime::with('user')->get();
         $all_approvers = $get_approvers->get_approvers(auth()->user()->id);

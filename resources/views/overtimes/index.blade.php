@@ -6,30 +6,28 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Users 
-                            @if (count($users) > 0)
-                            <button class='btn btn-info' onclick="exportTableToExcel('users','Users')">Export</button>
-                            @endif
-                            
-                        </h4>
-
-
-
+                        <h4 class="card-title">Overtime Reports</h4>
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered tablewithSearch" id='users'>
+                            <table class="table table-hover table-bordered tablewithSearch">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Biometric ID</th>
                                         <th>Name</th>
-                                        <th>Email</th>
+                                        <th>Date</th>
+                                        <th>Start Time</th>
+                                        <th>End Time</th>
+                                        <th>Remarks</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($users as $user)
+                                    @foreach($employee_overtimes as $item)
                                     <tr>
-                                        <td>{{$user->id}}</td>
-                                        <td>{{$user->name}}</td>
-                                        <td>{{$user->email}}</td>
+                                        <td>{{$item->employee->employee_number}}</td>
+                                        <td>{{$item->user->name}}</td>
+                                        <td>{{$item->ot_date}}</td>
+                                        <td>{{$item->start_time}}</td>
+                                        <td>{{$item->end_time}}</td>
+                                        <td>{{$item->status}}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

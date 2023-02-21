@@ -80,6 +80,8 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
+            'encrypt' => 'no',
+            'trust_server_certificate' => true,
         ],
 
         'sqlsrv_payroll' => [
@@ -92,6 +94,8 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
+            'encrypt' => 'no',
+            'trust_server_certificate' => true,
         ],
         'sqlsrv_local' => [
             'driver' => 'sqlsrv',
@@ -103,6 +107,8 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
+            'encrypt' => 'no',
+            'trust_server_certificate' => true,
         ],
         'mysql_srv' => [
             'driver' => 'mysql',

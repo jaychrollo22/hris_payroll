@@ -183,6 +183,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('loan-report', 'LoanController@loan_report');
     Route::get('incentive-report', 'IncentiveController@incentive_report');
     Route::get('payroll-report', 'PayrollController@payroll_report');
+    
+    Route::get('overtime-report', 'OvertimeController@index');
+
+
 
     //13th month
     Route::get('month-benefit', 'PayslipController@monthly_benefit');
