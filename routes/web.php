@@ -190,6 +190,8 @@ Route::group(['middleware' => 'auth'], function () {
     // Employee Leave Credits
     Route::get('employee-leave-credits', 'LeaveCreditsController@index');
 
+    Route::get('/users','UserController@index');
+
     
 });
 Route::post('new-employee', 'EmployeeController@new');

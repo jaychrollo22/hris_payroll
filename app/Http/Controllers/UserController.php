@@ -20,6 +20,21 @@ use Psy\Command\ListCommand\FunctionEnumerator;
 class UserController extends Controller
 {
     //
+    public function index(){
+
+        $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+
+
+        $users = User::all();
+
+        return view('users.index',
+        array(
+            'header' => 'users',
+            'user' => $user,
+            'header' => 'users',
+                'users' => $users
+        ));
+    }
 
     public function accountSetting()
     {
