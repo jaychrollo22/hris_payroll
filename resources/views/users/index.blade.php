@@ -16,13 +16,14 @@
 
 
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered tablewithSearch" id='users'>
+                            <table class="table table-hover table-bordered user-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
+                                        <th>Email</th>
                                         <th>Role</th>
-                                        <th></th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>

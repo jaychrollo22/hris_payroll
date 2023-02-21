@@ -610,6 +610,14 @@
                 //     "left": 2
                 // }
             });
+            $('.user-table').DataTable({
+                // "ordering": true,
+                // "pageLength": 100,
+                // "paging":         false,
+                // "fixedColumns":   {
+                //     "left": 2
+                // }
+            });
 
 
             $('.tablewithSearchonly').DataTable({
