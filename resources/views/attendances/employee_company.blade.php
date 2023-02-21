@@ -48,29 +48,22 @@
                             </form>
                         </p>
                         @if($date_range)
-                        <button class='btn btn-info' onclick="exportTableToExcel('employee_attendance','{{$from_date}} - {{$to_date}}')">Export</button>
+                        <button class='btn btn-info mb-1' onclick="exportTableToExcel('employee_attendance','{{$from_date}} - {{$to_date}}')">Export</button>
                         @endif
 
 
                         <div class="table-responsive">
 
-                            <table border="1" class="table table-hover table-bordered " id='employee_attendance'>
-                                @foreach($emp_data as $emp)
-                                @php
-                                $work =0;
-                                $lates =0;
-                                $undertimes =0;
-                                $overtimes =0;
-                                $approved_overtimes =0;
-                                $night_diffs =0;
-                                $night_diff_ot =0;
-                                @endphp
+                            <table border="1" class="table table-hover table-bordered employee_attendance" id='employee_attendance'>
+
                                 <thead>
-                                    <tr>
+                                    {{-- <tr>
                                         <td colspan='5'>{{$emp->emp_code}} - {{$emp->first_name}} {{$emp->last_name}}</td>
-                                    </tr>
+                                    </tr> --}}
                                     <tr>
+                                        <td>User ID</td>
                                         <td>Biometric ID</td>
+                                        <td>Name</td>
                                         <td>Date</td>
                                         <td>Time In</td>
                                         <td>Time Out</td>
@@ -86,11 +79,25 @@
 
                                     </tr>
                                 </thead>
+
+                                @foreach($emp_data as $emp)
+                                @php
+                                $work =0;
+                                $lates =0;
+                                $undertimes =0;
+                                $overtimes =0;
+                                $approved_overtimes =0;
+                                $night_diffs =0;
+                                $night_diff_ot =0;
+                                @endphp
+                                
                                 <tbody>
 
                                     @foreach(array_reverse($date_range) as $date_r)
                                     <tr>
+                                        <td>{{$emp->employee->user_id}}</td>
                                         <td>{{$emp->emp_code}}</td>
+                                        <td>{{$emp->employee->first_name . ' ' . $emp->employee->last_name}}</td>
                                         <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
 
                                         @php
@@ -242,7 +249,7 @@
 
                                     </tr>
                                     @endforeach
-                                    <tr>
+                                    {{-- <tr> --}}
                                         {{-- <td colspan='3'>Total</td>
                                         <td >{{$work}} hrs</td>
                                         <td>{{$lates}} hrs</td>
@@ -252,7 +259,7 @@
                                         <td>0 hrs</td>
                                         <td>{{$night_diff_ot}} hrs</td>
                                         <td></td> --}}
-                                    </tr>
+                                    {{-- </tr> --}}
                                     {{-- <tr>
                                         <td colspan='11'>&nbsp;</td>
                                     </tr> --}}

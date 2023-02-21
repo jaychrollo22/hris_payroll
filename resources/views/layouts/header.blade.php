@@ -619,7 +619,6 @@
                 // }
             });
 
-
             $('.tablewithSearchonly').DataTable({
                 "paging": false
                 , "sDom": "lfrti"
