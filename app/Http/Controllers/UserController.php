@@ -36,6 +36,17 @@ class UserController extends Controller
         ));
     }
 
+    public function updateUserRole(Request $request, User $user){
+        if($user){
+            $user = User::findOrFail($user->id);
+            $user->role = $request->role;
+            $user->save();
+
+            Alert::success('Successfully Updated')->persistent('Dismiss');
+            return back();
+        }
+    }
+
     public function accountSetting()
     {
         $classifications = Classification::get();

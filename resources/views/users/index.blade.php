@@ -21,7 +21,8 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
-                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -30,6 +31,13 @@
                                         <td>{{$user->id}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
+                                        <td>{{$user->role}}</td>
+                                        <td>
+                                            <button data-toggle="modal" data-target="#editUserRole{{$user->id}}" type="button" class="btn btn-outline-info btn-icon-text btn-sm">
+                                                Edit
+                                                <i class="ti-file btn-icon-append"></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -42,6 +50,9 @@
     </div>
 </div>
 
+@foreach($users as $user)
+@include('users.edit_user_role')
+@endforeach
 
 @endsection
 @section('footer')
