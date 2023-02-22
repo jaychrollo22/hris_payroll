@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Psy\Command\ListCommand\FunctionEnumerator;
 
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class UserController extends Controller
 {
     //
@@ -34,6 +37,11 @@ class UserController extends Controller
             'header' => 'users',
                 'users' => $users
         ));
+    }
+
+    public function export() 
+    {
+        return Excel::download(new UsersExport, 'Users.xlsx');
     }
 
     public function updateUserRole(Request $request, User $user){

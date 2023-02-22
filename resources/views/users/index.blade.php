@@ -8,15 +8,12 @@
                     <div class="card-body">
                         <h4 class="card-title">Users 
                             @if (count($users) > 0)
-                            <button class='btn btn-info' onclick="exportTableToExcel('users','Users')">Export</button>
+                            <a href='/users-export' class='btn btn-info'>Export</a>
                             @endif
                             
                         </h4>
-
-
-
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered user-table" id="users">
+                            <table border="1" class="table table-hover table-bordered" id='users_table'>
                                 <thead>
                                     <tr>
                                         <th>ID</th>

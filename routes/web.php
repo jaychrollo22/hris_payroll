@@ -199,6 +199,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/users','UserController@index');
     Route::post('/update-user-role/{user}','UserController@updateUserRole');
 
+
+    Route::get('users-export', 'UserController@export');
+
     
 });
 Route::post('new-employee', 'EmployeeController@new');
