@@ -16,7 +16,7 @@
 
 
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered user-table">
+                            <table class="table table-hover table-bordered user-table" id="users">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
