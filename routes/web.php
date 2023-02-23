@@ -69,7 +69,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     //employees
     Route::get('employees', 'EmployeeController@view');
+    Route::get('employees-export', 'EmployeeController@export');
     Route::post('new-employee', 'EmployeeController@new');
+    Route::get('account-setting-hr/{user}', 'EmployeeController@employeeSettingsHR');
+    Route::post('account-setting-hr/updateInfoHR/{id}', 'EmployeeController@updateInfoHR');
+    Route::post('account-setting-hr/updateEmpInfoHR/{id}', 'EmployeeController@updateEmpInfoHR');
 
     //Payslips
     Route::get('payslips', 'PayslipController@view');

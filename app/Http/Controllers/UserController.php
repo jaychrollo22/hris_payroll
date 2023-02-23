@@ -88,6 +88,7 @@ class UserController extends Controller
         ));
     
     }
+    
     public function updateInfo(Request $request, $id){
 
         $employee = Employee::findOrFail($id);

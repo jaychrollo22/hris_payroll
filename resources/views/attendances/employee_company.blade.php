@@ -29,7 +29,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label text-right">From</label>
                                             <div class="col-sm-8">
-                                                <input type="date" value='{{$from_date}}' class="form-control" name="from" max='{{date('Y-m-d')}}' onchange='get_min(this.value);' required />
+                                                <input type="date" value='{{$from_date}}' class="form-control" name="from" max='{{date('d/m/Y')}}' onchange='get_min(this.value);' required />
                                             </div>
                                         </div>
                                     </div>
@@ -37,7 +37,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label text-right">To</label>
                                             <div class="col-sm-8">
-                                                <input type="date" value='{{$to_date}}' class="form-control" name="to" id='to' max='{{date('Y-m-d')}}' required />
+                                                <input type="date" value='{{$to_date}}' class="form-control" name="to" id='to' max='{{date('d/m/Y')}}' required />
                                             </div>
                                         </div>
                                     </div>
@@ -173,7 +173,7 @@
                                             }
                                             else
                                             {
-                                            $time_in_data = date('Y-m-d 07:00:00',strtotime($time_in->time_in));
+                                            $time_in_data = date('d/m/Y 07:00:00',strtotime($time_in->time_in));
                                             }
                                             @endphp
                                             {{round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2)}} hrs
@@ -187,7 +187,7 @@
                                         @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()))
                                         @php
                                         $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
-                                        $late = (strtotime(date("2022-01-01 h:i",strtotime($time_in_data))) - strtotime(date("2022-01-01 h:i",strtotime("2022-01-01 ".$schedules[$id]->time_in_to))))/60;
+                                        $late = (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
                                         $working_minutes = (((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600);
                                         $overtime = number_format($working_minutes - $schedules[$id]->working_hours,2);
                                         if($late > 0)

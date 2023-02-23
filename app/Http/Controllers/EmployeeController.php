@@ -5,6 +5,7 @@ use Excel;
 use App\Imports\EmployeesImport;
 use App\Classification;
 use App\Employee;
+use App\EmployeeApprover;
 use App\Department;
 use App\Schedule;
 use App\Attendance;
@@ -24,6 +25,9 @@ use App\AttPunch;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+
+
+use App\Exports\EmployeesExport;
 
 class EmployeeController extends Controller
 {
@@ -55,6 +59,11 @@ class EmployeeController extends Controller
                 'companies' => $companies,
             )
         );
+    }
+
+    public function export() 
+    {
+        return Excel::download(new EmployeesExport, 'Employees.xlsx');
     }
 
     public function new(Request $request)
@@ -188,6 +197,106 @@ class EmployeeController extends Controller
             
         }
     }
+
+    public function employeeSettingsHR(User $user)
+    {
+        $classifications = Classification::get();
+
+        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company')->get();
+        $schedules = Schedule::get();
+        $banks = Bank::get();
+        $users = User::all();
+        $levels = Level::get();
+        $departments = Department::get();
+        $marital_statuses = MaritalStatus::get();
+        $companies = Company::get();
+        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+
+       
+
+        return view('employees.employee_settings_hr',
+        array(
+            'header' => $user->name,
+            'user' => $user,
+            'header' => 'employees',
+                'classifications' => $classifications,
+                'employees' => $employees,
+                'marital_statuses' => $marital_statuses,
+                'departments' => $departments,
+                'levels' => $levels,
+                'users' => $users,
+                'banks' => $banks,
+                'schedules' => $schedules,
+                'companies' => $companies,
+        ));
+    
+    }
+
+    public function updateInfoHR(Request $request, $id){
+
+        $employee = Employee::findOrFail($id);
+        $employee->first_name = $request->first_name;
+        $employee->middle_name = $request->middle_name;
+        $employee->middle_initial = $request->middile_initial;
+        $employee->last_name = $request->last_name;
+        $employee->name_suffix = $request->suffix;
+        $employee->nick_name = $request->nickname;
+        $employee->marital_status = $request->marital_status;
+        $employee->religion = $request->religion;
+        $employee->gender = $request->gender;
+        $employee->birth_date = $request->birthdate;
+        $employee->birth_place = $request->birthplace;
+        $employee->personal_email = $request->personal_email;
+        $employee->personal_number = $request->personal_number;
+        $employee->present_address = $request->present_address;
+        $employee->permanent_address = ($request->permanent_address == '') ? $request->present_address : $request->permanent_address;
+        $employee->save();
+
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
+
+    }
+    public function updateEmpInfoHR(Request $request, $id){
+
+        $employee = Employee::findOrFail($id);
+        $employee->employee_number = $request->employee_number;
+        $employee->company_id = $request->company;
+        $employee->position = $request->position;
+        $employee->department_id = $request->department;
+        $employee->classification = $request->classification;
+        $employee->phil_number = $request->philhealth;
+        $employee->level = $request->level;
+        $employee->immediate_sup = $request->immediate_supervisor;
+        $employee->sss_number = $request->sss;
+        $employee->tax_number = $request->tin;
+        $employee->hdmf_number = $request->pagibig;
+        $employee->original_date_hired = $request->date_hired;
+        $employee->personal_email = $request->personal_email;
+        $employee->immediate_sup = $request->immediate_supervisor;
+        $employee->schedule_id = $request->schedule;
+        $employee->bank_name = $request->bank_name;
+        $employee->bank_account_number = $request->bank_account_number;
+        $employee->save();
+
+        if(isset($request->approver)){
+            $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+            $level = 1;
+            foreach($request->approver as  $approver)
+            {
+                $new_approver = new EmployeeApprover;
+                $new_approver->user_id = $employee->user_id;
+                $new_approver->approver_id = $approver;
+                $new_approver->level = $level;
+                $new_approver->save();
+                $level = $level+1;
+            }
+        }
+        
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
+
+    }
+
 
     public function generate_emp_code($table, $code, $year, $compId)
     {
