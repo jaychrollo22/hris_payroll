@@ -82,8 +82,11 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Employees <button type="button" class="btn btn-outline-success btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#newEmployee"><i class="ti-plus btn-icon-prepend"></i></button>
-                            <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployee"><i class="ti-arrow-up btn-icon-prepend"></i></button></h4>
+                        <h4 class="card-title">Employees 
+                            <button type="button" class="btn btn-outline-success btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#newEmployee"><i class="ti-plus btn-icon-prepend"></i></button>
+                            <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployee"><i class="ti-arrow-up btn-icon-prepend"></i></button>
+                            <a href="/employees-export" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+                        </h4>
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered employees-table">
                                 <thead>

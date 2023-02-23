@@ -14,7 +14,9 @@ class EmployeesExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return Employee::select('user_id','original_date_hired','first_name','last_name','middle_name','name_suffix','gender','personal_number','personal_email','permanent_address','bank_name','bank_account_number','sss_number','hdmf_number','phil_number','tax_number')->get();
+        return Employee::select('user_id','original_date_hired','first_name','last_name','middle_name','name_suffix','gender','personal_number','personal_email','permanent_address','bank_name','bank_account_number','sss_number','hdmf_number','phil_number','tax_number')
+                        ->where('status','Active')
+                        ->get();
     }
 
     public function headings(): array
