@@ -104,7 +104,11 @@
                                 <tbody>
                                     @foreach($employees as $employee)
                                     <tr>
-                                        <td></td>
+                                        <td align="center">
+                                            <a href="/account-setting-hr/{{$employee->user_id}}" class="btn btn-outline-success btn-icon-text btn-sm text-center">
+                                                <i class="ti-pencil btn-icon-prepend"></i>
+                                            </a>
+                                        </td>
                                         <td>{{$employee->employee_number}}</td>
                                         <td>
                                             <small><img class="rounded-circle" style='width:34px;height:34px;' src='{{URL::asset($employee->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
