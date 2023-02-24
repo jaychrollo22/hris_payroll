@@ -179,6 +179,7 @@
         </div>
     </div>
 </div>
+
 @php
 function get_count_days($data,$date_from,$date_to)
  {
@@ -196,12 +197,17 @@ function get_count_days($data,$date_from,$date_to)
     return($count);
  } 
 @endphp  
+
+
 @foreach ($employee_leaves as $leave)
   @include('forms.leaves.edit_leave')
   @include('forms.leaves.view_leave') 
 @endforeach
-  @include('forms.leaves.apply_leave') 
+
+
+@include('forms.leaves.apply_leave') 
 @endsection
+
 @section('LeaveScript')
 	<script>
 		function cancel(id) {
