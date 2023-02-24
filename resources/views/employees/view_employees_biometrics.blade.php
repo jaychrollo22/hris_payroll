@@ -44,6 +44,6 @@
 </div>
 @include('employees.new_employee')
 @foreach($employees as $employee)
-@include('employees.edit_employee')
+{{-- @include('employees.edit_employee') --}}
 @endforeach
 @endsection

@@ -216,7 +216,7 @@ class EmployeeController extends Controller
 
         return view('employees.employee_settings_hr',
         array(
-            'header' => $user->name,
+            'header' => 'employees',
             'user' => $user,
             'header' => 'employees',
                 'classifications' => $classifications,
