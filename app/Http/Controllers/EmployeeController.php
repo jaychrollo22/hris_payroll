@@ -218,16 +218,15 @@ class EmployeeController extends Controller
         array(
             'header' => 'employees',
             'user' => $user,
-            'header' => 'employees',
-                'classifications' => $classifications,
-                'employees' => $employees,
-                'marital_statuses' => $marital_statuses,
-                'departments' => $departments,
-                'levels' => $levels,
-                'users' => $users,
-                'banks' => $banks,
-                'schedules' => $schedules,
-                'companies' => $companies,
+            'classifications' => $classifications,
+            'employees' => $employees,
+            'marital_statuses' => $marital_statuses,
+            'departments' => $departments,
+            'levels' => $levels,
+            'users' => $users,
+            'banks' => $banks,
+            'schedules' => $schedules,
+            'companies' => $companies,
         ));
     
     }
