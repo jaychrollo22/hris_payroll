@@ -64,10 +64,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('disable-dtr/{id}', 'EmployeeDtrController@disable_dtr');     
 
     //FOR APPROVAL
-    Route::get('for-approval', 'FormApprovalController@form_approval');
-    Route::get('for-leave','FormApprovalController@form_approval');
+    Route::get('for-leave','FormApprovalController@form_leave_approval');
     Route::get('approve-leave/{id}','FormApprovalController@approveLeave');
     Route::get('decline-leave/{id}','FormApprovalController@declineLeave');
+
+    Route::get('for-overtime','FormApprovalController@form_overtime_approval');
+    Route::post('approve-ot-hrs/{employee_overtime}','FormApprovalController@approveOvertime');
+    Route::get('decline-overtime/{id}','FormApprovalController@declineOvertime');
 
     //employees
     Route::get('employees', 'EmployeeController@view');
@@ -190,7 +193,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('loan-report', 'LoanController@loan_report');
     Route::get('incentive-report', 'IncentiveController@incentive_report');
     Route::get('payroll-report', 'PayrollController@payroll_report');
-    Route::get('overtime-report', 'OvertimeController@index');
+    Route::get('overtime-report', 'OvertimeController@overtime_report');
+    Route::get('overtime-report-export', 'OvertimeController@export');
 
 
 

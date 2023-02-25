@@ -372,10 +372,10 @@
                         <div class="collapse @if ($header == 'for-approval') show @endif" id="for-approval">
                             <ul class="nav flex-column sub-menu @if ($header == 'for-approval') show @endif">
                                 <li class="nav-item "> <a class="nav-link active" href="{{ url('/for-leave') }}">Leave</a></li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for=overtime') }}">Overtime</a></li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for=work-from-home') }}">Work from home</a></li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for=official-business') }}">Official Business</a></li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for=dtr-correction') }}">DTR Correction</a></li>
+                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for-overtime') }}">Overtime</a></li>
+                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for-work-from-home') }}">Work from home</a></li>
+                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for-official-business') }}">Official Business</a></li>
+                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction</a></li>
                             </ul>
                         </div>
                     </li>
@@ -494,6 +494,7 @@
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/employee-report') }}">Employees</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/leave-report') }}">Leave Reports</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url('/overtime-report') }}">Overtime Reports</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li>

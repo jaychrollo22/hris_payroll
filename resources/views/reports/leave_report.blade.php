@@ -6,11 +6,24 @@
 			<div class="col-lg-12 grid-margin stretch-card">
 				<div class="card">
 					<div class="card-body">
-						<h4 class="card-title">Leave Reports</h4>
+						<h4 class="card-title">Filter</h4>
 						<p class="card-description">
 						<form method='get' onsubmit='show();' enctype="multipart/form-data">
 							<div class=row>
-								<div class='col-md-4'>
+								<div class='col-md-3'>
+									<div class="form-group row">
+										<label class="col-sm-4 col-form-label text-right">Company</label>
+										<div class="col-sm-8">
+											<select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
+												<option value="">-- Select Employee --</option>
+												@foreach($companies as $comp)
+												<option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
+												@endforeach
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class='col-md-3'>
 									<div class="form-group row">
 										<label class="col-sm-4 col-form-label text-right">From</label>
 										<div class="col-sm-8">
@@ -19,7 +32,7 @@
 										</div>
 									</div>
 								</div>
-								<div class='col-md-4'>
+								<div class='col-md-3'>
 									<div class="form-group row">
 										<label class="col-sm-4 col-form-label text-right">To</label>
 										<div class="col-sm-8">
@@ -28,7 +41,7 @@
 										</div>
 									</div>
 								</div>
-								<div class='col-md-4'>
+								<div class='col-md-3'>
 									<button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Generate</button>
 								</div>
 							</div>
@@ -39,11 +52,12 @@
 							<div class="col-lg-12 grid-margin stretch-card">
 							  <div class="card">
 								<div class="card-body">
-								  <h4 class="card-title">Leave Report <a href="/leave-report-export?from={{$from}}&to={{$to}}" title="Export" class="btn btn-outline-primary btn-icon-text btn-sm text-center"><i class="ti-arrow-down btn-icon-prepend"></i></a></h4>
+								  <h4 class="card-title">Leave Report <a href="/leave-report-export?company={{$company}}&from={{$from}}&to={{$to}}" title="Export" class="btn btn-outline-primary btn-icon-text btn-sm text-center"><i class="ti-arrow-down btn-icon-prepend"></i></a></h4>
 								  <div class="table-responsive">
 									<table class="table table-hover table-bordered tablewithSearch">
 									  <thead>
 										<tr>
+										  <th>User ID</th>
 										  <th>Employee Name</th>
 										  <th>Form Type</th>
 										  <th>From</th>
@@ -56,6 +70,7 @@
 									  <tbody> 
 										@foreach ($employee_leaves as $form_approval)
 										<tr>
+										  <td>{{$form_approval->user->id}}</td>
 										  <td>{{$form_approval->user->name}}</td>
 										  <td>{{$form_approval->leave->leave_type}}</td>
 										  <td>{{date('d/m/Y', strtotime($form_approval->date_from))}}</td>

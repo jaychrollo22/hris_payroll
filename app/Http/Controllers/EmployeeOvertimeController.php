@@ -41,14 +41,18 @@ class EmployeeOvertimeController extends Controller
             $new_overtime->end_time = date('Y-m-d', strtotime($request->ot_date. ' + 1 day')).' '.$request->end_time;
         }
         $new_overtime->remarks = $request->remarks;
-        $logo = $request->file('attachment');
-        $original_name = $logo->getClientOriginalName();
-        $name = time() . '_' . $logo->getClientOriginalName();
-        $logo->move(public_path() . '/images/', $name);
-        $file_name = '/images/' . $name;
-        $new_overtime->attachment = $file_name;
+
+        if($request->file('attachment')){
+            $logo = $request->file('attachment');
+            $original_name = $logo->getClientOriginalName();
+            $name = time() . '_' . $logo->getClientOriginalName();
+            $logo->move(public_path() . '/images/', $name);
+            $file_name = '/images/' . $name;
+            $new_overtime->attachment = $file_name;
+        }
+
         $new_overtime->status = 'Pending';
-        $new_overtime->level = 1;
+        $new_overtime->level = 0;
         $new_overtime->created_by = Auth::user()->id;
         $new_overtime->save();
 
@@ -78,7 +82,7 @@ class EmployeeOvertimeController extends Controller
             $new_overtime->attachment = $file_name;
         }
         $new_overtime->status = 'Pending';
-        $new_overtime->level = 1;
+        $new_overtime->level = 0;
         $new_overtime->created_by = Auth::user()->id;
         $new_overtime->save();
 

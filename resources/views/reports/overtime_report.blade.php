@@ -6,7 +6,7 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Overtime Reports</h4>
+                        <h4 class="card-title">Filter</h4>
                         <p class="card-description">
                             <form method='get' onsubmit='show();' enctype="multipart/form-data">
                                 <div class=row>
@@ -17,7 +17,7 @@
                                                 <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
                                                     <option value="">-- Select Employee --</option>
                                                     @foreach($companies as $comp)
-                                                    <option value="{{$comp->id}}">{{$comp->company_name}} - {{$comp->company_code}}</option>
+                                                    <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -40,36 +40,39 @@
                                         </div>
                                     </div>
                                     <div class='col-md-3'>
-                                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                                        <button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Generate</button>
                                     </div>
                                 </div>
                             </form>
                         </p>
-                        @if(count($employee_overtimes) > 0)
-                        <button class='btn btn-info mb-1' onclick="exportTableToExcel('overtime_report','Overtime Report {{$from_date}} - {{$to_date}}')">Export</button>
-                        @endif
+                        <h4 class="card-title">Overtime Report <a href="/overtime-report-export?company={{$company}}&from={{$from_date}}&to={{$to_date}}" title="Export" class="btn btn-outline-primary btn-icon-text btn-sm text-center"><i class="ti-arrow-down btn-icon-prepend"></i></a></h4>
+
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered tablewithSearch" id="overtime_report">
                                 <thead>
                                     <tr>
                                         <th>User ID</th>
-                                        <th>Biometric ID</th>
-                                        <th>Name</th>
-                                        <th>Date</th>
-                                        <th>Start Time</th>
-                                        <th>End Time</th>
-                                        <th>Remarks</th>
+                                        <th>Employee Name</th>
+                                        <th>Date Filed</th>
+                                        <th>OT Date</th> 
+                                        <th>OT Time</th> 
+                                        <th>OT Requested (Hrs)</th>
+                                        <th>OT Approved (Hrs)</th>
+                                        <th>Remarks </th>
+                                        <th>Status </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($employee_overtimes as $item)
                                     <tr>
                                         <td>{{$item->employee->user_id}}</td>
-                                        <td>{{$item->employee->employee_number}}</td>
                                         <td>{{$item->user->name}}</td>
-                                        <td>{{$item->ot_date}}</td>
-                                        <td>{{$item->start_time}}</td>
-                                        <td>{{$item->end_time}}</td>
+                                        <td>{{date('d/m/Y', strtotime($item->created_at))}}</td>
+                                        <td>{{date('d/m/Y', strtotime($item->ot_date))}}</td>
+                                        <td>{{date('h:i A', strtotime($item->start_time))}} - {{date('h:i A', strtotime($item->end_time))}}</td>
+                                        <td>{{intval((strtotime($item->end_time)-strtotime($item->start_time))/60/60)}}</td>
+                                        <td>{{$item->ot_approved_hrs}}</td>
+                                        <td>{{$item->remarks}}</td>
                                         <td>{{$item->status}}</td>
                                     </tr>
                                     @endforeach

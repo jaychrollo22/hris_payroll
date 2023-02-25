@@ -2,17 +2,14 @@
 
 namespace App\Exports;
 
-use App\EmployeeLeave;
+use App\EmployeeOvertime;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-
-
-class EmployeeLeaveExport implements FromQuery, WithHeadings, WithMapping
+class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
 {
-
     public function __construct($company,$from,$to)
     {
         $this->company = $company;
@@ -23,7 +20,7 @@ class EmployeeLeaveExport implements FromQuery, WithHeadings, WithMapping
     public function query()
     {
         $company = $this->company;
-        return EmployeeLeave::query()->with('user','leave','employee')
+        return EmployeeOvertime::query()->with('user','employee')
                                 ->whereDate('approved_date','>=',$this->from)
                                 ->whereDate('approved_date','<=',$this->to)
                                 ->whereHas('employee',function($q) use($company){
@@ -36,15 +33,24 @@ class EmployeeLeaveExport implements FromQuery, WithHeadings, WithMapping
 
     public function headings(): array
     {
+
+        // <th>Date Filed</th>
+        // <th>OT Date</th> 
+        // <th>OT Time</th> 
+        // <th>OT Requested (Hrs)</th>
+        // <th>OT Approved (Hrs)</th>
+        // <th>Remarks </th>
+        // <th>Approvers </th>
+        // <th>Status </th>
         return [
             'User ID',
             'Employee Name',
-            'Form Type',
-            'From',
-            'To',
-            'Status',
-            'Approved Date',
-            'Reason/Remarks',
+            'Date Filed',
+            'OT Date',
+            'OT Time',
+            'OT Requested',
+            'OT Approved',
+            'Remarks',
         ];
     }
 
@@ -53,13 +59,12 @@ class EmployeeLeaveExport implements FromQuery, WithHeadings, WithMapping
         return [
             $employee_leave->user->id,
             $employee_leave->user->name,
-            $employee_leave->leave->leave_type,
-            date('d/m/Y',strtotime($employee_leave->date_to)),
-            date('d/m/Y',strtotime($employee_leave->date_from)),
-            $employee_leave->status,
-            date('d/m/Y',strtotime($employee_leave->approved_date)),
-            $employee_leave->reason
+            date('d/m/Y', strtotime($employee_leave->created_at)),
+            date('d/m/Y',strtotime($employee_leave->ot_date)),
+            date('h:i A', strtotime($employee_leave->start_time)) . '-' . date('h:i A', strtotime($employee_leave->end_time)),
+            intval((strtotime($employee_leave->end_time)-strtotime($employee_leave->start_time))/60/60),
+            $employee_leave->ot_approved_hrs,
+            $employee_leave->remarks
         ];
     }
-
 }
