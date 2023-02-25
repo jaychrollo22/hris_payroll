@@ -66,6 +66,8 @@ Route::group(['middleware' => 'auth'], function () {
     //FOR APPROVAL
     Route::get('for-approval', 'FormApprovalController@form_approval');
     Route::get('for-leave','FormApprovalController@form_approval');
+    Route::get('approve-leave/{id}','FormApprovalController@approveLeave');
+    Route::get('decline-leave/{id}','FormApprovalController@declineLeave');
 
     //employees
     Route::get('employees', 'EmployeeController@view');
@@ -183,11 +185,11 @@ Route::group(['middleware' => 'auth'], function () {
     // Reports
     Route::get('employee-report', 'EmployeeController@employee_report');
     Route::get('leave-report', 'LeaveController@leave_report');
+    Route::get('leave-report-export', 'LeaveController@export');
     Route::get('totalExpense-report', 'PayrollController@totalExpense_report');
     Route::get('loan-report', 'LoanController@loan_report');
     Route::get('incentive-report', 'IncentiveController@incentive_report');
     Route::get('payroll-report', 'PayrollController@payroll_report');
-    
     Route::get('overtime-report', 'OvertimeController@index');
 
 

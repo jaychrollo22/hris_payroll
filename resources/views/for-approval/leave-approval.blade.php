@@ -9,7 +9,7 @@
                 <div class="media">                
                   <div class="media-body">
                     <h4 class="mb-4">For Appoval</h4>
-                    <h2 class="card-text">0</h2>
+                    <a href="/for-leave?status=Pending" class="h2 card-text text-white">{{$for_approval}}</a>
                   </div>
                 </div>
               </div>
@@ -21,7 +21,7 @@
                 <div class="media">                
                   <div class="media-body">
                     <h4 class="mb-4">Approved</h4>
-                    <h2 class="card-text">0</h2>
+                    <a href="/for-leave?status=Approved" class="h2 card-text text-white">{{$approved}}</a>
                   </div>
                 </div>
               </div>
@@ -33,7 +33,7 @@
                 <div class="media">                
                   <div class="media-body">
                     <h4 class="mb-4">Declined / Rejected</h4>
-                    <h2 class="card-text">0</h2>
+                    <a href="/for-leave?status=Declined" class="h2 card-text text-white">{{$declined}}</a>
                   </div>
                 </div>
               </div>
@@ -45,14 +45,6 @@
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">For Approval Leave</h4>
-                <p class="card-description">
-                  {{-- <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#applyovertime">
-                    <i class="ti-check btn-icon-prepend"></i>                                                    
-                  </button>
-                  <button type="button" class="btn btn-outline-danger btn-icon-text" data-toggle="modal" data-target="#applyovertime">
-                    <i class="ti-close btn-icon-prepend"></i>                                                    
-                  </button>                   --}}
-                </p>
                 <div class="table-responsive">
                   <table class="table table-hover table-bordered tablewithSearch">
                     <thead>
@@ -68,93 +60,52 @@
                       </tr>
                     </thead>
                     <tbody> 
-                      @foreach ($form_approvals as $form_approval)
-                        @foreach($form_approval->user_info->emp_leave as $leave)
-                          <tr>
-                            <td>{{$form_approval->user_info->name}}</td>
-                            <td>{{$leave->leave->leave_type}}</td>
-                            <td>{{date('M d, Y', strtotime($leave->date_from))}} - {{date('M d, Y', strtotime($leave->date_to))}}</td>
-                            <td>{{$leave->reason}}</td>
-                            <td><a href="{{url($leave->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>
-                            <td>
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#applyovertime">
+                      @foreach ($leaves as $form_approval)
+                      <tr>
+                        <td>{{$form_approval->user->name}}</td>
+                        <td>{{$form_approval->leave->leave_type}}</td>
+                        <td>{{date('M d, Y', strtotime($form_approval->date_from))}} - {{date('M d, Y', strtotime($form_approval->date_to))}}</td>
+                        <td>
+                          @if ($form_approval->status == 'Pending')
+                            <label class="badge badge-warning">{{ $form_approval->status }}</label>
+                          @elseif($form_approval->status == 'Approved')
+                            <label class="badge badge-success">{{ $form_approval->status }}</label>
+                          @elseif($form_approval->status == 'Rejected' || $form_approval->status == 'Cancelled')
+                            <label class="badge badge-danger">{{ $form_approval->status }}</label>
+                          @endif  
+                        </td>
+                        <td id="tdStatus{{ $form_approval->id }}">
+                          @foreach($form_approval->approver as $approver)
+                            @if($form_approval->level >= $approver->level)
+                            {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                            @else
+                            {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                            @endif<br> 
+                          @endforeach
+                        </td>
+                        <td>{{$form_approval->reason}}</td>
+                        <td>
+                          @if($form_approval->attachment)
+                          <a href="{{url($form_approval->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>
+                          @endif
+                        </td>
+                        <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
+
+                          @foreach($form_approval->approver as $approver)
+                            @if($approver->approver_id == $approver_id && $form_approval->level < $approver->level && $form_approval->status == 'Pending')
+                              <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" onclick="approve({{ $form_approval->id }})">
                                 <i class="ti-check btn-icon-prepend"></i>                                                    
                               </button>
-                              <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#applyovertime">
+                              <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" onclick="decline({{ $form_approval->id }})">
                                 <i class="ti-close btn-icon-prepend"></i>                                                    
                               </button> 
-                            </td>                            
-                          </tr>  
-                        @endforeach     
-                        @foreach($form_approval->user_info->emp_ot as $ot_file)
-                          <tr>
-                            <td>{{$form_approval->user_info->name}}</td>
-                            <td>Overtime</td>   
-                            <td>{{date('M d, Y', strtotime($ot_file->ot_date))}}</td>
-                            <td>{{$ot_file->remarks}}</td>
-                            <td><a href="{{url($ot_file->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a></td>                                                     
-                            <td>
-                              <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#applyovertime">
-                              <i class="ti-check btn-icon-prepend"></i>                                                    
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#applyovertime">
-                              <i class="ti-close btn-icon-prepend"></i>                                                    
-                            </button> 
-                          </td>   
-                          </tr>  
-                        @endforeach 
-                        @foreach($form_approval->user_info->emp_wfh as $wfh_file)
-                          <tr>
-                            <td>{{$form_approval->user_info->name}}</td>
-                            <td>Work From Home</td>     
-                            <td>{{date('M d, Y', strtotime($wfh_file->date_from))}} - {{date('M d, Y', strtotime($wfh_file->date_to))}}</td>
-                            <td>{{$wfh_file->remarks}}</td>
-                            <td><a href="{{url($wfh_file->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a></td>
-                            <td>
-                              <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#applyovertime">
-                              <i class="ti-check btn-icon-prepend"></i>                                                    
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#applyovertime">
-                              <i class="ti-close btn-icon-prepend"></i>                                                    
-                            </button> 
-                          </td>   
-                          </tr>  
-                        @endforeach 
-                        @foreach($form_approval->user_info->emp_ob as $ob_file)
-                          <tr>
-                            <td>{{$form_approval->user_info->name}}</td>
-                            <td>Official Business</td>     
-                            <td>{{date('M d, Y', strtotime($ob_file->date_from))}} - {{date('M d, Y', strtotime($ob_file->date_to))}}</td>
-                            <td>{{$ob_file->remarks}}</td>
-                            <td><a href="{{url($ob_file->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a></td>
-                            <td>
-                              <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#applyovertime">
-                              <i class="ti-check btn-icon-prepend"></i>                                                    
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#applyovertime">
-                              <i class="ti-close btn-icon-prepend"></i>                                                    
-                            </button> 
-                          </td>   
-                          </tr>  
-                        @endforeach
-                        @foreach($form_approval->user_info->emp_dtr as $dtr_file)
-                          <tr>
-                            <td>{{$form_approval->user_info->name}}</td>
-                            <td>DTR Correction</td>     
-                            <td>{{date('M d, Y', strtotime($dtr_file->dtr_date))}}</td>
-                            <td>{{$dtr_file->remarks}}</td>
-                            <td><a href="{{url($dtr_file->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a></td>
-                            <td>
-                              <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#applyovertime">
-                              <i class="ti-check btn-icon-prepend"></i>                                                    
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#applyovertime">
-                              <i class="ti-close btn-icon-prepend"></i>                                                    
-                            </button> 
-                          </td>   
-                          </tr>  
-                        @endforeach                                                                                                 
-                      @endforeach                                                        
+                            @endif<br> 
+                          @endforeach
+
+                          
+                        </td>
+                        </tr>
+                      @endforeach                        
                     </tbody>
                   </table>
                 </div>
@@ -164,5 +115,85 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('LeaveScript')
+	<script>
+		function approve(id) {
+			var element = document.getElementById('tdActionId'+id);
+			var dataID = element.getAttribute('data-id');
+			swal({
+					title: "Are you sure?",
+					text: "You want to approve this leave?",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willApprove) => {
+					if (willApprove) {
+						document.getElementById("loader").style.display = "block";
+						$.ajax({
+							url: "approve-leave/" + id,
+							method: "GET",
+							data: {
+								id: id
+							},
+							headers: {
+								'X-CSRF-TOKEN': '{{ csrf_token() }}'
+							},
+							success: function(data) {
+								document.getElementById("loader").style.display = "none";
+								swal("Leave has been Approved!", {
+									icon: "success",
+								}).then(function() {
+									location.reload();
+								});
+							}
+						})
+
+					} else {
+            swal({text:"You stop the approval of leave.",icon:"success"});
+					}
+				});
+		}
+		function decline(id) {
+			var element = document.getElementById('tdActionId'+id);
+			var dataID = element.getAttribute('data-id');
+			swal({
+					title: "Are you sure?",
+					text: "You want to decline this leave?",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willDecline) => {
+					if (willDecline) {
+						document.getElementById("loader").style.display = "block";
+						$.ajax({
+							url: "decline-leave/" + id,
+							method: "GET",
+							data: {
+								id: id
+							},
+							headers: {
+								'X-CSRF-TOKEN': '{{ csrf_token() }}'
+							},
+							success: function(data) {
+								document.getElementById("loader").style.display = "none";
+								swal("Leave has been declined!", {
+									icon: "success",
+								}).then(function() {
+									location.reload();
+								});
+							}
+						})
+
+					} else {
+            swal({text:"You stop the approval of leave.",icon:"success"});
+					}
+				});
+		}
+
+	</script>
 @endsection
 

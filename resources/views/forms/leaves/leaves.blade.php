@@ -90,7 +90,7 @@
                         <th>Leave Type</th>
                         <th>with Pay </th>
                         <th>Reason </th>
-                        <th>Leave Count </th>
+                        <th>Leave Count</th>
                         <th>Approvers </th>
                         <th>Status </th>
                         <th>Action </th>
@@ -112,28 +112,29 @@
                         <td>{{get_count_days($employee_leave->schedule,$employee_leave->date_from,$employee_leave->date_to)}}</td>
                         <td id="tdStatus{{ $employee_leave->id }}">
                             @foreach($employee_leave->approver as $approver)
-                              @if($employee_leave->level < $approver->level)
-                              {{$approver->approver_data->name}} -  <label class="badge badge-success">Approved</label>
+                              @if($employee_leave->level >= $approver->level)
+                              {{$approver->approver_data->name}} -  <label class="badge badge-success mt-1">Approved</label>
                               @else
-                              {{$approver->approver_data->name}} -  <label class="badge badge-warning">Pending</label>
+                              {{$approver->approver_data->name}} -  <label class="badge badge-warning mt-1">Pending</label>
                               @endif<br> 
                             @endforeach
                         </td>
                         <td id="tdStatus{{ $employee_leave->id }}">
                           @if ($employee_leave->status == 'Pending')
-                            <label class="badge badge-warning">{{ $employee_leave->status }}</label>
+                            <label class="badge badge-warning  mt-1">{{ $employee_leave->status }}</label>
                           @elseif($employee_leave->status == 'Approved')
-                            <label class="badge badge-success">{{ $employee_leave->status }}</label>
+                            <label class="badge badge-success mt-1">{{ $employee_leave->status }}</label>
                           @elseif($employee_leave->status == 'Rejected' or $employee_leave->status == 'Cancelled')
-                            <label class="badge badge-danger">{{ $employee_leave->status }}</label>
+                            <label class="badge badge-danger  mt-1">{{ $employee_leave->status }}</label>
                           @endif                        
                         </td>
                         <td id="tdActionId{{ $employee_leave->id }}" data-id="{{ $employee_leave->id }}">
-                          @if ($employee_leave->status == 'Pending' and $employee_leave->level == 1)
-                          <button type="button" id="view{{ $employee_leave->id }}" class="btn btn-primary btn-rounded btn-icon"
-                            data-target="#view_leave{{ $employee_leave->id }}" data-toggle="modal" title='View'>
-                            <i class="ti-eye"></i>
-                          </button>            
+
+                          @if ($employee_leave->status == 'Pending' && $employee_leave->level == 0)
+                            <button type="button" id="view{{ $employee_leave->id }}" class="btn btn-primary btn-rounded btn-icon"
+                              data-target="#view_leave{{ $employee_leave->id }}" data-toggle="modal" title='View'>
+                              <i class="ti-eye"></i>
+                            </button>            
                             <button type="button" id="edit{{ $employee_leave->id }}" class="btn btn-info btn-rounded btn-icon"
                               data-target="#edit_leave{{ $employee_leave->id }}" data-toggle="modal" title='Edit'>
                               <i class="ti-pencil-alt"></i>
@@ -142,7 +143,7 @@
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
                             </button>
-                          @elseif ($employee_leave->status == 'Pending' and $employee_leave->level > 1)
+                          @elseif ($employee_leave->status == 'Pending' and $employee_leave->level == 1)
                             <button type="button" id="view{{ $employee_leave->id }}" class="btn btn-primary btn-rounded btn-icon"
                               data-target="#view_leave{{ $employee_leave->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
@@ -152,14 +153,10 @@
                                 <i class="fa fa-ban"></i>
                               </button>
                           @elseif ($employee_leave->status == 'Approved')   
-                          <button type="button" id="view{{ $employee_leave->id }}" class="btn btn-primary btn-rounded btn-icon"
-                            data-target="#view_leave{{ $employee_leave->id }}" data-toggle="modal" title='View'>
-                            <i class="ti-eye"></i>
-                          </button>                            
-                            <button title='Cancel' id="{{ $employee_leave->id }}" onclick="cancel(this.id)"
-                              class="btn btn-rounded btn-danger btn-icon">
-                              <i class="fa fa-ban"></i>
-                            </button>  
+                            <button type="button" id="view{{ $employee_leave->id }}" class="btn btn-primary btn-rounded btn-icon"
+                              data-target="#view_leave{{ $employee_leave->id }}" data-toggle="modal" title='View'>
+                              <i class="ti-eye"></i>
+                            </button>                            
                           @else
                             <button type="button" id="view{{ $employee_leave->id }}" class="btn btn-primary btn-rounded btn-icon"
                               data-target="#view_leave{{ $employee_leave->id }}" data-toggle="modal" title='View'>

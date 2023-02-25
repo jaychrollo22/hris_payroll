@@ -9,6 +9,9 @@ use App\LeaveBalance;
 use App\Employee;
 use Illuminate\Http\Request;
 
+use App\Exports\EmployeeLeaveExport;
+use Excel;
+
 class LeaveController extends Controller
 {
     //
@@ -34,11 +37,32 @@ class LeaveController extends Controller
             )
         );
     }
-    public function leave_report()
+    public function leave_report(Request $request)
     {
+        $from = isset($request->from) ? $request->from : "";
+        $to =  isset($request->to) ? $request->to : "";
+        $employee_leaves = [];
+        if(isset($request->from) && isset($request->to)){
+            $employee_leaves = EmployeeLeave::with('user','leave')
+                                        ->whereDate('approved_date','>=',$from)
+                                        ->whereDate('approved_date','<=',$to)
+                                        ->where('status','Approved')
+                                        ->get();
+        }
+        
+
         return view('reports.leave_report', array(
             'header' => 'reports',
+            'from'=>$from,
+            'to'=>$to,
+            'employee_leaves' => $employee_leaves
         ));
+    }
+
+    public function export(Request $request){
+        $from = isset($request->from) ? $request->from : "";
+        $to =  isset($request->to) ? $request->to : "";
+        return Excel::download(new EmployeeLeaveExport($from,$to), 'Leave Export.xlsx');
     }
 
     public function leaveBalances()
@@ -56,7 +80,7 @@ class LeaveController extends Controller
             'leave_balances' => $leave_balances,
             'all_approvers' => $all_approvers,
             'employee_leaves' => $employee_leaves,
-            'leave_types' => $leave_types,
+            'leave_types' => $leave_types
         ));
     }    
 

@@ -358,7 +358,7 @@
                             <span class="menu-title">Loans</span>
                         </a>
                     </li>
-                    @if (auth()->user()->subbordinates->count() != 0)
+                    @if (auth()->user()->employee_under->count() != 0)
                     <li class="nav-item">
                         <hr>
                         <h5>Manager</h5>

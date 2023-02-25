@@ -59,7 +59,7 @@ class EmployeeLeaveController extends Controller
         }
         
         $new_leave->status = 'Pending';
-        $new_leave->level = 1;
+        $new_leave->level = 0;
         $new_leave->created_by = Auth::user()->id;
         $new_leave->save();
 
@@ -87,9 +87,8 @@ class EmployeeLeaveController extends Controller
             $new_leave->attachment = $file_name;
         }
         $new_leave->status = 'Pending';
-        $new_leave->level = 1;
+        $new_leave->level = 0;
         $new_leave->created_by = Auth::user()->id;
-        // dd($new_leave);
         $new_leave->save();
 
         Alert::success('Successfully Updated')->persistent('Dismiss');
