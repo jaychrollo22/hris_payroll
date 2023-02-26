@@ -75,9 +75,17 @@
                         <td id="tdStatus{{ $form_approval->id }}">
                           @foreach($form_approval->approver as $approver)
                             @if($form_approval->level >= $approver->level)
-                            {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                              @if ($form_approval->level == 0 && $form_approval->status == 'Declined')
+                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                              @endif
                             @else
-                            {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                              @if ($form_approval->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                              @endif
                             @endif<br> 
                           @endforeach
                         </td>
@@ -86,7 +94,7 @@
                             <label class="badge badge-warning">{{ $form_approval->status }}</label>
                           @elseif($form_approval->status == 'Approved')
                             <label class="badge badge-success">{{ $form_approval->status }}</label>
-                          @elseif($form_approval->status == 'Rejected' || $form_approval->status == 'Cancelled')
+                          @elseif($form_approval->status == 'Declined' || $form_approval->status == 'Cancelled')
                             <label class="badge badge-danger">{{ $form_approval->status }}</label>
                           @endif  
                         </td>
@@ -122,7 +130,7 @@
   @include('for-approval.add-approve-hrs')
 @endforeach 
 
-@section('LeaveScript')
+@section('ForApprovalScript')
 	<script>
 		function decline(id) {
 			var element = document.getElementById('tdActionId'+id);

@@ -42,8 +42,8 @@ class EmployeeLeaveExport implements FromQuery, WithHeadings, WithMapping
             'Form Type',
             'From',
             'To',
-            'Status',
             'Approved Date',
+            'Status',
             'Reason/Remarks',
         ];
     }
@@ -56,8 +56,8 @@ class EmployeeLeaveExport implements FromQuery, WithHeadings, WithMapping
             $employee_leave->leave->leave_type,
             date('d/m/Y',strtotime($employee_leave->date_to)),
             date('d/m/Y',strtotime($employee_leave->date_from)),
-            $employee_leave->status,
             date('d/m/Y',strtotime($employee_leave->approved_date)),
+            $employee_leave->status,
             $employee_leave->reason
         ];
     }

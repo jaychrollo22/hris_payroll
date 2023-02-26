@@ -495,6 +495,7 @@
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/employee-report') }}">Employees</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/leave-report') }}">Leave Reports</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/overtime-report') }}">Overtime Reports</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url('/wfh-report') }}">WFH Reports</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li>
@@ -747,6 +748,7 @@
     @yield('wfhScript')
     @yield('obScript')
     @yield('dtrScript')
+    @yield('ForApprovalScript')
 
     @yield('loanRegScripts')
     @yield('empAllowScript')

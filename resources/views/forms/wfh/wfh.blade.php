@@ -17,8 +17,8 @@
                   <table class="table table-hover table-bordered tablewithSearch">
                     <thead>
                       <tr>
-                        <th>WFH Date</th>
                         <th>Date Filed</th>
+                        <th>WFH Date</th>
                         <th>WFH Count (Days)</th>
                         <th>Remarks</th>
                         <th>Status</th>
@@ -28,8 +28,8 @@
                     <tbody>
                       @foreach ($wfhs as $wfh)
                       <tr>
-                        <td> {{ date('M. d, Y ', strtotime($wfh->date_from)) }} - {{ date('M. d, Y ', strtotime($wfh->date_to)) }}  </td>
-                        <td> {{ date('M. d, Y ', strtotime($wfh->created_at)) }}</td>
+                        <td> {{ date('d/m/Y', strtotime($wfh->created_at)) }}</td>
+                        <td> {{ date('d/m/Y', strtotime($wfh->date_from)) }} - {{ date('d/m/Y', strtotime($wfh->date_to)) }}  </td>
                         <td>{{get_count_days($wfh->schedule,$wfh->date_from,$wfh->date_to)}}</td>
                         <td>{{ $wfh->remarks }}</td>
                         <td id="tdStatus{{ $wfh->id }}">
@@ -37,12 +37,12 @@
                             <label class="badge badge-warning">{{ $wfh->status }}</label>
                           @elseif($wfh->status == 'Approved')
                             <label class="badge badge-success">{{ $wfh->status }}</label>
-                          @elseif($wfh->status == 'Rejected' or $wfh->status == 'Cancelled')
+                          @elseif($wfh->status == 'Declined' or $wfh->status == 'Cancelled')
                             <label class="badge badge-danger">{{ $wfh->status }}</label>
                           @endif                        
                         </td>
                         <td id="tdActionId{{ $wfh->id }}" data-id="{{ $wfh->id }}">
-                          @if ($wfh->status == 'Pending' and $wfh->level == 1)
+                          @if ($wfh->status == 'Pending' and $wfh->level == 0)
                           <button type="button" id="view{{ $wfh->id }}" class="btn btn-primary btn-rounded btn-icon"
                             data-target="#view_wfh{{ $wfh->id }}" data-toggle="modal" title='View'>
                             <i class="ti-eye"></i>
@@ -60,19 +60,15 @@
                               data-target="#view_wfh{{ $wfh->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
                             </button>            
-                              <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel(this.id)"
-                                class="btn btn-rounded btn-danger btn-icon">
-                                <i class="fa fa-ban"></i>
-                              </button>
-                          @elseif ($wfh->status == 'Approved')   
-                          <button type="button" id="view{{ $wfh->id }}" class="btn btn-primary btn-rounded btn-icon"
-                            data-target="#view_wfh{{ $wfh->id }}" data-toggle="modal" title='View'>
-                            <i class="ti-eye"></i>
-                          </button>                            
                             <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel(this.id)"
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
-                            </button>  
+                            </button>
+                          @elseif ($wfh->status == 'Approved')   
+                            <button type="button" id="view{{ $wfh->id }}" class="btn btn-primary btn-rounded btn-icon"
+                              data-target="#view_wfh{{ $wfh->id }}" data-toggle="modal" title='View'>
+                              <i class="ti-eye"></i>
+                            </button>                            
                           @else
                             <button type="button" id="view{{ $wfh->id }}" class="btn btn-primary btn-rounded btn-icon"
                               data-target="#view_wfh{{ $wfh->id }}" data-toggle="modal" title='View'>
@@ -105,6 +101,7 @@ function get_count_days($data,$date_from,$date_to)
           $count= $count+1;
       }
     }
+
     return($count);
  } 
 @endphp  

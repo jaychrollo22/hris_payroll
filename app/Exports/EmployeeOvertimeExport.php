@@ -33,23 +33,17 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
 
     public function headings(): array
     {
-
-        // <th>Date Filed</th>
-        // <th>OT Date</th> 
-        // <th>OT Time</th> 
-        // <th>OT Requested (Hrs)</th>
-        // <th>OT Approved (Hrs)</th>
-        // <th>Remarks </th>
-        // <th>Approvers </th>
-        // <th>Status </th>
         return [
             'User ID',
             'Employee Name',
             'Date Filed',
             'OT Date',
-            'OT Time',
+            'OT Start Time',
+            'OT End Time',
             'OT Requested',
             'OT Approved',
+            'Approved Date',
+            'Status',
             'Remarks',
         ];
     }
@@ -61,9 +55,12 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
             $employee_leave->user->name,
             date('d/m/Y', strtotime($employee_leave->created_at)),
             date('d/m/Y',strtotime($employee_leave->ot_date)),
-            date('h:i A', strtotime($employee_leave->start_time)) . '-' . date('h:i A', strtotime($employee_leave->end_time)),
+            date('H:i', strtotime($employee_leave->start_time)),
+            date('H:i', strtotime($employee_leave->end_time)),
             intval((strtotime($employee_leave->end_time)-strtotime($employee_leave->start_time))/60/60),
             $employee_leave->ot_approved_hrs,
+            date('d/m/Y',strtotime($employee_leave->approved_date)),
+            $employee_leave->status,
             $employee_leave->remarks
         ];
     }

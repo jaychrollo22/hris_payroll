@@ -34,7 +34,7 @@
               <input type="date" name='date_to' value="{{$wfh->date_to}}" class="form-control" required>
             </div>
           </div>
-          <div class="form-group task">
+          {{-- <div class="form-group task">
             <div class='row mb-2' id='task_1'>
               <div class='col-md-2 text-right'  >
                 <button type="button" onclick='add_task();' class="btn btn-success btn-rounded btn-icon">
@@ -48,7 +48,7 @@
                 @endforeach
               </div>
             </div>
-          </div>
+          </div> --}}
           <div class="form-group row">
             <div class='col-md-2'>
                Remarks
@@ -67,7 +67,10 @@
           </div>
       </div>
       <div class="modal-footer">
-        <a href="{{url($wfh->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-info btn-fw ">View Attachment</button></a>
+        @if($wfh->attachment)
+          <a href="{{url($wfh->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-info btn-fw ">View Attachment</button></a>
+        @endif
+        
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Save</button>
       </div>

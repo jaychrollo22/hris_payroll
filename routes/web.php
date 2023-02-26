@@ -50,6 +50,7 @@ Route::group(['middleware' => 'auth'], function () {
     //Work-from-home
     Route::get('work-from-home', 'EmployeeWfhController@wfh');
     Route::post('new-wfh','EmployeeWfhController@new');
+    Route::post('edit-wfh/{id}','EmployeeWfhController@edit_wfh');
 
     //official-business
     Route::get('official-business', 'EmployeeObController@ob');
@@ -71,6 +72,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('for-overtime','FormApprovalController@form_overtime_approval');
     Route::post('approve-ot-hrs/{employee_overtime}','FormApprovalController@approveOvertime');
     Route::get('decline-overtime/{id}','FormApprovalController@declineOvertime');
+
+    Route::get('for-work-from-home','FormApprovalController@form_wfh_approval');
+    Route::get('approve-wfh/{id}','FormApprovalController@approveWfh');
+    Route::get('decline-wfh/{id}','FormApprovalController@declineWfh');
 
     //employees
     Route::get('employees', 'EmployeeController@view');
@@ -195,6 +200,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('payroll-report', 'PayrollController@payroll_report');
     Route::get('overtime-report', 'OvertimeController@overtime_report');
     Route::get('overtime-report-export', 'OvertimeController@export');
+    Route::get('wfh-report', 'WorkfromhomeController@wfh_report');
+    Route::get('wfh-report-export', 'WorkfromhomeController@export');
 
 
 

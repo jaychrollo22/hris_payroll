@@ -45,7 +45,9 @@
                    Attachment
                 </div>
                 <div class='col-md-2'>
-                  <a href="{{url($wfh->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-info btn-fw ">View Attachment</button></a>
+                  @if($wfh->attachment)
+                    <a href="{{url($wfh->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-info btn-fw ">View Attachment</button></a>
+                  @endif
               </div>          
               </div>
         </div>

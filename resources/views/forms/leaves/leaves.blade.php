@@ -205,7 +205,7 @@ function get_count_days($data,$date_from,$date_to)
 @include('forms.leaves.apply_leave') 
 @endsection
 
-@section('LeaveScript')
+@section('ForApprovalScript')
 	<script>
 		function cancel(id) {
 			var element = document.getElementById('tdActionId'+id);

@@ -159,4 +159,78 @@ class FormApprovalController extends Controller
         Alert::success('Leave has been declined.')->persistent('Dismiss');
         return back();
     }
+
+
+    public function form_wfh_approval(Request $request)
+    { 
+        $filter_status = isset($request->status) ? $request->status : 'Pending';
+        $approver_id = auth()->user()->id;
+        $wfhs = EmployeeWfh::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status',$filter_status)
+                                ->orderBy('created_at','DESC')
+                                ->get();
+
+        $for_approval = EmployeeWfh::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status','Pending')
+                                ->count();
+        $approved = EmployeeWfh::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status','Approved')
+                                ->count();
+        $declined = EmployeeWfh::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status','Declined')
+                                ->count();
+        
+        return view('for-approval.wfh-approval',
+        array(
+            'header' => 'for-approval',
+            'wfhs' => $wfhs,
+            'for_approval' => $for_approval,
+            'approved' => $approved,
+            'declined' => $declined,
+            'approver_id' => $approver_id,
+        ));
+
+    }
+
+    public function approveWfh($id){
+
+        $employee_wfh = EmployeeWfh::where('id', $id)
+                                            ->first();
+
+        if($employee_wfh){
+            $level = '';
+            if($employee_wfh->level == 0){
+                EmployeeWfh::Where('id', $id)->update([
+                    'level' => 1,
+                ]);
+            }
+            else if($employee_wfh->level == 1){
+                EmployeeWfh::Where('id', $id)->update([
+                    'approved_date' => date('Y-m-d'),
+                    'status' => 'Approved',
+                    'level' => 2,
+                ]);
+            }
+            Alert::success('Wfh has been approved.')->persistent('Dismiss');
+            return back();
+        }
+    }
+
+    public function declineWfh($id){
+        EmployeeWfh::Where('id', $id)->update(['status' => 'Declined',]);
+        Alert::success('Wfh has been declined.')->persistent('Dismiss');
+        return back();
+    }
 }
