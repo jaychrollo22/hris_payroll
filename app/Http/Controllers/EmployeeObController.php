@@ -36,14 +36,16 @@ class EmployeeObController extends Controller
         $new_ob->remarks = $request->remarks;
         $new_ob->destination = $request->destination;
         $new_ob->persontosee = $request->persontosee;
-        $logo = $request->file('attachment');
-        $original_name = $logo->getClientOriginalName();
-        $name = time() . '_' . $logo->getClientOriginalName();
-        $logo->move(public_path() . '/images/', $name);
-        $file_name = '/images/' . $name;
-        $new_ob->attachment = $file_name;
+        if($request->file('attachment')){
+            $logo = $request->file('attachment');
+            $original_name = $logo->getClientOriginalName();
+            $name = time() . '_' . $logo->getClientOriginalName();
+            $logo->move(public_path() . '/images/', $name);
+            $file_name = '/images/' . $name;
+            $new_ob->attachment = $file_name;
+        }
         $new_ob->status = 'Pending';
-        $new_ob->level = 1;
+        $new_ob->level = 0;
         $new_ob->created_by = Auth::user()->id;
         $new_ob->save();
     
@@ -70,7 +72,7 @@ class EmployeeObController extends Controller
             $new_ob->attachment = $file_name;
         }
         $new_ob->status = 'Pending';
-        $new_ob->level = 1;
+        $new_ob->level = 0;
         $new_ob->created_by = Auth::user()->id;
         $new_ob->save();
 

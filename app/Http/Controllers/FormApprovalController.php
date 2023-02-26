@@ -233,4 +233,77 @@ class FormApprovalController extends Controller
         Alert::success('Wfh has been declined.')->persistent('Dismiss');
         return back();
     }
+
+    public function form_ob_approval(Request $request)
+    { 
+        $filter_status = isset($request->status) ? $request->status : 'Pending';
+        $approver_id = auth()->user()->id;
+        $obs = EmployeeOb::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status',$filter_status)
+                                ->orderBy('created_at','DESC')
+                                ->get();
+
+        $for_approval = EmployeeOb::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status','Pending')
+                                ->count();
+        $approved = EmployeeOb::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status','Approved')
+                                ->count();
+        $declined = EmployeeOb::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status','Declined')
+                                ->count();
+        
+        return view('for-approval.ob-approval',
+        array(
+            'header' => 'for-approval',
+            'obs' => $obs,
+            'for_approval' => $for_approval,
+            'approved' => $approved,
+            'declined' => $declined,
+            'approver_id' => $approver_id,
+        ));
+
+    }
+
+    public function approveOb($id){
+
+        $employee_ob = EmployeeOb::where('id', $id)
+                                            ->first();
+
+        if($employee_ob){
+            $level = '';
+            if($employee_ob->level == 0){
+                EmployeeOb::Where('id', $id)->update([
+                    'level' => 1,
+                ]);
+            }
+            else if($employee_ob->level == 1){
+                EmployeeOb::Where('id', $id)->update([
+                    'approved_date' => date('Y-m-d'),
+                    'status' => 'Approved',
+                    'level' => 2,
+                ]);
+            }
+            Alert::success('OB has been approved.')->persistent('Dismiss');
+            return back();
+        }
+    }
+
+    public function declineOb($id){
+        EmployeeOb::Where('id', $id)->update(['status' => 'Declined',]);
+        Alert::success('OB has been declined.')->persistent('Dismiss');
+        return back();
+    }
 }

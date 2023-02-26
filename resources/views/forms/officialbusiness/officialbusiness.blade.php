@@ -22,6 +22,7 @@
                         <th>Destination</th>
                         <th>Person/Company to see</th>
                         <th>Purpose</th>
+                        <th>Approvers </th>
                         <th>Status </th>
                         <th>Action </th>
                       </tr>
@@ -35,6 +36,15 @@
                         <td> {{$ob->persontosee}}</td>
                         <td> {{$ob->remarks}}</td>
                         <td id="tdStatus{{ $ob->id }}">
+                          @foreach($ob->approver as $approver)
+                            @if($ob->level >= $approver->level)
+                            {{$approver->approver_data->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                            @else
+                            {{$approver->approver_data->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                            @endif<br> 
+                          @endforeach
+                      </td>
+                        <td id="tdStatus{{ $ob->id }}">
                           @if ($ob->status == 'Pending')
                             <label class="badge badge-warning">{{ $ob->status }}</label>
                           @elseif($ob->status == 'Approved')
@@ -44,7 +54,7 @@
                           @endif                        
                         </td>
                         <td id="tdActionId{{ $ob->id }}" data-id="{{ $ob->id }}">
-                          @if ($ob->status == 'Pending' and $ob->level == 1)
+                          @if ($ob->status == 'Pending' and $ob->level == 0)
                           <button type="button" id="view{{ $ob->id }}" class="btn btn-primary btn-rounded btn-icon"
                             data-target="#view_ob{{ $ob->id }}" data-toggle="modal" title='View'>
                             <i class="ti-eye"></i>
@@ -57,7 +67,7 @@
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
                             </button>
-                          @elseif ($ob->status == 'Pending' and $ob->level > 1)
+                          @elseif ($ob->status == 'Pending' and $ob->level > 0)
                             <button type="button" id="view{{ $ob->id }}" class="btn btn-primary btn-rounded btn-icon"
                               data-target="#view_ob{{ $ob->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>

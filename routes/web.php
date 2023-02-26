@@ -76,6 +76,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('for-work-from-home','FormApprovalController@form_wfh_approval');
     Route::get('approve-wfh/{id}','FormApprovalController@approveWfh');
     Route::get('decline-wfh/{id}','FormApprovalController@declineWfh');
+    
+    Route::get('for-official-business','FormApprovalController@form_ob_approval');
+    Route::get('approve-ob/{id}','FormApprovalController@approveOb');
+    Route::get('decline-ob/{id}','FormApprovalController@declineOb');
 
     //employees
     Route::get('employees', 'EmployeeController@view');
@@ -203,14 +207,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('wfh-report', 'WorkfromhomeController@wfh_report');
     Route::get('wfh-report-export', 'WorkfromhomeController@export');
 
-
+    Route::get('ob-report', 'OfficialbusinessController@ob_report');
+    Route::get('ob-report-export', 'OfficialbusinessController@export');
 
     //13th month
     Route::get('month-benefit', 'PayslipController@monthly_benefit');
 
     // Employee Leave Credits
     Route::get('employee-leave-credits', 'LeaveCreditsController@index');
-
 
     //User
     Route::get('/users','UserController@index');
