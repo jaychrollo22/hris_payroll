@@ -49,14 +49,18 @@ class EmployeeDtrController extends Controller
             $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;
         }        
         $new_dtr->remarks = $request->remarks;
-        $logo = $request->file('attachment');
-        $original_name = $logo->getClientOriginalName();
-        $name = time() . '_' . $logo->getClientOriginalName();
-        $logo->move(public_path() . '/images/', $name);
-        $file_name = '/images/' . $name;
-        $new_dtr->attachment = $file_name;
+        
+        if($request->file('attachment')){
+            $logo = $request->file('attachment');
+            $original_name = $logo->getClientOriginalName();
+            $name = time() . '_' . $logo->getClientOriginalName();
+            $logo->move(public_path() . '/images/', $name);
+            $file_name = '/images/' . $name;
+            $new_dtr->attachment = $file_name;
+        }
+        
         $new_dtr->status = 'Pending';
-        $new_dtr->level = 1;
+        $new_dtr->level = 0;
         $new_dtr->created_by = Auth::user()->id;
         // dd($new_dtr);
         $new_dtr->save();
@@ -89,16 +93,18 @@ class EmployeeDtrController extends Controller
             $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;
         }       
         $new_dtr->remarks = $request->remarks;
-        $logo = $request->file('attachment');
-        if(isset($logo)){
+
+        if($request->file('attachment')){
+            $logo = $request->file('attachment');
             $original_name = $logo->getClientOriginalName();
             $name = time() . '_' . $logo->getClientOriginalName();
             $logo->move(public_path() . '/images/', $name);
             $file_name = '/images/' . $name;
             $new_dtr->attachment = $file_name;
         }
+        
         $new_dtr->status = 'Pending';
-        $new_dtr->level = 1;
+        $new_dtr->level = 0;
         $new_dtr->created_by = Auth::user()->id;
         // dd($new_dtr);
         $new_dtr->save();

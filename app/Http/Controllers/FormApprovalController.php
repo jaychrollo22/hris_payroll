@@ -306,4 +306,74 @@ class FormApprovalController extends Controller
         Alert::success('OB has been declined.')->persistent('Dismiss');
         return back();
     }
+
+    public function form_dtr_approval(Request $request)
+    { 
+        $filter_status = isset($request->status) ? $request->status : 'Pending';
+        $approver_id = auth()->user()->id;
+        $dtrs = EmployeeDtr::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status',$filter_status)
+                                ->orderBy('created_at','DESC')
+                                ->get();
+
+        $for_approval = EmployeeDtr::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status','Pending')
+                                ->count();
+        $approved = EmployeeDtr::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status','Approved')
+                                ->count();
+        $declined = EmployeeDtr::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status','Declined')
+                                ->count();
+        
+        return view('for-approval.dtr-approval',
+        array(
+            'header' => 'for-approval',
+            'dtrs' => $dtrs,
+            'for_approval' => $for_approval,
+            'approved' => $approved,
+            'declined' => $declined,
+            'approver_id' => $approver_id,
+        ));
+
+    }
+
+    public function approveDtr($id){
+        $employee_ob = EmployeeDtr::where('id', $id)->first();
+        if($employee_ob){
+            $level = '';
+            if($employee_ob->level == 0){
+                EmployeeDtr::Where('id', $id)->update([
+                    'level' => 1,
+                ]);
+            }
+            else if($employee_ob->level == 1){
+                EmployeeDtr::Where('id', $id)->update([
+                    'approved_date' => date('Y-m-d'),
+                    'status' => 'Approved',
+                    'level' => 2,
+                ]);
+            }
+            Alert::success('DTR has been approved.')->persistent('Dismiss');
+            return back();
+        }
+    }
+
+    public function declineDtr($id){
+        EmployeeDtr::Where('id', $id)->update(['status' => 'Declined',]);
+        Alert::success('DTR has been declined.')->persistent('Dismiss');
+        return back();
+    }
 }

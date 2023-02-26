@@ -497,6 +497,7 @@
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/overtime-report') }}">Overtime Reports</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/wfh-report') }}">WFH Reports</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/ob-report') }}">OB Reports</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url('/dtr-report') }}">DTR Reports</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li>

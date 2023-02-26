@@ -81,6 +81,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('approve-ob/{id}','FormApprovalController@approveOb');
     Route::get('decline-ob/{id}','FormApprovalController@declineOb');
 
+    Route::get('for-dtr-correction','FormApprovalController@form_dtr_approval');
+    Route::get('approve-dtr/{id}','FormApprovalController@approveDtr');
+    Route::get('decline-dtr/{id}','FormApprovalController@declineDtr');
+
     //employees
     Route::get('employees', 'EmployeeController@view');
     Route::get('employees-export', 'EmployeeController@export');
@@ -206,9 +210,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('overtime-report-export', 'OvertimeController@export');
     Route::get('wfh-report', 'WorkfromhomeController@wfh_report');
     Route::get('wfh-report-export', 'WorkfromhomeController@export');
-
     Route::get('ob-report', 'OfficialbusinessController@ob_report');
     Route::get('ob-report-export', 'OfficialbusinessController@export');
+    Route::get('dtr-report', 'DailytimerecordController@dtr_report');
+    Route::get('dtr-report-export', 'DailytimerecordController@export');
 
     //13th month
     Route::get('month-benefit', 'PayslipController@monthly_benefit');

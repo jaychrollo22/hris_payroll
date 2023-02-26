@@ -62,6 +62,7 @@
                         <th>OT Approved (Hrs)</th>
                         <th>Remarks </th>
                         <th>Status </th>
+                        <th>Approvers </th>
                         <th>Action </th>
                       </tr>
                     </thead>
@@ -83,6 +84,24 @@
                             <label class="badge badge-danger">{{ $overtime->status }}</label>
                           @endif                        
                         </td>
+                        <td>
+                          @foreach($overtime->approver as $approver)
+                            @if($overtime->level >= $approver->level)
+                              @if ($overtime->level == 0 && $overtime->status == 'Declined')
+                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                              @endif
+                            @else
+                              @if ($overtime->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                              @endif
+                            @endif<br>
+                          @endforeach
+                        </td>
+
                         <td id="tdActionId{{ $overtime->id }}" data-id="{{ $overtime->id }}">
                           @if ($overtime->status == 'Pending' and $overtime->level == 0)
                             <button type="button" id="view{{ $overtime->id }}" class="btn btn-primary btn-rounded btn-icon"

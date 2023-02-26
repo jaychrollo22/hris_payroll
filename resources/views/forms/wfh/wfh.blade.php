@@ -22,6 +22,7 @@
                         <th>WFH Count (Days)</th>
                         <th>Remarks</th>
                         <th>Status</th>
+                        <th>Approvers</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -40,6 +41,23 @@
                           @elseif($wfh->status == 'Declined' or $wfh->status == 'Cancelled')
                             <label class="badge badge-danger">{{ $wfh->status }}</label>
                           @endif                        
+                        </td>
+                        <td id="tdStatus{{ $wfh->id }}">
+                          @foreach($wfh->approver as $approver)
+                            @if($wfh->level >= $approver->level)
+                              @if ($wfh->level == 0 && $wfh->status == 'Declined')
+                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                              @endif
+                            @else
+                              @if ($wfh->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                              @endif
+                            @endif<br>
+                          @endforeach
                         </td>
                         <td id="tdActionId{{ $wfh->id }}" data-id="{{ $wfh->id }}">
                           @if ($wfh->status == 'Pending' and $wfh->level == 0)
@@ -68,7 +86,11 @@
                             <button type="button" id="view{{ $wfh->id }}" class="btn btn-primary btn-rounded btn-icon"
                               data-target="#view_wfh{{ $wfh->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
-                            </button>                            
+                            </button>                 
+                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel(this.id)"
+                              class="btn btn-rounded btn-danger btn-icon">
+                              <i class="fa fa-ban"></i>
+                            </button>            
                           @else
                             <button type="button" id="view{{ $wfh->id }}" class="btn btn-primary btn-rounded btn-icon"
                               data-target="#view_wfh{{ $wfh->id }}" data-toggle="modal" title='View'>

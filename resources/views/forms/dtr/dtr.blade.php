@@ -23,6 +23,7 @@
                         <th>Time-in</th>
                         <th>Time-Out</th>
                         <th>Reason</th>
+                        <th>Approvers</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
@@ -45,8 +46,25 @@
                             <label class="badge badge-danger">{{ $dtr->status }}</label>
                           @endif                        
                         </td>
+                        <td id="tdStatus{{ $dtr->id }}">
+                          @foreach($dtr->approver as $approver)
+                            @if($dtr->level >= $approver->level)
+                              @if ($dtr->level == 0 && $dtr->status == 'Declined')
+                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                              @endif
+                            @else
+                              @if ($dtr->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                              @endif
+                            @endif<br>
+                          @endforeach
+                        </td>
                         <td id="tdActionId{{ $dtr->id }}" data-id="{{ $dtr->id }}">
-                          @if ($dtr->status == 'Pending' and $dtr->level == 1)
+                          @if ($dtr->status == 'Pending' and $dtr->level == 0)
                           <button type="button" id="view{{ $dtr->id }}" class="btn btn-primary btn-rounded btn-icon"
                             data-target="#view_dtr{{ $dtr->id }}" data-toggle="modal" title='View'>
                             <i class="ti-eye"></i>
@@ -59,7 +77,7 @@
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
                             </button>
-                          @elseif ($dtr->status == 'Pending' and $dtr->level > 1)
+                          @elseif ($dtr->status == 'Pending' and $dtr->level > 0)
                             <button type="button" id="view{{ $dtr->id }}" class="btn btn-primary btn-rounded btn-icon"
                               data-target="#view_dtr{{ $dtr->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
