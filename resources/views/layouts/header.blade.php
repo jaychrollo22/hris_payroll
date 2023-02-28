@@ -346,7 +346,7 @@
                             </ul>
                         </div>
                     </li>
-                    <li class="nav-item @if ($header == 'payslips') active @endif">
+                    {{-- <li class="nav-item @if ($header == 'payslips') active @endif">
                         <a class="nav-link" href="{{ url('/payslips') }}" onclick='show()'>
                             <i class="icon-briefcase menu-icon"></i>
                             <span class="menu-title">Payslips</span>
@@ -357,7 +357,7 @@
                             <i class="fa fa-money menu-icon"></i>
                             <span class="menu-title">Loans</span>
                         </a>
-                    </li>
+                    </li> --}}
                     @if (auth()->user()->employee_under->count() != 0)
                     <li class="nav-item">
                         <hr>
@@ -435,19 +435,19 @@
                         </div>
                     </li>
 
-                    <li class="nav-item @if ($header == 'Payroll') active @endif">
-                        <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
+                    {{-- <li class="nav-item @if ($header == 'Payroll') active @endif"> --}}
+                        {{-- <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
                             <i class="icon-align-center menu-icon"></i>
                             <span class="menu-title">Payroll</span>
                             <i class="menu-arrow"></i>
-                        </a>
-                        <div class="collapse" id="payroll">
-                            <ul class="nav flex-column sub-menu">
-                                {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a>
-                    </li> --}}
-                    <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-reg') }}">Loan Register</a></li>
-                </ul>
-        </div>
+                        </a> --}}
+                        {{-- <div class="collapse" id="payroll"> --}}
+                            {{-- <ul class="nav flex-column sub-menu"> --}}
+                                {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a> --}}
+                                {{-- </li> --}}
+                                {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-reg') }}">Loan Register</a></li> --}}
+                            {{-- </ul> --}}
+                        {{-- </div> --}}
         </li>
         <li class="nav-item @if ($header == 'masterfiles') active @endif">
             <a class="nav-link" data-toggle="collapse" href="#masterfiles" aria-expanded="false" aria-controls="ui-basic">
@@ -498,10 +498,10 @@
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/wfh-report') }}">WFH Reports</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/ob-report') }}">OB Reports</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/dtr-report') }}">DTR Reports</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ url('/payroll-report') }}">Payroll Reports</a></li>
+                    {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li> --}}
+                    {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li> --}}
+                    {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li> --}}
+                    {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/payroll-report') }}">Payroll Reports</a></li> --}}
                 </ul>
             </div>
         </li>

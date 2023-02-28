@@ -80,9 +80,11 @@ class EmployeeController extends Controller
         $user->status = "Active";
         $user->save();
 
+        $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
+
         $employee = new Employee;
-        $employee->employee_number = $user->id;
-        $employee->employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($request->date_hired)), $company->id);
+        $employee->employee_number = $employee_code;
+        $employee->employee_code = $employee_code;
         $employee->user_id = $user->id;
         $employee->first_name = $request->first_name;
         $employee->middle_name = $request->middle_name;
@@ -121,19 +123,21 @@ class EmployeeController extends Controller
         $employeeCompany->save();
 
         if(isset($request->approver)){
-            $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+            
             $level = 1;
-            foreach($request->approver as  $approver)
-            {
-                $new_approver = new EmployeeApprover;
-                $new_approver->user_id = $employee->user_id;
-                $new_approver->approver_id = $approver;
-                $new_approver->level = $level;
-                $new_approver->save();
-                $level = $level+1;
+            if(count($request->approver) > 0){
+                $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+                foreach($request->approver as  $approver)
+                {
+                    $new_approver = new EmployeeApprover;
+                    $new_approver->user_id = $employee->user_id;
+                    $new_approver->approver_id = $approver;
+                    $new_approver->level = $level;
+                    $new_approver->save();
+                    $level = $level+1;
+                }
             }
         }
-
 
         Alert::success('Successfully Registered')->persistent('Dismiss');
         return back();
@@ -174,36 +178,119 @@ class EmployeeController extends Controller
                                 $user_id = $validate->id;
                             }
                         }
-
+                        $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
                         $employee = new Employee;
                         $employee->user_id = $user_id;
                         $employee->employee_number = $value['employee_number'];
-                        $employee->employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
+                        $employee->employee_code =  $employee_code;
                         $employee->first_name = $value['first_name'];
                         $employee->last_name = $value['last_name'];
                         $employee->middle_name = $value['middle_name'];
-                        $employee->name_suffix = $value['name_suffix'];
-                        $employee->classification = $value['classification'];
-                        $employee->department_id = $value['department_id'];
-                        $employee->company_id = $value['company_id'];
-                        $employee->original_date_hired = $value['original_date_hired'] ? date('Y-m-d',strtotime($value['original_date_hired'])) : "";
+                        $employee->name_suffix = isset($value['name_suffix']) ? $value['name_suffix'] : "";
+                        $employee->classification = isset($value['classification']) ? $value['classification'] : "";
+                        $employee->department_id = isset($value['department_id']) ? $value['department_id'] : "";
+                        $employee->company_id = isset($value['company_id']) ? $value['company_id'] : "";
+                        $employee->original_date_hired = isset($value['original_date_hired']) && $value['original_date_hired'] ? date('Y-m-d',strtotime($value['original_date_hired'])) : "";
+
+                        $employee->position = isset($value['position']) ? $value['position'] : "";
+                        $employee->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
+                        $employee->level = $value['level'];
+                        $employee->date_regularized = isset($value['date_regularized']) && $value['date_regularized'] ? date('Y-m-d',strtotime($value['date_regularized'])) : "";
+                        $employee->date_resigned = isset($value['date_resigned']) && $value['date_resigned'] ? date('Y-m-d',strtotime($value['date_resigned'])) : "";
+                        $employee->birth_date = isset($value['birth_date']) && $value['birth_date'] ? date('Y-m-d',strtotime($value['birth_date'])) : "";
+                        $employee->birth_place = isset($value['birth_place']) ? $value['birth_place'] : "";
+                        $employee->gender = isset($value['gender']) ? $value['gender'] : "";
+                        $employee->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
+                        $employee->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
+                        $employee->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
+                        $employee->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
+                        $employee->phil_number = isset($value['phil_number']) ? $value['phil_number'] : "";
+                        $employee->sss_number = isset($value['phil_number']) ? $value['sss_number'] : "";
+                        $employee->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
+                        $employee->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
+                        $employee->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
+                        $employee->bank_account_number = isset($value['bank_account_number']) ? $value['bank_account_number'] : "";
+                        $employee->personal_email = isset($value['personal_email']) ? $value['personal_email'] : "";
+                        $employee->area = isset($value['area']) ? $value['area'] : "";
+                        $employee->religion = isset($value['religion']) ? $value['religion'] : "";
+                        $employee->schedule_id = 1;
                         $employee->status = "Active";
                         $employee->save();
 
-                        $validate_company = EmployeeCompany::where('schedule_id',$value['employee_number'])->first();
-                        if(empty($validate_company)){
-                            $employeeCompany = new EmployeeCompany;
-                            $employeeCompany->emp_code = $value['employee_number'];
-                            $employeeCompany->schedule_id = 1;
-                            $employeeCompany->company_id = $value['company_id'];
-                            $employeeCompany->save();
-                        }
-
                         $save_count++;
+
                     }else{
+                        $check_if_exist = Employee::where('employee_number',$value['employee_number'])->first();
                         array_push($not_save,$value);
                     }
                     
+                }else{
+
+                    $validate_employee = Employee::where('first_name',$value['first_name'])
+                                                    ->where('last_name',$value['last_name'])
+                                                    ->where('company_id',$value['company_id'])
+                                                    ->first();
+
+                    if(empty($validate_employee)){
+                        $company = Company::findOrfail($value['company_id']);
+                        $user_id = '';
+                        if($value['company_email']){
+                            $validate = User::where('email',$value['company_email'])->first();
+                            if(empty($validate)){
+                                $user = new User;
+                                $user->email = $value['company_email'];
+                                $user->name = $value['first_name'] . " " . $value['last_name'];
+                                $password = strtolower($value['first_name']) . '.'. strtolower($value['last_name']);
+                                $stripped_password = str_replace(' ', '', $password);
+                                $user->password = bcrypt($stripped_password);
+                                $user->status = "Active";
+                                $user->save();
+
+                                $user_id = $user->id;
+                            }else{
+                                $user_id = $validate->id;
+                            }
+                        }
+                        $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
+                        $employee = new Employee;
+                        $employee->user_id = $user_id;
+                        $employee->employee_number = $value['employee_number'];
+                        $employee->employee_code =  $employee_code;
+                        $employee->first_name = $value['first_name'];
+                        $employee->last_name = $value['last_name'];
+                        $employee->middle_name = $value['middle_name'];
+                        $employee->name_suffix = isset($value['name_suffix']) ? $value['name_suffix'] : "";
+                        $employee->classification = isset($value['classification']) ? $value['classification'] : "";
+                        $employee->department_id = isset($value['department_id']) ? $value['department_id'] : "";
+                        $employee->company_id = isset($value['company_id']) ? $value['company_id'] : "";
+                        $employee->original_date_hired = isset($value['original_date_hired']) && $value['original_date_hired'] ? date('Y-m-d',strtotime($value['original_date_hired'])) : "";
+
+                        $employee->position = isset($value['position']) ? $value['position'] : "";
+                        $employee->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
+                        $employee->level = $value['level'];
+                        $employee->date_regularized = isset($value['date_regularized']) && $value['date_regularized'] ? date('Y-m-d',strtotime($value['date_regularized'])) : "";
+                        $employee->date_resigned = isset($value['date_resigned']) && $value['date_resigned'] ? date('Y-m-d',strtotime($value['date_resigned'])) : "";
+                        $employee->birth_date = isset($value['birth_date']) && $value['birth_date'] ? date('Y-m-d',strtotime($value['birth_date'])) : "";
+                        $employee->birth_place = isset($value['birth_place']) ? $value['birth_place'] : "";
+                        $employee->gender = isset($value['gender']) ? $value['gender'] : "";
+                        $employee->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
+                        $employee->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
+                        $employee->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
+                        $employee->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
+                        $employee->phil_number = isset($value['phil_number']) ? $value['phil_number'] : "";
+                        $employee->sss_number = isset($value['phil_number']) ? $value['sss_number'] : "";
+                        $employee->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
+                        $employee->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
+                        $employee->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
+                        $employee->bank_account_number = isset($value['bank_account_number']) ? $value['bank_account_number'] : "";
+                        $employee->personal_email = isset($value['personal_email']) ? $value['personal_email'] : "";
+                        $employee->area = isset($value['area']) ? $value['area'] : "";
+                        $employee->religion = isset($value['religion']) ? $value['religion'] : "";
+                        
+                        $employee->schedule_id = 1;
+                        $employee->status = "Active";
+                        $employee->save();
+                    }
                 }
             }
 
@@ -295,16 +382,19 @@ class EmployeeController extends Controller
         $employee->save();
 
         if(isset($request->approver)){
-            $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+            
             $level = 1;
-            foreach($request->approver as  $approver)
-            {
-                $new_approver = new EmployeeApprover;
-                $new_approver->user_id = $employee->user_id;
-                $new_approver->approver_id = $approver;
-                $new_approver->level = $level;
-                $new_approver->save();
-                $level = $level+1;
+            if(count($request->approver) > 0){
+                $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+                foreach($request->approver as  $approver)
+                {
+                    $new_approver = new EmployeeApprover;
+                    $new_approver->user_id = $employee->user_id;
+                    $new_approver->approver_id = $approver;
+                    $new_approver->level = $level;
+                    $new_approver->save();
+                    $level = $level+1;
+                }
             }
         }
         
