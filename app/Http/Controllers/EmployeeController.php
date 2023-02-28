@@ -381,11 +381,10 @@ class EmployeeController extends Controller
         $employee->bank_account_number = $request->bank_account_number;
         $employee->save();
 
+        $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
         if(isset($request->approver)){
-            
             $level = 1;
             if(count($request->approver) > 0){
-                $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
                 foreach($request->approver as  $approver)
                 {
                     $new_approver = new EmployeeApprover;

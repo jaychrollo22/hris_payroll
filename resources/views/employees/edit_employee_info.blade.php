@@ -229,7 +229,7 @@
   }
   function remove_approver()
   {
-    if($('div.approvers-data div.row').length > 1)
+    if($('div.approvers-data div.row').length > 0)
     {
     var lastItemID = $('.approvers-data').children().last().attr('id');
     $('#'+lastItemID).remove();
