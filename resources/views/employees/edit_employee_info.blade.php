@@ -128,7 +128,7 @@
                       <small class='align-items-center'>{{ $approver->level }}</small>
                     </div>
                     <div class='col-md-11'>
-                      <select data-placeholder="Approver" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='approver[]' required>
+                      <select data-placeholder="Approver" class="form-control form-control-sm js-example-basic-single" style='width:100%;' name='approver[]' required>
                         <option value="">-- Approver --</option>
                           @foreach($users as $user)
                             <option value="{{$user->id}}" @if($user->id == $approver->approver_id) selected @endif>{{$user->name}}</option>
