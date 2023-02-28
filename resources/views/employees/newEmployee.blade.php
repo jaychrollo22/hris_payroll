@@ -207,7 +207,7 @@
                                       <small class='align-items-center'>1</small>
                                     </div>
                                     <div class='col-md-11'>
-                                      <select data-placeholder="Approver" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='approver[]'>
+                                      <select data-placeholder="Approver" class="form-control form-control-sm js-example-basic-single" style='width:100%;' name='approver[]'>
                                         <option value="">-- Approver --</option>
                                           @foreach($users as $user)
                                             <option value="{{$user->id}}">{{$user->name}}</option>
