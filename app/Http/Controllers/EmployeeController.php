@@ -68,79 +68,90 @@ class EmployeeController extends Controller
 
     public function new(Request $request)
     {
-        // dd($request->all());
-        $company = Company::findOrfail($request->company);
-        // dd($company);
-        $user = new User;
-        $user->email = $request->work_email;
-        $user->name = $request->first_name . " " . $request->last_name;
-        $password = strtolower($request->first_name) . '.'. strtolower($request->last_name);
-        $stripped_password = str_replace(' ', '', $password);
-        $user->password = bcrypt($stripped_password);
-        $user->status = "Active";
-        $user->save();
 
-        $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
+        $validate_employee = Employee::where('first_name',$request->first_name)
+                                        ->where('last_name',$request->last_name)
+                                        ->where('company_id',$request->company)
+                                        ->first();
 
-        $employee = new Employee;
-        $employee->employee_number = $employee_code;
-        $employee->employee_code = $employee_code;
-        $employee->user_id = $user->id;
-        $employee->first_name = $request->first_name;
-        $employee->middle_name = $request->middle_name;
-        $employee->last_name = $request->last_name;
-        $employee->classification = $request->classification;
-        $employee->department_id = $request->department;
-        $employee->company_id = $request->company;
-        $employee->position = $request->position;
-        $employee->nick_name = $request->nickname;
-        $employee->level = $request->level;
-        $employee->obanana_date_hired = $request->date_hired;
-        $employee->birth_date = $request->birthdate;
-        $employee->birth_place = $request->birthplace;
-        $employee->marital_status = $request->marital_status;
-        $employee->status = "Active";
-        $employee->present_address = $request->present_address;
-        $employee->permanent_address = ($request->permanent_address == '') ? $request->present_address : $request->permanent_address;
-        $employee->personal_number = $request->personal_number;
-        $employee->phil_number = $request->philhealth;
-        $employee->sss_number = $request->sss;
-        $employee->tax_number = $request->tin;
-        $employee->hdmf_number = $request->pagibig;
-        $employee->original_date_hired = $request->date_hired;
-        $employee->personal_email = $request->personal_email;
-        $employee->immediate_sup = $request->immediate_supervisor;
-        $employee->schedule_id = $request->schedule;
-        $employee->middle_initial = $request->middile_initial;
-        $employee->name_suffix = $request->suffix;
-        $employee->religion = $request->religion;
-        $employee->save();
+        if(empty($validate_employee)){
 
-        $employeeCompany = new EmployeeCompany;
-        $employeeCompany->emp_code = $request->biometric_code;
-        $employeeCompany->schedule_id = 1;
-        $employeeCompany->company_id = $request->company;
-        $employeeCompany->save();
+            $company = Company::findOrfail($request->company);
+            // dd($company);
+            $user = new User;
+            $user->email = $request->work_email;
+            $user->name = $request->first_name . " " . $request->last_name;
+            $password = strtolower($request->first_name) . '.'. strtolower($request->last_name);
+            $stripped_password = str_replace(' ', '', $password);
+            $user->password = bcrypt($stripped_password);
+            $user->status = "Active";
+            $user->save();
 
-        if(isset($request->approver)){
-            
-            $level = 1;
-            if(count($request->approver) > 0){
-                $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
-                foreach($request->approver as  $approver)
-                {
-                    $new_approver = new EmployeeApprover;
-                    $new_approver->user_id = $employee->user_id;
-                    $new_approver->approver_id = $approver;
-                    $new_approver->level = $level;
-                    $new_approver->save();
-                    $level = $level+1;
+            $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($request->date_hired)), $company->id);
+
+            $employee = new Employee;
+            $employee->employee_number = $employee_code;
+            $employee->employee_code = $employee_code;
+            $employee->user_id = $user->id;
+            $employee->first_name = $request->first_name;
+            $employee->middle_name = $request->middle_name;
+            $employee->last_name = $request->last_name;
+            $employee->classification = $request->classification;
+            $employee->department_id = $request->department;
+            $employee->company_id = $request->company;
+            $employee->position = $request->position;
+            $employee->nick_name = $request->nickname;
+            $employee->level = $request->level;
+            $employee->obanana_date_hired = $request->date_hired;
+            $employee->birth_date = $request->birthdate;
+            $employee->birth_place = $request->birthplace;
+            $employee->marital_status = $request->marital_status;
+            $employee->status = "Active";
+            $employee->present_address = $request->present_address;
+            $employee->permanent_address = ($request->permanent_address == '') ? $request->present_address : $request->permanent_address;
+            $employee->personal_number = $request->personal_number;
+            $employee->phil_number = $request->philhealth;
+            $employee->sss_number = $request->sss;
+            $employee->tax_number = $request->tin;
+            $employee->hdmf_number = $request->pagibig;
+            $employee->original_date_hired = $request->date_hired;
+            $employee->personal_email = $request->personal_email;
+            $employee->immediate_sup = $request->immediate_supervisor;
+            $employee->schedule_id = $request->schedule;
+            $employee->middle_initial = $request->middile_initial;
+            $employee->name_suffix = $request->suffix;
+            $employee->religion = $request->religion;
+            $employee->save();
+
+            $employeeCompany = new EmployeeCompany;
+            $employeeCompany->emp_code = $request->biometric_code;
+            $employeeCompany->schedule_id = 1;
+            $employeeCompany->company_id = $request->company;
+            $employeeCompany->save();
+
+            if(isset($request->approver)){
+                
+                $level = 1;
+                if(count($request->approver) > 0){
+                    $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+                    foreach($request->approver as  $approver)
+                    {
+                        $new_approver = new EmployeeApprover;
+                        $new_approver->user_id = $employee->user_id;
+                        $new_approver->approver_id = $approver;
+                        $new_approver->level = $level;
+                        $new_approver->save();
+                        $level = $level+1;
+                    }
                 }
             }
-        }
 
-        Alert::success('Successfully Registered')->persistent('Dismiss');
-        return back();
+            Alert::success('Successfully Registered')->persistent('Dismiss');
+            return back();
+        }else{
+            Alert::warning('Warning : Employee Exist!')->persistent('Dismiss');
+            return back();
+        }
     }
 
     public function upload(Request $request){
