@@ -41,7 +41,7 @@ class EmployeeController extends Controller
         $banks = Bank::get();
         $users = User::get();
         $levels = Level::get();
-        $departments = Department::where('status', null)->get();
+        $departments = Department::where('status','1')->get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
         return view(
@@ -74,11 +74,14 @@ class EmployeeController extends Controller
         $user = new User;
         $user->email = $request->work_email;
         $user->name = $request->first_name . " " . $request->last_name;
+        $password = strtolower($request->first_name) . '.'. strtolower($request->last_name);
+        $stripped_password = str_replace(' ', '', $password);
+        $user->password = bcrypt($stripped_password);
         $user->status = "Active";
         $user->save();
 
         $employee = new Employee;
-        $employee->employee_number = $request->biometric_code;
+        $employee->employee_number = $user->id;
         $employee->employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($request->date_hired)), $company->id);
         $employee->user_id = $user->id;
         $employee->first_name = $request->first_name;
@@ -116,6 +119,20 @@ class EmployeeController extends Controller
         $employeeCompany->schedule_id = 1;
         $employeeCompany->company_id = $request->company;
         $employeeCompany->save();
+
+        if(isset($request->approver)){
+            $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+            $level = 1;
+            foreach($request->approver as  $approver)
+            {
+                $new_approver = new EmployeeApprover;
+                $new_approver->user_id = $employee->user_id;
+                $new_approver->approver_id = $approver;
+                $new_approver->level = $level;
+                $new_approver->save();
+                $level = $level+1;
+            }
+        }
 
 
         Alert::success('Successfully Registered')->persistent('Dismiss');
