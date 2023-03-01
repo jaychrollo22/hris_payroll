@@ -122,18 +122,23 @@
                 </button>
                 </h2>
                 <div class='approvers-data'>
-                @foreach ($user->approvers as $approver)
-                  <div class='row mb-2  mt-2 ' id='approver_1'>
+                @foreach ($user->approvers as $k => $approver)
+                  <div class='row mb-2  mt-2 ' id='approver_0'>
                     <div class='col-md-1  align-self-center'>
                       <small class='align-items-center'>{{ $approver->level }}</small>
                     </div>
                     <div class='col-md-11'>
-                      <select data-placeholder="Approver" class="form-control form-control-sm js-example-basic-single" style='width:100%;' name='approver[]' required>
+                      <select data-placeholder="Approver" class="form-control form-control-sm js-example-basic-single" style='width:100%;' name='approver[{{$k}}][approver_id]' required>
                         <option value="">-- Approver --</option>
                           @foreach($users as $user)
                             <option value="{{$user->id}}" @if($user->id == $approver->approver_id) selected @endif>{{$user->name}}</option>
                           @endforeach
                       </select>
+                      @if($approver->as_final == 'on')
+                        <input type="checkbox" value="{{$approver->as_final}}" checked  name='approver[{{$k}}][as_final]'> Tag as Final
+                      @else
+                      <input type="checkbox" value="{{$approver->as_final}}"  name='approver[{{$k}}][as_final]'> Tag as Final
+                      @endif
                     </div>
                   </div>
                 @endforeach
@@ -206,20 +211,26 @@
   function add_approver()
   {
     var lastItemID = $('.approvers-data').children().last().attr('id');
-    var last_id = lastItemID.split("_");
+    if(lastItemID){
+        var last_id = lastItemID.split("_");
         finalLastId = parseInt(last_id[1]) + 1;
+    }else{
+        finalLastId = 0;
+    }
+        
                                  
         var item = "<div class='row mb-2  mt-2 ' id='approver_"+finalLastId+"'>";
             item+= "<div class='col-md-1  align-self-center'>";
             item+= "<small class='align-items-center'>"+finalLastId+"</small>";
             item+= "</div>";
             item+= " <div class='col-md-11'>";
-            item+= " <select data-placeholder='Approver' class='form-control form-control-sm required js-example-basic-single' style='width:100%;' name='approver[]' required>";
+            item+= " <select data-placeholder='Approver' class='form-control form-control-sm required js-example-basic-single' style='width:100%;' name='approver["+finalLastId+"][approver_id]' required>";
             item+= "<option value=''>-- Approver --</option>";
             item+= " @foreach($users as $user)";
             item+= "<option value='{{$user->id}}'>{{$user->name}}</option>";
             item+= "@endforeach";
             item+= "</select>";
+            item+= "<input type='checkbox' name='approver["+finalLastId+"][as_final]'> Tag as Final";
             item+= "</div>";
             item+= "</div>";
           

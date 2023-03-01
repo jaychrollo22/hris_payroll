@@ -138,8 +138,9 @@ class EmployeeController extends Controller
                     {
                         $new_approver = new EmployeeApprover;
                         $new_approver->user_id = $employee->user_id;
-                        $new_approver->approver_id = $approver;
+                        $new_approver->approver_id = $approver['approver_id'];
                         $new_approver->level = $level;
+                        $new_approver->as_final = isset($approver['as_final']) ? $approver['as_final'] : "";
                         $new_approver->save();
                         $level = $level+1;
                     }
@@ -372,6 +373,7 @@ class EmployeeController extends Controller
     }
     public function updateEmpInfoHR(Request $request, $id){
 
+        // return  $request->all();
         $employee = Employee::findOrFail($id);
         $employee->employee_number = $request->employee_number;
         $employee->company_id = $request->company;
@@ -400,8 +402,9 @@ class EmployeeController extends Controller
                 {
                     $new_approver = new EmployeeApprover;
                     $new_approver->user_id = $employee->user_id;
-                    $new_approver->approver_id = $approver;
+                    $new_approver->approver_id = $approver['approver_id'];
                     $new_approver->level = $level;
+                    $new_approver->as_final = isset($approver['as_final']) ? $approver['as_final'] : "";
                     $new_approver->save();
                     $level = $level+1;
                 }
