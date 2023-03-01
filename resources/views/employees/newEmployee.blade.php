@@ -390,13 +390,15 @@
     if(lastItemID){
         var last_id = lastItemID.split("_");
         finalLastId = parseInt(last_id[1]) + 1;
+        level = finalLastId + 1;
     }else{
         finalLastId = 0;
+        level = finalLastId + 1;
     }
                                  
         var item = "<div class='row mb-2  mt-2 ' id='approver_"+finalLastId+"'>";
             item+= "<div class='col-md-1  align-self-center'>";
-            item+= "<small class='align-items-center'>"+finalLastId+"</small>";
+            item+= "<small class='align-items-center'>"+level+"</small>";
             item+= "</div>";
             item+= " <div class='col-md-11'>";
             item+= " <select data-placeholder='Approver' class='form-control form-control-sm required js-example-basic-single' style='width:100%;' name='approver["+finalLastId+"][approver_id]' required>";
