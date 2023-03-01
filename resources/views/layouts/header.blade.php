@@ -551,6 +551,10 @@
     <script src="{{ asset('body_css/js/form-repeater.js') }}"></script>
     <script src="{{ asset('body_css/vendors/sweetalert/sweetalert.min.js') }}"></script>
 
+    <script src="{{ asset('body_css/vendors/inputmask/jquery.inputmask.bundle.js') }}"></script>
+    <script src="{{ asset('body_css/vendors/inputmask/jquery.inputmask.bundle.js') }}"></script>
+    <script src="{{ asset('body_css/js/inputmask.js') }}"></script>
+
     {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.6/dist/sweetalert2.all.min.js"></script> --}}
     {{-- <script src="{{ asset('body_css/js/form-validation.js') }}"></script>
     <script src="{{ asset('body_css/js/bt-maxLength.js') }}"></script> --}}

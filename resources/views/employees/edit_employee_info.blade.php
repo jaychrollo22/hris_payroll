@@ -93,19 +93,19 @@
               </div>
               <div class='col-md-4'>
                 PHILHEALTH
-                <input type="text" class="form-control" name="philhealth" value="{{$user->employee->phil_number}}">
+                <input type="text" class="form-control" name="philhealth" data-inputmask-alias="9999-9999-9999" value="{{$user->employee->phil_number}}">
               </div>
               <div class='col-md-4'>
                 SSS
-                <input type="text" class="form-control" name="sss" value="{{$user->employee->sss_number}}">
+                <input type="text" class="form-control" name="sss" data-inputmask-alias="99-9999999-9"  value="{{$user->employee->sss_number}}">
               </div>
               <div class='col-md-4'>
                 TIN
-                <input type="text" class="form-control" name="tin" value="{{$user->employee->tax_number}}">
+                <input type="text" class="form-control" name="tin" data-inputmask-alias="999-999-999" value="{{$user->employee->tax_number}}">
               </div>
               <div class='col-md-4'>
                 HDMF
-                <input type="text" class="form-control" name="pagibig" value="{{$user->employee->hdmf_number}}">
+                <input type="text" class="form-control" name="pagibig" data-inputmask-alias="9999-9999-9999" value="{{$user->employee->hdmf_number}}">
               </div>
 
             </div>
