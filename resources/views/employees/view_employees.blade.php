@@ -85,8 +85,45 @@
                         <h4 class="card-title">Employees 
                             <button type="button" class="btn btn-outline-success btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#newEmployee"><i class="ti-plus btn-icon-prepend"></i></button>
                             <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployee" title="Upload Employees"><i class="ti-arrow-up btn-icon-prepend"></i></button>
-                            <a href="/employees-export" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right" title="Export Employees"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+                            <a href="/employees-export?company={{$company}}&department={{$department}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right" title="Export Employees"><i class="ti-arrow-down btn-icon-prepend"></i></a>
                         </h4>
+
+                        <h4 class="card-title">Filter</h4>
+						<p class="card-description">
+						<form method='get' onsubmit='show();' enctype="multipart/form-data">
+							<div class=row>
+								<div class='col-md-3'>
+									<div class="form-group">
+										
+                                        <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company'>
+                                            <option value="">-- Select Company --</option>
+                                            @foreach($companies as $comp)
+                                            <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
+                                            @endforeach
+                                        </select>
+										
+									</div>
+								</div>
+								<div class='col-md-3'>
+									<div class="form-group">
+										
+                                        <select data-placeholder="Select Department" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='department'>
+                                            <option value="">-- Select Department --</option>
+                                            @foreach($departments as $dep)
+                                            <option value="{{$dep->id}}" @if ($dep->id == $department) selected @endif>{{$dep->name}} - {{$dep->code}}</option>
+                                            @endforeach
+                                        </select>
+										
+									</div>
+								</div>
+								<div class='col-md-2'>
+									<button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
+								</div>
+							</div>
+							
+						</form>
+						</p>
+
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered employees-table">
                                 <thead>

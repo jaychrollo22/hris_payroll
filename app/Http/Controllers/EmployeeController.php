@@ -32,18 +32,48 @@ use App\Exports\EmployeesExport;
 class EmployeeController extends Controller
 {
     //
-    public function view()
+    public function view(Request $request)
     {
+        $company = isset($request->company) ? $request->company : "";
+        $department = isset($request->department) ? $request->department : "";
+
         $classifications = Classification::get();
 
-        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company')->get();
+        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company')
+                                ->when($company,function($q) use($company){
+                                    $q->where('company_id',$company);
+                                })
+                                ->when($department,function($q) use($department){
+                                    $q->where('department_id',$department);
+                                })
+                                ->get();
+       
+        if($company){
+            $department_companies = Employee::select('department_id')
+                                                ->when($company,function($q) use($company){
+                                                    $q->where('company_id',$company);
+                                                })
+                                            ->groupBy('department_id')
+                                            ->get();
+            $department_ids = [];
+            if($department_companies){
+                foreach($department_companies as $item){
+                    array_push($department_ids,$item->department_id);
+                }
+            }
+            $departments = Department::whereIn('id',$department_ids)->where('status','1')->orderBy('name')->get();
+        }else{
+            $departments = Department::where('status','1')->orderBy('name')->get();
+        }
+        
         $schedules = Schedule::get();
         $banks = Bank::get();
         $users = User::get();
         $levels = Level::get();
-        $departments = Department::where('status','1')->get();
         $marital_statuses = MaritalStatus::get();
-        $companies = Company::get();
+        $companies = Company::whereHas('employee_company')->orderBy('company_name','ASC')->get();
+
+       
         return view(
             'employees.view_employees',
             array(
@@ -57,13 +87,19 @@ class EmployeeController extends Controller
                 'banks' => $banks,
                 'schedules' => $schedules,
                 'companies' => $companies,
+                'company' => $company,
+                'department' => $department,
             )
         );
     }
 
-    public function export() 
+    public function export(Request $request) 
     {
-        return Excel::download(new EmployeesExport, 'Employees.xlsx');
+        $company = isset($request->company) ? $request->company : "";
+        $department = isset($request->department) ? $request->department : "";
+        $company_info = Company::where('id',$company)->first();
+        $company_name = $company_info ? $company_info->company_code : "";
+        return Excel::download(new EmployeesExport($company,$department), 'Employees '. $company_name .' .xlsx');
     }
 
     public function new(Request $request)
