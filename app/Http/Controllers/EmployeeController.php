@@ -88,9 +88,10 @@ class EmployeeController extends Controller
             $user->save();
 
             $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($request->date_hired)), $company->id);
+            $employee_number = $this->generate_biometric_code(date('Y',strtotime($request->date_hired)), $company->id ,$user->id);
 
             $employee = new Employee;
-            $employee->employee_number = $employee_code;
+            $employee->employee_number = $employee_number;
             $employee->employee_code = $employee_code;
             $employee->user_id = $user->id;
             $employee->first_name = $request->first_name;
@@ -292,9 +293,10 @@ class EmployeeController extends Controller
                             }
                         }
                         $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
+                        $employee_number = $this->generate_biometric_code(date('Y',strtotime($value['original_date_hired'])), $company->id, $user_id);
                         $employee = new Employee;
                         $employee->user_id = $user_id;
-                        $employee->employee_number = $employee_code;
+                        $employee->employee_number = $employee_number;
                         $employee->employee_code =  $employee_code;
                         $employee->first_name = $value['first_name'];
                         $employee->last_name = $value['last_name'];
@@ -465,6 +467,15 @@ class EmployeeController extends Controller
             $emp_code = $code . "-" . $year . "-" . str_pad($code_final, 5, '0', STR_PAD_LEFT);
         }
 
+        return $emp_code;
+    }
+
+    public function generate_biometric_code( $year, $compId, $user_id)
+    {
+       
+        $comp_code = str_pad($compId, 2, '0', STR_PAD_LEFT);
+        $user_id = str_pad($user_id, 5, '0', STR_PAD_LEFT);
+        $emp_code = $comp_code . $year . $user_id;
         return $emp_code;
     }
 
