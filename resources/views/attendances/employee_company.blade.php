@@ -165,23 +165,30 @@
                                         @else
                                         <td>
                                             @if($time_in != null)
-                                            @if($time_in->time_out != null)
-                                            @php
-                                            if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("07:00:00"))
-                                            {
-                                            $time_in_data = $time_in->time_in;
-                                            }
-                                            else
-                                            {
-                                            $time_in_data = date('d/m/Y 07:00:00',strtotime($time_in->time_in));
-                                            }
-                                            @endphp
-                                            {{round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2)}} hrs
-                                            @php
-                                            // $work = $work + round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
-                                            $work =  round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
-                                            @endphp
-                                            @endif
+                                                @if($time_in->time_out != null)
+                                                    @php
+                                                        if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("07:00:00"))
+                                                        {
+                                                        $time_in_data = $time_in->time_in;
+                                                        }
+                                                        else
+                                                        {
+                                                        $time_in_data = date('d/m/Y 07:00:00',strtotime($time_in->time_in));
+                                                        }
+
+                                                        
+                                                        $start_datetime = new DateTime($time_in->time_in); 
+                                                        $diff = $start_datetime->diff(new DateTime($time_in->time_out)); 
+                                                    @endphp
+                                                    
+                                                    {{-- {{round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2)}} hrs <br> --}}
+                                                    {{ $diff->h }} hrs. {{ $diff->i }} mins. 
+                                                    @php
+                                                    
+                                                    // $work = $work + round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
+                                                    $work =  round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
+                                                    @endphp
+                                                @endif
                                             @endif
                                         </td>
 
