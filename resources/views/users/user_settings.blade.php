@@ -290,14 +290,14 @@
                                     {{auth()->user()->employee->payment_info->account_number}}
                                 </div>
                             </div>
-                            <div class='row  m-2 border-bottom'>
+                            {{-- <div class='row  m-2 border-bottom'>
                                 <div class='col-md-3'>
                                     <small>Rate</small>
                                 </div>
                                 <div class='col-md-3'>
                                     <a href="#" data-toggle="modal" onclick='reset_data();' data-target="#rateData">********</a>
                                 </div>
-                            </div>
+                            </div> --}}
 
                         </div>
                     </div>
