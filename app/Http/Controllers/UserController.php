@@ -199,4 +199,20 @@ class UserController extends Controller
             return $request;
         }
     }
+
+    public function updateUserPassword(Request $request,User $user){
+
+        $validator = $request->validate([
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required'
+        ]);
+    
+        $user = User::findOrFail($user->id);
+        $user->password = bcrypt($request->input('password'));
+        $user->save();
+
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
+
+    }
 }

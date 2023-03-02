@@ -12,6 +12,11 @@
                             @endif
                             
                         </h4>
+                        @if ($errors->has('password'))
+                            <span class="invalid-feedback" style="display: block;margin:0px 0px 10px 0px;" role="alert">
+                                <strong>{{ $errors->first('password') }}</strong>
+                            </span>
+                        @endif
                         <div class="table-responsive">
                             <table border="1" class="table table-hover table-bordered" id='users_table'>
                                 <thead>
@@ -35,6 +40,10 @@
                                                 Edit
                                                 <i class="ti-file btn-icon-append"></i>
                                             </button>
+                                            <button data-toggle="modal" data-target="#editUserPassword{{$user->id}}" type="button" class="btn btn-outline-info btn-icon-text btn-sm">
+                                                Change Password
+                                                <i class="ti-key btn-icon-append"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -50,6 +59,7 @@
 
 @foreach($users as $user)
 @include('users.edit_user_role')
+@include('users.user_change_password')
 @endforeach
 
 @endsection
