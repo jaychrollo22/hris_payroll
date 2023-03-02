@@ -77,7 +77,7 @@
                                 <div class='col-md-12 text-center'>
                                     <strong>
                                         <h3><i class="fa fa-user" aria-hidden="true"></i> Personal Information
-                                            <button class="btn btn-icon btn-info btn-xs" title="Edit Information" data-toggle="modal" data-target="#editInfo"><i class="fa fa-pencil"></i></button></h3>
+                                            {{-- <button class="btn btn-icon btn-info btn-xs" title="Edit Information" data-toggle="modal" data-target="#editInfo"><i class="fa fa-pencil"></i></button></h3> --}}
                                     </strong>
                                 </div>
                             </div>
