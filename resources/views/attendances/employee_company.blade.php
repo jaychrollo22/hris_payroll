@@ -178,14 +178,15 @@
                                             @endphp
                                             {{round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2)}} hrs
                                             @php
-                                            $work = $work + round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
+                                            // $work = $work + round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
+                                            $work =  round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
                                             @endphp
                                             @endif
                                             @endif
                                         </td>
 
                                         @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()))
-                                        @php
+                                        {{-- @php
                                         $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
                                         $late = (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
                                         $working_minutes = (((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600);
@@ -199,7 +200,7 @@
 
                                         }
                                         $undertime = number_format($working_minutes - $schedules[$id]->working_hours + ($late_data/60),2);
-                                        @endphp
+                                        @endphp --}}
 
                                         {{-- <td>
                                             {{number_format($late_data/60,2)}} hrs
