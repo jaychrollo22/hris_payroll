@@ -225,7 +225,7 @@ class EmployeeController extends Controller
                         $employee->personal_email = isset($value['personal_email']) ? $value['personal_email'] : "";
                         $employee->area = isset($value['area']) ? $value['area'] : "";
                         $employee->religion = isset($value['religion']) ? $value['religion'] : "";
-                        $employee->schedule_id = 1;
+                        $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
                         $employee->status = "Active";
                         $employee->save();
 
@@ -233,7 +233,35 @@ class EmployeeController extends Controller
 
                     }else{
                         $check_if_exist = Employee::where('employee_number',$value['employee_number'])->first();
-                        array_push($not_save,$value);
+
+                        if($check_if_exist){
+                            $check_if_exist->position = isset($value['position']) ? $value['position'] : "";
+                            $check_if_exist->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
+                            $check_if_exist->level = $value['level'];
+                            $check_if_exist->date_regularized = isset($value['date_regularized']) && !empty($value['date_regularized']) ? date('Y-m-d',strtotime($value['date_regularized'])) : null;
+                            $check_if_exist->date_resigned = isset($value['date_resigned']) && !empty($value['date_resigned']) ? date('Y-m-d',strtotime($value['date_resigned'])) : null;
+                            $check_if_exist->birth_date = isset($value['birth_date']) && !empty($value['birth_date']) ? date('Y-m-d',strtotime($value['birth_date'])) : null;
+                            $check_if_exist->birth_place = isset($value['birth_place']) ? $value['birth_place'] : "";
+                            $check_if_exist->gender = isset($value['gender']) ? $value['gender'] : "";
+                            $check_if_exist->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
+                            $check_if_exist->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
+                            $check_if_exist->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
+                            $check_if_exist->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
+                            $check_if_exist->phil_number = isset($value['phil_number']) ? $value['phil_number'] : "";
+                            $check_if_exist->sss_number = isset($value['phil_number']) ? $value['sss_number'] : "";
+                            $check_if_exist->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
+                            $check_if_exist->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
+                            $check_if_exist->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
+                            $check_if_exist->bank_account_number = isset($value['bank_account_number']) ? $value['bank_account_number'] : "";
+                            $check_if_exist->personal_email = isset($value['personal_email']) ? $value['personal_email'] : "";
+                            $check_if_exist->area = isset($value['area']) ? $value['area'] : "";
+                            $check_if_exist->religion = isset($value['religion']) ? $value['religion'] : "";
+                            $check_if_exist->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
+                            $check_if_exist->status = "Active";
+                            $check_if_exist->save();
+
+                            $save_count++;
+                        }
                     }
                     
                 }else{
@@ -266,7 +294,7 @@ class EmployeeController extends Controller
                         $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
                         $employee = new Employee;
                         $employee->user_id = $user_id;
-                        $employee->employee_number = $value['employee_number'];
+                        $employee->employee_number = $employee_code;
                         $employee->employee_code =  $employee_code;
                         $employee->first_name = $value['first_name'];
                         $employee->last_name = $value['last_name'];
@@ -280,9 +308,9 @@ class EmployeeController extends Controller
                         $employee->position = isset($value['position']) ? $value['position'] : "";
                         $employee->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
                         $employee->level = $value['level'];
-                        $employee->date_regularized = isset($value['date_regularized']) && $value['date_regularized'] ? date('Y-m-d',strtotime($value['date_regularized'])) : "";
-                        $employee->date_resigned = isset($value['date_resigned']) && $value['date_resigned'] ? date('Y-m-d',strtotime($value['date_resigned'])) : "";
-                        $employee->birth_date = isset($value['birth_date']) && $value['birth_date'] ? date('Y-m-d',strtotime($value['birth_date'])) : "";
+                        $employee->date_regularized = isset($value['date_regularized']) && !empty($value['date_regularized']) ? date('Y-m-d',strtotime($value['date_regularized'])) : null;
+                        $employee->date_resigned = isset($value['date_resigned']) && !empty($value['date_resigned']) ? date('Y-m-d',strtotime($value['date_resigned'])) : null;
+                        $employee->birth_date = isset($value['birth_date']) && !empty($value['birth_date']) ? date('Y-m-d',strtotime($value['birth_date'])) : null;
                         $employee->birth_place = isset($value['birth_place']) ? $value['birth_place'] : "";
                         $employee->gender = isset($value['gender']) ? $value['gender'] : "";
                         $employee->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
@@ -298,10 +326,11 @@ class EmployeeController extends Controller
                         $employee->personal_email = isset($value['personal_email']) ? $value['personal_email'] : "";
                         $employee->area = isset($value['area']) ? $value['area'] : "";
                         $employee->religion = isset($value['religion']) ? $value['religion'] : "";
-                        
-                        $employee->schedule_id = 1;
+                        $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
                         $employee->status = "Active";
                         $employee->save();
+
+                        $save_count++;
                     }
                 }
             }
