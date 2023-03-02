@@ -36,6 +36,7 @@ class EmployeeController extends Controller
     {
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
+        $status = isset($request->status) ? $request->status : "Active";
 
         $classifications = Classification::get();
 
@@ -45,6 +46,9 @@ class EmployeeController extends Controller
                                 })
                                 ->when($department,function($q) use($department){
                                     $q->where('department_id',$department);
+                                })
+                                ->when($status,function($q) use($status){
+                                    $q->where('status',$status);
                                 })
                                 ->get();
        
@@ -89,6 +93,7 @@ class EmployeeController extends Controller
                 'companies' => $companies,
                 'company' => $company,
                 'department' => $department,
+                'status' => $status,
             )
         );
     }

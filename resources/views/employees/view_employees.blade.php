@@ -117,6 +117,17 @@
 									</div>
 								</div>
 								<div class='col-md-2'>
+									<div class="form-group">
+										
+                                        <select data-placeholder="Select Status" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='status'>
+                                            <option value="">-- Select Status --</option>
+                                            <option value="Active" @if ($status == 'Active') selected @endif>Active</option>
+                                            <option value="Inactive" @if ($status == 'Inactive') selected @endif>Inactive</option>
+                                        </select>
+										
+									</div>
+								</div>
+								<div class='col-md-2'>
 									<button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
 								</div>
 							</div>
