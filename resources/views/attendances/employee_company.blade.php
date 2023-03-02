@@ -173,11 +173,9 @@
                                                         }
                                                         else
                                                         {
-                                                        $time_in_data = date('d/m/Y 07:00:00',strtotime($time_in->time_in));
+                                                        $time_in_data = date('Y-m-d 07:00:00',strtotime($time_in->time_in));
                                                         }
-
-                                                        
-                                                        $start_datetime = new DateTime($time_in->time_in); 
+                                                        $start_datetime = new DateTime($time_in_data); 
                                                         $diff = $start_datetime->diff(new DateTime($time_in->time_out)); 
                                                     @endphp
                                                     
