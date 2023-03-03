@@ -167,6 +167,7 @@ return [
         /*
          * Package Service Providers...
          */
+        OwenIt\Auditing\AuditingServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         /*
          * Application Service Providers...

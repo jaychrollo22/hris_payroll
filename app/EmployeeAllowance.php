@@ -4,9 +4,11 @@ namespace App;
 
 use App\Employee as AppEmployee;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class EmployeeAllowance extends Model
+class EmployeeAllowance extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     //
     public function employee()
     {

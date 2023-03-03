@@ -107,49 +107,49 @@
                                         $time_out = null;
                                         if($time_in == null)
                                         {
-                                        $time_out = ($emp->attendances)->whereBetween('time_out',[$date_r." 00:00:00", $date_r." 23:59:59"])->where('time_in',null)->first();
+                                            $time_out = ($emp->attendances)->whereBetween('time_out',[$date_r." 00:00:00", $date_r." 23:59:59"])->where('time_in',null)->first();
                                         }
                                         @endphp
                                         @if($time_in != null)
-                                        <td>
-                                            {{date('h:i A',strtotime($time_in->time_in))}}
-                                        </td>
-                                        @if($time_in->time_out != null)
-                                        <td>
-                                            {{date('h:i A',strtotime($time_in->time_out))}}
-                                        </td>
-                                        @else
-                                        @php
-                                        $time_in_out = 1;
-                                        @endphp
-                                        <td class='bg-warning'>
-                                        </td>
-                                        @endif
-                                        @else
-                                        @if((date('l',strtotime($date_r)) == "Saturday") || (date('l',strtotime($date_r)) == "Sunday"))
-                                        <td></td>
-                                        <td></td>
-                                        @else
-                                        @php
-                                        $time_in_out = 1;
-                                        @endphp
-                                        <td class='bg-warning'>
+                                                <td>
+                                                    {{date('h:i A',strtotime($time_in->time_in))}}
+                                                </td>
+                                            @if($time_in->time_out != null)
+                                                <td>
+                                                    {{date('h:i A',strtotime($time_in->time_out))}}
+                                                </td>
+                                            @else
+                                                @php
+                                                $time_in_out = 1;
+                                                @endphp
+                                                <td class='bg-warning'>
+                                                </td>
+                                                @endif
+                                            @else
+                                            @if((date('l',strtotime($date_r)) == "Saturday") || (date('l',strtotime($date_r)) == "Sunday"))
+                                                <td></td>
+                                                <td></td>
+                                            @else
+                                                @php
+                                                $time_in_out = 1;
+                                                @endphp
+                                                <td class='bg-warning'>
 
-                                        </td>
-                                        @if($time_out == null)
-                                        @php
-                                        $time_in_out = 1;
-                                        @endphp
-                                        <td class='bg-warning'>
+                                                </td>
+                                                @if($time_out == null)
+                                                    @php
+                                                    $time_in_out = 1;
+                                                    @endphp
+                                                <td class='bg-warning'>
 
-                                        </td>
-                                        @else
-                                        <td>
-                                            {{date('h:i A',strtotime($time_out->time_out))}}
-                                        </td>
-                                        @endif
+                                                </td>
+                                            @else
+                                                <td>
+                                                    {{date('h:i A',strtotime($time_out->time_out))}}
+                                                </td>
+                                            @endif
 
-                                        @endif
+                                            @endif
                                         @endif
                                         @if($time_in_out == 1)
                                         <td></td>
