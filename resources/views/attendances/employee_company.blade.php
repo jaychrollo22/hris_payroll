@@ -48,8 +48,8 @@
                             </form>
                         </p>
                         @if($date_range)
-                        <button class='btn btn-info mb-1' onclick="exportTableToExcel('employee_attendance','{{$from_date}} - {{$to_date}}')">Export</button>
-                        {{-- <a href="attendance-per-company-export?company={{$company}}&from={{$from_date}}&to={{$to_date}}" class='btn btn-info mb-1'>Export</a> --}}
+                        {{-- <button class='btn btn-info mb-1' onclick="exportTableToExcel('employee_attendance','{{$from_date}} - {{$to_date}}')">Export</button> --}}
+                        <a href="attendance-per-company-export?company={{$company}}&from={{$from_date}}&to={{$to_date}}" class='btn btn-info mb-1'>Export</a>
                         @endif
 
 
