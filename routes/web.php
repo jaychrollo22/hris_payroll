@@ -35,6 +35,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('get-attendance-bio', 'AttendanceController@get_attendances');
 
+
+    Route::get('attendance-per-company-export', 'AttendanceController@attendancePerCompanyExport');
+
+
+
     //Leaves
     Route::get('file-leave', 'EmployeeLeaveController@leaveBalances');
     Route::post('new-leave','EmployeeLeaveController@new');

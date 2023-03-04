@@ -5,9 +5,13 @@ use App\IclockTransation;
 use App\Attendance;
 use App\Employee;
 use App\PersonnelEmployee;
+use App\Company;
 use App\ScheduleData;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+
+use App\Exports\AttedancePerCompanyExport;
+use Excel;
 
 class AttendanceController extends Controller
 {
@@ -114,49 +118,15 @@ class AttendanceController extends Controller
 
         return $attendances;
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+    public function attendancePerCompanyExport(Request $request){
 
+        $company = isset($request->company) ? $request->company : "";
+        $from = isset($request->from) ? $request->from : "";
+        $to =  isset($request->to) ? $request->to : "";
+        $company_detail = Company::where('id',$company)->first();
+        return Excel::download(new AttedancePerCompanyExport($company,$from,$to), $company_detail->company_code . ' ' . $from . ' to ' . $to . ' Attendance Export.xlsx');
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

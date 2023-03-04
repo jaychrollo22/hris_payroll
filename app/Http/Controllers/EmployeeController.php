@@ -53,19 +53,15 @@ class EmployeeController extends Controller
                                 ->get();
        
         if($company){
-            $department_companies = Employee::select('department_id')
-                                                ->when($company,function($q) use($company){
-                                                    $q->where('company_id',$company);
-                                                })
+
+            $department_companies = Employee::when($company,function($q) use($company){
+                                                $q->where('company_id',$company);
+                                            })
                                             ->groupBy('department_id')
-                                            ->get();
-            $department_ids = [];
-            if($department_companies){
-                foreach($department_companies as $item){
-                    array_push($department_ids,$item->department_id);
-                }
-            }
-            $departments = Department::whereIn('id',$department_ids)->where('status','1')->orderBy('name')->get();
+                                            ->pluck('department_id')
+                                            ->toArray();
+
+            $departments = Department::whereIn('id',$department_companies)->where('status','1')->orderBy('name')->get();
         }else{
             $departments = Department::where('status','1')->orderBy('name')->get();
         }
@@ -575,6 +571,7 @@ class EmployeeController extends Controller
     {
         $companies = Company::whereHas('employee_company')->get();
         $attendance_controller = new AttendanceController;
+        $company = $request->company;
         $from_date = $request->from;
         $to_date = $request->to;
         $date_range =  [];
@@ -582,7 +579,7 @@ class EmployeeController extends Controller
         $emp_data = [];
         $attendances = [];
         $employees = [];
-        $coompany = $request->company_id;
+        
         if ($from_date != null) {
             
             $company_employees = EmployeeCompany::where('company_id',$request->company)->pluck('emp_code')->toArray();
@@ -599,6 +596,7 @@ class EmployeeController extends Controller
             'attendances.employee_company',
             array(
                 'header' => 'biometrics',
+                'company' => $company,
                 'from_date' => $from_date,
                 'to_date' => $to_date,
                 'date_range' => $date_range,

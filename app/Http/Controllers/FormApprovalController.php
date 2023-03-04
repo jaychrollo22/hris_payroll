@@ -65,9 +65,18 @@ class FormApprovalController extends Controller
         if($employee_leave){
             $level = '';
             if($employee_leave->level == 0){
-                EmployeeLeave::Where('id', $id)->update([
-                    'level' => 1,
-                ]);
+                $employee_approver = EmployeeApprover::where('user_id', $employee_leave->user_id)->where('approver_id', auth()->user()->id)->first();
+                if($employee_approver->as_final == 'on'){
+                    EmployeeLeave::Where('id', $id)->update([
+                        'approved_date' => date('Y-m-d'),
+                        'status' => 'Approved',
+                        'level' => 1,
+                    ]);
+                }else{
+                    EmployeeLeave::Where('id', $id)->update([
+                        'level' => 1,
+                    ]);
+                }
             }
             else if($employee_leave->level == 1){
                 EmployeeLeave::Where('id', $id)->update([
@@ -136,10 +145,21 @@ class FormApprovalController extends Controller
         if($employee_overtime){
             $level = '';
             if($employee_overtime->level == 0){
-                EmployeeOvertime::Where('id', $employee_overtime->id)->update([
-                    'level' => 1,
-                    'ot_approved_hrs' => $request->ot_approved_hrs
-                ]);
+
+                $employee_approver = EmployeeApprover::where('user_id', $employee_overtime->user_id)->where('approver_id', auth()->user()->id)->first();
+                if($employee_approver->as_final == 'on'){
+                    EmployeeOvertime::Where('id', $employee_overtime->id)->update([
+                        'approved_date' => date('Y-m-d'),
+                        'status' => 'Approved',
+                        'level' => 1,
+                        'ot_approved_hrs' => $request->ot_approved_hrs
+                    ]);
+                }else{
+                    EmployeeOvertime::Where('id', $employee_overtime->id)->update([
+                        'level' => 1,
+                        'ot_approved_hrs' => $request->ot_approved_hrs
+                    ]);
+                }
             }
             else if($employee_overtime->level == 1){
                 EmployeeOvertime::Where('id', $employee_overtime->id)->update([
@@ -212,9 +232,18 @@ class FormApprovalController extends Controller
         if($employee_wfh){
             $level = '';
             if($employee_wfh->level == 0){
-                EmployeeWfh::Where('id', $id)->update([
-                    'level' => 1,
-                ]);
+                $employee_approver = EmployeeApprover::where('user_id', $employee_wfh->user_id)->where('approver_id', auth()->user()->id)->first();
+                if($employee_approver->as_final == 'on'){
+                    EmployeeWfh::Where('id', $id)->update([
+                        'approved_date' => date('Y-m-d'),
+                        'status' => 'Approved',
+                        'level' => 1,
+                    ]);
+                }else{
+                    EmployeeWfh::Where('id', $id)->update([
+                        'level' => 1,
+                    ]);
+                }
             }
             else if($employee_wfh->level == 1){
                 EmployeeWfh::Where('id', $id)->update([
@@ -285,9 +314,19 @@ class FormApprovalController extends Controller
         if($employee_ob){
             $level = '';
             if($employee_ob->level == 0){
-                EmployeeOb::Where('id', $id)->update([
-                    'level' => 1,
-                ]);
+                $employee_approver = EmployeeApprover::where('user_id', $employee_ob->user_id)->where('approver_id', auth()->user()->id)->first();
+                if($employee_approver->as_final == 'on'){
+                    EmployeeOb::Where('id', $id)->update([
+                        'approved_date' => date('Y-m-d'),
+                        'status' => 'Approved',
+                        'level' => 1,
+                    ]);
+
+                }else{
+                    EmployeeOb::Where('id', $id)->update([
+                        'level' => 1,
+                    ]);
+                }
             }
             else if($employee_ob->level == 1){
                 EmployeeOb::Where('id', $id)->update([
@@ -351,15 +390,24 @@ class FormApprovalController extends Controller
     }
 
     public function approveDtr($id){
-        $employee_ob = EmployeeDtr::where('id', $id)->first();
-        if($employee_ob){
+        $employee_dtr = EmployeeDtr::where('id', $id)->first();
+        if($employee_dtr){
             $level = '';
-            if($employee_ob->level == 0){
-                EmployeeDtr::Where('id', $id)->update([
-                    'level' => 1,
-                ]);
+            if($employee_dtr->level == 0){
+                $employee_approver = EmployeeApprover::where('user_id', $employee_dtr->user_id)->where('approver_id', auth()->user()->id)->first();
+                if($employee_approver->as_final == 'on'){
+                    EmployeeDtr::Where('id', $id)->update([
+                        'approved_date' => date('Y-m-d'),
+                        'status' => 'Approved',
+                        'level' => 1,
+                    ]);
+                }else{
+                    EmployeeDtr::Where('id', $id)->update([
+                        'level' => 1,
+                    ]);
+                }
             }
-            else if($employee_ob->level == 1){
+            else if($employee_dtr->level == 1){
                 EmployeeDtr::Where('id', $id)->update([
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
