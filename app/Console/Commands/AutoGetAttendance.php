@@ -48,7 +48,7 @@ class AutoGetAttendance extends Command
     public function getAttendances(){
         $from = date('Y-m-d',strtotime ( '-1 day'));
         $to = date('Y-m-d');
-        $terminals = iclockterminal_mysql::where('id',1)->get();
+        $terminals = iclockterminal_mysql::get();
         $count = 0;
         foreach($terminals as $terminal)
         {
