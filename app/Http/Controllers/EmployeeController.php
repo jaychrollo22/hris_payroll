@@ -533,7 +533,7 @@ class EmployeeController extends Controller
     public function employee_attendance(Request $request)
     {
         $attendance_controller = new AttendanceController;
-        $employees = Employee::get();
+        $employees = Employee::where('status','Active')->get();
         $from_date = $request->from;
         $to_date = $request->to;
         $date_range =  [];
@@ -544,9 +544,9 @@ class EmployeeController extends Controller
         $emp_data = [];
         if ($from_date != null) {
             $emp_data = Employee::with(['attendances' => function ($query) use ($from_date, $to_date) {
-                $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
-                ->orderBy('time_in','asc')->orderby('time_out','desc')->orderBy('id','asc');
-            }])->whereIn('employee_number', $request->employee)->get();
+                                        $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                        ->orderBy('time_in','asc')->orderby('time_out','desc')->orderBy('id','asc');
+                                    }])->whereIn('employee_number', $request->employee)->get();
 
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
             $schedules = ScheduleData::where('schedule_id', 1)->get();
@@ -590,6 +590,7 @@ class EmployeeController extends Controller
                                     ->orderBy('id','asc');
                                 }])
                                 ->where('company_id', $company)
+                                ->where('status','Active')
                                 ->get();
             // dd($company_employees);
             $schedules = ScheduleData::where('schedule_id', 1)->get();

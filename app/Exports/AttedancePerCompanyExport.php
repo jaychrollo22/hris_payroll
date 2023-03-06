@@ -33,6 +33,7 @@ class AttedancePerCompanyExport implements FromView
                                                     ->orderBy('id','asc');
                                             }])
                                             ->where('company_id', $company)
+                                            ->where('status','Active')
                                             ->get();
             $date_range =  dateRange($from_date, $to_date);
             $schedules = ScheduleData::where('schedule_id', 1)->get();
