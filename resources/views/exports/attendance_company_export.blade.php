@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <td>User ID</td>
-            <td>Biometric ID</td>
+            {{-- <td>Biometric ID</td> --}}
             <td>Name</td>
             <td>Date</td>
             <td>Time In</td>
@@ -25,9 +25,9 @@
 
         @foreach(array_reverse($date_range) as $date_r)
         <tr>
-            <td>{{$emp->employee->user_id}}</td>
-            <td>{{$emp->emp_code}}</td>
-            <td>{{$emp->employee->first_name . ' ' . $emp->employee->last_name}}</td>
+            <td>{{$emp->user_id}}</td>
+            {{-- <td>{{$emp->employee_number}}</td> --}}
+            <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
             <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
 
             @php

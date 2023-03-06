@@ -33,5 +33,9 @@ class Employee extends Model implements Auditable
     {
         return $this->belongsTo(User::class);
     }
+
+    public function attendances() {
+        return $this->hasMany(Attendance::class,'employee_code','employee_number');
+    }
   
 }
