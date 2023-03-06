@@ -94,10 +94,10 @@ class EmployeeWfhController extends Controller
         return back();
     }    
 
-    public function disable_overtime($id)
+    public function disable_wfh($id)
     {
         EmployeeWfh::Where('id', $id)->update(['status' => 'Cancelled']);
-        Alert::success('Overtime has been cancelled.')->persistent('Dismiss');
+        Alert::success('WFH has been cancelled.')->persistent('Dismiss');
         return back();
-    }       
+    }      
 }

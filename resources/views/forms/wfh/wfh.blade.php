@@ -69,7 +69,7 @@
                               data-target="#edit_wfh{{ $wfh->id }}" data-toggle="modal" title='Edit'>
                               <i class="ti-pencil-alt"></i>
                             </button>
-                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel(this.id)"
+                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel({{$wfh->id}})"
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
                             </button>
@@ -78,7 +78,7 @@
                               data-target="#view_wfh{{ $wfh->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
                             </button>            
-                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel(this.id)"
+                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel({{$wfh->id}})"
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
                             </button>
@@ -87,7 +87,7 @@
                               data-target="#view_wfh{{ $wfh->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
                             </button>                 
-                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel(this.id)"
+                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel({{$wfh->id}})"
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
                             </button>            
@@ -138,6 +138,7 @@ function get_count_days($data,$date_from,$date_to)
 @section('wfhScript')
 	<script>
 		function cancel(id) {
+      alert(id);
 			var element = document.getElementById('tdActionId'+id);
 			var dataID = element.getAttribute('data-id');
 			swal({
