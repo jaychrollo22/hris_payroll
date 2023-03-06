@@ -32,8 +32,8 @@ class WorkfromhomeController extends Controller
         $employee_wfhs = [];
         if(isset($request->from) && isset($request->to)){
             $employee_wfhs = EmployeeWfh::with('user','employee')
-                                        ->whereDate('approved_date','>=',$from)
-                                        ->whereDate('approved_date','<=',$to)
+                                        ->whereDate('date_from','>=',$from)
+                                        ->whereDate('date_from','<=',$to)
                                         ->whereHas('employee',function($q) use($company){
                                             $q->where('company_id',$company);
                                         })

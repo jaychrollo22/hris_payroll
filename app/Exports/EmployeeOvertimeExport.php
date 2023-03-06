@@ -36,32 +36,49 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
         return [
             'User ID',
             'Employee Name',
-            'Date Filed',
+            // 'Date Filed',
             'OT Date',
-            'OT Start Time',
-            'OT End Time',
-            'OT Requested',
+            // 'OT Start Time',
+            // 'OT End Time',
+            // 'OT Requested',
             'OT Approved',
-            'Approved Date',
-            'Status',
-            'Remarks',
+            // 'Approved Date',
+            // 'Status',
+            // 'Remarks',
+            'RW OT'
         ];
     }
 
     public function map($employee_leave): array
     {
+        $rw_ot = $this->isRestDay($employee_leave->ot_date);
         return [
             $employee_leave->user->id,
             $employee_leave->user->name,
-            date('d/m/Y', strtotime($employee_leave->created_at)),
+            // date('d/m/Y', strtotime($employee_leave->created_at)),
             date('d/m/Y',strtotime($employee_leave->ot_date)),
-            date('H:i', strtotime($employee_leave->start_time)),
-            date('H:i', strtotime($employee_leave->end_time)),
-            intval((strtotime($employee_leave->end_time)-strtotime($employee_leave->start_time))/60/60),
+            // date('H:i', strtotime($employee_leave->start_time)),
+            // date('H:i', strtotime($employee_leave->end_time)),
+            // intval((strtotime($employee_leave->end_time)-strtotime($employee_leave->start_time))/60/60),
             $employee_leave->ot_approved_hrs,
-            date('d/m/Y',strtotime($employee_leave->approved_date)),
-            $employee_leave->status,
-            $employee_leave->remarks
+            $rw_ot,
+            // date('d/m/Y',strtotime($employee_leave->approved_date)),
+            // $employee_leave->status,
+            // $employee_leave->remarks
         ];
     }
+
+
+    public function isRestDay( $date ) {
+
+        $check_day = date('D',strtotime($date));
+        $check = '0';
+        if ($check_day == 'Sat' || $check_day == 'Sun') {
+            $check = '1';
+        }else{
+            $check = '0';
+        }
+        return $check;
+    }
+
 }

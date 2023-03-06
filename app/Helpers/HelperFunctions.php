@@ -73,3 +73,15 @@ function dateRange( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
 
     return $dates;
 }
+
+function isRestDay( $date ) {
+
+    $check_day = date('D',strtotime($date));
+    $check = 0;
+    if ($check_day == 'Sat' || $check_day == 'Sun') {
+        $check = 1;
+    }else{
+        $check = 0;
+    }
+    return $check;
+}

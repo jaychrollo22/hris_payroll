@@ -22,16 +22,16 @@
         </div>
           <div class="form-group row">
             <div class='align-self-center col-md-2 text-right'>
-              Date From
+              Time In
             </div>
             <div class='col-md-4'>
-              <input type="date" name='date_from' value="{{$wfh->date_from}}" class="form-control" required>
+              <input type="datetime-local" name='date_from' value="{{$wfh->date_from}}" class="form-control" required>
             </div>
             <div class='align-self-center col-md-2 text-right'>
-               Date To
+              Time Out
             </div>
             <div class='col-md-4'>
-              <input type="date" name='date_to' value="{{$wfh->date_to}}" class="form-control" required>
+              <input type="datetime-local" name='date_to' value="{{$wfh->date_to}}" class="form-control" required>
             </div>
           </div>
           {{-- <div class="form-group task">
