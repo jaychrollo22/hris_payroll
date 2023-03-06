@@ -48,14 +48,18 @@ class EmployeeLeaveController extends Controller
         $new_leave->reason = $request->reason;
         $new_leave->withpay = (isset($request->withpay)) ? $request->withpay : 0 ;
         $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
-        $logo = $request->file('attachment');
-        $original_name = $logo->getClientOriginalName();
-        $name = time() . '_' . $logo->getClientOriginalName();
-        $logo->move(public_path() . '/images/', $name);
-        $file_name = '/images/' . $name;
-        $new_leave->attachment = $file_name;
+
+        if($request->file('attachment')){
+            $logo = $request->file('attachment');
+            $original_name = $logo->getClientOriginalName();
+            $name = time() . '_' . $logo->getClientOriginalName();
+            $logo->move(public_path() . '/images/', $name);
+            $file_name = '/images/' . $name;
+            $new_leave->attachment = $file_name;
+        }
+        
         $new_leave->status = 'Pending';
-        $new_leave->level = 1;
+        $new_leave->level = 0;
         $new_leave->created_by = Auth::user()->id;
         $new_leave->save();
 
@@ -83,9 +87,8 @@ class EmployeeLeaveController extends Controller
             $new_leave->attachment = $file_name;
         }
         $new_leave->status = 'Pending';
-        $new_leave->level = 1;
+        $new_leave->level = 0;
         $new_leave->created_by = Auth::user()->id;
-        // dd($new_leave);
         $new_leave->save();
 
         Alert::success('Successfully Updated')->persistent('Dismiss');

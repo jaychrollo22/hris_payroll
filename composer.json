@@ -12,7 +12,8 @@
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
-        "maatwebsite/excel": "~2.1.0",
+        "maatwebsite/excel": "^3.1",
+        "owen-it/laravel-auditing": "^8",
         "realrashid/sweet-alert": "^5.1",
         "silviolleite/laravelpwa": "^2.0"
     },
@@ -44,6 +45,9 @@
         "classmap": [
             "database/seeds",
             "database/factories"
+        ],
+        "files": [
+            "app/Helpers/HelperFunctions.php"
         ]
     },
     "autoload-dev": {

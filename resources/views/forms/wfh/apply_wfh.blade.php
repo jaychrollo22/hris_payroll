@@ -35,7 +35,7 @@
               <input type="date" name='date_to' class="form-control" required>
             </div>
           </div>
-          <div class="form-group task">
+          {{-- <div class="form-group task">
             <div class='row mb-2' id='task_1'>
               <div class='col-md-2 text-right'  >
                 <button type="button" onclick='add_task();' class="btn btn-success btn-rounded btn-icon">
@@ -47,7 +47,7 @@
                 <input extarea  name='task[]' class="form-control" rows='4' required>
               </div>
             </div>
-          </div>
+          </div> --}}
           <div class="form-group row">
             <div class='col-md-2'>
                Remarks

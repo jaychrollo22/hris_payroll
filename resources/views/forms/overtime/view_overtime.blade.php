@@ -59,8 +59,10 @@
                  Attachment
               </div>
               <div class='col-md-10'>
-                <a href="{{url($overtime->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-info btn-fw ">View Attachment</button></a>
-            </div>          
+                @if($overtime->attachment)
+                  <a href="{{url($overtime->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-info btn-fw ">View Attachment</button></a>
+                @endif
+              </div>          
             </div>
           </div>
         <div class="modal-footer">

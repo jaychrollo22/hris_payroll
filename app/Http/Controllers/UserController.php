@@ -17,9 +17,43 @@ use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 use Psy\Command\ListCommand\FunctionEnumerator;
 
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class UserController extends Controller
 {
     //
+    public function index(){
+
+        $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+
+
+        $users = User::all();
+
+        return view('users.index',
+        array(
+            'header' => 'users',
+            'user' => $user,
+            'header' => 'users',
+                'users' => $users
+        ));
+    }
+
+    public function export() 
+    {
+        return Excel::download(new UsersExport, 'Users.xlsx');
+    }
+
+    public function updateUserRole(Request $request, User $user){
+        if($user){
+            $user = User::findOrFail($user->id);
+            $user->role = $request->role;
+            $user->save();
+
+            Alert::success('Successfully Updated')->persistent('Dismiss');
+            return back();
+        }
+    }
 
     public function accountSetting()
     {
@@ -54,6 +88,7 @@ class UserController extends Controller
         ));
     
     }
+    
     public function updateInfo(Request $request, $id){
 
         $employee = Employee::findOrFail($id);
@@ -163,5 +198,21 @@ class UserController extends Controller
         {
             return $request;
         }
+    }
+
+    public function updateUserPassword(Request $request,User $user){
+
+        $validator = $request->validate([
+            'password' => 'required|confirmed',
+            'password_confirmation' => 'required'
+        ]);
+    
+        $user = User::findOrFail($user->id);
+        $user->password = bcrypt($request->input('password'));
+        $user->save();
+
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
+
     }
 }

@@ -15,6 +15,9 @@ class PersonnelEmployee extends Model
     //     return $this->hasMany(Attendance::class,'emp_code','employee_code');
     // }
 
+    public function employee() {
+        return $this->setConnection('mysql')->belongsTo(Employee::class,'emp_code','employee_number')->select('id','user_id','employee_number','first_name','last_name');
+    }
     public function attendances() {
         return $this->setConnection('mysql')->hasMany(Attendance::class,'employee_code','emp_code');
     }

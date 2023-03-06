@@ -2,19 +2,66 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\EmployeeApproverController;
+use App\Company;
 use App\Employee;
 use App\Overtime;
+use App\EmployeeCompany;
+use App\EmployeeOvertime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
+use App\Exports\EmployeeOvertimeExport;
+use Excel;
+
 class OvertimeController extends Controller
 {
     //
+    public function overtime_report(Request $request){
+        $company = $request->company;
+        $from_date = $request->from;
+        $to_date = $request->to;
+        $date_range = '';
+        $companies = Company::whereHas('employee_company')->get();
+
+        $employee_overtimes=[];
+        if ($from_date != null) {
+            $company_employees = Employee::where('company_id',$request->company)->pluck('user_id')->toArray();
+            
+            $employee_overtimes = EmployeeOvertime::with('user','employee')
+                                                    ->where(function ($query) use ($from_date, $to_date) {
+                                                        $query->whereBetween('ot_date', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                                              ->orderBy('ot_date','asc')
+                                                              ->orderby('user_id','desc')
+                                                              ->orderBy('id','asc');
+                                                    })
+                                                    ->whereIn('user_id', $company_employees)
+                                                    ->where('status','Approved')
+                                                    ->get();
+        }
+
+        return view('reports.overtime_report',
+        array(
+            'header' => 'overtimes',
+            'employee_overtimes' => $employee_overtimes,
+            'companies' => $companies,
+            'company' => $company,
+            'from_date' => $from_date,
+            'to_date' => $to_date,
+            'date_range' => $date_range,
+        ));
+    }
+
+    public function export(Request $request){
+        $company = isset($request->company) ? $request->company : "";
+        $from = isset($request->from) ? $request->from : "";
+        $to =  isset($request->to) ? $request->to : "";
+        $company_detail = Company::where('id',$company)->first();
+        return Excel::download(new EmployeeOvertimeExport($company,$from,$to), $company_detail->company_code . ' ' . $from . ' to ' . $to . ' Overtime Export.xlsx');
+    }
 
     public function overtime ()
-    { 
-        
+    {   
         $get_approvers = new EmployeeApproverController;
         $overtimes = Overtime::with('user')->get();
         $all_approvers = $get_approvers->get_approvers(auth()->user()->id);

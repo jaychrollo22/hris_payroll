@@ -60,9 +60,9 @@
                         <th>OT Time</th> 
                         <th>OT Requested (Hrs)</th>
                         <th>OT Approved (Hrs)</th>
-                        <th>OT Rendered (Hrs)</th>
                         <th>Remarks </th>
                         <th>Status </th>
+                        <th>Approvers </th>
                         <th>Action </th>
                       </tr>
                     </thead>
@@ -73,8 +73,7 @@
                         <td> {{ date('M. d, Y ', strtotime($overtime->ot_date)) }}</td>
                         <td> {{ date('h:i A', strtotime($overtime->start_time)) }} - {{ date('h:i A', strtotime($overtime->end_time)) }}</td>
                         <td> {{intval((strtotime($overtime->end_time)-strtotime($overtime->start_time))/60/60)}}</td>
-                        <td> 0</td>
-                        <td> 0</td>
+                        <td> {{$overtime->ot_approved_hrs}}</td>
                         <td>{{ $overtime->remarks }}</td>
                         <td id="tdStatus{{ $overtime->id }}">
                           @if ($overtime->status == 'Pending')
@@ -85,12 +84,30 @@
                             <label class="badge badge-danger">{{ $overtime->status }}</label>
                           @endif                        
                         </td>
+                        <td>
+                          @foreach($overtime->approver as $approver)
+                            @if($overtime->level >= $approver->level)
+                              @if ($overtime->level == 0 && $overtime->status == 'Declined')
+                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                              @endif
+                            @else
+                              @if ($overtime->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                              @endif
+                            @endif<br>
+                          @endforeach
+                        </td>
+
                         <td id="tdActionId{{ $overtime->id }}" data-id="{{ $overtime->id }}">
-                          @if ($overtime->status == 'Pending' and $overtime->level == 1)
-                          <button type="button" id="view{{ $overtime->id }}" class="btn btn-primary btn-rounded btn-icon"
-                            data-target="#view_overtime{{ $overtime->id }}" data-toggle="modal" title='View'>
-                            <i class="ti-eye"></i>
-                          </button>            
+                          @if ($overtime->status == 'Pending' and $overtime->level == 0)
+                            <button type="button" id="view{{ $overtime->id }}" class="btn btn-primary btn-rounded btn-icon"
+                              data-target="#view_overtime{{ $overtime->id }}" data-toggle="modal" title='View'>
+                              <i class="ti-eye"></i>
+                            </button>            
                             <button type="button" id="edit{{ $overtime->id }}" class="btn btn-info btn-rounded btn-icon"
                               data-target="#edit_overtime{{ $overtime->id }}" data-toggle="modal" title='Edit'>
                               <i class="ti-pencil-alt"></i>
@@ -99,7 +116,7 @@
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
                             </button>
-                          @elseif ($overtime->status == 'Pending' and $overtime->level > 1)
+                          @elseif ($overtime->status == 'Pending' && $overtime->level > 1)
                             <button type="button" id="view{{ $overtime->id }}" class="btn btn-primary btn-rounded btn-icon"
                               data-target="#view_overtime{{ $overtime->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
@@ -137,8 +154,6 @@
 </div>
 @foreach ($overtimes as $overtime)
   @include('forms.overtime.edit_overtime')
-@endforeach  
-@foreach ($overtimes as $overtime)
   @include('forms.overtime.view_overtime')
 @endforeach  
  @include('forms.overtime.apply_overtime') 

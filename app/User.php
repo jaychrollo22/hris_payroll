@@ -49,6 +49,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Employee::class,'immediate_sup','id');
     }
+    public function employee_under()
+    {
+        return $this->hasMany(EmployeeApprover::class,'approver_id','id');
+    }
 
     public function emp_leave()
     {

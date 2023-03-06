@@ -69,7 +69,9 @@
           </div>
       </div>
       <div class="modal-footer">
-        <a href="{{url($ob->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-info btn-fw ">View Attachment</button></a>
+        @if($ob->attachment)
+          <a href="{{url($ob->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-info btn-fw ">View Attachment</button></a>  
+        @endif
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-primary">Save</button>
       </div>

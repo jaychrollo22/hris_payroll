@@ -68,7 +68,9 @@
                  Attachment
               </div>
               <div class='col-md-10'>
-                <a href="{{url($dtr->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-info btn-fw ">View Attachment</button></a>
+                @if($dtr->attachment)
+                  <a href="{{url($dtr->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-info btn-fw ">View Attachment</button></a>
+                @endif
             </div>
             </div>
           </div>

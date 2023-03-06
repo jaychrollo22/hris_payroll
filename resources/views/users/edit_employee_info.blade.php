@@ -181,8 +181,14 @@
   function add_approver()
   {
     var lastItemID = $('.approvers-data').children().last().attr('id');
-    var last_id = lastItemID.split("_");
+    console.log(lastItemID);
+    if(lastItemID){
+        var last_id = lastItemID.split("_");
         finalLastId = parseInt(last_id[1]) + 1;
+    }else{
+      finalLastId =  1;
+    }
+   
                                  
         var item = "<div class='row mb-2  mt-2 ' id='approver_"+finalLastId+"'>";
             item+= "<div class='col-md-1  align-self-center'>";

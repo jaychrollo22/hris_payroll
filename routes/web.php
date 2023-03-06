@@ -35,6 +35,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('get-attendance-bio', 'AttendanceController@get_attendances');
 
+
+    Route::get('attendance-per-company-export', 'AttendanceController@attendancePerCompanyExport');
+
+
+
     //Leaves
     Route::get('file-leave', 'EmployeeLeaveController@leaveBalances');
     Route::post('new-leave','EmployeeLeaveController@new');
@@ -50,6 +55,7 @@ Route::group(['middleware' => 'auth'], function () {
     //Work-from-home
     Route::get('work-from-home', 'EmployeeWfhController@wfh');
     Route::post('new-wfh','EmployeeWfhController@new');
+    Route::post('edit-wfh/{id}','EmployeeWfhController@edit_wfh');
 
     //official-business
     Route::get('official-business', 'EmployeeObController@ob');
@@ -64,12 +70,33 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('disable-dtr/{id}', 'EmployeeDtrController@disable_dtr');     
 
     //FOR APPROVAL
-    Route::get('for-approval', 'FormApprovalController@form_approval');
-    Route::get('for-leave','FormApprovalController@form_approval');
+    Route::get('for-leave','FormApprovalController@form_leave_approval');
+    Route::get('approve-leave/{id}','FormApprovalController@approveLeave');
+    Route::get('decline-leave/{id}','FormApprovalController@declineLeave');
+
+    Route::get('for-overtime','FormApprovalController@form_overtime_approval');
+    Route::post('approve-ot-hrs/{employee_overtime}','FormApprovalController@approveOvertime');
+    Route::get('decline-overtime/{id}','FormApprovalController@declineOvertime');
+
+    Route::get('for-work-from-home','FormApprovalController@form_wfh_approval');
+    Route::get('approve-wfh/{id}','FormApprovalController@approveWfh');
+    Route::get('decline-wfh/{id}','FormApprovalController@declineWfh');
+    
+    Route::get('for-official-business','FormApprovalController@form_ob_approval');
+    Route::get('approve-ob/{id}','FormApprovalController@approveOb');
+    Route::get('decline-ob/{id}','FormApprovalController@declineOb');
+
+    Route::get('for-dtr-correction','FormApprovalController@form_dtr_approval');
+    Route::get('approve-dtr/{id}','FormApprovalController@approveDtr');
+    Route::get('decline-dtr/{id}','FormApprovalController@declineDtr');
 
     //employees
     Route::get('employees', 'EmployeeController@view');
+    Route::get('employees-export', 'EmployeeController@export');
     Route::post('new-employee', 'EmployeeController@new');
+    Route::get('account-setting-hr/{user}', 'EmployeeController@employeeSettingsHR');
+    Route::post('account-setting-hr/updateInfoHR/{id}', 'EmployeeController@updateInfoHR');
+    Route::post('account-setting-hr/updateEmpInfoHR/{id}', 'EmployeeController@updateEmpInfoHR');
 
     //Payslips
     Route::get('payslips', 'PayslipController@view');
@@ -179,10 +206,19 @@ Route::group(['middleware' => 'auth'], function () {
     // Reports
     Route::get('employee-report', 'EmployeeController@employee_report');
     Route::get('leave-report', 'LeaveController@leave_report');
+    Route::get('leave-report-export', 'LeaveController@export');
     Route::get('totalExpense-report', 'PayrollController@totalExpense_report');
     Route::get('loan-report', 'LoanController@loan_report');
     Route::get('incentive-report', 'IncentiveController@incentive_report');
     Route::get('payroll-report', 'PayrollController@payroll_report');
+    Route::get('overtime-report', 'OvertimeController@overtime_report');
+    Route::get('overtime-report-export', 'OvertimeController@export');
+    Route::get('wfh-report', 'WorkfromhomeController@wfh_report');
+    Route::get('wfh-report-export', 'WorkfromhomeController@export');
+    Route::get('ob-report', 'OfficialbusinessController@ob_report');
+    Route::get('ob-report-export', 'OfficialbusinessController@export');
+    Route::get('dtr-report', 'DailytimerecordController@dtr_report');
+    Route::get('dtr-report-export', 'DailytimerecordController@export');
 
     //13th month
     Route::get('month-benefit', 'PayslipController@monthly_benefit');
@@ -190,6 +226,15 @@ Route::group(['middleware' => 'auth'], function () {
     // Employee Leave Credits
     Route::get('employee-leave-credits', 'LeaveCreditsController@index');
 
+    //User
+    Route::get('/users','UserController@index');
+    Route::post('/update-user-role/{user}','UserController@updateUserRole');
+    Route::post('/update-user-password/{user}','UserController@updateUserPassword');
+
+
+    Route::get('users-export', 'UserController@export');
+
     
 });
 Route::post('new-employee', 'EmployeeController@new');
+Route::post('upload-employee', 'EmployeeController@upload');
