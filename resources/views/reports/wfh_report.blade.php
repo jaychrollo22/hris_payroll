@@ -61,7 +61,7 @@
 										  <th>Employee Name</th>
 										  <th>From</th>
 										  <th>To</th>
-                                          <th>WFH Count(Days)</th> 
+                                          {{-- <th>WFH Count(Days)</th>  --}}
 										  <th>Status</th> 
 										  <th>Approved Date</th> 
 										  <th>Reason/Remarks</th> 
@@ -74,7 +74,7 @@
 										  <td>{{$form_approval->user->name}}</td>
 										  <td>{{date('d/m/Y H:i', strtotime($form_approval->date_from))}}</td>
 										  <td>{{date('d/m/Y H:i', strtotime($form_approval->date_to))}}</td>
-                                          <td>{{get_count_days($form_approval->schedule,$form_approval->date_from,$form_approval->date_to)}}</td>
+                                          {{-- <td>{{get_count_days($form_approval->schedule,$form_approval->date_from,$form_approval->date_to)}}</td> --}}
 										  <td>
 											{{$form_approval->status}}
 										  </td>

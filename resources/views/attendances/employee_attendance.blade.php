@@ -67,7 +67,7 @@
                     @endphp
                     <thead>
                       <tr>
-                        <td colspan='11'>{{$emp->emp_code}} - {{$emp->first_name}} {{$emp->last_name}}</td>
+                        <td colspan='11'>{{$emp->employee_number}} - {{$emp->first_name}} {{$emp->last_name}}</td>
                       </tr>
                       <tr>
                         <td>Date</td>

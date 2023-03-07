@@ -11,7 +11,7 @@
        
         @foreach($leaves as $leave)
             @php
-                $date_range = dateRangeWorkdayHelper($leave->date_from,$leave->date_to);
+                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
             @endphp
             @if($date_range)
             <tbody>
