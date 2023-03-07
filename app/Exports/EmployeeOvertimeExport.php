@@ -51,7 +51,7 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
 
     public function map($employee_leave): array
     {
-        $rw_ot = $this->isRestDay($employee_leave->ot_date);
+        $rw_ot = $this->isRWOT($employee_leave->ot_date);
         return [
             $employee_leave->user->id,
             $employee_leave->user->name,
@@ -69,14 +69,14 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
     }
 
 
-    public function isRestDay( $date ) {
+    public function isRWOT( $date ) {
 
         $check_day = date('D',strtotime($date));
-        $check = '0';
+        $check = '1';
         if ($check_day == 'Sat' || $check_day == 'Sun') {
-            $check = '1';
-        }else{
             $check = '0';
+        }else{
+            $check = '1';
         }
         return $check;
     }
