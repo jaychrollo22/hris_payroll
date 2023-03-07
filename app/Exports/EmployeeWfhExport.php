@@ -57,7 +57,7 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
             date('H:i',strtotime($employee_wfh->date_to)),
             // $this->get_count_days($employee_wfh->schedule,$employee_wfh->date_from,$employee_wfh->date_to),
             // date('d/m/Y',strtotime($employee_wfh->approved_date)),
-            $employee_wfh->status,
+            // $employee_wfh->status,
             "WFH"
         ];
     }
