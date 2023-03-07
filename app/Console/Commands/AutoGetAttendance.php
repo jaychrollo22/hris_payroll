@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Employee;
 use App\Attendance;
 use App\iclockterminal_mysql;
 use App\iclocktransactions_mysql;
@@ -46,13 +47,21 @@ class AutoGetAttendance extends Command
     }
 
     public function getAttendances(){
-        $from = date('Y-m-d',strtotime ( '-1 day'));
+        
+        $from = date('Y-m-d',strtotime('-1 day'));
         $to = date('Y-m-d');
-        $terminals = iclockterminal_mysql::get();
+        
+        
+        $terminals = iclockterminal_mysql::pluck('id')->toArray();
+        $employee_numbers = Employee::pluck('employee_number')->toArray();
+        $attendances = iclocktransactions_mysql::whereIn('emp_code',$employee_numbers)
+                                                    ->whereIn('terminal_id',$terminals)
+                                                    ->whereBetween('punch_time',[$from,$to])
+                                                    ->orderBy('punch_time','asc')
+                                                    ->get();
+        
         $count = 0;
-        foreach($terminals as $terminal)
-        {
-            $attendances = iclocktransactions_mysql::where('terminal_id','=',$terminal->id)->whereBetween('punch_time',[$from,$to])->orderBy('punch_time','asc')->get();
+        if(count($attendances) > 0){
             foreach($attendances as $att)
             {
                 if($att->punch_state == 0)
