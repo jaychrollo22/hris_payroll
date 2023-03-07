@@ -34,15 +34,15 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'User ID',
-            'Employee Name',
-            'Date',
-            'Time In',
-            'Time Out',
+            'USER ID',
+            'EMPLOYEE NAME',
+            'DATE',
+            'FIRST ACTUAL TIME IN',
+            'SECOND ACTUAL TIME OUT',
             // 'WFH Count',
             // 'Approved Date',
             // 'Status',
-            'Remarks',
+            'REMARKS',
         ];
     }
 

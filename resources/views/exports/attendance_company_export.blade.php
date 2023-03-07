@@ -1,13 +1,14 @@
 <table border="1" class="table table-hover table-bordered employee_attendance" id='employee_attendance'>
     <thead>
         <tr>
-            <td>User ID</td>
+            <td>USER ID</td>
             {{-- <td>Biometric ID</td> --}}
-            <td>Name</td>
-            <td>Date</td>
-            <td>Time In</td>
-            <td>Time Out</td>
-            <td>Work </td>
+            <td>NAME</td>
+            <td>DATE</td>
+            <td>FIRST ACTUAL TIME IN</td>
+            <td>SECOND ACTUAL TIME OUT</td>
+            <td>WORK</td>
+            <td>REMARKS</td>
         </tr>
     </thead>
     @foreach($attendances as $emp)
@@ -105,6 +106,9 @@
                         @endphp
                     @endif
                 @endif
+            </td>
+            <td>
+
             </td>
             @endif
         </tr>
