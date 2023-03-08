@@ -240,7 +240,7 @@ class EmployeeController extends Controller
                         $employee->classification = isset($value['classification']) ? $value['classification'] : "";
                         $employee->department_id = isset($value['department_id']) ? $value['department_id'] : "";
                         $employee->company_id = isset($value['company_id']) ? $value['company_id'] : "";
-                        $employee->original_date_hired = isset($value['original_date_hired']) && !empty($value['original_date_hired']) ? date('Y-m-d',strtotime($value['original_date_hired'])) : null;
+                        $employee->original_date_hired = isset($value['date_hired']) && !empty($value['date_hired']) ? date('Y-m-d',strtotime($value['date_hired'])) : null;
 
                         $employee->position = isset($value['position']) ? $value['position'] : "";
                         $employee->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
