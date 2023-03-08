@@ -71,7 +71,7 @@ class EmployeeController extends Controller
         $users = User::get();
         $levels = Level::get();
         $marital_statuses = MaritalStatus::get();
-        $companies = Company::whereHas('employee_company')->orderBy('company_name','ASC')->get();
+        $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
 
        
         return view(
@@ -569,7 +569,7 @@ class EmployeeController extends Controller
     }
     public function perCompany(Request $request)
     {
-        $companies = Company::whereHas('employee_company')->get();
+        $companies = Company::whereHas('employee_has_company')->get();
         $attendance_controller = new AttendanceController;
         $company = $request->company;
         $from_date = $request->from;

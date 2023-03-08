@@ -22,7 +22,7 @@ class OvertimeController extends Controller
         $from_date = $request->from;
         $to_date = $request->to;
         $date_range = '';
-        $companies = Company::whereHas('employee_company')->get();
+        $companies = Company::whereHas('employee_has_company')->get();
 
         $employee_overtimes=[];
         if ($from_date != null) {

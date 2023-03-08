@@ -40,7 +40,7 @@ class LeaveController extends Controller
     }
     public function leave_report(Request $request)
     {   
-        $companies = Company::whereHas('employee_company')->get();
+        $companies = Company::whereHas('employee_has_company')->get();
 
         $company = isset($request->company) ? $request->company : "";
         $from = isset($request->from) ? $request->from : "";

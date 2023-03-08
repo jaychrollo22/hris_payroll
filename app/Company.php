@@ -13,4 +13,9 @@ class Company extends Model implements Auditable
     {
         return $this->hasMany(EmployeeCompany::class);
     }
+
+    public function employee_has_company()
+    {
+        return $this->belongsTo(Employee::class,'id','company_id');
+    }
 }
