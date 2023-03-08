@@ -45,6 +45,7 @@ class LeaveController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
+        $status =  isset($request->status) ? $request->status : "";
         $employee_leaves = [];
         if(isset($request->from) && isset($request->to)){
             $employee_leaves = EmployeeLeave::with('user','leave')
@@ -53,7 +54,7 @@ class LeaveController extends Controller
                                         ->whereHas('employee',function($q) use($company){
                                             $q->where('company_id',$company);
                                         })
-                                        ->where('status','Approved')
+                                        ->where('status',$status)
                                         ->get();
         }
         
@@ -63,6 +64,7 @@ class LeaveController extends Controller
             'company'=>$company,
             'from'=>$from,
             'to'=>$to,
+            'status'=>$status,
             'employee_leaves' => $employee_leaves,
             'companies' => $companies
         ));
@@ -72,8 +74,9 @@ class LeaveController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
+        $status =  isset($request->status) ? $request->status : "";
         $company_detail = Company::where('id',$company)->first();
-        return Excel::download(new EmployeeLeaveExport($company,$from,$to), $company_detail->company_code . ' ' . $from . ' to ' . $to . ' Leave Export.xlsx');
+        return Excel::download(new EmployeeLeaveExport($company,$from,$to,$status), $company_detail->company_code . ' ' . $from . ' to ' . $to . ' Leave Export.xlsx');
     }
 
     public function leaveBalances()
