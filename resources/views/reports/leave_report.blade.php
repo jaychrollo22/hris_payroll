@@ -85,7 +85,7 @@
 										  <td>
 											{{$form_approval->status}}
 										  </td>
-										  <td>{{date('d/m/Y', strtotime($form_approval->approved_date))}}</td>
+										  <td>{{ $form_approval->approved_date ? date('d/m/Y', strtotime($form_approval->approved_date)) : ""}}</td>
 										  <td>{{$form_approval->reason}}</td>
 										  </tr>
 										@endforeach                        
