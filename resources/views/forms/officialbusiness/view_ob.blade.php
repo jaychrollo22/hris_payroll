@@ -23,16 +23,24 @@
           </div>
             <div class="form-group row">
               <div class='align-self-center col-md-2 text-right'>
-                Date From
+                Date
               </div>
               <div class='col-md-4'>
-                <input type="date" name='date_from' class="form-control" value="{{ $ob->date_from }}" disabled>
+                <input type="date" name='applied_date' class="form-control" value="{{ $ob->applied_date }}" disabled>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class='align-self-center col-md-2 text-right'>
+                Time In
+              </div>
+              <div class='col-md-4'>
+                <input type="time" name='date_from' class="form-control" value="{{ $ob->date_from }}" disabled>
               </div>
               <div class='align-self-center col-md-2 text-right'>
-                 Date To
+                Time Out
               </div>
               <div class='col-md-4'>
-                <input type="date" name='date_to' class="form-control" value="{{ $ob->date_to }}" disabled>
+                <input type="time" name='date_to' class="form-control" value="{{ $ob->date_to }}" disabled>
               </div>
             </div>
             <div class="form-group row">

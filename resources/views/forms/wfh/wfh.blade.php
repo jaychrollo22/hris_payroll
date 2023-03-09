@@ -19,6 +19,7 @@
                       <tr>
                         <th>Date Filed</th>
                         <th>WFH Date</th>
+                        <th>WFH Time In-Out</th>
                         {{-- <th>WFH Count (Days)</th> --}}
                         <th>Remarks</th>
                         <th>Status</th>
@@ -30,7 +31,8 @@
                       @foreach ($wfhs as $wfh)
                       <tr>
                         <td> {{ date('d/m/Y', strtotime($wfh->created_at)) }}</td>
-                        <td> {{ date('d/m/Y H:i', strtotime($wfh->date_from)) }} - {{ date('d/m/Y H:i', strtotime($wfh->date_to)) }}  </td>
+                        <td> {{ date('d/m/Y', strtotime($wfh->applied_date)) }} </td>
+                        <td> {{ date('H:i', strtotime($wfh->date_from)) }} - {{ date('H:i', strtotime($wfh->date_to)) }}  </td>
                         {{-- <td>{{get_count_days($wfh->schedule,$wfh->date_from,$wfh->date_to)}}</td> --}}
                         <td>{{ $wfh->remarks }}</td>
                         <td id="tdStatus{{ $wfh->id }}">

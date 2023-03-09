@@ -39,9 +39,6 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
             'DATE',
             'FIRST ACTUAL TIME IN',
             'SECOND ACTUAL TIME OUT',
-            // 'WFH Count',
-            // 'Approved Date',
-            // 'Status',
             'REMARKS',
         ];
     }
@@ -51,13 +48,9 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
         return [
             $employee_wfh->user->id,
             $employee_wfh->user->name,
-            // date('d/m/Y', strtotime($employee_wfh->created_at)),
-            date('d/m/Y',strtotime($employee_wfh->date_from)),
+            date('d/m/Y',strtotime($employee_wfh->applied_date)),
             date('H:i',strtotime($employee_wfh->date_from)),
             date('H:i',strtotime($employee_wfh->date_to)),
-            // $this->get_count_days($employee_wfh->schedule,$employee_wfh->date_from,$employee_wfh->date_to),
-            // date('d/m/Y',strtotime($employee_wfh->approved_date)),
-            // $employee_wfh->status,
             "WFH"
         ];
     }

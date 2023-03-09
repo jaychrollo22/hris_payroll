@@ -36,6 +36,7 @@ class EmployeeWfhController extends Controller
         $new_wfh->user_id = Auth::user()->id;
         $emp = Employee::where('user_id',auth()->user()->id)->first();
         $new_wfh->schedule_id = $emp->schedule_id;
+        $new_wfh->applied_date = $request->applied_date;
         $new_wfh->date_from = $request->date_from;
         $new_wfh->date_to = $request->date_to;
         $new_wfh->remarks = $request->remarks;
@@ -73,6 +74,7 @@ class EmployeeWfhController extends Controller
         
         $emp = Employee::where('user_id',auth()->user()->id)->first();
         $wfh->schedule_id = $emp->schedule_id;
+        $wfh->applied_date = $request->applied_date;
         $wfh->date_from = $request->date_from;
         $wfh->date_to = $request->date_to;
         $wfh->remarks = $request->remarks;

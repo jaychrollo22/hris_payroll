@@ -17,6 +17,7 @@
                   <table class="table table-hover table-bordered tablewithSearch">
                     <thead>
                       <tr>
+                        <th>Date Filed</th>
                         <th>Date</th>
                         <th>Time In-Out</th>
                         <th>Destination</th>
@@ -31,6 +32,7 @@
                     <tbody>
                       @foreach ($obs as $ob)
                       <tr>
+                        <td> {{ date('d/m/Y', strtotime($ob->created_date)) }} </td>
                         <td> {{ date('d/m/Y', strtotime($ob->applied_date)) }} </td>
                         <td> {{ date('H:i', strtotime($ob->date_from)) }} - {{ date('H:i', strtotime($ob->date_to)) }}  </td>
                         <td> {{$ob->destination}}</td>
