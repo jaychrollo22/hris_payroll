@@ -55,17 +55,9 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
         return [
             $employee_leave->user->id,
             $employee_leave->user->name,
-            // date('d/m/Y', strtotime($employee_leave->created_at)),
             date('d/m/Y',strtotime($employee_leave->ot_date)),
-            // date('H:i', strtotime($employee_leave->start_time)),
-            // date('H:i', strtotime($employee_leave->end_time)),
-            // intval((strtotime($employee_leave->end_time)-strtotime($employee_leave->start_time))/60/60),
-            // date('H:i',strtotime($employee_leave->ot_approved_hrs)),
             gmdate('H:i', floor($employee_leave->ot_approved_hrs * 3600)),
             $rw_ot,
-            // date('d/m/Y',strtotime($employee_leave->approved_date)),
-            // $employee_leave->status,
-            // $employee_leave->remarks
         ];
     }
 
