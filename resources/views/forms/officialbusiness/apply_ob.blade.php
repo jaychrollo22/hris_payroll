@@ -23,16 +23,24 @@
         </div>
           <div class="form-group row">
             <div class='align-self-center col-md-2 text-right'>
-              Date From
+              Date Applied
             </div>
             <div class='col-md-4'>
-              <input type="date" name='date_from' class="form-control" required>
+              <input type="date" name='applied_date' class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class='align-self-center col-md-2 text-right'>
+              Time in
+            </div>
+            <div class='col-md-4'>
+              <input type="time" name='date_from' class="form-control" required>
             </div>
             <div class='align-self-center col-md-2 text-right'>
-               Date To
+               Time out
             </div>
             <div class='col-md-4'>
-              <input type="date" name='date_to' class="form-control" required>
+              <input type="time" name='date_to' class="form-control" required>
             </div>
           </div>
           <div class="form-group row">

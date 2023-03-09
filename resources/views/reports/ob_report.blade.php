@@ -54,8 +54,8 @@
                                         <th>User ID</th>
                                         <th>Employee Name</th>
                                         <th>Date Filed</th>
-                                        <th>OB From</th> 
-                                        <th>OB To</th> 
+                                        <th>Date</th>
+                                        <th>Time In-Out</th>
                                         <th>OB Count</th> 
                                         <th>Remarks </th>
                                         <th>Status </th>
@@ -67,8 +67,8 @@
                                         <td>{{$item->employee->user_id}}</td>
                                         <td>{{$item->user->name}}</td>
                                         <td>{{date('d/m/Y', strtotime($item->created_at))}}</td>
-                                        <td>{{date('d/m/Y', strtotime($item->date_from))}}</td>
-                                        <td>{{date('d/m/Y', strtotime($item->date_to))}}</td>
+                                        <td>{{ date('d/m/Y ', strtotime($item->applied_date)) }}</td>
+                                        <td>{{ date('H:i', strtotime($item->date_from)) }} - {{ date('H:i', strtotime($item->date_to)) }}  </td>
                                         <td>{{get_count_days($item->schedule,$item->date_from,$item->date_to)}}</td>
                                         <td>{{$item->remarks}}</td>
                                         <td>{{$item->status}}</td>

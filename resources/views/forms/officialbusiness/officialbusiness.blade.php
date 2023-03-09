@@ -17,8 +17,8 @@
                   <table class="table table-hover table-bordered tablewithSearch">
                     <thead>
                       <tr>
-                        <th>Date Filed</th>
-                        <th>OB Date</th>
+                        <th>Date</th>
+                        <th>Time In-Out</th>
                         <th>Destination</th>
                         <th>Person/Company to see</th>
                         <th>Purpose</th>
@@ -31,8 +31,8 @@
                     <tbody>
                       @foreach ($obs as $ob)
                       <tr>
-                        <td> {{ date('M. d, Y ', strtotime($ob->created_at)) }} </td>
-                        <td> {{ date('M. d, Y ', strtotime($ob->date_from)) }} - {{ date('M. d, Y ', strtotime($ob->date_to)) }}  </td>
+                        <td> {{ date('d/m/Y', strtotime($ob->applied_date)) }} </td>
+                        <td> {{ date('H:i', strtotime($ob->date_from)) }} - {{ date('H:i', strtotime($ob->date_to)) }}  </td>
                         <td> {{$ob->destination}}</td>
                         <td> {{$ob->persontosee}}</td>
                         <td> {{$ob->remarks}}</td>

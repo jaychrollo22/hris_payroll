@@ -34,15 +34,12 @@ class EmployeeObExport implements FromQuery, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'User ID',
-            'Employee Name',
-            'Date Filed',
-            'OB From',
-            'OB To',
-            'OB Count',
-            'Approved Date',
-            'Status',
-            'Remarks',
+            'USER ID',
+            'EMPLOYEE NAME',
+            'DATE',
+            'FIRST ACTUAL TIME IN',
+            'SECOND ACTUAL TIME OUT',
+            'REMARKS',
         ];
     }
 
@@ -51,13 +48,10 @@ class EmployeeObExport implements FromQuery, WithHeadings, WithMapping
         return [
             $employee_ob->user->id,
             $employee_ob->user->name,
-            date('d/m/Y', strtotime($employee_ob->created_at)),
-            date('d/m/Y',strtotime($employee_ob->date_from)),
-            date('d/m/Y',strtotime($employee_ob->date_to)),
-            $this->get_count_days($employee_ob->schedule,$employee_ob->date_from,$employee_ob->date_to),
-            date('d/m/Y',strtotime($employee_ob->approved_date)),
-            $employee_ob->status,
-            $employee_ob->remarks
+            date('d/m/Y',strtotime($employee_ob->applied_date)),
+            date('H:i',strtotime($employee_ob->date_from)),
+            date('H:i',strtotime($employee_ob->date_to)),
+            'Official Business'
         ];
     }
 
