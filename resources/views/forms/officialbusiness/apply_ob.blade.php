@@ -23,7 +23,7 @@
         </div>
           <div class="form-group row">
             <div class='align-self-center col-md-2 text-right'>
-              Date Applied
+              Date
             </div>
             <div class='col-md-4'>
               <input type="date" name='applied_date' class="form-control" required>
