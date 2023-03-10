@@ -38,7 +38,8 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
                                             'sss_number',
                                             'hdmf_number',
                                             'phil_number',
-                                            'tax_number'
+                                            'tax_number',
+                                            'company_id',
                                         )
                                         ->with('company')
                                         ->when($company,function($q) use($company){
@@ -66,6 +67,11 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
         return [
             'USER ID',
             'EMPLOYEE ID NUMBER',
+            'COMPANY',
+            'BRANCH',
+            'JOB TITLE',
+            'WORK DESCRIPTION',
+            'RATE',
             'DATE HIRED',
             'FIRST NAME',
             'LAST NAME',
@@ -86,9 +92,15 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
 
     public function map($employee): array
     {
+        $company = $employee->company ? $employee->company->company_name : "";
         return [
             $employee->employee_number,
             $employee->user_id,
+            $company,
+            $employee->location,
+            $employee->position,
+            $employee->work_description,
+            $employee->rate,
             date('d/m/Y',strtotime($employee->original_date_hired)),
             $employee->first_name,
             $employee->last_name,
