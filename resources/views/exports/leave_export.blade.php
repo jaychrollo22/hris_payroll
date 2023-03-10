@@ -17,7 +17,7 @@
             <tbody>
                 @foreach($date_range as $date_r)
                 <tr>
-                    <td>{{$leave->user_id}}</td>
+                    <td>{{$leave->employee->employee_number}}</td>
                     <td>{{$leave->employee->first_name . ' ' . $leave->employee->last_name}}</td>
                     <td>{{date('d/m/Y',strtotime($date_r))}}</td>
                     <td>{{$leave->leave->leave_type}}</td>

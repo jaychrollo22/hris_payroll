@@ -46,7 +46,7 @@ class EmployeeObExport implements FromQuery, WithHeadings, WithMapping
     public function map($employee_ob): array
     {
         return [
-            $employee_ob->user->id,
+            $employee_ob->employee->employee_number,
             $employee_ob->user->name,
             date('d/m/Y',strtotime($employee_ob->applied_date)),
             date('H:i',strtotime($employee_ob->date_from)),

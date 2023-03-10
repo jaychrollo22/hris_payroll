@@ -46,7 +46,7 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
     public function map($employee_wfh): array
     {
         return [
-            $employee_wfh->user->id,
+            $employee_wfh->employee->employee_number,
             $employee_wfh->user->name,
             date('d/m/Y',strtotime($employee_wfh->applied_date)),
             date('H:i',strtotime($employee_wfh->date_from)),

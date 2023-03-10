@@ -53,7 +53,7 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
     {
         $rw_ot = $this->isRWOT($employee_leave->ot_date);
         return [
-            $employee_leave->user->id,
+            $employee_leave->employee->employee_number,
             $employee_leave->user->name,
             date('d/m/Y',strtotime($employee_leave->ot_date)),
             gmdate('H:i', floor($employee_leave->ot_approved_hrs * 3600)),

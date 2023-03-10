@@ -375,7 +375,7 @@
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/for-overtime') }}">Overtime</a></li>
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/for-work-from-home') }}">Work from home</a></li>
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/for-official-business') }}">Official Business</a></li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction</a></li>
+                                {{-- <li class="nav-item "> <a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction</a></li> --}}
                             </ul>
                         </div>
                     </li>
