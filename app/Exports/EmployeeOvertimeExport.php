@@ -34,14 +34,14 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'User ID',
-            'Employee Name',
+            'USER ID',
+            'EMPLOYEE NAME',
             // 'Date Filed',
-            'OT Date',
+            'OT DATE',
             // 'OT Start Time',
             // 'OT End Time',
             // 'OT Requested',
-            'OT Approved',
+            'OT APPROVED',
             // 'Approved Date',
             // 'Status',
             // 'Remarks',
