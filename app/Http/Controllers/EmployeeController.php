@@ -25,7 +25,8 @@ use App\AttPunch;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 use App\Exports\EmployeesExport;
 
@@ -159,6 +160,35 @@ class EmployeeController extends Controller
             $employee->middle_initial = $request->middile_initial;
             $employee->name_suffix = $request->suffix;
             $employee->religion = $request->religion;
+            
+            $employee->bank_name = $request->bank_name;
+            $employee->bank_account_number = $request->bank_account_number;
+
+            $employee->location = $request->location;
+            $employee->work_description = $request->work_description;
+            $employee->rate = isset($request->rate) ? Crypt::encryptString($request->rate) : "";
+
+
+            if($request->hasFile('file'))
+            {
+                $attachment = $request->file('file');
+                $original_name = $attachment->getClientOriginalName();
+                $name = time().'_'.$attachment->getClientOriginalName();
+                $attachment->move(public_path().'/avatar/', $name);
+                $file_name = '/avatar/'.$name;
+                $employee->avatar = $file_name;
+            }
+
+            if($request->hasFile('signature'))
+            {
+                $attachment = $request->file('signature');
+                $original_name = $attachment->getClientOriginalName();
+                $name = time().'_'.$attachment->getClientOriginalName();
+                $attachment->move(public_path().'/signature/', $name);
+                $file_name = '/signature/'.$name;
+                $employee->signature = $file_name;
+            }
+
             $employee->save();
 
             $employeeCompany = new EmployeeCompany;
@@ -264,6 +294,11 @@ class EmployeeController extends Controller
                         $employee->area = isset($value['area']) ? $value['area'] : "";
                         $employee->religion = isset($value['religion']) ? $value['religion'] : "";
                         $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
+
+                        $employee->location = isset($value['branch']) ? $value['branch'] : "";
+                        $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
+                        $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
+                        
                         $employee->status = "Active";
                         $employee->save();
 
@@ -295,6 +330,11 @@ class EmployeeController extends Controller
                             $check_if_exist->area = isset($value['area']) ? $value['area'] : "";
                             $check_if_exist->religion = isset($value['religion']) ? $value['religion'] : "";
                             $check_if_exist->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
+
+                            $employee->location = isset($value['branch']) ? $value['branch'] : "";
+                            $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
+                            $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
+
                             $check_if_exist->status = "Active";
                             $check_if_exist->save();
 
@@ -366,6 +406,11 @@ class EmployeeController extends Controller
                         $employee->area = isset($value['area']) ? $value['area'] : "";
                         $employee->religion = isset($value['religion']) ? $value['religion'] : "";
                         $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
+
+                        $employee->location = isset($value['branch']) ? $value['branch'] : "";
+                        $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
+                        $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
+
                         $employee->status = "Active";
                         $employee->save();
 

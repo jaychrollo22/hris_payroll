@@ -626,6 +626,14 @@
                 //     "left": 2
                 // }
             });
+            $('.users_table').DataTable({
+                // "ordering": true,
+                // "pageLength": 100,
+                // "paging":         false,
+                // "fixedColumns":   {
+                //     "left": 2
+                // }
+            });
 
             $('.tablewithSearchonly').DataTable({
                 "paging": false

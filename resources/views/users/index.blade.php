@@ -18,7 +18,7 @@
                             </span>
                         @endif
                         <div class="table-responsive">
-                            <table border="1" class="table table-hover table-bordered" id='users_table'>
+                            <table border="1" class="table table-hover table-bordered users_table" id='users_table'>
                                 <thead>
                                     <tr>
                                         <th>ID</th>

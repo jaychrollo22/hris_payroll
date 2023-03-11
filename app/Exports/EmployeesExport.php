@@ -8,6 +8,9 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
+
 
 class EmployeesExport implements FromQuery, WithHeadings, WithMapping
 {
@@ -97,6 +100,7 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
     public function map($employee): array
     {
         $company = $employee->company ? $employee->company->company_name : "";
+        $rate = $employee->rate ? (float) Crypt::decryptString($employee->rate) : "";
         return [
             $employee->employee_number,
             $employee->user_id,
@@ -104,7 +108,7 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
             $employee->location,
             $employee->position,
             $employee->work_description,
-            $employee->rate,
+            $rate,
             date('d/m/Y',strtotime($employee->original_date_hired)),
             $employee->first_name,
             $employee->last_name,
