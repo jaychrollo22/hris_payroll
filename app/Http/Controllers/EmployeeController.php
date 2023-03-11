@@ -589,6 +589,21 @@ class EmployeeController extends Controller
                                     ->orderby('time_out','desc')
                                     ->orderBy('id','asc');
                                 }])
+                                ->with(['leaves' => function ($query) use ($from_date, $to_date) {
+                                    $query->whereBetween('date_from', [$from_date, $to_date])
+                                    ->where('status','Approved')
+                                    ->orderBy('id','asc');
+                                },'leaves.leave'])
+                                ->with(['wfhs' => function ($query) use ($from_date, $to_date) {
+                                    $query->whereBetween('applied_date', [$from_date, $to_date])
+                                    ->where('status','Approved')
+                                    ->orderBy('id','asc');
+                                }])
+                                ->with(['obs' => function ($query) use ($from_date, $to_date) {
+                                    $query->whereBetween('applied_date', [$from_date, $to_date])
+                                    ->where('status','Approved')
+                                    ->orderBy('id','asc');
+                                }])
                                 ->where('company_id', $company)
                                 ->where('status','Active')
                                 ->get();

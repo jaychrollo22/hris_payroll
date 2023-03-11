@@ -85,3 +85,38 @@ function isRestDay( $date ) {
     }
     return $check;
 }
+
+function employeeHasLeave($employee_leaves = array(), $check_date){
+    if(count($employee_leaves) > 0){
+        foreach($employee_leaves as $item){
+            $date_range = dateRangeHelper($item['date_from'],$item['date_to']);
+            if(count($date_range) > 0){
+                foreach($date_range as $date_r){
+                    if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
+                        return $item['leave']['code'];
+                    }
+                }
+            }
+        }
+    }
+}
+
+function employeeHasOB($employee_obs = array(), $check_date){
+    if(count($employee_obs) > 0){
+        foreach($employee_obs as $item){
+            if(date('Y-m-d',strtotime($item['applied_date'])) == date('Y-m-d',strtotime($check_date))){
+                return 'OB';
+            }
+        }
+    }
+}
+
+function employeeHasWFH($employee_wfhs = array(), $check_date){
+    if(count($employee_wfhs) > 0){
+        foreach($employee_wfhs as $item){
+            if(date('Y-m-d',strtotime($item['applied_date'])) == date('Y-m-d',strtotime($check_date))){
+                return 'WFH';
+            }
+        }
+    }
+}
