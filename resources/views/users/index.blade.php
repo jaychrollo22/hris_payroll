@@ -24,7 +24,7 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Email</th>
-                                        <th>Allowed Companies</th>
+                                        {{-- <th>Allowed Companies</th> --}}
                                         <th>Role</th>
                                         <th>Action</th>
                                     </tr>
@@ -35,7 +35,7 @@
                                         <td>{{$user->id}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
-                                        <td>
+                                        {{-- <td>
                                             @php
                                                 $user_allowed_companies = $user->user_allowed_company ? json_decode($user->user_allowed_company->company_ids) : [];
                                             @endphp
@@ -52,7 +52,7 @@
                                                 </ul>
                                             @endif
                                             
-                                        </td>
+                                        </td> --}}
                                         <td>{{$user->role}}</td>
                                         <td>
                                             <button data-toggle="modal" data-target="#editUserRole{{$user->id}}" type="button" class="btn btn-outline-info btn-icon-text btn-sm">
