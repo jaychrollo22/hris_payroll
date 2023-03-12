@@ -77,7 +77,10 @@
                                 <div class='col-md-12 text-center'>
                                     <strong>
                                         <h3><i class="fa fa-user" aria-hidden="true"></i> Personal Information
-                                            <button class="btn btn-icon btn-info btn-xs" title="Edit Information" data-toggle="modal" data-target="#editInfo"><i class="fa fa-pencil"></i></button></h3>
+                                            @if (checkUserPrivilege('employees_edit',auth()->user()->id) == 'yes')
+                                                <button class="btn btn-icon btn-info btn-xs" title="Edit Information" data-toggle="modal" data-target="#editInfo"><i class="fa fa-pencil"></i></button>
+                                            @endif
+                                        </h3>
                                     </strong>
                                 </div>
                             </div>
@@ -167,7 +170,11 @@
                             <div class='row m-2'>
                                 <div class='col-md-12 text-center'>
                                     <strong>
-                                        <h3><i class="fa fa-user-plus" aria-hidden="true"></i> Employment Information <button class="btn btn-icon btn-info btn-xs" title="Edit Employee Information" data-toggle="modal" data-target="#editEmpInfo"><i class="fa fa-pencil"></i></button></h3>
+                                        <h3><i class="fa fa-user-plus" aria-hidden="true"></i> Employment Information 
+                                            @if (checkUserPrivilege('employees_edit',auth()->user()->id) == 'yes')
+                                                <button class="btn btn-icon btn-info btn-xs" title="Edit Employee Information" data-toggle="modal" data-target="#editEmpInfo"><i class="fa fa-pencil"></i></button>
+                                            @endif
+                                        </h3>
                                     </strong>
                                 </div>
                             </div>

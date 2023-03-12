@@ -514,6 +514,10 @@ class EmployeeController extends Controller
         $employee->schedule_id = $request->schedule;
         $employee->bank_name = $request->bank_name;
         $employee->bank_account_number = $request->bank_account_number;
+
+        $employee->work_description = $request->work_description;
+        $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
+        
         $employee->save();
 
         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();

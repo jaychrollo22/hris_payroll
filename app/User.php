@@ -83,4 +83,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserAllowedCompany::class);
     }         
+    public function user_privilege()
+    {
+        return $this->hasOne(UserPrivilege::class);
+    }         
 }

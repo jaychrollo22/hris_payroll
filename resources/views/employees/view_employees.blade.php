@@ -83,9 +83,13 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Employees 
-                            <button type="button" class="btn btn-outline-success btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#newEmployee"><i class="ti-plus btn-icon-prepend"></i></button>
-                            <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployee" title="Upload Employees"><i class="ti-arrow-up btn-icon-prepend"></i></button>
-                            <a href="/employees-export?company={{$company}}&department={{$department}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right" title="Export Employees"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+                            @if (checkUserPrivilege('employees_add',auth()->user()->id) == 'yes')
+                                <button type="button" class="btn btn-outline-success btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#newEmployee"><i class="ti-plus btn-icon-prepend"></i></button>
+                                <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployee" title="Upload Employees"><i class="ti-arrow-up btn-icon-prepend"></i></button>
+                            @endif
+                            @if (checkUserPrivilege('employees_export',auth()->user()->id) == 'yes')
+                                <a href="/employees-export?company={{$company}}&department={{$department}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right" title="Export Employees"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+                            @endif
                         </h4>
 
                         <h4 class="card-title">Filter</h4>
@@ -153,9 +157,11 @@
                                     @foreach($employees as $employee)
                                     <tr>
                                         <td align="center">
-                                            <a href="/account-setting-hr/{{$employee->user_id}}" class="btn btn-outline-success btn-icon-text btn-sm text-center">
-                                                <i class="ti-pencil btn-icon-prepend"></i>
-                                            </a>
+                                            @if (checkUserPrivilege('employees_view',auth()->user()->id) == 'yes')
+                                                <a href="/account-setting-hr/{{$employee->user_id}}" class="btn btn-outline-success btn-icon-text btn-sm text-center">
+                                                    <i class="ti-pencil btn-icon-prepend"></i>
+                                                </a>
+                                            @endif
                                         </td>
                                         <td>{{$employee->employee_number}}</td>
                                         <td>

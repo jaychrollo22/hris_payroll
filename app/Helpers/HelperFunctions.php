@@ -1,6 +1,7 @@
 <?php
 use App\ApplicantSystemNotification;
 use App\UserAllowedCompany;
+use App\UserPrivilege;
 
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
@@ -129,5 +130,14 @@ function getUserAllowedCompanies($user_id){
         return json_decode($user_allowed_companies->company_ids);
     }else{
         return [];
+    }
+}
+
+function checkUserPrivilege($field,$user_id){
+    $user_privilege = UserPrivilege::select('id')->where($field,'on')->where('user_id',$user_id)->first();
+    if($user_privilege){
+        return 'yes';
+    }else{
+        return 'no';
     }
 }
