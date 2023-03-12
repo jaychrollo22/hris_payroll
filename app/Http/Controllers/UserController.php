@@ -26,7 +26,7 @@ class UserController extends Controller
     //
     public function index(){
 
-        $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
+        $companies = Company::orderBy('company_name','ASC')->get();
 
         $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
 
