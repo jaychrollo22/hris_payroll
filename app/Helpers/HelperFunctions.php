@@ -1,5 +1,6 @@
 <?php
 use App\ApplicantSystemNotification;
+use App\UserAllowedCompany;
 
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
@@ -118,5 +119,15 @@ function employeeHasWFH($employee_wfhs = array(), $check_date){
                 return 'WFH';
             }
         }
+    }
+}
+
+function getUserAllowedCompanies($user_id){
+    $user_allowed_companies = UserAllowedCompany::where('user_id',$user_id)->first();
+
+    if($user_allowed_companies){
+        return json_decode($user_allowed_companies->company_ids);
+    }else{
+        return [];
     }
 }

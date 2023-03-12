@@ -35,6 +35,9 @@ class EmployeeController extends Controller
     //
     public function view(Request $request)
     {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $status = isset($request->status) ? $request->status : "Active";
@@ -51,6 +54,7 @@ class EmployeeController extends Controller
                                 ->when($status,function($q) use($status){
                                     $q->where('status',$status);
                                 })
+                                ->whereIn('company_id',$allowed_companies)
                                 ->get();
        
         if($company){
@@ -72,7 +76,12 @@ class EmployeeController extends Controller
         $users = User::get();
         $levels = Level::get();
         $marital_statuses = MaritalStatus::get();
-        $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
+
+        
+        $companies = Company::whereHas('employee_has_company')
+                                    ->whereIn('id',$allowed_companies)
+                                    ->orderBy('company_name','ASC')
+                                    ->get();
 
        
         return view(
@@ -577,8 +586,11 @@ class EmployeeController extends Controller
 
     public function employee_attendance(Request $request)
     {
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $attendance_controller = new AttendanceController;
-        $employees = Employee::where('status','Active')->get();
+        $employees = Employee::where('status','Active')
+                                ->whereIn('company_id', $allowed_companies)
+                                ->get();
         $from_date = $request->from;
         $to_date = $request->to;
         $date_range =  [];
@@ -591,7 +603,10 @@ class EmployeeController extends Controller
             $emp_data = Employee::with(['attendances' => function ($query) use ($from_date, $to_date) {
                                         $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                         ->orderBy('time_in','asc')->orderby('time_out','desc')->orderBy('id','asc');
-                                    }])->whereIn('employee_number', $request->employee)->get();
+                                    }])
+                                    ->whereIn('employee_number', $request->employee)
+                                    ->whereIn('company_id', $allowed_companies)
+                                    ->get();
 
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
             $schedules = ScheduleData::where('schedule_id', 1)->get();
@@ -614,7 +629,10 @@ class EmployeeController extends Controller
     }
     public function perCompany(Request $request)
     {
-        $companies = Company::whereHas('employee_has_company')->get();
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $companies = Company::whereHas('employee_has_company')
+                                ->whereIn('id',$allowed_companies)
+                                ->get();
         $attendance_controller = new AttendanceController;
         $company = $request->company;
         $from_date = $request->from;

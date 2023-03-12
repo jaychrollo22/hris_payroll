@@ -24,7 +24,10 @@ class WorkfromhomeController extends Controller
 
     public function wfh_report(Request $request)
     {   
-        $companies = Company::whereHas('employee_has_company')->get();
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $companies = Company::whereHas('employee_has_company')
+                                ->whereIn('id',$allowed_companies)
+                                ->get();
 
         $company = isset($request->company) ? $request->company : "";
         $from = isset($request->from) ? $request->from : "";

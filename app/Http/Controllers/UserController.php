@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Bank;
 use App\User;
+use App\UserAllowedCompany;
 use App\Level;
 use App\Company;
 use App\Employee;
@@ -25,17 +26,19 @@ class UserController extends Controller
     //
     public function index(){
 
+        $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
+
         $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
 
-
-        $users = User::all();
+        $users = User::with('user_allowed_company')->get();
 
         return view('users.index',
         array(
             'header' => 'users',
             'user' => $user,
             'header' => 'users',
-                'users' => $users
+                'users' => $users,
+                'companies' => $companies,
         ));
     }
 
@@ -45,10 +48,27 @@ class UserController extends Controller
     }
 
     public function updateUserRole(Request $request, User $user){
+
+       
         if($user){
             $user = User::findOrFail($user->id);
             $user->role = $request->role;
             $user->save();
+
+            if($request->company){
+                $user_allowed_company = UserAllowedCompany::where('user_id',$user->id)->first(); 
+                if($user_allowed_company){
+                    $user_allowed_company->company_ids = json_encode($request->company,true);
+                    $user_allowed_company->save();
+                }else{
+                    $new_user_allowed_company = new UserAllowedCompany;
+                    $new_user_allowed_company->user_id = $user->id;
+                    $new_user_allowed_company->company_ids = json_encode($request->company,true);
+                    $new_user_allowed_company->save();
+                }
+            }else{
+                $user_allowed_company = UserAllowedCompany::where('user_id',$user->id)->delete();
+            }
 
             Alert::success('Successfully Updated')->persistent('Dismiss');
             return back();
