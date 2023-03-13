@@ -2,6 +2,12 @@
 @section('content')
 <div class="main-panel">
     <div class="content-wrapper">
+        @if($errors->any())
+            <div class="form-group alert alert-danger alert-dismissable">
+                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                <strong>{{$errors->first()}}</strong>
+            </div>
+        @endif
         <div class='row'>
             <div class="col-lg-4 grid-margin ">
                 <div class="card">
@@ -18,6 +24,9 @@
                         </button>
                         <button class="btn btn-info btn-sm mt-3" data-toggle="modal" data-target="#uploadSignature">
                             Upload Signature
+                        </button>
+                        <button class="btn btn-success btn-sm mt-3" data-toggle="modal" data-target="#editUserPassword{{$user->id}}">
+                            Change Password
                         </button>
                     </div>
                 </div>
@@ -398,4 +407,5 @@
 @include('users.edit_info')
 @include('users.edit_employee_info')
 @include('users.view_salary')
+@include('users.user_change_password')
 @endsection
