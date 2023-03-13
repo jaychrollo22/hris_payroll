@@ -110,7 +110,7 @@ class EmployeeController extends Controller
         $department = isset($request->department) ? $request->department : "";
         $company_info = Company::where('id',$company)->first();
         $company_name = $company_info ? $company_info->company_code : "";
-        return Excel::download(new EmployeesExport($company,$department), 'Employees '. $company_name .' .xlsx');
+        return Excel::download(new EmployeesExport($company,$department), 'Master List '. $company_name .' .xlsx');
     }
 
     public function new(Request $request)

@@ -61,7 +61,7 @@ class OvertimeController extends Controller
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
         $company_detail = Company::where('id',$company)->first();
-        return Excel::download(new EmployeeOvertimeExport($company,$from,$to), $company_detail->company_code . ' ' . $from . ' to ' . $to . ' Overtime Export.xlsx');
+        return Excel::download(new EmployeeOvertimeExport($company,$from,$to), 'Overtime ' . $company_detail->company_code . ' ' . $from . ' to ' . $to . '.xlsx');
     }
 
     public function overtime ()

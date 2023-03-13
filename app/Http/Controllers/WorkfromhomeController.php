@@ -60,7 +60,7 @@ class WorkfromhomeController extends Controller
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
         $company_detail = Company::where('id',$company)->first();
-        return Excel::download(new EmployeeWfhExport($company,$from,$to), $company_detail->company_code . ' ' . $from . ' to ' . $to . ' WFH Export.xlsx');
+        return Excel::download(new EmployeeWfhExport($company,$from,$to), 'Work From Home ' . $company_detail->company_code . ' ' . $from . ' to ' . $to . '.xlsx');
     }
 
 }

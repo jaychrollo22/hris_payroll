@@ -79,7 +79,7 @@ class LeaveController extends Controller
         $to =  isset($request->to) ? $request->to : "";
         $status =  isset($request->status) ? $request->status : "";
         $company_detail = Company::where('id',$company)->first();
-        return Excel::download(new EmployeeLeaveExport($company,$from,$to,$status), $company_detail->company_code . ' ' . $from . ' to ' . $to . ' Leave Export.xlsx');
+        return Excel::download(new EmployeeLeaveExport($company,$from,$to,$status), 'Leave ' . $company_detail->company_code . ' ' . $from . ' to ' . $to . '.xlsx');
     }
 
     public function leaveBalances()
