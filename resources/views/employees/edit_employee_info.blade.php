@@ -120,7 +120,10 @@
                 <div class='col-md-4'>
                   RATE
                   @php
-                      $rate = Crypt::decryptString( $user->employee->rate);
+                    $rate = "";
+                    if($user->employee->rate){
+                       $rate = Crypt::decryptString( $user->employee->rate);
+                    }  
                   @endphp
                   <input type="number" class="form-control" name="rate" value="{{ $rate }}">
                 </div>
