@@ -125,7 +125,7 @@
                        $rate = Crypt::decryptString( $user->employee->rate);
                     }  
                   @endphp
-                  <input type="text" class="form-control" name="rate" value="{{ $rate }}">
+                  <input type="number" class="form-control" name="rate" value="{{ $rate }}" min="0" value="0" step="any">
                 </div>
               @endif
 
