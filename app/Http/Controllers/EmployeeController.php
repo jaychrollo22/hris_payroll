@@ -517,7 +517,8 @@ class EmployeeController extends Controller
 
         $employee->work_description = $request->work_description;
         $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
-        
+        $employee->status = $request->status;
+
         $employee->save();
 
         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();

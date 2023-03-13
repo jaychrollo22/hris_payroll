@@ -129,6 +129,15 @@
                 </div>
               @endif
 
+              <div class='col-md-4'>
+                Status
+                <select data-placeholder="Status" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='status' required>
+                  <option value="">-- Status--</option>
+                  <option value="Active" @if ($user->employee->status == 'Active') selected @endif>Active</option>
+                  <option value="Inactive" @if ($user->employee->status == 'Inactive') selected @endif>Inactive</option>
+                </select>
+              </div>
+
             </div>
             <hr>
             <div class='row mb-2'>
