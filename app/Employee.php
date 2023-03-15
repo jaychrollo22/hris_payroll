@@ -49,4 +49,8 @@ class Employee extends Model implements Auditable
     public function wfhs() {
         return $this->hasMany(EmployeeWfh::class,'user_id','user_id');
     }
+
+    public function employee_leave_credits() {
+        return $this->hasMany(EmployeeLeaveCredit::class,'user_id','user_id')->orderBy('leave_type','ASC');
+    }
 }
