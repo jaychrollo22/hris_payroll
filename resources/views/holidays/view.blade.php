@@ -48,7 +48,7 @@
                                 @endif
                             </td>
                         </tr>
-                        @include('holidays.edit_holiday')
+                        
                         @endforeach
                     </tbody>
                   </table>
@@ -61,4 +61,7 @@
     </div>
 </div>
 @include('holidays.new_holiday')
+@foreach($holidays as $holiday)
+@include('holidays.edit_holiday')
+@endforeach
 @endsection
