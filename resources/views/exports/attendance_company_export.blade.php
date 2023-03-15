@@ -1,13 +1,14 @@
 <table border="1" class="table table-hover table-bordered employee_attendance" id='employee_attendance'>
     <thead>
         <tr>
-            <td>User ID</td>
-            <td>Biometric ID</td>
-            <td>Name</td>
-            <td>Date</td>
-            <td>Time In</td>
-            <td>Time Out</td>
-            <td>Work </td>
+            <td>USER ID</td>
+            {{-- <td>Biometric ID</td> --}}
+            <td>NAME</td>
+            <td>DATE</td>
+            <td>FIRST ACTUAL TIME IN</td>
+            <td>SECOND ACTUAL TIME OUT</td>
+            <td>WORK</td>
+            <td>REMARKS</td>
         </tr>
     </thead>
     @foreach($attendances as $emp)
@@ -25,9 +26,9 @@
 
         @foreach(array_reverse($date_range) as $date_r)
         <tr>
-            <td>{{$emp->employee->user_id}}</td>
-            <td>{{$emp->emp_code}}</td>
-            <td>{{$emp->employee->first_name . ' ' . $emp->employee->last_name}}</td>
+            <td>{{$emp->employee_number}}</td>
+            {{-- <td>{{$emp->employee_number}}</td> --}}
+            <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
             <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
 
             @php
@@ -105,6 +106,9 @@
                         @endphp
                     @endif
                 @endif
+            </td>
+            <td>
+
             </td>
             @endif
         </tr>

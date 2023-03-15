@@ -342,7 +342,7 @@
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/work-from-home') }}">Work from home</a></li>
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/official-business') }}">Official Business</a>
                                 </li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/dtr-correction') }}">DTR Correction</a></li>
+                                {{-- <li class="nav-item "> <a class="nav-link " href="{{ url('/dtr-correction') }}">DTR Correction</a></li> --}}
                             </ul>
                         </div>
                     </li>
@@ -375,7 +375,7 @@
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/for-overtime') }}">Overtime</a></li>
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/for-work-from-home') }}">Work from home</a></li>
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/for-official-business') }}">Official Business</a></li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction</a></li>
+                                {{-- <li class="nav-item "> <a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction</a></li> --}}
                             </ul>
                         </div>
                     </li>
@@ -407,7 +407,7 @@
                         </a>
                         <div class="collapse" id="biometrics">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="{{ url('/get-biometrics') }}">Biometrics</a></li>
+                                {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/get-biometrics') }}">Biometrics</a></li> --}}
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biologs-employee') }}">Per Employee</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biometrics-per-company') }}">Per Company</a></li>
@@ -425,7 +425,7 @@
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/holidays') }}">Holidays</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/schedules') }}">Schedules</a></li>
-                                <li class="nav-item"> <a class="nav-link" href="{{ url('/allowances') }}">Allowances</a></li>
+                                {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/allowances') }}">Allowances</a></li> --}}
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/incentives') }}">Incentives</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/handbooks') }}">Handbook</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/leavee-settings') }}">Leave Type</a></li>
@@ -466,7 +466,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/loan-type') }}">Loan Types</a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-incentive') }}">Employee Incentives</a>
                     </li>
                     <li class="nav-item">
@@ -477,7 +477,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-companies') }}">Employee Groups</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-leave-credits') }}">Employee Leave Credits</a>
                     </li>
@@ -497,7 +497,7 @@
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/overtime-report') }}">Overtime Reports</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/wfh-report') }}">WFH Reports</a></li>
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/ob-report') }}">OB Reports</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ url('/dtr-report') }}">DTR Reports</a></li>
+                    {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/dtr-report') }}">DTR Reports</a></li> --}}
                     {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li> --}}
                     {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li> --}}
                     {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li> --}}
@@ -619,6 +619,14 @@
                 // }
             });
             $('.user-table').DataTable({
+                // "ordering": true,
+                // "pageLength": 100,
+                // "paging":         false,
+                // "fixedColumns":   {
+                //     "left": 2
+                // }
+            });
+            $('.users_table').DataTable({
                 // "ordering": true,
                 // "pageLength": 100,
                 // "paging":         false,

@@ -23,7 +23,10 @@ class OfficialbusinessController extends Controller
 
     public function ob_report(Request $request)
     {   
-        $companies = Company::whereHas('employee_company')->get();
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $companies = Company::whereHas('employee_has_company')
+                                ->whereIn('id',$allowed_companies)
+                                ->get();
 
         $company = isset($request->company) ? $request->company : "";
         $from = isset($request->from) ? $request->from : "";
@@ -56,6 +59,6 @@ class OfficialbusinessController extends Controller
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
         $company_detail = Company::where('id',$company)->first();
-        return Excel::download(new EmployeeObExport($company,$from,$to), $company_detail->company_code . ' ' . $from . ' to ' . $to . ' OB Export.xlsx');
+        return Excel::download(new EmployeeObExport($company,$from,$to), 'Official Business ' . $company_detail->company_code . ' ' . $from . ' to ' . $to . '.xlsx');
     }
 }

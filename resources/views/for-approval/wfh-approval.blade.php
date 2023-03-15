@@ -52,7 +52,8 @@
                         <th>Employee Name</th>
                         <th>Date Filed</th>
                         <th>WFH Date</th>
-                        <th>WFH Count(Days)</th> 
+                        <th>WFH Time In-Out</th>
+                        {{-- <th>WFH Count(Days)</th>  --}}
                         <th>Remarks</th> 
                         <th>Approvers</th> 
                         <th>Attachment</th>
@@ -65,8 +66,9 @@
                       <tr>
                         <td>{{$form_approval->user->name}}</td>
                         <td>{{date('m/d/Y', strtotime($form_approval->created_at))}}</td>
-                        <td>{{date('M d, Y', strtotime($form_approval->date_from))}} - {{date('M d, Y', strtotime($form_approval->date_to))}}</td>
-                        <td>{{get_count_days($form_approval->schedule,$form_approval->date_from,$form_approval->date_to)}}</td>
+                        <td>{{date('m/d/Y', strtotime($form_approval->applied_date))}}</td>
+                        <td>{{date('H:i', strtotime($form_approval->date_from))}} - {{date('H:i', strtotime($form_approval->date_to))}}</td>
+                        {{-- <td>{{get_count_days($form_approval->schedule,$form_approval->date_from,$form_approval->date_to)}}</td> --}}
                         <td>{{$form_approval->remarks}}</td>
                         <td id="tdStatus{{ $form_approval->id }}">
                           @foreach($form_approval->approver as $approver)

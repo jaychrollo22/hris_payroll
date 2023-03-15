@@ -2,11 +2,13 @@
 
 namespace App\Exports;
 
+use App\Holiday;
 use App\EmployeeOvertime;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+
 
 class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
 {
@@ -34,34 +36,123 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'User ID',
-            'Employee Name',
-            'Date Filed',
-            'OT Date',
-            'OT Start Time',
-            'OT End Time',
-            'OT Requested',
-            'OT Approved',
-            'Approved Date',
-            'Status',
-            'Remarks',
+            'USER ID',
+            'EMPLOYEE NAME',
+            'OT DATE',
+            'MAX OVERTIME',
+            'HOURS WORKED CAP SPWH',
+            'COMPUTE RW OT',
+            'COMPUTE RD',
+            'COMPUTE SUN',
+            'COMPUTE RH',
+            'COMPUTE SPH',
+            'REMARKS',
         ];
     }
 
-    public function map($employee_leave): array
+    public function map($employee_ot): array
     {
+        $max_overtime = $employee_ot->ot_approved_hrs > 8 ? 8 : $employee_ot->ot_approved_hrs; //Max 8 Hours
+        $hours_worked_cap_spwh = $employee_ot->ot_approved_hrs > 8 ? ($employee_ot->ot_approved_hrs - 8) : 0; // Hours Cap SPWH
+        
+        $rw_ot = $this->isRWOT($employee_ot->ot_date); //Regular Work
+        $rd = $this->isRD($employee_ot->ot_date); //Rest Day
+        $sun = $this->isSUN($employee_ot->ot_date); //Sunday
+        $rh = $this->isRH($employee_ot->ot_date); //Regular Holiday
+        $sph = $this->isSPH($employee_ot->ot_date); //Special Holiday
+        $remarks = $this->isRemarks($employee_ot->end_time); //Remarks
+
         return [
-            $employee_leave->user->id,
-            $employee_leave->user->name,
-            date('d/m/Y', strtotime($employee_leave->created_at)),
-            date('d/m/Y',strtotime($employee_leave->ot_date)),
-            date('H:i', strtotime($employee_leave->start_time)),
-            date('H:i', strtotime($employee_leave->end_time)),
-            intval((strtotime($employee_leave->end_time)-strtotime($employee_leave->start_time))/60/60),
-            $employee_leave->ot_approved_hrs,
-            date('d/m/Y',strtotime($employee_leave->approved_date)),
-            $employee_leave->status,
-            $employee_leave->remarks
-        ];
+            $employee_ot->employee->employee_number,
+            $employee_ot->user->name,
+            date('d/m/Y',strtotime($employee_ot->ot_date)),
+            gmdate('H:i', floor($max_overtime * 3600)),
+            gmdate('H:i', floor($hours_worked_cap_spwh * 3600)),
+            $rw_ot,
+            $rd,
+            $sun,
+            $rh,
+            $sph,
+            $remarks
+      ];
     }
+
+
+    public function isRWOT( $date ) {
+
+        $check_day = date('D',strtotime($date));
+        $check = '1';
+        if ($check_day == 'Sat' || $check_day == 'Sun') {
+            $check = '0';
+        }else{
+            $check = '1';
+        }
+        return $check;
+    }
+
+    public function isRD( $date ) {
+
+        $check_day = date('D',strtotime($date));
+        $check = '0';
+        if ($check_day == 'Sat' || $check_day == 'Sun') {
+            $check = '1';
+        }else{
+            $check = '0';
+        }
+        return $check;
+    }
+
+    public function isSUN( $date ) {
+
+        $check_day = date('D',strtotime($date));
+        $check = '0';
+        if ($check_day == 'Sun') {
+            $check = '1';
+        }else{
+            $check ='0';
+        }
+
+        return $check;
+    }
+
+    public function isRH( $date ) {
+        $regular_holiday = Holiday::where('holiday_type','Legal Holiday')
+                                    ->where('holiday_date',date('Y-m-d',strtotime($date)))
+                                    ->first();
+        $check = '0';
+        if($regular_holiday){
+            $check = '1';
+        }else{
+            $check = '0';
+        }
+        return $check;
+    }
+
+    public function isSPH( $date ) {
+        $special_holiday = Holiday::where('holiday_type','Special Holiday')
+                                    ->where('holiday_date',date('Y-m-d',strtotime($date)))
+                                    ->first();
+
+        $check = '0';
+        if($special_holiday){
+            $check = '1';
+        }else{
+            $check = '0';
+        }
+        return $check;
+    }
+
+    public function isRemarks($end_time){
+        if(date('H:i',strtotime($end_time)) >= '13:00'){
+            return 'Second Half';
+        }else{
+            return 'First Half';
+        }
+        
+    }
+
+
+
+
+
 }

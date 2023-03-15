@@ -22,7 +22,11 @@ class OvertimeController extends Controller
         $from_date = $request->from;
         $to_date = $request->to;
         $date_range = '';
-        $companies = Company::whereHas('employee_company')->get();
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $companies = Company::whereHas('employee_has_company')
+                                ->whereIn('id',$allowed_companies)
+                                ->get();
 
         $employee_overtimes=[];
         if ($from_date != null) {
@@ -57,7 +61,7 @@ class OvertimeController extends Controller
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
         $company_detail = Company::where('id',$company)->first();
-        return Excel::download(new EmployeeOvertimeExport($company,$from,$to), $company_detail->company_code . ' ' . $from . ' to ' . $to . ' Overtime Export.xlsx');
+        return Excel::download(new EmployeeOvertimeExport($company,$from,$to), 'Overtime ' . $company_detail->company_code . ' ' . $from . ' to ' . $to . '.xlsx');
     }
 
     public function overtime ()

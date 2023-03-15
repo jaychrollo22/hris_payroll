@@ -77,5 +77,14 @@ class User extends Authenticatable
     public function emp_dtr()
     {
         return $this->hasMany(EmployeeDtr::class);
+    } 
+    
+    public function user_allowed_company()
+    {
+        return $this->hasOne(UserAllowedCompany::class);
+    }         
+    public function user_privilege()
+    {
+        return $this->hasOne(UserPrivilege::class);
     }         
 }

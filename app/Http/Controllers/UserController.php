@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Bank;
 use App\User;
+use App\UserPrivilege;
+use App\UserAllowedCompany;
 use App\Level;
 use App\Company;
 use App\Employee;
@@ -25,17 +27,14 @@ class UserController extends Controller
     //
     public function index(){
 
-        $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
-
-
-        $users = User::all();
+        $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
+        $users = User::with('user_allowed_company','user_privilege')->get();
 
         return view('users.index',
         array(
             'header' => 'users',
-            'user' => $user,
-            'header' => 'users',
-                'users' => $users
+            'users' => $users,
+            'companies' => $companies,
         ));
     }
 
@@ -45,10 +44,46 @@ class UserController extends Controller
     }
 
     public function updateUserRole(Request $request, User $user){
+    //    return $request->all();
         if($user){
             $user = User::findOrFail($user->id);
             $user->role = $request->role;
             $user->save();
+
+            if($request->company){
+                $user_allowed_company = UserAllowedCompany::where('user_id',$user->id)->first(); 
+                if($user_allowed_company){
+                    $user_allowed_company->company_ids = json_encode($request->company,true);
+                    $user_allowed_company->save();
+                }else{
+                    $new_user_allowed_company = new UserAllowedCompany;
+                    $new_user_allowed_company->user_id = $user->id;
+                    $new_user_allowed_company->company_ids = json_encode($request->company,true);
+                    $new_user_allowed_company->save();
+                }
+            }else{
+                $user_allowed_company = UserAllowedCompany::where('user_id',$user->id)->delete();
+            }
+
+            $user_privilege = UserPrivilege::where('user_id',$user->id)->first();
+            
+            if($user_privilege){
+                $user_privilege->employees_view = $request->employees_view;
+                $user_privilege->employees_edit = $request->employees_edit;
+                $user_privilege->employees_add = $request->employees_add;
+                $user_privilege->employees_export = $request->employees_export;
+                $user_privilege->employees_rate = $request->employees_rate;
+                $user_privilege->save();
+            }else{
+                $new_user_privilege = new UserPrivilege;
+                $new_user_privilege->user_id = $user->id;
+                $new_user_privilege->employees_view = $request->employees_view;
+                $new_user_privilege->employees_edit = $request->employees_edit;
+                $new_user_privilege->employees_add = $request->employees_add;
+                $new_user_privilege->employees_export = $request->employees_export;
+                $new_user_privilege->employees_rate = $request->employees_rate;
+                $new_user_privilege->save();
+            }
 
             Alert::success('Successfully Updated')->persistent('Dismiss');
             return back();
@@ -114,6 +149,7 @@ class UserController extends Controller
         return back();
 
     }
+
     public function updateEmpInfo(Request $request, $id){
 
         $employee = Employee::findOrFail($id);

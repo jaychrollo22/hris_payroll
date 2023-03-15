@@ -33,5 +33,24 @@ class Employee extends Model implements Auditable
     {
         return $this->belongsTo(User::class);
     }
-  
+
+    public function attendances() {
+        return $this->hasMany(Attendance::class,'employee_code','employee_number');
+    }
+
+    public function leaves() {
+        return $this->hasMany(EmployeeLeave::class,'user_id','user_id');
+    }
+
+    public function obs() {
+        return $this->hasMany(EmployeeOb::class,'user_id','user_id');
+    }
+
+    public function wfhs() {
+        return $this->hasMany(EmployeeWfh::class,'user_id','user_id');
+    }
+
+    public function employee_leave_credits() {
+        return $this->hasMany(EmployeeLeaveCredit::class,'user_id','user_id')->orderBy('leave_type','ASC');
+    }
 }

@@ -51,7 +51,8 @@
                       <tr>
                         <th>Employee Name</th>
                         <th>Date Filed</th>
-                        <th>OB Date</th>
+                        <th>Date</th>
+                        <th>Time In-Out</th>
                         <th>Destination</th>
                         <th>Person/Company to see</th>
                         <th>Purpose</th>
@@ -65,8 +66,9 @@
                       @foreach ($obs as $form_approval)
                       <tr>
                         <td>{{$form_approval->user->name}}</td>
-                        <td> {{ date('M. d, Y ', strtotime($form_approval->created_at)) }} </td>
-                        <td> {{ date('M. d, Y ', strtotime($form_approval->date_from)) }} - {{ date('M. d, Y ', strtotime($form_approval->date_to)) }}  </td>
+                        <td> {{ date('d/m/Y', strtotime($form_approval->created_at)) }} </td>
+                        <td> {{ date('d/m/Y ', strtotime($form_approval->applied_date)) }}</td>
+                        <td> {{ date('H:i', strtotime($form_approval->date_from)) }} - {{ date('H:i', strtotime($form_approval->date_to)) }}  </td>
                         <td> {{$form_approval->destination}}</td>
                         <td> {{$form_approval->persontosee}}</td>
                         <td> {{$form_approval->remarks}}</td>

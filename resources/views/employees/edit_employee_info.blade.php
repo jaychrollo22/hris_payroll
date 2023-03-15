@@ -108,6 +108,36 @@
                 <input type="text" class="form-control" name="pagibig" data-inputmask-alias="9999-9999-9999" value="{{$user->employee->hdmf_number}}">
               </div>
 
+              @if (checkUserPrivilege('employees_rate',auth()->user()->id) == 'yes')
+                <div class='col-md-4'>
+                  WORK DESCRIPTION
+                  <select data-placeholder="Work Description" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='work_description' required>
+                    <option value="">-- Bank Work Description --</option>
+                    <option value="Monthly" @if ($user->employee->work_description == 'Monthly') selected @endif>Monthly</option>
+                    <option value="Non-Monthly" @if ($user->employee->work_description == 'Non-Monthly') selected @endif>Non-Monthly</option>
+                  </select>
+                </div>
+                <div class='col-md-4'>
+                  RATE
+                  @php
+                    $rate = "";
+                    if($user->employee->rate){
+                       $rate = Crypt::decryptString( $user->employee->rate);
+                    }  
+                  @endphp
+                  <input type="number" class="form-control" name="rate" value="{{ $rate }}" min="0" value="0" step="any">
+                </div>
+              @endif
+
+              <div class='col-md-4'>
+                Status
+                <select data-placeholder="Status" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='status' required>
+                  <option value="">-- Status--</option>
+                  <option value="Active" @if ($user->employee->status == 'Active') selected @endif>Active</option>
+                  <option value="Inactive" @if ($user->employee->status == 'Inactive') selected @endif>Inactive</option>
+                </select>
+              </div>
+
             </div>
             <hr>
             <div class='row mb-2'>

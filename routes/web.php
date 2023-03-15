@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('work-from-home', 'EmployeeWfhController@wfh');
     Route::post('new-wfh','EmployeeWfhController@new');
     Route::post('edit-wfh/{id}','EmployeeWfhController@edit_wfh');
+    Route::get('disable-wfh/{id}','EmployeeWfhController@disable_wfh');
 
     //official-business
     Route::get('official-business', 'EmployeeObController@ob');
@@ -225,6 +226,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Employee Leave Credits
     Route::get('employee-leave-credits', 'LeaveCreditsController@index');
+    Route::post('new-employee-leave-credit', 'LeaveCreditsController@store');
 
     //User
     Route::get('/users','UserController@index');

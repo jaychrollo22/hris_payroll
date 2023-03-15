@@ -26,17 +26,26 @@
 							<table class="table table-hover table-bordered tablewithSearch">
 								<thead>
 									<tr>
-										<th>Leave Credits</th>
 										<th>Employee</th>
-										<th>Date Created</th>
-										<th>Action</th>
+										<th>Company</th>
+										<th>Leave Credits</th>
 									</tr>
 								</thead>
 								<tbody>
-									@foreach ($leaveCredits as $leaveCredit)
-										<tr>
-											
-										</tr>
+									@foreach ($employees as $employee)
+										@if(count($employee->employee_leave_credits) > 0)
+											<tr>
+												<td>{{ $employee->first_name . ' ' . $employee->last_name}}</td>
+												<td>{{ $employee->company->company_name}}</td>
+												<td>
+													<ul>
+														@foreach ($employee->employee_leave_credits as $leave_credit)
+															<li>{{$leave_credit->leave->leave_type . ' : ' . $leave_credit->count}}</li>
+														@endforeach
+													</ul>
+												</td>
+											</tr>
+										@endif
 									@endforeach
 								</tbody>
 							</table>
@@ -48,6 +57,8 @@
 	</div>
 	</div>
 	@include('employee_leave_credits.new_leave_credit')
+
+
 @endsection
 @section('leaveCreditScript')
 	<script>

@@ -8,6 +8,9 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
+
 
 class EmployeesExport implements FromQuery, WithHeadings, WithMapping
 {
@@ -23,7 +26,12 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
         $company = $this->company;
         $department = $this->department;
         return Employee::query()->select('user_id',
+                                            'employee_number',
                                             'original_date_hired',
+                                            'work_description',
+                                            'rate',
+                                            'location',
+                                            'position',
                                             'first_name',
                                             'last_name',
                                             'middle_name',
@@ -37,8 +45,10 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
                                             'sss_number',
                                             'hdmf_number',
                                             'phil_number',
-                                            'tax_number'
+                                            'tax_number',
+                                            'company_id',
                                         )
+                                        ->with('company')
                                         ->when($company,function($q) use($company){
                                             $q->where('company_id',$company);
                                         })
@@ -62,7 +72,13 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'User ID',
+            'USER ID',
+            'EMPLOYEE ID NUMBER',
+            'COMPANY',
+            'BRANCH',
+            'JOB TITLE',
+            'WORK DESCRIPTION',
+            'RATE',
             'DATE HIRED',
             'FIRST NAME',
             'LAST NAME',
@@ -83,8 +99,16 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
 
     public function map($employee): array
     {
+        $company = $employee->company ? $employee->company->company_name : "";
+        $rate = $employee->rate ? (float) Crypt::decryptString($employee->rate) : "";
         return [
+            $employee->employee_number,
             $employee->user_id,
+            $company,
+            $employee->location,
+            $employee->position,
+            $employee->work_description,
+            $rate,
             date('d/m/Y',strtotime($employee->original_date_hired)),
             $employee->first_name,
             $employee->last_name,

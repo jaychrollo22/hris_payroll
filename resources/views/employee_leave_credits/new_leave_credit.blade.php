@@ -28,25 +28,16 @@
 						<div class="col-lg-6 form-group">
 							<label for="employee">Employee</label>
 							<select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-multiple "
-								style='width:100%;' name='employee' required multiple>
+								style='width:100%;' name='user_id' required>
 								<option value="">--Select Employee--</option>
 								@foreach ($employees as $employee)
-									<option value="{{ $employee->id }}" {{ old('employee') == $employee->id ? 'selected' : '' }}>
+									<option value="{{ $employee->user_id }}" {{ old('employee') == $employee->user_id ? 'selected' : '' }}>
 										{{ $employee->last_name . ', ' . $employee->first_name . ' ' . $employee->middle_name }}</option>
 								@endforeach
 							</select>
 						</div>
 					</div>
 					<div class="row">
-          				{{-- <div class="col-lg-6 form-group">
-							<label for="type">Type</label>
-							<select class="form-control form-control-sm required js-example-basic-single "
-								style='width:100%;' name='type' aria-label="Disabled select example" disabled>
-								<option value="">--Select Type--</option>
-									<option value="Add">➕</option>
-									<option value="Deduct">Deduct</option>
-							</select>
-						</div> --}}
 						<div class="col-lg-6 form-group">
 							<label for="count">Count (days)</label>
 							<input type="number" class="form-control form-control-sm" name="count" id="count" required min=".01" step='0.01'

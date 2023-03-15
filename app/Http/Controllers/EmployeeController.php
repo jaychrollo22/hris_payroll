@@ -25,7 +25,8 @@ use App\AttPunch;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 use App\Exports\EmployeesExport;
 
@@ -34,6 +35,9 @@ class EmployeeController extends Controller
     //
     public function view(Request $request)
     {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $status = isset($request->status) ? $request->status : "Active";
@@ -50,6 +54,7 @@ class EmployeeController extends Controller
                                 ->when($status,function($q) use($status){
                                     $q->where('status',$status);
                                 })
+                                ->whereIn('company_id',$allowed_companies)
                                 ->get();
        
         if($company){
@@ -71,7 +76,12 @@ class EmployeeController extends Controller
         $users = User::get();
         $levels = Level::get();
         $marital_statuses = MaritalStatus::get();
-        $companies = Company::whereHas('employee_company')->orderBy('company_name','ASC')->get();
+
+        
+        $companies = Company::whereHas('employee_has_company')
+                                    ->whereIn('id',$allowed_companies)
+                                    ->orderBy('company_name','ASC')
+                                    ->get();
 
        
         return view(
@@ -100,7 +110,7 @@ class EmployeeController extends Controller
         $department = isset($request->department) ? $request->department : "";
         $company_info = Company::where('id',$company)->first();
         $company_name = $company_info ? $company_info->company_code : "";
-        return Excel::download(new EmployeesExport($company,$department), 'Employees '. $company_name .' .xlsx');
+        return Excel::download(new EmployeesExport($company,$department), 'Master List '. $company_name .' .xlsx');
     }
 
     public function new(Request $request)
@@ -159,6 +169,35 @@ class EmployeeController extends Controller
             $employee->middle_initial = $request->middile_initial;
             $employee->name_suffix = $request->suffix;
             $employee->religion = $request->religion;
+            
+            $employee->bank_name = $request->bank_name;
+            $employee->bank_account_number = $request->bank_account_number;
+
+            $employee->location = $request->location;
+            $employee->work_description = $request->work_description;
+            $employee->rate = isset($request->rate) ? Crypt::encryptString($request->rate) : "";
+
+
+            if($request->hasFile('file'))
+            {
+                $attachment = $request->file('file');
+                $original_name = $attachment->getClientOriginalName();
+                $name = time().'_'.$attachment->getClientOriginalName();
+                $attachment->move(public_path().'/avatar/', $name);
+                $file_name = '/avatar/'.$name;
+                $employee->avatar = $file_name;
+            }
+
+            if($request->hasFile('signature'))
+            {
+                $attachment = $request->file('signature');
+                $original_name = $attachment->getClientOriginalName();
+                $name = time().'_'.$attachment->getClientOriginalName();
+                $attachment->move(public_path().'/signature/', $name);
+                $file_name = '/signature/'.$name;
+                $employee->signature = $file_name;
+            }
+
             $employee->save();
 
             $employeeCompany = new EmployeeCompany;
@@ -240,7 +279,7 @@ class EmployeeController extends Controller
                         $employee->classification = isset($value['classification']) ? $value['classification'] : "";
                         $employee->department_id = isset($value['department_id']) ? $value['department_id'] : "";
                         $employee->company_id = isset($value['company_id']) ? $value['company_id'] : "";
-                        $employee->original_date_hired = isset($value['original_date_hired']) && !empty($value['original_date_hired']) ? date('Y-m-d',strtotime($value['original_date_hired'])) : null;
+                        $employee->original_date_hired = isset($value['date_hired']) && !empty($value['date_hired']) ? date('Y-m-d',strtotime($value['date_hired'])) : null;
 
                         $employee->position = isset($value['position']) ? $value['position'] : "";
                         $employee->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
@@ -264,6 +303,11 @@ class EmployeeController extends Controller
                         $employee->area = isset($value['area']) ? $value['area'] : "";
                         $employee->religion = isset($value['religion']) ? $value['religion'] : "";
                         $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
+
+                        $employee->location = isset($value['branch']) ? $value['branch'] : "";
+                        $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
+                        $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
+                        
                         $employee->status = "Active";
                         $employee->save();
 
@@ -295,6 +339,11 @@ class EmployeeController extends Controller
                             $check_if_exist->area = isset($value['area']) ? $value['area'] : "";
                             $check_if_exist->religion = isset($value['religion']) ? $value['religion'] : "";
                             $check_if_exist->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
+
+                            $employee->location = isset($value['branch']) ? $value['branch'] : "";
+                            $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
+                            $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
+
                             $check_if_exist->status = "Active";
                             $check_if_exist->save();
 
@@ -366,6 +415,11 @@ class EmployeeController extends Controller
                         $employee->area = isset($value['area']) ? $value['area'] : "";
                         $employee->religion = isset($value['religion']) ? $value['religion'] : "";
                         $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
+
+                        $employee->location = isset($value['branch']) ? $value['branch'] : "";
+                        $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
+                        $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
+
                         $employee->status = "Active";
                         $employee->save();
 
@@ -460,6 +514,11 @@ class EmployeeController extends Controller
         $employee->schedule_id = $request->schedule;
         $employee->bank_name = $request->bank_name;
         $employee->bank_account_number = $request->bank_account_number;
+
+        $employee->work_description = $request->work_description;
+        $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
+        $employee->status = $request->status;
+
         $employee->save();
 
         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
@@ -532,8 +591,11 @@ class EmployeeController extends Controller
 
     public function employee_attendance(Request $request)
     {
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $attendance_controller = new AttendanceController;
-        $employees = PersonnelEmployee::get();
+        $employees = Employee::where('status','Active')
+                                ->whereIn('company_id', $allowed_companies)
+                                ->get();
         $from_date = $request->from;
         $to_date = $request->to;
         $date_range =  [];
@@ -543,10 +605,13 @@ class EmployeeController extends Controller
         $schedule_id = null;
         $emp_data = [];
         if ($from_date != null) {
-            $emp_data = PersonnelEmployee::with(['attendances' => function ($query) use ($from_date, $to_date) {
-                $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
-                ->orderBy('time_in','asc')->orderby('time_out','desc')->orderBy('id','asc');
-            }])->whereIn('emp_code', $request->employee)->get();
+            $emp_data = Employee::with(['attendances' => function ($query) use ($from_date, $to_date) {
+                                        $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                        ->orderBy('time_in','asc')->orderby('time_out','desc')->orderBy('id','asc');
+                                    }])
+                                    ->whereIn('employee_number', $request->employee)
+                                    ->whereIn('company_id', $allowed_companies)
+                                    ->get();
 
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
             $schedules = ScheduleData::where('schedule_id', 1)->get();
@@ -569,7 +634,10 @@ class EmployeeController extends Controller
     }
     public function perCompany(Request $request)
     {
-        $companies = Company::whereHas('employee_company')->get();
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $companies = Company::whereHas('employee_has_company')
+                                ->whereIn('id',$allowed_companies)
+                                ->get();
         $attendance_controller = new AttendanceController;
         $company = $request->company;
         $from_date = $request->from;
@@ -581,12 +649,32 @@ class EmployeeController extends Controller
         $employees = [];
         
         if ($from_date != null) {
-            
-            $company_employees = EmployeeCompany::where('company_id',$request->company)->pluck('emp_code')->toArray();
-            $emp_data = PersonnelEmployee::select('emp_code')->with(['employee','attendances' => function ($query) use ($from_date, $to_date) {
-                $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
-                ->orderBy('time_in','asc')->orderby('time_out','desc')->orderBy('id','asc');
-            }])->whereIn('emp_code', $company_employees)->get();
+            $emp_data = Employee::select('employee_number','user_id','first_name','last_name')
+                                ->with(['attendances' => function ($query) use ($from_date, $to_date) {
+                                    $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                    ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                    ->orderBy('time_in','asc')
+                                    ->orderby('time_out','desc')
+                                    ->orderBy('id','asc');
+                                }])
+                                ->with(['leaves' => function ($query) use ($from_date, $to_date) {
+                                    $query->whereBetween('date_from', [$from_date, $to_date])
+                                    ->where('status','Approved')
+                                    ->orderBy('id','asc');
+                                },'leaves.leave'])
+                                ->with(['wfhs' => function ($query) use ($from_date, $to_date) {
+                                    $query->whereBetween('applied_date', [$from_date, $to_date])
+                                    ->where('status','Approved')
+                                    ->orderBy('id','asc');
+                                }])
+                                ->with(['obs' => function ($query) use ($from_date, $to_date) {
+                                    $query->whereBetween('applied_date', [$from_date, $to_date])
+                                    ->where('status','Approved')
+                                    ->orderBy('id','asc');
+                                }])
+                                ->where('company_id', $company)
+                                ->where('status','Active')
+                                ->get();
             // dd($company_employees);
             $schedules = ScheduleData::where('schedule_id', 1)->get();
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);

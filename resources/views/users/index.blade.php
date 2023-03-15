@@ -18,12 +18,13 @@
                             </span>
                         @endif
                         <div class="table-responsive">
-                            <table border="1" class="table table-hover table-bordered" id='users_table'>
+                            <table border="1" class="table table-hover table-bordered users_table" id='users_table'>
                                 <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Email</th>
+                                        {{-- <th>Allowed Companies</th> --}}
                                         <th>Role</th>
                                         <th>Action</th>
                                     </tr>
@@ -34,6 +35,24 @@
                                         <td>{{$user->id}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
+                                        {{-- <td>
+                                            @php
+                                                $user_allowed_companies = $user->user_allowed_company ? json_decode($user->user_allowed_company->company_ids) : [];
+                                            @endphp
+                                            @if ($user_allowed_companies)
+                                                <ul>
+                                                    @foreach ($user_allowed_companies as $item)
+                                                        @foreach($companies as $company)
+                                                            @if ($item == $company->id)
+                                                                <li>{{ $company->company_name}}</li>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                    
+                                                </ul>
+                                            @endif
+                                            
+                                        </td> --}}
                                         <td>{{$user->role}}</td>
                                         <td>
                                             <button data-toggle="modal" data-target="#editUserRole{{$user->id}}" type="button" class="btn btn-outline-info btn-icon-text btn-sm">

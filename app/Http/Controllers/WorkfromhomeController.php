@@ -24,7 +24,10 @@ class WorkfromhomeController extends Controller
 
     public function wfh_report(Request $request)
     {   
-        $companies = Company::whereHas('employee_company')->get();
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $companies = Company::whereHas('employee_has_company')
+                                ->whereIn('id',$allowed_companies)
+                                ->get();
 
         $company = isset($request->company) ? $request->company : "";
         $from = isset($request->from) ? $request->from : "";
@@ -32,8 +35,8 @@ class WorkfromhomeController extends Controller
         $employee_wfhs = [];
         if(isset($request->from) && isset($request->to)){
             $employee_wfhs = EmployeeWfh::with('user','employee')
-                                        ->whereDate('approved_date','>=',$from)
-                                        ->whereDate('approved_date','<=',$to)
+                                        ->whereDate('date_from','>=',$from)
+                                        ->whereDate('date_from','<=',$to)
                                         ->whereHas('employee',function($q) use($company){
                                             $q->where('company_id',$company);
                                         })
@@ -57,7 +60,7 @@ class WorkfromhomeController extends Controller
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
         $company_detail = Company::where('id',$company)->first();
-        return Excel::download(new EmployeeWfhExport($company,$from,$to), $company_detail->company_code . ' ' . $from . ' to ' . $to . ' WFH Export.xlsx');
+        return Excel::download(new EmployeeWfhExport($company,$from,$to), 'Work From Home ' . $company_detail->company_code . ' ' . $from . ' to ' . $to . '.xlsx');
     }
 
 }

@@ -102,8 +102,8 @@
                             </div>
                             <div class='row mb-2'>
                               <div class='col-md-6'>
-                                Current Address
-                                <input type="text" name="current_address" class='form-control form-control-sm required' placeholder="Current Address"/>
+                                Present Address
+                                <input type="text" name="present_address" class='form-control form-control-sm required' placeholder="Present Address"/>
                               </div>
                               <div class='col-md-6'>
                                 <input onclick='same_as_current(this.value)' type="checkbox" class="ml-1 form-check-input" id="same_as"> <label class='ml-4 mb-0' for='same_as'><small><i>Same as Current Address</i></small></label>
@@ -188,6 +188,10 @@
                                   @endforeach
                                 </select>
                               </div>
+                              <div class='col-md-4'>
+                                Location / Branch
+                                <input type="text" name="location" class='form-control form-control-sm required' placeholder="Location"/>
+                              </div>
                             </div>
                             <hr>
                             <div class='row mb-2'>
@@ -224,25 +228,6 @@
                                 <h2 class="fs-title">Payment Information</h2>
                                 <div class='row'> 
                                     <div class='col-md-6'>
-                                      Payment Period
-                                      <select data-placeholder="Payment Period" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payment_period' required>
-                                        <option value="">-- Payment Period --</option>
-                                        <option value="Monthly">Monthly</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Daily">Daily</option>
-                                      </select>
-                                    </div>
-                                    <div class='col-md-6'>
-                                      Payment Type
-                                      <select data-placeholder="Payment Type" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payment_type' required>
-                                        <option value="">-- Payment Type --</option>
-                                        <option value="Cash">Cash</option>
-                                        <option value="Bank Transfer">Bank Transfer</option>
-                                      </select>
-                                    </div>
-                                </div>
-                                <div class='row'> 
-                                    <div class='col-md-6'>
                                       Bank Name
                                       <select data-placeholder="Bank Name" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='bank_name' required>
                                         <option value="">-- Bank Name --</option>
@@ -253,17 +238,21 @@
                                     </div>
                                     <div class='col-md-6'>
                                       Account Number
-                                      <input type="text" name="account_number" class='form-control form-control-sm required' placeholder="Bank Account"/>
+                                      <input type="text" name="bank_account_number" class='form-control form-control-sm required' placeholder="Bank Account"/>
                                     </div>
                                 </div>
                                 <div class='row'> 
                                     <div class='col-md-6'>
                                       Monthly Rate
-                                      <input type="text" name="monthy_rate" class='form-control form-control-sm required' placeholder="Monthly Rate"/>
+                                      <input type="number" name="rate" class='form-control form-control-sm required' placeholder="Monthly Rate"/>
                                     </div>
                                     <div class='col-md-6'>
-                                      Daily Rate
-                                      <input type="text" name="account_number" class='form-control form-control-sm required' placeholder="Daily Rate"/>
+                                      Work Description
+                                      <select data-placeholder="Work Description" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='work_description' required>
+                                        <option value="">-- Bank Work Description --</option>
+                                        <option value="Monthly">Monthly</option>
+                                        <option value="Non-Monthly">Non-Monthly</option>
+                                      </select>
                                     </div>
                                 </div>
                                </div>
@@ -312,36 +301,23 @@
                             <hr>
                             <div class="form-group row">
                               <div class="col-lg-3 align-self-center text-right">
-                                
                                   <img id='avatar' src="{{URL::asset('/images/no_image.png')}}" class="rounded-circle circle-border m-b-md border" alt="profile" height='125px;' width='125px;'>
-                                  
                               </div>
                               <div class="col-lg-3 align-self-center text-left">
                                 <label title="Upload image file" for="inputImage" class="btn btn-primary btn-sm ">
-                                    <input type="file" accept="image/*" name="file" id="inputImage" style="display:none"  onchange='uploadimage(this)'>
+                                    <input type="file" accept="image/*" name="file" id="inputImage" style="display:none" onchange='uploadimage(this)'>
                                     Upload Avatar
                                 </label><br>
-                                <label title="Upload image file" for="inputImage" class="btn btn-info btn-sm ">
-                                    <input type="file" accept="image/*" name="file" id="inputImage" style="display:none"  onchange='captureimage(this)'>
-                                    Capture Avatar
-                                </label>
-                                
                               </div>
                               <div class="col-lg-3 text-center">
                                 <img id='signature' src="{{URL::asset('/images/signature.png')}}" class="rounded-square circle-border m-b-md border" alt="profile" height='125px;' width='225px;'>
                               </div>
                               <div class="col-lg-3 align-self-center text-left">
                                 <label title="Upload signature file" for="inputSignature" class="btn btn-primary btn-sm ">
-                                    <input type="file" accept="image/*" name="file" id="inputSignature" style="display:none"  onchange='uploadsignature(this)'>
+                                    <input type="file" accept="image/*" name="signature" id="inputSignature" style="display:none" onchange='uploadsignature(this)'>
                                     Upload Signature
                                 </label>
-                                <br>
-                                <label title="Upload image file" for="inputImage" class="btn btn-info btn-sm ">
-                                    <input type="file" accept="image/*" name="file" id="inputImage" style="display:none"  onchange='esign(this)'>
-                                    Capture Signature
-                                </label>
                               </div>
-
                           </div>
                             <hr>
                           </div>

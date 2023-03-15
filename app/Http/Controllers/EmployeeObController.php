@@ -31,6 +31,7 @@ class EmployeeObController extends Controller
         $new_ob->user_id = Auth::user()->id;
         $emp = Employee::where('user_id',auth()->user()->id)->first();
         $new_ob->schedule_id = $emp->schedule_id;
+        $new_ob->applied_date = $request->applied_date;
         $new_ob->date_from = $request->date_from;
         $new_ob->date_to = $request->date_to;
         $new_ob->remarks = $request->remarks;
@@ -58,6 +59,7 @@ class EmployeeObController extends Controller
     {
         $new_ob = EmployeeOb::findOrFail($id);
         $new_ob->user_id = Auth::user()->id;
+        $new_ob->applied_date = $request->applied_date;
         $new_ob->date_from = $request->date_from;
         $new_ob->date_to = $request->date_to;
         $new_ob->remarks = $request->remarks;

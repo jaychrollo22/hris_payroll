@@ -21,8 +21,8 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
     {
         $company = $this->company;
         return EmployeeWfh::query()->with('user','employee')
-                                ->whereDate('approved_date','>=',$this->from)
-                                ->whereDate('approved_date','<=',$this->to)
+                                ->whereDate('date_from','>=',$this->from)
+                                ->whereDate('date_from','<=',$this->to)
                                 ->whereHas('employee',function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
@@ -34,30 +34,24 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'User ID',
-            'Employee Name',
-            'Date Filed',
-            'WFH From',
-            'WFH To',
-            'WFH Count',
-            'Approved Date',
-            'Status',
-            'Remarks',
+            'USER ID',
+            'EMPLOYEE NAME',
+            'DATE',
+            'FIRST ACTUAL TIME IN',
+            'SECOND ACTUAL TIME OUT',
+            'REMARKS',
         ];
     }
 
     public function map($employee_wfh): array
     {
         return [
-            $employee_wfh->user->id,
+            $employee_wfh->employee->employee_number,
             $employee_wfh->user->name,
-            date('d/m/Y', strtotime($employee_wfh->created_at)),
-            date('d/m/Y',strtotime($employee_wfh->date_from)),
-            date('d/m/Y',strtotime($employee_wfh->date_to)),
-            $this->get_count_days($employee_wfh->schedule,$employee_wfh->date_from,$employee_wfh->date_to),
-            date('d/m/Y',strtotime($employee_wfh->approved_date)),
-            $employee_wfh->status,
-            $employee_wfh->remarks
+            date('d/m/Y',strtotime($employee_wfh->applied_date)),
+            date('H:i',strtotime($employee_wfh->date_from)),
+            date('H:i',strtotime($employee_wfh->date_to)),
+            "WFH"
         ];
     }
 

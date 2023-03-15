@@ -14,11 +14,12 @@ use Maatwebsite\Excel\Concerns\FromView;
 class EmployeeLeaveExport implements FromView
 {
 
-    public function __construct($company,$from,$to)
+    public function __construct($company,$from,$to,$status)
     {
         $this->company = $company;
         $this->from = $from;
         $this->to = $to;
+        $this->status = $status;
     }
 
     public function view(): View

@@ -23,16 +23,24 @@
         </div>
           <div class="form-group row">
             <div class='align-self-center col-md-2 text-right'>
+              Date
+            </div>
+            <div class='col-md-4'>
+              <input type="date" name='applied_date' class="form-control" value="{{ $ob->applied_date }}" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class='align-self-center col-md-2 text-right'>
               Date From
             </div>
             <div class='col-md-4'>
-              <input type="date" name='date_from' class="form-control" value="{{ $ob->date_from }}" required>
+              <input type="time" name='date_from' class="form-control" value="{{ $ob->date_from }}" required>
             </div>
             <div class='align-self-center col-md-2 text-right'>
                Date To
             </div>
             <div class='col-md-4'>
-              <input type="date" name='date_to' class="form-control" value="{{ $ob->date_to }}" required>
+              <input type="time" name='date_to' class="form-control" value="{{ $ob->date_to }}" required>
             </div>
           </div>
           <div class="form-group row">

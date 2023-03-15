@@ -19,7 +19,8 @@
                       <tr>
                         <th>Date Filed</th>
                         <th>WFH Date</th>
-                        <th>WFH Count (Days)</th>
+                        <th>WFH Time In-Out</th>
+                        {{-- <th>WFH Count (Days)</th> --}}
                         <th>Remarks</th>
                         <th>Status</th>
                         <th>Approvers</th>
@@ -30,8 +31,9 @@
                       @foreach ($wfhs as $wfh)
                       <tr>
                         <td> {{ date('d/m/Y', strtotime($wfh->created_at)) }}</td>
-                        <td> {{ date('d/m/Y', strtotime($wfh->date_from)) }} - {{ date('d/m/Y', strtotime($wfh->date_to)) }}  </td>
-                        <td>{{get_count_days($wfh->schedule,$wfh->date_from,$wfh->date_to)}}</td>
+                        <td> {{ date('d/m/Y', strtotime($wfh->applied_date)) }} </td>
+                        <td> {{ date('H:i', strtotime($wfh->date_from)) }} - {{ date('H:i', strtotime($wfh->date_to)) }}  </td>
+                        {{-- <td>{{get_count_days($wfh->schedule,$wfh->date_from,$wfh->date_to)}}</td> --}}
                         <td>{{ $wfh->remarks }}</td>
                         <td id="tdStatus{{ $wfh->id }}">
                           @if ($wfh->status == 'Pending')
@@ -69,7 +71,7 @@
                               data-target="#edit_wfh{{ $wfh->id }}" data-toggle="modal" title='Edit'>
                               <i class="ti-pencil-alt"></i>
                             </button>
-                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel(this.id)"
+                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel({{$wfh->id}})"
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
                             </button>
@@ -78,7 +80,7 @@
                               data-target="#view_wfh{{ $wfh->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
                             </button>            
-                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel(this.id)"
+                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel({{$wfh->id}})"
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
                             </button>
@@ -87,7 +89,7 @@
                               data-target="#view_wfh{{ $wfh->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
                             </button>                 
-                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel(this.id)"
+                            <button title='Cancel' id="{{ $wfh->id }}" onclick="cancel({{$wfh->id}})"
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
                             </button>            
@@ -138,6 +140,7 @@ function get_count_days($data,$date_from,$date_to)
 @section('wfhScript')
 	<script>
 		function cancel(id) {
+      alert(id);
 			var element = document.getElementById('tdActionId'+id);
 			var dataID = element.getAttribute('data-id');
 			swal({
