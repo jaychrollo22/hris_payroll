@@ -52,8 +52,6 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
 
     public function map($employee_ot): array
     {
-        $max_overtime = $employee_ot->ot_approved_hrs > 8 ? 8 : $employee_ot->ot_approved_hrs; //Max 8 Hours
-        $hours_worked_cap_spwh = $employee_ot->ot_approved_hrs > 8 ? ($employee_ot->ot_approved_hrs - 8) : 0; // Hours Cap SPWH
         
         $rw_ot = $this->isRWOT($employee_ot->ot_date); //Regular Work
         $rd = $this->isRD($employee_ot->ot_date); //Rest Day
@@ -61,6 +59,21 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
         $rh = $this->isRH($employee_ot->ot_date); //Regular Holiday
         $sph = $this->isSPH($employee_ot->ot_date); //Special Holiday
         $remarks = $this->isRemarks($employee_ot->end_time); //Remarks
+
+
+        if($rd == '1' || $sun == '1' || $rh == '1' || $sph == '1'){
+            if($employee_ot->ot_approved_hrs > 8){
+                $hours_worked_cap_spwh = 8; // Hours Cap SPWH
+                $max_overtime =  $employee_ot->ot_approved_hrs - 8; //Max 8 Hours
+                $rw_ot = 1;
+            }else{
+                $hours_worked_cap_spwh = $employee_ot->ot_approved_hrs; // Hours Cap SPWH
+                $max_overtime =  0; //Max 8 Hours
+            }
+        }else{
+            $max_overtime = $employee_ot->ot_approved_hrs; //Max 8 Hours
+            $hours_worked_cap_spwh = 0; // Hours Cap SPWH
+        }
 
         return [
             $employee_ot->employee->employee_number,
