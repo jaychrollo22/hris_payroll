@@ -27,15 +27,20 @@ class UserController extends Controller
     //
     public function index(){
 
-        $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
-        $users = User::with('user_allowed_company','user_privilege')->get();
+        if(auth()->user()->id == '353' || auth()->user()->id == '1'){
+            $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
+            $users = User::with('user_allowed_company','user_privilege')->get();
 
-        return view('users.index',
-        array(
-            'header' => 'users',
-            'users' => $users,
-            'companies' => $companies,
-        ));
+            return view('users.index',
+            array(
+                'header' => 'users',
+                'users' => $users,
+                'companies' => $companies,
+            ));
+        }else{
+            return redirect('/');
+        }
+        
     }
 
     public function export() 
@@ -73,6 +78,27 @@ class UserController extends Controller
                 $user_privilege->employees_add = $request->employees_add;
                 $user_privilege->employees_export = $request->employees_export;
                 $user_privilege->employees_rate = $request->employees_rate;
+
+                $user_privilege->reports_leave = $request->reports_leave;
+                $user_privilege->reports_overtime = $request->reports_overtime;
+                $user_privilege->reports_wfh = $request->reports_wfh;
+                $user_privilege->reports_ob = $request->reports_ob;
+
+                $user_privilege->biometrics_per_employee = $request->biometrics_per_employee;
+                $user_privilege->biometrics_per_location = $request->biometrics_per_location;
+                $user_privilege->biometrics_per_company = $request->biometrics_per_company;
+                $user_privilege->biometrics_sync = $request->biometrics_sync;
+
+                $user_privilege->settings_view = $request->settings_view;
+                $user_privilege->settings_add = $request->settings_add;
+                $user_privilege->settings_edit = $request->settings_edit;
+                $user_privilege->settings_delete = $request->settings_delete;
+                
+                $user_privilege->masterfiles_companies = $request->masterfiles_companies;
+                $user_privilege->masterfiles_departments = $request->masterfiles_departments;
+                $user_privilege->masterfiles_loan_types = $request->masterfiles_loan_types;
+                $user_privilege->masterfiles_employee_leave_credits = $request->masterfiles_employee_leave_credits;
+
                 $user_privilege->save();
             }else{
                 $new_user_privilege = new UserPrivilege;
@@ -82,6 +108,27 @@ class UserController extends Controller
                 $new_user_privilege->employees_add = $request->employees_add;
                 $new_user_privilege->employees_export = $request->employees_export;
                 $new_user_privilege->employees_rate = $request->employees_rate;
+
+                $new_user_privilege->reports_leave = $request->reports_leave;
+                $new_user_privilege->reports_overtime = $request->reports_overtime;
+                $new_user_privilege->reports_wfh = $request->reports_wfh;
+                $new_user_privilege->reports_ob = $request->reports_ob;
+
+                $new_user_privilege->biometrics_per_employee = $request->biometrics_per_employee;
+                $new_user_privilege->biometrics_per_location = $request->biometrics_per_location;
+                $new_user_privilege->biometrics_per_company = $request->biometrics_per_company;
+                $new_user_privilege->biometrics_sync = $request->biometrics_sync;
+
+                $new_user_privilege->settings_view = $request->settings_view;
+                $new_user_privilege->settings_add = $request->settings_add;
+                $new_user_privilege->settings_edit = $request->settings_edit;
+                $new_user_privilege->settings_delete = $request->settings_delete;
+
+                $new_user_privilege->masterfiles_companies = $request->masterfiles_companies;
+                $new_user_privilege->masterfiles_departments = $request->masterfiles_departments;
+                $new_user_privilege->masterfiles_loan_types = $request->masterfiles_loan_types;
+                $new_user_privilege->masterfiles_employee_leave_credits = $request->masterfiles_employee_leave_credits;
+                
                 $new_user_privilege->save();
             }
 

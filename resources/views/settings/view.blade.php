@@ -16,17 +16,21 @@
                               <img id='avatar' src='@if($settings != null){{URL::asset($settings->where('icon','!=',null)->first()->icon)}}@endif' onerror="this.src='{{URL::asset('/images/icon.png')}}';"  class=" circle-border m-b-md border" alt="profile" height='130px;' width='130px;'> <br>
                               <i><small>SIZE : 130px x 130px</small></i>
                               <br>
+                            @if (checkUserPrivilege('settings_edit',auth()->user()->id) == 'yes')
                             <button title="Upload image file" data-toggle="modal" data-target="#uploadIcon"  class="btn btn-primary btn-sm mt-2">
                                 Change Icon
                             </button>
+                            @endif
                             
                           </div>
                           <div class="col-lg-6 text-center">
                             <img id='signature' src='@if($settings != null){{URL::asset($settings->logo)}}@endif' onerror="this.src='{{URL::asset('/images/obanana_brand.png')}}';"  class="rounded-square circle-border m-b-md border" alt="profile" height='130px;' width='431px;'> <br>
                             <i><small>SIZE : 130px x 431px</small></i> <br>
+                            @if (checkUserPrivilege('settings_edit',auth()->user()->id) == 'yes')
                             <button title="Upload image file"  data-toggle="modal" data-target="#uploadLogo"  class="btn btn-info btn-sm mt-2">
                                 Change Brand Logo
                             </button>
+                            @endif
                           </div>
 
                       </div>

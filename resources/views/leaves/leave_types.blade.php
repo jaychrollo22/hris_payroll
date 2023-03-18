@@ -9,10 +9,12 @@
               <div class="card-body">
                 <h4 class="card-title">Leave Types</h4>
                 <p class="card-description">
+                    @if (checkUserPrivilege('settings_add',auth()->user()->id) == 'yes')
                     <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#newHoliday">
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
                       New Leave Type
                     </button>
+                    @endif
                   </p>
              
                 <div class="table-responsive">

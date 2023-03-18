@@ -9,10 +9,12 @@
               <div class="card-body">
                 <h4 class="card-title">Announcements</h4>
                 <p class="card-description">
+                    @if (checkUserPrivilege('settings_add',auth()->user()->id) == 'yes')
                     <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#newAnnouncement">
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
                       New Announcement
                     </button>
+                    @endif
                   </p>
              
                 <div class="table-responsive">
@@ -34,11 +36,13 @@
                                 <td>{{$announcement->user->name}}</td>
                                 <td>@if($announcement->expired){{date('M d, Y',strtotime($announcement->expired))}}@endif</td>
                                 <td>
+                                    @if (checkUserPrivilege('settings_delete',auth()->user()->id) == 'yes')
                                     <a href="delete-announcement/{{$announcement->id}}">
                                         <button  title='DELETE' onclick="return confirm('Are you sure you want to delete this announcement?')" class="btn btn-rounded btn-danger btn-icon">
                                             <i class="ti-trash"></i>
                                         </button>
                                     </a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
