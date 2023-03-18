@@ -1,5 +1,5 @@
-<div class="modal fade" id="editUserRole{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="editUserRoledata" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade " id="editUserRole{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="editUserRoledata" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editUserRoledata">Edit User Role</h5>
@@ -31,7 +31,8 @@
                                     @endforeach
                             </select>
                         </div>
-                        <div class="col-md-12 form-group">
+                        {{-- Employees --}}
+                        <div class="col-md-6 form-group">
                             <h5>Employees</h5>
                             @if($user->user_privilege)
                                 @if($user->user_privilege->employees_view == 'on')
@@ -94,6 +95,215 @@
                             <br>
                             <br>
                         </div>
+                        {{-- Reports --}}
+                        <div class="col-md-6 form-group">
+                            <h5>Reports</h5>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->reports_leave == 'on')
+                                    <input type="checkbox" name="reports_leave" id="reports_leave{{$user->id}}" value="{{ $user->user_privilege->reports_leave }}" checked>
+                                @else
+                                    <input type="checkbox" name="reports_leave" id="reports_leave{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="reports_leave" id="reports_leave{{$user->id}}">
+                            @endif
+                            Leave
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->reports_overtime == 'on')
+                                    <input type="checkbox" name="reports_overtime" id="reports_overtime{{$user->id}}" value="{{ $user->user_privilege->reports_overtime }}" checked>
+                                @else
+                                    <input type="checkbox" name="reports_overtime" id="reports_overtime{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="reports_overtime" id="reports_overtime{{$user->id}}">
+                            @endif
+                            Overtime
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->reports_wfh == 'on')
+                                    <input type="checkbox" name="reports_wfh" id="reports_wfh{{$user->id}}" value="{{ $user->user_privilege->reports_wfh }}" checked>
+                                @else
+                                    <input type="checkbox" name="reports_wfh" id="reports_wfh{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="reports_wfh" id="reports_wfh{{$user->id}}">
+                            @endif
+                            Work From Home
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->reports_ob == 'on')
+                                    <input type="checkbox" name="reports_ob" id="reports_ob{{$user->id}}" value="{{ $user->user_privilege->reports_ob }}" checked>
+                                @else
+                                    <input type="checkbox" name="reports_ob" id="reports_ob{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="reports_ob" id="reports_ob{{$user->id}}">
+                            @endif
+                            Official Business
+                            <br>
+                            <br>
+                        </div>
+                        {{-- Biometrics --}}
+                        <div class="col-md-6 form-group">
+                            <h5>Biometrics</h5>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->biometrics_per_employee == 'on')
+                                    <input type="checkbox" name="biometrics_per_employee" id="biometrics_per_employee{{$user->id}}" value="{{ $user->user_privilege->biometrics_per_employee }}" checked>
+                                @else
+                                    <input type="checkbox" name="biometrics_per_employee" id="biometrics_per_employee{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="biometrics_per_employee" id="biometrics_per_employee{{$user->id}}">
+                            @endif
+                            Per Employee
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->biometrics_per_location == 'on')
+                                    <input type="checkbox" name="biometrics_per_location" id="biometrics_per_location{{$user->id}}" value="{{ $user->user_privilege->biometrics_per_location }}" checked>
+                                @else
+                                    <input type="checkbox" name="biometrics_per_location" id="biometrics_per_location{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="biometrics_per_location" id="biometrics_per_location{{$user->id}}">
+                            @endif
+                            Per Location
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->biometrics_per_company == 'on')
+                                    <input type="checkbox" name="biometrics_per_company" id="biometrics_per_company{{$user->id}}" value="{{ $user->user_privilege->biometrics_per_company }}" checked>
+                                @else
+                                    <input type="checkbox" name="biometrics_per_company" id="biometrics_per_company{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="biometrics_per_company" id="biometrics_per_company{{$user->id}}">
+                            @endif
+                            Per Company
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->biometrics_sync == 'on')
+                                    <input type="checkbox" name="biometrics_sync" id="biometrics_sync{{$user->id}}" value="{{ $user->user_privilege->biometrics_sync }}" checked>
+                                @else
+                                    <input type="checkbox" name="biometrics_sync" id="biometrics_sync{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="biometrics_sync" id="biometrics_sync{{$user->id}}">
+                            @endif
+                            Sync Biometric
+                            <br>
+                            <br>
+                        </div>
+                        {{-- Settings --}}
+                         <div class="col-md-6 form-group">
+                            <h5>Settings</h5>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->settings_view == 'on')
+                                    <input type="checkbox" name="settings_view" id="settings_view{{$user->id}}" value="{{ $user->user_privilege->settings_view }}" checked>
+                                @else
+                                    <input type="checkbox" name="settings_view" id="settings_view{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="settings_view" id="settings_view{{$user->id}}">
+                            @endif
+                            View
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->settings_add == 'on')
+                                    <input type="checkbox" name="settings_add" id="settings_add{{$user->id}}" value="{{ $user->user_privilege->settings_add }}" checked>
+                                @else
+                                    <input type="checkbox" name="settings_add" id="settings_add{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="settings_add" id="settings_add{{$user->id}}">
+                            @endif
+                            Add
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->settings_edit == 'on')
+                                    <input type="checkbox" name="settings_edit" id="settings_edit{{$user->id}}" value="{{ $user->user_privilege->settings_edit }}" checked>
+                                @else
+                                    <input type="checkbox" name="settings_edit" id="settings_edit{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="settings_edit" id="settings_edit{{$user->id}}">
+                            @endif
+                            Edit
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->settings_delete == 'on')
+                                    <input type="checkbox" name="settings_delete" id="settings_delete{{$user->id}}" value="{{ $user->user_privilege->settings_delete }}" checked>
+                                @else
+                                    <input type="checkbox" name="settings_delete" id="settings_delete{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="settings_delete" id="settings_delete{{$user->id}}">
+                            @endif
+                            Delete
+                            <br>
+                            <br>
+                        </div>
+                        {{-- Masterfiles --}}
+                        <div class="col-md-6 form-group">
+                            <h5>Masterfiles</h5>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->masterfiles_companies == 'on')
+                                    <input type="checkbox" name="masterfiles_companies" id="masterfiles_companies{{$user->id}}" value="{{ $user->user_privilege->masterfiles_companies }}" checked>
+                                @else
+                                    <input type="checkbox" name="masterfiles_companies" id="masterfiles_companies{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="masterfiles_companies" id="masterfiles_companies{{$user->id}}">
+                            @endif
+                            Companies
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->masterfiles_departments == 'on')
+                                    <input type="checkbox" name="masterfiles_departments" id="masterfiles_departments{{$user->id}}" value="{{ $user->user_privilege->masterfiles_departments }}" checked>
+                                @else
+                                    <input type="checkbox" name="masterfiles_departments" id="masterfiles_departments{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="masterfiles_departments" id="masterfiles_departments{{$user->id}}">
+                            @endif
+                            Departments
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->masterfiles_loan_types == 'on')
+                                    <input type="checkbox" name="masterfiles_loan_types" id="masterfiles_loan_types{{$user->id}}" value="{{ $user->user_privilege->masterfiles_loan_types }}" checked>
+                                @else
+                                    <input type="checkbox" name="masterfiles_loan_types" id="masterfiles_loan_types{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="masterfiles_loan_types" id="masterfiles_loan_types{{$user->id}}">
+                            @endif
+                            Loan Types
+                            <br>
+                            <br>
+                            @if($user->user_privilege)
+                                @if($user->user_privilege->masterfiles_employee_leave_credits == 'on')
+                                    <input type="checkbox" name="masterfiles_employee_leave_credits" id="masterfiles_employee_leave_credits{{$user->id}}" value="{{ $user->user_privilege->masterfiles_employee_leave_credits }}" checked>
+                                @else
+                                    <input type="checkbox" name="masterfiles_employee_leave_credits" id="masterfiles_employee_leave_credits{{$user->id}}">
+                                @endif
+                            @else
+                                <input type="checkbox" name="masterfiles_employee_leave_credits" id="masterfiles_employee_leave_credits{{$user->id}}">
+                            @endif
+                            Employee Leave Credits
+                            <br>
+                            <br>
+                        </div>
+
                     </div>
                 </div>
                 <div class="modal-footer">

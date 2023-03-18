@@ -9,10 +9,12 @@
 					<div class="card-body">
 						<h4 class="card-title">Incentives</h4>
 						<p class="card-description">
+							@if (checkUserPrivilege('settings_add',auth()->user()->id) == 'yes')
 							<button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#newIncentive">
 								<i class="ti-plus btn-icon-prepend"></i>
 								New Incentive
 							</button>
+							@endif
 						</p>
 
 						<div class="table-responsive">
@@ -39,14 +41,17 @@
 											</td>
 											<td id="tdActionId{{ $incentive->id }}" data-id="{{ $incentive->id }}">
 												@if ($incentive->status == 'Active')
+													@if (checkUserPrivilege('settings_edit',auth()->user()->id) == 'yes')
 													<button type="button" id="edit{{ $incentive->id }}" class="btn btn-info btn-rounded btn-icon"
 														data-target="#edit_incentive{{ $incentive->id }}" data-toggle="modal" title='Edit'>
 														<i class="ti-pencil-alt"></i>
 													</button>
+													
 													<button title='Disable' id="{{ $incentive->id }}" onclick="disable(this.id)"
 														class="btn btn-rounded btn-danger btn-icon">
 														<i class="fa fa-ban"></i>
 													</button>
+													@endif
 												@else
 													<button title='Activate' id="{{ $incentive->id }}" onclick="activate(this.id)"
 														class="btn btn-rounded btn-primary btn-icon">

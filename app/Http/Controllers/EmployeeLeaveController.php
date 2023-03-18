@@ -7,6 +7,7 @@ use App\Employee;
 use App\ScheduleData;
 use App\Leave;
 use App\EmployeeLeave;
+use App\EmployeeLeaveCredit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -17,11 +18,12 @@ class EmployeeLeaveController extends Controller
  
     public function leaveBalances()
     {
+
         $leave_types = Leave::all(); //masterfile
         $employee_leaves = EmployeeLeave::with('user','leave','schedule')->where('user_id',auth()->user()->id)->get();
         $get_leave_balances = new LeaveBalanceController;
         $get_approvers = new EmployeeApproverController;
-        $leave_balances = $get_leave_balances->get_leave_balances(auth()->user()->employee->id);
+        $leave_balances = EmployeeLeaveCredit::with('leave')->where('user_id',auth()->user()->id)->get();
         $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
 
         return view('forms.leaves.leaves',

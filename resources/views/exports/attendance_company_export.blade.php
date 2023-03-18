@@ -108,7 +108,26 @@
                 @endif
             </td>
             <td>
+                @if($time_in == null)
+                    @if((date('l',strtotime($date_r)) == "Saturday") || (date('l',strtotime($date_r)) == "Sunday"))
+                        
+                    @else
+                        @php 
+                            $if_leave = employeeHasLeave($emp->leaves,date('Y-m-d',strtotime($date_r)));
+                            $if_ob = employeeHasOB($emp->obs,date('Y-m-d',strtotime($date_r)));
+                            $if_wfh = employeeHasWFH($emp->wfhs,date('Y-m-d',strtotime($date_r)));
 
+                            $is_absent = '';
+                            if(empty($if_leave) && empty($if_ob) && empty($if_wfh) ){
+                                $is_absent = 'Absent';
+                            }                            
+                        @endphp
+                        {{$if_leave}}
+                        {{$if_ob}}
+                        {{$if_wfh}}
+                        {{$is_absent}}
+                    @endif
+                @endif
             </td>
             @endif
         </tr>

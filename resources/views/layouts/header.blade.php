@@ -392,13 +392,16 @@
                         <h5>Super Admin</h5>
                     </li>
 
+                    @if (checkUserPrivilege('employees_view',auth()->user()->id) == 'yes')
                     <li class="nav-item @if ($header == 'employees') active @endif ">
                         <a class="nav-link" href="{{ url('/employees') }}" onclick='show()'>
                             <i class="icon-head menu-icon"></i>
                             <span class="menu-title">Employees</span>
                         </a>
                     </li>
+                    @endif
 
+                    @if (checkUserPrivilege('biometrics_per_employee',auth()->user()->id) == 'yes' || checkUserPrivilege('biometrics_per_location',auth()->user()->id) == 'yes' || checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes' || checkUserPrivilege('biometrics_sync',auth()->user()->id) == 'yes')
                     <li class="nav-item @if ($header == 'biometrics') active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#biometrics" aria-expanded="false" aria-controls="ui-basic">
                             <i class="icon-cog menu-icon"></i>
@@ -408,13 +411,23 @@
                         <div class="collapse" id="biometrics">
                             <ul class="nav flex-column sub-menu">
                                 {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/get-biometrics') }}">Biometrics</a></li> --}}
+                                @if (checkUserPrivilege('biometrics_per_employee',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biologs-employee') }}">Per Employee</a></li>
+                                @endif
+                                @if (checkUserPrivilege('biometrics_per_location',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location</a></li>
+                                @endif
+                                @if (checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biometrics-per-company') }}">Per Company</a></li>
+                                @endif
+                                @if (checkUserPrivilege('biometrics_sync',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/sync-biometrics') }}">Sync Biometrics</a></li>
+                                @endif
                             </ul>
                         </div>
                     </li>
+                    @endif
+                    @if (checkUserPrivilege('settings_view',auth()->user()->id) == 'yes')
                     <li class="nav-item @if ($header == 'settings') active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#settings" aria-expanded="@if ($header == 'settings') true @else false @endif" aria-controls="ui-basic">
                             <i class="icon-cog menu-icon"></i>
@@ -434,6 +447,7 @@
                             </ul>
                         </div>
                     </li>
+                    @endif
 
                     {{-- <li class="nav-item @if ($header == 'Payroll') active @endif"> --}}
                         {{-- <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
@@ -449,6 +463,7 @@
                             {{-- </ul> --}}
                         {{-- </div> --}}
         </li>
+        @if (checkUserPrivilege('masterfiles_companies',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_departments',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes')
         <li class="nav-item @if ($header == 'masterfiles') active @endif">
             <a class="nav-link" data-toggle="collapse" href="#masterfiles" aria-expanded="false" aria-controls="ui-basic">
                 <i class="icon-align-center menu-icon"></i>
@@ -484,6 +499,8 @@
                 </ul>
             </div>
         </li>
+        @endif
+        @if (checkUserPrivilege('reports_leave',auth()->user()->id) == 'yes' || checkUserPrivilege('reports_overtime',auth()->user()->id) == 'yes' || checkUserPrivilege('reports_wfh',auth()->user()->id) == 'yes' || checkUserPrivilege('reports_ob',auth()->user()->id) == 'yes')
         <li class="nav-item @if ($header == 'reports') active @endif">
             <a class="nav-link" data-toggle="collapse" href="#reports" aria-expanded="false" aria-controls="ui-basic">
                 <i class="icon-paper menu-icon"></i>
@@ -493,10 +510,18 @@
             <div class="collapse" id="reports">
                 <ul class="nav flex-column sub-menu">
                     {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/employee-report') }}">Employees</a></li> --}}
+                    @if (checkUserPrivilege('reports_leave',auth()->user()->id) == 'yes')
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/leave-report') }}">Leave Reports</a></li>
+                    @endif
+                    @if (checkUserPrivilege('reports_overtime',auth()->user()->id) == 'yes')
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/overtime-report') }}">Overtime Reports</a></li>
+                    @endif
+                    @if (checkUserPrivilege('reports_wfh',auth()->user()->id) == 'yes')
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/wfh-report') }}">WFH Reports</a></li>
+                    @endif
+                    @if (checkUserPrivilege('reports_ob',auth()->user()->id) == 'yes')
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/ob-report') }}">OB Reports</a></li>
+                    @endif
                     {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/dtr-report') }}">DTR Reports</a></li> --}}
                     {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li> --}}
                     {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li> --}}
@@ -505,6 +530,7 @@
                 </ul>
             </div>
         </li>
+        @endif
         @endif
         </ul>
         </nav>
