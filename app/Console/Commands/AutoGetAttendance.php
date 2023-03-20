@@ -51,8 +51,7 @@ class AutoGetAttendance extends Command
         $from = date('Y-m-d',strtotime('-1 day'));
         $to = date('Y-m-d');
         
-        
-        $terminals = iclockterminal_mysql::pluck('id')->toArray();
+        $terminals = iclockterminal_mysql::orderBy('id','ASC')->pluck('id')->toArray();
         $employee_numbers = Employee::pluck('employee_number')->toArray();
         $attendances = iclocktransactions_mysql::whereIn('emp_code',$employee_numbers)
                                                     ->whereIn('terminal_id',$terminals)
