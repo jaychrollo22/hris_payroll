@@ -2,6 +2,7 @@
 use App\ApplicantSystemNotification;
 use App\UserAllowedCompany;
 use App\UserPrivilege;
+use App\Employee;
 
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
@@ -153,6 +154,15 @@ function getUserAllowedCompanies($user_id){
 function checkUserPrivilege($field,$user_id){
     $user_privilege = UserPrivilege::select('id')->where($field,'on')->where('user_id',$user_id)->first();
     if($user_privilege){
+        return 'yes';
+    }else{
+        return 'no';
+    }
+}
+
+function checkUserAllowedOvertime($user_id){
+    $employee = Employee::select('level')->where('user_id',$user_id)->first();
+    if($employee->level == 'RANK&FILE'){
         return 'yes';
     }else{
         return 'no';
