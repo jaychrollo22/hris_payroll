@@ -509,7 +509,7 @@ class EmployeeController extends Controller
         $employee->tax_number = $request->tin;
         $employee->hdmf_number = $request->pagibig;
         $employee->original_date_hired = $request->date_hired;
-        $employee->personal_email = $request->personal_email;
+        // $employee->personal_email = $request->personal_email;
         $employee->immediate_sup = $request->immediate_supervisor;
         $employee->schedule_id = $request->schedule;
         $employee->bank_name = $request->bank_name;

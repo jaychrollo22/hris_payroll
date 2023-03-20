@@ -2,6 +2,7 @@
 use App\ApplicantSystemNotification;
 use App\UserAllowedCompany;
 use App\UserPrivilege;
+use App\Employee;
 
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
@@ -44,6 +45,23 @@ function roleValidationAsAdministrator(){
     }
 }
 
+
+function get_count_days_leave($data,$date_from,$date_to)
+ {
+    $data = ($data->pluck('name'))->toArray();
+    $count = 0;
+    $startTime = strtotime($date_from);
+    $endTime = strtotime($date_to);
+
+    for ( $i = $startTime; $i <= $endTime; $i = $i + 86400 ) {
+      $thisDate = date( 'l', $i ); // 2010-05-01, 2010-05-02, etc
+      if(in_array($thisDate,$data)){
+          $count= $count+1;
+      }
+    }
+    return($count);
+ } 
+ 
 function dateRangeHelper( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
     $dates = [];
     $current = strtotime( $first );
@@ -136,6 +154,15 @@ function getUserAllowedCompanies($user_id){
 function checkUserPrivilege($field,$user_id){
     $user_privilege = UserPrivilege::select('id')->where($field,'on')->where('user_id',$user_id)->first();
     if($user_privilege){
+        return 'yes';
+    }else{
+        return 'no';
+    }
+}
+
+function checkUserAllowedOvertime($user_id){
+    $employee = Employee::select('level')->where('user_id',$user_id)->first();
+    if($employee->level == 'RANK&FILE'){
         return 'yes';
     }else{
         return 'no';

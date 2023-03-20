@@ -338,7 +338,9 @@
                         <div class="collapse @if ($header == 'forms') show @endif" id="forms">
                             <ul class="nav flex-column sub-menu @if ($header == 'forms') show @endif">
                                 <li class="nav-item "> <a class="nav-link active" href="{{ url('/file-leave') }}">Leave</a></li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/overtime') }}">Overtime</a></li>
+                                @if(checkUserAllowedOvertime(auth()->user()->id) == 'yes')
+                                    <li class="nav-item "> <a class="nav-link " href="{{ url('/overtime') }}">Overtime</a></li>
+                                @endif
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/work-from-home') }}">Work from home</a></li>
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/official-business') }}">Official Business</a>
                                 </li>

@@ -18,7 +18,7 @@ class LeaveController extends Controller
     //
     public function leaves()
     {
-        $leave_types = Leave::get();
+        return $leave_types = Leave::get();
         return view(
             'forms.leaves.leaves',
             array(
