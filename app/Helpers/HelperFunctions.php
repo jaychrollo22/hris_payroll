@@ -3,6 +3,7 @@ use App\ApplicantSystemNotification;
 use App\UserAllowedCompany;
 use App\UserPrivilege;
 use App\Employee;
+use App\EmployeeLeave;
 
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
@@ -167,4 +168,58 @@ function checkUserAllowedOvertime($user_id){
     }else{
         return 'no';
     }
+}
+
+function checkUsedVacationLeave($user_id){
+    $employee_vl = EmployeeLeave::where('user_id',$user_id)
+                                    ->where('leave_type','1')
+                                    ->where('status','Approved')
+                                    ->get();
+
+    $count = 0;
+    if($employee_vl){
+        foreach($employee_vl as $leave){
+            if($leave->withpay == 1 && $leave->halfday == 1){
+                $count += 0.5;
+            }else{
+                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                if($date_range){
+                    foreach($date_range as $date_r){
+                        if($leave->withpay == 1){
+                            $count += 1;
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+    return $count;
+}
+
+function checkUsedSickLeave($user_id){
+    $employee_sl = EmployeeLeave::where('user_id',$user_id)
+                                    ->where('leave_type','2')
+                                    ->where('status','Approved')
+                                    ->get();
+
+    $count = 0;
+    if($employee_sl){
+        foreach($employee_sl as $leave){
+            if($leave->withpay == 1 && $leave->halfday == 1){
+                $count += 0.5;
+            }else{
+                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                if($date_range){
+                    foreach($date_range as $date_r){
+                        if($leave->withpay == 1){
+                            $count += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return $count;
 }

@@ -18,6 +18,8 @@ class EmployeeLeaveController extends Controller
  
     public function leaveBalances()
     {
+        $used_vl = checkUsedVacationLeave(auth()->user()->id);
+        $used_sl = checkUsedSickLeave(auth()->user()->id);
 
         $leave_types = Leave::all(); //masterfile
         $employee_leaves = EmployeeLeave::with('user','leave','schedule')->where('user_id',auth()->user()->id)->get();
@@ -26,6 +28,7 @@ class EmployeeLeaveController extends Controller
         $leave_balances = EmployeeLeaveCredit::with('leave')->where('user_id',auth()->user()->id)->get();
         $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
 
+
         return view('forms.leaves.leaves',
         array(
             'header' => 'forms',
@@ -33,6 +36,8 @@ class EmployeeLeaveController extends Controller
             'all_approvers' => $all_approvers,
             'employee_leaves' => $employee_leaves,
             'leave_types' => $leave_types,
+            'used_vl' => $used_vl,
+            'used_sl' => $used_sl,
         ));
     }  
 
