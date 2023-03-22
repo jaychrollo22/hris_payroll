@@ -11,8 +11,8 @@
                     <thead>
                       <tr>
                         <th>Leave Type</th>
-                        {{-- <th>Used</th>
-                        <th>Pending</th> --}}
+                        <th>Used</th>
+                        {{-- <th>Pending</th> --}}
                         <th>Balance</th>
                       </tr>
                     </thead>
@@ -20,9 +20,21 @@
                       @foreach($leave_balances as $leave)
                       <tr>
                         <td>{{$leave->leave->leave_type}}</td>
-                        {{-- <td>0</td>
-                        <td>0</td> --}}
-                        <td>{{$leave->count}}</td>
+                        <td>
+                          @if ($leave->leave->id == '1')
+                              {{$used_vl}}
+                          @elseif ($leave->leave->id == '2')
+                              {{$used_sl}}
+                          @endif
+                        </td>
+                        {{-- <td>0</td> --}}
+                        <td>
+                          @if ($leave->leave->id == '1')
+                              {{$leave->count - $used_vl}}
+                          @elseif ($leave->leave->id == '2')
+                              {{$leave->count - $used_sl}}
+                          @endif
+                        </td>
                       </tr>
                       @endforeach
                     </tbody>
