@@ -25,6 +25,8 @@
                               {{$used_vl}}
                           @elseif ($leave->leave->id == '2')
                               {{$used_sl}}
+                          @elseif ($leave->leave->id == '10')
+                              {{$used_sil}}
                           @endif
                         </td>
                         {{-- <td>0</td> --}}
@@ -33,6 +35,8 @@
                               {{$leave->count - $used_vl}}
                           @elseif ($leave->leave->id == '2')
                               {{$leave->count - $used_sl}}
+                          @elseif ($leave->leave->id == '10')
+                              {{$leave->count - $used_sil}}
                           @endif
                         </td>
                       </tr>

@@ -223,3 +223,30 @@ function checkUsedSickLeave($user_id){
 
     return $count;
 }
+
+function checkUsedServiceIncentiveLeave($user_id){
+    $employee_sil = EmployeeLeave::where('user_id',$user_id)
+                                    ->where('leave_type','10')
+                                    ->where('status','Approved')
+                                    ->get();
+
+    $count = 0;
+    if($employee_sil){
+        foreach($employee_sil as $leave){
+            if($leave->withpay == 1 && $leave->halfday == 1){
+                $count += 0.5;
+            }else{
+                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                if($date_range){
+                    foreach($date_range as $date_r){
+                        if($leave->withpay == 1){
+                            $count += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return $count;
+}

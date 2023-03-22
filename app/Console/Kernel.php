@@ -14,6 +14,10 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\AutoGetAttendance::class,
+        Commands\LeaveApproval::class,
+        Commands\OfficialBusinessApproval::class,
+        Commands\OvertimeApproval::class,
+        Commands\WorkFromHomeApproval::class,
     ];
 
     /**
@@ -25,6 +29,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('command:auto_get_attendance')->dailyAt('20:00');
+        $schedule->command('command:leave_approval')->everyFiveMinutes();
+        $schedule->command('command:official_business_approval')->everyFiveMinutes();
+        $schedule->command('command:overtime_approval')->everyFiveMinutes();
+        $schedule->command('command:work_from_home_approval')->everyFiveMinutes();
     }
 
     /**

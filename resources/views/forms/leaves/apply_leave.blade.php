@@ -28,7 +28,21 @@
               <select class="js-example-basic-single w-100 form-control"  id="leave_type" style='width:100%;' name='leave_type' required>
                 <option value="">--Select--</option>
                 @foreach($leave_types as $leave_type)
-                  <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
+                  @if($leave_type->code == 'PL')
+                    @if ($employee_status->gender == 'MALE')
+                      <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
+                    @endif
+                  @elseif($leave_type->code == 'ML')
+                    @if ($employee_status->gender == 'FEMALE')
+                      <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
+                    @endif
+                  @elseif($leave_type->code == 'SIL')
+                    @if($employee_status->classifcation == 'Project Based')
+                      <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
+                    @endif
+                  @else
+                    <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
+                  @endif
                 @endforeach
               </select>
             </div>
