@@ -60,6 +60,7 @@ class EmployeeLeaveController extends Controller
         $new_leave->reason = $request->reason;
         $new_leave->withpay = (isset($request->withpay)) ? $request->withpay : 0 ;
         $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
+        $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : "" ; 
 
         if($request->file('attachment')){
             $logo = $request->file('attachment');
@@ -90,6 +91,8 @@ class EmployeeLeaveController extends Controller
         $new_leave->reason = $request->reason;
         $new_leave->withpay = (isset($request->withpay)) ? $request->withpay : 0 ;
         $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
+        $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : ""; 
+
         $logo = $request->file('attachment');
         if(isset($logo)){
             $original_name = $logo->getClientOriginalName();

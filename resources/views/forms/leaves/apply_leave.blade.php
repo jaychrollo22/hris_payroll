@@ -56,8 +56,16 @@
                 </div>
                 <div class='col-md-6'>
                   <label class="form-check-label ">
-                    <input type="checkbox" name="halfday" class="form-check-input" value="1">
+                    <input id="leaveHalfday" type="checkbox" name="halfday" class="form-check-input" value="1">
                     Halfday
+                    <br>
+                    <div class="halfDayStatus">
+                        <select name="halfday_status" class="form-control" required>
+                            <option value="">Choose One</option>
+                            <option value="First Half">First Half</option>
+                            <option value="Second Half">Second Half</option>
+                        </select>
+                    </div>
                 </label>
                 </div>
               </div>

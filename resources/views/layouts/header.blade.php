@@ -778,9 +778,26 @@
                 $(this).addClass('selected');
             });
 
-        });
+            $(".halfDayStatus").hide();
+            $("#leaveHalfday").change(function(){
+                if($(this).is(':checked')){
+                    $(".halfDayStatus").show(300);
+                }else{
+                    $(".halfDayStatus").hide(200);
+                }
+            });
 
+            $("#editViewleaveHalfday").change(function(){
+                if($(this).is(':checked')){
+                $(".edithalfDayStatus").show(300);
+                }else{
+                $(".edithalfDayStatus").hide(200);
+                }
+            });
+
+        });
     </script>
+
     @include('sweetalert::alert')
     @yield('allowanceScript')
     @yield('incentivescript')

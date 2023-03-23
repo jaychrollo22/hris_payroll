@@ -25,41 +25,60 @@
               </div>
             </div>
 
-            <div class="form-group row">
-              <label for="leave_type" class="col-sm-2 col-form-label">Leave Type</label>
-                <div class="col-sm-4">
-                  <select class="js-example-basic-single w-100 form-control"  id="leave_type" style='width:100%;' name='leave_type' required>
-                    @foreach ($leave_types as $leave_type)
-                      <option value="{{ $leave_type->id }}"{{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>
-                              {{ $leave_type->leave_type }}
-                      </option>
-                    @endforeach                  
-                  </select>
-                </div>
-                <div class='col-sm-5'>
-                  <div class='row'>
-                    <div class='col-md-6'>
-                      <label class="form-check-label ">
-                          @if($leave->withpay == 1)
-                              <input type="checkbox" name="withpay" class="form-check-input" value="1" checked>  
+              <div class="form-group row">
+                <label for="leave_type" class="col-sm-2 col-form-label">Leave Type</label>
+                  <div class="col-sm-4">
+                    <select class="js-example-basic-single w-100 form-control"  id="leave_type" style='width:100%;' name='leave_type' required>
+                      @foreach ($leave_types as $leave_type)
+                        <option value="{{ $leave_type->id }}"{{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>
+                                {{ $leave_type->leave_type }}
+                        </option>
+                      @endforeach                  
+                    </select>
+                  </div>
+                  <div class='col-sm-5'>
+                    <div class='row'>
+                      <div class='col-md-6'>
+                        <label class="form-check-label ">
+                            @if($leave->withpay == 1)
+                                <input type="checkbox" name="withpay" class="form-check-input" value="1" checked>  
+                            @else
+                                <input type="checkbox" name="withpay" class="form-check-input" value="1">  
+                            @endif
+                          With Pay
+                      </label>
+                      </div>
+                      <div class='col-md-6'>
+                        <label class="form-check-label ">
+                          @if($leave->halfday == 1)
+                              <input id="editViewleaveHalfday" type="checkbox" name="halfday" class="form-check-input" value="1" checked>  
                           @else
-                              <input type="checkbox" name="withpay" class="form-check-input" value="1">  
+                              <input id="editViewleaveHalfday" type="checkbox" name="halfday" class="form-check-input" value="1">  
                           @endif
-                        With Pay
-                    </label>
-                    </div>
-                    <div class='col-md-6'>
-                      <label class="form-check-label ">
+                          Halfday
+                      </label>
+
+                      <br>
                         @if($leave->halfday == 1)
-                            <input type="checkbox" name="halfday" class="form-check-input" value="1" checked>  
+                          <div class="edithalfDayStatus">
+                            <select name="halfday_status" class="form-control" value="{{$leave->halfday_status}}">
+                                <option value="">Choose One</option>
+                                <option value="First Half" {{ $leave->halfday_status == 'First Half' ? 'selected' : ''}}>First Half</option>
+                                <option value="Second Half" {{ $leave->halfday_status == 'Second Half' ? 'selected' : ''}}>Second Half</option>
+                            </select>
+                          </div>
                         @else
-                            <input type="checkbox" name="halfday" class="form-check-input" value="1">  
+                        <div class="edithalfDayStatus">
+                          <select name="halfday_status" class="form-control">
+                              <option value="">Choose One</option>
+                              <option value="First Half">First Half</option>
+                              <option value="Second Half">Second Half</option>
+                          </select>
+                        </div>
                         @endif
-                        Halfday
-                    </label>
+                      </div>
                     </div>
                   </div>
-                </div>
               </div>
               <div class="form-group row">
                 <div class='col-md-2'>
