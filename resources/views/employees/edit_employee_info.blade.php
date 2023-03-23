@@ -44,7 +44,7 @@
                 <select data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='classification' required>
                   <option value="">--Select Classification--</option>
                   @foreach($classifications as $classification)
-                    <option value="{{$classification->name}}" @if ($user->employee->classification == $classification->name) selected @endif>{{$classification->name}}</option>
+                    <option value="{{$classification->id}}" @if ($user->employee->classification == $classification->id) selected @endif>{{$classification->name}}</option>
                   @endforeach
               </select>
               </div>

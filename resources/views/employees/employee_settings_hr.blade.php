@@ -199,7 +199,7 @@
                                     <small> Classification </small>
                                 </div>
                                 <div class='col-md-9'>
-                                    {{$user->employee->classification}}
+                                    {{$user->employee->classification_info ? $user->employee->classification_info->name : ""}}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>
