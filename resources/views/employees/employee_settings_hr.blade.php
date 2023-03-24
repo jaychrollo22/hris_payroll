@@ -207,7 +207,7 @@
                                     <small> Level </small>
                                 </div>
                                 <div class='col-md-9'>
-                                    {{$user->employee->level}}
+                                    {{$user->employee->level_info ? $user->employee->level_info->name : "" }}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>

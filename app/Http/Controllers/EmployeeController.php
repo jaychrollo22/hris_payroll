@@ -45,6 +45,9 @@ class EmployeeController extends Controller
 
         $classifications = Classification::get();
 
+        $employees_classification = Employee::select('classification', DB::raw('count(*) as total'))->with('classification_info')->groupBy('classification')->orderBy('classification','ASC')->get();
+        $employees_gender = Employee::select('gender', DB::raw('count(*) as total'))->groupBy('gender')->orderBy('gender','ASC')->get();
+
         $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info')
                                 ->when($company,function($q) use($company){
                                     $q->where('company_id',$company);
@@ -90,6 +93,8 @@ class EmployeeController extends Controller
             array(
                 'header' => 'employees',
                 'classifications' => $classifications,
+                'employees_classification' => $employees_classification,
+                'employees_gender' => $employees_gender,
                 'employees' => $employees,
                 'marital_statuses' => $marital_statuses,
                 'departments' => $departments,
@@ -656,7 +661,7 @@ class EmployeeController extends Controller
     {
         $classifications = Classification::get();
 
-        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info')->get();
+        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info','level_info')->get();
         $schedules = Schedule::get();
         $banks = Bank::get();
         $users = User::all();
@@ -664,7 +669,7 @@ class EmployeeController extends Controller
         $departments = Department::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
-        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.classification_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
 
        
 

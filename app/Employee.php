@@ -13,6 +13,10 @@ class Employee extends Model implements Auditable
     {
         return $this->belongsTo(Classification::class,'classification','id');
     }
+    public function level_info()
+    {
+        return $this->belongsTo(Level::class,'level','id');
+    }
     public function department()
     {
         return $this->belongsTo(Department::class);
