@@ -60,8 +60,8 @@
                         <div class="edithalfDayStatus">
                           <select name="halfday_status" class="form-control" value="{{$leave->halfday_status}}" disabled required>
                               <option value="">Choose One</option>
-                              <option value="First Half" {{ $leave->halfday_status == 'First Half' ? 'selected' : ''}}>First Half</option>
-                              <option value="Second Half" {{ $leave->halfday_status == 'Second Half' ? 'selected' : ''}}>Second Half</option>
+                              <option value="First Shift" {{ $leave->halfday_status == 'First Shift' ? 'selected' : ''}}>First Shift</option>
+                              <option value="Second Shift" {{ $leave->halfday_status == 'Second Shift' ? 'selected' : ''}}>Second Shift</option>
                           </select>
                         </div>
                       @endif
