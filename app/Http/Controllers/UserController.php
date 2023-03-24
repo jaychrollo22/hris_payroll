@@ -48,6 +48,21 @@ class UserController extends Controller
         return Excel::download(new UsersExport, 'Users.xlsx');
     }
 
+    public function editUserRole(User $user){
+
+        $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
+        $user = User::with('user_allowed_company','user_privilege')
+                        ->where('id',$user->id)
+                        ->first();
+
+        return view('users.edit_user_role',
+        array(
+            'header' => 'users',
+            'user' => $user,
+            'companies' => $companies,
+        ));
+    }
+
     public function updateUserRole(Request $request, User $user){
     //    return $request->all();
         if($user){
@@ -100,6 +115,8 @@ class UserController extends Controller
                 $user_privilege->masterfiles_employee_leave_credits = $request->masterfiles_employee_leave_credits;
 
                 $user_privilege->save();
+                Alert::success('Successfully Updated')->persistent('Dismiss');
+                return back();
             }else{
                 $new_user_privilege = new UserPrivilege;
                 $new_user_privilege->user_id = $user->id;
@@ -130,10 +147,11 @@ class UserController extends Controller
                 $new_user_privilege->masterfiles_employee_leave_credits = $request->masterfiles_employee_leave_credits;
                 
                 $new_user_privilege->save();
+                Alert::success('Successfully Updated')->persistent('Dismiss');
+                return back();
             }
 
-            Alert::success('Successfully Updated')->persistent('Dismiss');
-            return back();
+            
         }
     }
 

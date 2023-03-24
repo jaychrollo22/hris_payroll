@@ -24,7 +24,6 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Email</th>
-                                        {{-- <th>Allowed Companies</th> --}}
                                         <th>Role</th>
                                         <th>Action</th>
                                     </tr>
@@ -35,30 +34,12 @@
                                         <td>{{$user->id}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
-                                        {{-- <td>
-                                            @php
-                                                $user_allowed_companies = $user->user_allowed_company ? json_decode($user->user_allowed_company->company_ids) : [];
-                                            @endphp
-                                            @if ($user_allowed_companies)
-                                                <ul>
-                                                    @foreach ($user_allowed_companies as $item)
-                                                        @foreach($companies as $company)
-                                                            @if ($item == $company->id)
-                                                                <li>{{ $company->company_name}}</li>
-                                                            @endif
-                                                        @endforeach
-                                                    @endforeach
-                                                    
-                                                </ul>
-                                            @endif
-                                            
-                                        </td> --}}
                                         <td>{{$user->role}}</td>
                                         <td>
-                                            <button data-toggle="modal" data-target="#editUserRole{{$user->id}}" type="button" class="btn btn-outline-info btn-icon-text btn-sm">
+                                            <a href="/edit-user-role/{{$user->id}}" class="btn btn-outline-info btn-icon-text btn-sm">
                                                 Edit
                                                 <i class="ti-file btn-icon-append"></i>
-                                            </button>
+                                            </a>
                                             <button data-toggle="modal" data-target="#editUserPassword{{$user->id}}" type="button" class="btn btn-outline-info btn-icon-text btn-sm">
                                                 Change Password
                                                 <i class="ti-key btn-icon-append"></i>
@@ -77,7 +58,7 @@
 </div>
 
 @foreach($users as $user)
-@include('users.edit_user_role')
+{{-- @include('users.edit_user_role') --}}
 @include('users.user_change_password')
 @endforeach
 
