@@ -14,7 +14,7 @@
 					<div class="row">
 						<div class='col-lg-6 form-group'>
 							<label for="leaveType">Leave Type</label>
-							<select data-placeholder="Select Allowance Type"
+							<select data-placeholder="Select Leave Type"
 								class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='leave_type'
 								required>
 								<option value="">--Select Leave Type--</option>
