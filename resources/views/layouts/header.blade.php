@@ -474,15 +474,21 @@
             </a>
             <div class="collapse" id="masterfiles">
                 <ul class="nav flex-column sub-menu">
+                    @if(checkUserPrivilege('masterfiles_companies',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/company') }}">Companies</a>
                     </li>
+                    @endif
+                    @if(checkUserPrivilege('masterfiles_departments',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/department') }}">Departments</a>
                     </li>
+                    @endif
+                    @if(checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/loan-type') }}">Loan Types</a>
                     </li>
+                    @endif
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-incentive') }}">Employee Incentives</a>
                     </li>
@@ -495,9 +501,11 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-companies') }}">Employee Groups</a>
                     </li> --}}
+                    @if(checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-leave-credits') }}">Employee Leave Credits</a>
                     </li>
+                    @endif
                 </ul>
             </div>
         </li>

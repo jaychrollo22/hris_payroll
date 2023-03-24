@@ -64,7 +64,6 @@ class UserController extends Controller
     }
 
     public function updateUserRole(Request $request, User $user){
-    //    return $request->all();
         if($user){
             $user = User::findOrFail($user->id);
             $user->role = $request->role;
