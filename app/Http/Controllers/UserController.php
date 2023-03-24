@@ -67,6 +67,7 @@ class UserController extends Controller
     public function updateUserRole(Request $request, User $user){
         if($user){
             $user = User::findOrFail($user->id);
+            $user->email = $request->email;
             $user->role = $request->role;
             $user->save();
 
