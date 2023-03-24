@@ -8,6 +8,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+
+
       <form method='POST' action='edit-overtime/{{ $overtime->id }}' onsubmit='show()' enctype="multipart/form-data">
 				@csrf      
       <div class="modal-body">
@@ -47,6 +49,16 @@
               <input type="time" name='end_time' class="form-control" value="{{ date('H:i', strtotime($overtime->end_time)) }}" required>
             </div>
           </div>
+
+          <div class="form-group row">
+            <div class='col-md-2'>
+               Break (Hrs)
+            </div>
+            <div class='col-md-4'>
+              <input type="number" name='break_hrs' min="1" max="3" class="form-control" placeholder="0.00">
+            </div>
+          </div>
+
           <div class="form-group row">
             <div class='col-md-2'>
                Remarks

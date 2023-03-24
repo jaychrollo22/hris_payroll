@@ -86,6 +86,7 @@ class OvertimeController extends Controller
         $new_overtime->ot_date = $request->date_from;
         $new_overtime->start_time = $request->start_time;
         $new_overtime->end_time = $request->end_time;
+        $new_overtime->break_hrs = $request->break_hrs;
         $new_overtime->remarks = $request->remarks;
         $new_overtime->attachment = $request->attachment;
         $new_overtime->status = 'Active';

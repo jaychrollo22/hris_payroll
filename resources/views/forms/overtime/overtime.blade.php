@@ -59,6 +59,7 @@
                         <th>OT Date</th> 
                         <th>OT Time</th> 
                         <th>OT Requested (Hrs)</th>
+                        <th>Break (Hrs)</th>
                         <th>OT Approved (Hrs)</th>
                         <th>Remarks </th>
                         <th>Status </th>
@@ -73,6 +74,7 @@
                         <td> {{ date('M. d, Y ', strtotime($overtime->ot_date)) }}</td>
                         <td> {{ date('h:i A', strtotime($overtime->start_time)) }} - {{ date('h:i A', strtotime($overtime->end_time)) }}</td>
                         <td> {{ number_format((strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600,2)}}</td>
+                        <td> {{$overtime->break_hrs}}</td>
                         <td> {{$overtime->ot_approved_hrs}}</td>
                         <td>{{ $overtime->remarks }}</td>
                         <td id="tdStatus{{ $overtime->id }}">

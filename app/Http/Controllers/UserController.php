@@ -57,10 +57,11 @@ class UserController extends Controller
 
         return view('users.edit_user_role',
         array(
-            'header' => 'users',
+            'header' => 'edit_user_role',
             'user' => $user,
             'companies' => $companies,
         ));
+
     }
 
     public function updateUserRole(Request $request, User $user){
