@@ -72,7 +72,7 @@
                         <td> {{ date('M. d, Y ', strtotime($overtime->created_at)) }}</td>
                         <td> {{ date('M. d, Y ', strtotime($overtime->ot_date)) }}</td>
                         <td> {{ date('h:i A', strtotime($overtime->start_time)) }} - {{ date('h:i A', strtotime($overtime->end_time)) }}</td>
-                        <td> {{intval((strtotime($overtime->end_time)-strtotime($overtime->start_time))/60/60)}}</td>
+                        <td> {{ number_format((strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600,2)}}</td>
                         <td> {{$overtime->ot_approved_hrs}}</td>
                         <td>{{ $overtime->remarks }}</td>
                         <td id="tdStatus{{ $overtime->id }}">

@@ -12,7 +12,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 mb-2">
-                            Requested Overtime (hrs): {{intval((strtotime($form_approval->end_time)-strtotime($form_approval->start_time))/60/60)}}
+                            Requested Overtime (hrs): {{ number_format((strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600,2)}}
                         </div>
                         <div class='col-md-12 form-group'>
                             Approve Overtime (hrs):
