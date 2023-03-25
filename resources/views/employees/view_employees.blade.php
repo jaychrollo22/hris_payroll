@@ -11,28 +11,34 @@
                                 <thead>
                                     <tr>
                                         <th>Employee Classification(Active)</th>
-                                        <th>Male</th>
-                                        <th>Female</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($classifications as $class)
+                                    @foreach($employees_classification as $item)
                                     <tr>
-                                        <td>{{$class->name}}</td>
-                                        <td>{{$employees->where('classification',$class->name)->where('gender','Male')->where('status','Active')->count()}}</td>
-                                        <td>{{$employees->where('classification',$class->name)->where('gender','Female')->where('status','Active')->count()}}</td>
-                                        <td>{{$employees->where('classification',$class->name)->where('status','Active')->count()}}</td>
+                                        <td>{{$item->classification_info ? $item->classification_info->name : $item->classification}}</td>
+                                        <td>{{$item->total}}</td>
                                     </tr>
                                     @endforeach
-
-                                    <tr>
-                                        <td></td>
-                                        <td>{{$employees->where('gender','Male')->where('status','Active')->count()}}</td>
-                                        <td>{{$employees->where('gender','Female')->where('status','Active')->count()}}</td>
-                                        <td>{{$employees->where('status','Active')->count()}}</td>
-                                    </tr>
                                 </tbody>
+                                <thead>
+                                    <tr>
+                                        <th>Employee Gender(Active)</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($employees_gender as $item)
+                                    <tr>
+                                        <td>{{$item->gender ? $item->gender : ""}}</td>
+                                        <td>{{$item->total}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <table class="table table-hover">
+                               
                             </table>
                         </div>
                     </div>
