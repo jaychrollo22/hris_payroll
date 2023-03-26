@@ -30,6 +30,7 @@
 										<th>Allowance Type</th>
 										<th>Employee</th>
 										<th>Amount</th>
+										<th>Schedule</th>
 										<th>Date Created</th>
 										<th>Status</th>
 										<th>Action</th>
@@ -43,6 +44,7 @@
 												{{ $employeeAllowance->employee->last_name . ', ' . $employeeAllowance->employee->first_name . ' ' . $employeeAllowance->employee->middle_name }}
 											</td>
 											<td>{{ number_format($employeeAllowance->allowance_amount) }}</td>
+											<td>{{ $employeeAllowance->schedule }}</td>
 											<td>{{ date('M d, Y', strtotime($employeeAllowance->created_at)) }}</td>
 											<td id="tdId{{ $employeeAllowance->id }}">
 												@if ($employeeAllowance->status == 'Active')

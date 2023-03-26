@@ -308,6 +308,18 @@
                                         Employee Leave Credits
                                         <br>
                                         <br>
+                                        @if($user->user_privilege)
+                                            @if($user->user_privilege->masterfiles_employee_allowances == 'on')
+                                                <input type="checkbox" name="masterfiles_employee_allowances" id="masterfiles_employee_allowances{{$user->id}}" value="{{ $user->user_privilege->masterfiles_employee_allowances }}" checked>
+                                            @else
+                                                <input type="checkbox" name="masterfiles_employee_allowances" id="masterfiles_employee_allowances{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="masterfiles_employee_allowances" id="masterfiles_employee_allowances{{$user->id}}">
+                                        @endif
+                                        Employee Allowances
+                                        <br>
+                                        <br>
                                     </div>
 
                                 </div>

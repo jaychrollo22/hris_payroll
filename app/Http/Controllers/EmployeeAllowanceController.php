@@ -19,7 +19,11 @@ class EmployeeAllowanceController extends Controller
     {
         $employeeAllowances = EmployeeAllowance::all();
         $allowanceTypes = Allowance::all();
-        $employees = Employee::all();
+        
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+
+        $employees = Employee::whereIn('company_id',$allowed_companies)->get();
+
         return view('employee_allowances.employee_allowance', array(
             'header' => 'masterfiles',
             'employeeAllowances' => $employeeAllowances,
@@ -57,6 +61,7 @@ class EmployeeAllowanceController extends Controller
         $employeeAllowances->allowance_id = $request->allowance_type;
         $employeeAllowances->employee_id = $request->employee;
         $employeeAllowances->allowance_amount = $request->amount;
+        $employeeAllowances->schedule = $request->schedule;
         $employeeAllowances->status = 'Active';
         $employeeAllowances->save();
 
