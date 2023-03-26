@@ -45,8 +45,16 @@ class EmployeeController extends Controller
 
         $classifications = Classification::get();
 
-        $employees_classification = Employee::select('classification', DB::raw('count(*) as total'))->with('classification_info')->groupBy('classification')->orderBy('classification','ASC')->get();
-        $employees_gender = Employee::select('gender', DB::raw('count(*) as total'))->groupBy('gender')->orderBy('gender','ASC')->get();
+        $employees_classification = Employee::select('classification', DB::raw('count(*) as total'))->with('classification_info')
+                                                ->where('status','Active')
+                                                ->groupBy('classification')
+                                                ->orderBy('classification','ASC')
+                                                ->get();
+        $employees_gender = Employee::select('gender', DB::raw('count(*) as total'))
+                                                ->where('status','Active')
+                                                ->groupBy('gender')
+                                                ->orderBy('gender','ASC')
+                                                ->get();
 
         $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info')
                                 ->when($company,function($q) use($company){
