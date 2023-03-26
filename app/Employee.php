@@ -9,6 +9,11 @@ class Employee extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     //
+
+    public function contact_person(){
+        return $this->hasOne(EmployeeContactPerson::class,'user_id','user_id');
+    }
+
     public function classification_info()
     {
         return $this->belongsTo(Classification::class,'classification','id');

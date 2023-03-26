@@ -5,6 +5,7 @@ use Excel;
 use App\Imports\EmployeesImport;
 use App\Classification;
 use App\Employee;
+use App\EmployeeContactPerson;
 use App\EmployeeLeaveCredit;
 use App\EmployeeApprover;
 use App\Department;
@@ -78,9 +79,14 @@ class EmployeeController extends Controller
                                             ->pluck('department_id')
                                             ->toArray();
 
-            $departments = Department::whereIn('id',$department_companies)->where('status','1')->orderBy('name')->get();
+            $departments = Department::whereIn('id',$department_companies)->where('status','1')
+                                        ->orderBy('name')
+                                        ->get();
+
         }else{
-            $departments = Department::where('status','1')->orderBy('name')->get();
+            $departments = Department::where('status','1')
+                                        ->orderBy('name')
+                                        ->get();
         }
         
         $schedules = Schedule::get();
@@ -677,9 +683,7 @@ class EmployeeController extends Controller
         $departments = Department::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
-        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
-
-       
+        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
 
         return view('employees.employee_settings_hr',
         array(
@@ -770,6 +774,32 @@ class EmployeeController extends Controller
         Alert::success('Successfully Updated')->persistent('Dismiss');
         return back();
 
+    }
+
+    public function updateContactInfoHR(Request $request, $id){
+
+        $employee = Employee::findOrFail($id);
+
+        if($employee){
+            $employee_contact_person = EmployeeContactPerson::where('user_id',$employee->user_id)->first();
+
+            if(empty($employee_contact_person)){
+                $new_contact_person = new EmployeeContactPerson;
+                $new_contact_person->user_id = $employee->user_id;
+                $new_contact_person->name = $request->name;
+                $new_contact_person->contact_number = $request->contact_number;
+                $new_contact_person->relation = $request->relation;
+                $new_contact_person->save();
+            }else{
+                $employee_contact_person->name = $request->name;
+                $employee_contact_person->contact_number = $request->contact_number;
+                $employee_contact_person->relation = $request->relation;
+                $employee_contact_person->save();
+            }
+        }
+
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
     }
 
 

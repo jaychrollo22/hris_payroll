@@ -11,6 +11,7 @@ use App\Employee;
 use App\Schedule;
 use App\Department;
 use App\EmployeeApprover;
+use App\EmployeeContactPerson;
 use App\MaritalStatus;
 use App\Classification;
 use App\EmployeeCompany;
@@ -251,6 +252,31 @@ class UserController extends Controller
         Alert::success('Successfully Updated')->persistent('Dismiss');
         return back();
 
+    }
+
+    public function updateEmpContactInfo(Request $request, $id){
+        $employee = Employee::findOrFail($id);
+
+        if($employee){
+            $employee_contact_person = EmployeeContactPerson::where('user_id',$employee->user_id)->first();
+
+            if(empty($employee_contact_person)){
+                $new_contact_person = new EmployeeContactPerson;
+                $new_contact_person->user_id = $employee->user_id;
+                $new_contact_person->name = $request->name;
+                $new_contact_person->contact_number = $request->contact_number;
+                $new_contact_person->relation = $request->relation;
+                $new_contact_person->save();
+            }else{
+                $employee_contact_person->name = $request->name;
+                $employee_contact_person->contact_number = $request->contact_number;
+                $employee_contact_person->relation = $request->relation;
+                $employee_contact_person->save();
+            }
+        }
+
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
     }
 
     public function uploadAvatar(Request $request)

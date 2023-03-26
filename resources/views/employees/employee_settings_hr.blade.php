@@ -164,6 +164,49 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="card mt-3">
+                    <div class="card-body text-left">
+                        <div class="template-demo">
+                            <div class='row m-2'>
+                                <div class='col-md-12 text-center'>
+                                    <strong>
+                                        <h3><i class="fa fa-user-plus" aria-hidden="true"></i> Contact Person (In case of Emergency)
+                                            @if (checkUserPrivilege('employees_edit',auth()->user()->id) == 'yes')
+                                                <button class="btn btn-icon btn-info btn-xs" title="Edit Contact Person" data-toggle="modal" data-target="#editContactInfo"><i class="fa fa-pencil"></i></button>
+                                            @endif
+                                        </h3>
+                                    </strong>
+                                </div>
+                            </div>
+                            <div class='row  m-2 border-bottom'>
+                                <div class='col-md-3'>
+                                    <small> Contact Person </small>
+                                </div>
+                                <div class='col-md-9'>
+                                    {{$user->employee->contact_person ? $user->employee->contact_person->name : ""}}
+                                </div>
+                            </div>
+                            <div class='row  m-2 border-bottom'>
+                                <div class='col-md-3'>
+                                    <small> Contact Number </small>
+                                </div>
+                                <div class='col-md-9'>
+                                    {{$user->employee->contact_person ? $user->employee->contact_person->contact_number : ""}}
+                                </div>
+                            </div>
+                            <div class='row  m-2 border-bottom'>
+                                <div class='col-md-3'>
+                                    <small> Relation </small>
+                                </div>
+                                <div class='col-md-9'>
+                                    {{$user->employee->contact_person ? $user->employee->contact_person->relation : ""}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card mt-3">
                     <div class="card-body text-left">
                         <div class="template-demo">
@@ -332,4 +375,5 @@
 </div>
 @include('employees.edit_info')
 @include('employees.edit_employee_info')
+@include('employees.edit_contact_info')
 @endsection
