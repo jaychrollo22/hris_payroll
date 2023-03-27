@@ -107,6 +107,7 @@
                     @endif
                 @endif
             </td>
+            @endif
             <td>
                 @if($time_in == null)
                     @if((date('l',strtotime($date_r)) == "Saturday") || (date('l',strtotime($date_r)) == "Sunday"))
@@ -120,16 +121,12 @@
                             $is_absent = '';
                             if(empty($if_leave) && empty($if_ob) && empty($if_wfh) ){
                                 $is_absent = 'Absent';
-                            }                            
+                            }        
                         @endphp
-                        {{$if_leave}}
-                        {{$if_ob}}
-                        {{$if_wfh}}
                         {{$is_absent}}
                     @endif
                 @endif
             </td>
-            @endif
         </tr>
         @endforeach
     </tbody>
