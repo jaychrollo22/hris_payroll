@@ -67,9 +67,11 @@ class OfficialBusinessApproval extends Command
                                 'user_info' => $employee_ob->user,
                                 'details' => $employee_ob,
                             ];
-                            $send_update = Mail::to($approver->approver_info->email)->send(new OfficialBusinessNotification($details));
-                            EmployeeOb::where('id',$employee_ob->id)->update(['mail_1'=>1]);
-                            $count++;
+                            if(empty($employee_ob->mail_1)){
+                                $send_update = Mail::to($approver->approver_info->email)->send(new OfficialBusinessNotification($details));
+                                EmployeeOb::where('id',$employee_ob->id)->update(['mail_1'=>1]);
+                                $count++;
+                            }
                         }
                         
                         if($employee_ob->level == 1 && $approver->level == 2){ // If Level 1 Notify Level 2
@@ -78,9 +80,11 @@ class OfficialBusinessApproval extends Command
                                 'user_info' => $employee_ob->user,
                                 'details' => $employee_ob,
                             ];
-                            $send_update = Mail::to($approver->approver_info->email)->send(new OfficialBusinessNotification($details));
-                            EmployeeOb::where('id',$employee_ob->id)->update(['mail_2'=>1]);
-                            $count++;
+                            if(empty($employee_ob->mail_2)){
+                                $send_update = Mail::to($approver->approver_info->email)->send(new OfficialBusinessNotification($details));
+                                EmployeeOb::where('id',$employee_ob->id)->update(['mail_2'=>1]);
+                                $count++;
+                            }
                         }
                     }
                 }
