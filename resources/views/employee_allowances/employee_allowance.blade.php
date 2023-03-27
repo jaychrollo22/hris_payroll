@@ -41,7 +41,7 @@
 										<tr>
 											<td>{{ $employeeAllowance->allowance->name }}</td>
 											<td>
-												{{ $employeeAllowance->employee->last_name . ', ' . $employeeAllowance->employee->first_name . ' ' . $employeeAllowance->employee->middle_name }}
+												{{ $employeeAllowance->employee ? $employeeAllowance->employee->last_name . ', ' . $employeeAllowance->employee->first_name . ' ' . $employeeAllowance->employee->middle_name : "" }}
 											</td>
 											<td>{{ number_format($employeeAllowance->allowance_amount) }}</td>
 											<td>{{ $employeeAllowance->schedule }}</td>
@@ -57,6 +57,10 @@
 											</td>
 											<td id="tdActionId{{ $employeeAllowance->id }}" data-id="{{ $employeeAllowance->id }}">
 												@if ($employeeAllowance->status == 'Active')
+													<button type="button" id="edit{{ $employeeAllowance->id }}" class="btn btn-info btn-rounded btn-icon"
+														data-target="#editEmpAllowance{{ $employeeAllowance->id }}" data-toggle="modal" title='Edit'>
+														<i class="ti-pencil-alt"></i>
+													</button>
 													<button title='Disable' id="{{ $employeeAllowance->id }}" onclick="disable(this.id)"
 														class="btn btn-rounded btn-danger btn-icon">
 														<i class="fa fa-ban"></i>
@@ -76,6 +80,9 @@
 	</div>
 	@include('employee_allowances.new_emp_allowance')
 @endsection
+@foreach ($employeeAllowances as $employee_allowance)
+@include('employee_allowances.edit_emp_allowance')
+@endforeach
 @section('empAllowScript')
 	<script>
 		function disable(id) {
