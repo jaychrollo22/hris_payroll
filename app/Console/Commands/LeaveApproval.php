@@ -67,9 +67,13 @@ class LeaveApproval extends Command
                                 'user_info' => $employee_leave->user,
                                 'details' => $employee_leave,
                             ];
-                            $send_update = Mail::to($approver->approver_info->email)->send(new LeaveNotification($details));
-                            EmployeeLeave::where('id',$employee_leave->id)->update(['mail_1'=>1]);
-                            $count++;
+
+                            if(empty($employee_leave->mail_1)){
+                                $send_update = Mail::to($approver->approver_info->email)->send(new LeaveNotification($details));
+                                EmployeeLeave::where('id',$employee_leave->id)->update(['mail_1'=>1]);
+                                $count++;
+                            }
+                            
                         }
                         
                         if($employee_leave->level == 1 && $approver->level == 2){ // If Level 1 Notify Level 2
@@ -78,9 +82,11 @@ class LeaveApproval extends Command
                                 'user_info' => $employee_leave->user,
                                 'details' => $employee_leave,
                             ];
-                            $send_update = Mail::to($approver->approver_info->email)->send(new LeaveNotification($details));
-                            EmployeeLeave::where('id',$employee_leave->id)->update(['mail_2'=>1]);
-                            $count++;
+                            if(empty($employee_leave->mail_2)){
+                                $send_update = Mail::to($approver->approver_info->email)->send(new LeaveNotification($details));
+                                EmployeeLeave::where('id',$employee_leave->id)->update(['mail_2'=>1]);
+                                $count++;
+                            }
                         }
                     }
                 }

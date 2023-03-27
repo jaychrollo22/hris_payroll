@@ -46,6 +46,16 @@
               <input type="time" name='end_time' class="form-control" required>
             </div>
           </div>
+          
+          <div class="form-group row">
+            <div class='col-md-2'>
+               Break (Hrs)
+            </div>
+            <div class='col-md-4'>
+              <input type="number" name='break_hrs' min="0" max="3" class="form-control" placeholder="0.00">
+            </div>
+          </div>
+
           <div class="form-group row">
             <div class='col-md-2'>
                Remarks

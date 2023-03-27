@@ -54,6 +54,7 @@
                         <th>OT Date</th> 
                         <th>OT Time</th> 
                         <th>OT Requested (Hrs)</th>
+                        <th>Break (Hrs)</th>
                         <th>OT Approved (Hrs)</th>
                         <th>Remarks </th>
                         <th>Approvers </th>
@@ -68,7 +69,8 @@
                         <td>{{date('d/m/Y', strtotime($form_approval->created_at))}}</td>
                         <td>{{date('d/m/Y', strtotime($form_approval->ot_date))}}</td>
                         <td>{{date('h:i A', strtotime($form_approval->start_time))}} - {{date('h:i A', strtotime($form_approval->end_time))}}</td>
-                        <td>{{intval((strtotime($form_approval->end_time)-strtotime($form_approval->start_time))/60/60)}}</td>
+                        <td> {{ number_format((strtotime($form_approval->end_time)-strtotime($form_approval->start_time))/3600,2)}}</td>
+                        <td>{{$form_approval->break_hrs}}</td>
                         <td>{{$form_approval->ot_approved_hrs}}</td>
 
                         <td>{{$form_approval->remarks}}</td>

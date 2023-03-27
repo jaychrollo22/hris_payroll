@@ -22,6 +22,7 @@
                     <thead>
                         <tr>
                             
+                            <th>ID</th>
                             <th>Leave Type</th>
                             <th>Count</th>
                             <th>Action</th>
@@ -30,6 +31,7 @@
                     <tbody>
                         @foreach($leave_types as $leave)
                             <tr>
+                                <td>{{$leave->id}}</td>
                                 <td>{{$leave->leave_type}}</td>
                                 <td>{{$leave->count}}</td>
                                 <td></td>

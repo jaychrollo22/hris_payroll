@@ -157,9 +157,9 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
 
     public function isRemarks($end_time){
         if(date('H:i',strtotime($end_time)) >= '13:00'){
-            return 'Second Half';
+            return 'Second Shift';
         }else{
-            return 'First Half';
+            return 'First Shift';
         }
         
     }

@@ -44,6 +44,13 @@
 								value="{{ old('amount') }}" placeholder="0.00">
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-lg-12 form-group">
+							<label for="schedule">Schedule</label>
+							<input type="text" class="form-control form-control-sm" name="schedule" id="schedule"
+								value="{{ old('schedule') }}" placeholder="Schedule">
+						</div>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

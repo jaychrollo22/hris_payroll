@@ -44,7 +44,7 @@
                 <select data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='classification' required>
                   <option value="">--Select Classification--</option>
                   @foreach($classifications as $classification)
-                    <option value="{{$classification->name}}" @if ($user->employee->classification == $classification->name) selected @endif>{{$classification->name}}</option>
+                    <option value="{{$classification->id}}" @if ($user->employee->classification == $classification->id) selected @endif>{{$classification->name}}</option>
                   @endforeach
               </select>
               </div>
@@ -53,7 +53,7 @@
                 <select data-placeholder="Level" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='level' required>
                   <option value="">--Select Level--</option>
                   @foreach($levels as $level)
-                    <option value="{{$level->name}}" @if ($user->employee->level == $level->name) selected @endif>{{$level->name}}</option>
+                    <option value="{{$level->id}}" @if ($user->employee->level == $level->id) selected @endif>{{$level->name}}</option>
                   @endforeach
                 </select>
               </div>

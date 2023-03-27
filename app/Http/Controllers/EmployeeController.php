@@ -5,6 +5,8 @@ use Excel;
 use App\Imports\EmployeesImport;
 use App\Classification;
 use App\Employee;
+use App\EmployeeContactPerson;
+use App\EmployeeLeaveCredit;
 use App\EmployeeApprover;
 use App\Department;
 use App\Schedule;
@@ -44,7 +46,18 @@ class EmployeeController extends Controller
 
         $classifications = Classification::get();
 
-        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company')
+        $employees_classification = Employee::select('classification', DB::raw('count(*) as total'))->with('classification_info')
+                                                ->where('status','Active')
+                                                ->groupBy('classification')
+                                                ->orderBy('classification','ASC')
+                                                ->get();
+        $employees_gender = Employee::select('gender', DB::raw('count(*) as total'))
+                                                ->where('status','Active')
+                                                ->groupBy('gender')
+                                                ->orderBy('gender','ASC')
+                                                ->get();
+
+        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info')
                                 ->when($company,function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
@@ -66,9 +79,14 @@ class EmployeeController extends Controller
                                             ->pluck('department_id')
                                             ->toArray();
 
-            $departments = Department::whereIn('id',$department_companies)->where('status','1')->orderBy('name')->get();
+            $departments = Department::whereIn('id',$department_companies)->where('status','1')
+                                        ->orderBy('name')
+                                        ->get();
+
         }else{
-            $departments = Department::where('status','1')->orderBy('name')->get();
+            $departments = Department::where('status','1')
+                                        ->orderBy('name')
+                                        ->get();
         }
         
         $schedules = Schedule::get();
@@ -89,6 +107,8 @@ class EmployeeController extends Controller
             array(
                 'header' => 'employees',
                 'classifications' => $classifications,
+                'employees_classification' => $employees_classification,
+                'employees_gender' => $employees_gender,
                 'employees' => $employees,
                 'marital_statuses' => $marital_statuses,
                 'departments' => $departments,
@@ -236,6 +256,7 @@ class EmployeeController extends Controller
 
         $path = $request->file('file')->getRealPath();
         $data = Excel::toArray(new EmployeesImport, $request->file('file'));
+
         // return $data = Excel::load($path)->get();
 
         if(count($data[0]) > 0)
@@ -311,7 +332,79 @@ class EmployeeController extends Controller
                         $employee->status = "Active";
                         $employee->save();
 
-                        $save_count++;
+                        //Leave Beginning Balance
+                        if(isset($value['vl_balance'])){
+                            if($value['vl_balance']){
+                                $vl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                        ->where('leave_type','1') // VL
+                                                                        ->first();
+                                if($vl_leave_credit){
+                                    $vl_leave_credit->count = $value['vl_balance'];
+                                    $vl_leave_credit->save();
+                                }else{
+                                    $vl_leave_credit = new EmployeeLeaveCredit;
+                                    $vl_leave_credit->leave_type = '1';
+                                    $vl_leave_credit->user_id = $user_id;
+                                    $vl_leave_credit->count = $value['vl_balance'];
+                                    $vl_leave_credit->save();
+                                }
+                            }
+                        }
+                        if(isset($value['sl_balance'])){
+                            if($value['sl_balance']){
+                                $sl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                        ->where('leave_type','2') // SL
+                                                                        ->first();
+                                if($sl_leave_credit){
+                                    $sl_leave_credit->count = $value['sl_balance'];
+                                    $sl_leave_credit->save();
+                                }else{
+                                    $sl_leave_credit = new EmployeeLeaveCredit;
+                                    $sl_leave_credit->leave_type = '2';
+                                    $sl_leave_credit->user_id = $user_id;
+                                    $sl_leave_credit->count = $value['sl_balance'];
+                                    $sl_leave_credit->save();
+                                }
+                            }
+                        }
+
+                        if(isset($value['el_balance'])){
+                            if($value['el_balance']){
+                                $el_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                        ->where('leave_type','6') // EL
+                                                                        ->first();
+                                if($el_leave_credit){
+                                    $el_leave_credit->count = $value['el_balance'];
+                                    $el_leave_credit->save();
+                                }else{
+                                    $el_leave_credit = new EmployeeLeaveCredit;
+                                    $el_leave_credit->leave_type = '6';
+                                    $el_leave_credit->user_id = $user_id;
+                                    $el_leave_credit->count = $value['el_balance'];
+                                    $el_leave_credit->save();
+                                }
+                            }
+                        }
+                        
+                        if(isset($value['sil_balance'])){
+                            if($value['sil_balance']){
+                                $sil_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                        ->where('leave_type','10') // SIL
+                                                                        ->first();
+                                if($sil_leave_credit){
+                                    $sil_leave_credit->count = $value['sil_balance'];
+                                    $sil_leave_credit->save();
+                                }else{
+                                    $sil_leave_credit = new EmployeeLeaveCredit;
+                                    $sil_leave_credit->leave_type = '10';
+                                    $sil_leave_credit->user_id = $user_id;
+                                    $sil_leave_credit->count = $value['sil_balance'];
+                                    $sil_leave_credit->save();
+                                }
+                            }
+                        }
+
+                        $save_count+=1;
 
                     }else{
                         $check_if_exist = Employee::where('employee_number',$value['employee_number'])->first();
@@ -321,8 +414,8 @@ class EmployeeController extends Controller
                             $check_if_exist->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
                             $check_if_exist->level = $value['level'];
                             $check_if_exist->date_regularized = isset($value['date_regularized']) && !empty($value['date_regularized']) ? date('Y-m-d',strtotime($value['date_regularized'])) : null;
-                            $check_if_exist->date_resigned = isset($value['date_resigned']) && !empty($value['date_resigned']) ? date('Y-m-d',strtotime($value['date_resigned'])) : null;
-                            $check_if_exist->birth_date = isset($value['birth_date']) && !empty($value['birth_date']) ? date('Y-m-d',strtotime($value['birth_date'])) : null;
+                            $check_if_exist->date_resigned = $value['date_resigned'] ? date('Y-m-d',strtotime($value['date_resigned'])) : null;
+                            $check_if_exist->birth_date = $value['birth_date'] ? date('Y-m-d',strtotime($value['birth_date'])) : null;
                             $check_if_exist->birth_place = isset($value['birth_place']) ? $value['birth_place'] : "";
                             $check_if_exist->gender = isset($value['gender']) ? $value['gender'] : "";
                             $check_if_exist->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
@@ -340,14 +433,86 @@ class EmployeeController extends Controller
                             $check_if_exist->religion = isset($value['religion']) ? $value['religion'] : "";
                             $check_if_exist->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
 
-                            $employee->location = isset($value['branch']) ? $value['branch'] : "";
-                            $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
-                            $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
+                            $check_if_exist->location = isset($value['branch']) ? $value['branch'] : "";
+                            $check_if_exist->work_description = isset($value['work_description']) ? $value['work_description'] : "";
+                            $check_if_exist->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
 
                             $check_if_exist->status = "Active";
                             $check_if_exist->save();
 
-                            $save_count++;
+                            //Leave Beginning Balance
+                            if(isset($value['vl_balance'])){
+                                if($value['vl_balance']){
+                                    $vl_leave_credit = EmployeeLeaveCredit::where('user_id',$check_if_exist->user_id)
+                                                                            ->where('leave_type','1') // VL
+                                                                            ->first();
+                                    if($vl_leave_credit){
+                                        $vl_leave_credit->count = $value['vl_balance'];
+                                        $vl_leave_credit->save();
+                                    }else{
+                                        $vl_leave_credit = new EmployeeLeaveCredit;
+                                        $vl_leave_credit->leave_type = '1';
+                                        $vl_leave_credit->user_id = $check_if_exist->user_id;
+                                        $vl_leave_credit->count = $value['vl_balance'];
+                                        $vl_leave_credit->save();
+                                    }
+                                }
+                            }
+                            if(isset($value['sl_balance'])){
+                                if($value['sl_balance']){
+                                    $sl_leave_credit = EmployeeLeaveCredit::where('user_id',$check_if_exist->user_id)
+                                                                            ->where('leave_type','2') // SL
+                                                                            ->first();
+                                    if($sl_leave_credit){
+                                        $sl_leave_credit->count = $value['sl_balance'];
+                                        $sl_leave_credit->save();
+                                    }else{
+                                        $sl_leave_credit = new EmployeeLeaveCredit;
+                                        $sl_leave_credit->leave_type = '2';
+                                        $sl_leave_credit->user_id = $check_if_exist->user_id;
+                                        $sl_leave_credit->count = $value['sl_balance'];
+                                        $sl_leave_credit->save();
+                                    }
+                                }
+                            }
+
+                            if(isset($value['el_balance'])){
+                                if($value['el_balance']){
+                                    $el_leave_credit = EmployeeLeaveCredit::where('user_id',$check_if_exist->user_id)
+                                                                            ->where('leave_type','6') // EL
+                                                                            ->first();
+                                    if($el_leave_credit){
+                                        $el_leave_credit->count = $value['el_balance'];
+                                        $el_leave_credit->save();
+                                    }else{
+                                        $el_leave_credit = new EmployeeLeaveCredit;
+                                        $el_leave_credit->leave_type = '6';
+                                        $el_leave_credit->user_id = $check_if_exist->user_id;
+                                        $el_leave_credit->count = $value['el_balance'];
+                                        $el_leave_credit->save();
+                                    }
+                                }
+                            }
+                            
+                            if(isset($value['sil_balance'])){
+                                if($value['sil_balance']){
+                                    $sil_leave_credit = EmployeeLeaveCredit::where('user_id',$check_if_exist->user_id)
+                                                                            ->where('leave_type','10') // SIL
+                                                                            ->first();
+                                    if($sil_leave_credit){
+                                        $sil_leave_credit->count = $value['sil_balance'];
+                                        $sil_leave_credit->save();
+                                    }else{
+                                        $sil_leave_credit = new EmployeeLeaveCredit;
+                                        $sil_leave_credit->leave_type = '10';
+                                        $sil_leave_credit->user_id = $check_if_exist->user_id;
+                                        $sil_leave_credit->count = $value['sil_balance'];
+                                        $sil_leave_credit->save();
+                                    }
+                                }
+                            }
+
+                            $save_count+=1;
                         }
                     }
                     
@@ -423,12 +588,82 @@ class EmployeeController extends Controller
                         $employee->status = "Active";
                         $employee->save();
 
-                        $save_count++;
+                        //Leave Beginning Balance
+                        if(isset($value['vl_balance'])){
+                            if($value['vl_balance']){
+                                $vl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                        ->where('leave_type','1') // VL
+                                                                        ->first();
+                                if($vl_leave_credit){
+                                    $vl_leave_credit->count = $value['vl_balance'];
+                                    $vl_leave_credit->save();
+                                }else{
+                                    $vl_leave_credit = new EmployeeLeaveCredit;
+                                    $vl_leave_credit->leave_type = '1';
+                                    $vl_leave_credit->user_id = $user_id;
+                                    $vl_leave_credit->count = $value['vl_balance'];
+                                    $vl_leave_credit->save();
+                                }
+                            }
+                        }
+                        if(isset($value['sl_balance'])){
+                            if($value['sl_balance']){
+                                $sl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                        ->where('leave_type','2') // SL
+                                                                        ->first();
+                                if($sl_leave_credit){
+                                    $sl_leave_credit->count = $value['sl_balance'];
+                                    $sl_leave_credit->save();
+                                }else{
+                                    $sl_leave_credit = new EmployeeLeaveCredit;
+                                    $sl_leave_credit->leave_type = '2';
+                                    $sl_leave_credit->user_id = $user_id;
+                                    $sl_leave_credit->count = $value['sl_balance'];
+                                    $sl_leave_credit->save();
+                                }
+                            }
+                        }
+
+                        if(isset($value['el_balance'])){
+                            if($value['el_balance']){
+                                $el_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                        ->where('leave_type','6') // EL
+                                                                        ->first();
+                                if($el_leave_credit){
+                                    $el_leave_credit->count = $value['el_balance'];
+                                    $el_leave_credit->save();
+                                }else{
+                                    $el_leave_credit = new EmployeeLeaveCredit;
+                                    $el_leave_credit->leave_type = '6';
+                                    $el_leave_credit->user_id = $check_if_exist->user_id;
+                                    $el_leave_credit->count = $value['el_balance'];
+                                    $el_leave_credit->save();
+                                }
+                            }
+                        }
+                        
+                        if(isset($value['sil_balance'])){
+                            if($value['sil_balance']){
+                                $sil_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                        ->where('leave_type','10') // SIL
+                                                                        ->first();
+                                if($sil_leave_credit){
+                                    $sil_leave_credit->count = $value['sil_balance'];
+                                    $sil_leave_credit->save();
+                                }else{
+                                    $sil_leave_credit = new EmployeeLeaveCredit;
+                                    $sil_leave_credit->leave_type = '10';
+                                    $sil_leave_credit->user_id = $check_if_exist->user_id;
+                                    $sil_leave_credit->count = $value['sil_balance'];
+                                    $sil_leave_credit->save();
+                                }
+                            }
+                        }
+
+                        $save_count+=1;
                     }
                 }
             }
-
-            // return $not_save;
 
             Alert::success('Successfully Import Employees (' . $save_count. ')')->persistent('Dismiss');
             return back();
@@ -440,7 +675,7 @@ class EmployeeController extends Controller
     {
         $classifications = Classification::get();
 
-        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company')->get();
+        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info','level_info')->get();
         $schedules = Schedule::get();
         $banks = Bank::get();
         $users = User::all();
@@ -448,9 +683,7 @@ class EmployeeController extends Controller
         $departments = Department::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
-        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
-
-       
+        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
 
         return view('employees.employee_settings_hr',
         array(
@@ -541,6 +774,32 @@ class EmployeeController extends Controller
         Alert::success('Successfully Updated')->persistent('Dismiss');
         return back();
 
+    }
+
+    public function updateContactInfoHR(Request $request, $id){
+
+        $employee = Employee::findOrFail($id);
+
+        if($employee){
+            $employee_contact_person = EmployeeContactPerson::where('user_id',$employee->user_id)->first();
+
+            if(empty($employee_contact_person)){
+                $new_contact_person = new EmployeeContactPerson;
+                $new_contact_person->user_id = $employee->user_id;
+                $new_contact_person->name = $request->name;
+                $new_contact_person->contact_number = $request->contact_number;
+                $new_contact_person->relation = $request->relation;
+                $new_contact_person->save();
+            }else{
+                $employee_contact_person->name = $request->name;
+                $employee_contact_person->contact_number = $request->contact_number;
+                $employee_contact_person->relation = $request->relation;
+                $employee_contact_person->save();
+            }
+        }
+
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
     }
 
 

@@ -67,9 +67,11 @@ class OvertimeApproval extends Command
                                 'user_info' => $employee_overtime->user,
                                 'details' => $employee_overtime,
                             ];
-                            $send_update = Mail::to($approver->approver_info->email)->send(new OvertimeNotification($details));
-                            EmployeeOvertime::where('id',$employee_overtime->id)->update(['mail_1'=>1]);
-                            $count++;
+                            if(empty($employee_overtime->mail_1)){
+                                $send_update = Mail::to($approver->approver_info->email)->send(new OvertimeNotification($details));
+                                EmployeeOvertime::where('id',$employee_overtime->id)->update(['mail_1'=>1]);
+                                $count++;
+                            }
                         }
                         
                         if($employee_overtime->level == 1 && $approver->level == 2){ // If Level 1 Notify Level 2
@@ -78,9 +80,11 @@ class OvertimeApproval extends Command
                                 'user_info' => $employee_overtime->user,
                                 'details' => $employee_overtime,
                             ];
-                            $send_update = Mail::to($approver->approver_info->email)->send(new OvertimeNotification($details));
-                            EmployeeOvertime::where('id',$employee_overtime->id)->update(['mail_2'=>1]);
-                            $count++;
+                            if(empty($employee_overtime->mail_2)){
+                                $send_update = Mail::to($approver->approver_info->email)->send(new OvertimeNotification($details));
+                                EmployeeOvertime::where('id',$employee_overtime->id)->update(['mail_2'=>1]);
+                                $count++;
+                            }
                         }
                     }
                 }

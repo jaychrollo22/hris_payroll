@@ -57,7 +57,9 @@
                                         <th>OT Date</th> 
                                         <th>OT Time</th> 
                                         <th>OT Requested (Hrs)</th>
+                                        <th>Break (Hrs)</th>
                                         <th>OT Approved (Hrs)</th>
+                                        <th>Total OT Approved (Hrs)</th>
                                         <th>Remarks </th>
                                         <th>Status </th>
                                     </tr>
@@ -71,7 +73,9 @@
                                         <td>{{date('d/m/Y', strtotime($item->ot_date))}}</td>
                                         <td>{{date('h:i A', strtotime($item->start_time))}} - {{date('h:i A', strtotime($item->end_time))}}</td>
                                         <td>{{intval((strtotime($item->end_time)-strtotime($item->start_time))/60/60)}}</td>
+                                        <td>{{$item->break_hrs}}</td>
                                         <td>{{$item->ot_approved_hrs}}</td>
+                                        <td>{{$item->ot_approved_hrs - $item->break_hrs}}</td>
                                         <td>{{$item->remarks}}</td>
                                         <td>{{$item->status}}</td>
                                     </tr>

@@ -7,7 +7,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method='POST' action='upload-employee' onsubmit='show()' enctype="multipart/form-data">
+            <form method='POST' action='{{url('upload-employee')}}' onsubmit='show()' enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="row">

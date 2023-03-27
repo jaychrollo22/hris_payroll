@@ -12,6 +12,7 @@
 |
 */
 
+
 Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
     //Users
@@ -21,6 +22,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('get-salary', 'UserController@get_salary');
     Route::post('updateInfo/{id}', 'UserController@updateInfo');
     Route::post('updateEmpInfo/{id}', 'UserController@updateEmpInfo');
+    Route::post('updateEmpContactInfo/{id}', 'UserController@updateEmpContactInfo');
 
     //employees
     Route::get('/dashboard', 'HomeController@index')->name('home');
@@ -98,6 +100,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('account-setting-hr/{user}', 'EmployeeController@employeeSettingsHR');
     Route::post('account-setting-hr/updateInfoHR/{id}', 'EmployeeController@updateInfoHR');
     Route::post('account-setting-hr/updateEmpInfoHR/{id}', 'EmployeeController@updateEmpInfoHR');
+    Route::post('account-setting-hr/updateContactInfoHR/{id}', 'EmployeeController@updateContactInfoHR');
 
     //Payslips
     Route::get('payslips', 'PayslipController@view');
@@ -230,6 +233,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //User
     Route::get('/users','UserController@index');
+    Route::get('/edit-user-role/{user}','UserController@editUserRole');
     Route::post('/update-user-role/{user}','UserController@updateUserRole');
     Route::post('/update-user-password/{user}','UserController@updateUserPassword');
 

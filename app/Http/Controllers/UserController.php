@@ -11,6 +11,7 @@ use App\Employee;
 use App\Schedule;
 use App\Department;
 use App\EmployeeApprover;
+use App\EmployeeContactPerson;
 use App\MaritalStatus;
 use App\Classification;
 use App\EmployeeCompany;
@@ -48,10 +49,26 @@ class UserController extends Controller
         return Excel::download(new UsersExport, 'Users.xlsx');
     }
 
+    public function editUserRole(User $user){
+
+        $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
+        $user = User::with('user_allowed_company','user_privilege')
+                        ->where('id',$user->id)
+                        ->first();
+
+        return view('users.edit_user_role',
+        array(
+            'header' => 'edit_user_role',
+            'user' => $user,
+            'companies' => $companies,
+        ));
+
+    }
+
     public function updateUserRole(Request $request, User $user){
-    //    return $request->all();
         if($user){
             $user = User::findOrFail($user->id);
+            $user->email = $request->email;
             $user->role = $request->role;
             $user->save();
 
@@ -98,8 +115,11 @@ class UserController extends Controller
                 $user_privilege->masterfiles_departments = $request->masterfiles_departments;
                 $user_privilege->masterfiles_loan_types = $request->masterfiles_loan_types;
                 $user_privilege->masterfiles_employee_leave_credits = $request->masterfiles_employee_leave_credits;
+                $user_privilege->masterfiles_employee_allowances = $request->masterfiles_employee_allowances;
 
                 $user_privilege->save();
+                Alert::success('Successfully Updated')->persistent('Dismiss');
+                return back();
             }else{
                 $new_user_privilege = new UserPrivilege;
                 $new_user_privilege->user_id = $user->id;
@@ -128,12 +148,14 @@ class UserController extends Controller
                 $new_user_privilege->masterfiles_departments = $request->masterfiles_departments;
                 $new_user_privilege->masterfiles_loan_types = $request->masterfiles_loan_types;
                 $new_user_privilege->masterfiles_employee_leave_credits = $request->masterfiles_employee_leave_credits;
+                $new_user_privilege->masterfiles_employee_allowances = $request->masterfiles_employee_allowances;
                 
                 $new_user_privilege->save();
+                Alert::success('Successfully Updated')->persistent('Dismiss');
+                return back();
             }
 
-            Alert::success('Successfully Updated')->persistent('Dismiss');
-            return back();
+            
         }
     }
 
@@ -232,6 +254,31 @@ class UserController extends Controller
         Alert::success('Successfully Updated')->persistent('Dismiss');
         return back();
 
+    }
+
+    public function updateEmpContactInfo(Request $request, $id){
+        $employee = Employee::findOrFail($id);
+
+        if($employee){
+            $employee_contact_person = EmployeeContactPerson::where('user_id',$employee->user_id)->first();
+
+            if(empty($employee_contact_person)){
+                $new_contact_person = new EmployeeContactPerson;
+                $new_contact_person->user_id = $employee->user_id;
+                $new_contact_person->name = $request->name;
+                $new_contact_person->contact_number = $request->contact_number;
+                $new_contact_person->relation = $request->relation;
+                $new_contact_person->save();
+            }else{
+                $employee_contact_person->name = $request->name;
+                $employee_contact_person->contact_number = $request->contact_number;
+                $employee_contact_person->relation = $request->relation;
+                $employee_contact_person->save();
+            }
+        }
+
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return back();
     }
 
     public function uploadAvatar(Request $request)

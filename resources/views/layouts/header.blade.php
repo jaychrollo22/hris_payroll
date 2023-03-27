@@ -440,7 +440,7 @@
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/holidays') }}">Holidays</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/schedules') }}">Schedules</a></li>
-                                {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/allowances') }}">Allowances</a></li> --}}
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/allowances') }}">Allowances</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/incentives') }}">Incentives</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/handbooks') }}">Handbook</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/leavee-settings') }}">Leave Type</a></li>
@@ -474,30 +474,40 @@
             </a>
             <div class="collapse" id="masterfiles">
                 <ul class="nav flex-column sub-menu">
+                    @if(checkUserPrivilege('masterfiles_companies',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/company') }}">Companies</a>
                     </li>
+                    @endif
+                    @if(checkUserPrivilege('masterfiles_departments',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/department') }}">Departments</a>
                     </li>
+                    @endif
+                    @if(checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/loan-type') }}">Loan Types</a>
                     </li>
+                    @endif
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-incentive') }}">Employee Incentives</a>
-                    </li>
+                    </li> --}}
+                    @if(checkUserPrivilege('masterfiles_employee_allowances',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-allowance') }}">Employee Allowances</a>
                     </li>
-                    <li class="nav-item">
+                    @endif
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ url('/salary-management') }}">Salary Management</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-companies') }}">Employee Groups</a>
                     </li> --}}
+                    @if(checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-leave-credits') }}">Employee Leave Credits</a>
                     </li>
+                    @endif
                 </ul>
             </div>
         </li>
@@ -778,9 +788,26 @@
                 $(this).addClass('selected');
             });
 
-        });
+            $(".halfDayStatus").hide();
+            $("#leaveHalfday").change(function(){
+                if($(this).is(':checked')){
+                    $(".halfDayStatus").show(300);
+                }else{
+                    $(".halfDayStatus").hide(200);
+                }
+            });
 
+            $("#editViewleaveHalfday").change(function(){
+                if($(this).is(':checked')){
+                $(".edithalfDayStatus").show(300);
+                }else{
+                $(".edithalfDayStatus").hide(200);
+                }
+            });
+
+        });
     </script>
+
     @include('sweetalert::alert')
     @yield('allowanceScript')
     @yield('incentivescript')

@@ -3,6 +3,7 @@ use App\ApplicantSystemNotification;
 use App\UserAllowedCompany;
 use App\UserPrivilege;
 use App\Employee;
+use App\EmployeeLeave;
 
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
@@ -113,7 +114,12 @@ function employeeHasLeave($employee_leaves = array(), $check_date){
             if(count($date_range) > 0){
                 foreach($date_range as $date_r){
                     if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
-                        return $item['leave']['code'];
+                        if($item['halfday'] == '1'){
+                            return $item['leave']['code'] . ' ' . $item['halfday_status'];
+                        }else{
+                            return $item['leave']['code'];
+                        }
+                        
                     }
                 }
             }
@@ -167,4 +173,85 @@ function checkUserAllowedOvertime($user_id){
     }else{
         return 'no';
     }
+}
+
+function checkUsedVacationLeave($user_id){
+    $employee_vl = EmployeeLeave::where('user_id',$user_id)
+                                    ->where('leave_type','1')
+                                    ->where('status','Approved')
+                                    ->get();
+
+    $count = 0;
+    if($employee_vl){
+        foreach($employee_vl as $leave){
+            if($leave->withpay == 1 && $leave->halfday == 1){
+                $count += 0.5;
+            }else{
+                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                if($date_range){
+                    foreach($date_range as $date_r){
+                        if($leave->withpay == 1){
+                            $count += 1;
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+    return $count;
+}
+
+function checkUsedSickLeave($user_id){
+    $employee_sl = EmployeeLeave::where('user_id',$user_id)
+                                    ->where('leave_type','2')
+                                    ->where('status','Approved')
+                                    ->get();
+
+    $count = 0;
+    if($employee_sl){
+        foreach($employee_sl as $leave){
+            if($leave->withpay == 1 && $leave->halfday == 1){
+                $count += 0.5;
+            }else{
+                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                if($date_range){
+                    foreach($date_range as $date_r){
+                        if($leave->withpay == 1){
+                            $count += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return $count;
+}
+
+function checkUsedServiceIncentiveLeave($user_id){
+    $employee_sil = EmployeeLeave::where('user_id',$user_id)
+                                    ->where('leave_type','10')
+                                    ->where('status','Approved')
+                                    ->get();
+
+    $count = 0;
+    if($employee_sil){
+        foreach($employee_sil as $leave){
+            if($leave->withpay == 1 && $leave->halfday == 1){
+                $count += 0.5;
+            }else{
+                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                if($date_range){
+                    foreach($date_range as $date_r){
+                        if($leave->withpay == 1){
+                            $count += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return $count;
 }

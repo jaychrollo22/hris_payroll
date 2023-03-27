@@ -37,6 +37,7 @@ class EmployeeOvertimeController extends Controller
         $etime = $request->end_time;   
         $new_overtime->start_time = $request->ot_date.' '.$request->start_time;
         $new_overtime->end_time = $request->ot_date.' '.$request->end_time;     
+        $new_overtime->break_hrs = $request->break_hrs;     
         if($stime > $etime ){
             $new_overtime->end_time = date('Y-m-d', strtotime($request->ot_date. ' + 1 day')).' '.$request->end_time;
         }
@@ -69,6 +70,7 @@ class EmployeeOvertimeController extends Controller
         $etime = $request->end_time;   
         $new_overtime->start_time = $request->ot_date.' '.$request->start_time;
         $new_overtime->end_time = $request->ot_date.' '.$request->end_time;  
+        $new_overtime->break_hrs = $request->break_hrs;   
         $new_overtime->remarks = $request->remarks;   
         if($stime > $etime ){
             $new_overtime->end_time = date('Y-m-d', strtotime($request->ot_date. ' + 1 day')).' '.$request->end_time;

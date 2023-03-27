@@ -148,25 +148,30 @@ class FormApprovalController extends Controller
 
                 $employee_approver = EmployeeApprover::where('user_id', $employee_overtime->user_id)->where('approver_id', auth()->user()->id)->first();
                 if($employee_approver->as_final == 'on'){
+                    $ot_approved_hrs = $request->ot_approved_hrs;
                     EmployeeOvertime::Where('id', $employee_overtime->id)->update([
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
                         'level' => 1,
-                        'ot_approved_hrs' => $request->ot_approved_hrs
+                        'break_hrs' => $request->break_hrs,
+                        'ot_approved_hrs' => $ot_approved_hrs
                     ]);
                 }else{
                     EmployeeOvertime::Where('id', $employee_overtime->id)->update([
                         'level' => 1,
+                        'break_hrs' => $request->break_hrs,
                         'ot_approved_hrs' => $request->ot_approved_hrs
                     ]);
                 }
             }
             else if($employee_overtime->level == 1){
+                $ot_approved_hrs = $request->ot_approved_hrs;
                 EmployeeOvertime::Where('id', $employee_overtime->id)->update([
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
                     'level' => 2,
-                    'ot_approved_hrs' => $request->ot_approved_hrs
+                    'break_hrs' => $request->break_hrs,
+                    'ot_approved_hrs' => $ot_approved_hrs
                 ]);
             }
             Alert::success('Overtime has been approved.')->persistent('Dismiss');

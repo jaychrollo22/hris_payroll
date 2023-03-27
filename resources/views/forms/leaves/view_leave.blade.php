@@ -25,14 +25,15 @@
             <div class="form-group row">
               <label for="leave_type" class="col-sm-2 col-form-label">Leave Type</label>
                 <div class="col-sm-4">
-                  <select class="js-example-basic-single w-100 form-control"  disabled id="leave_type"  style='width:100%;' name='leave_type' required>
-                    @foreach ($leave_types as $leave_type)
-                      <option value="{{ $leave_type->id }}"{{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>
-                              {{ $leave_type->leave_type }}
-                      </option>
-                    @endforeach                  
-                  </select>
-                </div>
+                    <select class="js-example-basic-single w-100 form-control"  disabled id="leave_type"  style='width:100%;' name='leave_type' required>
+                      @foreach ($leave_types as $leave_type)
+                        <option value="{{ $leave_type->id }}"{{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>
+                                {{ $leave_type->leave_type }}
+                        </option>
+                      @endforeach                  
+                    </select>
+                  </div>
+                
                 <div class='col-sm-5'>
                   <div class='row'>
                     <div class='col-md-6'>
@@ -54,33 +55,43 @@
                         @endif
                         Halfday
                     </label>
-                    </div>
+                      <br>
+                      @if($leave->halfday == 1)
+                        <div class="edithalfDayStatus">
+                          <select name="halfday_status" class="form-control" value="{{$leave->halfday_status}}" disabled required>
+                              <option value="">Choose One</option>
+                              <option value="First Shift" {{ $leave->halfday_status == 'First Shift' ? 'selected' : ''}}>First Shift</option>
+                              <option value="Second Shift" {{ $leave->halfday_status == 'Second Shift' ? 'selected' : ''}}>Second Shift</option>
+                          </select>
+                        </div>
+                      @endif
                   </div>
                 </div>
               </div>
-              <div class="form-group row">
-                <div class='col-md-2'>
-                  Date From 
-                </div>
-                <div class='col-md-4'>
-                  <input type="date" name='date_from' class="form-control" disabled value="{{$leave->date_from}}" required>
-                </div>
-                <div class='col-md-2'>
-                  Date To 
-                </div>
-                <div class='col-md-4'>
-                  <input type="date" name='date_to' class="form-control" disabled value="{{$leave->date_to}}" required>
-                </div>
+            </div>
+            <div class="form-group row">
+              <div class='col-md-2'>
+                Date From 
               </div>
-              <div class="form-group row">
-                <div class='col-md-2'>
-                  Reason
-                </div>
-                <div class='col-md-10'>
-                  <textarea  name='reason' class="form-control" disabled rows='4' required>{{$leave->reason}}</textarea>
-                </div>
+              <div class='col-md-4'>
+                <input type="date" name='date_from' class="form-control" disabled value="{{$leave->date_from}}" required>
+              </div>
+              <div class='col-md-2'>
+                Date To 
+              </div>
+              <div class='col-md-4'>
+                <input type="date" name='date_to' class="form-control" disabled value="{{$leave->date_to}}" required>
               </div>
             </div>
+            <div class="form-group row">
+              <div class='col-md-2'>
+                Reason
+              </div>
+              <div class='col-md-10'>
+                <textarea  name='reason' class="form-control" disabled rows='4' required>{{$leave->reason}}</textarea>
+              </div>
+            </div>
+            
             
             <div class="modal-footer">
                 @if($leave->attachment)
