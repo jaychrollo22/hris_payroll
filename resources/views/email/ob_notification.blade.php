@@ -5,3 +5,4 @@ Start Time: {{ date('H:i', strtotime($details['details']['date_from'])) }} <br>
 End Time: {{ date('H:i', strtotime($details['details']['date_to'])) }} <br>
 Remarks: {{$details['details']['remarks']}} <br>
 Last Update: {{appFormatFullDate($details['details']['updated_at'])}} <br>
+Link: <a href="http://124.6.185.87:8035/for-official-business">Click Here</a> <br>
