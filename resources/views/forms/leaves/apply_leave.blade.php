@@ -60,7 +60,7 @@
                     Halfday
                     <br>
                     <div class="halfDayStatus">
-                        <select name="halfday_status" class="form-control" required>
+                        <select name="halfday_status" class="form-control">
                             <option value="">Choose One</option>
                             <option value="First Shift">First Shift</option>
                             <option value="Second Shift">Second Shift</option>
