@@ -298,6 +298,7 @@ class EmployeeController extends Controller
                         $employee->last_name = $value['last_name'];
                         $employee->middle_name = $value['middle_name'];
                         $employee->name_suffix = isset($value['name_suffix']) ? $value['name_suffix'] : "";
+
                         $employee->classification = isset($value['classification']) ? $value['classification'] : "";
                         $employee->department_id = isset($value['department_id']) ? $value['department_id'] : "";
                         $employee->company_id = isset($value['company_id']) ? $value['company_id'] : "";
@@ -411,6 +412,12 @@ class EmployeeController extends Controller
                         $check_if_exist = Employee::where('employee_number',$value['employee_number'])->first();
 
                         if($check_if_exist){
+
+                            $check_if_exist->classification = isset($value['classification']) ? $value['classification'] : "";
+                            $check_if_exist->department_id = isset($value['department_id']) ? $value['department_id'] : "";
+                            $check_if_exist->company_id = isset($value['company_id']) ? $value['company_id'] : "";
+                            $check_if_exist->original_date_hired = isset($value['date_hired']) && !empty($value['date_hired']) ? date('Y-m-d',strtotime($value['date_hired'])) : null;
+
                             $check_if_exist->position = isset($value['position']) ? $value['position'] : "";
                             $check_if_exist->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
                             $check_if_exist->level = $value['level'];
@@ -423,8 +430,8 @@ class EmployeeController extends Controller
                             $check_if_exist->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
                             $check_if_exist->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
                             $check_if_exist->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
-                            $check_if_exist->phil_number = isset($value['phil_number']) ? $value['phil_number'] : "";
-                            $check_if_exist->sss_number = isset($value['phil_number']) ? $value['sss_number'] : "";
+                            $check_if_exist->phil_number = isset($value['philhealth_number']) ? $value['philhealth_number'] : "";
+                            $check_if_exist->sss_number = isset($value['sss_number']) ? $value['sss_number'] : "";
                             $check_if_exist->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
                             $check_if_exist->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
                             $check_if_exist->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
@@ -571,8 +578,8 @@ class EmployeeController extends Controller
                         $employee->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
                         $employee->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
                         $employee->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
-                        $employee->phil_number = isset($value['phil_number']) ? $value['phil_number'] : "";
-                        $employee->sss_number = isset($value['phil_number']) ? $value['sss_number'] : "";
+                        $employee->phil_number = isset($value['philhealth_number']) ? $value['philhealth_number'] : "";
+                        $employee->sss_number = isset($value['sss_number']) ? $value['sss_number'] : "";
                         $employee->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
                         $employee->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
                         $employee->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
