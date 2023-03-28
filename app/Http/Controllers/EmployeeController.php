@@ -8,6 +8,7 @@ use App\Employee;
 use App\EmployeeContactPerson;
 use App\EmployeeLeaveCredit;
 use App\EmployeeApprover;
+use App\EmployeeVessel;
 use App\Department;
 use App\Schedule;
 use App\Attendance;
@@ -683,7 +684,7 @@ class EmployeeController extends Controller
         $departments = Department::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
-        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
 
         return view('employees.employee_settings_hr',
         array(
@@ -768,6 +769,21 @@ class EmployeeController extends Controller
                     $new_approver->save();
                     $level = $level+1;
                 }
+            }
+        }
+
+        //Employee Vessel
+        if($request->classification == 4 && $request->vessel_name){
+            $employee_vessel = EmployeeVessel::where('user_id', $employee->user_id)->first();
+
+            if($employee_vessel){
+                $employee_vessel->vessel_name = $request->vessel_name;
+                $employee_vessel->save();
+            }else{
+                $new_employee_vessel = new EmployeeVessel;
+                $new_employee_vessel->user_id = $employee->user_id;
+                $new_employee_vessel->vessel_name = $request->vessel_name;
+                $new_employee_vessel->save();
             }
         }
         

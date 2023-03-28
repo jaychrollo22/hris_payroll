@@ -41,13 +41,24 @@
               </div>
               <div class='col-md-4'>
                 Classification
-                <select data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='classification' required>
+                <select id="emp_classification" data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='classification' required onchange="showIfSeabased(this.value)">
                   <option value="">--Select Classification--</option>
                   @foreach($classifications as $classification)
                     <option value="{{$classification->id}}" @if ($user->employee->classification == $classification->id) selected @endif>{{$classification->name}}</option>
                   @endforeach
               </select>
               </div>
+              @if($user->employee->classification == '4')
+                <div id="seaBased" class='col-md-4'>
+                  Vessel
+                  <input type="text" name="vessel_name" class="form-control" value="{{ $user->employee->employee_vessel ? $user->employee->employee_vessel->vessel_name : "" }}">
+                </div>
+              @else
+                <div id="seaBased" class='col-md-4' style="display: none;">
+                  Vessel
+                  <input type="text" name="vessel_name" class="form-control" value="{{ $user->employee->employee_vessel ? $user->employee->employee_vessel->vessel_name : "" }}">
+                </div>
+              @endif
               <div class='col-md-4'>
                 Level
                 <select data-placeholder="Level" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='level' required>
@@ -279,4 +290,14 @@
     }
 
   }
+
+  function showIfSeabased(value){
+
+    if(value == '4'){
+      $('#seaBased').show();
+    }else{
+      $('#seaBased').hide();
+    }
+  }
+
 </script>
