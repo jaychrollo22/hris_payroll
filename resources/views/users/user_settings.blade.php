@@ -19,12 +19,12 @@
                         <h5 class="card-text mt-2">Biometric Code : {{auth()->user()->employee->employee_number}}</h5>
                         <h5 class="card-text mt-2">Employee Code : {{auth()->user()->employee->employee_code}}</h5>
                         <img class='border' src='{{URL::asset(auth()->user()->employee->signature)}}' onerror="this.src='{{URL::asset('/images/signature.png')}}';" height='100px;' width='225px;'> <br>
-                        <button class="btn btn-primary btn-sm mt-3" data-toggle="modal" data-target="#uploadAvatar">
+                        {{-- <button class="btn btn-primary btn-sm mt-3" data-toggle="modal" data-target="#uploadAvatar">
                             Upload Avatar
                         </button>
                         <button class="btn btn-info btn-sm mt-3" data-toggle="modal" data-target="#uploadSignature">
                             Upload Signature
-                        </button>
+                        </button> --}}
                         <button class="btn btn-success btn-sm mt-3" data-toggle="modal" data-target="#editUserPassword{{$user->id}}">
                             Change Password
                         </button>
