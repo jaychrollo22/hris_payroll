@@ -313,10 +313,10 @@ class EmployeeController extends Controller
                         $employee->gender = isset($value['gender']) ? $value['gender'] : "";
                         $employee->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
                         $employee->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
-                        $employee->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
+                        $employee->present_address = isset($value['present_address']) ? $value['present_address'] : "";
                         $employee->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
-                        $employee->phil_number = isset($value['phil_number']) ? $value['phil_number'] : "";
-                        $employee->sss_number = isset($value['phil_number']) ? $value['sss_number'] : "";
+                        $employee->phil_number = isset($value['philhealth_number']) ? $value['philhealth_number'] : "";
+                        $employee->sss_number = isset($value['sss_number']) ? $value['sss_number'] : "";
                         $employee->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
                         $employee->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
                         $employee->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
