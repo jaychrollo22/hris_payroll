@@ -244,7 +244,7 @@
                                     <small> Classification </small>
                                 </div>
                                 <div class='col-md-9'>
-                                    {{auth()->user()->employee->classification}}
+                                    {{auth()->user()->employee->classification_info ? auth()->user()->employee->classification_info->name : ""}}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>
@@ -252,7 +252,7 @@
                                     <small> Level </small>
                                 </div>
                                 <div class='col-md-9'>
-                                    {{auth()->user()->employee->level}}
+                                    {{auth()->user()->employee->level_info ? auth()->user()->employee->level_info->name : ""}}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>

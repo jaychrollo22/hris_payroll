@@ -171,7 +171,7 @@ class UserController extends Controller
         $departments = Department::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
-        $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+        $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
 
        
 

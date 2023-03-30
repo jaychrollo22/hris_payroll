@@ -40,6 +40,15 @@
                 </select>
               </div>
               <div class='col-md-4'>
+                Location
+                <select data-placeholder="Location" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='location' required>
+                    <option value="">--Select Location--</option>
+                    @foreach($locations as $location)
+                      <option value="{{$location->location}}" @if ($user->employee->location == $location->location) selected @endif>{{$location->location}}</option>
+                    @endforeach
+                </select>
+              </div>
+              <div class='col-md-4'>
                 Classification
                 <select id="emp_classification" data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='classification' required onchange="showIfSeabased(this.value)">
                   <option value="">--Select Classification--</option>

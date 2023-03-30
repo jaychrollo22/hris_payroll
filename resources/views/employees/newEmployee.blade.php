@@ -141,6 +141,15 @@
                                 </select>
                               </div>
                               <div class='col-md-4'>
+                                Location
+                                <select data-placeholder="Location" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='location' required>
+                                    <option value="">--Select Location--</option>
+                                    @foreach($locations as $location)
+                                      <option value="{{$location->location}}">{{$location->location}}</option>
+                                    @endforeach
+                                </select>
+                              </div>
+                              <div class='col-md-4'>
                                 Classification
                                 <select data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='classification' required>
                                   <option value="">--Select Classification--</option>
@@ -187,10 +196,6 @@
                                     <option value="{{$schedule->id}}">{{$schedule->schedule_name}}</option>
                                   @endforeach
                                 </select>
-                              </div>
-                              <div class='col-md-4'>
-                                Location / Branch
-                                <input type="text" name="location" class='form-control form-control-sm required' placeholder="Location"/>
                               </div>
                             </div>
                             <hr>
