@@ -331,7 +331,7 @@ class EmployeeController extends Controller
                         $employee->religion = isset($value['religion']) ? $value['religion'] : "";
                         $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
 
-                        $employee->location = isset($value['branch']) ? $value['branch'] : "";
+                        $employee->location = isset($value['location']) ? $value['location'] : "";
                         $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
                         $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
                         
@@ -445,7 +445,7 @@ class EmployeeController extends Controller
                             $check_if_exist->religion = isset($value['religion']) ? $value['religion'] : "";
                             $check_if_exist->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
 
-                            $check_if_exist->location = isset($value['branch']) ? $value['branch'] : "";
+                            $check_if_exist->location = isset($value['location']) ? $value['location'] : "";
                             $check_if_exist->work_description = isset($value['work_description']) ? $value['work_description'] : "";
                             $check_if_exist->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
 
@@ -593,7 +593,7 @@ class EmployeeController extends Controller
                         $employee->religion = isset($value['religion']) ? $value['religion'] : "";
                         $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
 
-                        $employee->location = isset($value['branch']) ? $value['branch'] : "";
+                        $employee->location = isset($value['location']) ? $value['location'] : "";
                         $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
                         $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
 
