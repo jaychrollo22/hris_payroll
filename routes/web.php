@@ -232,6 +232,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('employee-leave-credits', 'LeaveCreditsController@index');
     Route::post('new-employee-leave-credit', 'LeaveCreditsController@store');
 
+    // Employee Earned Leaves
+    Route::get('employee-earned-leaves', 'EmployeeEarnedLeaveController@index');
+
     //User
     Route::get('/users','UserController@index');
     Route::get('/edit-user-role/{user}','UserController@editUserRole');

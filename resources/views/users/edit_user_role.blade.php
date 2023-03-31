@@ -309,6 +309,18 @@
                                         <br>
                                         <br>
                                         @if($user->user_privilege)
+                                            @if($user->user_privilege->masterfiles_employee_leave_earned == 'on')
+                                                <input type="checkbox" name="masterfiles_employee_leave_earned" id="masterfiles_employee_leave_earned{{$user->id}}" value="{{ $user->user_privilege->masterfiles_employee_leave_earned }}" checked>
+                                            @else
+                                                <input type="checkbox" name="masterfiles_employee_leave_earned" id="masterfiles_employee_leave_earned{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="masterfiles_employee_leave_earned" id="masterfiles_employee_leave_earned{{$user->id}}">
+                                        @endif
+                                        Employee Earned Leaves
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
                                             @if($user->user_privilege->masterfiles_employee_allowances == 'on')
                                                 <input type="checkbox" name="masterfiles_employee_allowances" id="masterfiles_employee_allowances{{$user->id}}" value="{{ $user->user_privilege->masterfiles_employee_allowances }}" checked>
                                             @else

@@ -508,6 +508,11 @@
                         <a class="nav-link" href="{{ url('/employee-leave-credits') }}">Employee Leave Credits</a>
                     </li>
                     @endif
+                    @if(checkUserPrivilege('masterfiles_employee_leave_earned',auth()->user()->id) == 'yes')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/employee-earned-leaves') }}">Employee Earned Leaves</a>
+                    </li>
+                    @endif
                 </ul>
             </div>
         </li>
