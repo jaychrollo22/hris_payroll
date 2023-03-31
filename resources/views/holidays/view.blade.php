@@ -36,21 +36,17 @@
                             <td>{{$holiday->holiday_name}}</td>
                             <td>{{$holiday->holiday_type}}</td>
                             <td>
-                                @if($holiday->status == "Permanent") 
-                                    {{$holiday->status}}
-                                @else
-                                    @if (checkUserPrivilege('settings_edit',auth()->user()->id) == 'yes')
-                                    <button type="button" class="btn btn-info btn-rounded btn-icon" href="#edit_holiday{{$holiday->id}}" data-toggle="modal" title='EDIT'>
-                                        <i class="ti-pencil-alt"></i>
+                                @if (checkUserPrivilege('settings_edit',auth()->user()->id) == 'yes')
+                                <button type="button" class="btn btn-info btn-rounded btn-icon" href="#edit_holiday{{$holiday->id}}" data-toggle="modal" title='EDIT'>
+                                    <i class="ti-pencil-alt"></i>
+                                </button>
+                                @endif
+                                @if (checkUserPrivilege('settings_delete',auth()->user()->id) == 'yes')
+                                <a href="delete-holiday/{{$holiday->id}}">
+                                    <button  title='DELETE' onclick="return confirm('Are you sure you want to delete this holiday?')" class="btn btn-rounded btn-danger btn-icon">
+                                        <i class="ti-trash"></i>
                                     </button>
-                                    @endif
-                                    @if (checkUserPrivilege('settings_delete',auth()->user()->id) == 'yes')
-                                    <a href="delete-holiday/{{$holiday->id}}">
-                                        <button  title='DELETE' onclick="return confirm('Are you sure you want to delete this holiday?')" class="btn btn-rounded btn-danger btn-icon">
-                                            <i class="ti-trash"></i>
-                                        </button>
-                                    </a>
-                                    @endif
+                                </a>
                                 @endif
                             </td>
                         </tr>
