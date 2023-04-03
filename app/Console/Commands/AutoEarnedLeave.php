@@ -48,7 +48,7 @@ class AutoEarnedLeave extends Command
     public function getEmployeeEarnedVacationLeaves(){
 
         $month = date('m');
-        $day = date('d');
+        $day = date('02');
         $classifications = [1,2,3,5];
 
         $employees = Employee::select('id','user_id','classification','original_date_hired')
@@ -89,7 +89,7 @@ class AutoEarnedLeave extends Command
     public function getEmployeeEarnedSickLeaves(){
 
         $month = date('m');
-        $day = date('d');
+        $day = date('02');
         $classifications = [1,2,3];
 
         $employees = Employee::select('id','user_id','classification','original_date_hired')
