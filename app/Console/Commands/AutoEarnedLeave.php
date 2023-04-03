@@ -48,13 +48,13 @@ class AutoEarnedLeave extends Command
     public function getEmployeeEarnedVacationLeaves(){
 
         $month = date('m');
-        $day = date('02');
+        $day = date('d');
         $classifications = [1,2,3,5];
 
         $employees = Employee::select('id','user_id','classification','original_date_hired')
                                 ->whereIn('classification',$classifications)
                                 ->where('status','Active')
-                                ->whereMonth('original_date_hired',$month)
+                                // ->whereMonth('original_date_hired',$month)
                                 ->whereDay('original_date_hired',$day)
                                 ->get();
 
@@ -67,12 +67,13 @@ class AutoEarnedLeave extends Command
                                                         ->where('leave_type',1)
                                                         ->first();
                 if(empty($check_if_exist)){
-                    if($employe->classification  == '3' || $employee->classification == '5'){
+                    $earned_leave = new EmployeeEarnedLeave;
+                    if($employee->classification  == '3' || $employee->classification == '5'){
                         $earned_leave->leave_type = 10;
                     }else{
                         $earned_leave->leave_type = 1;
                     }
-                    $earned_leave = new EmployeeEarnedLeave;
+                    
                     $earned_leave->user_id = $employee->user_id;
                     $earned_leave->earned_day = $day;
                     $earned_leave->earned_month = $month;
@@ -89,13 +90,13 @@ class AutoEarnedLeave extends Command
     public function getEmployeeEarnedSickLeaves(){
 
         $month = date('m');
-        $day = date('02');
+        $day = date('d');
         $classifications = [1,2,3];
 
         $employees = Employee::select('id','user_id','classification','original_date_hired')
                                 ->whereIn('classification',$classifications)
                                 ->where('status','Active')
-                                ->whereMonth('original_date_hired',$month)
+                                // ->whereMonth('original_date_hired',$month)
                                 ->whereDay('original_date_hired',$day)
                                 ->get();
 
