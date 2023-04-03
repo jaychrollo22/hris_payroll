@@ -4,6 +4,7 @@ use App\UserAllowedCompany;
 use App\UserPrivilege;
 use App\Employee;
 use App\EmployeeLeave;
+use App\EmployeeEarnedLeave;
 
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
@@ -200,6 +201,14 @@ function checkUsedVacationLeave($user_id){
         }
     }
     return $count;
+}
+
+function checkEarnedLeave($user_id,$leave_type){
+    return $vl_earned = EmployeeEarnedLeave::where('user_id',$user_id)
+                                    ->where('leave_type',$leave_type)
+                                    ->whereNull('converted_to_cash')
+                                    ->sum('earned_leave');
+    
 }
 
 function checkUsedSickLeave($user_id){

@@ -11,15 +11,30 @@
                     <thead>
                       <tr>
                         <th>Leave Type</th>
+                        <th>Total</th>
                         <th>Used</th>
-                        {{-- <th>Pending</th> --}}
                         <th>Balance</th>
                       </tr>
                     </thead>
                     <tbody>
+                      @php
+                          $is_allowed_to_file_vl = true;
+                          $is_allowed_to_file_sl = true;
+                          $is_allowed_to_file_sil = true;
+                      @endphp
+
                       @foreach($leave_balances as $leave)
                       <tr>
                         <td>{{$leave->leave->leave_type}}</td>
+                        <td>
+                          @if ($leave->leave->id == '1')
+                              {{$earned_vl + $leave->count}}
+                          @elseif ($leave->leave->id == '2')
+                              {{$earned_sl + $leave->count}}
+                          @elseif ($leave->leave->id == '10')
+                              {{$earned_sil + $leave->count}}
+                          @endif
+                        </td>
                         <td>
                           @if ($leave->leave->id == '1')
                               {{$used_vl}}
@@ -29,14 +44,37 @@
                               {{$used_sil}}
                           @endif
                         </td>
-                        {{-- <td>0</td> --}}
                         <td>
                           @if ($leave->leave->id == '1')
-                              {{$leave->count - $used_vl}}
+                              {{($leave->count + $earned_vl) - $used_vl}}
+                              @php
+                                $count_vl = ($leave->count + $earned_vl) - $used_vl;
+                                if($count_vl > 0){
+                                  $is_allowed_to_file_vl = true;
+                                }else{
+                                  $is_allowed_to_file_vl = false;
+                                }
+                              @endphp
                           @elseif ($leave->leave->id == '2')
-                              {{$leave->count - $used_sl}}
+                              {{($leave->count + $earned_sl) - $used_sl}}
+                              @php
+                                $count_sl = ($leave->count + $earned_sl) - $used_sl;
+                                if($count_sl > 0){
+                                  $is_allowed_to_file_sl = true;
+                                }else{
+                                  $is_allowed_to_file_sl = false;
+                                }
+                              @endphp
                           @elseif ($leave->leave->id == '10')
-                              {{$leave->count - $used_sil}}
+                              {{($leave->count + $earned_sil) - $used_sil}}
+                              @php
+                                $count_sil = ($leave->count + $earned_sil) - $used_sil;
+                                if($count_sil > 0){
+                                  $is_allowed_to_file_sil = true;
+                                }else{
+                                  $is_allowed_to_file_sil = false;
+                                }
+                              @endphp
                           @endif
                         </td>
                       </tr>
@@ -92,10 +130,14 @@
               <div class="card-body">
                 <h4 class="card-title">Leaves</h4>
                 <p class="card-description">
-                  <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#applyLeave">
-                    <i class="ti-plus btn-icon-prepend"></i>                                                    
-                    Apply Leave
-                  </button>
+                  @if($allowed_to_file)
+                    <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#applyLeave">
+                      <i class="ti-plus btn-icon-prepend"></i>                                                    
+                      Apply Leave
+                    </button>
+                  @else
+                    <span class="text-danger">You are not allowed to file a leave yet.</span>
+                  @endif
                 </p>
                 <div class="table-responsive">
                   <table class="table table-hover table-bordered tablewithSearch">
@@ -232,6 +274,7 @@ function get_count_days($data,$date_from,$date_to)
 
 
 @include('forms.leaves.apply_leave') 
+
 @endsection
 
 @section('ForApprovalScript')

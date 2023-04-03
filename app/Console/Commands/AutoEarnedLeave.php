@@ -49,7 +49,7 @@ class AutoEarnedLeave extends Command
 
         $month = date('m');
         $day = date('d');
-        $classifications = [1,2,3];
+        $classifications = [1,2,3,5];
 
         $employees = Employee::select('id','user_id','classification','original_date_hired')
                                 ->whereIn('classification',$classifications)
@@ -67,12 +67,16 @@ class AutoEarnedLeave extends Command
                                                         ->where('leave_type',1)
                                                         ->first();
                 if(empty($check_if_exist)){
+                    if($employe->classification  == '3' || $employee->classification == '5'){
+                        $earned_leave->leave_type = 10;
+                    }else{
+                        $earned_leave->leave_type = 1;
+                    }
                     $earned_leave = new EmployeeEarnedLeave;
                     $earned_leave->user_id = $employee->user_id;
                     $earned_leave->earned_day = $day;
                     $earned_leave->earned_month = $month;
                     $earned_leave->earned_leave = 0.833;
-                    $earned_leave->leave_type = 1;
                     $earned_leave->save();
                     $count++;
                 }
