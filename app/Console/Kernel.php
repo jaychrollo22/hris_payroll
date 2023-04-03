@@ -18,6 +18,8 @@ class Kernel extends ConsoleKernel
         Commands\OfficialBusinessApproval::class,
         Commands\OvertimeApproval::class,
         Commands\WorkFromHomeApproval::class,
+        Commands\WorkFromHomeApproval::class,
+        Commands\AutoEarnedLeave::class,
     ];
 
     /**
@@ -33,6 +35,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:official_business_approval')->everyFiveMinutes();
         $schedule->command('command:overtime_approval')->everyFiveMinutes();
         $schedule->command('command:work_from_home_approval')->everyFiveMinutes();
+        $schedule->command('command:auto_earned_leave')->dailyAt('8:00');
     }
 
     /**
