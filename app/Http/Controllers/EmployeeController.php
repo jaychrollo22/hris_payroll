@@ -97,7 +97,7 @@ class EmployeeController extends Controller
         $users = User::get();
         $levels = Level::get();
         $marital_statuses = MaritalStatus::get();
-        $locations = Location::get();
+        $locations = Location::orderBy('location','ASC')->get();
         $projects = Project::get();
 
         
@@ -421,38 +421,153 @@ class EmployeeController extends Controller
 
                         if($check_if_exist){
 
-                            $check_if_exist->classification = isset($value['classification']) ? $value['classification'] : "";
-                            $check_if_exist->department_id = isset($value['department_id']) ? $value['department_id'] : "";
-                            $check_if_exist->company_id = isset($value['company_id']) ? $value['company_id'] : "";
-                            $check_if_exist->original_date_hired = isset($value['date_hired']) && !empty($value['date_hired']) ? date('Y-m-d',strtotime($value['date_hired'])) : null;
-
-                            $check_if_exist->position = isset($value['position']) ? $value['position'] : "";
-                            $check_if_exist->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
-                            $check_if_exist->level = $value['level'];
-                            $check_if_exist->date_regularized = isset($value['date_regularized']) && !empty($value['date_regularized']) ? date('Y-m-d',strtotime($value['date_regularized'])) : null;
-                            $check_if_exist->date_resigned = $value['date_resigned'] ? date('Y-m-d',strtotime($value['date_resigned'])) : null;
-                            $check_if_exist->birth_date = $value['birth_date'] ? date('Y-m-d',strtotime($value['birth_date'])) : null;
-                            $check_if_exist->birth_place = isset($value['birth_place']) ? $value['birth_place'] : "";
-                            $check_if_exist->gender = isset($value['gender']) ? $value['gender'] : "";
-                            $check_if_exist->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
-                            $check_if_exist->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
-                            $check_if_exist->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
-                            $check_if_exist->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
-                            $check_if_exist->phil_number = isset($value['philhealth_number']) ? $value['philhealth_number'] : "";
-                            $check_if_exist->sss_number = isset($value['sss_number']) ? $value['sss_number'] : "";
-                            $check_if_exist->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
-                            $check_if_exist->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
-                            $check_if_exist->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
-                            $check_if_exist->bank_account_number = isset($value['bank_account_number']) ? $value['bank_account_number'] : "";
-                            $check_if_exist->personal_email = isset($value['personal_email']) ? $value['personal_email'] : "";
-                            $check_if_exist->area = isset($value['area']) ? $value['area'] : "";
-                            $check_if_exist->religion = isset($value['religion']) ? $value['religion'] : "";
-                            $check_if_exist->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
-
-                            $check_if_exist->location = isset($value['location']) ? $value['location'] : "";
-                            $check_if_exist->work_description = isset($value['work_description']) ? $value['work_description'] : "";
-                            $check_if_exist->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
-
+                            if(isset($value['classification'])){
+                                if($value['classification']){
+                                    $check_if_exist->classification =  $value['classification'];
+                                }
+                            }
+                            if(isset($value['department_id'])){
+                                if($value['department_id']){
+                                    $check_if_exist->department_id =  $value['department_id'];
+                                }
+                            }
+                            if(isset($value['company_id'])){
+                                if($value['company_id']){
+                                    $check_if_exist->company_id =  $value['company_id'];
+                                }
+                            }
+                            if(isset($value['original_date_hired'])){
+                                if($value['original_date_hired']){
+                                    $check_if_exist->original_date_hired =  date('Y-m-d',strtotime($value['date_hired']));
+                                }
+                            }
+                            if(isset($value['position'])){
+                                if($value['position']){
+                                    $check_if_exist->position =  $value['position'];
+                                }
+                            }
+                            if(isset($value['nick_name'])){
+                                if($value['nick_name']){
+                                    $check_if_exist->nick_name =  $value['nick_name'];
+                                }
+                            }
+                            if(isset($value['level'])){
+                                if($value['level']){
+                                    $check_if_exist->level =  $value['level'];
+                                }
+                            }
+                            if(isset($value['date_regularized'])){
+                                if($value['date_regularized']){
+                                    $check_if_exist->date_regularized =  date('Y-m-d',strtotime($value['date_regularized']));
+                                }
+                            }
+                            if(isset($value['date_resigned'])){
+                                if($value['date_resigned']){
+                                    $check_if_exist->date_resigned =  date('Y-m-d',strtotime($value['date_resigned']));
+                                }
+                            }
+                            if(isset($value['birth_date'])){
+                                if($value['birth_date']){
+                                    $check_if_exist->birth_date =  date('Y-m-d',strtotime($value['birth_date']));
+                                }
+                            }
+                            if(isset($value['birth_place'])){
+                                if($value['birth_place']){
+                                    $check_if_exist->birth_place =  $value['birth_place'];
+                                }
+                            }
+                            if(isset($value['gender'])){
+                                if($value['gender']){
+                                    $check_if_exist->gender =  $value['gender'];
+                                }
+                            }
+                            if(isset($value['marital_status'])){
+                                if($value['marital_status']){
+                                    $check_if_exist->marital_status =  $value['marital_status'];
+                                }
+                            }
+                            if(isset($value['permanent_address'])){
+                                if($value['permanent_address']){
+                                    $check_if_exist->permanent_address =  $value['permanent_address'];
+                                }
+                            }
+                            if(isset($value['present_address'])){
+                                if($value['present_address']){
+                                    $check_if_exist->present_address =  $value['present_address'];
+                                }
+                            }
+                            if(isset($value['personal_number'])){
+                                if($value['personal_number']){
+                                    $check_if_exist->personal_number =  $value['personal_number'];
+                                }
+                            }
+                            if(isset($value['philhealth_number'])){
+                                if($value['philhealth_number']){
+                                    $check_if_exist->phil_number =  $value['philhealth_number'];
+                                }
+                            }
+                            if(isset($value['sss_number'])){
+                                if($value['sss_number']){
+                                    $check_if_exist->sss_number =  $value['sss_number'];
+                                }
+                            }
+                            if(isset($value['tax_number'])){
+                                if($value['tax_number']){
+                                    $check_if_exist->tax_number =  $value['tax_number'];
+                                }
+                            }
+                            if(isset($value['hdmf_number'])){
+                                if($value['hdmf_number']){
+                                    $check_if_exist->hdmf_number =  $value['hdmf_number'];
+                                }
+                            }
+                            if(isset($value['bank_name'])){
+                                if($value['bank_name']){
+                                    $check_if_exist->bank_name =  $value['bank_name'];
+                                }
+                            }
+                            if(isset($value['bank_account_number'])){
+                                if($value['bank_account_number']){
+                                    $check_if_exist->bank_account_number =  $value['bank_account_number'];
+                                }
+                            }
+                            if(isset($value['personal_email'])){
+                                if($value['personal_email']){
+                                    $check_if_exist->personal_email =  $value['personal_email'];
+                                }
+                            }
+                            if(isset($value['area'])){
+                                if($value['area']){
+                                    $check_if_exist->area =  $value['area'];
+                                }
+                            }
+                            if(isset($value['religion'])){
+                                if($value['religion']){
+                                    $check_if_exist->religion =  $value['religion'];
+                                }
+                            }
+                            if(isset($value['schedule_id'])){
+                                if($value['schedule_id']){
+                                    $check_if_exist->schedule_id =  $value['schedule_id'];
+                                }
+                            }
+                     
+                            if(isset($value['location'])){
+                                if($value['location']){
+                                    $check_if_exist->location =  $value['location'];
+                                }
+                            }
+                            if(isset($value['work_description'])){
+                                if($value['work_description']){
+                                    $check_if_exist->work_description =  $value['work_description'];
+                                }
+                            }
+                            if(isset($value['rate'])){
+                                if($value['rate']){
+                                    $check_if_exist->rate =  Crypt::encryptString($value['rate']);
+                                }
+                            }
+                    
                             $check_if_exist->status = "Active";
                             $check_if_exist->save();
 
@@ -697,7 +812,7 @@ class EmployeeController extends Controller
         $users = User::all();
         $levels = Level::get();
         $departments = Department::get();
-        $locations = Location::get();
+        $locations = Location::orderBy('location','ASC')->get();
         $projects = Project::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
