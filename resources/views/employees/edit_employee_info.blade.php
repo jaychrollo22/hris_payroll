@@ -50,7 +50,7 @@
               </div>
               <div class='col-md-4'>
                 Project
-                <select data-placeholder="Project" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='project' required>
+                <select data-placeholder="Project" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='project'>
                     <option value="">--Select Project--</option>
                     @foreach($projects as $project)
                       <option value="{{$project->project_id}}" @if ($user->employee->project == $project->project_id) selected @endif>{{$project->project_id}}</option>
