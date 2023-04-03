@@ -11,6 +11,7 @@ use App\EmployeeApprover;
 use App\EmployeeVessel;
 use App\Department;
 use App\Location;
+use App\Project;
 use App\Schedule;
 use App\Attendance;
 use App\iclockterminal_mysql;
@@ -97,6 +98,7 @@ class EmployeeController extends Controller
         $levels = Level::get();
         $marital_statuses = MaritalStatus::get();
         $locations = Location::get();
+        $projects = Project::get();
 
         
         $companies = Company::whereHas('employee_has_company')
@@ -116,6 +118,7 @@ class EmployeeController extends Controller
                 'marital_statuses' => $marital_statuses,
                 'departments' => $departments,
                 'locations' => $locations,
+                'projects' => $projects,
                 'levels' => $levels,
                 'users' => $users,
                 'banks' => $banks,
@@ -172,6 +175,7 @@ class EmployeeController extends Controller
             $employee->department_id = $request->department;
             $employee->company_id = $request->company;
             $employee->location = $request->location;
+            $employee->project = $request->project;
             $employee->position = $request->position;
             $employee->nick_name = $request->nickname;
             $employee->level = $request->level;
@@ -694,6 +698,7 @@ class EmployeeController extends Controller
         $levels = Level::get();
         $departments = Department::get();
         $locations = Location::get();
+        $projects = Project::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
         $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
@@ -707,6 +712,7 @@ class EmployeeController extends Controller
             'marital_statuses' => $marital_statuses,
             'departments' => $departments,
             'locations' => $locations,
+            'projects' => $projects,
             'levels' => $levels,
             'users' => $users,
             'banks' => $banks,
@@ -749,6 +755,7 @@ class EmployeeController extends Controller
         $employee->position = $request->position;
         $employee->department_id = $request->department;
         $employee->location = $request->location;
+        $employee->project = $request->project;
         $employee->classification = $request->classification;
         $employee->phil_number = $request->philhealth;
         $employee->level = $request->level;
