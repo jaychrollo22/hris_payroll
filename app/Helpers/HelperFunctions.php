@@ -169,7 +169,7 @@ function checkUserPrivilege($field,$user_id){
 
 function checkUserAllowedOvertime($user_id){
     $employee = Employee::select('level')->where('user_id',$user_id)->first();
-    if($employee->level == 'RANK&FILE'){
+    if($employee->level == 'RANK&FILE' || $employee->level == '1'){
         return 'yes';
     }else{
         return 'no';
