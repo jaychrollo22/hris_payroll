@@ -146,12 +146,12 @@
 						</p>
 
                         <div class="table-responsive">
-                            <table class="table table-hover table-bordered employees-table">
+                            <table class="table table-hover table-bordered" id="datatableEmployee">
                                 <thead>
                                     <tr>
-                                        <th>Action</th>
+                                        {{-- <th>Action</th> --}}
                                         <th>Biometric Code</th>
-                                        <th>Image</th>
+                                        <th>Employee</th>
                                         <th>Company</th>
                                         <th>Department</th>
                                         <th>Classification</th>
@@ -162,14 +162,14 @@
                                 <tbody>
                                     @foreach($employees as $employee)
                                     <tr>
-                                        <td align="center">
+                                        <td>
                                             @if (checkUserPrivilege('employees_view',auth()->user()->id) == 'yes')
-                                                <a href="/account-setting-hr/{{$employee->user_id}}" class="btn btn-outline-success btn-icon-text btn-sm text-center">
+                                                <a href="/account-setting-hr/{{$employee->user_id}}" class="text-success btn-sm text-center">
                                                     <i class="ti-pencil btn-icon-prepend"></i>
                                                 </a>
                                             @endif
+                                            {{$employee->employee_number}}
                                         </td>
-                                        <td>{{$employee->employee_number}}</td>
                                         <td>
                                             <small><img class="rounded-circle" style='width:34px;height:34px;' src='{{URL::asset($employee->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
                                             {{$employee->first_name}} {{$employee->last_name}} </small>

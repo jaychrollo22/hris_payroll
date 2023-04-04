@@ -54,7 +54,6 @@ class AutoEarnedLeave extends Command
         $employees = Employee::select('id','user_id','classification','original_date_hired')
                                 ->whereIn('classification',$classifications)
                                 ->where('status','Active')
-                                // ->whereMonth('original_date_hired',$month)
                                 ->whereDay('original_date_hired',$day)
                                 ->get();
 
@@ -68,18 +67,31 @@ class AutoEarnedLeave extends Command
                                                         ->first();
                 if(empty($check_if_exist)){
                     $earned_leave = new EmployeeEarnedLeave;
-                    if($employee->classification  == '3' || $employee->classification == '5'){
-                        $earned_leave->leave_type = 10;
-                    }else{
+                    if($employee->classification = '3' || $employee->classification = '5'){ // Project Based and Fixed Rate
+                        if($employee->original_date_hired >= '2023-04-01'){
+                            $earned_leave->leave_type = 10;
+                        }else{
+                            $earned_leave->leave_type = 1;
+                        }
+                        $earned_leave->user_id = $employee->user_id;
+                        $earned_leave->earned_day = $day;
+                        $earned_leave->earned_month = $month;
+                        $earned_leave->earned_leave = 0.833;
+                        $earned_leave->save();
+                        $count++;
+
+                    }else if($employee->classification = '1' || $employee->classification = '2'){ // Regular and Probitionary
                         $earned_leave->leave_type = 1;
+
+                        $earned_leave->user_id = $employee->user_id;
+                        $earned_leave->earned_day = $day;
+                        $earned_leave->earned_month = $month;
+                        $earned_leave->earned_leave = 0.833;
+                        $earned_leave->save();
+                        $count++;
                     }
+                   
                     
-                    $earned_leave->user_id = $employee->user_id;
-                    $earned_leave->earned_day = $day;
-                    $earned_leave->earned_month = $month;
-                    $earned_leave->earned_leave = 0.833;
-                    $earned_leave->save();
-                    $count++;
                 }
             }
         }
@@ -96,13 +108,13 @@ class AutoEarnedLeave extends Command
         $employees = Employee::select('id','user_id','classification','original_date_hired')
                                 ->whereIn('classification',$classifications)
                                 ->where('status','Active')
-                                // ->whereMonth('original_date_hired',$month)
                                 ->whereDay('original_date_hired',$day)
                                 ->get();
 
         $count = 0;
         if(count($employees)){
             foreach($employees as $employee){
+
                 $check_if_exist = EmployeeEarnedLeave::where('user_id',$employee->user_id)
                                                         ->where('earned_day',$day)
                                                         ->where('earned_month',$month)
@@ -110,14 +122,27 @@ class AutoEarnedLeave extends Command
                                                         ->first();
                 if(empty($check_if_exist)){
                     $earned_leave = new EmployeeEarnedLeave;
-                    $earned_leave->user_id = $employee->user_id;
-                    $earned_leave->earned_day = $day;
-                    $earned_leave->earned_month = $month;
-                    $earned_leave->earned_leave = 0.833;
-                    $earned_leave->leave_type = 2;
-                    $earned_leave->save();
-                    $count++;
+                    if($employee->classification = '3' || $employee->classification = '5'){ // Project Based and Fixed Rate
+                        if($employee->original_date_hired < '2023-04-01'){
+                            $earned_leave->user_id = $employee->user_id;
+                            $earned_leave->earned_day = $day;
+                            $earned_leave->earned_month = $month;
+                            $earned_leave->earned_leave = 0.833;
+                            $earned_leave->leave_type = 2;
+                            $earned_leave->save();
+                            $count++;
+                        }
+                    }else{
+                        $earned_leave->user_id = $employee->user_id;
+                        $earned_leave->earned_day = $day;
+                        $earned_leave->earned_month = $month;
+                        $earned_leave->earned_leave = 0.833;
+                        $earned_leave->leave_type = 2;
+                        $earned_leave->save();
+                        $count++;
+                    }
                 }
+
             }
         }
         return $count;

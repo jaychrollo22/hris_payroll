@@ -21,6 +21,7 @@
 									<tr>
 										<th>Date</th>
 										<th>Employee</th>
+										<th>Classification</th>
 										<th>Company</th>
 										{{-- <th>Day</th>
 										<th>Month</th> --}}
@@ -34,6 +35,7 @@
                                         <tr>
                                             <td>{{ date('Y-m-d',strtotime($item->created_at))}}</td>
                                             <td>{{ $item->employee->first_name . ' ' . $item->employee->last_name}}</td>
+                                            <td>{{ $item->employee->classification_info->name}}</td>
                                             <td>{{ $item->employee->company->company_name}}</td>
                                             {{-- <td>{{ $item->earned_day}}</td>
                                             <td>{{ $item->earned_month}}</td> --}}
