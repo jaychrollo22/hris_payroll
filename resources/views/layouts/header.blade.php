@@ -660,8 +660,8 @@
                 .appendTo('#datatableEmployee thead');
 
                 var datatable = $('#datatableEmployee').DataTable({
-                    stateSave: true
-                    , orderCellsTop: true
+                    // stateSave: true
+                    orderCellsTop: true
                     , fixedHeader: true
                     , fixedColumns: {
                         left: 1
