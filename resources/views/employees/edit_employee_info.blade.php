@@ -167,6 +167,11 @@
                 </select>
               </div>
 
+              <div class='col-md-4'>
+                Date Resigned
+                <input type="date" name="date_resigned" value="{{ $user->employee->date_resigned }}" class='form-control form-control-sm' placeholder="Date"/>
+              </div>
+
             </div>
             <hr>
             <div class='row mb-2'>

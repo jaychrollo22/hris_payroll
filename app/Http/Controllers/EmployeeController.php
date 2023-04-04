@@ -889,6 +889,8 @@ class EmployeeController extends Controller
         $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
         $employee->status = $request->status;
 
+        $employee->date_resigned = $request->status == 'Inactive' ? $request->date_resigned : null;
+
         $employee->save();
 
         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
