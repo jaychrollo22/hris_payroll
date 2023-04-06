@@ -11,7 +11,7 @@
                         <h3 class="card-text mt-3">{{$user->employee->first_name}} @if($user->employee->middle_initial != null){{$user->employee->middle_initial}}.@endif {{$user->employee->last_name}}</h3>
                         <h4 class="card-text mt-2">{{$user->employee->position}}</h4>
                         <h5 class="card-text mt-2">Biometric Code : {{$user->employee->employee_number}}</h5>
-                        <h5 class="card-text mt-2">Employee Code : {{$user->employee->employee_code}}</h5>
+                        {{-- <h5 class="card-text mt-2">Employee Code : {{$user->employee->employee_code}}</h5> --}}
                         <img class='border' src='{{URL::asset($user->employee->signature)}}' onerror="this.src='{{URL::asset('/images/signature.png')}}';" height='100px;' width='225px;'> <br>
                         {{-- <button class="btn btn-primary btn-sm mt-3" data-toggle="modal" data-target="#uploadAvatar">
                             Upload Avatar
