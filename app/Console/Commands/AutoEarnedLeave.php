@@ -42,7 +42,7 @@ class AutoEarnedLeave extends Command
 
         $vl_earned = $this->getEmployeeEarnedVacationLeaves();
         $sl_earned = $this->getEmployeeEarnedSickLeaves();
-        
+
         return $this->info($vl_earned . ' VL ' . $sl_earned . ' SL');
     }
 
@@ -50,7 +50,7 @@ class AutoEarnedLeave extends Command
     public function getEmployeeEarnedVacationLeaves(){
 
         $month = date('m');
-        $day = date('d');
+        $day = date('01');
         $classifications = [1,2,3,5];
 
         $companies = [14,11,7];
@@ -117,7 +117,7 @@ class AutoEarnedLeave extends Command
     public function getEmployeeEarnedSickLeaves(){
 
         $month = date('m');
-        $day = date('d');
+        $day = date('01');
         $classifications = [1,2,3];
         $companies = [14,11,7];
 
