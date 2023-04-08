@@ -67,6 +67,18 @@ class Employee extends Model implements Auditable
         return $this->hasMany(EmployeeWfh::class,'user_id','user_id');
     }
 
+    public function approved_leaves() {
+        return $this->hasMany(EmployeeLeave::class,'user_id','user_id')->where('status','Approved');
+    }
+
+    public function approved_obs() {
+        return $this->hasMany(EmployeeOb::class,'user_id','user_id')->where('status','Approved');
+    }
+
+    public function approved_wfhs() {
+        return $this->hasMany(EmployeeWfh::class,'user_id','user_id')->where('status','Approved');
+    }
+
     public function employee_leave_credits() {
         return $this->hasMany(EmployeeLeaveCredit::class,'user_id','user_id')->orderBy('leave_type','ASC');
     }

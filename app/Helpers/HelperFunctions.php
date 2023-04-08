@@ -137,12 +137,30 @@ function employeeHasOB($employee_obs = array(), $check_date){
         }
     }
 }
+function employeeHasOBDetails($employee_obs = array(), $check_date){
+    if(count($employee_obs) > 0){
+        foreach($employee_obs as $item){
+            if(date('Y-m-d',strtotime($item['applied_date'])) == date('Y-m-d',strtotime($check_date))){
+                return $item;
+            }
+        }
+    }
+}
 
 function employeeHasWFH($employee_wfhs = array(), $check_date){
     if(count($employee_wfhs) > 0){
         foreach($employee_wfhs as $item){
             if(date('Y-m-d',strtotime($item['applied_date'])) == date('Y-m-d',strtotime($check_date))){
                 return 'WFH';
+            }
+        }
+    }
+}
+function employeeHasWFHDetails($employee_wfhs = array(), $check_date){
+    if(count($employee_wfhs) > 0){
+        foreach($employee_wfhs as $item){
+            if(date('Y-m-d',strtotime($item['applied_date'])) == date('Y-m-d',strtotime($check_date))){
+                return $item;
             }
         }
     }
