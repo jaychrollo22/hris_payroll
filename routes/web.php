@@ -244,7 +244,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('users-export', 'UserController@export');
 
-    
+    //HR Approver Setting
+    Route::get('/hr-approver-setting','HrApproverSettingController@index');
+    Route::post('/save-hr-approver-setting','HrApproverSettingController@store');
+    Route::get('/remove-hr-approver/{id}','HrApproverSettingController@remove'); 
 });
 Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');
