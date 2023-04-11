@@ -8,10 +8,12 @@
               <div class="card-body">
                 <h4 class="card-title">HR APPROVER</h4>
                 <p class="card-description">
+                  @if (checkUserPrivilege('settings_add',auth()->user()->id) == 'yes')
                   <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#new_hr_approver">
                     <i class="ti-plus btn-icon-prepend"></i>                                                    
                     New
                   </button>
+                  @endif
                 </p>
                 <div class="table-responsive">
                   <table class="table table-hover table-bordered tablewithSearch">
@@ -28,10 +30,12 @@
                             <td>{{$hr_approver->user->name}}</td>
                             <td>{{$hr_approver->company->company_name}}</td>
                             <td id="tdActionId{{ $hr_approver->id }}" data-id="{{ $hr_approver->id }}">
+                              @if (checkUserPrivilege('settings_delete',auth()->user()->id) == 'yes')
                                 <button title='Remove' id="{{ $hr_approver->id }}" onclick="remove({{$hr_approver->id}})"
                                     class="btn btn-rounded btn-danger btn-icon">
                                     <i class="fa fa-ban"></i>
                                 </button>
+                              @endif
                             </td>
                         </tr>
                         @endforeach  
