@@ -160,6 +160,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('biometrics-per-company', 'EmployeeController@perCompany');
     Route::get('sync-biometrics','EmployeeController@sync');
 
+    Route::get('sync-hik-att-logs','EmployeeController@sync_hik');
+
     //Payroll
     Route::get('pay-reg', 'PayslipController@payroll_datas');
     Route::get('timekeeping', 'PayslipController@attendances');
