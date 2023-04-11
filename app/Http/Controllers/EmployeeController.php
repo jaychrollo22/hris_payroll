@@ -804,20 +804,34 @@ class EmployeeController extends Controller
 
     public function employeeSettingsHR(User $user)
     {
+
+        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+
         $classifications = Classification::get();
 
         $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info','level_info')->get();
+        
+        $employee_approvers = Employee::whereHas('company',function($q) use($user){
+                                    if($user->employee->company_id){
+                                        $q->where('company_id',$user->employee->company_id);
+                                            // ->where('department_id',$user->employee->department_id);
+                                    }
+                                })
+                                // ->where('level','!=','1')
+                                ->where('status','Active')
+                                ->pluck('user_id')
+                                ->toArray();
+        
         $schedules = Schedule::get();
         $banks = Bank::get();
-        $users = User::all();
+        $users = User::whereIn('id',$employee_approvers)->get();
         $levels = Level::get();
         $departments = Department::get();
         $locations = Location::orderBy('location','ASC')->get();
         $projects = Project::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
-        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
-
+        
         return view('employees.employee_settings_hr',
         array(
             'header' => 'employees',
