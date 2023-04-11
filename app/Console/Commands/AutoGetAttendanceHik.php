@@ -47,8 +47,8 @@ class AutoGetAttendanceHik extends Command
 
     public function getAttendances(){
         
-        $from = date('Y-03-30',strtotime('-1 day'));
-        $to = date('Y-03-30');
+        $from = date('Y-m-d',strtotime('-1 day'));
+        $to = date('Y-m-d');
         
         $employee_numbers = Employee::pluck('employee_number')->toArray();
 
