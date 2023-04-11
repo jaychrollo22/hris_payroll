@@ -47,16 +47,64 @@ class EmployeeController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $status = isset($request->status) ? $request->status : "Active";
+        $classification = isset($request->classification) ? $request->classification : "";
+        $gender = isset($request->gender) ? $request->gender : "";
 
         $classifications = Classification::get();
 
         $employees_classification = Employee::select('classification', DB::raw('count(*) as total'))->with('classification_info')
-                                                ->where('status','Active')
+                                                ->when($company,function($q) use($company){
+                                                    $q->where('company_id',$company);
+                                                })
+                                                ->when($department,function($q) use($department){
+                                                    $q->where('department_id',$department);
+                                                })
+                                                ->when($status,function($q) use($status){
+                                                    $q->where('status',$status);
+                                                })
+                                                ->when($classification,function($q) use($classification){
+                                                    if($classification == 'N/A'){
+                                                        $q->whereNull('classification')->orWhere('classification','');
+                                                    }else{
+                                                        $q->where('classification',$classification);
+                                                    }  
+                                                })
+                                                ->when($gender,function($q) use($gender){
+                                                    if($gender == 'N/A'){
+                                                        $q->whereNull('gender')->orWhere('gender','');
+                                                    }else{
+                                                        $q->where('gender',$gender);
+                                                    }
+                                                })
+                                                ->whereIn('company_id',$allowed_companies)
                                                 ->groupBy('classification')
                                                 ->orderBy('classification','ASC')
                                                 ->get();
         $employees_gender = Employee::select('gender', DB::raw('count(*) as total'))
-                                                ->where('status','Active')
+                                                ->when($company,function($q) use($company){
+                                                    $q->where('company_id',$company);
+                                                })
+                                                ->when($department,function($q) use($department){
+                                                    $q->where('department_id',$department);
+                                                })
+                                                ->when($status,function($q) use($status){
+                                                    $q->where('status',$status);
+                                                })
+                                                ->when($classification,function($q) use($classification){
+                                                    if($classification == 'N/A'){
+                                                        $q->whereNull('classification')->orWhere('classification','');
+                                                    }else{
+                                                        $q->where('classification',$classification);
+                                                    }  
+                                                })
+                                                ->when($gender,function($q) use($gender){
+                                                    if($gender == 'N/A'){
+                                                        $q->whereNull('gender')->orWhere('gender','');
+                                                    }else{
+                                                        $q->where('gender',$gender);
+                                                    }
+                                                })
+                                                ->whereIn('company_id',$allowed_companies)
                                                 ->groupBy('gender')
                                                 ->orderBy('gender','ASC')
                                                 ->get();
@@ -70,6 +118,20 @@ class EmployeeController extends Controller
                                 })
                                 ->when($status,function($q) use($status){
                                     $q->where('status',$status);
+                                })
+                                ->when($classification,function($q) use($classification){
+                                    if($classification == 'N/A'){
+                                        $q->whereNull('classification')->orWhere('classification','');
+                                    }else{
+                                        $q->where('classification',$classification);
+                                    }  
+                                })
+                                ->when($gender,function($q) use($gender){
+                                    if($gender == 'N/A'){
+                                        $q->whereNull('gender')->orWhere('gender','');
+                                    }else{
+                                        $q->where('gender',$gender);
+                                    }
                                 })
                                 ->whereIn('company_id',$allowed_companies)
                                 ->get();

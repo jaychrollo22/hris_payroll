@@ -18,7 +18,13 @@
                                     @foreach($employees_classification as $item)
                                     <tr>
                                         <td>{{$item->classification_info ? $item->classification_info->name : $item->classification}}</td>
-                                        <td>{{$item->total}}</td>
+                                        <td>
+                                            @if($item->classification_info)
+                                                <a href="{{url('/employees?classification=' . $item->classification_info->id)}}">{{$item->total}}</a>
+                                            @else
+                                                <a href="{{url('/employees?classification=' . 'N/A' )}}">{{$item->total}}</a>
+                                            @endif
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -32,7 +38,13 @@
                                     @foreach($employees_gender as $item)
                                     <tr>
                                         <td>{{$item->gender ? $item->gender : ""}}</td>
-                                        <td>{{$item->total}}</td>
+                                        <td>
+                                            @if($item->gender)
+                                                <a href="{{url('/employees?gender=' . $item->gender)}}">{{$item->total}}</a>
+                                            @else
+                                                <a href="{{url('/employees?gender=' . 'N/A' )}}">{{$item->total}}</a>
+                                            @endif
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
