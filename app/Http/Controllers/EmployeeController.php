@@ -206,7 +206,7 @@ class EmployeeController extends Controller
 
         $access_rate = checkUserPrivilege('employees_rate',auth()->user()->id);
 
-        return Excel::download(new EmployeesExport($company,$department,$allowed_companies,$access_rate), 'Master List '. $company_name .' .xlsx');
+        return Excel::download(new EmployeesExport($company,$department,json_encode($allowed_companies),$access_rate), 'Master List '. $company_name .' .xlsx');
     }
 
     public function new(Request $request)

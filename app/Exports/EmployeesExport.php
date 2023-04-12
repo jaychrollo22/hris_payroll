@@ -15,11 +15,11 @@ use Illuminate\Contracts\Encryption\DecryptException;
 class EmployeesExport implements FromQuery, WithHeadings, WithMapping
 {
 
-    public function __construct($company,$department,$allowed_companies = array(),$access_rate)
+    public function __construct($company,$department,$allowed_companies,$access_rate)
     {
         $this->company = $company;
         $this->department = $department;
-        $this->$allowed_companies = $allowed_companies;
+        $this->$allowed_companies = $allowed_companies ? json_decode($allowed_companies) : [];
         $this->$access_rate = $access_rate;
     }
 
