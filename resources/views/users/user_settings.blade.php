@@ -127,7 +127,7 @@
                                     <small>Marital Status </small>
                                 </div>
                                 <div class='col-md-9'>
-                                    {{auth()->user()->employee->marital_status}}
+                                    {{ ucfirst(strtolower(auth()->user()->employee->marital_status)) }}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>
@@ -141,7 +141,7 @@
                                     <small>Gender </small>
                                 </div>
                                 <div class='col-md-3'>
-                                    {{auth()->user()->employee->gender}}
+                                    {{ ucfirst(strtolower(auth()->user()->employee->gender)) }}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>
@@ -264,8 +264,11 @@
                                     @php
                                     $date_from = new DateTime(auth()->user()->employee->original_date_hired);
                                     $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                                    $y_s = $date_diff->format('%y') > 1 ? 's' : '';
+                                    $m_s = $date_diff->format('%m') > 1 ? 's' : '';
+                                    $d_s = $date_diff->format('%d') > 1 ? 's' : '';
                                     @endphp
-                                    {{$date_diff->format('%y Year %m months %d days')}}
+                                    {{$date_diff->format('%y Year'.$y_s.' %m month'.$m_s.' %d day'.$d_s.'')}}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>

@@ -291,7 +291,7 @@
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                             <a class="dropdown-item" href="{{ url('account-setting') }}">
                                 <i class="ti-settings text-primary"></i>
-                                Account Settings
+                                Employee Details
                             </a>
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="logout(); show();">
                                 <i class="ti-power-off text-primary"></i>
