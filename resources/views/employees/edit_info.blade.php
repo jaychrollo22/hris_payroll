@@ -49,7 +49,7 @@
 								<select class='form-control required form-control-sm ' name='marital_status' required>
 									<option value=''>--Select Marital Status--</option>
 									@foreach ($marital_statuses as $marital_status)
-										<option value='{{ ucfirst(strtolower($marital_status->name))  }}' @if ($user->employee->marital_status == ucfirst(strtolower($marital_status->name))) selected @endif>{{ $marital_status->name }}</option>
+										<option value='{{ $marital_status->name}}' @if ($user->employee->marital_status == $marital_status->name) selected @endif>{{ $marital_status->name }}</option>
 									@endforeach
 								</select>
 							</div>
