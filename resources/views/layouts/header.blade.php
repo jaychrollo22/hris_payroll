@@ -874,6 +874,9 @@
             $("#privacy").click(function() {
                 $("#submit-btn").attr("disabled", !this.checked);
             });
+            $("#privacy-contact").click(function() {
+                $("#submit-contact-btn").attr("disabled", !this.checked);
+            });
 
         });
     </script>
