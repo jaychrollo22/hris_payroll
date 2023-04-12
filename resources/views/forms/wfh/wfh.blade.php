@@ -34,7 +34,11 @@
                         <td> {{ date('d/m/Y', strtotime($wfh->applied_date)) }} </td>
                         <td> {{ date('H:i', strtotime($wfh->date_from)) }} - {{ date('H:i', strtotime($wfh->date_to)) }}  </td>
                         {{-- <td>{{get_count_days($wfh->schedule,$wfh->date_from,$wfh->date_to)}}</td> --}}
-                        <td>{{ $wfh->remarks }}</td>
+                        <td>
+                          <p title="{{ $wfh->remarks }}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
+                            {{ $wfh->remarks }}
+                          </p>
+                        </td>
                         <td id="tdStatus{{ $wfh->id }}">
                           @if ($wfh->status == 'Pending')
                             <label class="badge badge-warning">{{ $wfh->status }}</label>

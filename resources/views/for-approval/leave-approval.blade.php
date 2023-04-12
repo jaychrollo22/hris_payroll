@@ -3,7 +3,7 @@
 <div class="main-panel">
     <div class="content-wrapper">
         <div class='row grid-margin'>
-          <div class='col-lg-2 '>
+          <div class='col-lg-2 mt-2'>
             <div class="card card-tale">
               <div class="card-body">
                 <div class="media">                
@@ -15,7 +15,7 @@
               </div>
             </div>
           </div> 
-          <div class='col-lg-2'>
+          <div class='col-lg-2 mt-2'>
             <div class="card card-dark-blue">
               <div class="card-body">
                 <div class="media">                
@@ -27,7 +27,7 @@
               </div>
             </div>
           </div> 
-          <div class='col-lg-2'>
+          <div class='col-lg-2 mt-2'>
             <div class="card card-light-danger">
               <div class="card-body">
                 <div class="media">                
@@ -91,7 +91,11 @@
                             @endif<br>
                           @endforeach
                         </td>
-                        <td>{{$form_approval->reason}}</td>
+                        <td>
+                          <p title="{{$form_approval->reason}}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
+                            {{$form_approval->reason}}
+                          </p>
+                        </td>
                         <td>
                           @if($form_approval->attachment)
                           <a href="{{url($form_approval->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>

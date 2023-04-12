@@ -259,7 +259,7 @@ class UserController extends Controller
     }
 
     public function updateEmpContactInfo(Request $request, $id){
-        $employee = Employee::findOrFail($id);
+        $employee = Employee::where('user_id',$id)->first();
 
         if($employee){
             $employee_contact_person = EmployeeContactPerson::where('user_id',$employee->user_id)->first();

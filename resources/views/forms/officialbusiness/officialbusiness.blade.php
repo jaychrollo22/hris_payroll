@@ -25,7 +25,6 @@
                         <th>Purpose</th>
                         <th>Status </th>
                         <th>Approvers </th>
-                        
                         <th>Action </th>
                       </tr>
                     </thead>
@@ -37,7 +36,11 @@
                         <td> {{ date('H:i', strtotime($ob->date_from)) }} - {{ date('H:i', strtotime($ob->date_to)) }}  </td>
                         <td> {{$ob->destination}}</td>
                         <td> {{$ob->persontosee}}</td>
-                        <td> {{$ob->remarks}}</td>
+                        <td> 
+                          <p title="{{ $ob->remarks }}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
+                            {{$ob->remarks}}
+                          </p>
+                        </td>
                         <td id="tdStatus{{ $ob->id }}">
                           @if ($ob->status == 'Pending')
                             <label class="badge badge-warning">{{ $ob->status }}</label>

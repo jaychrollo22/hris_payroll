@@ -3,7 +3,7 @@
 <div class="main-panel">
     <div class="content-wrapper">
         <div class='row grid-margin'>
-          <div class='col-lg-2 '>
+          <div class='col-lg-2 mt-2'>
             <div class="card card-tale">
               <div class="card-body">
                 <div class="media">                
@@ -15,7 +15,7 @@
               </div>
             </div>
           </div> 
-          <div class='col-lg-2'>
+          <div class='col-lg-2 mt-2'>
             <div class="card card-dark-blue">
               <div class="card-body">
                 <div class="media">                
@@ -27,7 +27,7 @@
               </div>
             </div>
           </div> 
-          <div class='col-lg-2'>
+          <div class='col-lg-2 mt-2'>
             <div class="card card-light-danger">
               <div class="card-body">
                 <div class="media">                
@@ -73,7 +73,11 @@
                         <td>{{$form_approval->break_hrs}}</td>
                         <td>{{$form_approval->ot_approved_hrs}}</td>
 
-                        <td>{{$form_approval->remarks}}</td>
+                        <td>
+                          <p title="{{$form_approval->remarks}}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
+                            {{$form_approval->remarks}}
+                          </p>
+                        </td>
                         <td id="tdStatus{{ $form_approval->id }}">
                           @foreach($form_approval->approver as $approver)
                             @if($form_approval->level >= $approver->level)

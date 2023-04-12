@@ -166,7 +166,11 @@
                               <td>No</td>
                           @endif  
                                   
-                        <td>{{ $employee_leave->reason }}</td>
+                        <td>
+                          <p title="{{ $employee_leave->reason }}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
+                            {{ $employee_leave->reason }}
+                          </p>
+                        </td>
                         <td>{{get_count_days($employee_leave->schedule,$employee_leave->date_from,$employee_leave->date_to)}}</td>
                         <td id="tdStatus{{ $employee_leave->id }}">
                           @if ($employee_leave->status == 'Pending')
