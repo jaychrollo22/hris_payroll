@@ -196,11 +196,17 @@ class EmployeeController extends Controller
 
     public function export(Request $request) 
     {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $company_info = Company::where('id',$company)->first();
         $company_name = $company_info ? $company_info->company_code : "";
-        return Excel::download(new EmployeesExport($company,$department), 'Master List '. $company_name .' .xlsx');
+
+        $access_rate = checkUserPrivilege('employees_rate',auth()->user()->id);
+
+        return Excel::download(new EmployeesExport($company,$department,$allowed_companies,$access_rate), 'Master List '. $company_name .' .xlsx');
     }
 
     public function new(Request $request)
