@@ -99,8 +99,8 @@
                         </td>
                         <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
 
-                          @foreach($form_approval->approver as $approver)
-                            @if($approver->approver_id == $approver_id && $form_approval->level < $approver->level && $form_approval->status == 'Pending')
+                          @foreach($form_approval->approver as $k => $approver)
+                            @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'Pending')
                               <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" onclick="approve({{ $form_approval->id }})">
                                 <i class="ti-check btn-icon-prepend"></i>                                                    
                               </button>
