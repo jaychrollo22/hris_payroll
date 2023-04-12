@@ -66,7 +66,7 @@
                       @foreach ($obs as $form_approval)
                       <tr>
                         <td>{{$form_approval->user->name}}</td>
-                        <td> {{ date('d/m/Y', strtotime($form_approval->created_at)) }} </td>
+                        <td> {{ $form_approval->created_at }} </td>
                         <td> {{ date('d/m/Y ', strtotime($form_approval->applied_date)) }}</td>
                         <td> {{ date('H:i', strtotime($form_approval->date_from)) }} - {{ date('H:i', strtotime($form_approval->date_to)) }}  </td>
                         <td> {{$form_approval->destination}}</td>

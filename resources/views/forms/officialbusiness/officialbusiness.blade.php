@@ -32,7 +32,7 @@
                     <tbody>
                       @foreach ($obs as $ob)
                       <tr>
-                        <td> {{ date('d/m/Y', strtotime($ob->created_date)) }} </td>
+                        <td> {{ $ob->created_at }} </td>
                         <td> {{ date('d/m/Y', strtotime($ob->applied_date)) }} </td>
                         <td> {{ date('H:i', strtotime($ob->date_from)) }} - {{ date('H:i', strtotime($ob->date_to)) }}  </td>
                         <td> {{$ob->destination}}</td>
