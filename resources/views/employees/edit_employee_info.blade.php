@@ -152,7 +152,12 @@
                   @php
                     $rate = "";
                     if($user->employee->rate){
-                       $rate = Crypt::decryptString( $user->employee->rate);
+                      try{
+                        $rate = Crypt::decryptString( $user->employee->rate);
+                      }
+                      catch(Exception $e) {
+                        $rate = "";
+                      }
                     }  
                   @endphp
                   <input type="number" class="form-control" name="rate" value="{{ $rate }}" min="0" value="0" step="any">

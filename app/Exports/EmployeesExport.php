@@ -106,7 +106,14 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
         $company = $employee->company ? $employee->company->company_name : "";
 
         if($this->access_rate == 'Yes'){
-            $rate = $employee->rate ? (float) Crypt::decryptString($employee->rate) : ""; 
+
+            try{
+                $rate = $employee->rate ? (float) Crypt::decryptString($employee->rate) : ""; 
+            }
+            catch(Exception $e) {
+                $rate = "";
+            }
+            
         }else{
             $rate = "";
         }
