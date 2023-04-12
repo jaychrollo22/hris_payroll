@@ -19,15 +19,15 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
     {
         $this->company = $company;
         $this->department = $department;
-        $this->$allowed_companies = $allowed_companies ? json_decode($allowed_companies) : [];
-        $this->$access_rate = $access_rate;
+        $this->allowed_companies = $allowed_companies;
+        $this->access_rate = $access_rate;
     }
 
     public function query()
     {
         $company = $this->company;
         $department = $this->department;
-        $allowed_companies = $this->allowed_companies;
+        $allowed_companies = json_decode($this->allowed_companies);
         return Employee::query()->select('user_id',
                                             'employee_number',
                                             'original_date_hired',
