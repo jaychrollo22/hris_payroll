@@ -871,6 +871,10 @@
                 }
             });
 
+            $("#privacy").click(function() {
+                $("#submit-btn").attr("disabled", !this.checked);
+            });
+
         });
     </script>
 

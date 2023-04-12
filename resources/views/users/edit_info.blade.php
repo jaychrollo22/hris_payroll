@@ -112,8 +112,11 @@
 					</div>
           </div>
 					<div class="modal-footer">
+						<p><input type="checkbox"id="privacy"> By submitting this form, the Employee hereby explicitly and unambiguously consents to the collection, use and transfer, in electronic or other form, of the Employee’s personal data as described in this form and any other materials by and among, as applicable, the Company, its Subsidiaries or Affiliates, and the Employer for the exclusive purpose of implementing, administering and managing the Employee’s employment.</p>
+						<br>
+						<br>
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary">Save</button>
+						<button type="submit" id="submit-btn" disabled class="btn btn-primary">Save</button>
 					</div>
 			</form>
 		</div>

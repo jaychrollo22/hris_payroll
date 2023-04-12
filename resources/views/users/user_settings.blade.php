@@ -177,9 +177,7 @@
                                 <div class='col-md-12 text-center'>
                                     <strong>
                                         <h3><i class="fa fa-user-plus" aria-hidden="true"></i> Contact Person (In case of Emergency)
-                                            @if (checkUserPrivilege('employees_edit',auth()->user()->id) == 'yes')
-                                                <button class="btn btn-icon btn-info btn-xs" title="Edit Contact Person" data-toggle="modal" data-target="#editEmpContactInfo"><i class="fa fa-pencil"></i></button>
-                                            @endif
+                                            <button class="btn btn-icon btn-info btn-xs" title="Edit Contact Person" data-toggle="modal" data-target="#editEmpContactInfo"><i class="fa fa-pencil"></i></button>
                                         </h3>
                                     </strong>
                                 </div>
