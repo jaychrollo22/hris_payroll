@@ -871,9 +871,19 @@
                 }
             });
 
+            $("#privacy-check").click(function() {
+                $("#privacy").attr("disabled", !this.checked);
+            });
+
             $("#privacy").click(function() {
                 $("#submit-btn").attr("disabled", !this.checked);
             });
+
+            $("#privacy-contact-check").click(function() {
+                $("#privacy-contact").attr("disabled", !this.checked);
+            });
+
+            
             $("#privacy-contact").click(function() {
                 $("#submit-contact-btn").attr("disabled", !this.checked);
             });
