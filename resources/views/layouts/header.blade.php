@@ -872,7 +872,12 @@
             });
 
             $("#privacy-check").click(function() {
-                $("#privacy").attr("disabled", !this.checked);
+                $("#privacy").attr("disabled", !this.checked); 
+                if(this.checked == false) {
+                    $("#privacy").prop('checked', false); 
+                    $("#privacy").removeAttr('checked'); 
+                    $("#submit-btn").attr("disabled",true);
+                }
             });
 
             $("#privacy").click(function() {
@@ -881,6 +886,13 @@
 
             $("#privacy-contact-check").click(function() {
                 $("#privacy-contact").attr("disabled", !this.checked);
+
+                if(this.checked == false) {
+                    $("#privacy-contact").prop('checked', false); 
+                    $("#privacy-contact").removeAttr('checked'); 
+                    $("#submit-contact-btn").attr("disabled",true);
+                }
+
             });
 
             
