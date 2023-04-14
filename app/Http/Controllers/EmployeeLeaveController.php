@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
+use DateTime;
+
 class EmployeeLeaveController extends Controller
 {
 
@@ -22,8 +24,12 @@ class EmployeeLeaveController extends Controller
         $used_sl = checkUsedSickLeave(auth()->user()->id);
         $used_sil = checkUsedServiceIncentiveLeave(auth()->user()->id);
 
+        $earned_vl = checkEarnedLeave(auth()->user()->id,1);
+        $earned_sl = checkEarnedLeave(auth()->user()->id,2);
+        $earned_sil = checkEarnedLeave(auth()->user()->id,10);
 
-        $employee_status = Employee::select('classification','gender')->where('user_id',auth()->user()->id)->first();
+
+        $employee_status = Employee::select('original_date_hired','classification','gender')->where('user_id',auth()->user()->id)->first();
         $leave_types = Leave::all(); //masterfile
         $employee_leaves = EmployeeLeave::with('user','leave','schedule')->where('user_id',auth()->user()->id)->get();
         $get_leave_balances = new LeaveBalanceController;
@@ -31,6 +37,18 @@ class EmployeeLeaveController extends Controller
         $leave_balances = EmployeeLeaveCredit::with('leave')->where('user_id',auth()->user()->id)->get();
         $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
         
+        $allowed_to_file = true;
+        //Validate Project Based
+        if($employee_status->classification == '3' || $employee_status->classification == '5'){
+            $date_from = new DateTime($employee_status->original_date_hired);
+            $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+            
+            if($date_diff->format('%m') > 5){
+                $allowed_to_file = true;
+            }else{
+                $allowed_to_file = false;
+            }
+        }
 
         return view('forms.leaves.leaves',
         array(
@@ -43,6 +61,10 @@ class EmployeeLeaveController extends Controller
             'used_vl' => $used_vl,
             'used_sl' => $used_sl,
             'used_sil' => $used_sil,
+            'earned_vl' => $earned_vl,
+            'earned_sl' => $earned_sl,
+            'earned_sil' => $earned_sil,
+            'allowed_to_file' => $allowed_to_file,
         ));
     }  
 

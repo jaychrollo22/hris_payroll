@@ -291,7 +291,7 @@
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
                             <a class="dropdown-item" href="{{ url('account-setting') }}">
                                 <i class="ti-settings text-primary"></i>
-                                Account Settings
+                                Employee Details
                             </a>
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="logout(); show();">
                                 <i class="ti-power-off text-primary"></i>
@@ -344,7 +344,7 @@
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/work-from-home') }}">Work from home</a></li>
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/official-business') }}">Official Business</a>
                                 </li>
-                                {{-- <li class="nav-item "> <a class="nav-link " href="{{ url('/dtr-correction') }}">DTR Correction</a></li> --}}
+                                <li class="nav-item "> <a class="nav-link " href="{{ url('/dtr-correction') }}">DTR Correction</a></li>
                             </ul>
                         </div>
                     </li>
@@ -377,7 +377,7 @@
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/for-overtime') }}">Overtime</a></li>
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/for-work-from-home') }}">Work from home</a></li>
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/for-official-business') }}">Official Business</a></li>
-                                {{-- <li class="nav-item "> <a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction</a></li> --}}
+                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction</a></li>
                             </ul>
                         </div>
                     </li>
@@ -446,6 +446,7 @@
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/leavee-settings') }}">Leave Type</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/announcements') }}">Announcements</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/logos') }}">Logos</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/hr-approver-setting') }}">HR Approver Setting</a></li>
                             </ul>
                         </div>
                     </li>
@@ -506,6 +507,11 @@
                     @if(checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-leave-credits') }}">Employee Leave Credits</a>
+                    </li>
+                    @endif
+                    @if(checkUserPrivilege('masterfiles_employee_leave_earned',auth()->user()->id) == 'yes')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/employee-earned-leaves') }}">Employee Earned Leaves</a>
                     </li>
                     @endif
                 </ul>
@@ -648,8 +654,68 @@
                 //	"left": 2
                 //}
             });
+
+            $('#datatableEmployee thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#datatableEmployee thead');
+
+                var datatable = $('#datatableEmployee').DataTable({
+                    // stateSave: true
+                    orderCellsTop: true
+                    , fixedHeader: true
+                    , fixedColumns: {
+                        left: 1
+                        , right: 1
+                    }
+                    , initComplete: function() {
+                        var api = this.api();
+
+                        // For each column
+                        api
+                            .columns()
+                            .eq(0)
+                            .each(function(colIdx) {
+                                // Set the header cell to contain the input element
+                                var cell = $('.filters th').eq(
+                                    $(api.column(colIdx).header()).index()
+                                );
+                                var title = $(cell).text();
+                                $(cell).html('<input type="text" placeholder="' + title + '" />');
+
+                                // On every keypress in this input
+                                $('input', $('.filters th').eq($(api.column(colIdx).header()).index()))
+                                    .off('keyup change')
+                                    .on('keyup change', function(e) {
+                                        e.stopPropagation();
+
+                                        // Get the search value
+                                        $(this).attr('title', $(this).val());
+                                        var regexr = '({search})'; //$(this).parents('th').find('select').val();
+
+                                        var cursorPosition = this.selectionStart;
+                                        // Search the column for that value
+                                        api
+                                            .column(colIdx)
+                                            .search(
+                                                this.value != '' ?
+                                                regexr.replace('{search}', '(((' + this.value + ')))') :
+                                                ''
+                                                , this.value != ''
+                                                , this.value == ''
+                                            )
+                                            .draw();
+
+                                        $(this)
+                                            .focus()[0]
+                                            .setSelectionRange(cursorPosition, cursorPosition);
+                                    });
+                            });
+                    }
+                , });
+
             $('.employees-table').DataTable({
-                // "ordering": true,
+                 // "ordering": true,
                 // "pageLength": 100,
                 // "paging":         false,
                 // "fixedColumns":   {
@@ -803,6 +869,35 @@
                 }else{
                 $(".edithalfDayStatus").hide(200);
                 }
+            });
+
+            $("#privacy-check").click(function() {
+                $("#privacy").attr("disabled", !this.checked); 
+                if(this.checked == false) {
+                    $("#privacy").prop('checked', false); 
+                    $("#privacy").removeAttr('checked'); 
+                    $("#submit-btn").attr("disabled",true);
+                }
+            });
+
+            $("#privacy").click(function() {
+                $("#submit-btn").attr("disabled", !this.checked);
+            });
+
+            $("#privacy-contact-check").click(function() {
+                $("#privacy-contact").attr("disabled", !this.checked);
+
+                if(this.checked == false) {
+                    $("#privacy-contact").prop('checked', false); 
+                    $("#privacy-contact").removeAttr('checked'); 
+                    $("#submit-contact-btn").attr("disabled",true);
+                }
+
+            });
+
+            
+            $("#privacy-contact").click(function() {
+                $("#submit-contact-btn").attr("disabled", !this.checked);
             });
 
         });

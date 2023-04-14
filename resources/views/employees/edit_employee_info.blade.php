@@ -40,14 +40,44 @@
                 </select>
               </div>
               <div class='col-md-4'>
+                Location
+                <select data-placeholder="Location" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='location' required>
+                    <option value="">--Select Location--</option>
+                    @foreach($locations as $location)
+                      <option value="{{$location->location}}" @if ($user->employee->location == $location->location) selected @endif>{{$location->location}}</option>
+                    @endforeach
+                </select>
+              </div>
+              <div class='col-md-4'>
+                Project
+                <select data-placeholder="Project" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='project'>
+                    <option value="">--Select Project--</option>
+                    <option value="N/A">N/A</option>
+                    @foreach($projects as $project)
+                      <option value="{{$project->project_id}}" @if ($user->employee->project == $project->project_id) selected @endif>{{$project->project_id}}</option>
+                    @endforeach
+                </select>
+              </div>
+              <div class='col-md-4'>
                 Classification
-                <select data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='classification' required>
+                <select id="emp_classification" data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='classification' required onchange="showIfSeabased(this.value)">
                   <option value="">--Select Classification--</option>
                   @foreach($classifications as $classification)
                     <option value="{{$classification->id}}" @if ($user->employee->classification == $classification->id) selected @endif>{{$classification->name}}</option>
                   @endforeach
               </select>
               </div>
+              @if($user->employee->classification == '4')
+                <div id="seaBased" class='col-md-4'>
+                  Vessel
+                  <input type="text" name="vessel_name" class="form-control" value="{{ $user->employee->employee_vessel ? $user->employee->employee_vessel->vessel_name : "" }}">
+                </div>
+              @else
+                <div id="seaBased" class='col-md-4' style="display: none;">
+                  Vessel
+                  <input type="text" name="vessel_name" class="form-control" value="{{ $user->employee->employee_vessel ? $user->employee->employee_vessel->vessel_name : "" }}">
+                </div>
+              @endif
               <div class='col-md-4'>
                 Level
                 <select data-placeholder="Level" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='level' required>
@@ -122,7 +152,12 @@
                   @php
                     $rate = "";
                     if($user->employee->rate){
-                       $rate = Crypt::decryptString( $user->employee->rate);
+                      try{
+                        $rate = Crypt::decryptString( $user->employee->rate);
+                      }
+                      catch(Exception $e) {
+                        $rate = "";
+                      }
                     }  
                   @endphp
                   <input type="number" class="form-control" name="rate" value="{{ $rate }}" min="0" value="0" step="any">
@@ -136,6 +171,11 @@
                   <option value="Active" @if ($user->employee->status == 'Active') selected @endif>Active</option>
                   <option value="Inactive" @if ($user->employee->status == 'Inactive') selected @endif>Inactive</option>
                 </select>
+              </div>
+
+              <div class='col-md-4'>
+                Date Resigned
+                <input type="date" name="date_resigned" value="{{ $user->employee->date_resigned }}" class='form-control form-control-sm' placeholder="Date"/>
               </div>
 
             </div>
@@ -279,4 +319,14 @@
     }
 
   }
+
+  function showIfSeabased(value){
+
+    if(value == '4'){
+      $('#seaBased').show();
+    }else{
+      $('#seaBased').hide();
+    }
+  }
+
 </script>

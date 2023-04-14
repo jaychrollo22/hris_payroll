@@ -18,6 +18,10 @@ class Employee extends Model implements Auditable
     {
         return $this->belongsTo(Classification::class,'classification','id');
     }
+    public function employee_vessel()
+    {
+        return $this->hasOne(EmployeeVessel::class,'user_id','user_id');
+    }
     public function level_info()
     {
         return $this->belongsTo(Level::class,'level','id');
@@ -61,6 +65,18 @@ class Employee extends Model implements Auditable
 
     public function wfhs() {
         return $this->hasMany(EmployeeWfh::class,'user_id','user_id');
+    }
+
+    public function approved_leaves() {
+        return $this->hasMany(EmployeeLeave::class,'user_id','user_id')->where('status','Approved');
+    }
+
+    public function approved_obs() {
+        return $this->hasMany(EmployeeOb::class,'user_id','user_id')->where('status','Approved');
+    }
+
+    public function approved_wfhs() {
+        return $this->hasMany(EmployeeWfh::class,'user_id','user_id')->where('status','Approved');
     }
 
     public function employee_leave_credits() {

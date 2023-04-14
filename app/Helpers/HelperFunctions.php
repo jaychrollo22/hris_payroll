@@ -4,6 +4,7 @@ use App\UserAllowedCompany;
 use App\UserPrivilege;
 use App\Employee;
 use App\EmployeeLeave;
+use App\EmployeeEarnedLeave;
 
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
@@ -136,12 +137,30 @@ function employeeHasOB($employee_obs = array(), $check_date){
         }
     }
 }
+function employeeHasOBDetails($employee_obs = array(), $check_date){
+    if(count($employee_obs) > 0){
+        foreach($employee_obs as $item){
+            if(date('Y-m-d',strtotime($item['applied_date'])) == date('Y-m-d',strtotime($check_date))){
+                return $item;
+            }
+        }
+    }
+}
 
 function employeeHasWFH($employee_wfhs = array(), $check_date){
     if(count($employee_wfhs) > 0){
         foreach($employee_wfhs as $item){
             if(date('Y-m-d',strtotime($item['applied_date'])) == date('Y-m-d',strtotime($check_date))){
                 return 'WFH';
+            }
+        }
+    }
+}
+function employeeHasWFHDetails($employee_wfhs = array(), $check_date){
+    if(count($employee_wfhs) > 0){
+        foreach($employee_wfhs as $item){
+            if(date('Y-m-d',strtotime($item['applied_date'])) == date('Y-m-d',strtotime($check_date))){
+                return $item;
             }
         }
     }
@@ -168,7 +187,7 @@ function checkUserPrivilege($field,$user_id){
 
 function checkUserAllowedOvertime($user_id){
     $employee = Employee::select('level')->where('user_id',$user_id)->first();
-    if($employee->level == 'RANK&FILE'){
+    if($employee->level == 'RANK&FILE' || $employee->level == '1'){
         return 'yes';
     }else{
         return 'no';
@@ -200,6 +219,14 @@ function checkUsedVacationLeave($user_id){
         }
     }
     return $count;
+}
+
+function checkEarnedLeave($user_id,$leave_type){
+    return $vl_earned = EmployeeEarnedLeave::where('user_id',$user_id)
+                                    ->where('leave_type',$leave_type)
+                                    ->whereNull('converted_to_cash')
+                                    ->sum('earned_leave');
+    
 }
 
 function checkUsedSickLeave($user_id){

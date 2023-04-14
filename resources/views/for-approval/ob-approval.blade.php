@@ -3,7 +3,7 @@
 <div class="main-panel">
     <div class="content-wrapper">
         <div class='row grid-margin'>
-          <div class='col-lg-2 '>
+          <div class='col-lg-2 mt-2'>
             <div class="card card-tale">
               <div class="card-body">
                 <div class="media">                
@@ -15,7 +15,7 @@
               </div>
             </div>
           </div> 
-          <div class='col-lg-2'>
+          <div class='col-lg-2 mt-2'>
             <div class="card card-dark-blue">
               <div class="card-body">
                 <div class="media">                
@@ -27,7 +27,7 @@
               </div>
             </div>
           </div> 
-          <div class='col-lg-2'>
+          <div class='col-lg-2 mt-2'>
             <div class="card card-light-danger">
               <div class="card-body">
                 <div class="media">                
@@ -66,12 +66,16 @@
                       @foreach ($obs as $form_approval)
                       <tr>
                         <td>{{$form_approval->user->name}}</td>
-                        <td> {{ date('d/m/Y', strtotime($form_approval->created_at)) }} </td>
+                        <td> {{ $form_approval->created_at }} </td>
                         <td> {{ date('d/m/Y ', strtotime($form_approval->applied_date)) }}</td>
                         <td> {{ date('H:i', strtotime($form_approval->date_from)) }} - {{ date('H:i', strtotime($form_approval->date_to)) }}  </td>
                         <td> {{$form_approval->destination}}</td>
                         <td> {{$form_approval->persontosee}}</td>
-                        <td> {{$form_approval->remarks}}</td>
+                        <td> 
+                          <p title="{{$form_approval->remarks}}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
+                            {{$form_approval->remarks}}
+                          </p>
+                        </td>
                         <td id="tdStatus{{ $form_approval->id }}">
                           @foreach($form_approval->approver as $approver)
                             @if($form_approval->level >= $approver->level)
@@ -105,8 +109,8 @@
                         </td>
                         <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
 
-                          @foreach($form_approval->approver as $approver)
-                            @if($approver->approver_id == $approver_id && $form_approval->level < $approver->level && $form_approval->status == 'Pending')
+                          @foreach($form_approval->approver as $k => $approver)
+                            @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'Pending')
                               <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" onclick="approve({{ $form_approval->id }})">
                                 <i class="ti-check btn-icon-prepend"></i>                                                    
                               </button>

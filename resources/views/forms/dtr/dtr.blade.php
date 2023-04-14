@@ -36,7 +36,11 @@
                         <td>{{ $dtr->correction }}</td>
                         <td> {{(isset($dtr->time_in)) ? date('h:i A', strtotime($dtr->time_in)) : '----'}}</td>
                         <td> {{(isset($dtr->time_out)) ? date('h:i A', strtotime($dtr->time_out)) : '----'}}</td>
-                        <td>{{ $dtr->remarks }}</td>
+                        <td>
+                          <p title="{{ $dtr->remarks }}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
+                            {{ $dtr->remarks }}
+                          </p>
+                        </td>
                         <td id="tdStatus{{ $dtr->id }}">
                           @if ($dtr->status == 'Pending')
                             <label class="badge badge-warning">{{ $dtr->status }}</label>

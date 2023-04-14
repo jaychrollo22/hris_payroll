@@ -57,9 +57,11 @@ class WorkFromHomeApproval extends Command
                                 'user_info' => $employee_wfh->user,
                                 'details' => $employee_wfh,
                             ];
-                            $send_update = Mail::to($approver->approver_info->email)->send(new WorkFromHomeNotification($details));
-                            EmployeeWfh::where('id',$employee_wfh->id)->update(['mail_1'=>1]);
-                            $count++;
+                            if(empty($employee_wfh->mail_1)){
+                                $send_update = Mail::to($approver->approver_info->email)->send(new WorkFromHomeNotification($details));
+                                EmployeeWfh::where('id',$employee_wfh->id)->update(['mail_1'=>1]);
+                                $count++;
+                            }
                         }
                         
                         if($employee_wfh->level == 1 && $approver->level == 2){ // If Level 1 Notify Level 2
@@ -68,9 +70,11 @@ class WorkFromHomeApproval extends Command
                                 'user_info' => $employee_wfh->user,
                                 'details' => $employee_wfh,
                             ];
-                            $send_update = Mail::to($approver->approver_info->email)->send(new WorkFromHomeNotification($details));
-                            EmployeeWfh::where('id',$employee_wfh->id)->update(['mail_2'=>1]);
-                            $count++;
+                            if(empty($employee_wfh->mail_2)){
+                                $send_update = Mail::to($approver->approver_info->email)->send(new WorkFromHomeNotification($details));
+                                EmployeeWfh::where('id',$employee_wfh->id)->update(['mail_2'=>1]);
+                                $count++;
+                            }
                         }
                     }
                 }

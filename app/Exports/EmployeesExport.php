@@ -15,16 +15,19 @@ use Illuminate\Contracts\Encryption\DecryptException;
 class EmployeesExport implements FromQuery, WithHeadings, WithMapping
 {
 
-    public function __construct($company,$department)
+    public function __construct($company,$department,$allowed_companies,$access_rate)
     {
         $this->company = $company;
         $this->department = $department;
+        $this->allowed_companies = $allowed_companies;
+        $this->access_rate = $access_rate;
     }
 
     public function query()
     {
         $company = $this->company;
         $department = $this->department;
+        $allowed_companies = json_decode($this->allowed_companies);
         return Employee::query()->select('user_id',
                                             'employee_number',
                                             'original_date_hired',
@@ -46,7 +49,7 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
                                             'hdmf_number',
                                             'phil_number',
                                             'tax_number',
-                                            'company_id',
+                                            'company_id'
                                         )
                                         ->with('company')
                                         ->when($company,function($q) use($company){
@@ -55,6 +58,7 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
                                         ->when($department,function($q) use($department){
                                             $q->where('department_id',$department);
                                         })
+                                        ->whereIn('company_id',$allowed_companies)
                                         ->where('status','Active');
     }
 
@@ -100,7 +104,21 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
     public function map($employee): array
     {
         $company = $employee->company ? $employee->company->company_name : "";
-        $rate = $employee->rate ? (float) Crypt::decryptString($employee->rate) : "";
+
+        if($this->access_rate == 'Yes'){
+
+            try{
+                $rate = $employee->rate ? (float) Crypt::decryptString($employee->rate) : ""; 
+            }
+            catch(Exception $e) {
+                $rate = "";
+            }
+            
+        }else{
+            $rate = "";
+        }
+        
+        
         return [
             $employee->employee_number,
             $employee->user_id,

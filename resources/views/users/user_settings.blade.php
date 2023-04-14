@@ -17,14 +17,14 @@
                         <h3 class="card-text mt-3">{{auth()->user()->employee->first_name}} @if(auth()->user()->employee->middle_initial != null){{auth()->user()->employee->middle_initial}}.@endif {{auth()->user()->employee->last_name}}</h3>
                         <h4 class="card-text mt-2">{{auth()->user()->employee->position}}</h4>
                         <h5 class="card-text mt-2">Biometric Code : {{auth()->user()->employee->employee_number}}</h5>
-                        <h5 class="card-text mt-2">Employee Code : {{auth()->user()->employee->employee_code}}</h5>
+                        {{-- <h5 class="card-text mt-2">Employee Code : {{auth()->user()->employee->employee_code}}</h5> --}}
                         <img class='border' src='{{URL::asset(auth()->user()->employee->signature)}}' onerror="this.src='{{URL::asset('/images/signature.png')}}';" height='100px;' width='225px;'> <br>
-                        <button class="btn btn-primary btn-sm mt-3" data-toggle="modal" data-target="#uploadAvatar">
+                        {{-- <button class="btn btn-primary btn-sm mt-3" data-toggle="modal" data-target="#uploadAvatar">
                             Upload Avatar
                         </button>
                         <button class="btn btn-info btn-sm mt-3" data-toggle="modal" data-target="#uploadSignature">
                             Upload Signature
-                        </button>
+                        </button> --}}
                         <button class="btn btn-success btn-sm mt-3" data-toggle="modal" data-target="#editUserPassword{{$user->id}}">
                             Change Password
                         </button>
@@ -127,7 +127,7 @@
                                     <small>Marital Status </small>
                                 </div>
                                 <div class='col-md-9'>
-                                    {{auth()->user()->employee->marital_status}}
+                                    {{ ucfirst(strtolower(auth()->user()->employee->marital_status)) }}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>
@@ -141,7 +141,7 @@
                                     <small>Gender </small>
                                 </div>
                                 <div class='col-md-3'>
-                                    {{auth()->user()->employee->gender}}
+                                    {{ ucfirst(strtolower(auth()->user()->employee->gender)) }}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>
@@ -177,9 +177,7 @@
                                 <div class='col-md-12 text-center'>
                                     <strong>
                                         <h3><i class="fa fa-user-plus" aria-hidden="true"></i> Contact Person (In case of Emergency)
-                                            @if (checkUserPrivilege('employees_edit',auth()->user()->id) == 'yes')
-                                                <button class="btn btn-icon btn-info btn-xs" title="Edit Contact Person" data-toggle="modal" data-target="#editEmpContactInfo"><i class="fa fa-pencil"></i></button>
-                                            @endif
+                                            <button class="btn btn-icon btn-info btn-xs" title="Edit Contact Person" data-toggle="modal" data-target="#editEmpContactInfo"><i class="fa fa-pencil"></i></button>
                                         </h3>
                                     </strong>
                                 </div>
@@ -244,7 +242,7 @@
                                     <small> Classification </small>
                                 </div>
                                 <div class='col-md-9'>
-                                    {{auth()->user()->employee->classification}}
+                                    {{auth()->user()->employee->classification_info ? auth()->user()->employee->classification_info->name : ""}}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>
@@ -252,7 +250,7 @@
                                     <small> Level </small>
                                 </div>
                                 <div class='col-md-9'>
-                                    {{auth()->user()->employee->level}}
+                                    {{auth()->user()->employee->level_info ? auth()->user()->employee->level_info->name : ""}}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>
@@ -266,8 +264,11 @@
                                     @php
                                     $date_from = new DateTime(auth()->user()->employee->original_date_hired);
                                     $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                                    $y_s = $date_diff->format('%y') > 1 ? 's' : '';
+                                    $m_s = $date_diff->format('%m') > 1 ? 's' : '';
+                                    $d_s = $date_diff->format('%d') > 1 ? 's' : '';
                                     @endphp
-                                    {{$date_diff->format('%y Year %m months %d days')}}
+                                    {{$date_diff->format('%y Year'.$y_s.' %m month'.$m_s.' %d day'.$d_s.'')}}
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>

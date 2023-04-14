@@ -29,7 +29,7 @@
                Date
             </div>
             <div class='col-md-4'>
-              <input type="date" name='dtr_date' class="form-control" min='{{date('Y-m-d', strtotime("-3 days"))}}' required>
+              <input type="date" name='dtr_date' class="form-control" required>
             </div>
             <div class='col-md-2'>
               DTR Type

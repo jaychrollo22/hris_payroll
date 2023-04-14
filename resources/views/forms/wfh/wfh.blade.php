@@ -34,7 +34,11 @@
                         <td> {{ date('d/m/Y', strtotime($wfh->applied_date)) }} </td>
                         <td> {{ date('H:i', strtotime($wfh->date_from)) }} - {{ date('H:i', strtotime($wfh->date_to)) }}  </td>
                         {{-- <td>{{get_count_days($wfh->schedule,$wfh->date_from,$wfh->date_to)}}</td> --}}
-                        <td>{{ $wfh->remarks }}</td>
+                        <td>
+                          <p title="{{ $wfh->remarks }}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
+                            {{ $wfh->remarks }}
+                          </p>
+                        </td>
                         <td id="tdStatus{{ $wfh->id }}">
                           @if ($wfh->status == 'Pending')
                             <label class="badge badge-warning">{{ $wfh->status }}</label>
@@ -48,13 +52,17 @@
                           @foreach($wfh->approver as $approver)
                             @if($wfh->level >= $approver->level)
                               @if ($wfh->level == 0 && $wfh->status == 'Declined')
-                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @elseif ($wfh->level == 1 && $wfh->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
                               @else
                                 {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
                               @endif
                             @else
                               @if ($wfh->status == 'Declined')
                                 {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @elseif ($wfh->status == 'Approved')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
                               @else
                                 {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
                               @endif

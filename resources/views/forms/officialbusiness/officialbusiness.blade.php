@@ -25,19 +25,22 @@
                         <th>Purpose</th>
                         <th>Status </th>
                         <th>Approvers </th>
-                        
                         <th>Action </th>
                       </tr>
                     </thead>
                     <tbody>
                       @foreach ($obs as $ob)
                       <tr>
-                        <td> {{ date('d/m/Y', strtotime($ob->created_date)) }} </td>
+                        <td> {{ $ob->created_at }} </td>
                         <td> {{ date('d/m/Y', strtotime($ob->applied_date)) }} </td>
                         <td> {{ date('H:i', strtotime($ob->date_from)) }} - {{ date('H:i', strtotime($ob->date_to)) }}  </td>
                         <td> {{$ob->destination}}</td>
                         <td> {{$ob->persontosee}}</td>
-                        <td> {{$ob->remarks}}</td>
+                        <td> 
+                          <p title="{{ $ob->remarks }}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
+                            {{$ob->remarks}}
+                          </p>
+                        </td>
                         <td id="tdStatus{{ $ob->id }}">
                           @if ($ob->status == 'Pending')
                             <label class="badge badge-warning">{{ $ob->status }}</label>
@@ -51,13 +54,17 @@
                           @foreach($ob->approver as $approver)
                             @if($ob->level >= $approver->level)
                               @if ($ob->level == 0 && $ob->status == 'Declined')
-                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @elseif ($ob->level == 1 && $ob->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
                               @else
                                 {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
                               @endif
                             @else
                               @if ($ob->status == 'Declined')
                                 {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @elseif ($ob->status == 'Approved')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
                               @else
                                 {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
                               @endif

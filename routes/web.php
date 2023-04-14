@@ -160,6 +160,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('biometrics-per-company', 'EmployeeController@perCompany');
     Route::get('sync-biometrics','EmployeeController@sync');
 
+    Route::get('sync-hik-att-logs','EmployeeController@sync_hik');
+
     //Payroll
     Route::get('pay-reg', 'PayslipController@payroll_datas');
     Route::get('timekeeping', 'PayslipController@attendances');
@@ -185,6 +187,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Employee Allowance
     Route::get('employee-allowance', 'EmployeeAllowanceController@index');
     Route::post('new-employee-allowance', 'EmployeeAllowanceController@store');
+    Route::post('edit-employee-allowance/{id}', 'EmployeeAllowanceController@update');
     Route::get('disableEmp-allowance/{id}', 'EmployeeAllowanceController@disable');
 
     // Employee Incentive
@@ -231,6 +234,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('employee-leave-credits', 'LeaveCreditsController@index');
     Route::post('new-employee-leave-credit', 'LeaveCreditsController@store');
 
+    // Employee Earned Leaves
+    Route::get('employee-earned-leaves', 'EmployeeEarnedLeaveController@index');
+
     //User
     Route::get('/users','UserController@index');
     Route::get('/edit-user-role/{user}','UserController@editUserRole');
@@ -240,7 +246,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('users-export', 'UserController@export');
 
-    
+    //HR Approver Setting
+    Route::get('/hr-approver-setting','HrApproverSettingController@index');
+    Route::post('/save-hr-approver-setting','HrApproverSettingController@store');
+    Route::get('/remove-hr-approver/{id}','HrApproverSettingController@remove'); 
 });
 Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');

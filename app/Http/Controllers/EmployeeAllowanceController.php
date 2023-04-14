@@ -68,6 +68,22 @@ class EmployeeAllowanceController extends Controller
         Alert::success('Successfully Store')->persistent('Dismiss');
         return back();
     }
+    public function update(Request $request, $id)
+    {
+        // Validation
+        $this->validate($request, [
+            'amount' => 'required', 'min:1',
+        ]);
+
+        $employeeAllowances = EmployeeAllowance::findOrFail($id);
+        $employeeAllowances->allowance_amount = $request->amount;
+        $employeeAllowances->schedule = $request->schedule;
+        $employeeAllowances->status = 'Active';
+        $employeeAllowances->save();
+
+        Alert::success('Successfully Store')->persistent('Dismiss');
+        return back();
+    }
     public function disable($id)
     {
         EmployeeAllowance::Where('id', $id)->update(['status' => 'Inactive']);
@@ -97,17 +113,6 @@ class EmployeeAllowanceController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EmployeeAllowance  $employeeAllowance
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, EmployeeAllowance $employeeAllowance)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.

@@ -8,7 +8,10 @@ use App\Employee;
 use App\EmployeeContactPerson;
 use App\EmployeeLeaveCredit;
 use App\EmployeeApprover;
+use App\EmployeeVessel;
 use App\Department;
+use App\Location;
+use App\Project;
 use App\Schedule;
 use App\Attendance;
 use App\iclockterminal_mysql;
@@ -20,6 +23,7 @@ use App\User;
 use App\Company;
 use App\ScheduleData;
 use App\PersonnelEmployee;
+use App\HikAttLog;
 use App\IclockTransation;
 use App\MaritalStatus;
 use App\IclockTerminal;
@@ -43,16 +47,64 @@ class EmployeeController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $status = isset($request->status) ? $request->status : "Active";
+        $classification = isset($request->classification) ? $request->classification : "";
+        $gender = isset($request->gender) ? $request->gender : "";
 
         $classifications = Classification::get();
 
         $employees_classification = Employee::select('classification', DB::raw('count(*) as total'))->with('classification_info')
-                                                ->where('status','Active')
+                                                ->when($company,function($q) use($company){
+                                                    $q->where('company_id',$company);
+                                                })
+                                                ->when($department,function($q) use($department){
+                                                    $q->where('department_id',$department);
+                                                })
+                                                ->when($status,function($q) use($status){
+                                                    $q->where('status',$status);
+                                                })
+                                                ->when($classification,function($q) use($classification){
+                                                    if($classification == 'N/A'){
+                                                        $q->whereNull('classification')->orWhere('classification','');
+                                                    }else{
+                                                        $q->where('classification',$classification);
+                                                    }  
+                                                })
+                                                ->when($gender,function($q) use($gender){
+                                                    if($gender == 'N/A'){
+                                                        $q->whereNull('gender')->orWhere('gender','');
+                                                    }else{
+                                                        $q->where('gender',$gender);
+                                                    }
+                                                })
+                                                ->whereIn('company_id',$allowed_companies)
                                                 ->groupBy('classification')
                                                 ->orderBy('classification','ASC')
                                                 ->get();
         $employees_gender = Employee::select('gender', DB::raw('count(*) as total'))
-                                                ->where('status','Active')
+                                                ->when($company,function($q) use($company){
+                                                    $q->where('company_id',$company);
+                                                })
+                                                ->when($department,function($q) use($department){
+                                                    $q->where('department_id',$department);
+                                                })
+                                                ->when($status,function($q) use($status){
+                                                    $q->where('status',$status);
+                                                })
+                                                ->when($classification,function($q) use($classification){
+                                                    if($classification == 'N/A'){
+                                                        $q->whereNull('classification')->orWhere('classification','');
+                                                    }else{
+                                                        $q->where('classification',$classification);
+                                                    }  
+                                                })
+                                                ->when($gender,function($q) use($gender){
+                                                    if($gender == 'N/A'){
+                                                        $q->whereNull('gender')->orWhere('gender','');
+                                                    }else{
+                                                        $q->where('gender',$gender);
+                                                    }
+                                                })
+                                                ->whereIn('company_id',$allowed_companies)
                                                 ->groupBy('gender')
                                                 ->orderBy('gender','ASC')
                                                 ->get();
@@ -66,6 +118,20 @@ class EmployeeController extends Controller
                                 })
                                 ->when($status,function($q) use($status){
                                     $q->where('status',$status);
+                                })
+                                ->when($classification,function($q) use($classification){
+                                    if($classification == 'N/A'){
+                                        $q->whereNull('classification')->orWhere('classification','');
+                                    }else{
+                                        $q->where('classification',$classification);
+                                    }  
+                                })
+                                ->when($gender,function($q) use($gender){
+                                    if($gender == 'N/A'){
+                                        $q->whereNull('gender')->orWhere('gender','');
+                                    }else{
+                                        $q->where('gender',$gender);
+                                    }
                                 })
                                 ->whereIn('company_id',$allowed_companies)
                                 ->get();
@@ -94,6 +160,8 @@ class EmployeeController extends Controller
         $users = User::get();
         $levels = Level::get();
         $marital_statuses = MaritalStatus::get();
+        $locations = Location::orderBy('location','ASC')->get();
+        $projects = Project::get();
 
         
         $companies = Company::whereHas('employee_has_company')
@@ -112,6 +180,8 @@ class EmployeeController extends Controller
                 'employees' => $employees,
                 'marital_statuses' => $marital_statuses,
                 'departments' => $departments,
+                'locations' => $locations,
+                'projects' => $projects,
                 'levels' => $levels,
                 'users' => $users,
                 'banks' => $banks,
@@ -126,11 +196,18 @@ class EmployeeController extends Controller
 
     public function export(Request $request) 
     {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_companies = json_encode($allowed_companies);
+
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $company_info = Company::where('id',$company)->first();
         $company_name = $company_info ? $company_info->company_code : "";
-        return Excel::download(new EmployeesExport($company,$department), 'Master List '. $company_name .' .xlsx');
+
+        $access_rate = checkUserPrivilege('employees_rate',auth()->user()->id);
+
+        return Excel::download(new EmployeesExport($company,$department,$allowed_companies,$access_rate), 'Master List '. $company_name .' .xlsx');
     }
 
     public function new(Request $request)
@@ -167,6 +244,8 @@ class EmployeeController extends Controller
             $employee->classification = $request->classification;
             $employee->department_id = $request->department;
             $employee->company_id = $request->company;
+            $employee->location = $request->location;
+            $employee->project = $request->project;
             $employee->position = $request->position;
             $employee->nick_name = $request->nickname;
             $employee->level = $request->level;
@@ -297,6 +376,7 @@ class EmployeeController extends Controller
                         $employee->last_name = $value['last_name'];
                         $employee->middle_name = $value['middle_name'];
                         $employee->name_suffix = isset($value['name_suffix']) ? $value['name_suffix'] : "";
+
                         $employee->classification = isset($value['classification']) ? $value['classification'] : "";
                         $employee->department_id = isset($value['department_id']) ? $value['department_id'] : "";
                         $employee->company_id = isset($value['company_id']) ? $value['company_id'] : "";
@@ -312,10 +392,10 @@ class EmployeeController extends Controller
                         $employee->gender = isset($value['gender']) ? $value['gender'] : "";
                         $employee->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
                         $employee->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
-                        $employee->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
+                        $employee->present_address = isset($value['present_address']) ? $value['present_address'] : "";
                         $employee->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
-                        $employee->phil_number = isset($value['phil_number']) ? $value['phil_number'] : "";
-                        $employee->sss_number = isset($value['phil_number']) ? $value['sss_number'] : "";
+                        $employee->phil_number = isset($value['philhealth_number']) ? $value['philhealth_number'] : "";
+                        $employee->sss_number = isset($value['sss_number']) ? $value['sss_number'] : "";
                         $employee->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
                         $employee->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
                         $employee->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
@@ -325,7 +405,7 @@ class EmployeeController extends Controller
                         $employee->religion = isset($value['religion']) ? $value['religion'] : "";
                         $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
 
-                        $employee->location = isset($value['branch']) ? $value['branch'] : "";
+                        $employee->location = isset($value['location']) ? $value['location'] : "";
                         $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
                         $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
                         
@@ -410,33 +490,154 @@ class EmployeeController extends Controller
                         $check_if_exist = Employee::where('employee_number',$value['employee_number'])->first();
 
                         if($check_if_exist){
-                            $check_if_exist->position = isset($value['position']) ? $value['position'] : "";
-                            $check_if_exist->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
-                            $check_if_exist->level = $value['level'];
-                            $check_if_exist->date_regularized = isset($value['date_regularized']) && !empty($value['date_regularized']) ? date('Y-m-d',strtotime($value['date_regularized'])) : null;
-                            $check_if_exist->date_resigned = $value['date_resigned'] ? date('Y-m-d',strtotime($value['date_resigned'])) : null;
-                            $check_if_exist->birth_date = $value['birth_date'] ? date('Y-m-d',strtotime($value['birth_date'])) : null;
-                            $check_if_exist->birth_place = isset($value['birth_place']) ? $value['birth_place'] : "";
-                            $check_if_exist->gender = isset($value['gender']) ? $value['gender'] : "";
-                            $check_if_exist->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
-                            $check_if_exist->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
-                            $check_if_exist->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
-                            $check_if_exist->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
-                            $check_if_exist->phil_number = isset($value['phil_number']) ? $value['phil_number'] : "";
-                            $check_if_exist->sss_number = isset($value['phil_number']) ? $value['sss_number'] : "";
-                            $check_if_exist->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
-                            $check_if_exist->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
-                            $check_if_exist->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
-                            $check_if_exist->bank_account_number = isset($value['bank_account_number']) ? $value['bank_account_number'] : "";
-                            $check_if_exist->personal_email = isset($value['personal_email']) ? $value['personal_email'] : "";
-                            $check_if_exist->area = isset($value['area']) ? $value['area'] : "";
-                            $check_if_exist->religion = isset($value['religion']) ? $value['religion'] : "";
-                            $check_if_exist->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
 
-                            $check_if_exist->location = isset($value['branch']) ? $value['branch'] : "";
-                            $check_if_exist->work_description = isset($value['work_description']) ? $value['work_description'] : "";
-                            $check_if_exist->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
-
+                            if(isset($value['classification'])){
+                                if($value['classification']){
+                                    $check_if_exist->classification =  $value['classification'];
+                                }
+                            }
+                            if(isset($value['department_id'])){
+                                if($value['department_id']){
+                                    $check_if_exist->department_id =  $value['department_id'];
+                                }
+                            }
+                            if(isset($value['company_id'])){
+                                if($value['company_id']){
+                                    $check_if_exist->company_id =  $value['company_id'];
+                                }
+                            }
+                            if(isset($value['original_date_hired'])){
+                                if($value['original_date_hired']){
+                                    $check_if_exist->original_date_hired =  date('Y-m-d',strtotime($value['date_hired']));
+                                }
+                            }
+                            if(isset($value['position'])){
+                                if($value['position']){
+                                    $check_if_exist->position =  $value['position'];
+                                }
+                            }
+                            if(isset($value['nick_name'])){
+                                if($value['nick_name']){
+                                    $check_if_exist->nick_name =  $value['nick_name'];
+                                }
+                            }
+                            if(isset($value['level'])){
+                                if($value['level']){
+                                    $check_if_exist->level =  $value['level'];
+                                }
+                            }
+                            if(isset($value['date_regularized'])){
+                                if($value['date_regularized']){
+                                    $check_if_exist->date_regularized =  date('Y-m-d',strtotime($value['date_regularized']));
+                                }
+                            }
+                            if(isset($value['date_resigned'])){
+                                if($value['date_resigned']){
+                                    $check_if_exist->date_resigned =  date('Y-m-d',strtotime($value['date_resigned']));
+                                }
+                            }
+                            if(isset($value['birth_date'])){
+                                if($value['birth_date']){
+                                    $check_if_exist->birth_date =  date('Y-m-d',strtotime($value['birth_date']));
+                                }
+                            }
+                            if(isset($value['birth_place'])){
+                                if($value['birth_place']){
+                                    $check_if_exist->birth_place =  $value['birth_place'];
+                                }
+                            }
+                            if(isset($value['gender'])){
+                                if($value['gender']){
+                                    $check_if_exist->gender =  $value['gender'];
+                                }
+                            }
+                            if(isset($value['marital_status'])){
+                                if($value['marital_status']){
+                                    $check_if_exist->marital_status =  $value['marital_status'];
+                                }
+                            }
+                            if(isset($value['permanent_address'])){
+                                if($value['permanent_address']){
+                                    $check_if_exist->permanent_address =  $value['permanent_address'];
+                                }
+                            }
+                            if(isset($value['present_address'])){
+                                if($value['present_address']){
+                                    $check_if_exist->present_address =  $value['present_address'];
+                                }
+                            }
+                            if(isset($value['personal_number'])){
+                                if($value['personal_number']){
+                                    $check_if_exist->personal_number =  $value['personal_number'];
+                                }
+                            }
+                            if(isset($value['philhealth_number'])){
+                                if($value['philhealth_number']){
+                                    $check_if_exist->phil_number =  $value['philhealth_number'];
+                                }
+                            }
+                            if(isset($value['sss_number'])){
+                                if($value['sss_number']){
+                                    $check_if_exist->sss_number =  $value['sss_number'];
+                                }
+                            }
+                            if(isset($value['tax_number'])){
+                                if($value['tax_number']){
+                                    $check_if_exist->tax_number =  $value['tax_number'];
+                                }
+                            }
+                            if(isset($value['hdmf_number'])){
+                                if($value['hdmf_number']){
+                                    $check_if_exist->hdmf_number =  $value['hdmf_number'];
+                                }
+                            }
+                            if(isset($value['bank_name'])){
+                                if($value['bank_name']){
+                                    $check_if_exist->bank_name =  $value['bank_name'];
+                                }
+                            }
+                            if(isset($value['bank_account_number'])){
+                                if($value['bank_account_number']){
+                                    $check_if_exist->bank_account_number =  $value['bank_account_number'];
+                                }
+                            }
+                            if(isset($value['personal_email'])){
+                                if($value['personal_email']){
+                                    $check_if_exist->personal_email =  $value['personal_email'];
+                                }
+                            }
+                            if(isset($value['area'])){
+                                if($value['area']){
+                                    $check_if_exist->area =  $value['area'];
+                                }
+                            }
+                            if(isset($value['religion'])){
+                                if($value['religion']){
+                                    $check_if_exist->religion =  $value['religion'];
+                                }
+                            }
+                            if(isset($value['schedule_id'])){
+                                if($value['schedule_id']){
+                                    $check_if_exist->schedule_id =  $value['schedule_id'];
+                                }
+                            }
+                     
+                            if(isset($value['location'])){
+                                if($value['location']){
+                                    $check_if_exist->location =  $value['location'];
+                                }
+                            }
+                            if(isset($value['work_description'])){
+                                if($value['work_description']){
+                                    $check_if_exist->work_description =  $value['work_description'];
+                                }
+                            }
+                            if(isset($value['rate'])){
+                                if($value['rate']){
+                                    $check_if_exist->rate =  Crypt::encryptString($value['rate']);
+                                }
+                            }
+                    
                             $check_if_exist->status = "Active";
                             $check_if_exist->save();
 
@@ -570,8 +771,8 @@ class EmployeeController extends Controller
                         $employee->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
                         $employee->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
                         $employee->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
-                        $employee->phil_number = isset($value['phil_number']) ? $value['phil_number'] : "";
-                        $employee->sss_number = isset($value['phil_number']) ? $value['sss_number'] : "";
+                        $employee->phil_number = isset($value['philhealth_number']) ? $value['philhealth_number'] : "";
+                        $employee->sss_number = isset($value['sss_number']) ? $value['sss_number'] : "";
                         $employee->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
                         $employee->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
                         $employee->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
@@ -581,7 +782,7 @@ class EmployeeController extends Controller
                         $employee->religion = isset($value['religion']) ? $value['religion'] : "";
                         $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
 
-                        $employee->location = isset($value['branch']) ? $value['branch'] : "";
+                        $employee->location = isset($value['location']) ? $value['location'] : "";
                         $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
                         $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
 
@@ -673,18 +874,34 @@ class EmployeeController extends Controller
 
     public function employeeSettingsHR(User $user)
     {
+
+        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+
         $classifications = Classification::get();
 
         $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info','level_info')->get();
+        
+        $employee_approvers = Employee::whereHas('company',function($q) use($user){
+                                    if($user->employee->company_id){
+                                        $q->where('company_id',$user->employee->company_id);
+                                            // ->where('department_id',$user->employee->department_id);
+                                    }
+                                })
+                                // ->where('level','!=','1')
+                                ->where('status','Active')
+                                ->pluck('user_id')
+                                ->toArray();
+        
         $schedules = Schedule::get();
         $banks = Bank::get();
-        $users = User::all();
+        $users = User::whereIn('id',$employee_approvers)->get();
         $levels = Level::get();
         $departments = Department::get();
+        $locations = Location::orderBy('location','ASC')->get();
+        $projects = Project::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
-        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
-
+        
         return view('employees.employee_settings_hr',
         array(
             'header' => 'employees',
@@ -693,6 +910,8 @@ class EmployeeController extends Controller
             'employees' => $employees,
             'marital_statuses' => $marital_statuses,
             'departments' => $departments,
+            'locations' => $locations,
+            'projects' => $projects,
             'levels' => $levels,
             'users' => $users,
             'banks' => $banks,
@@ -734,6 +953,8 @@ class EmployeeController extends Controller
         $employee->company_id = $request->company;
         $employee->position = $request->position;
         $employee->department_id = $request->department;
+        $employee->location = $request->location;
+        $employee->project = $request->project;
         $employee->classification = $request->classification;
         $employee->phil_number = $request->philhealth;
         $employee->level = $request->level;
@@ -752,6 +973,8 @@ class EmployeeController extends Controller
         $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
         $employee->status = $request->status;
 
+        $employee->date_resigned = $request->status == 'Inactive' ? $request->date_resigned : null;
+
         $employee->save();
 
         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
@@ -768,6 +991,21 @@ class EmployeeController extends Controller
                     $new_approver->save();
                     $level = $level+1;
                 }
+            }
+        }
+
+        //Employee Vessel
+        if($request->classification == 4 && $request->vessel_name){
+            $employee_vessel = EmployeeVessel::where('user_id', $employee->user_id)->first();
+
+            if($employee_vessel){
+                $employee_vessel->vessel_name = $request->vessel_name;
+                $employee_vessel->save();
+            }else{
+                $new_employee_vessel = new EmployeeVessel;
+                $new_employee_vessel->user_id = $employee->user_id;
+                $new_employee_vessel->vessel_name = $request->vessel_name;
+                $new_employee_vessel->save();
             }
         }
         
@@ -1060,6 +1298,10 @@ class EmployeeController extends Controller
     {
         
         $terminals = iclockterminal_mysql::get();
+        $terminals_hik = HikAttLog::select('deviceName')->groupBy('deviceName')
+                                    ->orderBy('deviceName' , 'ASC')
+                                    ->get();
+
         if($request->terminal)
         {
             // dd($request->all());
@@ -1109,6 +1351,74 @@ class EmployeeController extends Controller
         return view('employees.sync', array(
             'header' => 'biometrics',
             'terminals' => $terminals,
+            'terminals_hik' => $terminals_hik,
         ));
     }
+
+    public function sync_hik(Request $request)
+    {
+        $from = $request->from_hik;
+        $to = $request->to_hik;
+        $terminal = $request->terminal_hik;
+        
+        $employee_numbers = Employee::pluck('employee_number')->toArray();
+
+        $attendances = HikAttLog::where('deviceName',$terminal)
+                                ->whereIn('employeeID',$employee_numbers)
+                                ->whereBetween('authDate',[$from,$to])
+                                ->orderBy('authDate','asc')
+                                ->orderBy('direction','asc')
+                                ->get();
+        
+        $count = 0;
+        if(count($attendances) > 0){
+            foreach($attendances as $att)
+            {
+                if($att->direction == 'In' || $att->direction == 'IN')
+                {
+                    $attend = Attendance::where('employee_code',$att->emp_code)->whereDate('time_in',date('Y-m-d', strtotime($att->authDate)))->first();
+                    if($attend == null)
+                    {
+                        $attendance = new Attendance;
+                        $attendance->employee_code  = $att->employeeID;   
+                        $attendance->time_in = date('Y-m-d H:i:s',strtotime($att->authDateTime));
+                        $attendance->device_in = $att->deviceName;
+                        $attendance->save();
+                        $count++; 
+                    }
+                }
+                else if($att->direction == 'Out' || $att->direction == 'OUT' )
+                {
+                    $time_in_after = date('Y-m-d H:i:s',strtotime($att->authDateTime));
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $update = [
+                        'time_out' =>  date('Y-m-d H:i:s', strtotime($att->authDateTime)),
+                        'device_out' => $att->deviceName,
+                        // 'last_id' =>$att->id,
+                    ];
+                    // return $time_in_after . ' - ' .$time_in_before;
+                    $attendance_in = Attendance::where('employee_code',$att->employeeID)
+                    ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
+
+                    Attendance::where('employee_code',$att->employeeID)
+                    ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                    ->update($update);
+
+                    if($attendance_in ==  null)
+                    {
+                        $attendance = new Attendance;
+                        $attendance->employee_code  = $att->employeeID;   
+                        $attendance->time_out = date('Y-m-d H:i:s', strtotime($att->authDateTime));
+                        $attendance->device_out = $att->deviceName;
+                        $attendance->save(); 
+                    }
+
+                    $count++;
+                }
+            }
+        }
+
+        return back();
+    }
+
 }
