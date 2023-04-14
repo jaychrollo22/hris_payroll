@@ -35,7 +35,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<input type="checkbox" id="privacy-contact-check" class="ml-1 form-check-input">
-							<label class='ml-4 mb-0' for='same_as'><small><i> I hereby declare that the information provided is true and correct.  I also understand that any willful dishonesty may result to disciplinary action.</i></small></label>
+							<label class='ml-4 mb-0' for='same_as'><small><i> I hereby declare that the information provided is true and correct.  I also understand that any willful misrepresentation may result to disciplinary action.</i></small></label>
 						</div>
 						<div class="col-md-12">
 							<input type="checkbox" id="privacy-contact" disabled class="ml-1 form-check-input">
