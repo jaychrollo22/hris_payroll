@@ -10,6 +10,10 @@ class Employee extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
     //
 
+    public function beneficiaries(){
+        return $this->hasMany(EmployeeBeneficiary::class,'user_id','user_id');
+    }
+    
     public function contact_person(){
         return $this->hasOne(EmployeeContactPerson::class,'user_id','user_id');
     }

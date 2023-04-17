@@ -6,6 +6,7 @@ use App\Imports\EmployeesImport;
 use App\Classification;
 use App\Employee;
 use App\EmployeeContactPerson;
+use App\EmployeeBeneficiary;
 use App\EmployeeLeaveCredit;
 use App\EmployeeApprover;
 use App\EmployeeVessel;
@@ -875,7 +876,7 @@ class EmployeeController extends Controller
     public function employeeSettingsHR(User $user)
     {
 
-        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.beneficiaries','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
 
         $classifications = Classification::get();
 
@@ -1040,6 +1041,55 @@ class EmployeeController extends Controller
         return back();
     }
 
+    public function updateBeneficiariesHR(Request $request, $id){
+
+
+        $beneficiaries = $request->beneficiaries ? json_decode($request->beneficiaries) : "";
+        $deleted_beneficiaries = $request->deleted_beneficiaries ? json_decode($request->deleted_beneficiaries) : "";
+
+        if($deleted_beneficiaries){
+            foreach($deleted_beneficiaries as $item){
+                EmployeeBeneficiary::where('id',$item->id)->delete(); //Delete Beneficiary
+            }
+        }
+
+        if($beneficiaries){
+
+            $employee = Employee::findOrFail($id);
+            
+            if($employee){
+                foreach($beneficiaries as $item){
+                    if($item->id){
+                        $employee_beneficiary = EmployeeBeneficiary::where('id',$item->id)->first();
+
+                        if($employee_beneficiary){
+                            $employee_beneficiary->first_name = $item->first_name;
+                            $employee_beneficiary->middle_name = $item->first_name;
+                            $employee_beneficiary->last_name = $item->last_name;
+                            $employee_beneficiary->gender = $item->gender;
+                            $employee_beneficiary->bdate = $item->bdate;
+                            $employee_beneficiary->relation = $item->relation;
+                            $employee_beneficiary->save();
+                        }
+                    }else{
+                        $new = new EmployeeBeneficiary;
+                        $new->user_id = $employee->user_id;
+                        $new->first_name = $item->first_name;
+                        $new->middle_name = $item->first_name;
+                        $new->last_name = $item->last_name;
+                        $new->gender = $item->gender;
+                        $new->bdate = $item->bdate;
+                        $new->relation = $item->relation;
+                        $new->save();
+                    }
+                }
+            }
+        }
+    }
+
+    public function getBeneficiariesHR($id){
+        return $employee_beneficiary = EmployeeBeneficiary::where('user_id',$id)->get();
+    }
 
     public function generate_emp_code($table, $code, $year, $compId)
     {

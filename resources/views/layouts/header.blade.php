@@ -41,6 +41,10 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
     <style>
         .loader {
             position: fixed;
@@ -895,9 +899,23 @@
 
             });
 
-            
             $("#privacy-contact").click(function() {
                 $("#submit-contact-btn").attr("disabled", !this.checked);
+            });
+
+            $("#privacy-beneficiaries-check").click(function() {
+                $("#privacy-beneficiaries").attr("disabled", !this.checked);
+
+                if(this.checked == false) {
+                    $("#privacy-beneficiaries").prop('checked', false); 
+                    $("#privacy-beneficiaries").removeAttr('checked'); 
+                    $("#submit-beneficiaries-btn").attr("disabled",true);
+                }
+
+            });
+
+            $("#privacy-beneficiaries").click(function() {
+                $("#submit-beneficiaries-btn").attr("disabled", !this.checked);
             });
 
         });
