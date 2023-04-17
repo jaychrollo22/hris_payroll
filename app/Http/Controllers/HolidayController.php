@@ -5,6 +5,7 @@ use App\Holiday;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
+use App\Location;
 
 class HolidayController extends Controller
 {
@@ -20,10 +21,13 @@ class HolidayController extends Controller
         })
         ->orderBy('holiday_date','asc')->get();
 
+        $locations = Location::orderBy('location','ASC')->get();
+
         return view('holidays.view',
         array(
             'header' => 'settings',
             'holidays' => $holidays,
+            'locations' => $locations,
             
         ));
     }
@@ -34,6 +38,7 @@ class HolidayController extends Controller
         $new_holiday->holiday_name = $request->holiday_name;
         $new_holiday->holiday_type = $request->holiday_type;
         $new_holiday->holiday_date = $request->date;
+        $new_holiday->location = $request->location;
         $new_holiday->save();
 
         Alert::success('Successfully Store')->persistent('Dismiss');
@@ -52,6 +57,7 @@ class HolidayController extends Controller
         $new_holiday->holiday_name = $request->holiday_name;
         $new_holiday->holiday_type = $request->holiday_type;
         $new_holiday->holiday_date = $request->holiday_date;
+        $new_holiday->location = $request->location;
         $new_holiday->save();
 
         Alert::success('Successfully updated')->persistent('Dismiss');

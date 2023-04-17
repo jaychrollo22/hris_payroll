@@ -14,7 +14,7 @@
                     {{ csrf_field() }}
                     <label>Holiday Name:</label>
                     <input type="text" name="holiday_name" placeholder='Holiday Name' value='{{$holiday->holiday_name}}' class="form-control" required>
-                    <label >Holiday Type:</label>
+                    <label>Type:</label>
                     <select class='form-control' name = 'holiday_type' required>
                         <option ></option>
                         <option @if($holiday->holiday_type == "Legal Holiday") selected @endif value = 'Legal Holiday'>Legal Holiday</option>
@@ -23,6 +23,14 @@
                     <label >Holiday Date:</label>
                     <input type="date" name="holiday_date" placeholder='' value='{{$holiday->holiday_date}}' class="form-control" required>
                     
+                    <label>Location</label>
+                    <select data-placeholder="Location" class="form-control form-control-sm js-example-basic-single " style='width:100%;' name='location'>
+                        <option value="">--Select Location--</option>
+                        @foreach($locations as $location)
+                            <option value="{{$location->location}}" @if ($holiday->location == $location->location) selected @endif>{{$location->location}}</option>
+                        @endforeach
+                    </select>
+                  
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" id='submit1' class="btn btn-primary">Save</button>

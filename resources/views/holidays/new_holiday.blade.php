@@ -18,17 +18,28 @@
           </div>
           <div class="row">
             <div class='col-md-12 form-group'>
+               Type  
+               <select class='form-control' name='holiday_type' required>
+                  <option ></option>
+                  <option value = 'Regular Holiday'>Legal Holiday</option>
+                  <option value = 'Special Holiday'>Special Holiday</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class='col-md-12 form-group'>
                Date  
               <input type="date" name='date' class="form-control" required>
             </div>
           </div>
           <div class="row">
             <div class='col-md-12 form-group'>
-               Type  
-               <select class='form-control' name='holiday_type' required>
-                  <option ></option>
-                  <option value = 'Regular Holiday'>Legal Holiday</option>
-                  <option value = 'Special Holiday'>Special Holiday</option>
+              Location
+              <select data-placeholder="Location" class="form-control form-control-sm js-example-basic-single " style='width:100%;' name='location'>
+                  <option value="">--Select Location--</option>
+                  @foreach($locations as $location)
+                      <option value="{{$location->location}}">{{$location->location}}</option>
+                  @endforeach
               </select>
             </div>
           </div>
