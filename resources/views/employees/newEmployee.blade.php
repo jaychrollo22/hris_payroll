@@ -133,8 +133,9 @@
                               </div>
                               <div class='col-md-4'>
                                 Department
-                                <select data-placeholder="Department" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='department' required>
+                                <select data-placeholder="Department" class="form-control form-control-sm js-example-basic-single " style='width:100%;' name='department' required>
                                     <option value="">--Select Department--</option>
+                                    <option value="N/A">N/A</option>
                                     @foreach($departments as $department)
                                       <option value="{{$department->id}}">{{$department->code}} - {{$department->name}}</option>
                                     @endforeach
@@ -151,7 +152,7 @@
                               </div>
                               <div class='col-md-4'>
                                 Project
-                                <select data-placeholder="Project" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='project'>
+                                <select data-placeholder="Project" class="form-control form-control-sm js-example-basic-single " style='width:100%;' name='project'>
                                     <option value="">--Select Project--</option>
                                     <option value="N/A">N/A</option>
                                     @foreach($projects as $project)
