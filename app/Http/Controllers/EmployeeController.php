@@ -36,6 +36,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
 use App\Exports\EmployeesExport;
+use App\Exports\EmployeeHRExport;
 
 class EmployeeController extends Controller
 {
@@ -209,6 +210,20 @@ class EmployeeController extends Controller
         $access_rate = checkUserPrivilege('employees_rate',auth()->user()->id);
 
         return Excel::download(new EmployeesExport($company,$department,$allowed_companies,$access_rate), 'Master List '. $company_name .' .xlsx');
+    }
+
+    public function export_hr(Request $request) 
+    {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_companies = json_encode($allowed_companies);
+
+        $company = isset($request->company) ? $request->company : "";
+        $department = isset($request->department) ? $request->department : "";
+        $company_info = Company::where('id',$company)->first();
+        $company_name = $company_info ? $company_info->company_code : "";
+
+        return Excel::download(new EmployeeHRExport($company,$department,$allowed_companies), 'Master List '. $company_name .' .xlsx');
     }
 
     public function new(Request $request)

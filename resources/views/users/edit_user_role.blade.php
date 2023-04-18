@@ -84,8 +84,20 @@
                                             @endif
                                         @else
                                             <input type="checkbox" name="employees_export" id="employees_export{{$user->id}}">
+                                        @endif 
+                                        Export OTPMS
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
+                                            @if($user->user_privilege->employees_export_hr == 'on')
+                                                <input type="checkbox" name="employees_export_hr" id="employees_export_hr{{$user->id}}" value="{{ $user->user_privilege->employees_export_hr }}" checked>
+                                            @else
+                                                <input type="checkbox" name="employees_export_hr" id="employees_export_hr{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="employees_export_hr" id="employees_export_hr{{$user->id}}">
                                         @endif
-                                        Export
+                                        Export HR Details
                                         <br>
                                         <br>
                                         @if($user->user_privilege)

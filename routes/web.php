@@ -96,6 +96,7 @@ Route::group(['middleware' => 'auth'], function () {
     //employees
     Route::get('employees', 'EmployeeController@view');
     Route::get('employees-export', 'EmployeeController@export');
+    Route::get('employees-export-hr', 'EmployeeController@export_hr');
     Route::post('new-employee', 'EmployeeController@new');
     Route::get('account-setting-hr/{user}', 'EmployeeController@employeeSettingsHR');
     Route::post('account-setting-hr/updateInfoHR/{id}', 'EmployeeController@updateInfoHR');

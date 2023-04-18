@@ -108,7 +108,10 @@
                                 @endif
                             @endif
                             @if (checkUserPrivilege('employees_export',auth()->user()->id) == 'yes')
-                                <a href="/employees-export?company={{$company}}&department={{$department}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right" title="Export Employees"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+                                <a href="/employees-export?company={{$company}}&department={{$department}}" class="btn btn-outline-danger btn-icon-text btn-sm text-center float-right" title="Export OTPMS"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+                            @endif
+                            @if (checkUserPrivilege('employees_export_hr',auth()->user()->id) == 'yes')
+                                <a href="/employees-export-hr?company={{$company}}&department={{$department}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right mr-2" title="Export HR Details"><i class="ti-arrow-down btn-icon-prepend"></i></a>
                             @endif
                         </h4>
 

@@ -94,6 +94,7 @@ class UserController extends Controller
                 $user_privilege->employees_edit = $request->employees_edit;
                 $user_privilege->employees_add = $request->employees_add;
                 $user_privilege->employees_export = $request->employees_export;
+                $user_privilege->employees_export_hr = $request->employees_export_hr;
                 $user_privilege->employees_rate = $request->employees_rate;
 
                 $user_privilege->reports_leave = $request->reports_leave;
@@ -128,6 +129,7 @@ class UserController extends Controller
                 $new_user_privilege->employees_edit = $request->employees_edit;
                 $new_user_privilege->employees_add = $request->employees_add;
                 $new_user_privilege->employees_export = $request->employees_export;
+                $new_user_privilege->employees_export_hr = $request->employees_export_hr;
                 $new_user_privilege->employees_rate = $request->employees_rate;
 
                 $new_user_privilege->reports_leave = $request->reports_leave;
