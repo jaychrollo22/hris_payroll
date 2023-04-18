@@ -882,16 +882,22 @@ class EmployeeController extends Controller
 
         $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info','level_info')->get();
         
-        $employee_approvers = Employee::whereHas('company',function($q) use($user){
-                                    if($user->employee->company_id){
-                                        $q->where('company_id',$user->employee->company_id);
-                                            // ->where('department_id',$user->employee->department_id);
-                                    }
-                                })
-                                // ->where('level','!=','1')
-                                ->where('status','Active')
-                                ->pluck('user_id')
-                                ->toArray();
+        if($user->employee->level == '4' || $user->employee->level == 'EXECUTIVE'){
+            $employee_approvers = Employee::where('status','Active')
+                                            ->pluck('user_id')
+                                            ->toArray();
+        }else{
+            $employee_approvers = Employee::whereHas('company',function($q) use($user){
+                                                if($user->employee->company_id){
+                                                    $q->where('company_id',$user->employee->company_id);
+                                                        // ->where('department_id',$user->employee->department_id);
+                                                }
+                                            })
+                                            // ->where('level','!=','1')
+                                            ->where('status','Active')
+                                            ->pluck('user_id')
+                                            ->toArray();
+        }
         
         $schedules = Schedule::get();
         $banks = Bank::get();
