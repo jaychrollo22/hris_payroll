@@ -5,6 +5,8 @@ use App\UserPrivilege;
 use App\Employee;
 use App\EmployeeLeave;
 use App\EmployeeEarnedLeave;
+use App\Holiday;
+use App\Attendance;
 
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
@@ -97,7 +99,7 @@ function dateRange( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
 }
 
 function isRestDay( $date ) {
-
+    
     $check_day = date('D',strtotime($date));
     $check = 0;
     if ($check_day == 'Sat' || $check_day == 'Sun') {
@@ -137,6 +139,7 @@ function employeeHasOB($employee_obs = array(), $check_date){
         }
     }
 }
+
 function employeeHasOBDetails($employee_obs = array(), $check_date){
     if(count($employee_obs) > 0){
         foreach($employee_obs as $item){
@@ -156,6 +159,7 @@ function employeeHasWFH($employee_wfhs = array(), $check_date){
         }
     }
 }
+
 function employeeHasWFHDetails($employee_wfhs = array(), $check_date){
     if(count($employee_wfhs) > 0){
         foreach($employee_wfhs as $item){
@@ -209,7 +213,9 @@ function checkUsedVacationLeave($user_id){
                 $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
                 if($date_range){
                     foreach($date_range as $date_r){
-                        if($leave->withpay == 1){
+                        $date_today = date('Y-m-d');
+                        $leave_Date = date('Y-m-d', strtotime($date_r));
+                        if($leave->withpay == 1 && $leave_Date <= $date_today){
                             $count += 1;
                         }
                     }
@@ -282,3 +288,186 @@ function checkUsedServiceIncentiveLeave($user_id){
 
     return $count;
 }
+
+function checkIfHoliday($date,$location){
+    $check_holiday = Holiday::where('holiday_date',$date)->first();
+    if($check_holiday){
+        if($check_holiday->location){
+            if($check_holiday->location == $location){
+                return $check_holiday->holiday_type;
+            }else{
+                return "";
+            }
+        }else{
+            return $check_holiday->holiday_type;
+        }
+    }else{
+        return "";
+    }
+}
+
+function checkHasAttendanceHoliday($date,$employee_code,$location){
+
+    $date_attendance = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date) ) ));
+    $check_if_holiday = checkIfHoliday($date_attendance,$location);
+    $check_if_restday = isRestDay($date_attendance);
+
+    if($check_if_holiday){ //Holiday
+        $date_attendance_1 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance) ) ));
+        $check_if_holiday_1 = checkIfHoliday($date_attendance_1,$location);
+        $check_if_restday_1 = isRestDay($date_attendance_1);
+
+        if($check_if_holiday_1){ //Holiday
+            
+            $date_attendance_2 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_1) ) ));
+            $check_if_holiday_2 = checkIfHoliday($date_attendance_2,$location);
+            $check_if_restday_2 = isRestDay($date_attendance_2);
+
+            if($check_if_holiday_2){ //Holiday
+
+                $date_attendance_3 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_2) ) ));
+                $check_if_holiday_3 = checkIfHoliday($date_attendance_3,$location);
+                $check_if_restday_3 = isRestDay($date_attendance_3);
+
+                if($check_if_holiday_3){ //Holiday
+
+                }else{ //Regular Work
+                    if($check_if_restday_3 == 0){ //Rest day no
+                        return $date_attendance_3;
+                    }
+                }
+            }else{ //Regular Work
+                if($check_if_restday_2 == 0){ //Rest day no
+                    return $date_attendance_2;
+                }
+            }
+
+        }else{ //Regular Work
+            if($check_if_restday_1 == 0){ //Rest day no
+                return $date_attendance_1;
+            }else{
+                $date_attendance_2 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_1) ) ));
+                $check_if_holiday_2 = checkIfHoliday($date_attendance_2,$location);
+                $check_if_restday_2 = isRestDay($date_attendance_2);
+
+                if($check_if_holiday_2){ //Holiday
+                    
+                    $date_attendance_3 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_2) ) ));
+                    $check_if_holiday_3 = checkIfHoliday($date_attendance_3,$location);
+                    $check_if_restday_3 = isRestDay($date_attendance_3);
+
+                    if($check_if_holiday_3){ //Holiday
+
+                        $date_attendance_4 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_3) ) ));
+                        $check_if_holiday_4 = checkIfHoliday($date_attendance_4,$location);
+                        $check_if_restday_4 = isRestDay($date_attendance_4);
+                        
+                        if($check_if_holiday_4){ //Holiday
+
+                        }else{ //Regular Work
+                            if($check_if_restday_4 == 0){ //Rest day no
+                                return $date_attendance_4;
+                            }
+                        }
+                    }else{ //Regular Work
+                        if($check_if_restday_3 == 0){ //Rest day no
+                            return $date_attendance_3;
+                        }
+                    }
+                }else{ //Regular Work
+                    if($check_if_restday_2 == 0){ //Rest day no
+                        return $date_attendance_2;
+                    }
+                }
+            }
+        }
+    }else{ //Regular Work
+        if($check_if_restday == 0){
+            return $date_attendance;
+        }else{ // Regular days
+            $date_attendance_1 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance) ) ));
+            $check_if_holiday_1 = checkIfHoliday($date_attendance_1,$location);
+            $check_if_restday_1 = isRestDay($date_attendance_1);
+
+            if($check_if_holiday_1){ //Holiday
+
+                $date_attendance_2 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_1) ) ));
+                $check_if_holiday_2 = checkIfHoliday($date_attendance_2,$location);
+                $check_if_restday_2 = isRestDay($date_attendance_2);
+
+                if($check_if_holiday_2){ //Holiday
+                    $date_attendance_3 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_2) ) ));
+                    $check_if_holiday_3 = checkIfHoliday($date_attendance_3,$location);
+                    $check_if_restday_3 = isRestDay($date_attendance_3);
+
+                    if($check_if_holiday_3){ //Holiday
+
+                    }else{ //Regular Work
+                        if($check_if_restday_3 == 0){ //Rest day no
+                            return $date_attendance_3;
+                        }
+                    }
+                }else{ //Regular Work
+                    if($check_if_restday_2 == 0){ //Rest day no
+                        return $date_attendance_2;
+                    }
+                }
+            }else{ //Regular Work
+                if($check_if_restday_1 == 0){ //Rest day no
+                    return $date_attendance_1;
+                }else{
+
+                    $date_attendance_2 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_1) ) ));
+                    $check_if_holiday_2 = checkIfHoliday($date_attendance_2,$location);
+                    $check_if_restday_2 = isRestDay($date_attendance_2);
+
+                    if($check_if_holiday_2){ //Holiday
+
+                        $date_attendance_3 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_2) ) ));
+                        $check_if_holiday_3 = checkIfHoliday($date_attendance_3,$location);
+                        $check_if_restday_3 = isRestDay($date_attendance_3);
+
+                        if($check_if_holiday_3){ //Holiday
+                            $date_attendance_4 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_3) ) ));
+                            $check_if_holiday_4 = checkIfHoliday($date_attendance_4,$location);
+                            $check_if_restday_4 = isRestDay($date_attendance_4);
+
+                            if($check_if_holiday_4){ //Holiday
+
+                            }else{ //Regular Work
+                                if($check_if_restday_4 == 0){ //Rest day no
+                                    return $date_attendance_4;
+                                }
+                            }
+                        }else{ //Regular Work
+                            if($check_if_restday_3 == 0){ //Rest day no
+                                return $date_attendance_3;
+                            }
+                        }
+                    }else{
+                        if($check_if_restday_2 == 0){ //Rest day no
+                            return $date_attendance_2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+function checkHasAttendanceHolidayStatus($date,$employee_code){
+    $attendance = Attendance::select('id')
+                        ->where('employee_code',$employee_code)
+                        ->where(function($q) use($date){
+                            $q->whereDate('time_in',$date)
+                                ->orWhereDate('time_out',$date);
+                        })
+                        ->first();
+    if($attendance){
+        return 'With-Pay';
+    }else{
+        return 'Without-Pay';
+    }
+}
+
+

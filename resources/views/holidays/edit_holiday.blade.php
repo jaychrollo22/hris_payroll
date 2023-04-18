@@ -26,6 +26,7 @@
                     <label>Location</label>
                     <select data-placeholder="Location" class="form-control form-control-sm js-example-basic-single " style='width:100%;' name='location'>
                         <option value="">--Select Location--</option>
+                        <option value="N/A">N/A</option>
                         @foreach($locations as $location)
                             <option value="{{$location->location}}" @if ($holiday->location == $location->location) selected @endif>{{$location->location}}</option>
                         @endforeach

@@ -57,7 +57,12 @@ class HolidayController extends Controller
         $new_holiday->holiday_name = $request->holiday_name;
         $new_holiday->holiday_type = $request->holiday_type;
         $new_holiday->holiday_date = $request->holiday_date;
-        $new_holiday->location = $request->location;
+
+        if($request->location == 'N/A' || empty($request->location)){
+            $new_holiday->location = "";
+        }else{
+            $new_holiday->location = $request->location;
+        }
         $new_holiday->save();
 
         Alert::success('Successfully updated')->persistent('Dismiss');

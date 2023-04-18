@@ -139,13 +139,34 @@
                             
                         @else
                             @php 
-                                $if_leave = employeeHasLeave($emp->leaves,date('Y-m-d',strtotime($date_r)));
                                 $is_absent = '';
-                                if(empty($if_leave)){
-                                    $is_absent = 'Absent';
-                                }        
+                                $if_leave = '';
+                                $if_attendance_holiday = '';
+                                $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
+                                $if_attendance_holiday_status = '';
+                                if($check_if_holiday){
+                                    $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
+                                    if($if_attendance_holiday){
+
+                                        $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                        $if_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                        $if_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
+
+                                        if($if_leave || $if_wfh || $if_ob){
+                                            $if_attendance_holiday_status = 'With-Pay';
+                                        }else{
+                                            $if_attendance_holiday_status = checkHasAttendanceHolidayStatus($if_attendance_holiday, $emp->employee_number);
+                                        }
+                                    }
+                                }else{
+                                    $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)));
+                                    if(empty($if_leave)){
+                                        $is_absent = 'Absent';
+                                    } 
+                                }      
                             @endphp
                             {{$is_absent}}
+                            {{$if_attendance_holiday_status}}
                         @endif
                     @endif
                 </td>
