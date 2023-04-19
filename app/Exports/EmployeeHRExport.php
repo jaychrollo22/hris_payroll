@@ -38,13 +38,15 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'Employee Number',
-            'User Id',
+            'User ID',
             'First Name',
             'Middle Name',
             'Last Name',
             'Name Suffix',
+            'Classification ID',
             'Classification',
-            'Department Id',
+            'Department ID',
+            'Department',
             'Position',
             'Level',
             'Birth Date',
@@ -68,6 +70,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             'Project',
             'Religion',
             'Company ID',
+            'Company',
             
         ];
     }
@@ -75,6 +78,8 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
     public function map($employee): array
     {
         $company = $employee->company ? $employee->company->company_name : "";
+        $department = $employee->department ? $employee->department->name : "";
+        $classification_info = $employee->classification_info ? $employee->classification_info->name : "";
     
         return [
             $employee->employee_number,
@@ -84,7 +89,9 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             $employee->last_name,
             $employee->name_suffix,
             $employee->classification,
+            $classification_info,
             $employee->department_id,
+            $department,
             $employee->position,
             $employee->level,
             date('d/m/Y',strtotime($employee->birth_date)),
@@ -108,6 +115,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             $employee->project,
             $employee->religion,
             $employee->company_id,
+            $company
         ];
         
     }
