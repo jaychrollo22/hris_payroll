@@ -30,9 +30,23 @@
                   <div class="col-sm-4">
                     <select class="js-example-basic-single w-100 form-control"  id="leave_type" style='width:100%;' name='leave_type' required>
                       @foreach ($leave_types as $leave_type)
-                        <option value="{{ $leave_type->id }}"{{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>
-                                {{ $leave_type->leave_type }}
-                        </option>
+                        @if($is_allowed_to_file_vl && $leave_type->code == 'VL')
+                          <option value="{{$leave_type->id}}" {{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_type->leave_type}}</option>
+                        @elseif($is_allowed_to_file_sl && $leave_type->code == 'SL')
+                          <option value="{{$leave_type->id}}" {{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_type->leave_type}}</option>
+                        @elseif($is_allowed_to_file_sil && $leave_type->code == 'SIL' && $employee_status->classifcation == 'Project Based')
+                          <option value="{{$leave_type->id}}" {{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_type->leave_type}}</option>
+                        @elseif($is_allowed_to_file_ml && $leave_type->code == 'ML')
+                          <option value="{{$leave_type->id}}" {{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_type->leave_type}}</option>
+                        @elseif($is_allowed_to_file_pl && $leave_type->code == 'PL')
+                          <option value="{{$leave_type->id}}" {{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_type->leave_type}}</option>
+                        @elseif($is_allowed_to_file_spl && $leave_type->code == 'SPL')
+                          <option value="{{$leave_type->id}}" {{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_type->leave_type}}</option>
+                        @elseif($is_allowed_to_file_splw && $leave_type->code == 'SPLW')
+                          <option value="{{$leave_type->id}}" {{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_type->leave_type}}</option>
+                        @elseif($is_allowed_to_file_splvv && $leave_type->code == 'SPLVV')
+                          <option value="{{$leave_type->id}}" {{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_type->leave_type}}</option>
+                        @endif
                       @endforeach                  
                     </select>
                   </div>

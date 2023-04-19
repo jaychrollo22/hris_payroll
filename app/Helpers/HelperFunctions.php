@@ -289,6 +289,33 @@ function checkUsedServiceIncentiveLeave($user_id){
     return $count;
 }
 
+function checkUsedLeave($user_id,$leave_type){
+    $employee_leave = EmployeeLeave::where('user_id',$user_id)
+                                    ->where('leave_type',$leave_type)
+                                    ->where('status','Approved')
+                                    ->get();
+
+    $count = 0;
+    if($employee_leave){
+        foreach($employee_leave as $leave){
+            if($leave->withpay == 1 && $leave->halfday == 1){
+                $count += 0.5;
+            }else{
+                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                if($date_range){
+                    foreach($date_range as $date_r){
+                        if($leave->withpay == 1){
+                            $count += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return $count;
+}
+
 function checkIfHoliday($date,$location){
     $check_holiday = Holiday::where('holiday_date',$date)->first();
     if($check_holiday){
