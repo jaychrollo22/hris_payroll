@@ -28,9 +28,9 @@
               <select class="js-example-basic-single w-100 form-control"  id="leave_type" style='width:100%;' name='leave_type' required>
                 <option value="">--Select--</option>
                 @foreach($leave_types as $leave_type)
-                  @if($is_allowed_to_file_vl && $leave_type->code == 'VL')
+                  @if($leave_type->code == 'VL')
                     <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
-                  @elseif($is_allowed_to_file_sl && $leave_type->code == 'SL')
+                  @elseif($leave_type->code == 'SL')
                     <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
                   @elseif($is_allowed_to_file_sil && $leave_type->code == 'SIL' && $employee_status->classifcation == 'Project Based')
                     <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
@@ -51,10 +51,52 @@
             <div class='col-sm-5'>
               <div class='row'>
                 <div class='col-md-6'>
-                  <label class="form-check-label ">
-                    <input type="checkbox" name="withpay" class="form-check-input" value="1">
-                    With Pay
-                </label>
+                  @if($is_allowed_to_file_vl)
+                    <label class="form-check-label ">
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      With Pay
+                  </label>
+                  @elseif($is_allowed_to_file_sl)
+                    <label class="form-check-label ">
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      With Pay
+                  </label>
+                  @elseif($is_allowed_to_file_sil)
+                    <label class="form-check-label ">
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      With Pay
+                  </label>
+                  @elseif($is_allowed_to_file_ml)
+                    <label class="form-check-label ">
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      With Pay
+                  </label>
+                  @elseif($is_allowed_to_file_pl)
+                    <label class="form-check-label ">
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      With Pay
+                  </label>
+                  @elseif($is_allowed_to_file_spl)
+                    <label class="form-check-label ">
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      With Pay
+                  </label>
+                  @elseif($is_allowed_to_file_splw)
+                    <label class="form-check-label ">
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      With Pay
+                  </label>
+                  @elseif($is_allowed_to_file_splvv)
+                    <label class="form-check-label ">
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      With Pay
+                  </label>
+                  @else
+                    <label class="form-check-label ">
+                        <input type="checkbox" name="withpay" class="form-check-input" value="0" disabled>
+                        With Pay
+                    </label>
+                  @endif
                 </div>
                 <div class='col-md-6'>
                   <label class="form-check-label ">
