@@ -67,6 +67,10 @@ class Employee extends Model implements Auditable
         return $this->hasMany(EmployeeOb::class,'user_id','user_id');
     }
 
+    public function dtrs() {
+        return $this->hasMany(EmployeeDtr::class,'user_id','user_id');
+    }
+
     public function wfhs() {
         return $this->hasMany(EmployeeWfh::class,'user_id','user_id');
     }
@@ -81,6 +85,10 @@ class Employee extends Model implements Auditable
 
     public function approved_wfhs() {
         return $this->hasMany(EmployeeWfh::class,'user_id','user_id')->where('status','Approved');
+    }
+
+    public function approved_dtrs() {
+        return $this->hasMany(EmployeeDtr::class,'user_id','user_id')->where('status','Approved');
     }
 
     public function employee_leave_credits() {

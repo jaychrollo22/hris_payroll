@@ -170,6 +170,16 @@ function employeeHasWFHDetails($employee_wfhs = array(), $check_date){
     }
 }
 
+function employeeHasDTRDetails($employee_dtrs = array(), $check_date){
+    if(count($employee_dtrs) > 0){
+        foreach($employee_dtrs as $item){
+            if(date('Y-m-d',strtotime($item['dtr_date'])) == date('Y-m-d',strtotime($check_date))){
+                return $item;
+            }
+        }
+    }
+}
+
 function getUserAllowedCompanies($user_id){
     $user_allowed_companies = UserAllowedCompany::where('user_id',$user_id)->first();
 

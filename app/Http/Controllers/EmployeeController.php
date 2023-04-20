@@ -1238,6 +1238,11 @@ class EmployeeController extends Controller
                                     ->where('status','Approved')
                                     ->orderBy('id','asc');
                                 }])
+                                ->with(['dtrs' => function ($query) use ($from_date, $to_date) {
+                                    $query->whereBetween('dtr_date', [$from_date, $to_date])
+                                    ->where('status','Approved')
+                                    ->orderBy('id','asc');
+                                }])
                                 ->where('company_id', $company)
                                 ->where('status','Active')
                                 ->get();
@@ -1422,6 +1427,59 @@ class EmployeeController extends Controller
             'terminals' => $terminals,
             'terminals_hik' => $terminals_hik,
         ));
+    }
+
+    public function sync_per_employee(Request $request)
+    {
+        $from = $request->from_per_employee;
+        $to = $request->to_per_employee;
+        $employee_code = $request->employee_code;
+
+        $attendances = iclocktransactions_mysql::where('emp_code','=',$employee_code)->whereBetween('punch_time',[$from,$to])->orderBy('punch_time','asc')->get();
+        
+        foreach($attendances as $att)
+        {
+            if($att->punch_state == 0)
+            {
+                    $attend = Attendance::where('employee_code',$att->emp_code)->whereDate('time_in',date('Y-m-d', strtotime($att->punch_time)))->first();
+                    if($attend == null)
+                    {
+                        $attendance = new Attendance;
+                        $attendance->employee_code  = $att->emp_code;   
+                        $attendance->time_in = date('Y-m-d H:i:s',strtotime($att->punch_time));
+                        $attendance->device_in = $att->terminal_alias;
+                        $attendance->save(); 
+                    }
+                
+            }
+            else if($att->punch_state == 1)
+            {
+                $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
+                $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                $update = [
+                    'time_out' =>  date('Y-m-d H:i:s', strtotime($att->punch_time)),
+                    'device_out' => $att->terminal_alias,
+                    'last_id' =>$att->id,
+                ];
+
+                $attendance_in = Attendance::where('employee_code',$att->emp_code)
+                ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
+                Attendance::where('employee_code',$att->emp_code)
+                ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                ->update($update);
+
+                if($attendance_in ==  null)
+                {
+                    $attendance = new Attendance;
+                    $attendance->employee_code  = $att->emp_code;   
+                    $attendance->time_out = date('Y-m-d H:i:s', strtotime($att->punch_time));
+                    $attendance->device_out = $att->terminal_alias;
+                    $attendance->save(); 
+                }
+            }
+        }
+       
+        return back();
     }
 
     public function sync_hik(Request $request)
