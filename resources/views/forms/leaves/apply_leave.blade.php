@@ -53,42 +53,42 @@
                 <div class='col-md-6'>
                   @if($is_allowed_to_file_vl)
                     <label class="form-check-label ">
-                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1">
                       With Pay
                   </label>
                   @elseif($is_allowed_to_file_sl)
                     <label class="form-check-label ">
-                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1">
                       With Pay
                   </label>
                   @elseif($is_allowed_to_file_sil)
                     <label class="form-check-label ">
-                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1">
                       With Pay
                   </label>
                   @elseif($is_allowed_to_file_ml)
                     <label class="form-check-label ">
-                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1">
                       With Pay
                   </label>
                   @elseif($is_allowed_to_file_pl)
                     <label class="form-check-label ">
-                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1">
                       With Pay
                   </label>
                   @elseif($is_allowed_to_file_spl)
                     <label class="form-check-label ">
-                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1">
                       With Pay
                   </label>
                   @elseif($is_allowed_to_file_splw)
                     <label class="form-check-label ">
-                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1">
                       With Pay
                   </label>
                   @elseif($is_allowed_to_file_splvv)
                     <label class="form-check-label ">
-                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1" disabled>
+                      <input type="checkbox" name="withpay" class="form-check-input" checked value="1">
                       With Pay
                   </label>
                   @else
