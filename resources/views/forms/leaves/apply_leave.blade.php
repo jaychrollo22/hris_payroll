@@ -8,7 +8,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-	<form method='POST' action='new-leave' onsubmit='show()'  enctype="multipart/form-data">
+	<form method='POST' action='new-leave' onsubmit="btnLeave.disabled = true; return true;"  enctype="multipart/form-data">
 				@csrf       
       <div class="modal-body">
         <div class="app">
@@ -53,18 +53,13 @@
                 <div class='row'>
                   <div class='col-md-6'>
                   
-                    <div v-if="leave_type">
+                    <div>
                       <label class="form-check-label ">
                         <input type="checkbox" name="withpay" class="form-check-input" checked value="1">
                         With Pay
                     </label>
                     </div>
-                    <div v-else>
-                      <label class="form-check-label ">
-                          <input type="checkbox" name="withpay" class="form-check-input" value="0" disabled>
-                          With Pay
-                      </label>
-                    </div>
+            
                   </div>
                   <div class='col-md-6'>
                     <label class="form-check-label ">
@@ -119,7 +114,7 @@
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" name="btnLeave" class="btn btn-primary">Save</button>
       </div>
   </form>
     </div>
