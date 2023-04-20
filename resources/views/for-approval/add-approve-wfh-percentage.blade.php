@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class='col-md-12 form-group'>
                             Approve WFH Percentage:
-                            <select name="approve_percentage" id="" class="form-control">
+                            <select name="approve_percentage" id="" class="form-control" required>
                                 <option value="60" {{$wfh->approve_percentage == '60' ? 'selected' : "" }}>WFH 60%</option>
                                 <option value="100" {{$wfh->approve_percentage == '100' ? 'selected' : "" }}>WFH 100%</option>
                             </select>
