@@ -82,8 +82,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('decline-overtime/{id}','FormApprovalController@declineOvertime');
 
     Route::get('for-work-from-home','FormApprovalController@form_wfh_approval');
-    Route::get('approve-wfh/{id}','FormApprovalController@approveWfh');
+    // Route::get('approve-wfh/{id}','FormApprovalController@approveWfh');
     Route::get('decline-wfh/{id}','FormApprovalController@declineWfh');
+    Route::post('approve-wfh-percentage/{id}','FormApprovalController@approveWfh');
     
     Route::get('for-official-business','FormApprovalController@form_ob_approval');
     Route::get('approve-ob/{id}','FormApprovalController@approveOb');
@@ -162,6 +163,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pmi-local', 'EmployeeController@localbio');
     Route::get('biometrics-per-company', 'EmployeeController@perCompany');
     Route::get('sync-biometrics','EmployeeController@sync');
+    Route::get('sync-biometric-per-employee','EmployeeController@sync_per_employee');
 
     Route::get('sync-hik-att-logs','EmployeeController@sync_hik');
 

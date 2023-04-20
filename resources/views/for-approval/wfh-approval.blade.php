@@ -57,6 +57,7 @@
                         <th>Remarks</th> 
                         <th>Approvers</th> 
                         <th>Attachment</th>
+                        <th>Approve %</th>
                         <th>Status</th>
                         <th>Action </th> 
                       </tr>
@@ -91,11 +92,13 @@
                             @endif<br> 
                           @endforeach
                         </td>
-                       
                         <td>
                           @if($form_approval->attachment)
                           <a href="{{url($form_approval->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>
                           @endif
+                        </td>
+                        <td align="center">
+                          {{$form_approval->approve_percentage ? $form_approval->approve_percentage . '%' : ""}}
                         </td>
                         <td>
                           @if ($form_approval->status == 'Pending')
@@ -110,9 +113,13 @@
 
                           @foreach($form_approval->approver as $k => $approver)
                             @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'Pending')
-                              <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" onclick="approve({{ $form_approval->id }})">
+                              {{-- <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" onclick="approve({{ $form_approval->id }})">
+                                <i class="ti-check btn-icon-prepend"></i>                                                    
+                              </button> --}}
+                              <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#approve-wfh-percentage-{{ $form_approval->id }}" data-toggle="modal" title='Approve'>
                                 <i class="ti-check btn-icon-prepend"></i>                                                    
                               </button>
+
                               <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" onclick="decline({{ $form_approval->id }})">
                                 <i class="ti-close btn-icon-prepend"></i>                                                    
                               </button> 
@@ -133,6 +140,11 @@
     </div>
 </div>
 @endsection
+
+@foreach ($wfhs as $wfh)
+  @include('for-approval.add-approve-wfh-percentage')
+@endforeach 
+
 @php
 function get_count_days($data,$date_from,$date_to)
  {
@@ -153,43 +165,43 @@ function get_count_days($data,$date_from,$date_to)
 @endphp  
 @section('ForApprovalScript')
 	<script>
-		function approve(id) {
-			var element = document.getElementById('tdActionId'+id);
-			var dataID = element.getAttribute('data-id');
-			swal({
-					title: "Are you sure?",
-					text: "You want to approve this wfh?",
-					icon: "warning",
-					buttons: true,
-					dangerMode: true,
-				})
-				.then((willApprove) => {
-					if (willApprove) {
-						document.getElementById("loader").style.display = "block";
-						$.ajax({
-							url: "approve-wfh/" + id,
-							method: "GET",
-							data: {
-								id: id
-							},
-							headers: {
-								'X-CSRF-TOKEN': '{{ csrf_token() }}'
-							},
-							success: function(data) {
-								document.getElementById("loader").style.display = "none";
-								swal("Wfh has been Approved!", {
-									icon: "success",
-								}).then(function() {
-									location.reload();
-								});
-							}
-						})
+		// function approve(id) {
+		// 	var element = document.getElementById('tdActionId'+id);
+		// 	var dataID = element.getAttribute('data-id');
+		// 	swal({
+		// 			title: "Are you sure?",
+		// 			text: "You want to approve this wfh?",
+		// 			icon: "warning",
+		// 			buttons: true,
+		// 			dangerMode: true,
+		// 		})
+		// 		.then((willApprove) => {
+		// 			if (willApprove) {
+		// 				document.getElementById("loader").style.display = "block";
+		// 				$.ajax({
+		// 					url: "approve-wfh/" + id,
+		// 					method: "GET",
+		// 					data: {
+		// 						id: id
+		// 					},
+		// 					headers: {
+		// 						'X-CSRF-TOKEN': '{{ csrf_token() }}'
+		// 					},
+		// 					success: function(data) {
+		// 						document.getElementById("loader").style.display = "none";
+		// 						swal("Wfh has been Approved!", {
+		// 							icon: "success",
+		// 						}).then(function() {
+		// 							location.reload();
+		// 						});
+		// 					}
+		// 				})
 
-					} else {
-                        swal({text:"You stop the approval of wfh.",icon:"success"});
-					}
-				});
-		}
+		// 			} else {
+    //                     swal({text:"You stop the approval of wfh.",icon:"success"});
+		// 			}
+		// 		});
+		// }
 		function decline(id) {
 			var element = document.getElementById('tdActionId'+id);
 			var dataID = element.getAttribute('data-id');
@@ -223,7 +235,7 @@ function get_count_days($data,$date_from,$date_to)
 						})
 
 					} else {
-                        swal({text:"You stop the approval of wfh.",icon:"success"});
+              swal({text:"You stop the approval of wfh.",icon:"success"});
 					}
 				});
 		}
