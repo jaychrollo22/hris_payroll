@@ -55,7 +55,7 @@
                Break (Hrs)
             </div>
             <div class='col-md-4'>
-              <input type="number" name='break_hrs' min="1" max="3" class="form-control" placeholder="0.00">
+              <input type="number" name='break_hrs' min="0" max="3" class="form-control" placeholder="0.00">
             </div>
           </div>
 
