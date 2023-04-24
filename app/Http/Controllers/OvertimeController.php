@@ -21,6 +21,7 @@ class OvertimeController extends Controller
         $company = $request->company;
         $from_date = $request->from;
         $to_date = $request->to;
+        $status = isset($request->status) ? $request->status : "Approved";
         $date_range = '';
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
@@ -40,7 +41,7 @@ class OvertimeController extends Controller
                                                               ->orderBy('id','asc');
                                                     })
                                                     ->whereIn('user_id', $company_employees)
-                                                    ->where('status','Approved')
+                                                    ->where('status',$status)
                                                     ->get();
         }
 
@@ -52,6 +53,7 @@ class OvertimeController extends Controller
             'company' => $company,
             'from_date' => $from_date,
             'to_date' => $to_date,
+            'status' => $status,
             'date_range' => $date_range,
         ));
     }

@@ -41,6 +41,18 @@
 										</div>
 									</div>
 								</div>
+								<div class='col-md-2 mr-2'>
+									<div class="form-group">
+										<label class="text-right">Status</label>
+										<select data-placeholder="Select Status" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='status' required>
+											<option value="">-- Select Status --</option>
+											<option value="Approved" @if ('Approved' == $status) selected @endif>Approved</option>
+											<option value="Pending" @if ('Pending' == $status) selected @endif>Pending</option>
+											<option value="Cancelled" @if ('Cancelled' == $status) selected @endif>Cancelled</option>
+											<option value="Declined" @if ('Declined' == $status) selected @endif>Declined</option>
+										</select>
+									</div>
+								</div>
 								<div class='col-md-3'>
 									<button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Generate</button>
 								</div>

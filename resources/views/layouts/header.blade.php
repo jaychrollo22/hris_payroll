@@ -544,6 +544,9 @@
                     @if (checkUserPrivilege('reports_ob',auth()->user()->id) == 'yes')
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/ob-report') }}">OB Reports</a></li>
                     @endif
+                    @if (checkUserPrivilege('reports_dtr',auth()->user()->id) == 'yes')
+                    <li class="nav-item"> <a class="nav-link" href="{{ url('/dtr-report') }}">DTR Reports</a></li>
+                    @endif
                     {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/dtr-report') }}">DTR Reports</a></li> --}}
                     {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li> --}}
                     {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li> --}}
