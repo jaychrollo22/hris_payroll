@@ -197,7 +197,7 @@
                               </div>
                               <div class='col-md-4'>
                                 Work Email
-                                <input type="email" name="work_email" class='form-control form-control-sm required' placeholder="Work Email"/>
+                                <input type="email" name="work_email" class='form-control form-control-sm required' placeholder="Work Email" required/>
                               </div>
                               <div class='col-md-4'>
                                 Schedule
