@@ -219,7 +219,7 @@
                                                         </td>
                                                     @else
                                                         <td>
-                                                            {{date('h:i A',strtotime($time_out->time_out))}}
+                                                            {{$time_out->time_out ? date('h:i A',strtotime($time_out->time_out)) : ""}}
                                                         </td>
                                                     @endif
                                                 @endif
@@ -267,7 +267,7 @@
                                                 @endif
                                             </td>
   
-                                            @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()))
+                                            @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()) && $time_in_data)
                                                 @php
                                                   $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
                                                   $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
@@ -322,7 +322,7 @@
                                                     <small>Time In : {{$time_in->device_in}} <br>
                                                         Time Out : {{$time_in->device_out}}</small>
                                                 </td>
-                                              @else
+                                            @else
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
