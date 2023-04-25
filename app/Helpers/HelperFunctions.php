@@ -118,7 +118,6 @@ function employeeHasLeave($employee_leaves = array(), $check_date){
                 foreach($date_range as $date_r){
                     if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
                         if($item['halfday'] == '1'){
-                            $status = $item->withpay == 1 ? 'With-Pay' : 
                             return $item['leave']['code'] . ' ' . $item['halfday_status'];
                         }else{
                             return $item['leave']['code'];
