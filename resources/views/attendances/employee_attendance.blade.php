@@ -253,13 +253,13 @@
                                             <td>
                                                 @if($time_in != null)
                                                     @php
-                                                        if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("07:00:00"))
+                                                        if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("08:00:00"))
                                                         {
                                                         $time_in_data = $time_in->time_in;
                                                         }
                                                         else
                                                         {
-                                                        $time_in_data = date('Y-m-d 07:00:00',strtotime($time_in->time_in));
+                                                        $time_in_data = date('Y-m-d 08:00:00',strtotime($time_in->time_in));
                                                         }
                                                     @endphp
                                                     @if($time_in->time_out != null)
@@ -365,9 +365,9 @@
                                                                 $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)));
                                                                 $if_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
                                                                 $if_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                                                $if_dtr = employeeHasDTRDetails($emp->approved_drs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                                $if_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
   
-                                                                if($if_leave || $if_wfh || $if_dtr){
+                                                                if($if_leave || $if_wfh || $if_ob || $if_dtr){
                                                                     $if_attendance_holiday_status = 'With-Pay';
                                                                 }else{
                                                                     $if_attendance_holiday_status = checkHasAttendanceHolidayStatus($if_attendance_holiday, $emp->employee_number);
@@ -398,7 +398,7 @@
                         @endforeach
                     </table>
                   </div>
-              </div>
+                </div>
             </div>
           </div>
         
