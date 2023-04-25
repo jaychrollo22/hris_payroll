@@ -35,8 +35,8 @@ class OfficialbusinessController extends Controller
         $employee_obs = [];
         if(isset($request->from) && isset($request->to)){
             $employee_obs = EmployeeOb::with('user','employee')
-                                        ->whereDate('approved_date','>=',$from)
-                                        ->whereDate('approved_date','<=',$to)
+                                        ->whereDate('applied_date','>=',$from)
+                                        ->whereDate('applied_date','<=',$to)
                                         ->whereHas('employee',function($q) use($company){
                                             $q->where('company_id',$company);
                                         })
