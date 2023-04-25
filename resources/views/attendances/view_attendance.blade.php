@@ -334,7 +334,7 @@
                                                           if($if_attendance_holiday){
 
                                                               $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                                              $if_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                              $if_wfh = employeeHasWFHDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
                                                               $if_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
                                                               $if_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
 
