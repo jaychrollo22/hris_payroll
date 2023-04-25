@@ -181,7 +181,7 @@ function employeeHasOTDetails($employee_ots = array(), $check_date){
 }
 
 function employeeHasDTRDetails($employee_dtrs = array(), $check_date){
-    if(count($employee_dtrs) > 0){
+    if($employee_dtrs){
         foreach($employee_dtrs as $item){
             if(date('Y-m-d',strtotime($item['dtr_date'])) == date('Y-m-d',strtotime($check_date))){
                 return $item;
