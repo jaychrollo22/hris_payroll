@@ -91,6 +91,10 @@ class Employee extends Model implements Auditable
         return $this->hasMany(EmployeeDtr::class,'user_id','user_id')->where('status','Approved');
     }
 
+    public function approved_ots() {
+        return $this->hasMany(EmployeeOvertime::class,'user_id','user_id')->where('status','Approved');
+    }
+
     public function employee_leave_credits() {
         return $this->hasMany(EmployeeLeaveCredit::class,'user_id','user_id')->orderBy('leave_type','ASC');
     }

@@ -284,7 +284,12 @@
                                                     0 hrs
                                                   @endif
                                               </td>
-                                              <td>0 hrs</td>
+                                              <td>
+                                                    @php
+                                                        $approved_overtime_hrs = employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r)));
+                                                    @endphp
+                                                    {{$approved_overtime_hrs ? $approved_overtime_hrs->ot_approved_hrs : 0 }} hrs
+                                              </td>
                                               <td>
                                                   0 hrs
                                               </td>
