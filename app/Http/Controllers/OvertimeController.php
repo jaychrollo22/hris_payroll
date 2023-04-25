@@ -34,13 +34,11 @@ class OvertimeController extends Controller
             $company_employees = Employee::where('company_id',$request->company)->pluck('user_id')->toArray();
             
             $employee_overtimes = EmployeeOvertime::with('user','employee')
-                                                    ->where(function ($query) use ($from_date, $to_date) {
-                                                        $query->whereBetween('ot_date', [$from_date." 00:00:01", $to_date." 23:59:59"])
-                                                              ->orderBy('ot_date','asc')
-                                                              ->orderby('user_id','desc')
-                                                              ->orderBy('id','asc');
+                                                    ->whereDate('ot_date','>=',$from_date)
+                                                    ->whereDate('ot_date','<=',$to_date)
+                                                    ->whereHas('employee',function($q) use($company){
+                                                        $q->where('company_id',$company);
                                                     })
-                                                    ->whereIn('user_id', $company_employees)
                                                     ->where('status',$status)
                                                     ->get();
         }
