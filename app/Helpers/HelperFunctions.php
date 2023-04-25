@@ -118,6 +118,7 @@ function employeeHasLeave($employee_leaves = array(), $check_date){
                 foreach($date_range as $date_r){
                     if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
                         if($item['halfday'] == '1'){
+                            $status = $item->withpay == 1 ? 'With-Pay' : 
                             return $item['leave']['code'] . ' ' . $item['halfday_status'];
                         }else{
                             return $item['leave']['code'];
@@ -171,7 +172,7 @@ function employeeHasWFHDetails($employee_wfhs = array(), $check_date){
 }
 
 function employeeHasOTDetails($employee_ots = array(), $check_date){
-    if(count($employee_ots) > 0){
+    if($employee_ots){
         foreach($employee_ots as $item){
             if(date('Y-m-d',strtotime($item['ot_date'])) == date('Y-m-d',strtotime($check_date))){
                 return $item;
