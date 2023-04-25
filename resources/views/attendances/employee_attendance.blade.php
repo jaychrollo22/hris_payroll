@@ -255,13 +255,13 @@
                                             <td>
                                                 @if($time_in != null)
                                                     @php
-                                                        if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("08:00:00"))
+                                                        if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("10:00:00"))
                                                         {
                                                         $time_in_data = $time_in->time_in;
                                                         }
                                                         else
                                                         {
-                                                        $time_in_data = date('Y-m-d 08:00:00',strtotime($time_in->time_in));
+                                                        $time_in_data = date('Y-m-d 10:00:00',strtotime($time_in->time_in));
                                                         }
                                                     @endphp
                                                     @php
