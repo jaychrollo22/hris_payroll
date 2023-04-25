@@ -271,8 +271,8 @@
                                                 @php
                                                   $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
                                                   $late = (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
-                                                  $working_minutes = (((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600);
-                                                  $overtime = number_format($working_minutes - $schedules[$id]->working_hours,2);
+                                                  $working_minutes = (double) (((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600);
+                                                  $overtime = (double) number_format($working_minutes - $schedules[$id]->working_hours,2);
                                                   if($late > 0)
                                                   {
                                                   $late_data = $late;
@@ -281,13 +281,13 @@
                                                   $late_data = 0;
   
                                                   }
-                                                  $undertime = number_format($working_minutes - $schedules[$id]->working_hours + ($late_data/60),2);
+                                                  $undertime = (double) number_format($working_minutes - $schedules[$id]->working_hours + ($late_data/60),2);
                                                 @endphp
   
                                                 <td>
                                                       {{number_format($late_data/60,2)}} hrs
                                                       @php
-                                                      $lates = $lates+ round($late_data/60,2);
+                                                      $lates = (double) $lates+ round($late_data/60,2);
                                                       @endphp
                                                 </td>
                                                 <td>
@@ -296,7 +296,7 @@
                                                     @if($overtime > .5)
                                                       {{$overtime}} hrs
                                                       @php
-                                                          $overtimes = $overtimes +round($overtime,2);
+                                                          $overtimes = (double) $overtimes +round($overtime,2);
                                                       @endphp
                                                     @else
                                                       0 hrs
@@ -306,7 +306,7 @@
                                                       @php
                                                           $approved_overtime_hrs = employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r)));
                                                       @endphp
-                                                      {{$approved_overtime_hrs ? $approved_overtime_hrs->ot_approved_hrs : 0 }} hrs
+                                                      {{$approved_overtime_hrs ? (double) $approved_overtime_hrs->ot_approved_hrs : 0 }} hrs
                                                 </td>
                                                 <td>
                                                     0 hrs
