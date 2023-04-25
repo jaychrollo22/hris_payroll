@@ -273,7 +273,15 @@
                                                     @endphp
                                               </td>
                                               <td>
-                                                  @if($undertime < 0) {{number_format(($undertime*60*-1)/60,2)}} hrs @php $undertimes=$undertimes + round(($undertime*60*-1)/60,2); @endphp @else 0 hrs @endif </td>
+                                                  @if($undertime > 0) 
+                                                    {{number_format(($undertime*60*-1)/60,2)}} hrs 
+                                                    @php 
+                                                        $undertimes=$undertimes + round(($undertime*60*-1)/60,2); 
+                                                    @endphp 
+                                                  @else 
+                                                    0 hrs 
+                                                    @endif 
+                                              </td>
                                               <td>
                                                   @if($overtime > .5)
                                                     {{$overtime}} hrs
@@ -335,8 +343,9 @@
                                                               $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)));
                                                               $if_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
                                                               $if_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                              $if_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
 
-                                                              if($if_leave || $if_wfh || $if_ob){
+                                                              if($if_leave || $if_wfh || $if_ob || $if_dtr){
                                                                   $if_attendance_holiday_status = 'With-Pay';
                                                               }else{
                                                                   $if_attendance_holiday_status = checkHasAttendanceHolidayStatus($if_attendance_holiday, $emp->employee_number);
