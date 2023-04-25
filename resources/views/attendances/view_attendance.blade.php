@@ -237,21 +237,27 @@
                                             <td>
                                                 @if($time_in != null)
                                                     @php
-                                                        if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("07:00:00"))
+                                                        if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("08:00:00"))
                                                         {
                                                         $time_in_data = $time_in->time_in;
                                                         }
                                                         else
                                                         {
-                                                        $time_in_data = date('Y-m-d 07:00:00',strtotime($time_in->time_in));
+                                                        $time_in_data = date('Y-m-d 08:00:00',strtotime($time_in->time_in));
                                                         }
                                                     @endphp
-                                                    @if($time_in->time_out != null)
-                                                        @php
-                                                            $start_datetime = new DateTime($time_in_data); 
+                                                    @php
+                                                        $start_datetime = new DateTime($time_in_data); 
+
+                                                        if($dtr_correction_time_out){
+                                                            $diff = $start_datetime->diff(new DateTime($dtr_correction_time_out)); 
+                                                        }
+                                                        else{
                                                             $diff = $start_datetime->diff(new DateTime($time_in->time_out)); 
-                                                        @endphp
-                                                        
+                                                        }
+
+                                                    @endphp
+                                                    @if($time_in->time_out || $dtr_correction_time_out)
                                                         {{-- {{round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2)}} hrs <br> --}}
                                                         {{ $diff->h }} hrs. {{ $diff->i }} mins. 
                                                         @php
@@ -267,7 +273,12 @@
                                                 @php
                                                   $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
                                                   $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("Y-m-d ".$schedules[$id]->time_in_to))))/60;
-                                                  $working_minutes = (double) (((strtotime($time_in->time_out) - (double) strtotime($time_in_data)))/3600);
+                                                  if($dtr_correction_time_out){
+                                                    $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($time_in_data)))/3600);
+                                                  }else{
+                                                    $working_minutes = (double) (((strtotime($time_in->time_out) - (double) strtotime($time_in_data)))/3600);
+                                                  }
+                                                
                                                   $overtime = (double) number_format($working_minutes - $schedules[$id]->working_hours,2);
                                                   if($late > 0)
                                                   {
@@ -287,7 +298,16 @@
                                                       @endphp
                                                 </td>
                                                 <td>
-                                                    @if($undertime < 0) {{number_format(($undertime*60*-1)/60,2)}} hrs @php $undertimes=$undertimes + round(($undertime*60*-1)/60,2); @endphp @else 0 hrs @endif </td>
+                                                    {{-- Undertime --}}
+                                                    @if($undertime < 0) 
+                                                        {{number_format(($undertime*60*-1)/60,2)}} hrs 
+                                                        @php 
+                                                            $undertimes=$undertimes + round(($undertime*60*-1)/60,2); 
+                                                        @endphp 
+                                                    @else 
+                                                        0 hrs 
+                                                    @endif 
+                                                </td>
                                                 <td>
                                                     @if($overtime > .5)
                                                       {{$overtime}} hrs

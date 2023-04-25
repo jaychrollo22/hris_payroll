@@ -27,46 +27,56 @@ class EmployeeDtrController extends Controller
 
     public function new(Request $request)
     {
-        $new_dtr = new EmployeeDtr;
-        $new_dtr->user_id = Auth::user()->id;
-        $new_dtr->dtr_date = $request->dtr_date;
-        $emp = Employee::where('user_id',auth()->user()->id)->first();
-        $new_dtr->schedule_id = $emp->schedule_id;
-        $new_dtr->correction = $request->correction;
-        if($request->correction == 'Both'){
-            $stime = $request->time_in;
-            $etime = $request->time_out;   
-            $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
-            $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;     
-            if($stime > $etime ){
-                $new_dtr->time_out = date('Y-m-d', strtotime($request->dtr_date. ' + 1 day')).' '.$request->time_out;
-            }             
-        }else if($request->correction == 'Time-in'){
-            $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
-            $new_dtr->time_out = null;
+        $check_dtr = EmployeeDtr::where('user_id',auth()->user()->id)
+                                    ->where('dtr_date',$request->dtr_date)
+                                    ->first();
+                                    
+        if($check_dtr){
+            Alert::warning('DTR Date has been exist!')->persistent('Dismiss');
+            return back();
         }else{
-            $new_dtr->time_in = null;
-            $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;
-        }        
-        $new_dtr->remarks = $request->remarks;
+            $new_dtr = new EmployeeDtr;
+            $new_dtr->user_id = Auth::user()->id;
+            $new_dtr->dtr_date = $request->dtr_date;
+            $emp = Employee::where('user_id',auth()->user()->id)->first();
+            $new_dtr->schedule_id = $emp->schedule_id;
+            $new_dtr->correction = $request->correction;
+            if($request->correction == 'Both'){
+                $stime = $request->time_in;
+                $etime = $request->time_out;   
+                $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
+                $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;     
+                if($stime > $etime ){
+                    $new_dtr->time_out = date('Y-m-d', strtotime($request->dtr_date. ' + 1 day')).' '.$request->time_out;
+                }             
+            }else if($request->correction == 'Time-in'){
+                $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
+                $new_dtr->time_out = null;
+            }else{
+                $new_dtr->time_in = null;
+                $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;
+            }        
+            $new_dtr->remarks = $request->remarks;
+            
+            if($request->file('attachment')){
+                $logo = $request->file('attachment');
+                $original_name = $logo->getClientOriginalName();
+                $name = time() . '_' . $logo->getClientOriginalName();
+                $logo->move(public_path() . '/images/', $name);
+                $file_name = '/images/' . $name;
+                $new_dtr->attachment = $file_name;
+            }
+            
+            $new_dtr->status = 'Pending';
+            $new_dtr->level = 0;
+            $new_dtr->created_by = Auth::user()->id;
+            // dd($new_dtr);
+            $new_dtr->save();
         
-        if($request->file('attachment')){
-            $logo = $request->file('attachment');
-            $original_name = $logo->getClientOriginalName();
-            $name = time() . '_' . $logo->getClientOriginalName();
-            $logo->move(public_path() . '/images/', $name);
-            $file_name = '/images/' . $name;
-            $new_dtr->attachment = $file_name;
+            Alert::success('Successfully Store')->persistent('Dismiss');
+            return back();
         }
         
-        $new_dtr->status = 'Pending';
-        $new_dtr->level = 0;
-        $new_dtr->created_by = Auth::user()->id;
-        // dd($new_dtr);
-        $new_dtr->save();
-    
-        Alert::success('Successfully Store')->persistent('Dismiss');
-        return back();
     } 
 
 
