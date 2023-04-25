@@ -178,23 +178,23 @@
                                         @else
                                             {{-- Time In --}}
                                             @if($time_in != null)
-                                            <td>
-                                                {{date('h:i A',strtotime($time_in->time_in))}}
-                                            </td>
-                                            @if($time_in->time_out != null)
                                                 <td>
-                                                    {{date('h:i A',strtotime($time_in->time_out))}}
+                                                    {{date('h:i A',strtotime($time_in->time_in))}}
                                                 </td>
-                                            @else
-                                                @if($dtr_correction_time_out)
-                                                    <td>{{date('h:i A',strtotime($dtr_correction_time_out))}}</td>
+                                                @if($time_in->time_out != null)
+                                                    <td>
+                                                        {{date('h:i A',strtotime($time_in->time_out))}}
+                                                    </td>
                                                 @else
-                                                    @php
-                                                        $time_in_out = 1;
-                                                    @endphp
-                                                    <td class='bg-warning'></td>
+                                                    @if($dtr_correction_time_out)
+                                                        <td>{{date('h:i A',strtotime($dtr_correction_time_out))}}</td>
+                                                    @else
+                                                        @php
+                                                            $time_in_out = 1;
+                                                        @endphp
+                                                        <td class='bg-warning'></td>
+                                                    @endif
                                                 @endif
-                                            @endif
                                             @else
                                                 @if((date('l',strtotime($date_r)) == "Saturday") || (date('l',strtotime($date_r)) == "Sunday"))
                                                     <td></td>
@@ -218,9 +218,19 @@
   
                                                         </td>
                                                     @else
-                                                        <td>
-                                                            {{$time_out->time_out ? date('h:i A',strtotime($time_out->time_out)) : ""}}
-                                                        </td>
+                                                        @if($time_in->time_out == null)
+                                                                @php
+                                                                $time_in_out = 1;
+                                                                @endphp
+                                                            <td class='bg-warning'>
+    
+                                                            </td>
+                                                        @else
+                                                            <td>
+                                                                {{date('h:i A',strtotime($time_in->time_out))}}
+                                                            </td>
+                                                        @endif
+                                                        
                                                     @endif
                                                 @endif
   
@@ -270,7 +280,7 @@
                                             @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()) && $time_in)
                                                 @php
                                                   $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
-                                                  $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
+                                                  $late =  (double) (strtotime(date("Y-m-d h:i",strtotime($time_in_data))) - (double) strtotime(date("Y-m-d h:i",strtotime("Y-m-d ".$schedules[$id]->time_in_to))))/60;
                                                   $working_minutes = (double) (((strtotime($time_in->time_out) - (double) strtotime($time_in_data)))/3600);
                                                   $overtime = (double) number_format($working_minutes - $schedules[$id]->working_hours,2);
                                                   if($late > 0)
