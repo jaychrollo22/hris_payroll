@@ -290,7 +290,19 @@
                                             @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()) && $time_in)
                                                 @php
                                                   $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
+                                                  
+
+                                                  $time_in_data_full =  date('Y-m-d h:i:s',strtotime($time_in_data));
+                                                  $time_in_data_date =  date('Y-m-d',strtotime($time_in_data));
+                                                  $schedule_time_in =  $time_in_data_date . ' ' . $schedules[$id]->time_in_to;
+                                                  $schedule_time_in =  date('Y-m-d h:i:s',strtotime($schedule_time_in));
+                                                  $schedule_time_in =  new DateTime($schedule_time_in);
+                                                
+                                                  $late_diff = $schedule_time_in->diff(new DateTime($time_in_data_full));
+                                                  $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
+
                                                   $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("Y-m-d ".$schedules[$id]->time_in_to))))/60;
+
                                                   if($dtr_correction_time_out){
                                                     $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($time_in_data)))/3600);
                                                   }else{
@@ -306,11 +318,12 @@
                                                   $late_data = 0;
   
                                                   }
-                                                  $undertime = (double) number_format($working_minutes - $schedules[$id]->working_hours + ($late_data/60),2);
+                                                  $undertime = (double) number_format($working_minutes - $schedules[$id]->working_hours + $late_diff_hours,2);
                                                 @endphp
   
                                                 <td>
-                                                      {{  (double) number_format($late_data/60,2)}} hrs
+                                                      {{-- {{  (double) number_format($late_data/60,2) }} hrs  --}}
+                                                      {{  $late_diff_hours }} hrs
                                                       @php
                                                       $lates = (double) $lates+ round($late_data/60,2);
                                                       @endphp
