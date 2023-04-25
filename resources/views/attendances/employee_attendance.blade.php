@@ -252,16 +252,18 @@
                                         @else
                                             <td>
                                                 @if($time_in != null)
+                                                    @php
+                                                        if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("07:00:00"))
+                                                        {
+                                                        $time_in_data = $time_in->time_in;
+                                                        }
+                                                        else
+                                                        {
+                                                        $time_in_data = date('Y-m-d 07:00:00',strtotime($time_in->time_in));
+                                                        }
+                                                    @endphp
                                                     @if($time_in->time_out != null)
                                                         @php
-                                                            if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("07:00:00"))
-                                                            {
-                                                            $time_in_data = $time_in->time_in;
-                                                            }
-                                                            else
-                                                            {
-                                                            $time_in_data = date('Y-m-d 07:00:00',strtotime($time_in->time_in));
-                                                            }
                                                             $start_datetime = new DateTime($time_in_data); 
                                                             $diff = $start_datetime->diff(new DateTime($time_in->time_out)); 
                                                         @endphp
