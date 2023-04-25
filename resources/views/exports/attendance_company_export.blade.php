@@ -53,7 +53,7 @@
                 <td>{{$if_has_wfh->date_from}}</td>
                 <td>{{$if_has_wfh->date_to}}</td>
                 <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins. </td>
-                <td></td>
+                <td>{{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : ""}}</td>
             @else
                 @php
                     $time_in_out = 0;
@@ -273,6 +273,9 @@
                             @endif
                         @endif
                     </td>
+
+                    {{-- Date Description --}}
+
 
                 @endif
             @endif
