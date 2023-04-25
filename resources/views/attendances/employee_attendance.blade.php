@@ -267,7 +267,7 @@
                                                 @endif
                                             </td>
   
-                                            @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()) && $time_in_data)
+                                            @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()) && $time_in)
                                                 @php
                                                   $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
                                                   $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
