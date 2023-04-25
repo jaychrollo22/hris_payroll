@@ -270,7 +270,7 @@
                                             @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()))
                                                 @php
                                                   $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
-                                                  $late = (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
+                                                  $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
                                                   $working_minutes = (double) (((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600);
                                                   $overtime = (double) number_format($working_minutes - $schedules[$id]->working_hours,2);
                                                   if($late > 0)
@@ -285,7 +285,7 @@
                                                 @endphp
   
                                                 <td>
-                                                      {{number_format($late_data/60,2)}} hrs
+                                                      {{  (double) number_format($late_data/60,2)}} hrs
                                                       @php
                                                       $lates = (double) $lates+ round($late_data/60,2);
                                                       @endphp
