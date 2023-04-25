@@ -50,15 +50,15 @@
                               <td>Time In</td>
                               <td>Time Out</td>
                               <td>Work </td>
-                              <td>Remarks </td>
-
-                              {{-- <td>Lates </td>
+                              {{-- <td>Remarks </td> --}}
+                              <td>Lates </td>
                               <td>Undertime</td>
                               <td>Overtime</td>
                               <td>Approved Overtime</td>
                               <td>Night Diff</td>
                               <td>OT Night Diff</td>
-                              <td>Remarks</th> --}}
+                              <td>Device</th>
+                              <td>Remarks</th>
 
                           </tr>
                       </thead>
@@ -95,6 +95,13 @@
                                   <td>{{$if_has_ob->date_from}}</td>
                                   <td>{{$if_has_ob->date_to}}</td>
                                   <td>{{ $ob_diff->h }} hrs. {{ $ob_diff->i }} mins. </td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
                                   <td>OB</td>
                               @elseif($if_has_wfh)
                                   @php
@@ -104,6 +111,12 @@
                                   <td>{{$if_has_wfh->date_from}}</td>
                                   <td>{{$if_has_wfh->date_to}}</td>
                                   <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins. </td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
                                   <td>{{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : "WFH"}}</td>
                               @else
                                   @php
@@ -130,10 +143,16 @@
                                           $dtr_start = new DateTime($if_has_dtr->time_in); 
                                           $dtr_diff = $dtr_start->diff(new DateTime($if_has_dtr->time_out)); 
                                       @endphp
-                                      <td>{{date('h:i A',strtotime($if_has_dtr->time_in))}}</td>
-                                      <td>{{date('h:i A',strtotime($if_has_dtr->time_out))}}</td>
-                                      <td>{{ $dtr_diff->h }} hrs. {{ $dtr_diff->i }} mins.</td>
-                                      <td>DTR Correction</td>
+                                        <td>{{date('h:i A',strtotime($if_has_dtr->time_in))}}</td>
+                                        <td>{{date('h:i A',strtotime($if_has_dtr->time_out))}}</td>
+                                        <td>{{ $dtr_diff->h }} hrs. {{ $dtr_diff->i }} mins.</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>DTR Correction</td>
                                   @else
                                  
                                       @if($dtr_correction_time_in)
@@ -195,6 +214,13 @@
                                       {{-- Time Out --}}
                                       @if($time_in_out == 1)
                                       <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
+                                      <td></td>
                                       @else
                                           <td>
                                               @if($time_in != null)
@@ -224,38 +250,38 @@
                                           </td>
 
                                           @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()))
-                                              {{-- @php
-                                              $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
-                                              $late = (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
-                                              $working_minutes = (((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600);
-                                              $overtime = number_format($working_minutes - $schedules[$id]->working_hours,2);
-                                              if($late > 0)
-                                              {
-                                              $late_data = $late;
-                                              }
-                                              else {
-                                              $late_data = 0;
-
-                                              }
-                                              $undertime = number_format($working_minutes - $schedules[$id]->working_hours + ($late_data/60),2);
-                                              @endphp --}}
-
-                                              {{-- <td>
-                                                  {{number_format($late_data/60,2)}} hrs
                                               @php
-                                              $lates = $lates+ round($late_data/60,2);
+                                                $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
+                                                $late = (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
+                                                $working_minutes = (((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600);
+                                                $overtime = number_format($working_minutes - $schedules[$id]->working_hours,2);
+                                                if($late > 0)
+                                                {
+                                                $late_data = $late;
+                                                }
+                                                else {
+                                                $late_data = 0;
+
+                                                }
+                                                $undertime = number_format($working_minutes - $schedules[$id]->working_hours + ($late_data/60),2);
                                               @endphp
+
+                                              <td>
+                                                    {{number_format($late_data/60,2)}} hrs
+                                                    @php
+                                                    $lates = $lates+ round($late_data/60,2);
+                                                    @endphp
                                               </td>
                                               <td>
                                                   @if($undertime < 0) {{number_format(($undertime*60*-1)/60,2)}} hrs @php $undertimes=$undertimes + round(($undertime*60*-1)/60,2); @endphp @else 0 hrs @endif </td>
                                               <td>
                                                   @if($overtime > .5)
-                                                  {{$overtime}} hrs
-                                                  @php
-                                                  $overtimes = $overtimes +round($overtime,2);
-                                                  @endphp
+                                                    {{$overtime}} hrs
+                                                    @php
+                                                        $overtimes = $overtimes +round($overtime,2);
+                                                    @endphp
                                                   @else
-                                                  0 hrs
+                                                    0 hrs
                                                   @endif
                                               </td>
                                               <td>0 hrs</td>
@@ -272,16 +298,15 @@
                                               <td>
                                                   <small>Time In : {{$time_in->device_in}} <br>
                                                       Time Out : {{$time_in->device_out}}</small>
-                                              </td> --}}
-                                              @else
-                                              {{-- <td></td>
+                                              </td>
+                                            @else
                                               <td></td>
                                               <td></td>
                                               <td></td>
                                               <td></td>
                                               <td></td>
-                                              <td></td> --}}
-
+                                              <td></td>
+                                              <td></td>
                                           @endif
                                       @endif
                                       
