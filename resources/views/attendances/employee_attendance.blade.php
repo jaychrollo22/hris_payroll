@@ -135,6 +135,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                     <td>{{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : "WFH"}}</td>
                                 @else
                                     @php
@@ -164,6 +165,7 @@
                                           <td>{{date('h:i A',strtotime($if_has_dtr->time_in))}}</td>
                                           <td>{{date('h:i A',strtotime($if_has_dtr->time_out))}}</td>
                                           <td>{{ $dtr_diff->h }} hrs. {{ $dtr_diff->i }} mins.</td>
+                                          <td></td>
                                           <td></td>
                                           <td></td>
                                           <td></td>
