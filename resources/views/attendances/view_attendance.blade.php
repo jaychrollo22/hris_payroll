@@ -273,15 +273,7 @@
                                                     @endphp
                                               </td>
                                               <td>
-                                                  @if($undertime > 0) 
-                                                    {{number_format(($undertime*60*-1)/60,2)}} hrs 
-                                                    @php 
-                                                        $undertimes=$undertimes + round(($undertime*60*-1)/60,2); 
-                                                    @endphp 
-                                                  @else 
-                                                    0 hrs 
-                                                    @endif 
-                                              </td>
+                                                  @if($undertime < 0) {{number_format(($undertime*60*-1)/60,2)}} hrs @php $undertimes=$undertimes + round(($undertime*60*-1)/60,2); @endphp @else 0 hrs @endif </td>
                                               <td>
                                                   @if($overtime > .5)
                                                     {{$overtime}} hrs
