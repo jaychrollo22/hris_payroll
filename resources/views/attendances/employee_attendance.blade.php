@@ -349,7 +349,7 @@
                                                 </td>
                                                 <td>
                                                     {{-- Undertime --}}
-                                                    @if($undertime < 0) 
+                                                    @if($undertime_hrs > 0) 
                                                         {{$undertime_hrs}} hrs 
                                                         @php 
                                                             $undertimes=$undertimes + $undertime_hrs; 
