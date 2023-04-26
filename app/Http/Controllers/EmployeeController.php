@@ -906,7 +906,7 @@ class EmployeeController extends Controller
                                         ->where('status','Active')
                                         ->pluck('user_id')
                                         ->toArray();
-        if($user->employee->level == '4'){
+        if($user->employee->level >= 2){
             $users = User::all();
         }else{
             $users = User::whereIn('id',$employee_approvers)->get();
