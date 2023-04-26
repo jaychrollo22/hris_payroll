@@ -188,7 +188,7 @@ function employeeHasWFHDetails($employee_wfhs = array(), $check_date){
 }
 
 function employeeHasOTDetails($employee_ots = array(), $check_date){
-    if($employee_ots){
+    if(count($employee_ots) > 0){
         foreach($employee_ots as $item){
             if(date('Y-m-d',strtotime($item['ot_date'])) == date('Y-m-d',strtotime($check_date))){
                 return $item;
