@@ -318,7 +318,7 @@
                                                   $late_data = 0;
   
                                                   }
-                                                  $undertime = (double) number_format($working_minutes - $schedules[$id]->working_hours + $late_diff_hours,2);
+                                                  $undertime = (double) number_format($working_minutes - $schedules[$id]->working_hours,2);
                                                 @endphp
   
                                                 <td>
