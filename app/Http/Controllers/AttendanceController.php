@@ -32,7 +32,7 @@ class AttendanceController extends Controller
         $date_range =  $this->dateRange( $from_date, $to_date);
         $attendances =  $this->get_attendances($from_date,$to_date,auth()->user()->employee->employee_number);
         }
-        $schedules = ScheduleData::where('schedule_id',auth()->user()->employee->schedule_id)->get();
+        $schedules = ScheduleData::all();
         // dd($attendances);
 
         $emp_data = Employee::with(['attendances' => function ($query) use ($from_date, $to_date) {

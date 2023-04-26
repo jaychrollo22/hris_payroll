@@ -234,16 +234,22 @@
                                         <td></td>
                                         <td></td>
                                         @else
+                                            @php
+                                                $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
+                                            @endphp
                                             <td>
                                                 @if($time_in != null)
                                                     @php
-                                                        if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime("10:00:00"))
+
+                                                        $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
+                                                        $time_in_from = $employee_schedule ? $employee_schedule['time_in_from'] : "08:00";
+                                                        if(strtotime(date('H:i:00',strtotime($time_in->time_in))) >= strtotime($time_in_from))
                                                         {
-                                                        $time_in_data = $time_in->time_in;
+                                                            $time_in_data = $time_in->time_in;
                                                         }
                                                         else
                                                         {
-                                                        $time_in_data = date('Y-m-d 10:00:00',strtotime($time_in->time_in));
+                                                            $time_in_data = date('Y-m-d ' . $time_in_from,strtotime($time_in->time_in));
                                                         }
                                                     @endphp
                                                     @php
@@ -260,6 +266,9 @@
                                                     @if($time_in->time_out || $dtr_correction_time_out)
                                                         {{-- {{round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2)}} hrs <br> --}}
                                                         {{ $diff->h }} hrs. {{ $diff->i }} mins. 
+
+                                                        {{-- <br>
+                                                        {{$time_in_data}} --}}
                                                         @php
                                                         
                                                         // $work = $work + round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
@@ -269,29 +278,34 @@
                                                 @endif
                                             </td>
   
-                                            @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()) && $time_in)
+                                            @if($employee_schedule && $time_in)
                                                 @php
-                                                  $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
+                                                //   $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
+                                                //   $id = employeeSchedule($schedules,$date_r,$emp->schedule_id);
                                                   
 
                                                   $time_in_data_full =  date('Y-m-d h:i:s',strtotime($time_in_data));
                                                   $time_in_data_date =  date('Y-m-d',strtotime($time_in_data));
-                                                  $schedule_time_in =  $time_in_data_date . ' ' . $schedules[$id]->time_in_to;
+                                                  $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
                                                   $schedule_time_in =  date('Y-m-d h:i:s',strtotime($schedule_time_in));
-                                                  $schedule_time_in =  new DateTime($schedule_time_in);
-                                                
-                                                  $late_diff = $schedule_time_in->diff(new DateTime($time_in_data_full));
-                                                  $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
+                                                  $schedule_time_in_final =  new DateTime($schedule_time_in);
+                                                  $late_diff_hours = 0;
 
-                                                  $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("Y-m-d ".$schedules[$id]->time_in_to))))/60;
+                                                  if(date('Y-m-d h:i:s',strtotime($time_in_data)) > date('Y-m-d h:i:s',strtotime($schedule_time_in))){
+                                                    $late_diff = $schedule_time_in_final->diff(new DateTime($time_in_data_full));
+                                                    $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);                                        
+                                                  }
 
+                                                  $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("Y-m-d ".$employee_schedule['time_in_to']))))/60;
+
+                                                  
                                                   if($dtr_correction_time_out){
                                                     $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($time_in_data)))/3600);
                                                   }else{
                                                     $working_minutes = (double) (((strtotime($time_in->time_out) - (double) strtotime($time_in_data)))/3600);
                                                   }
                                                 
-                                                  $overtime = (double) number_format($working_minutes - $schedules[$id]->working_hours,2);
+                                                  $overtime = (double) number_format($working_minutes - $employee_schedule['working_hours'],2);
                                                   if($late > 0)
                                                   {
                                                   $late_data = $late;
@@ -300,7 +314,7 @@
                                                   $late_data = 0;
   
                                                   }
-                                                  $undertime = (double) number_format($working_minutes - $schedules[$id]->working_hours + $late_diff_hours,2);
+                                                  $undertime = (double) number_format($working_minutes - $employee_schedule['working_hours'],2);
                                                 @endphp
   
                                                 <td>

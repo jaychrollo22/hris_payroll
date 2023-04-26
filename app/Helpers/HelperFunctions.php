@@ -98,6 +98,18 @@ function dateRange( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
     return $dates;
 }
 
+
+function employeeSchedule($schedules = array(), $check_date, $schedule_id){
+    $schedule_name = date('l',strtotime($check_date));
+    if(count($schedules) > 0){
+        foreach($schedules as $item){
+            if($item['schedule_id'] == $schedule_id && $item['name'] == $schedule_name){
+                return $item;
+            }
+        }
+    }
+}
+
 function isRestDay( $date ) {
     
     $check_day = date('D',strtotime($date));
