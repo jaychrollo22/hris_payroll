@@ -354,11 +354,11 @@
                                                       @php
                                                         $approved_overtime_hrs = employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r)));
                                                         if($approved_overtime_hrs){
-                                                                $approved_overtimes = (double) $approved_overtimes + $approved_overtime_hrs->ot_approved_hrs;
+                                                                $approved_overtimes = (double) $approved_overtimes + ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs);
                                                         }
                                                           
                                                       @endphp
-                                                      {{$approved_overtime_hrs ? (double) $approved_overtime_hrs->ot_approved_hrs : 0 }} hrs
+                                                      {{$approved_overtime_hrs ? (double) ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs) : 0 }} hrs
                                                 </td>
                                                 <td>
                                                     0 hrs
