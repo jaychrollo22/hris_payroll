@@ -298,7 +298,6 @@
                                                   }
 
                                                   $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("Y-m-d ".$employee_schedule['time_in_to']))))/60;
-
                                                   
                                                   if($dtr_correction_time_out){
                                                     $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($time_in_data)))/3600);
@@ -315,7 +314,12 @@
                                                   $late_data = 0;
   
                                                   }
+                                                  //Undertime
+                                                  $undertime_hrs = 0;
                                                   $undertime = (double) number_format($working_minutes - $employee_schedule['working_hours'],2);
+                                                  if($undertime < 0){
+                                                    $undertime_hrs = number_format(($undertime*60*-1)/60,2) - $late_diff_hours;
+                                                  }
                                                 @endphp
   
                                                 <td>
@@ -328,9 +332,9 @@
                                                 <td>
                                                     {{-- Undertime --}}
                                                     @if($undertime < 0) 
-                                                        {{number_format(($undertime*60*-1)/60,2)}} hrs 
+                                                        {{$undertime_hrs}} hrs 
                                                         @php 
-                                                            $undertimes=$undertimes + round(($undertime*60*-1)/60,2); 
+                                                            $undertimes=$undertimes + $undertime_hrs; 
                                                         @endphp 
                                                     @else 
                                                         0 hrs 
@@ -349,6 +353,7 @@
                                                 <td>
                                                       @php
                                                           $approved_overtime_hrs = employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r)));
+
                                                           $approved_overtimes = (double) $approved_overtimes + $approved_overtime_hrs;
                                                       @endphp
                                                       {{$approved_overtime_hrs ? (double) $approved_overtime_hrs->ot_approved_hrs : 0 }} hrs
