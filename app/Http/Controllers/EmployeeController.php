@@ -966,8 +966,7 @@ class EmployeeController extends Controller
 
     }
     public function updateEmpInfoHR(Request $request, $id){
-
-        // return  $request->all();
+        
         $employee = Employee::findOrFail($id);
         $employee->employee_number = $request->employee_number;
         $employee->company_id = $request->company;
@@ -999,15 +998,26 @@ class EmployeeController extends Controller
 
         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
         if(isset($request->approver)){
+
+            $count_approver = count($request->approver);
             $level = 1;
             if(count($request->approver) > 0){
-                foreach($request->approver as  $approver)
+                foreach($request->approver as $k =>  $approver_item)
                 {
                     $new_approver = new EmployeeApprover;
+                    
+                    if($count_approver == 1 && $k == 0){
+                        $new_approver->as_final = "on";
+                    }
+
+                    if($count_approver == 2 && $k == 1){
+                        $new_approver->as_final = "on";
+                    }
+
                     $new_approver->user_id = $employee->user_id;
-                    $new_approver->approver_id = $approver['approver_id'];
+                    $new_approver->approver_id = $approver_item['approver_id'];
                     $new_approver->level = $level;
-                    $new_approver->as_final = isset($approver['as_final']) ? $approver['as_final'] : "";
+                    
                     $new_approver->save();
                     $level = $level+1;
                 }
@@ -1179,8 +1189,9 @@ class EmployeeController extends Controller
                                     ->get();
 
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
-            $schedules = ScheduleData::where('schedule_id', 1)->get();
+           
         }
+        $schedules = ScheduleData::all();
         
         return view(
             'attendances.employee_attendance',

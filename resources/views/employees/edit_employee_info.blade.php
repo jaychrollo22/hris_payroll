@@ -208,7 +208,7 @@
                       @if($approver->as_final == 'on')
                         <input type="checkbox" value="{{$approver->as_final}}" checked  name='approver[{{$k}}][as_final]'> Tag as Final
                       @else
-                      <input type="checkbox" value="{{$approver->as_final}}"  name='approver[{{$k}}][as_final]'> Tag as Final
+                        <input type="checkbox" value=""  name='approver[{{$k}}][as_final]'> Tag as Final
                       @endif
                     </div>
                   </div>
