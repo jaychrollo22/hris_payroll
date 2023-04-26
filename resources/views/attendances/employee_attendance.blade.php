@@ -290,7 +290,8 @@
                                                         @php
                                                         
                                                         // $work = $work + round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
-                                                        $work =  round((((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600),2);
+                                                        $work_diff_hours = round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);
+                                                        $work = (double) $work+$work_diff_hours;
                                                         @endphp
                                                     @endif
                                                 @endif
@@ -339,7 +340,7 @@
                                                       {{-- {{  (double) number_format($late_data/60,2) }} hrs  --}}
                                                       {{  $late_diff_hours }} hrs
                                                       @php
-                                                      $lates = (double) $lates+ round($late_data/60,2);
+                                                      $lates = (double) $lates+$late_diff_hours;
                                                       @endphp
                                                 </td>
                                                 <td>
@@ -366,6 +367,8 @@
                                                 <td>
                                                       @php
                                                           $approved_overtime_hrs = employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r)));
+
+                                                          $approved_overtimes = (double) $approved_overtimes + $approved_overtime_hrs;
                                                       @endphp
                                                       {{$approved_overtime_hrs ? (double) $approved_overtime_hrs->ot_approved_hrs : 0 }} hrs
                                                 </td>
@@ -442,6 +445,20 @@
                                 @endif
                             </tr>
                             @endforeach
+                            <tr>
+                                <td colspan='5'>Total</td>
+                                <td >{{$work}} hrs</td>
+                                <td >{{$lates}} hrs</td>
+                                <td >{{$undertimes}} hrs </td>
+                                <td >{{$overtimes}} hrs</td>
+                                <td >{{$approved_overtimes}} hrs</td>
+                                <td >0 hrs</td>
+                                <td >{{$night_diff_ot}} hrs</td>
+                                <td ></td>
+                              </tr>
+                              <tr>
+                                <td colspan='11'>&nbsp;</td>
+                            </tr>
                         </tbody>
   
                         @endforeach
