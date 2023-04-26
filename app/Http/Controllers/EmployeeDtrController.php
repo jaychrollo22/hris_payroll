@@ -29,6 +29,7 @@ class EmployeeDtrController extends Controller
     {
         $check_dtr = EmployeeDtr::where('user_id',auth()->user()->id)
                                     ->where('dtr_date',$request->dtr_date)
+                                    ->where('status','Pending')
                                     ->first();
                                     
         if($check_dtr){
