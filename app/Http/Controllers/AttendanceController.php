@@ -32,8 +32,15 @@ class AttendanceController extends Controller
         $date_range =  $this->dateRange( $from_date, $to_date);
         $attendances =  $this->get_attendances($from_date,$to_date,auth()->user()->employee->employee_number);
         }
-        $schedules = ScheduleData::where('schedule_id',auth()->user()->employee->schedule_id)->get();
+        $schedules = ScheduleData::all();
         // dd($attendances);
+
+        $emp_data = Employee::with(['attendances' => function ($query) use ($from_date, $to_date) {
+                                $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orderBy('time_in','asc')->orderBy('id','asc');
+                            }])
+                            ->where('employee_number', auth()->user()->employee->employee_number)
+                            ->get();
+
         return view('attendances.view_attendance',
         array(
             'header' => 'attendances',
@@ -42,6 +49,7 @@ class AttendanceController extends Controller
             'date_range' => $date_range,
             'attendances' => $attendances,
             'schedules' => $schedules,
+            'emp_data' => $emp_data,
         ));
     }
     public function subordinates(Request $request)

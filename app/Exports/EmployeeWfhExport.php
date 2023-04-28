@@ -45,13 +45,14 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
 
     public function map($employee_wfh): array
     {
+        $remarks = $employee_wfh->approve_percentage ? 'Work from Home ' . $employee_wfh->approve_percentage . '%' : "";
         return [
             $employee_wfh->employee->employee_number,
             $employee_wfh->user->name,
             date('d/m/Y',strtotime($employee_wfh->applied_date)),
             date('H:i',strtotime($employee_wfh->date_from)),
             date('H:i',strtotime($employee_wfh->date_to)),
-            "WFH"
+            $remarks
         ];
     }
 

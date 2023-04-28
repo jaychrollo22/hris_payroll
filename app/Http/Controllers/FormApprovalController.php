@@ -229,7 +229,7 @@ class FormApprovalController extends Controller
 
     }
 
-    public function approveWfh($id){
+    public function approveWfh(Request $request,$id){
 
         $employee_wfh = EmployeeWfh::where('id', $id)
                                             ->first();
@@ -242,11 +242,13 @@ class FormApprovalController extends Controller
                     EmployeeWfh::Where('id', $id)->update([
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
+                        'approve_percentage' => $request->approve_percentage,
                         'level' => 1,
                     ]);
                 }else{
                     EmployeeWfh::Where('id', $id)->update([
                         'level' => 1,
+                        'approve_percentage' => $request->approve_percentage,
                     ]);
                 }
             }
@@ -254,6 +256,7 @@ class FormApprovalController extends Controller
                 EmployeeWfh::Where('id', $id)->update([
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
+                    'approve_percentage' => $request->approve_percentage,
                     'level' => 2,
                 ]);
             }

@@ -8,7 +8,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-			<form method='POST' action='new-ob' onsubmit='savewfh()'  enctype="multipart/form-data">
+			<form method='POST' action='new-ob' onsubmit="btnOB.disabled = true; return true;"  enctype="multipart/form-data">
 				@csrf        
       <div class="modal-body text-right">
         <div class="form-group row">
@@ -78,7 +78,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" name="btnOB" class="btn btn-primary">Save</button>
       </div>
     </form>
     </div>

@@ -7,7 +7,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-			<form method='POST' action='new-overtime' onsubmit='show()'  enctype="multipart/form-data">
+			<form method='POST' action='new-overtime' onsubmit="btnOT.disabled = true; return true;"  enctype="multipart/form-data">
 				@csrf      
       <div class="modal-body">
         <div class="form-group row">
@@ -28,7 +28,7 @@
                Date
             </div>
             <div class='col-md-4'>
-              <input type="date" name='ot_date' class="form-control" min='{{date('Y-m-d', strtotime("-3 days"))}}' required>
+              <input type="date" name='ot_date' class="form-control" required>
             </div>
           </div>
            
@@ -77,7 +77,7 @@
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" {{ (auth()->user()->employee->immediate_sup_data != null) ? "" : 'disabled'}}>Save</button>
+        <button type="submit" name="btnOT" class="btn btn-primary" {{ (auth()->user()->employee->immediate_sup_data != null) ? "" : 'disabled'}}>Save</button>
       </div>
     </form>      
     </div>

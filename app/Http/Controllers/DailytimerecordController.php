@@ -23,20 +23,25 @@ class DailytimerecordController extends Controller
     }
 
     public function dtr_report(Request $request){
-        $companies = Company::whereHas('employee_has_company')->get();
+        
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $companies = Company::whereHas('employee_has_company')
+                                ->whereIn('id',$allowed_companies)
+                                ->get();
 
         $company = isset($request->company) ? $request->company : "";
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
+        $status =  isset($request->status) ? $request->status : "Approved";
         $employee_dtrs = [];
         if(isset($request->from) && isset($request->to)){
             $employee_dtrs = EmployeeDtr::with('user','employee')
-                                        ->whereDate('approved_date','>=',$from)
-                                        ->whereDate('approved_date','<=',$to)
+                                        ->whereDate('dtr_date','>=',$from)
+                                        ->whereDate('dtr_date','<=',$to)
                                         ->whereHas('employee',function($q) use($company){
                                             $q->where('company_id',$company);
                                         })
-                                        ->where('status','Approved')
+                                        ->where('status',$status)
                                         ->get();
         }
         
@@ -46,6 +51,7 @@ class DailytimerecordController extends Controller
             'company'=>$company,
             'from'=>$from,
             'to'=>$to,
+            'status'=>$status,
             'employee_dtrs' => $employee_dtrs,
             'companies' => $companies
         ));

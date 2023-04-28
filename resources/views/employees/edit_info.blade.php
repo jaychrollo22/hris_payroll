@@ -37,7 +37,7 @@
 						<div class='row mb-2'>
 							<div class='col-md-3'>
 								Suffix
-								<input type="text" name="suffix" class='form-control form-control-sm ' value="{{ $user->employee->suffix }}" placeholder="Suffix" />
+								<input type="text" name="suffix" class='form-control form-control-sm ' value="{{ $user->employee->name_suffix }}" placeholder="Suffix" />
 							</div>
 							<div class='col-md-3'>
 								Nickname

@@ -6,6 +6,7 @@ use App\Imports\EmployeesImport;
 use App\Classification;
 use App\Employee;
 use App\EmployeeContactPerson;
+use App\EmployeeBeneficiary;
 use App\EmployeeLeaveCredit;
 use App\EmployeeApprover;
 use App\EmployeeVessel;
@@ -35,6 +36,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
 use App\Exports\EmployeesExport;
+use App\Exports\EmployeeHRExport;
 
 class EmployeeController extends Controller
 {
@@ -208,6 +210,20 @@ class EmployeeController extends Controller
         $access_rate = checkUserPrivilege('employees_rate',auth()->user()->id);
 
         return Excel::download(new EmployeesExport($company,$department,$allowed_companies,$access_rate), 'Master List '. $company_name .' .xlsx');
+    }
+
+    public function export_hr(Request $request) 
+    {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_companies = json_encode($allowed_companies);
+
+        $company = isset($request->company) ? $request->company : "";
+        $department = isset($request->department) ? $request->department : "";
+        $company_info = Company::where('id',$company)->first();
+        $company_name = $company_info ? $company_info->company_code : "";
+
+        return Excel::download(new EmployeeHRExport($company,$department,$allowed_companies), 'Master List '. $company_name .' .xlsx');
     }
 
     public function new(Request $request)
@@ -875,26 +891,30 @@ class EmployeeController extends Controller
     public function employeeSettingsHR(User $user)
     {
 
-        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.beneficiaries','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
 
         $classifications = Classification::get();
 
         $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info','level_info')->get();
         
+        
         $employee_approvers = Employee::whereHas('company',function($q) use($user){
-                                    if($user->employee->company_id){
-                                        $q->where('company_id',$user->employee->company_id);
-                                            // ->where('department_id',$user->employee->department_id);
-                                    }
-                                })
-                                // ->where('level','!=','1')
-                                ->where('status','Active')
-                                ->pluck('user_id')
-                                ->toArray();
+                                                if($user->employee->company_id){
+                                                    $q->where('company_id',$user->employee->company_id);
+                                                }
+                                        })
+                                        ->where('status','Active')
+                                        ->pluck('user_id')
+                                        ->toArray();
+        if($user->employee->level >= 2){
+            $users = User::all();
+        }else{
+            $users = User::whereIn('id',$employee_approvers)->get();
+        }
         
         $schedules = Schedule::get();
         $banks = Bank::get();
-        $users = User::whereIn('id',$employee_approvers)->get();
+       
         $levels = Level::get();
         $departments = Department::get();
         $locations = Location::orderBy('location','ASC')->get();
@@ -946,8 +966,7 @@ class EmployeeController extends Controller
 
     }
     public function updateEmpInfoHR(Request $request, $id){
-
-        // return  $request->all();
+        
         $employee = Employee::findOrFail($id);
         $employee->employee_number = $request->employee_number;
         $employee->company_id = $request->company;
@@ -979,15 +998,26 @@ class EmployeeController extends Controller
 
         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
         if(isset($request->approver)){
+
+            $count_approver = count($request->approver);
             $level = 1;
             if(count($request->approver) > 0){
-                foreach($request->approver as  $approver)
+                foreach($request->approver as $k =>  $approver_item)
                 {
                     $new_approver = new EmployeeApprover;
+                    
+                    if($count_approver == 1 && $k == 0){
+                        $new_approver->as_final = "on";
+                    }
+
+                    if($count_approver == 2 && $k == 1){
+                        $new_approver->as_final = "on";
+                    }
+
                     $new_approver->user_id = $employee->user_id;
-                    $new_approver->approver_id = $approver['approver_id'];
+                    $new_approver->approver_id = $approver_item['approver_id'];
                     $new_approver->level = $level;
-                    $new_approver->as_final = isset($approver['as_final']) ? $approver['as_final'] : "";
+                    
                     $new_approver->save();
                     $level = $level+1;
                 }
@@ -1040,6 +1070,55 @@ class EmployeeController extends Controller
         return back();
     }
 
+    public function updateBeneficiariesHR(Request $request, $id){
+
+
+        $beneficiaries = $request->beneficiaries ? json_decode($request->beneficiaries) : "";
+        $deleted_beneficiaries = $request->deleted_beneficiaries ? json_decode($request->deleted_beneficiaries) : "";
+
+        if($deleted_beneficiaries){
+            foreach($deleted_beneficiaries as $item){
+                EmployeeBeneficiary::where('id',$item->id)->delete(); //Delete Beneficiary
+            }
+        }
+
+        if($beneficiaries){
+
+            $employee = Employee::findOrFail($id);
+            
+            if($employee){
+                foreach($beneficiaries as $item){
+                    if($item->id){
+                        $employee_beneficiary = EmployeeBeneficiary::where('id',$item->id)->first();
+
+                        if($employee_beneficiary){
+                            $employee_beneficiary->first_name = $item->first_name;
+                            $employee_beneficiary->middle_name = $item->first_name;
+                            $employee_beneficiary->last_name = $item->last_name;
+                            $employee_beneficiary->gender = $item->gender;
+                            $employee_beneficiary->bdate = $item->bdate;
+                            $employee_beneficiary->relation = $item->relation;
+                            $employee_beneficiary->save();
+                        }
+                    }else{
+                        $new = new EmployeeBeneficiary;
+                        $new->user_id = $employee->user_id;
+                        $new->first_name = $item->first_name;
+                        $new->middle_name = $item->first_name;
+                        $new->last_name = $item->last_name;
+                        $new->gender = $item->gender;
+                        $new->bdate = $item->bdate;
+                        $new->relation = $item->relation;
+                        $new->save();
+                    }
+                }
+            }
+        }
+    }
+
+    public function getBeneficiariesHR($id){
+        return $employee_beneficiary = EmployeeBeneficiary::where('user_id',$id)->get();
+    }
 
     public function generate_emp_code($table, $code, $year, $compId)
     {
@@ -1103,16 +1182,16 @@ class EmployeeController extends Controller
         $emp_data = [];
         if ($from_date != null) {
             $emp_data = Employee::with(['attendances' => function ($query) use ($from_date, $to_date) {
-                                        $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
-                                        ->orderBy('time_in','asc')->orderby('time_out','desc')->orderBy('id','asc');
+                                        $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orderBy('time_in','asc')->orderBy('id','asc');
                                     }])
                                     ->whereIn('employee_number', $request->employee)
                                     ->whereIn('company_id', $allowed_companies)
                                     ->get();
 
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
-            $schedules = ScheduleData::where('schedule_id', 1)->get();
+           
         }
+        $schedules = ScheduleData::all();
         
         return view(
             'attendances.employee_attendance',
@@ -1146,7 +1225,7 @@ class EmployeeController extends Controller
         $employees = [];
         
         if ($from_date != null) {
-            $emp_data = Employee::select('employee_number','user_id','first_name','last_name')
+            $emp_data = Employee::select('employee_number','user_id','first_name','last_name','location')
                                 ->with(['attendances' => function ($query) use ($from_date, $to_date) {
                                     $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                     ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
@@ -1166,6 +1245,11 @@ class EmployeeController extends Controller
                                 }])
                                 ->with(['obs' => function ($query) use ($from_date, $to_date) {
                                     $query->whereBetween('applied_date', [$from_date, $to_date])
+                                    ->where('status','Approved')
+                                    ->orderBy('id','asc');
+                                }])
+                                ->with(['dtrs' => function ($query) use ($from_date, $to_date) {
+                                    $query->whereBetween('dtr_date', [$from_date, $to_date])
                                     ->where('status','Approved')
                                     ->orderBy('id','asc');
                                 }])
@@ -1353,6 +1437,59 @@ class EmployeeController extends Controller
             'terminals' => $terminals,
             'terminals_hik' => $terminals_hik,
         ));
+    }
+
+    public function sync_per_employee(Request $request)
+    {
+        $from = $request->from_per_employee;
+        $to = $request->to_per_employee;
+        $employee_code = $request->employee_code;
+
+        $attendances = iclocktransactions_mysql::where('emp_code','=',$employee_code)->whereBetween('punch_time',[$from,$to])->orderBy('punch_time','asc')->get();
+        
+        foreach($attendances as $att)
+        {
+            if($att->punch_state == 0)
+            {
+                    $attend = Attendance::where('employee_code',$att->emp_code)->whereDate('time_in',date('Y-m-d', strtotime($att->punch_time)))->first();
+                    if($attend == null)
+                    {
+                        $attendance = new Attendance;
+                        $attendance->employee_code  = $att->emp_code;   
+                        $attendance->time_in = date('Y-m-d H:i:s',strtotime($att->punch_time));
+                        $attendance->device_in = $att->terminal_alias;
+                        $attendance->save(); 
+                    }
+                
+            }
+            else if($att->punch_state == 1)
+            {
+                $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
+                $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                $update = [
+                    'time_out' =>  date('Y-m-d H:i:s', strtotime($att->punch_time)),
+                    'device_out' => $att->terminal_alias,
+                    'last_id' =>$att->id,
+                ];
+
+                $attendance_in = Attendance::where('employee_code',$att->emp_code)
+                ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
+                Attendance::where('employee_code',$att->emp_code)
+                ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                ->update($update);
+
+                if($attendance_in ==  null)
+                {
+                    $attendance = new Attendance;
+                    $attendance->employee_code  = $att->emp_code;   
+                    $attendance->time_out = date('Y-m-d H:i:s', strtotime($att->punch_time));
+                    $attendance->device_out = $att->terminal_alias;
+                    $attendance->save(); 
+                }
+            }
+        }
+       
+        return back();
     }
 
     public function sync_hik(Request $request)

@@ -21,8 +21,8 @@ class EmployeeObExport implements FromQuery, WithHeadings, WithMapping
     {
         $company = $this->company;
         return EmployeeOb::query()->with('user','employee')
-                                ->whereDate('approved_date','>=',$this->from)
-                                ->whereDate('approved_date','<=',$this->to)
+                                ->whereDate('applied_date','>=',$this->from)
+                                ->whereDate('applied_date','<=',$this->to)
                                 ->whereHas('employee',function($q) use($company){
                                     $q->where('company_id',$company);
                                 })

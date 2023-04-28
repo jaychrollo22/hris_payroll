@@ -84,8 +84,20 @@
                                             @endif
                                         @else
                                             <input type="checkbox" name="employees_export" id="employees_export{{$user->id}}">
+                                        @endif 
+                                        Export OTPMS
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
+                                            @if($user->user_privilege->employees_export_hr == 'on')
+                                                <input type="checkbox" name="employees_export_hr" id="employees_export_hr{{$user->id}}" value="{{ $user->user_privilege->employees_export_hr }}" checked>
+                                            @else
+                                                <input type="checkbox" name="employees_export_hr" id="employees_export_hr{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="employees_export_hr" id="employees_export_hr{{$user->id}}">
                                         @endif
-                                        Export
+                                        Export HR Details
                                         <br>
                                         <br>
                                         @if($user->user_privilege)
@@ -150,6 +162,18 @@
                                             <input type="checkbox" name="reports_ob" id="reports_ob{{$user->id}}">
                                         @endif
                                         Official Business
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
+                                            @if($user->user_privilege->reports_dtr == 'on')
+                                                <input type="checkbox" name="reports_dtr" id="reports_dtr{{$user->id}}" value="{{ $user->user_privilege->reports_dtr }}" checked>
+                                            @else
+                                                <input type="checkbox" name="reports_dtr" id="reports_dtr{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="reports_dtr" id="reports_dtr{{$user->id}}">
+                                        @endif
+                                        Daily Time Record
                                         <br>
                                         <br>
                                     </div>

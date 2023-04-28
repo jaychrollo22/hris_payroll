@@ -32,6 +32,7 @@ class WorkfromhomeController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
+        $status =  isset($request->status) ? $request->status : "Approved";
         $employee_wfhs = [];
         if(isset($request->from) && isset($request->to)){
             $employee_wfhs = EmployeeWfh::with('user','employee')
@@ -40,7 +41,7 @@ class WorkfromhomeController extends Controller
                                         ->whereHas('employee',function($q) use($company){
                                             $q->where('company_id',$company);
                                         })
-                                        ->where('status','Approved')
+                                        ->where('status',$status)
                                         ->get();
         }
         
@@ -50,6 +51,7 @@ class WorkfromhomeController extends Controller
             'company'=>$company,
             'from'=>$from,
             'to'=>$to,
+            'status'=>$status,
             'employee_wfhs' => $employee_wfhs,
             'companies' => $companies
         ));

@@ -103,10 +103,15 @@
                         <h4 class="card-title">Employees 
                             @if (checkUserPrivilege('employees_add',auth()->user()->id) == 'yes')
                                 <button type="button" class="btn btn-outline-success btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#newEmployee"><i class="ti-plus btn-icon-prepend"></i></button>
-                                <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployee" title="Upload Employees"><i class="ti-arrow-up btn-icon-prepend"></i></button>
+                                @if(auth()->user()->id == '353' || auth()->user()->id == '1')
+                                    <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployee" title="Upload Employees"><i class="ti-arrow-up btn-icon-prepend"></i></button>
+                                @endif
                             @endif
                             @if (checkUserPrivilege('employees_export',auth()->user()->id) == 'yes')
-                                <a href="/employees-export?company={{$company}}&department={{$department}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right" title="Export Employees"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+                                <a href="/employees-export?company={{$company}}&department={{$department}}" class="btn btn-outline-danger btn-icon-text btn-sm text-center float-right" title="Export OTPMS"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+                            @endif
+                            @if (checkUserPrivilege('employees_export_hr',auth()->user()->id) == 'yes')
+                                <a href="/employees-export-hr?company={{$company}}&department={{$department}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right mr-2" title="Export HR Details"><i class="ti-arrow-down btn-icon-prepend"></i></a>
                             @endif
                         </h4>
 
@@ -184,7 +189,7 @@
                                         </td>
                                         <td>
                                             <small><img class="rounded-circle" style='width:34px;height:34px;' src='{{URL::asset($employee->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
-                                            {{$employee->first_name}} {{$employee->last_name}} </small>
+                                            {{$employee->last_name}}, {{$employee->first_name}}  </small>
                                         </td>
                                         <td>
                                             @if($employee->company){{$employee->company->company_name}}@endif

@@ -23,8 +23,8 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
     {
         $company = $this->company;
         return EmployeeOvertime::query()->with('user','employee')
-                                ->whereDate('approved_date','>=',$this->from)
-                                ->whereDate('approved_date','<=',$this->to)
+                                ->whereDate('ot_date','>=',$this->from)
+                                ->whereDate('ot_date','<=',$this->to)
                                 ->whereHas('employee',function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
@@ -60,18 +60,19 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
         $sph = $this->isSPH($employee_ot->ot_date); //Special Holiday
         $remarks = $this->isRemarks($employee_ot->end_time); //Remarks
 
+        $ot_approved_hrs = $employee_ot->ot_approved_hrs - $employee_ot->break_hrs;
 
         if($rd == '1' || $sun == '1' || $rh == '1' || $sph == '1'){
-            if($employee_ot->ot_approved_hrs > 8){
+            if($ot_approved_hrs > 8){
                 $hours_worked_cap_spwh = 8; // Hours Cap SPWH
-                $max_overtime =  $employee_ot->ot_approved_hrs - 8; //Max 8 Hours
+                $max_overtime =  $ot_approved_hrs - 8; //Max 8 Hours
                 $rw_ot = 1;
             }else{
-                $hours_worked_cap_spwh = $employee_ot->ot_approved_hrs; // Hours Cap SPWH
+                $hours_worked_cap_spwh = $ot_approved_hrs; // Hours Cap SPWH
                 $max_overtime =  0; //Max 8 Hours
             }
         }else{
-            $max_overtime = $employee_ot->ot_approved_hrs; //Max 8 Hours
+            $max_overtime = $ot_approved_hrs; //Max 8 Hours
             $hours_worked_cap_spwh = 0; // Hours Cap SPWH
         }
 

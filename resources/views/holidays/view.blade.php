@@ -25,6 +25,7 @@
                             <th>Holiday Date</th>
                             <th>Holiday Name</th>
                             <th>Holiday Type</th>
+                            <th>Location</th>
                             <th>Holiday Status</th>
                         </tr>
                     </thead>
@@ -35,6 +36,7 @@
                             <td>{{date('Y.').date('m.d',strtotime($holiday->holiday_date))}}</td>
                             <td>{{$holiday->holiday_name}}</td>
                             <td>{{$holiday->holiday_type}}</td>
+                            <td>{{$holiday->location}}</td>
                             <td>
                                 @if (checkUserPrivilege('settings_edit',auth()->user()->id) == 'yes')
                                 <button type="button" class="btn btn-info btn-rounded btn-icon" href="#edit_holiday{{$holiday->id}}" data-toggle="modal" title='EDIT'>

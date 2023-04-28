@@ -21,6 +21,7 @@ class OvertimeController extends Controller
         $company = $request->company;
         $from_date = $request->from;
         $to_date = $request->to;
+        $status = isset($request->status) ? $request->status : "Approved";
         $date_range = '';
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
@@ -33,14 +34,12 @@ class OvertimeController extends Controller
             $company_employees = Employee::where('company_id',$request->company)->pluck('user_id')->toArray();
             
             $employee_overtimes = EmployeeOvertime::with('user','employee')
-                                                    ->where(function ($query) use ($from_date, $to_date) {
-                                                        $query->whereBetween('ot_date', [$from_date." 00:00:01", $to_date." 23:59:59"])
-                                                              ->orderBy('ot_date','asc')
-                                                              ->orderby('user_id','desc')
-                                                              ->orderBy('id','asc');
+                                                    ->whereDate('ot_date','>=',$from_date)
+                                                    ->whereDate('ot_date','<=',$to_date)
+                                                    ->whereHas('employee',function($q) use($company){
+                                                        $q->where('company_id',$company);
                                                     })
-                                                    ->whereIn('user_id', $company_employees)
-                                                    ->where('status','Approved')
+                                                    ->where('status',$status)
                                                     ->get();
         }
 
@@ -52,6 +51,7 @@ class OvertimeController extends Controller
             'company' => $company,
             'from_date' => $from_date,
             'to_date' => $to_date,
+            'status' => $status,
             'date_range' => $date_range,
         ));
     }

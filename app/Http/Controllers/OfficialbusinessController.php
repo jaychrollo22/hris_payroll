@@ -31,15 +31,16 @@ class OfficialbusinessController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
+        $status =  isset($request->status) ? $request->status : "Approved";
         $employee_obs = [];
         if(isset($request->from) && isset($request->to)){
             $employee_obs = EmployeeOb::with('user','employee')
-                                        ->whereDate('approved_date','>=',$from)
-                                        ->whereDate('approved_date','<=',$to)
+                                        ->whereDate('applied_date','>=',$from)
+                                        ->whereDate('applied_date','<=',$to)
                                         ->whereHas('employee',function($q) use($company){
                                             $q->where('company_id',$company);
                                         })
-                                        ->where('status','Approved')
+                                        ->where('status',$status)
                                         ->get();
         }
         
@@ -49,6 +50,7 @@ class OfficialbusinessController extends Controller
             'company'=>$company,
             'from'=>$from,
             'to'=>$to,
+            'status'=>$status,
             'employee_obs' => $employee_obs,
             'companies' => $companies
         ));

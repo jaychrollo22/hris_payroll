@@ -213,6 +213,35 @@
                             <div class='row m-2'>
                                 <div class='col-md-12 text-center'>
                                     <strong>
+                                        <h3><i class="fa fa-user-plus" aria-hidden="true"></i> Beneficiaries
+                                            @if (checkUserPrivilege('employees_edit',auth()->user()->id) == 'yes')
+                                                <button class="btn btn-icon btn-info btn-xs" title="Edit Beneficiaries" data-toggle="modal" data-target="#editBeneficiaries"><i class="fa fa-pencil"></i></button>
+                                            @endif
+                                        </h3>
+                                    </strong>
+                                </div>
+                            </div>
+                            
+                            @foreach($user->employee->beneficiaries as $key => $value)
+                            <div class='row  m-2 border-bottom'>
+                                <div class='col-md-3'>
+                                    <small>{{$value->relation}}</small>
+                                </div>
+                                <div class='col-md-9'>
+                                    <small>{{$value->first_name . ' ' . $value->first_name}}</small>
+                                </div>
+                            </div>
+                            @endforeach                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-body text-left">
+                        <div class="template-demo">
+                            <div class='row m-2'>
+                                <div class='col-md-12 text-center'>
+                                    <strong>
                                         <h3><i class="fa fa-user-plus" aria-hidden="true"></i> Employment Information 
                                             @if (checkUserPrivilege('employees_edit',auth()->user()->id) == 'yes')
                                                 <button class="btn btn-icon btn-info btn-xs" title="Edit Employee Information" data-toggle="modal" data-target="#editEmpInfo"><i class="fa fa-pencil"></i></button>
@@ -376,4 +405,5 @@
 @include('employees.edit_info')
 @include('employees.edit_employee_info')
 @include('employees.edit_contact_info')
+@include('employees.edit_beneficiaries')
 @endsection

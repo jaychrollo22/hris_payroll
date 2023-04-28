@@ -24,6 +24,12 @@ class EmployeeLeaveController extends Controller
         $used_sl = checkUsedSickLeave(auth()->user()->id);
         $used_sil = checkUsedServiceIncentiveLeave(auth()->user()->id);
 
+        $used_ml = checkUsedLeave(auth()->user()->id,3);
+        $used_pl = checkUsedLeave(auth()->user()->id,4);
+        $used_spl = checkUsedLeave(auth()->user()->id,5);
+        $used_splw = checkUsedLeave(auth()->user()->id,7);
+        $used_splvv = checkUsedLeave(auth()->user()->id,9);
+
         $earned_vl = checkEarnedLeave(auth()->user()->id,1);
         $earned_sl = checkEarnedLeave(auth()->user()->id,2);
         $earned_sil = checkEarnedLeave(auth()->user()->id,10);
@@ -42,8 +48,9 @@ class EmployeeLeaveController extends Controller
         if($employee_status->classification == '3' || $employee_status->classification == '5'){
             $date_from = new DateTime($employee_status->original_date_hired);
             $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
-            
-            if($date_diff->format('%m') > 5){
+            $total_months = (($date_diff->y) * 12) + ($date_diff->m);
+
+            if($total_months > 5){
                 $allowed_to_file = true;
             }else{
                 $allowed_to_file = false;
@@ -61,6 +68,11 @@ class EmployeeLeaveController extends Controller
             'used_vl' => $used_vl,
             'used_sl' => $used_sl,
             'used_sil' => $used_sil,
+            'used_ml' => $used_ml,
+            'used_pl' => $used_pl,
+            'used_spl' => $used_spl,
+            'used_splw' => $used_splw,
+            'used_splvv' => $used_splvv,
             'earned_vl' => $earned_vl,
             'earned_sl' => $earned_sl,
             'earned_sil' => $earned_sil,

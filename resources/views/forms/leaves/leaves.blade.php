@@ -18,9 +18,15 @@
                     </thead>
                     <tbody>
                       @php
-                          $is_allowed_to_file_vl = true;
-                          $is_allowed_to_file_sl = true;
-                          $is_allowed_to_file_sil = true;
+                          $is_allowed_to_file_vl = false;
+                          $is_allowed_to_file_sl = false;
+                          $is_allowed_to_file_sil = false;
+
+                          $is_allowed_to_file_ml = false;
+                          $is_allowed_to_file_pl = false;
+                          $is_allowed_to_file_spl = false;
+                          $is_allowed_to_file_splw = false;
+                          $is_allowed_to_file_splvv = false;
                       @endphp
 
                       @foreach($leave_balances as $leave)
@@ -33,6 +39,17 @@
                               {{$earned_sl + $leave->count}}
                           @elseif ($leave->leave->id == '10')
                               {{$earned_sil + $leave->count}}
+
+                          @elseif ($leave->leave->id == '3')
+                              {{$leave->count}}
+                          @elseif ($leave->leave->id == '4')
+                              {{$leave->count}}
+                          @elseif ($leave->leave->id == '5')
+                              {{$leave->count}}
+                          @elseif ($leave->leave->id == '7')
+                              {{$leave->count}}
+                          @elseif ($leave->leave->id == '8')
+                              {{$leave->count}}
                           @endif
                         </td>
                         <td>
@@ -42,6 +59,16 @@
                               {{$used_sl}}
                           @elseif ($leave->leave->id == '10')
                               {{$used_sil}}
+                          @elseif ($leave->leave->id == '3')
+                              {{$used_ml}}
+                          @elseif ($leave->leave->id == '4')
+                              {{$used_pl}}
+                          @elseif ($leave->leave->id == '5')
+                              {{$used_spl}}
+                          @elseif ($leave->leave->id == '7')
+                              {{$used_splw}}
+                          @elseif ($leave->leave->id == '8')
+                              {{$used_splvv}}
                           @endif
                         </td>
                         <td>
@@ -50,7 +77,17 @@
                               @php
                                 $count_vl = ($leave->count + $earned_vl) - $used_vl;
                                 if($count_vl > 0){
-                                  $is_allowed_to_file_vl = true;
+
+                                  $date_from = new DateTime($employee_status->original_date_hired);
+                                  $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                                  $total_months = (($date_diff->y) * 12) + ($date_diff->m);
+
+                                  if($total_months > 11){
+                                      $is_allowed_to_file_vl = true;
+                                  }else{
+                                      $is_allowed_to_file_vl = false;
+                                  }
+                    
                                 }else{
                                   $is_allowed_to_file_vl = false;
                                 }
@@ -60,7 +97,17 @@
                               @php
                                 $count_sl = ($leave->count + $earned_sl) - $used_sl;
                                 if($count_sl > 0){
-                                  $is_allowed_to_file_sl = true;
+
+                                  $date_from = new DateTime($employee_status->original_date_hired);
+                                  $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                                  $total_months = (($date_diff->y) * 12) + ($date_diff->m);
+
+                                  if($total_months > 5){
+                                      $is_allowed_to_file_sl = true;
+                                  }else{
+                                      $is_allowed_to_file_sl = false;
+                                  }
+
                                 }else{
                                   $is_allowed_to_file_sl = false;
                                 }
@@ -73,6 +120,56 @@
                                   $is_allowed_to_file_sil = true;
                                 }else{
                                   $is_allowed_to_file_sil = false;
+                                }
+                              @endphp
+                          @elseif ($leave->leave->id == '3')
+                              {{($leave->count) - $used_ml}}
+                              @php
+                                $count_ml = ($leave->count) - $used_ml;
+                                if($count_ml > 0){
+                                  $is_allowed_to_file_ml = true;
+                                }else{
+                                  $is_allowed_to_file_ml = false;
+                                }
+                              @endphp
+                          @elseif ($leave->leave->id == '4')
+                              {{($leave->count) - $used_pl}}
+                              @php
+                                $count_pl = ($leave->count) - $used_pl;
+                                if($count_pl > 0){
+                                  $is_allowed_to_file_pl = true;
+                                }else{
+                                  $is_allowed_to_file_pl = false;
+                                }
+                              @endphp
+                          @elseif ($leave->leave->id == '5')
+                                {{($leave->count) - $used_spl}}
+                                @php
+                                  $count_spl = ($leave->count) - $used_spl;
+                                if($count_spl > 0){
+                                  $is_allowed_to_file_spl = true;
+                                }else{
+                                  $is_allowed_to_file_spl = false;
+                                }
+                              @endphp
+                          @elseif ($leave->leave->id == '7')
+                              {{($leave->count) - $used_splw}}
+                              @php
+                                $count_splw = ($leave->count) - $used_splw;
+                                if($count_splw > 0){
+                                  $is_allowed_to_file_splw = true;
+                                }else{
+                                  $is_allowed_to_file_splw = false;
+                                }
+                              @endphp
+                          @elseif ($leave->leave->id == '9')
+                              {{($leave->count) - $used_splvv}}
+                              @php
+                                $count_splvv = ($leave->count) - $used_splvv;
+                                if($count_splvv > 0){
+                                  $is_allowed_to_file_splvv = true;
+                                }else{
+                                  $is_allowed_to_file_splvv = false;
                                 }
                               @endphp
                           @endif

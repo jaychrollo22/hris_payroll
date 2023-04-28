@@ -31,7 +31,7 @@
                Date
             </div>
             <div class='col-md-4'>
-              <input type="date" name='ot_date' value="{{$overtime->ot_date}}" class="form-control" min='{{date('Y-m-d', strtotime("-3 days"))}}' required>
+              <input type="date" name='ot_date' value="{{$overtime->ot_date}}" class="form-control" required>
             </div>
           </div>
            
@@ -55,7 +55,7 @@
                Break (Hrs)
             </div>
             <div class='col-md-4'>
-              <input type="number" name='break_hrs' min="1" max="3" class="form-control" placeholder="0.00">
+              <input type="number" name='break_hrs' min="0" max="3" class="form-control" placeholder="0.00" value="{{$overtime->break_hrs}}">
             </div>
           </div>
 

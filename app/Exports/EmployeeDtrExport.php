@@ -21,8 +21,8 @@ class EmployeeDtrExport implements FromQuery, WithHeadings, WithMapping
     {
         $company = $this->company;
         return EmployeeDtr::query()->with('user','employee')
-                                ->whereDate('approved_date','>=',$this->from)
-                                ->whereDate('approved_date','<=',$this->to)
+                                ->whereDate('dtr_date','>=',$this->from)
+                                ->whereDate('dtr_date','<=',$this->to)
                                 ->whereHas('employee',function($q) use($company){
                                     $q->where('company_id',$company);
                                 })

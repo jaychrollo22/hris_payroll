@@ -94,12 +94,14 @@ class UserController extends Controller
                 $user_privilege->employees_edit = $request->employees_edit;
                 $user_privilege->employees_add = $request->employees_add;
                 $user_privilege->employees_export = $request->employees_export;
+                $user_privilege->employees_export_hr = $request->employees_export_hr;
                 $user_privilege->employees_rate = $request->employees_rate;
 
                 $user_privilege->reports_leave = $request->reports_leave;
                 $user_privilege->reports_overtime = $request->reports_overtime;
                 $user_privilege->reports_wfh = $request->reports_wfh;
                 $user_privilege->reports_ob = $request->reports_ob;
+                $user_privilege->reports_dtr = $request->reports_dtr;
 
                 $user_privilege->biometrics_per_employee = $request->biometrics_per_employee;
                 $user_privilege->biometrics_per_location = $request->biometrics_per_location;
@@ -128,12 +130,14 @@ class UserController extends Controller
                 $new_user_privilege->employees_edit = $request->employees_edit;
                 $new_user_privilege->employees_add = $request->employees_add;
                 $new_user_privilege->employees_export = $request->employees_export;
+                $new_user_privilege->employees_export_hr = $request->employees_export_hr;
                 $new_user_privilege->employees_rate = $request->employees_rate;
 
                 $new_user_privilege->reports_leave = $request->reports_leave;
                 $new_user_privilege->reports_overtime = $request->reports_overtime;
                 $new_user_privilege->reports_wfh = $request->reports_wfh;
                 $new_user_privilege->reports_ob = $request->reports_ob;
+                $new_user_privilege->reports_dtr = $request->reports_dtr;
 
                 $new_user_privilege->biometrics_per_employee = $request->biometrics_per_employee;
                 $new_user_privilege->biometrics_per_location = $request->biometrics_per_location;
