@@ -24,7 +24,7 @@
                       <div class="form-group row">
                         <label class="col-sm-4 col-form-label text-right">To</label>
                         <div class="col-sm-8">
-                          <input type="date" value='{{$to_date}}'  class="form-control"  id='to' name="to" max='{{date('Y-m-d')}}' required/>
+                          <input type="date" value='{{$to_date}}'  class="form-control"  id='to' name="to" required/>
                         </div>
                       </div>
                     </div>
@@ -39,18 +39,13 @@
                     <table border="1" class="table table-hover table-bordered employee_attendance" id='employee_attendance'>
   
                         <thead>
-                            {{-- <tr>
-                                <td colspan='5'>{{$emp->emp_code}} - {{$emp->first_name}} {{$emp->last_name}}</td>
-                            </tr> --}}
                             <tr>
                                 <td>User ID</td>
-                                {{-- <td>Biometric ID</td> --}}
                                 <td>Name</td>
                                 <td>Date</td>
                                 <td>Time In</td>
                                 <td>Time Out</td>
                                 <td>Work </td>
-                                {{-- <td>Remarks </td> --}}
                                 <td>Lates </td>
                                 <td>Undertime</td>
                                 <td>Overtime</td>
@@ -81,12 +76,32 @@
                                 <td>{{$emp->employee_number}}</td>
                                 <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
                                 <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
-  
-                                @php
+                                
+                                @php    
                                     $if_has_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($date_r)));
                                     $if_has_wfh = employeeHasWFHDetails($emp->approved_wfhs,date('Y-m-d',strtotime($date_r)));
                                     $if_has_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($date_r)));
                                 @endphp
+
+                                @php
+                                    $time_in_out = 0;
+                                    $time_in = ($emp->attendances)->whereBetween('time_in',[$date_r." 00:00:00", $date_r." 23:59:59"])->first();
+                                    $time_out = null;
+                                    if($time_in == null)
+                                    {
+                                        $time_out = ($emp->attendances)->whereBetween('time_out',[$date_r." 00:00:00", $date_r." 23:59:59"])->where('time_in',null)->first();
+                                    }
+                                    
+                                    $dtr_correction_time_in = "";
+                                    $dtr_correction_time_out = "";
+                                    $dtr_correction_both = "";
+                                    if($if_has_dtr){
+                                        $dtr_correction_time_in = $if_has_dtr->correction == 'Time-in' ? $if_has_dtr->time_in : "";
+                                        $dtr_correction_time_out = $if_has_dtr->correction == 'Time-out' ? $if_has_dtr->time_out : "";
+                                        $dtr_correction_both = $if_has_dtr->correction == 'Both'  ? $if_has_dtr : "";
+                                    }
+                                @endphp
+
                                 @if($if_has_ob)
                                     @php
                                         $ob_start = new DateTime($if_has_ob->date_from); 
@@ -120,25 +135,6 @@
                                     <td></td>
                                     <td>{{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : "WFH"}}</td>
                                 @else
-                                    @php
-                                        $time_in_out = 0;
-                                        $time_in = ($emp->attendances)->whereBetween('time_in',[$date_r." 00:00:00", $date_r." 23:59:59"])->first();
-                                        $time_out = null;
-                                        if($time_in == null)
-                                        {
-                                            $time_out = ($emp->attendances)->whereBetween('time_out',[$date_r." 00:00:00", $date_r." 23:59:59"])->where('time_in',null)->first();
-                                        }
-                                        
-                                        $dtr_correction_time_in = "";
-                                        $dtr_correction_time_out = "";
-                                        $dtr_correction_both = "";
-                                        if($if_has_dtr){
-                                            $dtr_correction_time_in = $if_has_dtr->correction == 'Time-in' ? $if_has_dtr->time_in : "";
-                                            $dtr_correction_time_out = $if_has_dtr->correction == 'Time-out' ? $if_has_dtr->time_out : "";
-                                            $dtr_correction_both = $if_has_dtr->correction == 'Both'  ? $if_has_dtr : "";
-                                        }
-                                    @endphp
-                                    
                                     @if($dtr_correction_both)
                                         @php
                                             $dtr_start = new DateTime($if_has_dtr->time_in); 
@@ -161,7 +157,7 @@
                                             <td>{{date('h:i A',strtotime($dtr_correction_time_in))}}</td>
                                         @else
                                             {{-- Time In --}}
-                                            @if($time_in != null)
+                                            @if($time_in)
                                                 <td>
                                                     {{date('h:i A',strtotime($time_in->time_in))}}
                                                 </td>
@@ -185,39 +181,37 @@
                                                     <td></td>
                                                 @else
   
-                                                @if($dtr_correction_time_out)
-                                                    <td>{{date('h:i A',strtotime($dtr_correction_time_out))}}</td>
-                                                @else
-                                                    @php
-                                                    $time_in_out = 1;
-                                                    @endphp
-                                                    <td class='bg-warning'>
-  
-                                                    </td>
-                                                    @if($time_out == null)
-                                                            @php
-                                                            $time_in_out = 1;
-                                                            @endphp
-                                                        <td class='bg-warning'>
-  
-                                                        </td>
+                                                    @if($dtr_correction_time_out)
+                                                        <td>{{date('h:i A',strtotime($dtr_correction_time_out))}}</td>
                                                     @else
-                                                        @if($time_in->time_out == null)
-                                                                @php
-                                                                $time_in_out = 1;
-                                                                @endphp
-                                                            <td class='bg-warning'>
-    
-                                                            </td>
-                                                        @else
+                                                        @php
+                                                        $time_in_out = 1;
+                                                        @endphp
+                                                        <td class='bg-warning'></td>
+                                                        @if($time_in)
+                                                            @if($time_in->time_out)
                                                             <td>
                                                                 {{date('h:i A',strtotime($time_in->time_out))}}
                                                             </td>
+                                                            @else
+                                                                @php
+                                                                    $time_in_out = 1;
+                                                                @endphp
+                                                                <td class='bg-warning'></td>
+                                                            @endif
+                                                        @else
+                                                            @if ($time_out)
+                                                                <td>
+                                                                    {{date('h:i A',strtotime($time_out->time_out))}}
+                                                                </td>
+                                                            @else
+                                                                @php
+                                                                    $time_in_out = 1;
+                                                                    @endphp
+                                                                <td class='bg-warning'></td>
+                                                            @endif
                                                         @endif
-                                                        
                                                     @endif
-                                                @endif
-  
                                                 @endif
                                             @endif
                                         @endif
@@ -353,10 +347,10 @@
                                                 <td>
                                                       @php
                                                         $approved_overtime_hrs = employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r)));
+
                                                         if($approved_overtime_hrs){
-                                                                $approved_overtimes = (double) $approved_overtimes + ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs);
+                                                            $approved_overtimes = (double) $approved_overtimes + ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs);
                                                         }
-                                                          
                                                       @endphp
                                                       {{$approved_overtime_hrs ? (double) ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs) : 0 }} hrs
                                                 </td>
@@ -443,9 +437,7 @@
                                 <td >0 hrs</td>
                                 <td >{{$night_diff_ot}} hrs</td>
                                 <td ></td>
-                              </tr>
-                              <tr>
-                                <td colspan='11'>&nbsp;</td>
+                                <td ></td>
                             </tr>
                         </tbody>
   

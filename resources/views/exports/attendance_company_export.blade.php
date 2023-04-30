@@ -9,6 +9,7 @@
             <td>SECOND ACTUAL TIME OUT</td>
             <td>WORK</td>
             <td>REMARKS</td>
+            <td>DATE DESCRIPTION</td>
         </tr>
     </thead>
     @foreach($attendances as $emp)
@@ -235,6 +236,9 @@
                 
                     {{-- Remarks --}}
                     <td>
+                        @php
+                            $check_if_holiday = '';
+                        @endphp
                         @if($time_in == null)
                             @if((date('l',strtotime($date_r)) == "Saturday") || (date('l',strtotime($date_r)) == "Sunday"))
                                 
@@ -275,7 +279,20 @@
                     </td>
 
                     {{-- Date Description --}}
-
+                    <td>
+                        @php
+                            $date_description = '';
+                            if($check_if_holiday){
+                                if($check_if_holiday == 'Legal Holiday'){
+                                    $date_description = 'Regular Holiday';
+                                }
+                                else {
+                                    $date_description = $check_if_holiday;
+                                }
+                            }
+                        @endphp
+                        {{$date_description}}
+                    </td>
 
                 @endif
             @endif
