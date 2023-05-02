@@ -30,7 +30,7 @@
 							<select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-multiple "
 								style='width:100%;' name='user_id' required>
 								<option value="">--Select Employee--</option>
-								@foreach ($employees as $employee)
+								@foreach ($employees_selection as $employee)
 									<option value="{{ $employee->user_id }}" {{ old('employee') == $employee->user_id ? 'selected' : '' }}>
 										{{ $employee->last_name . ', ' . $employee->first_name . ' ' . $employee->middle_name }}</option>
 								@endforeach

@@ -26,7 +26,9 @@
 							<table class="table table-hover table-bordered tablewithSearch">
 								<thead>
 									<tr>
+										<th>User ID</th>
 										<th>Employee</th>
+										<th>Date Hired</th>
 										<th>Company</th>
 										<th>Leave Credits</th>
 									</tr>
@@ -35,7 +37,9 @@
 									@foreach ($employees as $employee)
 										@if(count($employee->employee_leave_credits) > 0)
 											<tr>
+												<td>{{ $employee->user_id}}</td>
 												<td>{{ $employee->first_name . ' ' . $employee->last_name}}</td>
+												<td>{{ $employee->original_date_hired}}</td>
 												<td>{{ $employee->company->company_name}}</td>
 												<td>
 													<ul>
