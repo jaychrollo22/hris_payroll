@@ -276,7 +276,9 @@
                                                     if($dtr_correction_time_out){
                                                         $time_out_data = $dtr_correction_time_out;
                                                     }else{
-                                                        $time_out_data = $time_in->time_out ? $time_in->time_out : "";
+                                                        if($time_in){
+                                                            $time_out_data = $time_in->time_out ? $time_in->time_out : "";
+                                                        }
                                                     }
 
                                                     if(strtotime(date('H:i:00',strtotime($employee_time_in))) >= strtotime($time_in_from))
