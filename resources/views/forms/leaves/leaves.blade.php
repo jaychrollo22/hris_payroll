@@ -34,12 +34,77 @@
                         <td>{{$leave->leave->leave_type}}</td>
                         <td>
                           @if ($leave->leave->id == '1')
-                              {{$earned_vl + $leave->count}}
+                            @php
+                              $date_from = new DateTime($employee_status->original_date_hired);
+                              $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                              $total_months = (($date_diff->y) * 12) + ($date_diff->m);
+
+                              $vl_beginning_balance = 0;
+                              if($total_months > 11){ //
+                                
+                                $original_date_hired_m_d = date('m-d',strtotime($employee_status->original_date_hired));
+                                $original_date_hired_m = date('m',strtotime($employee_status->original_date_hired));
+                                $today = date('Y-m-d');
+                                $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+                                $original_date_hired = $last_year . '-' . $original_date_hired_m_d;
+
+                                if($last_year == 2022){
+                                  $date_from = new DateTime($original_date_hired);
+                                  $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                                  $total_months_within = (($date_diff->y) * 12) + ($date_diff->m);
+
+                                  if($total_months_within > 11){
+                                    if($original_date_hired_m < date('m', strtotime('-1 month', strtotime($today)))){
+                                      $vl_beginning_balance = $leave->count;
+                                    }
+                                  }else{
+                                    $vl_beginning_balance = $leave->count;
+                                  }
+                                }
+                              }else{
+                                $vl_beginning_balance = $leave->count;
+                              }
+                              
+                              $total_vl = $vl_beginning_balance + $earned_vl;
+                            @endphp
+                            {{$total_vl}}
                           @elseif ($leave->leave->id == '2')
-                              {{$earned_sl + $leave->count}}
+                            @php
+                              $date_from = new DateTime($employee_status->original_date_hired);
+                              $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                              $total_months = (($date_diff->y) * 12) + ($date_diff->m);
+
+                              $sl_beginning_balance = 0;
+                              if($total_months > 11){ //
+                                
+                                $original_date_hired_m_d = date('m-d',strtotime($employee_status->original_date_hired));
+                                $original_date_hired_m = date('m',strtotime($employee_status->original_date_hired));
+                                $today = date('Y-m-d');
+                                $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+                                $original_date_hired = $last_year . '-' . $original_date_hired_m_d;
+
+                                if($last_year == 2022){
+                                  $date_from = new DateTime($original_date_hired);
+                                  $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                                  $total_months_within = (($date_diff->y) * 12) + ($date_diff->m);
+
+                                  if($total_months_within > 11){
+                                    if($original_date_hired_m < date('m', strtotime('-1 month', strtotime($today)))){
+                                      $sl_beginning_balance = $leave->count;
+                                    }
+                                  }else{
+                                    $sl_beginning_balance = $leave->count;
+                                  }
+                                }
+                              }else{
+                                $sl_beginning_balance = $leave->count;
+                              }
+                              
+                              $total_sl = $sl_beginning_balance + $earned_sl;
+                            @endphp
+                              {{$total_sl}}
                           @elseif ($leave->leave->id == '10')
                               {{$earned_sil + $leave->count}}
-
                           @elseif ($leave->leave->id == '3')
                               {{$leave->count}}
                           @elseif ($leave->leave->id == '4')
@@ -73,45 +138,94 @@
                         </td>
                         <td>
                           @if ($leave->leave->id == '1')
-                              {{($leave->count + $earned_vl) - $used_vl}}
                               @php
-                                $count_vl = ($leave->count + $earned_vl) - $used_vl;
+                                $date_from = new DateTime($employee_status->original_date_hired);
+                                $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                                $total_months = (($date_diff->y) * 12) + ($date_diff->m);
+
+                                $vl_beginning_balance = 0;
+                                if($total_months > 11){ //
+                                  
+                                  $original_date_hired_m_d = date('m-d',strtotime($employee_status->original_date_hired));
+                                  $original_date_hired_m = date('m',strtotime($employee_status->original_date_hired));
+                                  $today = date('Y-m-d');
+                                  $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+                                  $original_date_hired = $last_year . '-' . $original_date_hired_m_d;
+
+                                  if($last_year == 2022){
+                                    $date_from = new DateTime($original_date_hired);
+                                    $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                                    $total_months_within = (($date_diff->y) * 12) + ($date_diff->m);
+
+                                    if($total_months_within > 11){
+                                      if($original_date_hired_m < date('m', strtotime('-1 month', strtotime($today)))){
+                                        $vl_beginning_balance = $leave->count;
+                                      }
+                                    }else{
+                                      $vl_beginning_balance = $leave->count;
+                                    }
+                                  }
+                                }else{
+                                  $vl_beginning_balance = $leave->count;
+                                }
+                                
+                                $count_vl = ($vl_beginning_balance + $earned_vl) - $used_vl;
                                 if($count_vl > 0){
-
-                                  $date_from = new DateTime($employee_status->original_date_hired);
-                                  $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
-                                  $total_months = (($date_diff->y) * 12) + ($date_diff->m);
-
                                   if($total_months > 11){
                                       $is_allowed_to_file_vl = true;
                                   }else{
                                       $is_allowed_to_file_vl = false;
                                   }
-                    
                                 }else{
                                   $is_allowed_to_file_vl = false;
                                 }
                               @endphp
+                              {{$count_vl}}
                           @elseif ($leave->leave->id == '2')
-                              {{($leave->count + $earned_sl) - $used_sl}}
+                              
                               @php
-                                $count_sl = ($leave->count + $earned_sl) - $used_sl;
+                                $date_from = new DateTime($employee_status->original_date_hired);
+                                $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                                $total_months = (($date_diff->y) * 12) + ($date_diff->m);
+
+                                $sl_beginning_balance = 0;
+                                if($total_months > 11){ //
+                                  
+                                  $original_date_hired_m_d = date('m-d',strtotime($employee_status->original_date_hired));
+                                  $original_date_hired_m = date('m',strtotime($employee_status->original_date_hired));
+                                  $today = date('Y-m-d');
+                                  $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+                                  $original_date_hired = $last_year . '-' . $original_date_hired_m_d;
+
+                                  if($last_year == 2022){
+                                    $date_from = new DateTime($original_date_hired);
+                                    $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+                                    $total_months_within = (($date_diff->y) * 12) + ($date_diff->m);
+
+                                    if($total_months_within > 11){
+                                      if($original_date_hired_m < date('m', strtotime('-1 month', strtotime($today)))){
+                                        $sl_beginning_balance = $leave->count;
+                                      }
+                                    }else{
+                                      $sl_beginning_balance = $leave->count;
+                                    }
+                                  }
+                                }else{
+                                  $sl_beginning_balance = $leave->count;
+                                }
+                                
+                                $count_sl = ($sl_beginning_balance + $earned_sl) - $used_sl;
                                 if($count_sl > 0){
-
-                                  $date_from = new DateTime($employee_status->original_date_hired);
-                                  $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
-                                  $total_months = (($date_diff->y) * 12) + ($date_diff->m);
-
-                                  if($total_months > 5){
+                                  if($total_months > 11){
                                       $is_allowed_to_file_sl = true;
                                   }else{
                                       $is_allowed_to_file_sl = false;
                                   }
-
                                 }else{
                                   $is_allowed_to_file_sl = false;
                                 }
                               @endphp
+                              {{$count_sl}}
                           @elseif ($leave->leave->id == '10')
                               {{($leave->count + $earned_sil) - $used_sil}}
                               @php

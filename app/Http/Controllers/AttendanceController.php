@@ -36,7 +36,11 @@ class AttendanceController extends Controller
         // dd($attendances);
 
         $emp_data = Employee::with(['attendances' => function ($query) use ($from_date, $to_date) {
-                                $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])->orderBy('time_in','asc')->orderBy('id','asc');
+                                    $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                    ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                    ->orderBy('time_in','asc')
+                                    ->orderby('time_out','desc')
+                                    ->orderBy('id','asc');
                             }])
                             ->where('employee_number', auth()->user()->employee->employee_number)
                             ->get();

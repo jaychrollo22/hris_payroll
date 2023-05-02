@@ -17,10 +17,13 @@ class LeaveCreditsController extends Controller
 
         $leaveCredits = EmployeeLeaveCredit::all();
         $leaveTypes = Leave::all();
+        $employees_selection = Employee::whereIn('company_id',$allowed_companies)->where('status','Active')->get();
 
-        $employees = Employee::with('department','company','employee_leave_credits.leave')
+         $employees = Employee::with('department','company','employee_leave_credits.leave')
                                 ->whereIn('company_id',$allowed_companies)
                                 ->where('status','Active')
+                                ->whereHas('employee_leave_credits')
+                                ->orderBy('first_name','ASC')
                                 ->get();
 
         return view('employee_leave_credits.index', array(
@@ -28,6 +31,7 @@ class LeaveCreditsController extends Controller
             'leaveCredits' => $leaveCredits,
             'leaveTypes' => $leaveTypes,
             'employees' => $employees,
+            'employees_selection' => $employees_selection,
         ));
     }
 
