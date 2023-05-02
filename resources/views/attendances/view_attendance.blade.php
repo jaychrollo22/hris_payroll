@@ -77,7 +77,11 @@
                                 <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
                                 <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
                                 
-                                @php    
+                                @php   
+                                
+                                    $time_in_data = '';
+                                    $time_out_data = '';
+
                                     $if_has_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($date_r)));
                                     $if_has_wfh = employeeHasWFHDetails($emp->approved_wfhs,date('Y-m-d',strtotime($date_r)));
                                     $if_has_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($date_r)));
@@ -104,8 +108,7 @@
                                         $dtr_correction_both = $if_has_dtr->correction == 'Both'  ? $if_has_dtr : "";
                                     }
 
-                                    $time_in_data = '';
-                                    $time_out_data = '';
+                                    
                                 @endphp
 
                                 @if($if_has_ob)
@@ -258,7 +261,12 @@
                                                     if($dtr_correction_time_out){
                                                         $time_out_data = $dtr_correction_time_out;
                                                     }else{
-                                                        if($time_in){
+                                                        if($time_in == null)
+                                                        {
+                                                            if($time_out){
+                                                                $time_out_data = $time_out->time_out ? $time_out->time_out : "";
+                                                            }
+                                                        }else{
                                                             $time_out_data = $time_in->time_out ? $time_in->time_out : "";
                                                         }
                                                     }
@@ -277,7 +285,6 @@
                                                     if($time_out_data){
                                                         $diff = $start_datetime->diff(new DateTime($time_out_data)); 
                                                     }
-
                                                 @endphp
                                                 @if($time_out_data)
                                                     {{ $diff->h }} hrs. {{ $diff->i }} mins. 
