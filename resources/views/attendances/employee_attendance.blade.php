@@ -184,13 +184,20 @@
                                                 @endif
                                             @else
                                                 @if ($time_out)
-                                                    <td>
-                                                        {{date('h:i A',strtotime($time_out->time_out))}}
-                                                    </td>
+                                                    @if ($time_out->time_out)
+                                                        <td>
+                                                            {{date('h:i A',strtotime($time_out->time_out))}}
+                                                        </td>
+                                                    @else
+                                                        @php
+                                                            $time_in_out = 1;
+                                                        @endphp
+                                                        <td class='bg-warning'></td>
+                                                    @endif
                                                 @else
                                                     @php
                                                         $time_in_out = 1;
-                                                        @endphp
+                                                    @endphp
                                                     <td class='bg-warning'></td>
                                                 @endif
                                             @endif
