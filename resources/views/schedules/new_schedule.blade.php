@@ -292,7 +292,7 @@
                 </div>
               </div>
               <div class='col-md-3  align-self-center'>
-                  <input type='number' class='form-control form-control-sm align-self-center' name='working_hours[Saturday]' step='.5' placeholder="10.5" readonly>
+                  <input type='number' class='form-control form-control-sm align-self-center' name='working_hours[Saturday]' step='.5' placeholder="10.5">
               </div>
             </div>
           </div>
