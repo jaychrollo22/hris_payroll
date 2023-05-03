@@ -51,7 +51,7 @@
                         <button class='btn btn-info' onclick="exportTableToExcel('employee_attendance','{{$from_date}} - {{$to_date}}')">Export</button>
                 @endif
                 <div class="table-responsive">
-                  <table border="1" class="table table-hover table-bordered  tablewithSearch" id='employee_attendance'>
+                  <table border="1" class="table table-hover table-bordered">
                     <thead>
                       <tr>
                         <th>Full Name</th>
