@@ -41,13 +41,13 @@
                   <div class="row mt-1 ">
                     <label  class="col-sm-2 col-form-label align-self-center">From</label>
                     <div class="col-sm-10">
-                      <input type="time" name="time_in_from[Sunday]" class="form-control form-control-sm"  readonly>
+                      <input type="time" name="time_in_from[Sunday]" class="form-control form-control-sm">
                     </div>
                   </div>
                   <div class="row">
                     <label  class="col-sm-2 col-form-label align-self-center">To</label>
                     <div class="col-sm-10">
-                      <input type="time" name="time_in_to[Sunday" class="form-control form-control-sm"  readonly>
+                      <input type="time" name="time_in_to[Sunday" class="form-control form-control-sm">
                     </div>
                   </div>
                 </div>
@@ -55,11 +55,11 @@
                   <div class="row mt-1 ">
                     <label  class="col-sm-2 col-form-label align-self-center">From</label>
                     <div class="col-sm-10">
-                      <input type="time" name="time_out_from[Sunday]" class="form-control form-control-sm"  readonly>
+                      <input type="time" name="time_out_from[Sunday]" class="form-control form-control-sm">
                     </div>
                     <label  class="col-sm-2 col-form-label align-self-center">To</label>
                     <div class="col-sm-10">
-                      <input type="time" name="time_out_to[Sunday]"  class="form-control form-control-sm"  readonly>
+                      <input type="time" name="time_out_to[Sunday]"  class="form-control form-control-sm">
                     </div>
                   </div>
                 </div>
@@ -269,13 +269,13 @@
                 <div class="row mt-1 ">
                   <label  class="col-sm-2 col-form-label align-self-center">From</label>
                   <div class="col-sm-10">
-                    <input type="time" name="time_in_from[Saturday]" class="form-control form-control-sm"  readonly>
+                    <input type="time" name="time_in_from[Saturday]" class="form-control form-control-sm">
                   </div>
                 </div>
                 <div class="row">
                   <label  class="col-sm-2 col-form-label align-self-center">To</label>
                   <div class="col-sm-10">
-                    <input type="time" name="time_in_to[Saturday]" class="form-control form-control-sm"  readonly>
+                    <input type="time" name="time_in_to[Saturday]" class="form-control form-control-sm">
                   </div>
                 </div>
               </div>
@@ -283,11 +283,11 @@
                 <div class="row mt-1 ">
                   <label  class="col-sm-2 col-form-label align-self-center">From</label>
                   <div class="col-sm-10">
-                    <input type="time" name="time_out_from[Saturday]" class="form-control form-control-sm"  readonly>
+                    <input type="time" name="time_out_from[Saturday]" class="form-control form-control-sm">
                   </div>
                   <label  class="col-sm-2 col-form-label align-self-center">To</label>
                   <div class="col-sm-10">
-                    <input type="time" name="time_out_to[Saturday]"  class="form-control form-control-sm"  readonly>
+                    <input type="time" name="time_out_to[Saturday]"  class="form-control form-control-sm">
                   </div>
                 </div>
               </div>
