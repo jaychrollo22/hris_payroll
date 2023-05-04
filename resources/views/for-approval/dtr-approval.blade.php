@@ -57,6 +57,7 @@
                         <th>Time-Out</th>
                         <th>Reason</th>
                         <th>Approvers</th>
+                        <th>Attachment</th>
                         <th>Status</th>
                         <th>Action </th> 
                       </tr>
@@ -91,6 +92,11 @@
                               @endif
                             @endif<br> 
                           @endforeach
+                        </td>
+                        <td>
+                          @if($form_approval->attachment)
+                          <a href="{{url($form_approval->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>
+                          @endif
                         </td>
                         <td>
                           @if ($form_approval->status == 'Pending')
