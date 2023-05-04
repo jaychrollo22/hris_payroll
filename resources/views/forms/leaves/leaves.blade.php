@@ -357,7 +357,8 @@
                         <th>Date Filed</th> 
                         <th>Leave Date</th>
                         <th>Leave Type</th>
-                        <th>with Pay </th>
+                        <th>With Pay </th>
+                        <th>Half Day </th>
                         <th>Reason </th>
                         <th>Leave Count</th>
                         <th>Status </th>
@@ -371,18 +372,22 @@
                         <td>{{date('M d, Y', strtotime($employee_leave->created_at))}}</td>
                         <td>{{date('M d, Y', strtotime($employee_leave->date_from))}} to {{date('M d, Y', strtotime($employee_leave->date_to))}} </td>
                         <td>{{ $employee_leave->leave->leave_type }}</td>
-                          @if($employee_leave->withpay == 1)   
-                              <td>Yes</td>
-                          @else
-                              <td>No</td>
-                          @endif  
-                                  
+                        @if($employee_leave->withpay == 1)   
+                          <td>Yes</td>
+                        @else
+                          <td>No</td>
+                        @endif  
+                        @if($employee_leave->halfday == 1)   
+                          <td>Yes</td>
+                        @else
+                          <td></td>
+                        @endif  
                         <td>
                           <p title="{{ $employee_leave->reason }}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
                             {{ $employee_leave->reason }}
                           </p>
                         </td>
-                        <td>{{get_count_days($employee_leave->schedule,$employee_leave->date_from,$employee_leave->date_to)}}</td>
+                        <td>{{get_count_days($employee_leave->schedule,$employee_leave->date_from,$employee_leave->date_to,$employee_leave->halfday)}}</td>
                         <td id="tdStatus{{ $employee_leave->id }}">
                           @if ($employee_leave->status == 'Pending')
                             <label class="badge badge-warning  mt-1">{{ $employee_leave->status }}</label>
@@ -468,7 +473,7 @@
 </div>
 
 @php
-function get_count_days($data,$date_from,$date_to)
+function get_count_days($data,$date_from,$date_to,$halfday)
  {
     $data = ($data->pluck('name'))->toArray();
     $count = 0;
@@ -481,7 +486,13 @@ function get_count_days($data,$date_from,$date_to)
           $count= $count+1;
       }
     }
-    return($count);
+
+    if($count == 1 && $halfday == 1){
+      return '0.5';
+    }else{
+      return($count);
+    }
+    
  } 
 @endphp  
 

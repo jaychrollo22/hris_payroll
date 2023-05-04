@@ -52,6 +52,8 @@
                         <th>Employee Name</th>
                         <th>Form Type</th>
                         <th>Date</th>
+                        <th>With Pay </th>
+                        <th>Half Day </th>
                         <th>Status</th> 
                         <th>Approvers</th> 
                         <th>Reason/Remarks</th> 
@@ -65,6 +67,16 @@
                         <td>{{$form_approval->user->name}}</td>
                         <td>{{$form_approval->leave->leave_type}}</td>
                         <td>{{date('M d, Y', strtotime($form_approval->date_from))}} - {{date('M d, Y', strtotime($form_approval->date_to))}}</td>
+                        @if($form_approval->withpay == 1)   
+                          <td>Yes</td>
+                        @else
+                          <td>No</td>
+                        @endif  
+                        @if($form_approval->halfday == 1)   
+                          <td>Yes</td>
+                        @else
+                          <td></td>
+                        @endif  
                         <td>
                           @if ($form_approval->status == 'Pending')
                             <label class="badge badge-warning">{{ $form_approval->status }}</label>
