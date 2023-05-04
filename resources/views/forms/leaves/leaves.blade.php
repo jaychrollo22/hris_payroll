@@ -475,15 +475,20 @@
 @php
 function get_count_days($data,$date_from,$date_to,$halfday)
  {
-    $data = ($data->pluck('name'))->toArray();
-    $count = 0;
-    $startTime = strtotime($date_from);
-    $endTime = strtotime($date_to);
 
-    for ( $i = $startTime; $i <= $endTime; $i = $i + 86400 ) {
-      $thisDate = date( 'l', $i ); // 2010-05-01, 2010-05-02, etc
-      if(in_array($thisDate,$data)){
-          $count= $count+1;
+    if($date_from == $date_to){
+        $count = 1;
+    }else{
+      $data = ($data->pluck('name'))->toArray();
+      $count = 0;
+      $startTime = strtotime($date_from);
+      $endTime = strtotime($date_to);
+
+      for ( $i = $startTime; $i <= $endTime; $i = $i + 86400 ) {
+        $thisDate = date( 'l', $i ); // 2010-05-01, 2010-05-02, etc
+        if(in_array($thisDate,$data)){
+            $count= $count+1;
+        }
       }
     }
 

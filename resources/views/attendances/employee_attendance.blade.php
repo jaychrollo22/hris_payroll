@@ -424,7 +424,7 @@
                                     {{-- Remarks --}}
                                     <td>
                                         @if($time_in == null)
-                                            @if((date('l',strtotime($date_r)) == "Saturday") || (date('l',strtotime($date_r)) == "Sunday"))
+                                            @if((date('l',strtotime($date_r)) == "Sunday"))
                                                 
                                             @else
                                                 @php 

@@ -125,21 +125,36 @@ function isRestDay( $date ) {
 function employeeHasLeave($employee_leaves = array(), $check_date){
     if(count($employee_leaves) > 0){
         foreach($employee_leaves as $item){
-            $date_range = dateRangeHelper($item['date_from'],$item['date_to']);
-            if(count($date_range) > 0){
-                foreach($date_range as $date_r){
-                    if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
-                        $status = 'Without-Pay';
-                        if($item['withpay'] == 1){
-                            $status = 'With-Pay';
-                        }
-                        if($item['halfday'] == '1'){
+
+            if($item['date_from'] == $item['date_to']){
+                if(date('Y-m-d',strtotime($check_date)) == date('Y-m-d',strtotime($item['date_from']))){
+                    $status = 'Without-Pay';
+                    if($item['withpay'] == 1){
+                        $status = 'With-Pay';
+                    }
+                    if($item['halfday'] == '1'){
+                        return $item['leave']['code'] . ' ' . $item['halfday_status'] . ' ' . $status;
+                    }else{
+                        return $item['leave']['code'] . ' ' . $status;
+                    }
+                }
+            }else{
+                $date_range = dateRangeHelper($item['date_from'],$item['date_to']);
+                if(count($date_range) > 0){
+                    foreach($date_range as $date_r){
+                        if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
+                            $status = 'Without-Pay';
+                            if($item['withpay'] == 1){
+                                $status = 'With-Pay';
+                            }
+                            if($item['halfday'] == '1'){
+                                
+                                return $item['leave']['code'] . ' ' . $item['halfday_status'] . ' ' . $status;
+                            }else{
+                                return $item['leave']['code'] . ' ' . $status;
+                            }
                             
-                            return $item['leave']['code'] . ' ' . $item['halfday_status'] . ' ' . $status;
-                        }else{
-                            return $item['leave']['code'] . ' ' . $status;
                         }
-                        
                     }
                 }
             }
