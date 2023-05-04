@@ -96,7 +96,7 @@
                             <tr>
                                 <td>{{$emp->employee_number}}</td>
                                 <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
-                                <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
+                                <td class="@if($employee_schedule) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
                                 
                                 @php   
                                 

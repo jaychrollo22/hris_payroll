@@ -96,10 +96,13 @@
                                 <tbody>
 
                                     @foreach(array_reverse($date_range) as $date_r)
+                                    @php
+                                        $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
+                                    @endphp
                                     <tr>
                                         <td>{{$emp->employee_number}}</td>
                                         <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
-                                        <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
+                                        <td class="@if($employee_schedule) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
 
                                         @php
                                             $if_has_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($date_r)));
@@ -308,9 +311,6 @@
                                                 {{-- Remarks --}}
                                                 <td>
                                                     @if($time_in == null)
-                                                        @php
-                                                            $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
-                                                        @endphp
                                                         @if($employee_schedule)
                                                             @php 
                                                                 $is_absent = '';

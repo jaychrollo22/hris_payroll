@@ -1261,9 +1261,9 @@ class EmployeeController extends Controller
                                 ->where('status','Active')
                                 ->get();
             // dd($company_employees);
-            $schedules = ScheduleData::where('schedule_id', 1)->get();
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
         }
+        $schedules = ScheduleData::all();
 
         return view(
             'attendances.employee_company',
