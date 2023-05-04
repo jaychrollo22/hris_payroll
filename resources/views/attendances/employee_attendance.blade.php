@@ -90,6 +90,9 @@
                         <tbody>
   
                             @foreach(array_reverse($date_range) as $date_r)
+                            @php
+                                $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
+                            @endphp
                             <tr>
                                 <td>{{$emp->employee_number}}</td>
                                 <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
@@ -257,10 +260,6 @@
                                         <td></td>
                                         <td></td>
                                     @else
-                                        @php
-                                            $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
-                                        @endphp
-
                                         {{-- Working Hours --}}
                                         <td>
                                             @if($time_in || $if_has_dtr)
@@ -424,9 +423,7 @@
                                     {{-- Remarks --}}
                                     <td>
                                         @if($time_in == null)
-                                            @if((date('l',strtotime($date_r)) == "Sunday"))
-                                                
-                                            @else
+                                            @if($employee_schedule)
                                                 @php 
                                                     $is_absent = '';
                                                     $if_leave = '';

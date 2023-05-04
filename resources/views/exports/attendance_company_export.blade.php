@@ -240,9 +240,10 @@
                             $check_if_holiday = '';
                         @endphp
                         @if($time_in == null)
-                            @if((date('l',strtotime($date_r)) == "Saturday") || (date('l',strtotime($date_r)) == "Sunday"))
-                                
-                            @else
+                            @php
+                                $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
+                            @endphp
+                            @if($employee_schedule)
                                 @php 
                                     $is_absent = '';
                                     $if_leave = '';
