@@ -47,7 +47,7 @@
 							</div>
 						</form>
 						</p>
-						@if(auth()->user()->id == '1')
+						@if(auth()->user()->id == '1' || auth()->user()->id == '353')
 							<p class="card-description">
 								<form method='get' action='sync-biometric-per-employee' onsubmit='show();' enctype="multipart/form-data">
 									<div class=row>
