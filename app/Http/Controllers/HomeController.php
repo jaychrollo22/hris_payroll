@@ -28,7 +28,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-
+        $schedules = [];
         $attendance_controller = new AttendanceController;
         $sevendays = date('Y-m-d',strtotime("-7 days"));
         if(auth()->user()->employee){
@@ -39,6 +39,8 @@ class HomeController extends Controller
                 $attendance_now = null;
                 $attendances = null;
             }
+
+            $schedules = ScheduleData::where('schedule_id',auth()->user()->employee->schedule_id)->get();
         }else{
             $attendance_now = null;
             $attendances = null;
@@ -66,7 +68,7 @@ class HomeController extends Controller
         ->orderBy('holiday_date','asc')->get();
         // dd($holidays);
 
-        $schedules = ScheduleData::where('schedule_id',auth()->user()->employee->schedule_id)->get();
+        
 
         return view('dashboards.home',
         array(
