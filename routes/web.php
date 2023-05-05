@@ -165,6 +165,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('sync-biometrics','EmployeeController@sync');
     Route::get('sync-biometric-per-employee','EmployeeController@sync_per_employee');
 
+    Route::get('sync-per-employee','EmployeeController@sync_per_employee');
     Route::get('sync-hik-att-logs','EmployeeController@sync_hik');
 
     //Payroll

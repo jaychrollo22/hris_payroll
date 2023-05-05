@@ -1436,10 +1436,16 @@ class EmployeeController extends Controller
                 }
             }
         }
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $employees = Employee::where('status','Active')
+                                ->whereIn('company_id', $allowed_companies)
+                                ->get();
+
         return view('employees.sync', array(
             'header' => 'biometrics',
             'terminals' => $terminals,
             'terminals_hik' => $terminals_hik,
+            'employees' => $employees,
         ));
     }
 
@@ -1447,10 +1453,11 @@ class EmployeeController extends Controller
     {
         $from = $request->from_per_employee;
         $to = $request->to_per_employee;
-        $employee_code = $request->employee_code;
+        $employee_code = $request->employee;
 
-        $attendances = iclocktransactions_mysql::where('emp_code','=',$employee_code)->whereBetween('punch_time',[$from,$to])->orderBy('punch_time','asc')->get();
+        $attendances = iclocktransactions_mysql::whereIn('emp_code',$employee_code)->whereBetween('punch_time',[$from,$to])->orderBy('punch_time','asc')->get();
         
+        $count = 0;
         foreach($attendances as $att)
         {
             if($att->punch_state == 0)
@@ -1463,6 +1470,7 @@ class EmployeeController extends Controller
                         $attendance->time_in = date('Y-m-d H:i:s',strtotime($att->punch_time));
                         $attendance->device_in = $att->terminal_alias;
                         $attendance->save(); 
+                        $count++;
                     }
                 
             }
@@ -1490,9 +1498,12 @@ class EmployeeController extends Controller
                     $attendance->device_out = $att->terminal_alias;
                     $attendance->save(); 
                 }
+
+                $count++;
             }
         }
-       
+
+        Alert::warning('Sync count : ' . $count)->persistent('Success');
         return back();
     }
 
