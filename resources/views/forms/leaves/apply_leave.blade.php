@@ -55,7 +55,11 @@
                   
                     <div>
                       <label class="form-check-label ">
-                        <input type="checkbox" name="withpay" class="form-check-input" checked value="1">
+                        @if($is_allowed_to_file_vl || $is_allowed_to_file_sl)
+                          <input type="checkbox" name="withpay" class="form-check-input" checked value="1">
+                        @else
+                          <input type="checkbox" name="withpay" class="form-check-input" disabled value="0">
+                        @endif
                         With Pay
                     </label>
                     </div>

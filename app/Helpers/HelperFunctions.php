@@ -250,40 +250,74 @@ function checkUserAllowedOvertime($user_id){
     }
 }
 
-function checkUsedVacationLeave($user_id){
-    $employee_vl = EmployeeLeave::where('user_id',$user_id)
-                                    ->where('leave_type','1')
-                                    ->where('status','Approved')
-                                    ->get();
+function checkUsedSLVLSILLeave($user_id,$leave_type,$date_hired){
 
-    $count = 0;
-    if($employee_vl){
-        foreach($employee_vl as $leave){
-            if($leave->withpay == 1 && $leave->halfday == 1){
-                $count += 0.5;
-            }else{
-                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
-                if($date_range){
-                    foreach($date_range as $date_r){
-                        $date_today = date('Y-m-d');
-                        $leave_Date = date('Y-m-d', strtotime($date_r));
-                        if($leave->withpay == 1 && $leave_Date <= $date_today){
-                            $count += 1;
+    if($date_hired){
+        $today  = date('Y-m-d');
+        $date_hired_md = date('m-d',strtotime($date_hired));
+        $date_hired_m = date('m',strtotime($date_hired));
+        $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+        $this_year = date('Y');
+
+        $date_hired_this_year = $this_year . '-'. $date_hired_md;
+
+        $employee_vl = EmployeeLeave::where('user_id',$user_id)
+                                        ->where('leave_type',$leave_type)
+                                        ->where('status','Approved')
+                                        ->where('date_from','>',$date_hired_this_year)
+                                        ->get();
+        $count = 0;
+        $date_today = date('Y-m-d');
+        if($employee_vl){
+            foreach($employee_vl as $leave){
+                if($leave->withpay == 1 && $leave->halfday == 1){
+                    if(date('Y-m-d',strtotime($leave->date_from)) <= $date_today){
+                        $count += 0.5;
+                    }
+                }else{
+                    $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                    if($date_range){
+                        foreach($date_range as $date_r){
+                            $leave_Date = date('Y-m-d', strtotime($date_r));
+                            if($leave->withpay == 1 && $leave_Date <= $date_today){
+                                $count += 1;
+                            }
                         }
                     }
                 }
+                
             }
-            
         }
     }
     return $count;
 }
 
-function checkEarnedLeave($user_id,$leave_type){
-    return $vl_earned = EmployeeEarnedLeave::where('user_id',$user_id)
-                                    ->where('leave_type',$leave_type)
-                                    ->whereNull('converted_to_cash')
-                                    ->sum('earned_leave');
+function checkEarnedLeave($user_id,$leave_type,$date_hired){
+
+    //Get From Last Year Earned
+    if($date_hired){
+        $today  = date('Y-m-d');
+        $date_hired_md = date('m-d',strtotime($date_hired));
+        $date_hired_m = date('m',strtotime($date_hired));
+        $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+        $this_year = date('Y');
+
+        $date_hired_this_year = $this_year . '-'. $date_hired_md;
+        $date_hired_last_year = $last_year . '-'. $date_hired_md;
+
+        if($today >= $date_hired_this_year){ //if Date hired meets todays date get earned leaves from last year to this year date_hired
+            $date_hired_this_minus_1_month = date('Y-m-d', strtotime('-1 month', strtotime($date_hired_this_year)) );
+            return $vl_earned = EmployeeEarnedLeave::where('user_id',$user_id)
+                                                        ->where('leave_type',$leave_type)
+                                                        ->whereNull('converted_to_cash')
+                                                        ->whereBetween('earned_date', [$date_hired_last_year, $date_hired_this_minus_1_month])
+                                                        ->sum('earned_leave');
+        }else{
+            return 0;
+        }
+    }
+
+    
     
 }
 

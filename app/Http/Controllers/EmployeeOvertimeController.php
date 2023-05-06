@@ -13,15 +13,20 @@ class EmployeeOvertimeController extends Controller
     public function overtime ()
     { 
         
-        $get_approvers = new EmployeeApproverController;
-        $overtimes = EmployeeOvertime::with('user')->where('user_id',auth()->user()->id)->get();
-        $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
-        return view('forms.overtime.overtime',
-        array(
-            'header' => 'forms',
-            'all_approvers' => $all_approvers,
-            'overtimes' => $overtimes,
-        ));
+        if(checkUserAllowedOvertime(auth()->user()->id) == 'yes'){
+            $get_approvers = new EmployeeApproverController;
+            $overtimes = EmployeeOvertime::with('user')->where('user_id',auth()->user()->id)->get();
+            $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
+            return view('forms.overtime.overtime',
+            array(
+                'header' => 'forms',
+                'all_approvers' => $all_approvers,
+                'overtimes' => $overtimes,
+            ));
+        }else{
+            Alert::warning('Warning: Not Allowed to Access')->persistent('Dismiss');
+            return back();
+        }
 
     }
 

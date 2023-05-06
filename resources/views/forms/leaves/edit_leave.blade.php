@@ -30,10 +30,10 @@
                   <div class="col-sm-4">
                     <select class="js-example-basic-single w-100 form-control"  id="leave_type" style='width:100%;' name='leave_type' required>
                       @foreach ($leave_types as $leave_type)
-                        @if($is_allowed_to_file_vl && $leave_type->code == 'VL')
-                          <option value="{{$leave_type->id}}" {{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_type->leave_type}}</option>
-                        @elseif($is_allowed_to_file_sl && $leave_type->code == 'SL')
-                          <option value="{{$leave_type->id}}" {{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_type->leave_type}}</option>
+                        @if($leave_type->code == 'VL')
+                          <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
+                        @elseif($leave_type->code == 'SL')
+                          <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
                         @elseif($is_allowed_to_file_sil && $leave_type->code == 'SIL' && $employee_status->classifcation == 'Project Based')
                           <option value="{{$leave_type->id}}" {{ $leave_type->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_type->leave_type}}</option>
                         @elseif($is_allowed_to_file_ml && $leave_type->code == 'ML')
@@ -54,11 +54,16 @@
                     <div class='row'>
                       <div class='col-md-6'>
                         <label class="form-check-label ">
-                            @if($leave->withpay == 1)
-                                <input type="checkbox" name="withpay" class="form-check-input" value="1" checked>  
-                            @else
-                                <input type="checkbox" name="withpay" class="form-check-input" value="1">  
-                            @endif
+
+                          @if($is_allowed_to_file_vl || $is_allowed_to_file_sl)
+                              @if($leave->withpay == 1)
+                                  <input type="checkbox" name="withpay" class="form-check-input" value="1" checked>  
+                              @else
+                                  <input type="checkbox" name="withpay" class="form-check-input" value="1">  
+                              @endif
+                          @else
+                            <input type="checkbox" name="withpay" class="form-check-input" disabled value="0">
+                          @endif
                           With Pay
                       </label>
                       </div>

@@ -20,22 +20,22 @@ class EmployeeLeaveController extends Controller
  
     public function leaveBalances()
     {
-        $used_vl = checkUsedVacationLeave(auth()->user()->id);
-        $used_sl = checkUsedSickLeave(auth()->user()->id);
-        $used_sil = checkUsedServiceIncentiveLeave(auth()->user()->id);
+        $employee_status = Employee::select('original_date_hired','classification','gender')->where('user_id',auth()->user()->id)->first();
 
+        $used_vl = checkUsedSLVLSILLeave(auth()->user()->id,1,$employee_status->original_date_hired);
+        $used_sl = checkUsedSLVLSILLeave(auth()->user()->id,2,$employee_status->original_date_hired);
+        $used_sil = checkUsedSLVLSILLeave(auth()->user()->id,10,$employee_status->original_date_hired);
         $used_ml = checkUsedLeave(auth()->user()->id,3);
         $used_pl = checkUsedLeave(auth()->user()->id,4);
         $used_spl = checkUsedLeave(auth()->user()->id,5);
         $used_splw = checkUsedLeave(auth()->user()->id,7);
         $used_splvv = checkUsedLeave(auth()->user()->id,9);
+       
+        $earned_vl = checkEarnedLeave(auth()->user()->id,1,$employee_status->original_date_hired);
+        $earned_sl = checkEarnedLeave(auth()->user()->id,2,$employee_status->original_date_hired);
+        $earned_sil = checkEarnedLeave(auth()->user()->id,10,$employee_status->original_date_hired);
 
-        $earned_vl = checkEarnedLeave(auth()->user()->id,1);
-        $earned_sl = checkEarnedLeave(auth()->user()->id,2);
-        $earned_sil = checkEarnedLeave(auth()->user()->id,10);
-
-
-        $employee_status = Employee::select('original_date_hired','classification','gender')->where('user_id',auth()->user()->id)->first();
+        
         $leave_types = Leave::all(); //masterfile
         $employee_leaves = EmployeeLeave::with('user','leave','schedule')->where('user_id',auth()->user()->id)->get();
         $get_leave_balances = new LeaveBalanceController;
