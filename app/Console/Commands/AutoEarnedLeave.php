@@ -51,6 +51,8 @@ class AutoEarnedLeave extends Command
 
         $month = date('m');
         $day = date('d');
+        $year = date('Y');
+        $today = date('Y-m-d');
         $classifications = [1,2,3,5];
 
         $companies = [14,11,7];
@@ -83,6 +85,8 @@ class AutoEarnedLeave extends Command
                                     $earned_leave->user_id = $employee->user_id;
                                     $earned_leave->earned_day = $day;
                                     $earned_leave->earned_month = $month;
+                                    $earned_leave->earned_year = $year;
+                                    $earned_leave->earned_date = $today;
                                     $earned_leave->save();
                                     $count++;
                                 }   
@@ -93,6 +97,8 @@ class AutoEarnedLeave extends Command
                             $earned_leave->user_id = $employee->user_id;
                             $earned_leave->earned_day = $day;
                             $earned_leave->earned_month = $month;
+                            $earned_leave->earned_year = $year;
+                            $earned_leave->earned_date = $today;
                             $earned_leave->save();
                             $count++;
                         }
@@ -101,6 +107,8 @@ class AutoEarnedLeave extends Command
                         $earned_leave->user_id = $employee->user_id;
                         $earned_leave->earned_day = $day;
                         $earned_leave->earned_month = $month;
+                        $earned_leave->earned_year = $year;
+                        $earned_leave->earned_date = $today;
                         $earned_leave->earned_leave = 0.833;
                         $earned_leave->save();
                         $count++;
@@ -118,6 +126,9 @@ class AutoEarnedLeave extends Command
 
         $month = date('m');
         $day = date('d');
+        $year = date('Y');
+        $today = date('Y-m-d');
+        
         $classifications = [1,2,3];
         $companies = [14,11,7];
 
@@ -144,6 +155,8 @@ class AutoEarnedLeave extends Command
                             $earned_leave->user_id = $employee->user_id;
                             $earned_leave->earned_day = $day;
                             $earned_leave->earned_month = $month;
+                            $earned_leave->earned_year = $year;
+                            $earned_leave->earned_date = $today;
                             $earned_leave->earned_leave = 0.833;
                             $earned_leave->leave_type = 2;
                             $earned_leave->save();
@@ -153,6 +166,8 @@ class AutoEarnedLeave extends Command
                         $earned_leave->user_id = $employee->user_id;
                         $earned_leave->earned_day = $day;
                         $earned_leave->earned_month = $month;
+                        $earned_leave->earned_year = $year;
+                        $earned_leave->earned_date = $today;
                         $earned_leave->earned_leave = 0.833;
                         $earned_leave->leave_type = 2;
                         $earned_leave->save();
