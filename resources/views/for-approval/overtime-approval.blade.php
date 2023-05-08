@@ -51,11 +51,11 @@
                       <tr>
                         <th>Employee Name</th>
                         <th>Date Filed</th>
-                        <th>OT Date</th> 
-                        <th>OT Time</th> 
+                        <th>OT Details</th> 
                         <th>OT Requested (Hrs)</th>
                         <th>Break (Hrs)</th>
                         <th>OT Approved (Hrs)</th>
+                        <th>Total Approved (Hrs)</th>
                         <th>Remarks </th>
                         <th>Approvers </th>
                         <th>Status </th>
@@ -67,11 +67,14 @@
                       <tr>
                         <td>{{$form_approval->user->name}}</td>
                         <td>{{date('d/m/Y', strtotime($form_approval->created_at))}}</td>
-                        <td>{{date('d/m/Y', strtotime($form_approval->ot_date))}}</td>
-                        <td>{{date('h:i A', strtotime($form_approval->start_time))}} - {{date('h:i A', strtotime($form_approval->end_time))}}</td>
+                        <td>
+                          Date : {{date('d/m/Y', strtotime($form_approval->ot_date))}} <br>
+                          Time : {{date('h:i A', strtotime($form_approval->start_time))}} - {{date('h:i A', strtotime($form_approval->end_time))}}
+                        </td>
                         <td> {{ number_format((strtotime($form_approval->end_time)-strtotime($form_approval->start_time))/3600,2)}}</td>
                         <td>{{$form_approval->break_hrs}}</td>
                         <td>{{$form_approval->ot_approved_hrs}}</td>
+                        <td>{{$form_approval->ot_approved_hrs - $form_approval->break_hrs}}</td>
 
                         <td>
                           <p title="{{$form_approval->remarks}}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">

@@ -256,6 +256,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/hr-approver-setting','HrApproverSettingController@index');
     Route::post('/save-hr-approver-setting','HrApproverSettingController@store');
     Route::get('/remove-hr-approver/{id}','HrApproverSettingController@remove'); 
+
+    //Timekeeping Dashboard
+    
+
+    Route::get('/timekeeping-dashboard','TimekeepingDashboardController@index');
 });
 Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');

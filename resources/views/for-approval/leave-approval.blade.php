@@ -52,6 +52,7 @@
                         <th>Employee Name</th>
                         <th>Form Type</th>
                         <th>Date</th>
+                        <th>Count</th>
                         <th>With Pay </th>
                         <th>Half Day </th>
                         <th>Status</th> 
@@ -67,6 +68,7 @@
                         <td>{{$form_approval->user->name}}</td>
                         <td>{{$form_approval->leave->leave_type}}</td>
                         <td>{{date('M d, Y', strtotime($form_approval->date_from))}} - {{date('M d, Y', strtotime($form_approval->date_to))}}</td>
+                        <td>{{get_count_days($form_approval->schedule,$form_approval->date_from,$form_approval->date_to,$form_approval->halfday)}}</td>
                         @if($form_approval->withpay == 1)   
                           <td>Yes</td>
                         @else
@@ -139,6 +141,36 @@
         </div>
     </div>
 </div>
+
+@php
+function get_count_days($data,$date_from,$date_to,$halfday)
+ {
+
+    if($date_from == $date_to){
+        $count = 1;
+    }else{
+      $data = ($data->pluck('name'))->toArray();
+      $count = 0;
+      $startTime = strtotime($date_from);
+      $endTime = strtotime($date_to);
+
+      for ( $i = $startTime; $i <= $endTime; $i = $i + 86400 ) {
+        $thisDate = date( 'l', $i ); // 2010-05-01, 2010-05-02, etc
+        if(in_array($thisDate,$data)){
+            $count= $count+1;
+        }
+      }
+    }
+
+    if($count == 1 && $halfday == 1){
+      return '0.5';
+    }else{
+      return($count);
+    }
+    
+ } 
+@endphp  
+
 @endsection
 
 @section('ForApprovalScript')

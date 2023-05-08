@@ -398,6 +398,13 @@
                         <h5>Super Admin</h5>
                     </li>
 
+                    {{-- <li class="nav-item @if ($header == 'Timekeeping') active @endif">
+                        <a class="nav-link" href="{{ url('/timekeeping-dashboard') }}" onclick='show()'>
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">Timekeeping</span>
+                        </a>
+                    </li> --}}
+
                     @if (checkUserPrivilege('employees_view',auth()->user()->id) == 'yes')
                     <li class="nav-item @if ($header == 'employees') active @endif ">
                         <a class="nav-link" href="{{ url('/employees') }}" onclick='show()'>
@@ -920,6 +927,25 @@
             $("#privacy-beneficiaries").click(function() {
                 $("#submit-beneficiaries-btn").attr("disabled", !this.checked);
             });
+
+           
+            // Get references to the input fields
+            var $break_hrs = $('#break_hrs');
+            var $approve_hrs = $('#approve_hrs');
+            var $total_approve_hours = $('#total_approve_hours');
+
+            // Add event listeners to the input fields
+            $break_hrs.on('keyup', calculate);
+            $approve_hrs.on('keyup', calculate);
+
+            // Define the calculate function
+            function calculate() {
+                var value_break_hrs = parseFloat($break_hrs.val()) || 0;
+                var value_approve_hrs = parseFloat($approve_hrs.val()) || 0;
+                var total_approve_hrs = value_approve_hrs - value_break_hrs;
+                $total_approve_hours.val(total_approve_hrs);
+            }
+   
 
         });
     </script>

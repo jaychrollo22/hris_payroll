@@ -19,10 +19,13 @@
                         </div>
                         <div class='col-md-12 form-group'>
                             Break (hrs):
+                            @php
+                                $break_hrs = $overtime->break_hrs ? $overtime->break_hrs : 0;
+                            @endphp
                             @if($total > 3)
-                                <input type="number" name='break_hrs' value='{{$overtime->break_hrs}}' class="form-control" required>
+                                <input id="break_hrs" type="number" name='break_hrs' value='{{$overtime->break_hrs}}' class="form-control" required>
                             @else
-                                <input type="number" name='break_hrs' value='{{$overtime->break_hrs}}' class="form-control">
+                                <input id="break_hrs" type="number" name='break_hrs' value='{{$overtime->break_hrs}}' class="form-control">
                             @endif
                             
                         </div>
@@ -31,7 +34,11 @@
                             @php
                                 $approve_hrs = $overtime->ot_approved_hrs ? $overtime->ot_approved_hrs : $total;
                             @endphp
-                            <input type="number" name='ot_approved_hrs' value='{{ $approve_hrs }}' max="{{$total}}" step='0.01' class="form-control" required>
+                            <input id="approve_hrs" type="number" name='ot_approved_hrs' value='{{ $approve_hrs }}' max="{{$total}}" step='0.01' class="form-control" required>
+                        </div>
+                        <div class='col-md-12 form-group'>
+                            Total Approve Overtime (hrs):
+                            <input id="total_approve_hours" type="number" class="form-control" disabled value="{{ $approve_hrs - $break_hrs}}">
                         </div>
                     </div>
                 </div>
