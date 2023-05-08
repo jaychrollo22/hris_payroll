@@ -252,6 +252,7 @@ function checkUserAllowedOvertime($user_id){
 
 function checkUsedSLVLSILLeave($user_id,$leave_type,$date_hired){
 
+    $count = 0;
     if($date_hired){
         $today  = date('Y-m-d');
         $date_hired_md = date('m-d',strtotime($date_hired));
@@ -266,7 +267,7 @@ function checkUsedSLVLSILLeave($user_id,$leave_type,$date_hired){
                                         ->where('status','Approved')
                                         ->where('date_from','>',$date_hired_this_year)
                                         ->get();
-        $count = 0;
+        
         $date_today = date('Y-m-d');
         if($employee_vl){
             foreach($employee_vl as $leave){
