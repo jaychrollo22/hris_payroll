@@ -398,12 +398,14 @@
                         <h5>Super Admin</h5>
                     </li>
 
-                    {{-- <li class="nav-item @if ($header == 'Timekeeping') active @endif">
+                    @if (checkUserPrivilege('timekeeping_dashboard',auth()->user()->id) == 'yes')
+                    <li class="nav-item @if ($header == 'Timekeeping') active @endif">
                         <a class="nav-link" href="{{ url('/timekeeping-dashboard') }}" onclick='show()'>
                             <i class="icon-grid menu-icon"></i>
                             <span class="menu-title">Timekeeping</span>
                         </a>
-                    </li> --}}
+                    </li>
+                    @endif
 
                     @if (checkUserPrivilege('employees_view',auth()->user()->id) == 'yes')
                     <li class="nav-item @if ($header == 'employees') active @endif ">

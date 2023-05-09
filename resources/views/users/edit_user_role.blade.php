@@ -232,6 +232,18 @@
                                         Sync Biometric
                                         <br>
                                         <br>
+                                        @if($user->user_privilege)
+                                            @if($user->user_privilege->timekeeping_dashboard == 'on')
+                                                <input type="checkbox" name="timekeeping_dashboard" id="timekeeping_dashboard{{$user->id}}" value="{{ $user->user_privilege->timekeeping_dashboard }}" checked>
+                                            @else
+                                                <input type="checkbox" name="timekeeping_dashboard" id="timekeeping_dashboard{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="timekeeping_dashboard" id="timekeeping_dashboard{{$user->id}}">
+                                        @endif
+                                        Timekeeping Dashboard
+                                        <br>
+                                        <br>
                                     </div>
                                     {{-- Settings --}}
                                     <div class="col-md-6 form-group">
