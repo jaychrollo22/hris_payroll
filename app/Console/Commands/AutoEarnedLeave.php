@@ -50,9 +50,9 @@ class AutoEarnedLeave extends Command
     public function getEmployeeEarnedVacationLeaves(){
 
         $month = date('m');
-        $day = date('7');
+        $day = date('6');
         $year = date('Y');
-        $today = date('Y-m-7');
+        $today = date('Y-m-6');
         $classifications = [1,2,3,5];
 
         $companies = [14,11,7,2,1]; //PLC, OBN , PIVI, MAC, PMI
@@ -125,9 +125,9 @@ class AutoEarnedLeave extends Command
     public function getEmployeeEarnedSickLeaves(){
 
         $month = date('m');
-        $day = date('7');
+        $day = date('6');
         $year = date('Y');
-        $today = date('Y-m-7');
+        $today = date('Y-m-6');
         
         $classifications = [1,2,3];
         $companies = [14,11,7,2,1]; //PLC, OBN , PIVI, MAC, PMI
