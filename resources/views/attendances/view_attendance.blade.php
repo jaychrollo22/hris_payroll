@@ -417,12 +417,12 @@
                                                         $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
                                                         if($if_attendance_holiday){
 
-                                                            $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                                            $if_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                                            $if_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                                            $if_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                            $check_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                            $check_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                            $check_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                            $check_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
 
-                                                            if($if_leave || $if_wfh || $if_ob || $if_dtr){
+                                                            if($check_leave || $check_wfh || $check_ob || $check_dtr){
                                                                 $if_attendance_holiday_status = 'With-Pay';
                                                             }else{
                                                                 $if_attendance_holiday_status = checkHasAttendanceHolidayStatus($if_attendance_holiday, $emp->employee_number);
@@ -450,12 +450,26 @@
                                                 {{$if_attendance_holiday_status}}
                                             @endif
                                         @else
+                                        
                                             @php
                                                 $is_absent = '';
-                                                if($time_out_data == null){
-                                                    $is_absent = 'Absent';
-                                                }
+                                            
+                                                $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)));
+
+                                                if(empty($if_leave)){
+                                                    if(empty($if_has_dtr)){
+                                                        if($dtr_correction_time_out == null){
+                                                            if($time_out == null){
+                                                                $is_absent = 'Absent';
+                                                            }
+                                                        }
+                                                    }else{
+                                                        $if_dtr_correction = 'DTR Correction';
+                                                    } 
+                                                } 
+
                                             @endphp  
+                                            {{$if_leave}}
                                             {{$is_absent}}
                                         @endif
                                     </td>
