@@ -468,23 +468,13 @@
                                                 {{$if_attendance_holiday_status}}
                                             @endif
                                         @else
-                                        
                                             @php
                                                 $is_absent = '';
-                                            
+                                                if($time_out_data == null){
+                                                    $is_absent = 'Absent';
+                                                }
+                                                
                                                 $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)));
-
-                                                if(empty($if_leave)){
-                                                    if(empty($if_has_dtr)){
-                                                        if($dtr_correction_time_out == null){
-                                                            if($time_out == null){
-                                                                $is_absent = 'Absent';
-                                                            }
-                                                        }
-                                                    }else{
-                                                        $if_dtr_correction = 'DTR Correction';
-                                                    } 
-                                                } 
 
                                             @endphp  
                                             {{$if_leave}}
