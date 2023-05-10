@@ -306,8 +306,8 @@
                 <div class="media">
                 
                   <div class="media-body">
-                    <h4 class="mb-4">Denied/Cancelled</h4>
-                    <h2 class="card-text">{{($employee_leaves->where('status','Cancelled'))->count()}}</h2>
+                    <h4 class="mb-4">Declined/Cancelled</h4>
+                    <h2 class="card-text">{{($employee_leaves->where('status','Cancelled'))->count() + ($employee_leaves->where('status','Declined'))->count()}}</h2>
                   </div>
                 </div>
               </div>
@@ -384,7 +384,7 @@
                             <label class="badge badge-warning  mt-1">{{ $employee_leave->status }}</label>
                           @elseif($employee_leave->status == 'Approved')
                             <label class="badge badge-success mt-1">{{ $employee_leave->status }}</label>
-                          @elseif($employee_leave->status == 'Rejected' or $employee_leave->status == 'Cancelled')
+                          @elseif($employee_leave->status == 'Rejected' || $employee_leave->status == 'Cancelled' || $employee_leave->status == 'Declined')
                             <label class="badge badge-danger  mt-1">{{ $employee_leave->status }}</label>
                           @endif                        
                         </td>
