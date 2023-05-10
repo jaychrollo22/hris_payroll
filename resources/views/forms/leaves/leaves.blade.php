@@ -389,25 +389,29 @@
                           @endif                        
                         </td>
                         <td id="tdStatus{{ $employee_leave->id }}">
-                          @foreach($employee_leave->approver as $approver)
-                            @if($employee_leave->level >= $approver->level)
-                              @if ($employee_leave->level == 0 && $employee_leave->status == 'Declined')
-                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                              @elseif ($employee_leave->level == 1 && $employee_leave->status == 'Declined')
-                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Approved</label>
-                              @else
-                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
-                              @endif
-                            @else
-                              @if ($employee_leave->status == 'Declined')
+                          @if(count($employee_leave->approver) > 0)
+                            @foreach($employee_leave->approver as $approver)
+                              @if($employee_leave->level >= $approver->level)
+                                @if ($employee_leave->level == 0 && $employee_leave->status == 'Declined')
                                 {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                              @elseif ($employee_leave->status == 'Approved')
-                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                @elseif ($employee_leave->level == 1 && $employee_leave->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Approved</label>
+                                @else
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                @endif
                               @else
-                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
-                              @endif
-                            @endif<br>
-                          @endforeach
+                                @if ($employee_leave->status == 'Declined')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @elseif ($employee_leave->status == 'Approved')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                @else
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                                @endif
+                              @endif<br>
+                            @endforeach
+                          @else
+                            <label class="badge badge-danger mt-1">No Approver</label>
+                          @endif
                         </td>
                         
                         <td id="tdActionId{{ $employee_leave->id }}" data-id="{{ $employee_leave->id }}">

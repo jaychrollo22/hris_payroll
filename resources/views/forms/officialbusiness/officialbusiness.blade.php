@@ -51,25 +51,29 @@
                           @endif                        
                         </td>
                         <td id="tdStatus{{ $ob->id }}">
-                          @foreach($ob->approver as $approver)
-                            @if($ob->level >= $approver->level)
-                              @if ($ob->level == 0 && $ob->status == 'Declined')
-                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                              @elseif ($ob->level == 1 && $ob->status == 'Declined')
-                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                          @if(count($ob->approver) > 0)
+                            @foreach($ob->approver as $approver)
+                              @if($ob->level >= $approver->level)
+                                @if ($ob->level == 0 && $ob->status == 'Declined')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @elseif ($ob->level == 1 && $ob->status == 'Declined')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @else
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                @endif
                               @else
-                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
-                              @endif
-                            @else
-                              @if ($ob->status == 'Declined')
-                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                              @elseif ($ob->status == 'Approved')
-                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
-                              @else
-                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
-                              @endif
-                            @endif<br>
-                          @endforeach
+                                @if ($ob->status == 'Declined')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @elseif ($ob->status == 'Approved')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                @else
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                                @endif
+                              @endif<br>
+                            @endforeach
+                          @else
+                            <label class="badge badge-danger mt-1">No Approver</label>
+                          @endif
                       </td>
                         
                         <td id="tdActionId{{ $ob->id }}" data-id="{{ $ob->id }}">

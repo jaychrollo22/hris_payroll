@@ -51,21 +51,25 @@
                           @endif                        
                         </td>
                         <td id="tdStatus{{ $dtr->id }}">
-                          @foreach($dtr->approver as $approver)
-                            @if($dtr->level >= $approver->level)
-                              @if ($dtr->level == 0 && $dtr->status == 'Declined')
-                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                              @else
-                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
-                              @endif
-                            @else
-                              @if ($dtr->status == 'Declined')
+                          @if(count($dtr->approver) > 0)
+                            @foreach($dtr->approver as $approver)
+                              @if($dtr->level >= $approver->level)
+                                @if ($dtr->level == 0 && $dtr->status == 'Declined')
                                 {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @else
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                @endif
                               @else
-                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
-                              @endif
-                            @endif<br>
-                          @endforeach
+                                @if ($dtr->status == 'Declined')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @else
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                                @endif
+                              @endif<br>
+                            @endforeach
+                          @else
+                            <label class="badge badge-danger mt-1">No Approver</label>
+                          @endif
                         </td>
                         <td id="tdActionId{{ $dtr->id }}" data-id="{{ $dtr->id }}">
                           @if ($dtr->status == 'Pending' and $dtr->level == 0)
