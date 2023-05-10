@@ -424,6 +424,11 @@
 
                                                             if($check_leave || $check_wfh || $check_ob || $check_dtr){
                                                                 $if_attendance_holiday_status = 'With-Pay';
+                                                                if($check_leave == 'SL Without-Pay' || $check_leave == 'VL Without-Pay'){
+                                                                    $if_attendance_holiday_status = 'Without-Pay';
+                                                                }else{
+                                                                    $if_attendance_holiday_status = 'With-Pay';
+                                                                }
                                                             }else{
                                                                 $if_attendance_holiday_status = checkHasAttendanceHolidayStatus($if_attendance_holiday, $emp->employee_number);
                                                             }
