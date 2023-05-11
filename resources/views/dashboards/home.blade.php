@@ -96,7 +96,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-              <div class='row mt-2'>
+              <div class='row'>
                 @if(count($announcements) > 0)
                 <div class="col-md-12">
                   <div class="card">
