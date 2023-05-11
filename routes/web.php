@@ -261,6 +261,11 @@ Route::group(['middleware' => 'auth'], function () {
     
 
     Route::get('/timekeeping-dashboard','TimekeepingDashboardController@index');
+    Route::get('/reset-leave/{id}','TimekeepingDashboardController@reset_leave');
+    Route::get('/reset-ob/{id}','TimekeepingDashboardController@reset_ob');
+    Route::get('/reset-wfh/{id}','TimekeepingDashboardController@reset_wfh');
+    Route::get('/reset-ot/{id}','TimekeepingDashboardController@reset_ot');
+    Route::get('/reset-dtr/{id}','TimekeepingDashboardController@reset_dtr');
 });
 Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');

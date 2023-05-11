@@ -84,6 +84,13 @@
                                                     @endif
                                                     @endif<br>
                                                 @endforeach
+
+                                                {{-- @if($item->status == 'Pending' && $item->level == '1' && count($item->approver) == 1) --}}
+                                                @if($item->status == 'Pending' && $item->level == '1')
+                                                    <br>
+                                                    <button onclick="reset({{ $item->id }},'leave')" class="btn btn-sm btn-primary mt-1">Reset Approval</button>
+                                                @endif
+                                                
                                             @else
                                             <label class="badge badge-danger mt-1">No Approver</label>
                                             @endif
@@ -146,6 +153,11 @@
                                                 @endif
                                                 @endif<br>
                                             @endforeach
+
+                                            @if($item->status == 'Pending' && $item->level == '1')
+                                                <br>
+                                                <button onclick="reset({{ $item->id }},'ob')" class="btn btn-sm btn-primary mt-1">Reset Approval</button>
+                                            @endif
                                         @else
                                         <label class="badge badge-danger mt-1">No Approver</label>
                                         @endif
@@ -208,6 +220,12 @@
                                                 @endif
                                                 @endif<br>
                                             @endforeach
+
+                                            @if($item->status == 'Pending' && $item->level == '1')
+                                                <br>
+                                                <button onclick="reset({{ $item->id }},'wfh')" class="btn btn-sm btn-primary mt-1">Reset Approval</button>
+                                            @endif
+
                                         @else
                                         <label class="badge badge-danger mt-1">No Approver</label>
                                         @endif
@@ -270,6 +288,11 @@
                                                 @endif
                                                 @endif<br>
                                             @endforeach
+
+                                            @if($item->status == 'Pending' && $item->level == '1')
+                                                <br>
+                                                <button onclick="reset({{ $item->id }},'ot')" class="btn btn-sm btn-primary mt-1">Reset Approval</button>
+                                            @endif
                                         @else
                                         <label class="badge badge-danger mt-1">No Approver</label>
                                         @endif
@@ -333,6 +356,11 @@
                                                 @endif
                                                 @endif<br>
                                             @endforeach
+
+                                            @if($item->status == 'Pending' && $item->level == '1')
+                                                <br>
+                                                <button onclick="reset({{ $item->id }},'dtr')" class="btn btn-sm btn-primary mt-1">Reset Approval</button>
+                                            @endif
                                         @else
                                         <label class="badge badge-danger mt-1">No Approver</label>
                                         @endif
@@ -411,3 +439,41 @@
     </div>
 </div>
 @endsection
+
+<script>
+    function reset(id,form) {
+			swal({
+					title: "Are you sure?",
+					text: "You want to reset approval for this "+form+" ?",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willApprove) => {
+					if (willApprove) {
+						document.getElementById("loader").style.display = "block";
+						$.ajax({
+							url: "reset-"+form+"/" + id,
+							method: "GET",
+							data: {
+								id: id
+							},
+							headers: {
+								'X-CSRF-TOKEN': '{{ csrf_token() }}'
+							},
+							success: function(data) {
+								document.getElementById("loader").style.display = "none";
+								swal(form + " has been reset!", {
+									icon: "success",
+								}).then(function() {
+									location.reload();
+								});
+							}
+						})
+
+					} else {
+            swal({text:"You stop the approval of leave.",icon:"success"});
+					}
+				});
+		}
+</script>

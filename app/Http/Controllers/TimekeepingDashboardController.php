@@ -9,6 +9,7 @@ use App\EmployeeOb;
 use App\EmployeeWfh;
 use App\EmployeeOvertime;
 use App\EmployeeDtr;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class TimekeepingDashboardController extends Controller
 {
@@ -90,5 +91,51 @@ class TimekeepingDashboardController extends Controller
                         'dtrs' => $dtrs,
                     )
         );
+    }
+
+    public function reset_leave($id){
+        $request = EmployeeLeave::where('id',$id)->first();
+        $request->level = 0;
+        $request->mail_1 = null;
+        $request->mail_2 = null;
+        $request->save();
+        Alert::success('Successfully reset')->persistent('Dismiss');
+        return back();
+    }
+    public function reset_ob($id){
+        $request = EmployeeOb::where('id',$id)->first();
+        $request->level = 0;
+        $request->mail_1 = null;
+        $request->mail_2 = null;
+        $request->save();
+        Alert::success('Successfully reset')->persistent('Dismiss');
+        return back();
+    }
+    public function reset_wfh($id){
+        $request = EmployeeWfh::where('id',$id)->first();
+        $request->level = 0;
+        $request->mail_1 = null;
+        $request->mail_2 = null;
+        $request->save();
+        Alert::success('Successfully reset')->persistent('Dismiss');
+        return back();
+    }
+    public function reset_ot($id){
+        $request = EmployeeOvertime::where('id',$id)->first();
+        $request->level = 0;
+        $request->mail_1 = null;
+        $request->mail_2 = null;
+        $request->save();
+        Alert::success('Successfully reset')->persistent('Dismiss');
+        return back();
+    }
+    public function reset_dtr($id){
+        $request = EmployeeDtr::where('id',$id)->first();
+        $request->level = 0;
+        $request->mail_1 = null;
+        $request->mail_2 = null;
+        $request->save();
+        Alert::success('Successfully reset')->persistent('Dismiss');
+        return back();
     }
 }
