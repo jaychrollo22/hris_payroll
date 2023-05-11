@@ -65,7 +65,11 @@
                     <tbody> 
                       @foreach ($wfhs as $form_approval)
                       <tr>
-                        <td>{{$form_approval->user->name}}</td>
+                        <td>
+                            <strong>{{$form_approval->user->name}}</strong> <br>
+                            <small>Position : {{$form_approval->user->employee->position}}</small> <br>
+                            <small>Location : {{$form_approval->user->employee->location}}</small>
+                        </td>
                         <td>{{date('m/d/Y', strtotime($form_approval->created_at))}}</td>
                         <td>{{date('m/d/Y', strtotime($form_approval->applied_date))}}</td>
                         <td>{{date('H:i', strtotime($form_approval->date_from))}} - {{date('H:i', strtotime($form_approval->date_to))}}</td>

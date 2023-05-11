@@ -65,7 +65,11 @@
                     <tbody> 
                       @foreach ($overtimes as $form_approval)
                       <tr>
-                        <td>{{$form_approval->user->name}}</td>
+                        <td>
+                            <strong>{{$form_approval->user->name}}</strong> <br>
+                            <small>Position : {{$form_approval->user->employee->position}}</small> <br>
+                            <small>Location : {{$form_approval->user->employee->location}}</small>
+                        </td>
                         <td>{{date('d/m/Y', strtotime($form_approval->created_at))}}</td>
                         <td>
                           Date : {{date('d/m/Y', strtotime($form_approval->ot_date))}} <br>

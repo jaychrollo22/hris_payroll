@@ -65,7 +65,11 @@
                     <tbody> 
                       @foreach ($leaves as $form_approval)
                       <tr>
-                        <td>{{$form_approval->user->name}}</td>
+                        <td>
+                            <strong>{{$form_approval->user->name}}</strong> <br>
+                            <small>Position : {{$form_approval->user->employee->position}}</small> <br>
+                            <small>Location : {{$form_approval->user->employee->location}}</small>
+                        </td>
                         <td>{{$form_approval->leave->leave_type}}</td>
                         <td>{{date('M d, Y', strtotime($form_approval->date_from))}} - {{date('M d, Y', strtotime($form_approval->date_to))}}</td>
                         <td>{{get_count_days($form_approval->schedule,$form_approval->date_from,$form_approval->date_to,$form_approval->halfday)}}</td>

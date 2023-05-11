@@ -65,7 +65,11 @@
                     <tbody> 
                       @foreach ($dtrs as $form_approval)
                       <tr>
-                        <td>{{$form_approval->user->name}}</td>
+                        <td>
+                            <strong>{{$form_approval->user->name}}</strong> <br>
+                            <small>Position : {{$form_approval->user->employee->position}}</small> <br>
+                            <small>Location : {{$form_approval->user->employee->location}}</small>
+                        </td>
                         <td>{{date('m/d/Y', strtotime($form_approval->created_at))}}</td>
                         <td>{{date('m/d/Y', strtotime($form_approval->dtr_date))}}</td>
                         <td>{{$form_approval->correction}}</td>
