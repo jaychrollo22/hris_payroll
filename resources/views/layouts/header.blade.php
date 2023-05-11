@@ -285,6 +285,7 @@
                 <ul class="navbar-nav mr-lg-2">
                     <li class="nav-item nav-search d-none d-lg-block">
                         <div class="input-group">
+                            
                         </div>
                     </li>
                 </ul>
@@ -318,6 +319,12 @@
             <!-- partial:partials/_sidebar.html -->
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
+                    <li class="nav-item @if ($header == 'account-setting') active @endif">
+                        <a class="nav-link" href="{{ url('/account-setting') }}" onclick='show()'>
+                            <i class="ti-settings menu-icon"></i>
+                            <span class="menu-title">{{auth()->user()->employee->first_name . ' ' . auth()->user()->employee->last_name}}</span>   
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <hr>
                         <h5>Employee</h5>

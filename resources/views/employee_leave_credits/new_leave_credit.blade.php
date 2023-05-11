@@ -40,7 +40,7 @@
 					<div class="row">
 						<div class="col-lg-6 form-group">
 							<label for="count">Count (days)</label>
-							<input type="number" class="form-control form-control-sm" name="count" id="count" required min=".00" step='0.01'
+							<input type="number" class="form-control form-control-sm" name="count" id="count" required min=".00" max="10" step='0.01'
 								value="{{ old('count') }}" placeholder="0.00">
 						</div>
 					</div>

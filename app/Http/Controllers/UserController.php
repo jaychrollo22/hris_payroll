@@ -188,16 +188,16 @@ class UserController extends Controller
         array(
             'header' => 'user1',
             'user' => $user,
-            'header' => 'employees',
-                'classifications' => $classifications,
-                'employees' => $employees,
-                'marital_statuses' => $marital_statuses,
-                'departments' => $departments,
-                'levels' => $levels,
-                'users' => $users,
-                'banks' => $banks,
-                'schedules' => $schedules,
-                'companies' => $companies,
+            'header' => 'account-setting',
+            'classifications' => $classifications,
+            'employees' => $employees,
+            'marital_statuses' => $marital_statuses,
+            'departments' => $departments,
+            'levels' => $levels,
+            'users' => $users,
+            'banks' => $banks,
+            'schedules' => $schedules,
+            'companies' => $companies,
         ));
     
     }
