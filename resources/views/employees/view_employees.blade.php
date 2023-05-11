@@ -166,8 +166,8 @@
                             <table class="table table-hover table-bordered" id="datatableEmployee">
                                 <thead>
                                     <tr>
-                                        {{-- <th>Action</th> --}}
                                         <th>Biometric Code</th>
+                                        <th>User ID</th>
                                         <th>Employee</th>
                                         <th>Company</th>
                                         <th>Department</th>
@@ -179,6 +179,7 @@
                                 <tbody>
                                     @foreach($employees as $employee)
                                     <tr>
+                                        
                                         <td>
                                             @if (checkUserPrivilege('employees_view',auth()->user()->id) == 'yes')
                                                 <a href="/account-setting-hr/{{$employee->user_id}}" class="text-success btn-sm text-center">
@@ -187,6 +188,7 @@
                                             @endif
                                             {{$employee->employee_number}}
                                         </td>
+                                        <td>{{$employee->user_id}} </td>
                                         <td>
                                             <small><img class="rounded-circle" style='width:34px;height:34px;' src='{{URL::asset($employee->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
                                             {{$employee->last_name}}, {{$employee->first_name}}  </small>
