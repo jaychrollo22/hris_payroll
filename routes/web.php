@@ -11,7 +11,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+use App\PersonnelEmployee;
 
 Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
@@ -269,3 +269,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');
+
+Route::get('personnel-employee', function(){
+    return PersonnelEmployee::get()->take(5);
+});
