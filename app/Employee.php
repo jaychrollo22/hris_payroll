@@ -52,7 +52,7 @@ class Employee extends Model implements Auditable
     }
     public function user_info()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
     public function attendances() {
