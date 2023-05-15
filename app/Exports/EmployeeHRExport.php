@@ -115,7 +115,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             $employee->personal_email,
             $company_email,
             $employee->immediate_sup,
-            $employee->immediate_sup_data,
+            $immediate_sup_data,
             $employee->schedule_id,
             $employee->location,
             $employee->project,
