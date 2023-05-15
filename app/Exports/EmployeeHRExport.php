@@ -65,6 +65,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             'Date Hired',
             'Personal Email',
             'Company Email',
+            'Immediate Superior ID',
             'Immediate Superior',
             'Schedule ID',
             'Location',
@@ -81,6 +82,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
         $company = $employee->company ? $employee->company->company_name : "";
         $department = $employee->department ? $employee->department->name : "";
         $classification_info = $employee->classification_info ? $employee->classification_info->name : "";
+        $immediate_sup_data = $employee->immediate_sup_data ? $employee->immediate_sup_data->name : "";
         $company_email = $employee->user_info ? $employee->user_info->email : "";
     
         return [
@@ -113,6 +115,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             $employee->personal_email,
             $company_email,
             $employee->immediate_sup,
+            $employee->immediate_sup_data,
             $employee->schedule_id,
             $employee->location,
             $employee->project,
