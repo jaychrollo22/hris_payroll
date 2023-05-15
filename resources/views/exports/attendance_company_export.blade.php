@@ -302,8 +302,11 @@
 
                                 //HDAM
                                 $compressed_work_with_saturday = '';
-                                if((date('l',strtotime($date_r)) == "Saturday") && $emp->schedule_id == '9'){ // if Compressed Work (With Saturday)
-                                    $compressed_work_with_saturday == 'HDAM';
+                                if((date('l',strtotime($date_r)) == "Saturday")){ // if Compressed Work (With Saturday)
+                                    if($emp->schedule_id == '9'){
+                                        $compressed_work_with_saturday = 'HDAM';
+                                    }   
+                                    
                                 }
                             @endphp
                             {{$time_out_status}}
