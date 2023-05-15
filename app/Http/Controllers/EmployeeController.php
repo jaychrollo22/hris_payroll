@@ -1384,7 +1384,8 @@ class EmployeeController extends Controller
 
     public function sync(Request $request)
     {
-        
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+
         $terminals = iclockterminal_mysql::get();
         $terminals_hik = HikAttLog::select('deviceName')->groupBy('deviceName')
                                     ->orderBy('deviceName' , 'ASC')
@@ -1392,11 +1393,20 @@ class EmployeeController extends Controller
 
         if($request->terminal)
         {
-            // dd($request->all());
-        $attendances = iclocktransactions_mysql::where('terminal_id','=',$request->terminal)->whereBetween('punch_time',[$request->from,$request->to])->orderBy('punch_time','asc')->get();
-        foreach($attendances as $att)
+
+            $from = $request->from;
+            $to = $request->to;
+
+            $employee_numbers = Employee::whereIn('company_id', $allowed_companies)->where('status','Active')->pluck('employee_number')->toArray();
+
+            $attendances = iclocktransactions_mysql::whereIn('emp_code',$employee_numbers)
+                                                    ->where('terminal_id','=',$request->terminal)
+                                                    ->whereBetween('punch_time',[$from." 00:00:01", $to." 23:59:59"])
+                                                    ->orderBy('punch_time','asc')
+                                                    ->get();
+            foreach($attendances as $att)
             {
-              if($att->punch_state == 0)
+                if($att->punch_state == 0)
                 {
                         $attend = Attendance::where('employee_code',$att->emp_code)->whereDate('time_in',date('Y-m-d', strtotime($att->punch_time)))->first();
                         if($attend == null)
@@ -1436,7 +1446,7 @@ class EmployeeController extends Controller
                 }
             }
         }
-        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        
         $employees = Employee::where('status','Active')
                                 ->whereIn('company_id', $allowed_companies)
                                 ->get();
@@ -1510,11 +1520,14 @@ class EmployeeController extends Controller
 
     public function sync_hik(Request $request)
     {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+
         $from = $request->from_hik;
         $to = $request->to_hik;
         $terminal = $request->terminal_hik;
         
-        $employee_numbers = Employee::pluck('employee_number')->toArray();
+        $employee_numbers = Employee::whereIn('company_id', $allowed_companies)->where('status','Active')->pluck('employee_number')->toArray();
 
         $attendances = HikAttLog::where('deviceName',$terminal)
                                 ->whereIn('employeeID',$employee_numbers)
@@ -1581,7 +1594,7 @@ class EmployeeController extends Controller
         $employee_code = $request->employee;
 
 
-        $employee_numbers = Employee::whereIn('employee_number',$employee_code)->pluck('employee_number')->toArray();
+        $employee_numbers = Employee::whereIn('employee_number',$employee_code)->where('status','Active')->pluck('employee_number')->toArray();
 
         $attendances = HikAttLog::whereIn('employeeID',$employee_numbers)
                                 ->whereBetween('authDate',[$from,$to])
