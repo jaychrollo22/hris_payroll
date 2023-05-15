@@ -47,7 +47,17 @@
 										</select>
 									</div>
 								</div>
-								<div class='col-md-2'>
+								<div class='col-md-2 mr-2'>
+									<div class="form-group">
+										<label class="text-right">Percentage</label>
+										<select data-placeholder="Select Percentage" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='percentage'>
+											<option value="">-- Select Percentage --</option>
+											<option value="100" @if ('100' == $percentage) selected @endif>WFH-100%</option>
+											<option value="60" @if ('60' == $percentage) selected @endif>WFH-60%</option>
+										</select>
+									</div>
+								</div>
+								<div class='col-md-1'>
 									<button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Generate</button>
 								</div>
 							</div>
@@ -70,6 +80,7 @@
 										  <th>WFH Time In-Out</th>
                                           {{-- <th>WFH Count(Days)</th>  --}}
 										  <th>Status</th> 
+										  <th>Percentage</th> 
 										  <th>Approved Date</th> 
 										  <th>Reason/Remarks</th> 
 										</tr>
@@ -85,7 +96,9 @@
 										  <td>
 											{{$form_approval->status}}
 										  </td>
+										  <td>{{$form_approval->approve_percentage ? 'WFH-' . $form_approval->approve_percentage . '%' : "" }}</td>
 										  <td>{{date('d/m/Y', strtotime($form_approval->approved_date))}}</td>
+										 
 										  <td>{{$form_approval->remarks}}</td>
 										  </tr>
 										@endforeach                        
