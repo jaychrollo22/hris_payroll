@@ -183,6 +183,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('department', 'DepartmentController@department_index');
     Route::get('enable-department/{id}', 'DepartmentController@enable_department');
     Route::get('disable-department/{id}', 'DepartmentController@disable_department');
+    Route::get('edit-deparment/{id}', 'DepartmentController@edit_department');
+    Route::post('update-department/{id}', 'DepartmentController@update_department');
 
     // Loan Type
     Route::get('loan-type', 'LoanTypeController@loanTypes_index');

@@ -43,4 +43,26 @@ class DepartmentController extends Controller
         Department::Where('id', $id)->update(['status' => 1]);
         return back();
     }
+
+    public function edit_department($id){
+
+        $department = Department::where('id',$id)->first();
+        return view('masterfiles.edit_department',
+                    array(
+                        'header' => 'masterfiles',
+                        'department'=>$department
+        ));
+        
+    }
+    public function update_department(Request $request,$id){
+
+        $new_department = Department::where('id',$id)->first();
+        $new_department->name = $request->name;
+        $new_department->code = $request->code;
+        $new_department->save();
+
+        Alert::success('Successfully Store')->persistent('Dismiss');
+        return redirect('/department');
+        
+    }
 }
