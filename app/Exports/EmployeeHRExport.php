@@ -64,6 +64,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             'Bank Account Number',
             'Date Hired',
             'Personal Email',
+            'Company Email',
             'Immediate Superior',
             'Schedule ID',
             'Location',
@@ -80,6 +81,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
         $company = $employee->company ? $employee->company->company_name : "";
         $department = $employee->department ? $employee->department->name : "";
         $classification_info = $employee->classification_info ? $employee->classification_info->name : "";
+        $company_email = $employee->user_info ? $employee->user_info->email : "";
     
         return [
             $employee->employee_number,
@@ -109,6 +111,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             $employee->bank_account_number,
             date('d/m/Y',strtotime($employee->original_date_hired)),
             $employee->personal_email,
+            $company_email,
             $employee->immediate_sup,
             $employee->schedule_id,
             $employee->location,
