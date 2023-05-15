@@ -1465,8 +1465,6 @@ class EmployeeController extends Controller
         $to = $request->to_biotime;
         $employee_code = $request->employee;
 
-        // return $request->all();
-
         $attendances = iclocktransactions_mysql::whereIn('emp_code',$employee_code)->whereBetween('punch_time',[$from." 00:00:01", $to." 23:59:59"])->orderBy('punch_time','asc')->get();
         
         $count = 0;
