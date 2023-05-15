@@ -71,6 +71,11 @@
                     if($if_has_dtr){
                         $dtr_correction_time_in = $if_has_dtr->correction == 'Time-in' ? $if_has_dtr->time_in : "";
                         $dtr_correction_time_out = $if_has_dtr->correction == 'Time-out' ? $if_has_dtr->time_out : "";
+
+                        if($if_has_dtr->correction == 'Both'){
+                            $dtr_correction_time_in = $if_has_dtr->time_in;
+                            $dtr_correction_time_out = $if_has_dtr->time_out;
+                        }
                         $dtr_correction_both = $if_has_dtr->correction == 'Both'  ? $if_has_dtr : "";
                     }
                 @endphp
@@ -238,11 +243,10 @@
                     <td>
                         @php
                             $check_if_holiday = '';
+
+                            $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
                         @endphp
                         @if($time_in == null)
-                            @php
-                                $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
-                            @endphp
                             @if($employee_schedule)
                                 @php 
                                     $is_absent = '';
@@ -276,6 +280,34 @@
                                 {{$is_absent}}
                                 {{$if_attendance_holiday_status}}
                             @endif
+                        @else
+                            @php
+                                //CWTOAM
+                                $time_out_status = '';
+                                if($time_in->time_out){
+                                    $time_out_default = date('Y-m-d H:i:s',strtotime($time_in->time_out));
+                                    $date_time_in = date('Y-m-d',strtotime($time_in->time_in));
+                                    $date_time_in_validator = $date_time_in . ' 24:00:00';
+                                    if($time_out_default > $date_time_in_validator){
+                                        $time_out_status = 'CWTOAM';
+                                    }
+                                }elseif($dtr_correction_time_out){
+                                    $time_out_default = date('Y-m-d H:i:s',strtotime($dtr_correction_time_out));
+                                    $date_time_in = date('Y-m-d',strtotime($time_in->time_in));
+                                    $date_time_in_validator = $date_time_in . ' 24:00:00';
+                                    if($time_out_default > $date_time_in_validator){
+                                        $time_out_status = 'CWTOAM';
+                                    }
+                                }
+
+                                //HDAM
+                                $compressed_work_with_saturday = '';
+                                if((date('l',strtotime($date_r)) == "Saturday") && $emp->schedule_id == '9'){ // if Compressed Work (With Saturday)
+                                    $compressed_work_with_saturday == 'HDAM';
+                                }
+                            @endphp
+                            {{$time_out_status}}
+                            {{$compressed_work_with_saturday}}
                         @endif
                     </td>
 

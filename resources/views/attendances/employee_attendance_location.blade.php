@@ -19,7 +19,7 @@
                             <select data-placeholder="Select Location" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='location' required>
                                 <option value="">-- Select Location --</option>
                                 @foreach($terminals as $terminal)
-                                    <option value="{{$terminal->id}}">{{$terminal->alias}}</option>
+                                    <option value="{{$terminal->id}}" @if($location == $terminal->id) selected @endif>{{$terminal->alias}}</option>
                                 @endforeach
                               </select>
                         </div>
@@ -48,10 +48,10 @@
                   </form>
                 </p>
                 @if($from_date)
-                        <button class='btn btn-info' onclick="exportTableToExcel('employee_attendance','{{$from_date}} - {{$to_date}}')">Export</button>
+                    <a class='btn btn-info mb-2' href="/bio-per-location-export?location={{$location}}&from={{$from_date}}&to={{$to_date}}">Export</a>
                 @endif
                 <div class="table-responsive">
-                  <table border="1" class="table table-hover table-bordered" id='employee_attendance'>
+                  <table border="1" class="table table-hover table-bordered tablewithSearch" id='employee_attendance'>
                     <thead>
                       <tr>
                         <th>Full Name</th>

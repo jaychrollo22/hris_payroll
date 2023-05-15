@@ -37,6 +37,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 use App\Exports\EmployeesExport;
 use App\Exports\EmployeeHRExport;
+use App\Exports\AttendancePerLocationExport;
 
 class EmployeeController extends Controller
 {
@@ -1237,22 +1238,22 @@ class EmployeeController extends Controller
                                     ->orderby('time_out','desc')
                                     ->orderBy('id','asc');
                                 }])
-                                ->with(['leaves' => function ($query) use ($from_date, $to_date) {
+                                ->with(['approved_leaves' => function ($query) use ($from_date, $to_date) {
                                     $query->whereBetween('date_from', [$from_date, $to_date])
                                     ->where('status','Approved')
                                     ->orderBy('id','asc');
-                                },'leaves.leave'])
-                                ->with(['wfhs' => function ($query) use ($from_date, $to_date) {
+                                },'approved_leaves.leave'])
+                                ->with(['approved_wfhs' => function ($query) use ($from_date, $to_date) {
                                     $query->whereBetween('applied_date', [$from_date, $to_date])
                                     ->where('status','Approved')
                                     ->orderBy('id','asc');
                                 }])
-                                ->with(['obs' => function ($query) use ($from_date, $to_date) {
+                                ->with(['approved_obs' => function ($query) use ($from_date, $to_date) {
                                     $query->whereBetween('applied_date', [$from_date, $to_date])
                                     ->where('status','Approved')
                                     ->orderBy('id','asc');
                                 }])
-                                ->with(['dtrs' => function ($query) use ($from_date, $to_date) {
+                                ->with(['approved_dtrs' => function ($query) use ($from_date, $to_date) {
                                     $query->whereBetween('dtr_date', [$from_date, $to_date])
                                     ->where('status','Approved')
                                     ->orderBy('id','asc');
@@ -1283,6 +1284,7 @@ class EmployeeController extends Controller
     public function biologs_per_location(Request $request)
     {
         $terminals = IclockTerminal::get();
+        $location = $request->location;
         $from_date = $request->from;
         $to_date = $request->to;
         $attendances = array();
@@ -1301,6 +1303,7 @@ class EmployeeController extends Controller
             'attendances.employee_attendance_location',
             array(
                 'header' => 'biometrics',
+                'location' => $location,
                 'from_date' => $from_date,
                 'to_date' => $to_date,
                 'terminals' => $terminals,
@@ -1308,6 +1311,16 @@ class EmployeeController extends Controller
             )
         );
     }
+
+    public function biologs_per_location_export(Request $request){
+
+        $location = isset($request->location) ? $request->location : "";
+        $from = isset($request->from) ? $request->from : "";
+        $to =  isset($request->to) ? $request->to : "";
+        $terminal = IclockTerminal::where('id',$location)->first();
+        return Excel::download(new AttendancePerLocationExport($location,$from,$to), $terminal->alias . ' ' . $from . ' to ' . $to . ' Attendance Per Location Export.xlsx');
+    }
+
     public function newBio(Request $request)
     {
         // dd($request->all());
