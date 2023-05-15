@@ -67,8 +67,9 @@ class WorkfromhomeController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
+        $percentage =  isset($request->percentage) ? $request->percentage : "";
         $company_detail = Company::where('id',$company)->first();
-        return Excel::download(new EmployeeWfhExport($company,$from,$to), 'Work From Home ' . $company_detail->company_code . ' ' . $from . ' to ' . $to . '.xlsx');
+        return Excel::download(new EmployeeWfhExport($company,$from,$to,$percentage), 'Work From Home ' . $company_detail->company_code . ' ' . $from . ' to ' . $to . '.xlsx');
     }
 
 }

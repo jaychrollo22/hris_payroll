@@ -10,11 +10,12 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 
 class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function __construct($company,$from,$to)
+    public function __construct($company,$from,$to,$percentage)
     {
         $this->company = $company;
         $this->from = $from;
         $this->to = $to;
+        $this->percentage = $percentage ? $percentage : '100';
     }
 
     public function query()
@@ -23,6 +24,7 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
         return EmployeeWfh::query()->with('user','employee')
                                 ->whereDate('applied_date','>=',$this->from)
                                 ->whereDate('applied_date','<=',$this->to)
+                                ->where('approve_percentage','=',$this->percentage)
                                 ->whereHas('employee',function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
