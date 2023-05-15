@@ -102,7 +102,7 @@ class AutoEarnedLeave extends Command
                             $earned_leave->save();
                             $count++;
                         }
-                    }else if($employee->classification = '1' || $employee->classification = '2'){ // Regular and Probitionary
+                    }else if($employee->classification = '1' || $employee->classification = '2' || $employee->classification = '6'){ // Regular and Probitionary and Project Based Old
                         $earned_leave->leave_type = 1;
                         $earned_leave->user_id = $employee->user_id;
                         $earned_leave->earned_day = $day;
@@ -162,7 +162,7 @@ class AutoEarnedLeave extends Command
                             $earned_leave->save();
                             $count++;
                         }
-                    }else{
+                    }else if($employee->classification = '1' || $employee->classification = '2' || $employee->classification = '6'){ // Regular and Probitionary and Project Based Old
                         $earned_leave->user_id = $employee->user_id;
                         $earned_leave->earned_day = $day;
                         $earned_leave->earned_month = $month;
