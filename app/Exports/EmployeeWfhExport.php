@@ -21,8 +21,8 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
     {
         $company = $this->company;
         return EmployeeWfh::query()->with('user','employee')
-                                ->whereDate('date_from','>=',$this->from)
-                                ->whereDate('date_from','<=',$this->to)
+                                ->whereDate('applied_date','>=',$this->from)
+                                ->whereDate('applied_date','<=',$this->to)
                                 ->whereHas('employee',function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
