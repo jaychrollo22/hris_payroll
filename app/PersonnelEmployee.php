@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PersonnelEmployee extends Model
 {
     //
-    protected $connection = 'sqlsrv';
+    protected $connection = 'mysql_srv';
     protected $table = 'personnel_employee';
 
     // public function attendances()
