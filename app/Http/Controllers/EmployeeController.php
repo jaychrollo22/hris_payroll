@@ -1516,7 +1516,7 @@ class EmployeeController extends Controller
                         }
                     
                 }
-                else if($att->punch_state == 1)
+                else if($att->punch_state == 1 || $att->punch_state == 5)
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
                     $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
@@ -1581,7 +1581,7 @@ class EmployeeController extends Controller
                     }
                 
             }
-            else if($att->punch_state == 1)
+            else if($att->punch_state == 1 || $att->punch_state == 5)
             {
                 $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
                 $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
