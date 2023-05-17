@@ -11,11 +11,13 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 
 class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function __construct($company,$department,$allowed_companies)
+    public function __construct($company,$department,$allowed_companies,$allowed_locations,$allowed_projects)
     {
         $this->company = $company;
         $this->department = $department;
         $this->allowed_companies = $allowed_companies;
+        $this->allowed_locations = $allowed_locations;
+        $this->allowed_projects = $allowed_projects;
     }
 
     public function query()
@@ -23,6 +25,8 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
         $company = $this->company;
         $department = $this->department;
         $allowed_companies = json_decode($this->allowed_companies);
+        $allowed_locations = json_decode($this->allowed_locations);
+        $allowed_projects = json_decode($this->allowed_projects);
         return Employee::query()->with('company','department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info','classification_info')
                                 ->when($company,function($q) use($company){
                                     $q->where('company_id',$company);
@@ -31,6 +35,12 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
                                     $q->where('department_id',$department);
                                 })
                                 ->whereIn('company_id',$allowed_companies)
+                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                    $q->whereIn('location',$allowed_locations);
+                                })
+                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                    $q->whereIn('project',$allowed_projects);
+                                })
                                 ->where('status','Active');
     }
 

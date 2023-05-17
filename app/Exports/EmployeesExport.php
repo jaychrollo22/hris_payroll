@@ -15,11 +15,13 @@ use Illuminate\Contracts\Encryption\DecryptException;
 class EmployeesExport implements FromQuery, WithHeadings, WithMapping
 {
 
-    public function __construct($company,$department,$allowed_companies,$access_rate)
+    public function __construct($company,$department,$allowed_companies,$access_rate,$allowed_locations,$allowed_projects)
     {
         $this->company = $company;
         $this->department = $department;
         $this->allowed_companies = $allowed_companies;
+        $this->allowed_locations = $allowed_locations;
+        $this->allowed_projects = $allowed_projects;
         $this->access_rate = $access_rate;
     }
 
@@ -28,11 +30,14 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
         $company = $this->company;
         $department = $this->department;
         $allowed_companies = json_decode($this->allowed_companies);
+        $allowed_locations = json_decode($this->allowed_locations);
+        $allowed_projects = json_decode($this->allowed_projects);
         return Employee::query()->select('user_id',
                                             'employee_number',
                                             'original_date_hired',
                                             'work_description',
                                             'rate',
+                                            'project',
                                             'location',
                                             'position',
                                             'first_name',
@@ -59,6 +64,12 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
                                             $q->where('department_id',$department);
                                         })
                                         ->whereIn('company_id',$allowed_companies)
+                                        ->when($allowed_locations,function($q) use($allowed_locations){
+                                            $q->whereIn('location',$allowed_locations);
+                                        })
+                                        ->when($allowed_projects,function($q) use($allowed_projects){
+                                            $q->whereIn('project',$allowed_projects);
+                                        })
                                         ->where('status','Active');
     }
 

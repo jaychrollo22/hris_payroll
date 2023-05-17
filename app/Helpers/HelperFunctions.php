@@ -1,6 +1,8 @@
 <?php
 use App\ApplicantSystemNotification;
 use App\UserAllowedCompany;
+use App\UserAllowedLocation;
+use App\UserAllowedProject;
 use App\UserPrivilege;
 use App\Employee;
 use App\EmployeeLeave;
@@ -227,6 +229,24 @@ function getUserAllowedCompanies($user_id){
 
     if($user_allowed_companies){
         return json_decode($user_allowed_companies->company_ids);
+    }else{
+        return [];
+    }
+}
+function getUserAllowedLocations($user_id){
+    $user_allowed_locations = UserAllowedLocation::where('user_id',$user_id)->first();
+
+    if($user_allowed_locations){
+        return json_decode($user_allowed_locations->location_ids);
+    }else{
+        return [];
+    }
+}
+function getUserAllowedProjects($user_id){
+    $user_allowed_projects = UserAllowedProject::where('user_id',$user_id)->first();
+
+    if($user_allowed_projects){
+        return json_decode($user_allowed_projects->project_ids);
     }else{
         return [];
     }

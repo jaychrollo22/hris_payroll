@@ -34,10 +34,34 @@
                                         @php
                                             $user_allowed_companies = $user->user_allowed_company ? json_decode($user->user_allowed_company->company_ids) : [];
                                         @endphp
-                                        <select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company[]' multiple>
+                                        <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company[]' multiple>
                                             <option value="">-- Select Company --</option>
                                                 @foreach($companies as $company)
                                                 <option value="{{$company->id}}" @if (in_array($company->id,$user_allowed_companies)) selected @endif>{{$company->company_name}}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        Location
+                                        @php
+                                            $user_allowed_locations = $user->user_allowed_location ? json_decode($user->user_allowed_location->location_ids) : [];
+                                        @endphp
+                                        <select data-placeholder="Select Location" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='location[]' multiple>
+                                            <option value="">-- Select Location --</option>
+                                                @foreach($locations as $location)
+                                                <option value="{{$location->location}}" @if (in_array($location->location,$user_allowed_locations)) selected @endif>{{$location->location}}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        Project
+                                        @php
+                                            $user_allowed_projects = $user->user_allowed_project ? json_decode($user->user_allowed_project->project_ids) : [];
+                                        @endphp
+                                        <select data-placeholder="Select Project" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='project[]' multiple>
+                                            <option value="">-- Select Project --</option>
+                                                @foreach($projects as $project)
+                                                <option value="{{$project->project_id}}" @if (in_array($project->project_id,$user_allowed_projects)) selected @endif>{{$project->project_id}}</option>
                                                 @endforeach
                                         </select>
                                     </div>

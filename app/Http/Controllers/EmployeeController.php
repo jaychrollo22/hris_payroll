@@ -46,6 +46,8 @@ class EmployeeController extends Controller
     {
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
@@ -80,6 +82,12 @@ class EmployeeController extends Controller
                                                     }
                                                 })
                                                 ->whereIn('company_id',$allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
                                                 ->groupBy('classification')
                                                 ->orderBy('classification','ASC')
                                                 ->get();
@@ -108,6 +116,12 @@ class EmployeeController extends Controller
                                                     }
                                                 })
                                                 ->whereIn('company_id',$allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
                                                 ->groupBy('gender')
                                                 ->orderBy('gender','ASC')
                                                 ->get();
@@ -137,6 +151,12 @@ class EmployeeController extends Controller
                                     }
                                 })
                                 ->whereIn('company_id',$allowed_companies)
+                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                    $q->whereIn('location',$allowed_locations);
+                                })
+                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                    $q->whereIn('project',$allowed_projects);
+                                })
                                 ->get();
        
         if($company){
@@ -203,6 +223,12 @@ class EmployeeController extends Controller
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $allowed_companies = json_encode($allowed_companies);
 
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_locations = json_encode($allowed_locations);
+
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+        $allowed_projects = json_encode($allowed_projects);
+
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $company_info = Company::where('id',$company)->first();
@@ -210,7 +236,7 @@ class EmployeeController extends Controller
 
         $access_rate = checkUserPrivilege('employees_rate',auth()->user()->id);
 
-        return Excel::download(new EmployeesExport($company,$department,$allowed_companies,$access_rate), 'Master List '. $company_name .' .xlsx');
+        return Excel::download(new EmployeesExport($company,$department,$allowed_companies,$access_rate,$allowed_locations,$allowed_projects), 'Master List '. $company_name .' .xlsx');
     }
 
     public function export_hr(Request $request) 
@@ -219,12 +245,18 @@ class EmployeeController extends Controller
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $allowed_companies = json_encode($allowed_companies);
 
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_locations = json_encode($allowed_locations);
+
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+        $allowed_projects = json_encode($allowed_projects);
+
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $company_info = Company::where('id',$company)->first();
         $company_name = $company_info ? $company_info->company_code : "";
 
-        return Excel::download(new EmployeeHRExport($company,$department,$allowed_companies), 'Master List '. $company_name .' .xlsx');
+        return Excel::download(new EmployeeHRExport($company,$department,$allowed_companies,$allowed_locations,$allowed_projects), 'Master List '. $company_name .' .xlsx');
     }
 
     public function new(Request $request)
@@ -1169,9 +1201,18 @@ class EmployeeController extends Controller
     public function employee_attendance(Request $request)
     {
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
         $attendance_controller = new AttendanceController;
         $employees = Employee::where('status','Active')
                                 ->whereIn('company_id', $allowed_companies)
+                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                    $q->whereIn('location',$allowed_locations);
+                                })
+                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                    $q->whereIn('project',$allowed_projects);
+                                })
                                 ->get();
         $from_date = $request->from;
         $to_date = $request->to;
@@ -1191,6 +1232,12 @@ class EmployeeController extends Controller
                                     }])
                                     ->whereIn('employee_number', $request->employee)
                                     ->whereIn('company_id', $allowed_companies)
+                                    ->when($allowed_locations,function($q) use($allowed_locations){
+                                        $q->whereIn('location',$allowed_locations);
+                                    })
+                                    ->when($allowed_projects,function($q) use($allowed_projects){
+                                        $q->whereIn('project',$allowed_projects);
+                                    })
                                     ->get();
 
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
@@ -1216,9 +1263,13 @@ class EmployeeController extends Controller
     public function perCompany(Request $request)
     {
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
         $companies = Company::whereHas('employee_has_company')
                                 ->whereIn('id',$allowed_companies)
                                 ->get();
+
         $attendance_controller = new AttendanceController;
         $company = $request->company;
         $from_date = $request->from;
@@ -1259,6 +1310,12 @@ class EmployeeController extends Controller
                                     ->orderBy('id','asc');
                                 }])
                                 ->where('company_id', $company)
+                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                    $q->whereIn('location',$allowed_locations);
+                                })
+                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                    $q->whereIn('project',$allowed_projects);
+                                })    
                                 ->where('status','Active')
                                 ->get();
             // dd($company_employees);
@@ -1398,6 +1455,8 @@ class EmployeeController extends Controller
     public function sync(Request $request)
     {
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
         $terminals = iclockterminal_mysql::get();
         $terminals_hik = HikAttLog::select('deviceName')->groupBy('deviceName')
@@ -1410,7 +1469,16 @@ class EmployeeController extends Controller
             $from = $request->from;
             $to = $request->to;
 
-            $employee_numbers = Employee::whereIn('company_id', $allowed_companies)->where('status','Active')->pluck('employee_number')->toArray();
+            $employee_numbers = Employee::whereIn('company_id', $allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
+                                                ->where('status','Active')
+                                                ->pluck('employee_number')
+                                                ->toArray();
 
             $attendances = iclocktransactions_mysql::whereIn('emp_code',$employee_numbers)
                                                     ->where('terminal_id','=',$request->terminal)
@@ -1533,12 +1601,23 @@ class EmployeeController extends Controller
     {
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
         $from = $request->from_hik;
         $to = $request->to_hik;
         $terminal = $request->terminal_hik;
         
-        $employee_numbers = Employee::whereIn('company_id', $allowed_companies)->where('status','Active')->pluck('employee_number')->toArray();
+        $employee_numbers = Employee::whereIn('company_id', $allowed_companies)
+                                        ->when($allowed_locations,function($q) use($allowed_locations){
+                                            $q->whereIn('location',$allowed_locations);
+                                        })
+                                        ->when($allowed_projects,function($q) use($allowed_projects){
+                                            $q->whereIn('project',$allowed_projects);
+                                        })
+                                        ->where('status','Active')
+                                        ->pluck('employee_number')
+                                        ->toArray();
 
         $attendances = HikAttLog::where('deviceName',$terminal)
                                 ->whereIn('employeeID',$employee_numbers)

@@ -250,6 +250,7 @@ Route::group(['middleware' => 'auth'], function () {
     //User
     Route::get('/users','UserController@index');
     Route::get('/edit-user-role/{user}','UserController@editUserRole');
+    Route::get('/change-password/{user}','UserController@changePassword');
     Route::post('/update-user-role/{user}','UserController@updateUserRole');
     Route::post('/update-user-password/{user}','UserController@updateUserPassword');
 
