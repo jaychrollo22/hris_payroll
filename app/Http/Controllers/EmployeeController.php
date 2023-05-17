@@ -1341,20 +1341,20 @@ class EmployeeController extends Controller
     public function biologs_per_location(Request $request)
     {
 
-        // $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
-        // $allowed_locations = getUserAllowedLocations(auth()->user()->id);
-        // $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
-        // $employee_numbers = Employee::whereIn('company_id', $allowed_companies)
-        //                                         ->when($allowed_locations,function($q) use($allowed_locations){
-        //                                             $q->whereIn('location',$allowed_locations);
-        //                                         })
-        //                                         ->when($allowed_projects,function($q) use($allowed_projects){
-        //                                             $q->whereIn('project',$allowed_projects);
-        //                                         })
-        //                                         ->where('status','Active')
-        //                                         ->pluck('employee_number')
-        //                                         ->toArray();
+        $employee_numbers = Employee::whereIn('company_id', $allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
+                                                ->where('status','Active')
+                                                ->pluck('employee_number')
+                                                ->toArray();
 
         $terminals = IclockTerminal::get();
         $location = $request->location;
@@ -1365,7 +1365,7 @@ class EmployeeController extends Controller
             $attendances = IclockTransation::whereBetween('punch_time', [$from_date, $to_date])
                                 ->where('terminal_id', $request->location)
                                 ->whereIn('punch_state', array(0, 1))
-                                // ->whereIn('emp_code', $employee_numbers)
+                                ->whereIn('emp_code', $employee_numbers)
                                 ->with('emp_data', 'location')
                                 ->orderBy('emp_code', 'desc')
                                 ->orderBy('punch_time', 'asc')
