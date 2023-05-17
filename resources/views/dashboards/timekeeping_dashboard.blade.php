@@ -15,15 +15,13 @@
                                 <div class='col-md-2'>
                                     <div class="form-group">
                                         <label class="text-right">From</label>
-                                        <input type="date" value='{{$from}}' class="form-control form-control-sm" name="from"
-                                            max='{{ date('Y-m-d') }}' onchange='get_min(this.value);' required />
+                                        <input type="date" value='{{$from}}' class="form-control form-control-sm" name="from" required />
                                     </div>
                                 </div>
                                 <div class='col-md-2'>
                                     <div class="form-group">
                                         <label class="text-right">To</label>
-                                        <input type="date" value='{{$to}}' class="form-control form-control-sm" id='to' name="to"
-                                            max='{{ date('Y-m-d') }}' required />
+                                        <input type="date" value='{{$to}}' class="form-control form-control-sm" id='to' name="to" required />
                                     </div>
                                 </div>
                                 <div class='col-md-2'>
