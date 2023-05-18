@@ -27,6 +27,9 @@
                           $is_allowed_to_file_spl = false;
                           $is_allowed_to_file_splw = false;
                           $is_allowed_to_file_splvv = false;
+
+                          $vl_balance = 0;
+                          $sl_balance = 0;
                       @endphp
 
                       @if(count($leave_balances) > 0)
@@ -153,8 +156,10 @@
                                   }else{
                                     $is_allowed_to_file_vl = false;
                                   }
+
+                                  $vl_balance = $count_vl;
                                 @endphp
-                                {{$count_vl}}
+                                {{$vl_balance}}
                             @elseif ($leave->leave->id == '2')
                                 
                                 @php
@@ -189,8 +194,10 @@
                                   }else{
                                     $is_allowed_to_file_sl = false;
                                   }
+
+                                  $sl_balance = $count_sl;
                                 @endphp
-                                {{$count_sl}}
+                                {{$sl_balance}}
                             @elseif ($leave->leave->id == '10')
                                 {{($leave->count + $earned_sil) - $used_sil}}
                                 @php

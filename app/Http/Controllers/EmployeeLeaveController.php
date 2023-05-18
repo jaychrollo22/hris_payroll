@@ -92,7 +92,7 @@ class EmployeeLeaveController extends Controller
         $new_leave->date_from = $request->date_from;
         $new_leave->date_to = $request->date_to;
         $new_leave->reason = $request->reason;
-        $new_leave->withpay = (isset($request->withpay)) ? $request->withpay : 0 ;
+        $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
         $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
         $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : "" ; 
 
@@ -123,7 +123,7 @@ class EmployeeLeaveController extends Controller
         $new_leave->date_from = $request->date_from;
         $new_leave->date_to = $request->date_to;
         $new_leave->reason = $request->reason;
-        $new_leave->withpay = (isset($request->withpay)) ? $request->withpay : 0 ;
+        $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
         $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
         $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : ""; 
 
