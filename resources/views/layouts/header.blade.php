@@ -348,11 +348,7 @@
                         </a>
                         <div class="collapse @if ($header == 'forms') show @endif" id="forms">
                             <ul class="nav flex-column sub-menu @if ($header == 'forms') show @endif">
-                                @if(auth()->user()->employee->company_id=='1')
-                                    <li class="nav-item "> <a class="nav-link active" href="">Leave (Not Available)</a></li>
-                                @else
-                                    <li class="nav-item "> <a class="nav-link active" href="{{ url('/file-leave') }}">Leave</a></li>
-                                @endif
+                                <li class="nav-item "> <a class="nav-link active" href="{{ url('/file-leave') }}">Leave</a></li>
                                 @if(checkUserAllowedOvertime(auth()->user()->id) == 'yes')
                                     <li class="nav-item "> <a class="nav-link " href="{{ url('/overtime') }}">Overtime</a></li>
                                 @endif
@@ -771,6 +767,27 @@
                 , "sDom": "lfrti"
 
             });
+            $('#validateLevel').change(function() {
+                var selectedValue = $(this).val();
+                console.log(selectedValue);
+                
+                if (selectedValue != '1' ) {
+                    $('#isAllowedOvertime').show();
+                } else {
+                    $('#isAllowedOvertime').hide();
+                }
+            });
+            $('#validateLevel').load(function() {
+                var selectedValue = $(this).val();
+                console.log(selectedValue);
+                
+                if (selectedValue != '1' ) {
+                    $('#isAllowedOvertime').show();
+                } else {
+                    $('#isAllowedOvertime').hide();
+                }
+            });
+
         });
 
     </script>
