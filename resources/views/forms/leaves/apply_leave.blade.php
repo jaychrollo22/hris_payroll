@@ -133,6 +133,9 @@
               sl_balance : '<?php echo $sl_balance; ?>',
               ml_balance : '<?php echo $ml_balance; ?>',
               pl_balance : '<?php echo $pl_balance; ?>',
+              spl_balance : '<?php echo $spl_balance; ?>',
+              splw_balance : '<?php echo $splw_balance; ?>',
+              splvv_balance : '<?php echo $splvv_balance; ?>',
           },
           methods: {
             validateLeave() {
@@ -157,8 +160,29 @@
                     this.isAllowedWithPay = true;
                   }
               }
-              else if(this.leave_type == '4'){ // Maternity Leave
+              else if(this.leave_type == '4'){ // Paternity Leave
                   if(Number(this.pl_balance) > 0){
+                    this.isAllowedWithPay = false;
+                  }else{
+                    this.isAllowedWithPay = true;
+                  }
+              }
+              else if(this.leave_type == '5'){ // SPL
+                  if(Number(this.spl_balance) > 0){
+                    this.isAllowedWithPay = false;
+                  }else{
+                    this.isAllowedWithPay = true;
+                  }
+              }
+              else if(this.leave_type == '7'){ // SPLW
+                  if(Number(this.splw_balance) > 0){
+                    this.isAllowedWithPay = false;
+                  }else{
+                    this.isAllowedWithPay = true;
+                  }
+              }
+              else if(this.leave_type == '9'){ // SPLVV
+                  if(Number(this.splvv_balance) > 0){
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;

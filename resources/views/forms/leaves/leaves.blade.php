@@ -32,6 +32,9 @@
                           $sl_balance = 0;
                           $pl_balance = 0;
                           $ml_balance = 0;
+                          $spl_balance = 0;
+                          $splw_balance = 0;
+                          $splvv_balance = 0;
                       @endphp
 
                       @if(count($leave_balances) > 0)
@@ -243,6 +246,7 @@
                                   }else{
                                     $is_allowed_to_file_spl = false;
                                   }
+                                  $spl_balance = $count_spl;
                                 @endphp
                             @elseif ($leave->leave->id == '7')
                                 {{($leave->count) - $used_splw}}
@@ -253,6 +257,8 @@
                                   }else{
                                     $is_allowed_to_file_splw = false;
                                   }
+
+                                  $splw_balance = $count_splw;
                                 @endphp
                             @elseif ($leave->leave->id == '9')
                                 {{($leave->count) - $used_splvv}}
@@ -263,6 +269,7 @@
                                   }else{
                                     $is_allowed_to_file_splvv = false;
                                   }
+                                  $splvv_balance = $count_splvv;
                                 @endphp
                             @endif
                           </td>
