@@ -131,6 +131,8 @@
               isAllowedWithPay : true,
               vl_balance : '<?php echo $vl_balance; ?>',
               sl_balance : '<?php echo $sl_balance; ?>',
+              ml_balance : '<?php echo $ml_balance; ?>',
+              pl_balance : '<?php echo $pl_balance; ?>',
           },
           methods: {
             validateLeave() {
@@ -143,6 +145,20 @@
               }
               else if(this.leave_type == '2'){ // Sick Leave
                   if(Number(this.sl_balance) > 0){
+                    this.isAllowedWithPay = false;
+                  }else{
+                    this.isAllowedWithPay = true;
+                  }
+              }
+              else if(this.leave_type == '3'){ // Maternity Leave
+                  if(Number(this.ml_balance) > 0){
+                    this.isAllowedWithPay = false;
+                  }else{
+                    this.isAllowedWithPay = true;
+                  }
+              }
+              else if(this.leave_type == '4'){ // Maternity Leave
+                  if(Number(this.pl_balance) > 0){
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;

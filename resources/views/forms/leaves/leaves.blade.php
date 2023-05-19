@@ -30,6 +30,8 @@
 
                           $vl_balance = 0;
                           $sl_balance = 0;
+                          $pl_balance = 0;
+                          $ml_balance = 0;
                       @endphp
 
                       @if(count($leave_balances) > 0)
@@ -217,6 +219,8 @@
                                   }else{
                                     $is_allowed_to_file_ml = false;
                                   }
+
+                                  $ml_balance = $count_ml;
                                 @endphp
                             @elseif ($leave->leave->id == '4')
                                 {{($leave->count) - $used_pl}}
@@ -227,6 +231,8 @@
                                   }else{
                                     $is_allowed_to_file_pl = false;
                                   }
+
+                                  $pl_balance = $count_pl;
                                 @endphp
                             @elseif ($leave->leave->id == '5')
                                   {{($leave->count) - $used_spl}}
