@@ -29,6 +29,7 @@ use App\IclockTransation;
 use App\MaritalStatus;
 use App\IclockTerminal;
 use App\AttPunch;
+use App\UserAllowedOvertime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -924,7 +925,7 @@ class EmployeeController extends Controller
     public function employeeSettingsHR(User $user)
     {
 
-        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.beneficiaries','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+        $user = User::where('id',$user->id)->with('allowed_overtime','employee.department','employee.payment_info','employee.contact_person','employee.beneficiaries','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
 
         $classifications = Classification::get();
 
@@ -998,6 +999,7 @@ class EmployeeController extends Controller
         return back();
 
     }
+
     public function updateEmpInfoHR(Request $request, $id){
         
         $employee = Employee::findOrFail($id);
@@ -1069,6 +1071,25 @@ class EmployeeController extends Controller
                 $new_employee_vessel->user_id = $employee->user_id;
                 $new_employee_vessel->vessel_name = $request->vessel_name;
                 $new_employee_vessel->save();
+            }
+        }
+
+        if($request->level != 1){ // Validate if User not Rank and File
+            $check_user_allowed_overtime = UserAllowedOvertime::where('user_id',$employee->user_id)->first();
+            if(empty($check_user_allowed_overtime)){
+                $new_user_allowed_overtime = new UserAllowedOvertime;
+                $new_user_allowed_overtime->user_id = $employee->user_id;
+                $new_user_allowed_overtime->allowed_overtime = $request->allowed_overtime;
+                $new_user_allowed_overtime->save();
+            }else{
+                $check_user_allowed_overtime->allowed_overtime = $request->allowed_overtime;
+                $check_user_allowed_overtime->save();
+            }
+        }else{
+            $check_user_allowed_overtime = UserAllowedOvertime::where('user_id',$employee->user_id)->first();
+            if($check_user_allowed_overtime){
+                $check_user_allowed_overtime->allowed_overtime = null;
+                $check_user_allowed_overtime->save();
             }
         }
         

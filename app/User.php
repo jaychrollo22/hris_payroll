@@ -94,5 +94,9 @@ class User extends Authenticatable
     public function user_privilege()
     {
         return $this->hasOne(UserPrivilege::class);
-    }         
+    }   
+    
+    public function allowed_overtime() {
+        return $this->hasOne(UserAllowedOvertime::class);
+    }
 }

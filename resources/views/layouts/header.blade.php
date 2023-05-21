@@ -349,7 +349,10 @@
                         <div class="collapse @if ($header == 'forms') show @endif" id="forms">
                             <ul class="nav flex-column sub-menu @if ($header == 'forms') show @endif">
                                 <li class="nav-item "> <a class="nav-link active" href="{{ url('/file-leave') }}">Leave</a></li>
-                                @if(checkUserAllowedOvertime(auth()->user()->id) == 'yes')
+                                @php
+                                    $user_allowed_overtime = auth()->user()->allowed_overtime ? auth()->user()->allowed_overtime->allowed_overtime : "";
+                                @endphp
+                                @if(checkUserAllowedOvertime(auth()->user()->id) == 'yes' || $user_allowed_overtime == 'on')
                                     <li class="nav-item "> <a class="nav-link " href="{{ url('/overtime') }}">Overtime</a></li>
                                 @endif
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/work-from-home') }}">Work from home</a></li>
