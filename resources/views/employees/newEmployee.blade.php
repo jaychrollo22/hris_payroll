@@ -156,7 +156,7 @@
                                     <option value="">--Select Project--</option>
                                     <option value="N/A">N/A</option>
                                     @foreach($projects as $project)
-                                      <option value="{{$project->project_id}}">{{$project->project_id}}</option>
+                                      <option value="{{$project->project_id}}">{{$project->project_id . '-' . $project->project_title}}</option>
                                     @endforeach
                                 </select>
                               </div>

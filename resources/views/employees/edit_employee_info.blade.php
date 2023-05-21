@@ -56,7 +56,7 @@
                       <option value="">--Select Project--</option>
                       <option value="N/A">N/A</option>
                       @foreach($projects as $project)
-                        <option value="{{$project->project_id}}" @if ($user->employee->project == $project->project_id) selected @endif>{{$project->project_id}}</option>
+                        <option value="{{$project->project_id}}" @if ($user->employee->project == $project->project_id) selected @endif>{{$project->project_id . '-' . $project->project_title}}</option>
                       @endforeach
                   </select>
                 </div>
@@ -88,7 +88,7 @@
                   Level
                   <small v-if="allowed_overtime == true" class="float-right text-danger mt-1">
                       @if($user_allowed_overtime == 'on')
-                        <input type="checkbox" name="allowed_overtime" checked>&nbsp;Allowed Overtime
+                        <input type="checkbox" name=" " checked>&nbsp;Allowed Overtime
                       @else
                         <input type="checkbox" name="allowed_overtime">&nbsp;Allowed Overtime
                       @endif
