@@ -186,6 +186,8 @@
                     <option value="">-- Status--</option>
                     <option value="Active" @if ($user->employee->status == 'Active') selected @endif>Active</option>
                     <option value="Inactive" @if ($user->employee->status == 'Inactive') selected @endif>Inactive</option>
+                    <option value="Resigned" @if ($user->employee->status == 'Resigned') selected @endif>Resigned</option>
+                    <option value="Terminated" @if ($user->employee->status == 'Terminated') selected @endif>Terminated</option>
                   </select>
                 </div>
 
