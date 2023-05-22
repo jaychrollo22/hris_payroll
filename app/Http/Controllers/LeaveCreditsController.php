@@ -35,6 +35,8 @@ class LeaveCreditsController extends Controller
             $departments = Department::whereIn('id',$department_companies)->where('status','1')
                     ->orderBy('name')
                     ->get();
+        }else{
+            $departments = Department::where('status','1')->orderBy('name')->get();
         }
         
 
