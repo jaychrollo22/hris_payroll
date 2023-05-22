@@ -77,7 +77,7 @@
         </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" name="btnOT" class="btn btn-primary" {{ (auth()->user()->employee->immediate_sup_data != null) ? "" : 'disabled'}}>Save</button>
+        <button type="submit" name="btnOT" class="btn btn-primary">Save</button>
       </div>
     </form>      
     </div>
