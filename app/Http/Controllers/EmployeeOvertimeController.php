@@ -12,8 +12,9 @@ class EmployeeOvertimeController extends Controller
 {
     public function overtime ()
     { 
-        
-        if(checkUserAllowedOvertime(auth()->user()->id) == 'yes'){
+        $user_allowed_overtime = auth()->user()->allowed_overtime ? auth()->user()->allowed_overtime->allowed_overtime : "";
+
+        if(checkUserAllowedOvertime(auth()->user()->id) == 'yes' || $user_allowed_overtime == 'on'){
             $get_approvers = new EmployeeApproverController;
             $overtimes = EmployeeOvertime::with('user')->where('user_id',auth()->user()->id)->get();
             $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
