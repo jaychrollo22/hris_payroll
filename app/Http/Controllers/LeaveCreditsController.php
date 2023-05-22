@@ -23,6 +23,7 @@ class LeaveCreditsController extends Controller
         $companies = Company::whereHas('employee_has_company')
                                 ->whereIn('id',$allowed_companies)
                                 ->get();
+        $departments = [];
         if($company){
             $department_companies = Employee::when($company,function($q) use($company){
                             $q->where('company_id',$company);
