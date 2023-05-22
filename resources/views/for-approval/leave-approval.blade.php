@@ -68,7 +68,8 @@
                         <td>
                             <strong>{{$form_approval->user->name}}</strong> <br>
                             <small>Position : {{$form_approval->user->employee->position}}</small> <br>
-                            <small>Location : {{$form_approval->user->employee->location}}</small>
+                            <small>Location : {{$form_approval->user->employee->location}}</small> <br>
+                            <small>Department : {{ $form_approval->user->employee->department ? $form_approval->user->employee->department->name : ""}}</small> 
                         </td>
                         <td>{{$form_approval->leave->leave_type}}</td>
                         <td>{{date('M d, Y', strtotime($form_approval->date_from))}} - {{date('M d, Y', strtotime($form_approval->date_to))}}</td>

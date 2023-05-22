@@ -7,7 +7,7 @@
 				<div class="card">
 					<div class="card-body">
 						<h4 class="card-title">Sync Biometrics</h4>
-						@if(auth()->user()->id == '1' || auth()->user()->id == '353')
+						
 						<p class="card-description">
 						<form method='get' onsubmit='show();' enctype="multipart/form-data">
 							<div class=row>
@@ -91,7 +91,7 @@
 							</form>
 						</p>
 						
-						
+						@if(auth()->user()->id == '1' || auth()->user()->id == '353')
 						<p class="card-description">
 							<form method='get' action='sync-hik-att-logs' onsubmit='show();' enctype="multipart/form-data">
 								<div class=row>
@@ -173,9 +173,6 @@
 								</div>
 							</form>
 						</p>
-
-						@else
-							<h1>Currently Not Availble</h1>
 						@endif
 					</div>
 				</div>

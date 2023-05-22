@@ -68,7 +68,8 @@
                         <td>
                             <strong>{{$form_approval->user->name}}</strong> <br>
                             <small>Position : {{$form_approval->user->employee->position}}</small> <br>
-                            <small>Location : {{$form_approval->user->employee->location}}</small>
+                            <small>Location : {{$form_approval->user->employee->location}}</small> <br>
+                            <small>Department : {{ $form_approval->user->employee->department ? $form_approval->user->employee->department->name : ""}}</small>
                         </td>
                         <td> {{ $form_approval->created_at }} </td>
                         <td> {{ date('d/m/Y ', strtotime($form_approval->applied_date)) }}</td>
