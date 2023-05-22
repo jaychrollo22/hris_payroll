@@ -319,11 +319,12 @@
                                                 $time_in_data_full =  date('Y-m-d h:i:s',strtotime($time_in_data));
                                                 $time_in_data_date =  date('Y-m-d',strtotime($time_in_data));
                                                 $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
+                                                $schedule_time_in_with_grace =  date('Y-m-d h:15:s',strtotime($schedule_time_in));
                                                 $schedule_time_in =  date('Y-m-d h:i:s',strtotime($schedule_time_in));
                                                 $schedule_time_in_final =  new DateTime($schedule_time_in);
                                                 $late_diff_hours = 0;
 
-                                                if(date('Y-m-d h:i:s',strtotime($time_in_data)) > date('Y-m-d h:i:s',strtotime($schedule_time_in))){
+                                                if(date('Y-m-d h:i:s',strtotime($time_in_data)) > date('Y-m-d h:i:s',strtotime($schedule_time_in_with_grace))){
                                                     $late_diff = $schedule_time_in_final->diff(new DateTime($time_in_data_full));
                                                     $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);                                        
                                                 }
