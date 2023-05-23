@@ -917,7 +917,7 @@ class EmployeeController extends Controller
             }
 
             Alert::success('Successfully Import Employees (' . $save_count. ')')->persistent('Dismiss');
-            return back();
+            return redirect('/employees');
             
         }
     }
