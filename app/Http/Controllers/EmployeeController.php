@@ -1644,20 +1644,8 @@ class EmployeeController extends Controller
         $from = $request->from_hik;
         $to = $request->to_hik;
         $terminal = $request->terminal_hik;
-        
-        $employee_numbers = Employee::whereIn('company_id', $allowed_companies)
-                                        ->when($allowed_locations,function($q) use($allowed_locations){
-                                            $q->whereIn('location',$allowed_locations);
-                                        })
-                                        ->when($allowed_projects,function($q) use($allowed_projects){
-                                            $q->whereIn('project',$allowed_projects);
-                                        })
-                                        ->where('status','Active')
-                                        ->pluck('employee_number')
-                                        ->toArray();
 
         $attendances = HikAttLog::where('deviceName',$terminal)
-                                ->whereIn('employeeID',$employee_numbers)
                                 ->whereBetween('authDate',[$from,$to])
                                 ->orderBy('authDate','asc')
                                 ->orderBy('direction','asc')
