@@ -70,7 +70,7 @@ class EmployeeController extends Controller
                                                 })
                                                 ->when($classification,function($q) use($classification){
                                                     if($classification == 'N/A'){
-                                                        $q->whereNull('classification')->orWhere('classification','');
+                                                        $q->whereNull('classification');
                                                     }else{
                                                         $q->where('classification',$classification);
                                                     }  
@@ -111,7 +111,7 @@ class EmployeeController extends Controller
                                                 })
                                                 ->when($gender,function($q) use($gender){
                                                     if($gender == 'N/A'){
-                                                        $q->whereNull('gender')->orWhere('gender','');
+                                                        $q->whereNull('gender');
                                                     }else{
                                                         $q->where('gender',$gender);
                                                     }
@@ -139,25 +139,25 @@ class EmployeeController extends Controller
                                 })
                                 ->when($classification,function($q) use($classification){
                                     if($classification == 'N/A'){
-                                        $q->whereNull('classification')->orWhere('classification','');
+                                        $q->whereNull('classification');
                                     }else{
                                         $q->where('classification',$classification);
                                     }  
                                 })
                                 ->when($gender,function($q) use($gender){
                                     if($gender == 'N/A'){
-                                        $q->whereNull('gender')->orWhere('gender','');
+                                        $q->whereNull('gender');
                                     }else{
                                         $q->where('gender',$gender);
                                     }
-                                })
-                                ->whereIn('company_id',$allowed_companies)
+                                })     
                                 ->when($allowed_locations,function($q) use($allowed_locations){
                                     $q->whereIn('location',$allowed_locations);
                                 })
                                 ->when($allowed_projects,function($q) use($allowed_projects){
                                     $q->whereIn('project',$allowed_projects);
                                 })
+                                ->whereIn('company_id',$allowed_companies)
                                 ->get();
        
         if($company){
