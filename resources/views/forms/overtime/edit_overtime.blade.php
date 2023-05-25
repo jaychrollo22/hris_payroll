@@ -31,7 +31,7 @@
                Date
             </div>
             <div class='col-md-4'>
-              <input type="date" name='ot_date' value="{{$overtime->ot_date}}" class="form-control" disabled required>
+              <input type="date" name='ot_date' value="{{$overtime->ot_date}}" class="form-control" required>
             </div>
           </div>
            
@@ -40,13 +40,13 @@
                Start Time
             </div>
             <div class='col-md-4'>
-              <input type="time" name='start_time' class="form-control" value="{{ date('H:i', strtotime($overtime->start_time)) }}" required disabled>
+              <input type="time" name='start_time' class="form-control" value="{{ date('H:i', strtotime($overtime->start_time)) }}" required>
             </div>
             <div class='col-md-2'>
                End Time
             </div>
             <div class='col-md-4'>
-              <input type="time" name='end_time' class="form-control" value="{{ date('H:i', strtotime($overtime->end_time)) }}" required disabled>
+              <input type="time" name='end_time' class="form-control" value="{{ date('H:i', strtotime($overtime->end_time)) }}" required>
             </div>
           </div>
 
