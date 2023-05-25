@@ -5,7 +5,7 @@ use App\Http\Controllers\EmployeeApproverController;
 use App\Employee;
 use App\EmployeeOvertime;
 use App\Attendance;
-use App\scheduleData;
+use App\ScheduleData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
