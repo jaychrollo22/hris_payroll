@@ -16,6 +16,8 @@ class TimekeepingDashboardController extends Controller
     public function index(Request $request){
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
@@ -23,6 +25,16 @@ class TimekeepingDashboardController extends Controller
         $leaves = EmployeeLeave::with('approver.approver_info','user')
                                 ->whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies);
+                                })
+                                ->when($allowed_locations,function($w) use($allowed_locations){
+                                    $w->whereHas('employee',function($q) use($allowed_locations){
+                                        $q->whereIn('location',$allowed_locations);
+                                    });
+                                })
+                                ->when($allowed_projects,function($w) use($allowed_projects){
+                                    $w->whereHas('employee',function($q) use($allowed_projects){
+                                        $q->whereIn('project',$allowed_projects);
+                                    });
                                 })
                                 ->where('status','Pending')
                                 ->whereDate('date_from','>=',$from)
@@ -32,6 +44,16 @@ class TimekeepingDashboardController extends Controller
         $obs = EmployeeOb::with('approver.approver_info','user')
                                 ->whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies);
+                                })
+                                ->when($allowed_locations,function($w) use($allowed_locations){
+                                    $w->whereHas('employee',function($q) use($allowed_locations){
+                                        $q->whereIn('location',$allowed_locations);
+                                    });
+                                })
+                                ->when($allowed_projects,function($w) use($allowed_projects){
+                                    $w->whereHas('employee',function($q) use($allowed_projects){
+                                        $q->whereIn('project',$allowed_projects);
+                                    });
                                 })
                                 ->where('status','Pending')
                                 ->whereDate('applied_date','>=',$from)
@@ -43,6 +65,16 @@ class TimekeepingDashboardController extends Controller
                                 ->whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies);
                                 })
+                                ->when($allowed_locations,function($w) use($allowed_locations){
+                                    $w->whereHas('employee',function($q) use($allowed_locations){
+                                        $q->whereIn('location',$allowed_locations);
+                                    });
+                                })
+                                ->when($allowed_projects,function($w) use($allowed_projects){
+                                    $w->whereHas('employee',function($q) use($allowed_projects){
+                                        $q->whereIn('project',$allowed_projects);
+                                    });
+                                })
                                 ->where('status','Pending')
                                 ->whereDate('applied_date','>=',$from)
                                 ->whereDate('applied_date','<=',$to)
@@ -52,6 +84,16 @@ class TimekeepingDashboardController extends Controller
         $overtimes = EmployeeOvertime::with('approver.approver_info','user')
                                 ->whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies);
+                                })
+                                ->when($allowed_locations,function($w) use($allowed_locations){
+                                    $w->whereHas('employee',function($q) use($allowed_locations){
+                                        $q->whereIn('location',$allowed_locations);
+                                    });
+                                })
+                                ->when($allowed_projects,function($w) use($allowed_projects){
+                                    $w->whereHas('employee',function($q) use($allowed_projects){
+                                        $q->whereIn('project',$allowed_projects);
+                                    });
                                 })
                                 ->where('status','Pending')
                                 ->whereDate('ot_date','>=',$from)
@@ -63,13 +105,23 @@ class TimekeepingDashboardController extends Controller
                                 ->whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies);
                                 })
+                                ->when($allowed_locations,function($w) use($allowed_locations){
+                                    $w->whereHas('employee',function($q) use($allowed_locations){
+                                        $q->whereIn('location',$allowed_locations);
+                                    });
+                                })
+                                ->when($allowed_projects,function($w) use($allowed_projects){
+                                    $w->whereHas('employee',function($q) use($allowed_projects){
+                                        $q->whereIn('project',$allowed_projects);
+                                    });
+                                })
                                 ->where('status','Pending')
                                 ->whereDate('dtr_date','>=',$from)
                                 ->whereDate('dtr_date','<=',$to)
                                 ->orderBy('created_at','DESC')
                                 ->get();
         
-        $emp_data = Employee::with(['attendances' => function ($query) use ($from, $to) {
+        $emp_data = Employee::select('id','user_id','employee_number','first_name','last_name')->with(['attendances' => function ($query) use ($from, $to) {
                                     $query->whereBetween('time_in', [$from." 00:00:01", $to." 23:59:59"])
                                     ->orWhereBetween('time_out', [$from." 00:00:01", $to." 23:59:59"])
                                     ->orderBy('time_in','asc')
@@ -77,6 +129,12 @@ class TimekeepingDashboardController extends Controller
                                     ->orderBy('id','asc');
                             }])
                             ->whereIn('company_id',$allowed_companies)
+                            ->when($allowed_locations,function($q) use($allowed_locations){
+                                $q->whereIn('location',$allowed_locations);
+                            })
+                            ->when($allowed_projects,function($q) use($allowed_projects){
+                                $q->whereIn('project',$allowed_projects);
+                            })
                             ->get();
 
         return view('dashboards.timekeeping_dashboard', 
@@ -89,6 +147,7 @@ class TimekeepingDashboardController extends Controller
                         'wfhs' => $wfhs,
                         'overtimes' => $overtimes,
                         'dtrs' => $dtrs,
+                        'emp_data' => $emp_data,
                     )
         );
     }

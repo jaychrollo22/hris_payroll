@@ -53,6 +53,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('new-overtime','EmployeeOvertimeController@new');
     Route::post('edit-overtime/{id}', 'EmployeeOvertimeController@edit_overtime');
     Route::get('disable-overtime/{id}', 'EmployeeOvertimeController@disable_overtime');    
+    Route::get('check-valid-overtime', 'EmployeeOvertimeController@checkValidOvertime');    
 
     //Work-from-home
     Route::get('work-from-home', 'EmployeeWfhController@wfh');

@@ -390,8 +390,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3 mb-4  stretch-card transparent">
+            </div> --}}
+            {{-- <div class="col-md-3 mb-4  stretch-card transparent">
                 <div class="card">
                     <div class="card-body">
                         <h3 class="card-title">Earned Leaves</h3>  
@@ -410,8 +410,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-12 mb-4  stretch-card transparent">
+            </div> --}}
+            {{-- <div class="col-md-6 mb-4  stretch-card transparent">
                 <div class="card">
                     <div class="card-body">
                         <h3 class="card-title">Employee Attendances</h3>  
@@ -419,16 +419,26 @@
                             <thead>
                             <tr>
                                 <th>Employee</th>
-                                <th>Time In</th>
-                                <th>Time Out</th>
                                 <th>Lates</th>
                                 <th>Undertime</th>
-                                <th>Remarks</th>
                             </tr>
                             </thead>
+                        
                             <tbody> 
-                                                
+                                @foreach($emp_data as $emp)
+                                <tr>
+                                    <td>
+                                        {{$emp->first_name . ' ' . $emp->last_name}} <br>
+                                        <small>{{$emp->employee_number}}</small>
+                                    </td>
+                                    <td>
+                                        {{getCountLates($date_range,$emp->attendances, $emp->schedule_id)}}
+                                    </td>
+                                    <td></td>
+                                </tr>  
+                                @endforeach
                             </tbody>
+                           
                         </table>
                     </div>
                 </div>

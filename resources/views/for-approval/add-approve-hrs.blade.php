@@ -23,9 +23,9 @@
                                 $break_hrs = $overtime->break_hrs ? $overtime->break_hrs : 0;
                             @endphp
                             @if($total > 3)
-                                <input id="break_hrs" type="number" name='break_hrs' value='{{$overtime->break_hrs}}' class="form-control" required>
+                                <input id="break_hrs" type="number" step="0.01" min="0" max="3" name='break_hrs' value='{{$overtime->break_hrs}}' class="form-control" required>
                             @else
-                                <input id="break_hrs" type="number" name='break_hrs' value='{{$overtime->break_hrs}}' class="form-control">
+                                <input id="break_hrs" type="number" step="0.01" min="0" max="3" name='break_hrs' value='{{$overtime->break_hrs}}' class="form-control">
                             @endif
                             
                         </div>
