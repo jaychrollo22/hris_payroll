@@ -43,6 +43,7 @@
                                 <td>User ID</td>
                                 <td>Name</td>
                                 <td>Date</td>
+                                <td>Day</td>
                                 <td>Time In</td>
                                 <td>Time Out</td>
                                 <td>Work </td>
@@ -79,7 +80,7 @@
                                 <td>{{$emp->employee_number}}</td>
                                 <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
                                 <td class="@if($employee_schedule) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
-                                
+                                <td>{{date('l',strtotime($date_r))}}</td>
                                 @php   
                                 
                                     $time_in_data = '';
