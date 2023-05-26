@@ -42,7 +42,7 @@ class EmployeeOvertimeController extends Controller
                                         ->where('ot_date',date('Y-m-d',strtotime($request->ot_date)))
                                         ->whereIn('status',['Pending','Approved'])
                                         ->first();
-        if(empty($validate)){
+        // if(empty($validate)){
             $new_overtime = new EmployeeOvertime;
             $new_overtime->user_id = Auth::user()->id;
             $emp = Employee::where('user_id',auth()->user()->id)->first();
@@ -70,10 +70,10 @@ class EmployeeOvertimeController extends Controller
 
             Alert::success('Successfully Store')->persistent('Dismiss');
             return back();
-        }else{
-            Alert::warning('Overtime Application is already exist.')->persistent('Dismiss');
-            return back();
-        }
+        // }else{
+        //     Alert::warning('Overtime Application is already exist.')->persistent('Dismiss');
+        //     return back();
+        // }
 
        
     }
