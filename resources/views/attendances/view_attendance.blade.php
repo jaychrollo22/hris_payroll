@@ -478,7 +478,7 @@
                             </tr>
                             @endforeach
                             <tr>
-                                <td colspan='5'>Total</td>
+                                <td colspan='6'>Total</td>
                                 <td >{{$work}} hrs</td>
                                 <td >{{$lates}} hrs</td>
                                 <td >{{$undertimes}} hrs </td>
