@@ -135,7 +135,9 @@
                                 @if($if_has_ob)
                                     @php
                                         $ob_start = new DateTime($if_has_ob->date_from); 
-                                        $ob_diff = $ob_start->diff(new DateTime($if_has_ob->date_to)); 
+                                        $ob_diff = $ob_start->diff(new DateTime($if_has_ob->date_to));
+                                        $work_diff_hours = round($ob_diff->s / 3600 + $ob_diff->i / 60 + $ob_diff->h + $ob_diff->days * 24, 2);
+                                        $work = (double) $work+$work_diff_hours;
                                     @endphp
                                     <td>{{$if_has_ob->date_from}}</td>
                                     <td>{{$if_has_ob->date_to}}</td>
@@ -152,10 +154,12 @@
                                     @php
                                         $wfh_start = new DateTime($if_has_wfh->date_from); 
                                         $wfh_diff = $wfh_start->diff(new DateTime($if_has_wfh->date_to)); 
+                                        $work_diff_hours = round($wfh_diff->s / 3600 + $wfh_diff->i / 60 + $wfh_diff->h + $wfh_diff->days * 24, 2);
+                                        $work = (double) $work+$work_diff_hours;
                                     @endphp
                                     <td>{{$if_has_wfh->date_from}}</td>
                                     <td>{{$if_has_wfh->date_to}}</td>
-                                    <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins. </td>
+                                    <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins.</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
