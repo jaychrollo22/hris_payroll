@@ -75,25 +75,25 @@ Route::group(['middleware' => 'auth'], function () {
 
     //FOR APPROVAL
     Route::get('for-leave','FormApprovalController@form_leave_approval');
-    Route::get('approve-leave/{id}','FormApprovalController@approveLeave');
-    Route::get('decline-leave/{id}','FormApprovalController@declineLeave');
+    Route::post('approve-leave/{id}','FormApprovalController@approveLeave');
+    Route::post('decline-leave/{id}','FormApprovalController@declineLeave');
 
     Route::get('for-overtime','FormApprovalController@form_overtime_approval');
     Route::post('approve-ot-hrs/{employee_overtime}','FormApprovalController@approveOvertime');
-    Route::get('decline-overtime/{id}','FormApprovalController@declineOvertime');
+    Route::post('decline-overtime/{id}','FormApprovalController@declineOvertime');
 
     Route::get('for-work-from-home','FormApprovalController@form_wfh_approval');
     // Route::get('approve-wfh/{id}','FormApprovalController@approveWfh');
-    Route::get('decline-wfh/{id}','FormApprovalController@declineWfh');
+    Route::post('decline-wfh/{id}','FormApprovalController@declineWfh');
     Route::post('approve-wfh-percentage/{id}','FormApprovalController@approveWfh');
     
     Route::get('for-official-business','FormApprovalController@form_ob_approval');
-    Route::get('approve-ob/{id}','FormApprovalController@approveOb');
-    Route::get('decline-ob/{id}','FormApprovalController@declineOb');
+    Route::post('approve-ob/{id}','FormApprovalController@approveOb');
+    Route::post('decline-ob/{id}','FormApprovalController@declineOb');
 
     Route::get('for-dtr-correction','FormApprovalController@form_dtr_approval');
-    Route::get('approve-dtr/{id}','FormApprovalController@approveDtr');
-    Route::get('decline-dtr/{id}','FormApprovalController@declineDtr');
+    Route::post('approve-dtr/{id}','FormApprovalController@approveDtr');
+    Route::post('decline-dtr/{id}','FormApprovalController@declineDtr');
 
     //employees
     Route::get('employees', 'EmployeeController@view');

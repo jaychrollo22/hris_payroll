@@ -11,6 +11,11 @@
                 @csrf
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="badge badge-success mt-1">Approved</h4>
+                        </div>
+                        <input type="hidden" name="status" value="Approved">
+
                         <div class="col-md-12 mb-2">
                             Requested Overtime (hrs): {{ number_format((strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600,2)}}
                             @php
@@ -40,11 +45,16 @@
                             Total Approve Overtime (hrs):
                             <input id="total_approve_hours" type="number" class="form-control" disabled value="{{ $approve_hrs - $break_hrs}}">
                         </div>
+                        
+                        <div class='col-md-12 form-group'>
+                            Remarks:
+                            <textarea class="form-control" name="approval_remarks" id="" cols="30" rows="5" placeholder="Input Approval Remarks"></textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-success">Approve</button>
                 </div>
             </form>
         </div>

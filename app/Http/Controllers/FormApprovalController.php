@@ -57,7 +57,7 @@ class FormApprovalController extends Controller
 
     }
 
-    public function approveLeave($id){
+    public function approveLeave(Request $request, $id){
 
         $employee_leave  = EmployeeLeave::where('id', $id)
                                             ->first();
@@ -70,6 +70,7 @@ class FormApprovalController extends Controller
                     EmployeeLeave::Where('id', $id)->update([
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
+                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                     ]);
                 }else{
@@ -82,6 +83,7 @@ class FormApprovalController extends Controller
                 EmployeeLeave::Where('id', $id)->update([
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
+                    'approval_remarks' => $request->approval_remarks,
                     'level' => 2,
                 ]);
             }
@@ -90,8 +92,11 @@ class FormApprovalController extends Controller
         }
     }
 
-    public function declineLeave($id){
-        EmployeeLeave::Where('id', $id)->update(['status' => 'Declined',]);
+    public function declineLeave(Request $request, $id){
+        EmployeeLeave::Where('id', $id)->update([
+                        'status' => 'Declined',
+                        'approval_remarks' => $request->approval_remarks,
+                    ]);
         Alert::success('Leave has been declined.')->persistent('Dismiss');
         return back();
     }
@@ -152,12 +157,14 @@ class FormApprovalController extends Controller
                     EmployeeOvertime::Where('id', $employee_overtime->id)->update([
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
+                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                         'break_hrs' => $request->break_hrs,
                         'ot_approved_hrs' => $ot_approved_hrs
                     ]);
                 }else{
                     EmployeeOvertime::Where('id', $employee_overtime->id)->update([
+                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                         'break_hrs' => $request->break_hrs,
                         'ot_approved_hrs' => $request->ot_approved_hrs
@@ -169,6 +176,7 @@ class FormApprovalController extends Controller
                 EmployeeOvertime::Where('id', $employee_overtime->id)->update([
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
+                    'approval_remarks' => $request->approval_remarks,
                     'level' => 2,
                     'break_hrs' => $request->break_hrs,
                     'ot_approved_hrs' => $ot_approved_hrs
@@ -179,9 +187,12 @@ class FormApprovalController extends Controller
         }
     }
 
-    public function declineOvertime($id){
-        EmployeeOvertime::Where('id', $id)->update(['status' => 'Declined',]);
-        Alert::success('Leave has been declined.')->persistent('Dismiss');
+    public function declineOvertime(Request $request,$id){
+        EmployeeOvertime::Where('id', $id)->update([
+                            'status' => 'Declined',
+                            'approval_remarks' => $request->approval_remarks,
+                        ]);
+        Alert::success('Overtime has been declined.')->persistent('Dismiss');
         return back();
     }
 
@@ -243,12 +254,14 @@ class FormApprovalController extends Controller
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
                         'approve_percentage' => $request->approve_percentage,
+                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                     ]);
                 }else{
                     EmployeeWfh::Where('id', $id)->update([
                         'level' => 1,
                         'approve_percentage' => $request->approve_percentage,
+                        'approval_remarks' => $request->approval_remarks,
                     ]);
                 }
             }
@@ -257,6 +270,7 @@ class FormApprovalController extends Controller
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
                     'approve_percentage' => $request->approve_percentage,
+                    'approval_remarks' => $request->approval_remarks,
                     'level' => 2,
                 ]);
             }
@@ -265,8 +279,11 @@ class FormApprovalController extends Controller
         }
     }
 
-    public function declineWfh($id){
-        EmployeeWfh::Where('id', $id)->update(['status' => 'Declined',]);
+    public function declineWfh(Request $request,$id){
+        EmployeeWfh::Where('id', $id)->update([
+                'status' => 'Declined',
+                'approval_remarks' => $request->approval_remarks,
+        ]);
         Alert::success('Wfh has been declined.')->persistent('Dismiss');
         return back();
     }
@@ -314,7 +331,7 @@ class FormApprovalController extends Controller
 
     }
 
-    public function approveOb($id){
+    public function approveOb(Request $request,$id){
 
         $employee_ob = EmployeeOb::where('id', $id)
                                             ->first();
@@ -327,12 +344,14 @@ class FormApprovalController extends Controller
                     EmployeeOb::Where('id', $id)->update([
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
+                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                     ]);
 
                 }else{
                     EmployeeOb::Where('id', $id)->update([
                         'level' => 1,
+                        'approval_remarks' => $request->approval_remarks,
                     ]);
                 }
             }
@@ -340,6 +359,7 @@ class FormApprovalController extends Controller
                 EmployeeOb::Where('id', $id)->update([
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
+                    'approval_remarks' => $request->approval_remarks,
                     'level' => 2,
                 ]);
             }
@@ -348,8 +368,11 @@ class FormApprovalController extends Controller
         }
     }
 
-    public function declineOb($id){
-        EmployeeOb::Where('id', $id)->update(['status' => 'Declined',]);
+    public function declineOb(Request $request,$id){
+        EmployeeOb::Where('id', $id)->update([
+                    'status' => 'Declined',
+                    'approval_remarks' => $request->approval_remarks,
+        ]);
         Alert::success('OB has been declined.')->persistent('Dismiss');
         return back();
     }
@@ -397,7 +420,7 @@ class FormApprovalController extends Controller
 
     }
 
-    public function approveDtr($id){
+    public function approveDtr(Request $request,$id){
         $employee_dtr = EmployeeDtr::where('id', $id)->first();
         if($employee_dtr){
             $level = '';
@@ -407,11 +430,13 @@ class FormApprovalController extends Controller
                     EmployeeDtr::Where('id', $id)->update([
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
+                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                     ]);
                 }else{
                     EmployeeDtr::Where('id', $id)->update([
-                        'level' => 1,
+                        'approval_remarks' => $request->approval_remarks,
+                        'level' => 1
                     ]);
                 }
             }
@@ -419,6 +444,7 @@ class FormApprovalController extends Controller
                 EmployeeDtr::Where('id', $id)->update([
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
+                    'approval_remarks' => $request->approval_remarks,
                     'level' => 2,
                 ]);
             }
@@ -427,8 +453,11 @@ class FormApprovalController extends Controller
         }
     }
 
-    public function declineDtr($id){
-        EmployeeDtr::Where('id', $id)->update(['status' => 'Declined',]);
+    public function declineDtr(Request $request,$id){
+        EmployeeDtr::Where('id', $id)->update([
+                        'status' => 'Declined',
+                        'approval_remarks' => $request->approval_remarks,
+                    ]);
         Alert::success('DTR has been declined.')->persistent('Dismiss');
         return back();
     }

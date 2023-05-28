@@ -2,6 +2,44 @@
 @section('content')
 <div class="main-panel">
     <div class="content-wrapper">
+      <div class='row grid-margin'>
+        <div class='col-lg-2 '>
+          <div class="card card-tale">
+            <div class="card-body">
+              <div class="media">                
+                <div class="media-body">
+                  <h4 class="mb-4">Pending</h4>
+                  <h2 class="card-text">{{($dtrs->where('status','Pending'))->count()}}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> 
+        <div class='col-lg-2'>
+          <div class="card card-light-danger">
+            <div class="card-body">
+              <div class="media">
+                <div class="media-body">
+                  <h4 class="mb-4">Declined/Cancelled</h4>
+                  <h2 class="card-text">{{($dtrs->where('status','Cancelled'))->count() + ($dtrs->where('status','Declined'))->count()}}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='col-lg-2'>
+          <div class="card text-success">
+            <div class="card-body">
+              <div class="media">                
+                <div class="media-body">
+                  <h4 class="mb-4">Approved</h4>
+                  <h2 class="card-text">{{($dtrs->where('status','Approved'))->count()}}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>
         <div class='row'>
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">

@@ -11,12 +11,20 @@
                 @csrf
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col-md-12">
+                            <h4 class="badge badge-success mt-1">Approved</h4>
+                        </div>
+                        <input type="hidden" name="status" value="Approved">
                         <div class='col-md-12 form-group'>
                             Approve WFH Percentage:
                             <select name="approve_percentage" id="" class="form-control" required>
                                 <option value="60" {{$wfh->approve_percentage == '60' ? 'selected' : "" }}>WFH 60%</option>
                                 <option value="100" {{$wfh->approve_percentage == '100' ? 'selected' : "" }}>WFH 100%</option>
                             </select>
+                        </div>
+                        <div class='col-md-12 form-group'>
+                            Remarks:
+                            <textarea class="form-control" name="approval_remarks" id="" cols="30" rows="5" placeholder="Input Approval Remarks"></textarea>
                         </div>
                     </div>
                 </div>

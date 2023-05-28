@@ -107,9 +107,9 @@
                           @if ($form_approval->status == 'Pending')
                             <label class="badge badge-warning">{{ $form_approval->status }}</label>
                           @elseif($form_approval->status == 'Approved')
-                            <label class="badge badge-success">{{ $form_approval->status }}</label>
+                            <label class="badge badge-success" title="{{$form_approval->approval_remarks}}">{{ $form_approval->status }}</label>
                           @elseif($form_approval->status == 'Declined' || $form_approval->status == 'Cancelled')
-                            <label class="badge badge-danger">{{ $form_approval->status }}</label>
+                            <label class="badge badge-danger" title="{{$form_approval->approval_remarks}}">{{ $form_approval->status }}</label>
                           @endif  
                         </td>
                         <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
@@ -119,7 +119,7 @@
                               <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#approve-ot-hrs-{{ $form_approval->id }}" data-toggle="modal" title='Approve'>
                                 <i class="ti-check btn-icon-prepend"></i>                                                    
                               </button>
-                              <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" onclick="decline({{ $form_approval->id }})">
+                              <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" data-target="#overtime-declined-remarks-{{ $form_approval->id }}" data-toggle="modal" title='Decline'>
                                 <i class="ti-close btn-icon-prepend"></i>                                                    
                               </button> 
                             @endif<br> 
@@ -138,52 +138,12 @@
         </div>
     </div>
 </div>
-@endsection
 
 @foreach ($overtimes as $overtime)
-  @include('for-approval.add-approve-hrs')
+  @include('for-approval.remarks.overtime_approved_remarks')
+  @include('for-approval.remarks.overtime_declined_remarks')
 @endforeach 
 
-@section('ForApprovalScript')
-	<script>
-		function decline(id) {
-			var element = document.getElementById('tdActionId'+id);
-			var dataID = element.getAttribute('data-id');
-			swal({
-					title: "Are you sure?",
-					text: "You want to decline this overtime?",
-					icon: "warning",
-					buttons: true,
-					dangerMode: true,
-				})
-				.then((willDecline) => {
-					if (willDecline) {
-						document.getElementById("loader").style.display = "block";
-						$.ajax({
-							url: "decline-overtime/" + id,
-							method: "GET",
-							data: {
-								id: id
-							},
-							headers: {
-								'X-CSRF-TOKEN': '{{ csrf_token() }}'
-							},
-							success: function(data) {
-								document.getElementById("loader").style.display = "none";
-								swal("Overtime has been declined!", {
-									icon: "success",
-								}).then(function() {
-									location.reload();
-								});
-							}
-						})
 
-					} else {
-            swal({text:"You stop the approval of overtime.",icon:"success"});
-					}
-				});
-		}
-
-	</script>
 @endsection
 

@@ -18,15 +18,15 @@
           <div class='col-lg-2'>
             <div class="card card-light-danger">
               <div class="card-body">
-                <div class="media">                
+                <div class="media">
                   <div class="media-body">
-                    <h4 class="mb-4">Denied/Cancelled</h4>
-                    <h2 class="card-text">{{($overtimes->where('status','Cancelled'))->count()}}</h2>
+                    <h4 class="mb-4">Declined/Cancelled</h4>
+                    <h2 class="card-text">{{($overtimes->where('status','Cancelled'))->count() + ($overtimes->where('status','Declined'))->count()}}</h2>
                   </div>
                 </div>
               </div>
             </div>
-          </div> 
+          </div>
           <div class='col-lg-2'>
             <div class="card text-success">
               <div class="card-body">
