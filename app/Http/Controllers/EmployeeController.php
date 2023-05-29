@@ -1383,7 +1383,7 @@ class EmployeeController extends Controller
         $to_date = $request->to;
         $attendances = array();
         if ($from_date != null) {
-            $attendances = IclockTransation::whereBetween('punch_time', [$from_date, $to_date])
+            $attendances = IclockTransation::whereBetween('punch_time', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                 ->where('terminal_id', $request->location)
                                 ->whereIn('punch_state', array(0, 1, 5))
                                 ->whereIn('emp_code', $employee_numbers)
