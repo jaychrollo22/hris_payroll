@@ -354,10 +354,14 @@
 
                                                 //Undertime
                                                 $undertime_hrs = 0;
-                                                $undertime = (double) number_format($working_minutes - $employee_schedule['working_hours'],2);
+                                                $undertime = (double) number_format($employee_schedule['working_hours'] - $working_minutes,2);
                                                 if($undertime > 0){
-                                                    $undertime_hrs = number_format(($undertime*60*-1)/60,2) - $late_diff_hours;
-                                                }
+                                                    if($late_diff_hours > 0){
+                                                        $undertime_hrs = number_format(($undertime*60*-1)/60,2) - $late_diff_hours;
+                                                    }else{
+                                                        $undertime_hrs = $undertime;
+                                                    }
+                                                }   
 
                                             @endphp
 

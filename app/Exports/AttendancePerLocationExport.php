@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\IclockTransation;
+use App\Employee;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -19,6 +20,22 @@ class AttendancePerLocationExport implements FromQuery, WithHeadings, WithMappin
 
     public function query()
     {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
+        $employee_numbers = Employee::whereIn('company_id', $allowed_companies)
+                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                    $q->whereIn('location',$allowed_locations);
+                                })
+                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                    $q->whereIn('project',$allowed_projects);
+                                })
+                                ->where('status','Active')
+                                ->pluck('employee_number')
+                                ->toArray();
+
         return IclockTransation::whereBetween('punch_time', [$this->from . " 00:00:01", $this->to." 23:59:59"])
                                     ->where('terminal_id', $this->location)
                                     ->whereIn('punch_state', array(0, 1))

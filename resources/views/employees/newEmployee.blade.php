@@ -260,7 +260,7 @@
                                 <div class='row'> 
                                     <div class='col-md-6'>
                                       Monthly Rate
-                                      <input type="number" name="rate" class='form-control form-control-sm required' placeholder="Monthly Rate"/>
+                                      <input type="number" name="rate" step="any" class='form-control form-control-sm required' placeholder="Monthly Rate"/>
                                     </div>
                                     <div class='col-md-6'>
                                       Work Description
