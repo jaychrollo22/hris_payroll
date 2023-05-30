@@ -38,7 +38,8 @@ class AttendancePerLocationExport implements FromQuery, WithHeadings, WithMappin
 
         return IclockTransation::whereBetween('punch_time', [$this->from . " 00:00:01", $this->to." 23:59:59"])
                                     ->where('terminal_id', $this->location)
-                                    ->whereIn('punch_state', array(0, 1))
+                                    ->whereIn('punch_state', array(0, 1, 5))
+                                    ->whereIn('emp_code', $employee_numbers)
                                     ->with('emp_data', 'location')
                                     ->orderBy('emp_code', 'desc')
                                     ->orderBy('punch_time', 'asc');
