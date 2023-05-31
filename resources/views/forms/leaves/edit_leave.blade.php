@@ -160,6 +160,9 @@
               splw_balance : '<?php echo $splw_balance; ?>',
               splvv_balance : '<?php echo $splvv_balance; ?>',
           },
+          created () {
+            this.validateLeave();
+          },
           methods: {
             validateLeave() {
               if(this.leave_type == '1'){ // Vacation Leave
