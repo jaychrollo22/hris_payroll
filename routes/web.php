@@ -47,6 +47,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('new-leave','EmployeeLeaveController@new');
     Route::post('edit-leave/{id}', 'EmployeeLeaveController@edit_leave');
     Route::get('disable-leave/{id}', 'EmployeeLeaveController@disable_leave');
+    Route::post('request-to-cancel-leave/{id}', 'EmployeeLeaveController@request_to_cancel');
+    Route::get('void-to-cancel-leave/{id}', 'EmployeeLeaveController@void_request_to_cancel');
+    Route::get('approve-request-to-cancel-leave/{id}', 'EmployeeLeaveController@approve_request_to_cancel');
+    Route::get('decline-request-to-cancel-leave/{id}', 'EmployeeLeaveController@decline_request_to_cancel');
 
     //Overtime
     Route::get('overtime','EmployeeOvertimeController@overtime');

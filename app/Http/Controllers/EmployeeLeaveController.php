@@ -151,6 +151,49 @@ class EmployeeLeaveController extends Controller
         return back();
         
     }
+    public function request_to_cancel(Request $request,$id)
+    {
+        EmployeeLeave::Where('id', $id)->update([
+                        'request_to_cancel' => '1',
+                        'request_to_cancel_remarks' => $request->request_to_cancel_remarks,
+                    ]);
+        Alert::success('Leave Request to Cancel has been saved.')->persistent('Dismiss');
+        return back();
+        
+    }
+    public function void_request_to_cancel($id)
+    {
+        EmployeeLeave::Where('id', $id)->update([
+                        'request_to_cancel' => null,
+                        'request_to_cancel_remarks' => null,
+                    ]);
+        Alert::success('Request to Cancel Leave has been Void.')->persistent('Dismiss');
+        return back();
+        
+    }
+    public function approve_request_to_cancel(Request $request,$id)
+    {
+        EmployeeLeave::Where('id', $id)->update([
+                            'status' => 'Declined',
+                            'approval_remarks' => 'Request to Cancel',
+                            'request_to_cancel' => '2',
+                        ]);
+
+        Alert::success('Request to Cancel Leave has been Approved.')->persistent('Dismiss');
+        return back();
+        
+    }
+    public function decline_request_to_cancel(Request $request,$id)
+    {
+        EmployeeLeave::Where('id', $id)->update([
+                            'request_to_cancel' => 0
+                        ]);
+
+        Alert::success('Request to Cancel Leave has been Declined.')->persistent('Dismiss');
+        return back();
+        
+    }
+    
 
         
 }

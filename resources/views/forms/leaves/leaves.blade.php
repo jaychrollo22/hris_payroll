@@ -462,7 +462,27 @@
                             <button type="button" id="view{{ $employee_leave->id }}" class="btn btn-primary btn-rounded btn-icon"
                               data-target="#view_leave{{ $employee_leave->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
-                            </button>   
+                            </button>
+
+                            @if(date('Y-m-d',strtotime($employee_leave->date_from)) == date('Y-m-d'))
+                              @if($employee_leave->request_to_cancel == '1' || $employee_leave->request_to_cancel == null)
+                                <button type="button" id="view{{ $employee_leave->id }}" class="btn btn-warning btn-rounded btn-icon"
+                                  data-target="#requestToCancelLeave{{ $employee_leave->id }}" data-toggle="modal" title='Request to Cancel'>
+                                  <i class="fa fa-ban"></i>
+                                </button>  
+                              @elseif($employee_leave->request_to_cancel == '0')
+                                <button disabled type="button" id="view{{ $employee_leave->id }}" class="btn btn-warning btn-rounded btn-icon"
+                                  data-target="#requestToCancelLeave{{ $employee_leave->id }}" data-toggle="modal" title='Request to Cancel has been Declined'>
+                                  <i class="fa fa-ban"></i>
+                                </button>  
+                              @elseif($employee_leave->request_to_cancel == '2')
+                                <button disabled type="button" id="view{{ $employee_leave->id }}" class="btn btn-warning btn-rounded btn-icon"
+                                  data-target="#requestToCancelLeave{{ $employee_leave->id }}" data-toggle="modal" title='Request to Cancel has been Approved'>
+                                  <i class="fa fa-ban"></i>
+                                </button>  
+                              @endif
+                            @endif
+                             
                             @if(date('Y-m-d',strtotime($employee_leave->date_from)) > date('Y-m-d'))
                                 <button title='Cancel' id="{{ $employee_leave->id }}" onclick="cancel(this.id)"
                                   class="btn btn-rounded btn-danger btn-icon">
@@ -522,6 +542,7 @@ function get_count_days($data,$date_from,$date_to,$halfday)
 @foreach ($employee_leaves as $leave)
   @include('forms.leaves.edit_leave')
   @include('forms.leaves.view_leave') 
+  @include('forms.leaves.request_to_cancel') 
 @endforeach
 
 

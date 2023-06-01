@@ -16,13 +16,19 @@ class FormApprovalController extends Controller
 
     public function form_leave_approval (Request $request)
     { 
-        $filter_status = isset($request->status) ? $request->status : 'Pending';
+        $filter_status = isset($request->status) ? $request->status : '';
+        $filter_request_to_cancel = isset($request->request_to_cancel) ? $request->request_to_cancel : '';
         $approver_id = auth()->user()->id;
         $leaves = EmployeeLeave::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->where('status',$filter_status)
+                                ->when($filter_status, function($q) use($filter_status){
+                                    $q->where('status',$filter_status);
+                                })
+                                ->when($filter_request_to_cancel, function($q) use($filter_request_to_cancel){
+                                    $q->where('request_to_cancel',$filter_request_to_cancel);
+                                })
                                 ->orderBy('created_at','DESC')
                                 ->get();
 
@@ -44,6 +50,12 @@ class FormApprovalController extends Controller
                                 })
                                 ->where('status','Declined')
                                 ->count();
+        $request_to_cancel = EmployeeLeave::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('request_to_cancel','1')
+                                ->count();
         
         return view('for-approval.leave-approval',
         array(
@@ -52,6 +64,7 @@ class FormApprovalController extends Controller
             'for_approval' => $for_approval,
             'approved' => $approved,
             'declined' => $declined,
+            'request_to_cancel' => $request_to_cancel,
             'approver_id' => $approver_id,
         ));
 

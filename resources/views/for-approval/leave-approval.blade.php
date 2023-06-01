@@ -39,6 +39,21 @@
               </div>
             </div>
           </div>            
+          
+          <div class='col-lg-2 mt-2'>
+            <div class="card card-light-blue">
+              <div class="card-body">
+                <div class="media">                
+                  <div class="media-body">
+                    <h4 class="mb-4">Request to Cancel</h4>
+                    <a href="/for-leave?request_to_cancel=1" class="h2 card-text text-white">{{$request_to_cancel}}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>  
+      
+
         </div>
         <div class='row'>
           <div class="col-lg-12 grid-margin stretch-card">
@@ -66,7 +81,7 @@
                       @foreach ($leaves as $form_approval)
                       <tr>
                         <td>
-                            <strong>{{$form_approval->user->name}}</strong> <br>
+                            <strong>{{$form_approval->user->employee->last_name . ' ' . $form_approval->user->employee->first_name }}</strong> <br>
                             <small>Position : {{$form_approval->user->employee->position}}</small> <br>
                             <small>Location : {{$form_approval->user->employee->location}}</small> <br>
                             <small>Department : {{ $form_approval->user->employee->department ? $form_approval->user->employee->department->name : ""}}</small> 
@@ -122,6 +137,9 @@
                         </td>
                         <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
 
+                          @php
+                              $approver_last = '';
+                          @endphp
                           @foreach($form_approval->approver as $k => $approver)
                             @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'Pending')
                               <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#leave-approved-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Approve">
@@ -131,7 +149,18 @@
                                 <i class="ti-close btn-icon-prepend"></i>                                                    
                               </button> 
                             @endif<br> 
+
+                            @php
+                                $approver_last = $approver->approver_id;
+                            @endphp
                           @endforeach
+
+                          @if($approver_last == $approver_id && $form_approval->request_to_cancel == '1')
+                            <button type="button" id="view{{ $form_approval->id }}" class="btn btn-warning btn-rounded btn-icon"
+                              data-target="#requestToCancelLeave{{ $form_approval->id }}" data-toggle="modal" title='Request to Cancel'>
+                              <i class="fa fa-ban"></i>
+                          @endif
+
                         </td>
                         </tr>
                       @endforeach                        
@@ -177,6 +206,7 @@ function get_count_days($data,$date_from,$date_to,$halfday)
 @foreach ($leaves as $leave)
   @include('for-approval.remarks.leave_approved_remarks')
   @include('for-approval.remarks.leave_declined_remarks')
+  @include('for-approval.request_to_cancel.leave_request_to_cancel')
 @endforeach
 
 
