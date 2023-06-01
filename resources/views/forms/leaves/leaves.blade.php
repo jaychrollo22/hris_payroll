@@ -538,6 +538,7 @@ function get_count_days($data,$date_from,$date_to,$halfday)
  } 
 @endphp  
 
+@include('forms.leaves.apply_leave') 
 
 @foreach ($employee_leaves as $leave)
   @include('forms.leaves.edit_leave')
@@ -546,7 +547,7 @@ function get_count_days($data,$date_from,$date_to,$halfday)
 @endforeach
 
 
-@include('forms.leaves.apply_leave') 
+
 
 @endsection
 
