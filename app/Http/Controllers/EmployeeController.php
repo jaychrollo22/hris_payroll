@@ -299,6 +299,7 @@ class EmployeeController extends Controller
             $employee->position = $request->position;
             $employee->nick_name = $request->nickname;
             $employee->level = $request->level;
+            $employee->gender = $request->gender;
             $employee->obanana_date_hired = $request->date_hired;
             $employee->birth_date = $request->birthdate;
             $employee->birth_place = $request->birthplace;
