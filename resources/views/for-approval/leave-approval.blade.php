@@ -174,6 +174,12 @@
     </div>
 </div>
 
+@foreach ($leaves as $leave)
+  @include('for-approval.remarks.leave_approved_remarks')
+  @include('for-approval.remarks.leave_declined_remarks')
+  @include('for-approval.request_to_cancel.leave_request_to_cancel')
+@endforeach
+
 @php
 function get_count_days($data,$date_from,$date_to,$halfday)
  {
@@ -203,11 +209,7 @@ function get_count_days($data,$date_from,$date_to,$halfday)
  } 
 @endphp  
 
-@foreach ($leaves as $leave)
-  @include('for-approval.remarks.leave_approved_remarks')
-  @include('for-approval.remarks.leave_declined_remarks')
-  @include('for-approval.request_to_cancel.leave_request_to_cancel')
-@endforeach
+
 
 
 @endsection
