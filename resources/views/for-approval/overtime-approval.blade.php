@@ -89,7 +89,9 @@
                           {{ number_format($total,2)}}</td>
                         <td>{{$form_approval->break_hrs}}</td>
                         <td>{{$form_approval->ot_approved_hrs}}</td>
-                        <td>{{$form_approval->ot_approved_hrs - $form_approval->break_hrs}}</td>
+                        <td>
+                          {{ $form_approval->ot_approved_hrs ? $form_approval->ot_approved_hrs - $form_approval->break_hrs : ""}}
+                        </td>
 
                         <td>
                           <p title="{{$form_approval->remarks}}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
