@@ -48,7 +48,7 @@
                             @php
                                 $approve_hrs = $overtime->ot_approved_hrs ? $overtime->ot_approved_hrs : number_format((float)$total, 2, '.', '');
                             @endphp
-                            <input id="approve_hrs" type="number" name='ot_approved_hrs' value='{{ $approve_hrs }}' max="{{$total}}" step='0.01' class="form-control" required>
+                            <input id="approve_hrs" type="number" name='ot_approved_hrs' value='{{ $approve_hrs }}' max="{{number_format($total,2)}}" step='0.01' class="form-control" required>
                         </div>
                         <div class='col-md-12 form-group'>
                             Total Approve Overtime (hrs):
