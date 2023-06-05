@@ -18,12 +18,16 @@
 
                         <div class="col-md-12 mb-2">
                             @php
-                                $total = 0
+
+                                $startTime = new DateTime($overtime->start_time);
+                                $endTime = new DateTime($overtime->end_time);
+
+                                // Calculate the time difference
+                                $timeDifference = $endTime->diff($startTime);
+                                // Convert the time difference to decimal hours
+                                $total = ($timeDifference->days * 24) + $timeDifference->h + ($timeDifference->i / 60);
                             @endphp
                             @if($overtime->end_time && $overtime->start_time)
-                                @php
-                                    $total =(strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600;
-                                @endphp
                                 Requested Overtime (hrs): {{ number_format((float)$total, 2, '.', '') }}
                             @endif
                         </div>

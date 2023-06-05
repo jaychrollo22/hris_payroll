@@ -76,7 +76,17 @@
                           Date : {{date('d/m/Y', strtotime($form_approval->ot_date))}} <br>
                           Time : {{date('h:i A', strtotime($form_approval->start_time))}} - {{date('h:i A', strtotime($form_approval->end_time))}}
                         </td>
-                        <td> {{ number_format((strtotime($form_approval->end_time)-strtotime($form_approval->start_time))/3600,2)}}</td>
+                        <td>
+                          @php
+                            $startTime = new DateTime($form_approval->start_time);
+                            $endTime = new DateTime($form_approval->end_time);
+
+                            // Calculate the time difference
+                            $timeDifference = $endTime->diff($startTime);
+                            // Convert the time difference to decimal hours
+                            $total = ($timeDifference->days * 24) + $timeDifference->h + ($timeDifference->i / 60);
+                          @endphp
+                          {{ number_format($total,2)}}</td>
                         <td>{{$form_approval->break_hrs}}</td>
                         <td>{{$form_approval->ot_approved_hrs}}</td>
                         <td>{{$form_approval->ot_approved_hrs - $form_approval->break_hrs}}</td>
