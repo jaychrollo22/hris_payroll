@@ -122,8 +122,10 @@
                                         $ob_diff = $ob_start->diff(new DateTime($if_has_ob->date_to));
                                         $work_diff_hours = round($ob_diff->s / 3600 + $ob_diff->i / 60 + $ob_diff->h + $ob_diff->days * 24, 2);
                                         $work = (double) $work+$work_diff_hours;
-
-                                        $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
+                                        $overtime = 0;
+                                        // if($work_diff_hours){
+                                        //     $overtime = (double) number_format(double($work_diff_hours) - $employee_schedule['working_hours'],2);
+                                        // }
                                     @endphp
                                     <td>{{$if_has_ob->date_from}}</td>
                                     <td>{{$if_has_ob->date_to}}</td>
@@ -168,8 +170,11 @@
                                         $wfh_diff = $wfh_start->diff(new DateTime($if_has_wfh->date_to)); 
                                         $work_diff_hours = round($wfh_diff->s / 3600 + $wfh_diff->i / 60 + $wfh_diff->h + $wfh_diff->days * 24, 2);
                                         $work = (double) $work+$work_diff_hours;
-
-                                        $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
+                                        $overtime = 0;
+                                        // if($work_diff_hours && $employee_schedule['working_hours'] > 0){
+                                        //     $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
+                                        // }
+                                        
                                     @endphp
                                     <td>{{$if_has_wfh->date_from}}</td>
                                     <td>{{$if_has_wfh->date_to}}</td>
