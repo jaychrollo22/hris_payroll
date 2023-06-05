@@ -17,10 +17,15 @@
                         <input type="hidden" name="status" value="Approved">
 
                         <div class="col-md-12 mb-2">
-                            Requested Overtime (hrs): {{ number_format((strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600,2)}}
                             @php
-                                $total = number_format((strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600,2);
+                                $total = 0
                             @endphp
+                            @if($overtime->end_time && $overtime->start_time)
+                                @php
+                                    $total =(strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600;
+                                @endphp
+                                Requested Overtime (hrs): {{ number_format((float)$total, 2, '.', '') }}
+                            @endif
                         </div>
                         <div class='col-md-12 form-group'>
                             Break (hrs):
@@ -37,7 +42,7 @@
                         <div class='col-md-12 form-group'>
                             Approve Overtime (hrs):
                             @php
-                                $approve_hrs = $overtime->ot_approved_hrs ? $overtime->ot_approved_hrs : $total;
+                                $approve_hrs = $overtime->ot_approved_hrs ? $overtime->ot_approved_hrs : number_format((float)$total, 2, '.', '');
                             @endphp
                             <input id="approve_hrs" type="number" name='ot_approved_hrs' value='{{ $approve_hrs }}' max="{{$total}}" step='0.01' class="form-control" required>
                         </div>
