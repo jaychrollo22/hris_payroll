@@ -43,6 +43,7 @@ class AttendanceController extends Controller
                                     ->orderBy('id','asc');
                             }])
                             ->where('employee_number', auth()->user()->employee->employee_number)
+                            ->where('status','Active')
                             ->get();
 
         return view('attendances.view_attendance',
@@ -76,6 +77,7 @@ class AttendanceController extends Controller
                                                     ->orderBy('id','asc');
                                     }])
                                     ->whereIn('employee_number', $request->employee)
+                                    ->where('status','Active')
                                     ->get();
 
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
