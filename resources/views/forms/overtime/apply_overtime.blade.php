@@ -47,13 +47,13 @@
                    Start Time
                 </div>
                 <div class='col-md-4'>
-                  <input id="start_time" type="time" name='start_time' class="form-control" required>
+                  <input id="start_time" type="datetime-local" name='start_time' class="form-control" required>
                 </div>
                 <div class='col-md-2'>
                    End Time
                 </div>
                 <div class='col-md-4'>
-                  <input id="end_time" type="time" name='end_time' class="form-control" required>
+                  <input id="end_time" type="datetime-local" name='end_time' class="form-control" required>
                 </div>
               </div>
               
