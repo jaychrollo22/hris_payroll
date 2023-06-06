@@ -40,13 +40,13 @@
                Start Time
             </div>
             <div class='col-md-4'>
-              <input type="datetime-local" name='start_time' class="form-control" value="{{ date('H:i', strtotime($overtime->start_time)) }}" required>
+              <input type="datetime-local" name='start_time' class="form-control" value="{{ $overtime->start_time }}" required>
             </div>
             <div class='col-md-2'>
                End Time
             </div>
             <div class='col-md-4'>
-              <input type="datetime-local" name='end_time' class="form-control" value="{{ date('H:i', strtotime($overtime->end_time)) }}" required>
+              <input type="datetime-local" name='end_time' class="form-control" value="{{ $overtime->end_time }}" required>
             </div>
           </div>
 
