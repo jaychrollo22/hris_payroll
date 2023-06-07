@@ -7,6 +7,7 @@ use App\UserPrivilege;
 use App\Employee;
 use App\EmployeeLeave;
 use App\EmployeeEarnedLeave;
+use App\EmployeeLeaveCredit;
 use App\Holiday;
 use App\Attendance;
 
@@ -602,6 +603,17 @@ function checkHasAttendanceHolidayStatus($date,$employee_code){
         return 'With-Pay';
     }else{
         return 'Without-Pay';
+    }
+}
+
+function checkEmployeeLeaveCredits($user_id, $leave_type){
+    $employee_leave = EmployeeLeaveCredit::where('user_id',$user_id)
+                                    ->where('leave_type',$leave_type)
+                                    ->first();
+    if($employee_leave){
+        return $employee_leave->count;
+    }else{
+        return 0;
     }
 }
 
