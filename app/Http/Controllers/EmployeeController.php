@@ -1368,6 +1368,17 @@ class EmployeeController extends Controller
         $allowed_locations = getUserAllowedLocations(auth()->user()->id);
         $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
+        $employee_names = Employee::select('id','employee_number','first_name','last_name')
+                                                ->whereIn('company_id', $allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
+                                                ->where('status','Active')
+                                                ->get();
+
         $employee_numbers = Employee::whereIn('company_id', $allowed_companies)
                                                 ->when($allowed_locations,function($q) use($allowed_locations){
                                                     $q->whereIn('location',$allowed_locations);
@@ -1404,6 +1415,7 @@ class EmployeeController extends Controller
                 'to_date' => $to_date,
                 'terminals' => $terminals,
                 'attendances' => $attendances,
+                'employee_names' => $employee_names,
             )
         );
     }
@@ -1423,6 +1435,17 @@ class EmployeeController extends Controller
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $allowed_locations = getUserAllowedLocations(auth()->user()->id);
         $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
+        $employee_names = Employee::select('id','employee_number','first_name','last_name')
+                                                ->whereIn('company_id', $allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
+                                                ->where('status','Active')
+                                                ->get();
 
         $terminals = HikAttLog::select('deviceName')->groupBy('deviceName')
                                     ->orderBy('deviceName' , 'ASC')
@@ -1449,6 +1472,7 @@ class EmployeeController extends Controller
                 'to_date' => $to_date,
                 'terminals' => $terminals,
                 'attendances' => $attendances,
+                'employee_names' => $employee_names,
             )
         );
     }

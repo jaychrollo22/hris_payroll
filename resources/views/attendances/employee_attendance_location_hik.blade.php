@@ -65,7 +65,7 @@
                     <tbody>
                         @foreach($attendances as $attendance)
                           <tr>
-                              <td> {{employee_name($attendance->employeeID)}}</td>
+                              <td> {{employee_name($employee_names,$attendance->employeeID)}}</td>
                               <td> {{$attendance->employeeID}}</td>
                               <td>{{date('Y-m-d',strtotime($attendance->authDateTime))}}</td>
                               <td>{{date('h:i A',strtotime($attendance->authDateTime))}}</td>
