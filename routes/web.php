@@ -165,6 +165,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('update-biocode', 'EmployeeController@updatebiocode');
     Route::get('biologs-employee', 'EmployeeController@employee_attendance');
     Route::get('bio-per-location', 'EmployeeController@biologs_per_location');
+    Route::get('bio-per-location-hik', 'EmployeeController@biologs_per_location_hik');
     Route::get('bio-per-location-export', 'EmployeeController@biologs_per_location_export');
     Route::get('pmi-local', 'EmployeeController@localbio');
     Route::get('biometrics-per-company', 'EmployeeController@perCompany');

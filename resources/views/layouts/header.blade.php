@@ -440,7 +440,10 @@
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biologs-employee') }}">Per Employee</a></li>
                                 @endif
                                 @if (checkUserPrivilege('biometrics_per_location',auth()->user()->id) == 'yes')
-                                <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location (ZK)</a></li>
+                                @endif
+                                @if (checkUserPrivilege('biometrics_per_location_hik',auth()->user()->id) == 'yes')
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location-hik') }}">Per Location (HIK)</a></li>
                                 @endif
                                 @if (checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biometrics-per-company') }}">Per Company</a></li>

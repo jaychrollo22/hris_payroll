@@ -229,7 +229,19 @@
                                         @else
                                             <input type="checkbox" name="biometrics_per_location" id="biometrics_per_location{{$user->id}}">
                                         @endif
-                                        Per Location
+                                        Per Location (ZK TECO)
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
+                                            @if($user->user_privilege->biometrics_per_location_hik == 'on')
+                                                <input type="checkbox" name="biometrics_per_location_hik" id="biometrics_per_location_hik{{$user->id}}" value="{{ $user->user_privilege->biometrics_per_location_hik }}" checked>
+                                            @else
+                                                <input type="checkbox" name="biometrics_per_location_hik" id="biometrics_per_location_hik{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="biometrics_per_location_hik" id="biometrics_per_location_hik{{$user->id}}">
+                                        @endif
+                                        Per Location (HIK VISION)
                                         <br>
                                         <br>
                                         @if($user->user_privilege)

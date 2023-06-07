@@ -1417,6 +1417,42 @@ class EmployeeController extends Controller
         return Excel::download(new AttendancePerLocationExport($location,$from,$to), $terminal->alias . ' ' . $from . ' to ' . $to . ' Attendance Per Location Export.xlsx');
     }
 
+    public function biologs_per_location_hik(Request $request)
+    {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
+        $terminals = HikAttLog::select('deviceName')->groupBy('deviceName')
+                                    ->orderBy('deviceName' , 'ASC')
+                                    ->get();
+
+        $location = $request->location;
+        $from_date = $request->from;
+        $to_date = $request->to;
+        $attendances = array();
+        if ($from_date != null) {
+            $attendances = HikAttLog::whereBetween('authDateTime', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                ->where('deviceName', $request->location)
+                                ->orderBy('employeeID', 'desc')
+                                ->orderBy('authDateTime', 'asc')
+                                ->get();
+        }
+
+        return view(
+            'attendances.employee_attendance_location_hik',
+            array(
+                'header' => 'biometrics',
+                'location' => $location,
+                'from_date' => $from_date,
+                'to_date' => $to_date,
+                'terminals' => $terminals,
+                'attendances' => $attendances,
+            )
+        );
+    }
+
     public function newBio(Request $request)
     {
         // dd($request->all());
