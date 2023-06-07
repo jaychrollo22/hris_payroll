@@ -47,13 +47,13 @@
                     Time-In
                   </div>
                   <div class='col-md-4'>
-                    <input type="time" name='time_in' id='timein{{$dtr->id}}' class="form-control" value="{{ isset($dtr->time_in) ? date('H:i', strtotime($dtr->time_in)) : '' }}" required>
+                    <input type="datetime-local" name='time_in' id='timein{{$dtr->id}}' class="form-control" value="{{ isset($dtr->time_in) ? $dtr->time_in : '' }}" required>
                   </div>
                   <div class='col-md-2'>
                     Time-out
                   </div>
                   <div class='col-md-4'>
-                    <input type="time" name='time_out' id='timeout{{$dtr->id}}' class="form-control" value="{{ isset($dtr->time_out) ? date('H:i', strtotime($dtr->time_out)) : '' }}" required>
+                    <input type="datetime-local" name='time_out' id='timeout{{$dtr->id}}' class="form-control" value="{{ isset($dtr->time_out) ? $dtr->time_out : '' }}" required>
                   </div>
             </div>
             <div class="form-group row">

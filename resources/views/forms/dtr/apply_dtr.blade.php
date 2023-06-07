@@ -47,13 +47,13 @@
                   Time-In
                 </div>
                 <div class='col-md-4'>
-                  <input type="time" name='time_in' id="time_in" class="form-control" required>
+                  <input type="datetime-local" name='time_in' id="time_in" class="form-control" required>
                 </div>
                 <div class='col-md-2'>
                   Time-out
                 </div>
                 <div class='col-md-4'>
-                  <input type="time" name='time_out' id="time_out" class="form-control" required>
+                  <input type="datetime-local" name='time_out' id="time_out" class="form-control" required>
                 </div>
           </div>
           <div class="form-group row">
