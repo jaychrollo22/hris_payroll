@@ -34,13 +34,13 @@
               Time in
             </div>
             <div class='col-md-4'>
-              <input type="time" name='date_from' class="form-control" required>
+              <input type="datetime-local" name='date_from' class="form-control" required>
             </div>
             <div class='align-self-center col-md-2 text-right'>
                Time out
             </div>
             <div class='col-md-4'>
-              <input type="time" name='date_to' class="form-control" required>
+              <input type="datetime-local" name='date_to' class="form-control" required>
             </div>
           </div>
           <div class="form-group row">

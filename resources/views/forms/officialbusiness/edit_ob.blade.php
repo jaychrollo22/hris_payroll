@@ -34,13 +34,13 @@
               Date From
             </div>
             <div class='col-md-4'>
-              <input type="time" name='date_from' class="form-control" value="{{ $ob->date_from }}" required>
+              <input type="datetime-local" name='date_from' class="form-control" value="{{ $ob->date_from }}" required>
             </div>
             <div class='align-self-center col-md-2 text-right'>
                Date To
             </div>
             <div class='col-md-4'>
-              <input type="time" name='date_to' class="form-control" value="{{ $ob->date_to }}" required>
+              <input type="datetime-local" name='date_to' class="form-control" value="{{ $ob->date_to }}" required>
             </div>
           </div>
           <div class="form-group row">
