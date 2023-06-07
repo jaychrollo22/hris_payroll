@@ -86,6 +86,23 @@ function dateRangeHelper( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
 
     return $dates;
 }
+function dateRangeHelperLeave( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
+    $dates = [];
+    $current = strtotime( $first );
+    $last = strtotime( $last );
+
+    while( $current <= $last ) {
+        $curr = date('D',$current);
+        if ($curr == 'Sun') {
+            $current = strtotime( $step, $current);
+        }else{
+            $dates[] = date( $format, $current);
+            $current = strtotime( $step, $current );
+        }
+    }
+
+    return $dates;
+}
 
 function dateRange( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
     $dates = [];
@@ -125,10 +142,9 @@ function isRestDay( $date ) {
     return $check;
 }
 
-function employeeHasLeave($employee_leaves = array(), $check_date){
-    if(count($employee_leaves) > 0){
+function employeeHasLeave($employee_leaves = array(), $check_date,$schedule = array()){
+    if(count($employee_leaves) > 0 && $schedule){
         foreach($employee_leaves as $item){
-
             if($item['date_from'] == $item['date_to']){
                 if(date('Y-m-d',strtotime($check_date)) == date('Y-m-d',strtotime($item['date_from']))){
                     $status = 'Without-Pay';
@@ -142,7 +158,7 @@ function employeeHasLeave($employee_leaves = array(), $check_date){
                     }
                 }
             }else{
-                $date_range = dateRangeHelper($item['date_from'],$item['date_to']);
+                $date_range = dateRangeHelperLeave($item['date_from'],$item['date_to']);
                 if(count($date_range) > 0){
                     foreach($date_range as $date_r){
                         if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
@@ -156,7 +172,6 @@ function employeeHasLeave($employee_leaves = array(), $check_date){
                             }else{
                                 return $item['leave']['code'] . ' ' . $status;
                             }
-                            
                         }
                     }
                 }
