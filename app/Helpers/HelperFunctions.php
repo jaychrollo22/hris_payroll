@@ -11,6 +11,15 @@ use App\EmployeeLeaveCredit;
 use App\Holiday;
 use App\Attendance;
 
+function employee_name($employee_number){
+    $employee = Employee::select('id','employee_number','first_name','last_name')
+                            ->where('employee_number',$employee_number)
+                            ->first();
+    if($employee){
+        return $employee->last_name . ' ' . $employee->first_name;
+    }
+   
+}
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
     if (count($capitals[1]) >= 2) {

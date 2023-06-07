@@ -54,7 +54,7 @@
                   <table border="1" class="table table-hover table-bordered tablewithSearch" id='employee_attendance'>
                     <thead>
                       <tr>
-                        {{-- <th>Full Name</th> --}}
+                        <th>Full Name</th>
                         <th>Emp Code</th>
                         <th>Date</th>
                         <th>Time</th>
@@ -65,7 +65,8 @@
                     <tbody>
                         @foreach($attendances as $attendance)
                           <tr>
-                              <td>{{$attendance->employeeID}}</td>
+                              <td> {{employee_name($attendance->employeeID)}}</td>
+                              <td> {{$attendance->employeeID}}</td>
                               <td>{{date('Y-m-d',strtotime($attendance->authDateTime))}}</td>
                               <td>{{date('h:i A',strtotime($attendance->authDateTime))}}</td>
                               <td>{{($attendance->direction == 'In') ? "Time In" : "Time Out"}}</td>
