@@ -382,6 +382,39 @@ class EmployeeController extends Controller
         }
     }
 
+    public function reverseRate(Request $request){
+        $path = $request->file('file')->getRealPath();
+        $data = Excel::toArray(new EmployeesImport, $request->file('file'));
+
+        if(count($data[0]) > 0)
+        {
+            $save_count = 0;
+            $not_save = [];
+            foreach($data[0] as $key => $value)
+            {
+                
+                $validate = Employee::where('id',$value['id'])->first();
+
+                if($validate){
+                    $old_values = json_decode($value['old_values'],true);
+                    if(isset($old_values['rate'])){
+                        if(empty($validate->rate) && $old_values['rate']){
+                            $employee = Employee::findOrFail($value['id']);
+                            $employee->rate =  $old_values['rate'];
+                            $employee->work_description =  isset($old_values['work_description']) ? $old_values['work_description'] : "";
+                            $employee->save();
+                            $save_count++;
+                        }
+                        
+                    }
+                   
+                }
+            }
+            Alert::success('Successfully Import Employees (' . $save_count. ')')->persistent('Dismiss');
+            return redirect('/employees');
+        }
+    }
+
     public function upload(Request $request){
 
         $path = $request->file('file')->getRealPath();
