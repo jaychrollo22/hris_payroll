@@ -1025,7 +1025,11 @@ class EmployeeController extends Controller
         $employee->bank_account_number = $request->bank_account_number;
 
         $employee->work_description = $request->work_description;
-        $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
+
+        if(checkUserPrivilege('employees_rate',auth()->user()->id) == 'yes'){
+            $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
+        }
+       
         $employee->status = $request->status;
 
         $employee->date_resigned = $request->status == 'Inactive' ? $request->date_resigned : null;
