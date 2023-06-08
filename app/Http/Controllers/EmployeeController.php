@@ -1024,9 +1024,8 @@ class EmployeeController extends Controller
         $employee->bank_name = $request->bank_name;
         $employee->bank_account_number = $request->bank_account_number;
 
-        $employee->work_description = $request->work_description;
-
         if(checkUserPrivilege('employees_rate',auth()->user()->id) == 'yes'){
+            $employee->work_description = $request->work_description;
             $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
         }
        
