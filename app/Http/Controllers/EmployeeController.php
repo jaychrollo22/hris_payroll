@@ -1069,6 +1069,7 @@ class EmployeeController extends Controller
         $employee->save();
 
         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+
         if(isset($request->approver)){
 
             $count_approver = count($request->approver);
@@ -1258,6 +1259,8 @@ class EmployeeController extends Controller
 
     public function employee_attendance(Request $request)
     {
+        ini_set('memory_limit', '-1');
+    
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $allowed_locations = getUserAllowedLocations(auth()->user()->id);
         $allowed_projects = getUserAllowedProjects(auth()->user()->id);
