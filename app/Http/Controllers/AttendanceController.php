@@ -22,6 +22,9 @@ class AttendanceController extends Controller
      */
     public function index(Request $request)
     {
+
+        ini_set('memory_limit', '-1');
+        
         //  
         $from_date = $request->from;
         $to_date = $request->to;
