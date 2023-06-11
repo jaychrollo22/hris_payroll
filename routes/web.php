@@ -255,6 +255,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Employee Earned Leaves
     Route::get('employee-earned-leaves', 'EmployeeEarnedLeaveController@index');
+    Route::get('manual-employee-earned-leaves', 'EmployeeEarnedLeaveController@manual');
+    Route::post('manual-employee-earned-leaves-store', 'EmployeeEarnedLeaveController@manual_store');
+    Route::get('manual-employee-earned-leaves-delete', 'EmployeeEarnedLeaveController@manual_delete');
 
     //User
     Route::get('/users','UserController@index');
