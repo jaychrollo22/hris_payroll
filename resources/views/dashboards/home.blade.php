@@ -27,11 +27,10 @@
                                   <p class="card-text">Time In : 
                                     @if($attendance_now != null){{date('h:i A',strtotime($attendance_now->time_in))}} <br>
                                       @if($attendance_now->time_out == null )
-                                          @if (strtotime(date('H:i:00',strtotime($attendance_now->time_in))) >= strtotime("07:00:00"))
-                                            Estimated Out : {{date('h:i A', strtotime($attendance_now->time_in . " +10 hours +30 minutes"))}} 
-                                          @else
-                                            Estimated Out : 05:30 PM 
-                                          @endif
+                                          @php
+                                            $employee_schedule = employeeSchedule($schedules,$attendance_now->time_in,$schedules[0]->schedule_id)
+                                          @endphp
+                                          Estimated Out : {{$employee_schedule ? date('h:i A',strtotime($employee_schedule['time_out_from'])) : ""}}
                                        @else
                                        Time Out : {{date('h:i A',strtotime($attendance_now->time_out))}}
                                        @endif
@@ -43,7 +42,7 @@
                               </div>
                           </div>
                         </div>
-                        @if((auth()->user()->subbordinates->count()) != 0)
+                        @if(count(auth()->user()->subbordinates) > 0)
                         <div class="card">
                           <div class="card-body">
                             <p class="card-title ">Subordinates <small>({{date('M d, Y')}})</small></p>
@@ -57,6 +56,7 @@
                                     </tr>
                                   </thead>
                                   <tbody>
+                                      
                                     @foreach(auth()->user()->subbordinates as $emp)
                                     <tr>
                                       <td>{{$emp->first_name}} {{$emp->last_name}} </td>
@@ -68,6 +68,7 @@
                                       <td>@if($time_in) @if($time_in->time_out){{date('h:i a',strtotime($time_in->time_out))}} @endif @endif</td>
                                     </tr>
                                     @endforeach
+                    
                                   </tbody>
                               </table>
                               </div>
