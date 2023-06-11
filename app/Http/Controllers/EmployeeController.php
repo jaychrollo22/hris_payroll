@@ -417,6 +417,8 @@ class EmployeeController extends Controller
 
     public function upload(Request $request){
 
+        ini_set('memory_limit', '-1');
+        
         $path = $request->file('file')->getRealPath();
         $data = Excel::toArray(new EmployeesImport, $request->file('file'));
 
