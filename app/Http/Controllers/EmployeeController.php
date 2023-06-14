@@ -1643,7 +1643,7 @@ class EmployeeController extends Controller
                 else if($att->punch_state == 1 || $att->punch_state == 5)
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
-                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                     $update = [
                         'time_out' =>  date('Y-m-d H:i:s', strtotime($att->punch_time)),
                         'device_out' => $att->terminal_alias,
@@ -1708,7 +1708,7 @@ class EmployeeController extends Controller
             else if($att->punch_state == 1 || $att->punch_state == 5)
             {
                 $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
-                $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                 $update = [
                     'time_out' =>  date('Y-m-d H:i:s', strtotime($att->punch_time)),
                     'device_out' => $att->terminal_alias,
@@ -1718,8 +1718,8 @@ class EmployeeController extends Controller
                 $attendance_in = Attendance::where('employee_code',$att->emp_code)
                 ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
                 Attendance::where('employee_code',$att->emp_code)
-                ->whereBetween('time_in',[$time_in_before,$time_in_after])
-                ->update($update);
+                            ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                            ->update($update);
 
                 if($attendance_in ==  null)
                 {
@@ -1774,7 +1774,7 @@ class EmployeeController extends Controller
                 else if($att->direction == 'Out' || $att->direction == 'OUT' )
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->authDateTime));
-                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                     $update = [
                         'time_out' =>  date('Y-m-d H:i:s', strtotime($att->authDateTime)),
                         'device_out' => $att->deviceName,
@@ -1840,7 +1840,7 @@ class EmployeeController extends Controller
                 else if($att->direction == 'Out' || $att->direction == 'OUT' )
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->authDateTime));
-                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                     $update = [
                         'time_out' =>  date('Y-m-d H:i:s', strtotime($att->authDateTime)),
                         'device_out' => $att->deviceName,
