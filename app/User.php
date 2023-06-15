@@ -47,7 +47,7 @@ class User extends Authenticatable
     }
     public function subbordinates()
     {
-        return $this->hasMany(Employee::class,'immediate_sup','id');
+        return $this->hasMany(Employee::class,'immediate_sup','id')->where('status','Active');
     }
     public function employee_under()
     {
