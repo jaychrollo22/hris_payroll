@@ -280,9 +280,9 @@
                           <td>VL</td>
                           <td>{{$earned_vl}}</td>
                           <td>{{$used_vl}}</td>
-                          <td>{{$earned_vl + $used_vl}}</td>
+                          <td>{{$earned_vl}}</td>
                           @php
-                            if(($earned_vl + $used_vl) >= 1){
+                            if(($earned_vl) >= 1){
                               $is_allowed_to_file_vl = true;
                             }
                           @endphp
@@ -291,9 +291,9 @@
                           <td>SL</td>
                           <td>{{$earned_sl}}</td>
                           <td>{{$used_sl}}</td>
-                          <td>{{$earned_sl + $used_sl}}</td>
+                          <td>{{$earned_sl}}</td>
                           @php
-                            if(($earned_sl + $used_sl) >= 1){
+                            if(($earned_sl) >= 1){
                               $is_allowed_to_file_sl = true;
                             }
                           @endphp
