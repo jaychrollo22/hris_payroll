@@ -86,6 +86,11 @@ class EmployeeLeaveController extends Controller
         $employee = Employee::where('user_id',Auth::user()->id)->first();
         $count_days = get_count_days_leave($employee->ScheduleData,$request->date_from,$request->date_to);
         if($request->withpay == 'on'){
+            if($count_days == 1){
+                if($request->halfday == '1'){
+                    $count_days = 0.5;
+                }
+            }
             if($request->leave_balances >= $count_days){
                 $new_leave = new EmployeeLeave;
                 $new_leave->user_id = Auth::user()->id;
@@ -159,6 +164,13 @@ class EmployeeLeaveController extends Controller
         $employee = Employee::where('user_id',Auth::user()->id)->first();
         $count_days = get_count_days_leave($employee->ScheduleData,$request->date_from,$request->date_to);
         if($request->withpay == 'on'){
+
+            if($count_days == 1){
+                if($request->halfday == '1'){
+                    $count_days = 0.5;
+                }
+            }
+
             if($request->leave_balances >= $count_days){
                 $new_leave = EmployeeLeave::findOrFail($id);
                 $new_leave->user_id = Auth::user()->id;
