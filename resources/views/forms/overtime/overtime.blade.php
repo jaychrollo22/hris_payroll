@@ -72,7 +72,7 @@
                       <tr>
                         <td> {{ date('M. d, Y ', strtotime($overtime->created_at)) }}</td>
                         <td> {{ date('M. d, Y ', strtotime($overtime->ot_date)) }}</td>
-                        <td> {{ date('h:i A', strtotime($overtime->start_time)) }} - {{ date('h:i A', strtotime($overtime->end_time)) }}</td>
+                        <td> {{ date('M. d, Y h:i A', strtotime($overtime->start_time)) }} - {{ date('M. d, Y h:i A', strtotime($overtime->end_time)) }}</td>
                         <td> 
                           @php
                             $startTime = new DateTime($overtime->start_time);

@@ -72,8 +72,8 @@
                         <td> {{ date('M. d, Y ', strtotime($dtr->created_at)) }}</td>
                         <td> {{ date('M. d, Y ', strtotime($dtr->dtr_date)) }}</td>
                         <td>{{ $dtr->correction }}</td>
-                        <td> {{(isset($dtr->time_in)) ? date('h:i A', strtotime($dtr->time_in)) : '----'}}</td>
-                        <td> {{(isset($dtr->time_out)) ? date('h:i A', strtotime($dtr->time_out)) : '----'}}</td>
+                        <td> {{(isset($dtr->time_in)) ? date('M. d, Y h:i A', strtotime($dtr->time_in)) : '----'}}</td>
+                        <td> {{(isset($dtr->time_out)) ? date('M. d, Y h:i A', strtotime($dtr->time_out)) : '----'}}</td>
                         <td>
                           <p title="{{ $dtr->remarks }}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
                             {{ $dtr->remarks }}
