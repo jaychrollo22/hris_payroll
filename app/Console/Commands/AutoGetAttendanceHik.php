@@ -50,7 +50,7 @@ class AutoGetAttendanceHik extends Command
         $from = date('Y-m-d',strtotime('-1 day'));
         $to = date('Y-m-d');
         
-        $attendances = HikAttLog::whereBetween('authDate',[$from,$to])
+        $attendances = HikAttLog::whereBetween('authDate',[$from." 00:00:01", $to." 23:59:59"])
                                                     ->orderBy('authDate','asc')
                                                     ->orderBy('direction','asc')
                                                     ->get();

@@ -55,7 +55,7 @@ class AutoGetAttendance extends Command
         $employee_numbers = Employee::pluck('employee_number')->toArray();
         $attendances = iclocktransactions_mysql::whereIn('emp_code',$employee_numbers)
                                                     ->whereIn('terminal_id',$terminals)
-                                                    ->whereBetween('punch_time',[$from,$to])
+                                                    ->whereBetween('punch_time',[$from." 00:00:01", $to." 23:59:59"])
                                                     ->orderBy('punch_time','asc')
                                                     ->get();
         
