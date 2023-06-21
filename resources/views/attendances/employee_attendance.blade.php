@@ -19,7 +19,7 @@
                             <select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='employee[]' multiple required>
                                 <option value="">-- Select Employee --</option>
                                  @foreach($employees as $emp)
-                                    <option value="{{$emp->employee_number}}" @if ($emp->employee_number == $emp_code) selected @endif >{{$emp->employee_number}} - {{$emp->first_name}} {{$emp->last_name}}</option>
+                                    <option value="{{$emp->employee_number}}" @if($emp_code) @if (in_array($emp->employee_number,$emp_code)) selected @endif @endif>{{$emp->employee_number}} - {{$emp->first_name}} {{$emp->last_name}}</option>
                                  @endforeach
                               </select>
                         </div>
