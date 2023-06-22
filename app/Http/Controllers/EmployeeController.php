@@ -127,7 +127,8 @@ class EmployeeController extends Controller
                                                 ->orderBy('gender','ASC')
                                                 ->get();
 
-        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info')
+        $employees = Employee::select('id','user_id','employee_number','first_name','last_name','department_id','company_id','immediate_sup','classification','status')
+                                ->with('department', 'immediate_sup_data', 'user_info', 'company','classification_info')
                                 ->when($company,function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
