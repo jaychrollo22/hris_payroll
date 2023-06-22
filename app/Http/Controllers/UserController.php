@@ -37,7 +37,7 @@ class UserController extends Controller
 
         if(auth()->user()->id == '353' || auth()->user()->id == '1'){
             $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
-            $users = User::with('user_allowed_company','user_privilege')->get();
+            $users = User::select('id','name','email','status','role')->get();
 
             return view('users.index',
             array(
