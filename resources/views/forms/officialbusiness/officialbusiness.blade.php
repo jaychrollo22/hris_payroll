@@ -160,18 +160,18 @@
                 </div>
               </div>
             </div>
-            @include('forms.officialbusiness.apply_ob')
           </div>
         </div>
     </div>
 </div>
+
 @foreach ($obs as $ob)
   @include('forms.officialbusiness.edit_ob')
-@endforeach  
-@foreach ($obs as $ob)
   @include('forms.officialbusiness.view_ob')
 @endforeach  
- @include('forms.officialbusiness.apply_ob') 
+
+@include('forms.officialbusiness.apply_ob') 
+
 @endsection
 @section('obScript')
 	<script>
