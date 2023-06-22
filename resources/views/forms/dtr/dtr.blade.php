@@ -161,11 +161,9 @@
 </div>
 @foreach ($dtrs as $dtr)
   @include('forms.dtr.edit_dtr')
-@endforeach  
-@foreach ($dtrs as $dtr)
   @include('forms.dtr.view_dtr')
 @endforeach  
- @include('forms.dtr.apply_dtr') 
+@include('forms.dtr.apply_dtr') 
 @endsection
 @section('dtrScript')
 	<script>
