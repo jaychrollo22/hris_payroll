@@ -31,7 +31,7 @@
                     Date
                   </div>
                   <div class='col-md-6'>
-                    <input v-model="ot_date" type="date" name='ot_date' class="form-control" required>
+                    <input v-model="ot_date" type="date" name='ot_date' class="form-control" @change="validateDates" required>
                     {{-- <button v-if="ot_date" name="ot_date" @click="validateOvertimeDate" :disabled="btnDisable" class="btn btn-outline-success btn-sm mt-1">Check Attendance</button>
                     <div class="mt-2">
                         Start Time : <span id="startTime"></span> <br>
@@ -47,13 +47,13 @@
                    Start Time
                 </div>
                 <div class='col-md-4'>
-                  <input id="start_time" type="datetime-local" name='start_time' class="form-control" required>
+                  <input id="start_time" v-model="start_time" type="datetime-local" name='start_time' :min="min_date" :max="ot_max_date" class="form-control" @change="validateDates" required>
                 </div>
                 <div class='col-md-2'>
                    End Time
                 </div>
                 <div class='col-md-4'>
-                  <input id="end_time" type="datetime-local" name='end_time' class="form-control" required>
+                  <input id="end_time" v-model="end_time" type="datetime-local" name='end_time' class="form-control" :min="start_time" :max="max_date" @change="validateDates" required>
                 </div>
               </div>
               
@@ -106,8 +106,13 @@
           start_time: '',
           end_time: '',
           ot_date: '',
+          ot_max_date: '',
+          min_date: '',
+          max_date: '',
           // employee_number: '21000849',
-        employee_number: '<?php echo auth()->user()->employee->employee_number; ?>',
+          employee_number: '<?php echo auth()->user()->employee->employee_number; ?>',
+
+          error : ''
         };
       },
       methods: {
@@ -150,6 +155,15 @@
           .finally(() => {
             this.btnDisable = false; // Enable the button after the request
           });;
+        },
+        validateDates() {
+          if (this.ot_date) {
+            const otDate = new Date(this.ot_date);
+            otDate.setDate(otDate.getDate() + 1);
+            this.min_date = this.ot_date + ' 00:00:00';
+            this.ot_max_date = this.ot_date + ' 23:00:00';
+            this.max_date = otDate.toISOString().split('T')[0] + ' 23:00:00';
+          }
         }
       },
   });
