@@ -13,8 +13,7 @@ class LeaveBalancesController extends Controller
 {
     public function index(Request $request){
         
-        $company = isset($request->company) ? $request->company : "";
-        $department = isset($request->department) ? $request->department : "";
+       
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $allowed_locations = getUserAllowedLocations(auth()->user()->id);
@@ -24,9 +23,12 @@ class LeaveBalancesController extends Controller
                                 ->whereIn('id',$allowed_companies)
                                 ->get();
 
+        $company = isset($request->company) ? $request->company : $allowed_companies[0];
+        $department = isset($request->department) ? $request->department : "";
+
         $departments = [];
         if($company){
-            $department_companies = Employee::when($company,function($q) use($company){
+            $department_companies = Employee::select('department_id')->when($company,function($q) use($company){
                             $q->where('company_id',$company);
                         })
                         ->groupBy('department_id')
@@ -40,7 +42,7 @@ class LeaveBalancesController extends Controller
             $departments = Department::where('status','1')->orderBy('name')->get();
         }
 
-        $employees = Employee::with('department','company','employee_leave_credits.leave')
+        $employees = Employee::select('id','user_id','employee_number','first_name','last_name','department_id','company_id','status')->with('department','company','employee_leave_credits.leave')
                                 ->whereIn('company_id',$allowed_companies)
                                 ->where('status','Active')
                                 ->whereHas('employee_leave_credits')
@@ -58,6 +60,7 @@ class LeaveBalancesController extends Controller
                                 }) 
                                 ->orderBy('first_name','ASC')
                                 ->get();
+                                
         return view('employee_leave_balances.index', array(
             'header' => 'masterfiles',
             'employees' => $employees,
