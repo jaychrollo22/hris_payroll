@@ -2,7 +2,7 @@
     <thead>
     <tr>
         <th>USER ID</th>
-        <th>NAME</th>
+        {{-- <th>NAME</th> --}}
         <th>DATE</th>
         <th>PARTICULAR</th>
         <th>DESCRIPTION</th>
@@ -18,7 +18,7 @@
                 @foreach($date_range as $date_r)
                 <tr>
                     <td>{{$leave->employee->employee_number}}</td>
-                    <td>{{$leave->employee->first_name . ' ' . $leave->employee->last_name}}</td>
+                    {{-- <td>{{$leave->employee->first_name . ' ' . $leave->employee->last_name}}</td> --}}
                     <td>{{date('d/m/Y',strtotime($date_r))}}</td>
                     <td>{{$leave->leave->leave_type}}</td>
                     <td>

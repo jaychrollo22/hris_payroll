@@ -45,6 +45,39 @@
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">For Approval Overtime</h4>
+
+                <form method='get' onsubmit='show();' enctype="multipart/form-data">
+                  <div class=row>
+                    <div class='col-md-2'>
+                      <div class="form-group">
+                        <label class="text-right">From</label>
+                        <input type="date" value='{{$from}}' class="form-control form-control-sm" name="from" onchange='get_min(this.value);' required />
+                      </div>
+                    </div>
+                    <div class='col-md-2'>
+                      <div class="form-group">
+                        <label class="text-right">To</label>
+                        <input type="date" value='{{$to}}' class="form-control form-control-sm" id='to' name="to" required />
+                      </div>
+                    </div>
+                    <div class='col-md-2 mr-2'>
+                      <div class="form-group">
+                        <label class="text-right">Status</label>
+                        <select data-placeholder="Select Status" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='status' required>
+                          <option value="">-- Select Status --</option>
+                          <option value="Approved" @if ('Approved' == $status) selected @endif>Approved</option>
+                          <option value="Pending" @if ('Pending' == $status) selected @endif>Pending</option>
+                          <option value="Cancelled" @if ('Cancelled' == $status) selected @endif>Cancelled</option>
+                          <option value="Declined" @if ('Declined' == $status) selected @endif>Declined</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class='col-md-2'>
+                      <button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
+                    </div>
+                  </div>
+                </form>
+
                 <div class="table-responsive">
                   <table class="table table-hover table-bordered tablewithSearch">
                     <thead>
@@ -67,14 +100,14 @@
                       <tr>
                         <td>
                             <strong>{{$form_approval->user->name}}</strong> <br>
-                            <small>Position : {{$form_approval->user->employee->position}}</small> <br>
-                            <small>Location : {{$form_approval->user->employee->location}}</small> <br>
-                            <small>Department : {{ $form_approval->user->employee->department ? $form_approval->user->employee->department->name : ""}}</small>
+                            <small>Position : {{$form_approval->user->employee_info->position}}</small> <br>
+                            <small>Location : {{$form_approval->user->employee_info->location}}</small> <br>
+                            <small>Department : {{ $form_approval->user->employee_info->department ? $form_approval->user->employee_info->department->name : ""}}</small>
                         </td>
                         <td>{{date('d/m/Y', strtotime($form_approval->created_at))}}</td>
                         <td>
                           Date : {{date('d/m/Y', strtotime($form_approval->ot_date))}} <br>
-                          Time : {{date('h:i A', strtotime($form_approval->start_time))}} - {{date('h:i A', strtotime($form_approval->end_time))}}
+                          Time : {{date('d/m/Y h:i A', strtotime($form_approval->start_time))}} - {{date('d/m/Y h:i A', strtotime($form_approval->end_time))}}
                         </td>
                         <td>
                           @php

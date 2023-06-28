@@ -3,7 +3,7 @@
         <tr>
             <td>USER ID</td>
             {{-- <td>Biometric ID</td> --}}
-            <td>NAME</td>
+            {{-- <td>NAME</td> --}}
             <td>DATE</td>
             <td>FIRST ACTUAL TIME IN</td>
             <td>SECOND ACTUAL TIME OUT</td>
@@ -29,7 +29,7 @@
         <tr>
             <td>{{$emp->employee_number}}</td>
             {{-- <td>{{$emp->employee_number}}</td> --}}
-            <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
+            {{-- <td>{{$emp->first_name . ' ' . $emp->last_name}}</td> --}}
             <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
 
             @php
