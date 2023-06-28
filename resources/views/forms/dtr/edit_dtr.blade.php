@@ -24,12 +24,13 @@
             </div>
             
           </div>
+          <div id="appDTR{{$dtr->id}}">
             <div class="form-group row">
               <div class='col-md-2'>
                  Date
               </div>
               <div class='col-md-4'>
-                <input type="date" name='dtr_date' class="form-control" value="{{ $dtr->dtr_date }}" required>
+                <input type="date" name='dtr_date' class="form-control" value="{{ $dtr->dtr_date }}" v-model="dtr_date"  @change="validateDates" required>
               </div>
               <div class='col-md-2'>
                 DTR Type
@@ -47,13 +48,13 @@
                     Time-In
                   </div>
                   <div class='col-md-4'>
-                    <input type="datetime-local" name='time_in' id='timein{{$dtr->id}}' class="form-control" value="{{ isset($dtr->time_in) ? $dtr->time_in : '' }}" required>
+                    <input type="datetime-local" name='time_in' id='timein{{$dtr->id}}' class="form-control" value="{{ isset($dtr->time_in) ? $dtr->time_in : '' }}" v-model="start_time" :min="min_date" :max="dtr_max_date" class="form-control" @change="validateDates" :value="start_time" required>
                   </div>
                   <div class='col-md-2'>
                     Time-out
                   </div>
                   <div class='col-md-4'>
-                    <input type="datetime-local" name='time_out' id='timeout{{$dtr->id}}' class="form-control" value="{{ isset($dtr->time_out) ? $dtr->time_out : '' }}" required>
+                    <input type="datetime-local" name='time_out' id='timeout{{$dtr->id}}' class="form-control" value="{{ isset($dtr->time_out) ? $dtr->time_out : '' }}" v-model="end_time"  :min="start_time" :max="max_date" @change="validateDates"  class="form-control" :value="end_time" required>
                   </div>
             </div>
             <div class="form-group row">
@@ -74,6 +75,7 @@
               </div>
             </div>
           </div>
+        </div>
   
         <div class="modal-footer">
             @if($dtr->attachment)
@@ -87,3 +89,40 @@
       </div>
     </div>
   </div>
+
+  <script>
+    var app = new Vue({
+        el: '#appDTR' + '<?php echo $dtr->id; ?>',
+        data() {
+          return {
+            btnDisable: false,
+            isDisabled: true,
+            allowed_overtime_hrs: '',
+            start_time: '<?php echo $dtr->time_in; ?>',
+            end_time: '<?php echo $dtr->time_out; ?>',
+            dtr_date: '<?php echo $dtr->dtr_date; ?>',
+            dtr_max_date: '',
+            min_date: '',
+            max_date: '',
+            // employee_number: '21000849',
+            employee_number: '<?php echo auth()->user()->employee->employee_number; ?>',
+  
+            error : ''
+          };
+        },
+        created () {
+          this.validateDates();
+        },
+        methods: {
+          validateDates() {
+            if (this.dtr_date) {
+              const obDate = new Date(this.dtr_date);
+              obDate.setDate(obDate.getDate() + 1);
+              this.min_date = this.dtr_date + ' 00:00:00';
+              this.dtr_max_date = this.dtr_date + ' 23:00:00';
+              this.max_date = obDate.toISOString().split('T')[0] + ' 23:00:00';
+            }
+          }
+        },
+    });
+  </script>
