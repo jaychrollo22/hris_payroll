@@ -73,8 +73,7 @@
                     <div class='col-md-2'>
                       <div class="form-group">
                         <label class="text-right">To</label>
-                        <input type="date" value='{{$to}}' class="form-control form-control-sm" id='to' name="to"
-                            max='{{ date('Y-m-d') }}' required />
+                        <input type="date" value='{{$to}}' class="form-control form-control-sm" id='to' name="to" required />
                       </div>
                     </div>
                     <div class='col-md-2 mr-2'>
