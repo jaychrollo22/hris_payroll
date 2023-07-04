@@ -34,8 +34,8 @@ class FormApprovalController extends Controller
                                 ->when($filter_request_to_cancel, function($q) use($filter_request_to_cancel){
                                     $q->where('request_to_cancel',$filter_request_to_cancel);
                                 })
-                                ->whereDate('date_from','>=',$from_date)
-                                ->whereDate('date_from','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->orderBy('created_at','DESC')
                                 ->get();
 
@@ -43,32 +43,32 @@ class FormApprovalController extends Controller
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->whereDate('date_from','>=',$from_date)
-                                ->whereDate('date_from','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->where('status','Pending')
                                 ->count();
         $approved = EmployeeLeave::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->whereDate('date_from','>=',$from_date)
-                                ->whereDate('date_from','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->where('status','Approved')
                                 ->count();
         $declined = EmployeeLeave::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->whereDate('date_from','>=',$from_date)
-                                ->whereDate('date_from','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->where('status','Declined')
                                 ->count();
         $request_to_cancel = EmployeeLeave::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->whereDate('date_from','>=',$from_date)
-                                ->whereDate('date_from','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->where('request_to_cancel','1')
                                 ->count();
         
@@ -145,8 +145,8 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status',$filter_status)
-                                ->whereDate('ot_date','>=',$from_date)
-                                ->whereDate('ot_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->orderBy('created_at','DESC')
                                 ->get();
 
@@ -154,23 +154,23 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Pending')
-                                ->whereDate('ot_date','>=',$from_date)
-                                ->whereDate('ot_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
                                 
         $approved = EmployeeOvertime::whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->whereDate('ot_date','>=',$from_date)
-                                ->whereDate('ot_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->where('status','Approved')
                                 ->count();
 
         $declined = EmployeeOvertime::whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->whereDate('ot_date','>=',$from_date)
-                                ->whereDate('ot_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->where('status','Declined')
                                 ->count();
         
@@ -255,8 +255,8 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status',$filter_status)
-                                ->whereDate('applied_date','>=',$from_date)
-                                ->whereDate('applied_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->orderBy('created_at','DESC')
                                 ->get();
 
@@ -265,24 +265,24 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Pending')
-                                ->whereDate('applied_date','>=',$from_date)
-                                ->whereDate('applied_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $approved = EmployeeWfh::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Approved')
-                                ->whereDate('applied_date','>=',$from_date)
-                                ->whereDate('applied_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $declined = EmployeeWfh::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Declined')
-                                ->whereDate('applied_date','>=',$from_date)
-                                ->whereDate('applied_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         
         return view('for-approval.wfh-approval',
@@ -362,8 +362,8 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status',$filter_status)
-                                ->whereDate('applied_date','>=',$from_date)
-                                ->whereDate('applied_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->orderBy('created_at','DESC')
                                 ->get();
 
@@ -372,24 +372,24 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Pending')
-                                ->whereDate('applied_date','>=',$from_date)
-                                ->whereDate('applied_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $approved = EmployeeOb::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Approved')
-                                ->whereDate('applied_date','>=',$from_date)
-                                ->whereDate('applied_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $declined = EmployeeOb::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Declined')
-                                ->whereDate('applied_date','>=',$from_date)
-                                ->whereDate('applied_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         
         return view('for-approval.ob-approval',
@@ -466,8 +466,8 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status',$filter_status)
-                                ->whereDate('dtr_date','>=',$from_date)
-                                ->whereDate('dtr_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->orderBy('created_at','DESC')
                                 ->get();
 
@@ -476,24 +476,24 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Pending')
-                                ->whereDate('dtr_date','>=',$from_date)
-                                ->whereDate('dtr_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $approved = EmployeeDtr::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Approved')
-                                ->whereDate('dtr_date','>=',$from_date)
-                                ->whereDate('dtr_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $declined = EmployeeDtr::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Declined')
-                                ->whereDate('dtr_date','>=',$from_date)
-                                ->whereDate('dtr_date','<=',$to_date)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         
         return view('for-approval.dtr-approval',
