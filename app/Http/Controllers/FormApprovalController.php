@@ -21,7 +21,7 @@ class FormApprovalController extends Controller
         $from_date = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
         $to_date = isset($request->to) ? $request->to : date('Y-m-d');
 
-        $filter_status = 'Pending';
+        $$filter_status = isset($request->status) ? $request->status : 'Pending';
         $filter_request_to_cancel = '';
         if(isset($request->request_to_cancel)){
             $filter_status = 'Approved';
