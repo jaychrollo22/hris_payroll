@@ -42,7 +42,7 @@ class LeaveBalancesController extends Controller
             $departments = Department::where('status','1')->orderBy('name')->get();
         }
 
-        $employees = Employee::select('id','user_id','employee_number','first_name','last_name','department_id','company_id','status')->with('department','company','employee_leave_credits.leave')
+        $employees = Employee::select('id','user_id','employee_number','first_name','last_name','department_id','company_id','status','original_date_hired')->with('department','company','employee_leave_credits.leave')
                                 ->whereIn('company_id',$allowed_companies)
                                 ->where('status','Active')
                                 ->whereHas('employee_leave_credits')

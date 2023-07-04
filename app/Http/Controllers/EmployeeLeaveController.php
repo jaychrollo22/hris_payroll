@@ -25,6 +25,7 @@ class EmployeeLeaveController extends Controller
         $used_vl = checkUsedSLVLSILLeave(auth()->user()->id,1,$employee_status->original_date_hired);
         $used_sl = checkUsedSLVLSILLeave(auth()->user()->id,2,$employee_status->original_date_hired);
         $used_sil = checkUsedSLVLSILLeave(auth()->user()->id,10,$employee_status->original_date_hired);
+
         $used_ml = checkUsedLeave(auth()->user()->id,3);
         $used_pl = checkUsedLeave(auth()->user()->id,4);
         $used_spl = checkUsedLeave(auth()->user()->id,5);

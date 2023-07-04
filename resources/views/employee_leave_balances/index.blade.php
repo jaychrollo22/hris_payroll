@@ -58,7 +58,11 @@
 									@foreach ($employees as $employee)
                                     <tr>
                                         <td>{{ $employee->user_id}}</td>
-                                        <td>{{ $employee->first_name . ' ' . $employee->last_name}}</td>
+                                        <td>
+                                            {{ $employee->first_name . ' ' . $employee->last_name}} <br>
+                                            <small>Date Hired: {{ $employee->original_date_hired }}</small>
+                                        
+                                        </td>
                                         <td>{{ $employee->company->company_name}}</td>
                                         <td>{{ $employee->department->name}}</td>
                                         <td>
@@ -103,7 +107,7 @@
                                                 $total_vl = $vl_beginning_balance + $earned_vl;
                                                 $total_sl = $sl_beginning_balance + $earned_sl;
                                             @endphp
-
+                                            
                                             Total VL : {{$total_vl}} Used : {{$used_vl}} Remaining Balance : {{$total_vl - $used_vl }} <br>
                                             Total SL : {{$total_sl}} Used : {{$used_sl}} Remaining Balance : {{$total_sl - $used_sl }} <br> 
 
