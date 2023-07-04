@@ -21,8 +21,13 @@ class FormApprovalController extends Controller
         $from_date = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
         $to_date = isset($request->to) ? $request->to : date('Y-m-d');
 
-        $filter_status = isset($request->status) ? $request->status : 'Pending';
-        $filter_request_to_cancel = isset($request->request_to_cancel) ? $request->request_to_cancel : '';
+        $filter_status = 'Pending';
+        $filter_request_to_cancel = '';
+        if(isset($request->request_to_cancel)){
+            $filter_status = 'Approved';
+            $filter_request_to_cancel = isset($request->request_to_cancel) ? $request->request_to_cancel : '';
+        }
+        
         $approver_id = auth()->user()->id;
         $leaves = EmployeeLeave::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
