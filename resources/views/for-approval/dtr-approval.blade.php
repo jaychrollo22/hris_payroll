@@ -8,7 +8,7 @@
               <div class="card-body">
                 <div class="media">                
                   <div class="media-body">
-                    <h4 class="mb-4">For Appoval</h4>
+                    <h4 class="mb-4">For Approval</h4>
                     <a href="/for-dtr-correction?status=Pending" class="h2 card-text text-white">{{$for_approval}}</a>
                   </div>
                 </div>
