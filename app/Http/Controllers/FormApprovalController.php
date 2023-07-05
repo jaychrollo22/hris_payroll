@@ -16,31 +16,13 @@ class FormApprovalController extends Controller
 
     public function form_leave_approval (Request $request)
     { 
-
-        $today = date('Y-m-d');
-        $from_date = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
-        $to_date = isset($request->to) ? $request->to : date('Y-m-d');
-
         $filter_status = isset($request->status) ? $request->status : 'Pending';
-        $filter_request_to_cancel = '';
-        if(isset($request->request_to_cancel)){
-            $filter_status = 'Approved';
-            $filter_request_to_cancel = isset($request->request_to_cancel) ? $request->request_to_cancel : '';
-        }
-        
         $approver_id = auth()->user()->id;
         $leaves = EmployeeLeave::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->when($filter_status, function($q) use($filter_status){
-                                    $q->where('status',$filter_status);
-                                })
-                                ->when($filter_request_to_cancel, function($q) use($filter_request_to_cancel){
-                                    $q->where('request_to_cancel',$filter_request_to_cancel);
-                                })
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
+                                ->where('status',$filter_status)
                                 ->orderBy('created_at','DESC')
                                 ->get();
 
@@ -48,33 +30,19 @@ class FormApprovalController extends Controller
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->where('status','Pending')
                                 ->count();
         $approved = EmployeeLeave::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->where('status','Approved')
                                 ->count();
         $declined = EmployeeLeave::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->where('status','Declined')
-                                ->count();
-        $request_to_cancel = EmployeeLeave::with('approver.approver_info','user')
-                                ->whereHas('approver',function($q) use($approver_id) {
-                                    $q->where('approver_id',$approver_id);
-                                })
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
-                                ->where('request_to_cancel','1')
                                 ->count();
         
         return view('for-approval.leave-approval',
@@ -84,16 +52,12 @@ class FormApprovalController extends Controller
             'for_approval' => $for_approval,
             'approved' => $approved,
             'declined' => $declined,
-            'request_to_cancel' => $request_to_cancel,
             'approver_id' => $approver_id,
-            'from' => $from_date,
-            'to' => $to_date,
-            'status' => $filter_status,
         ));
 
     }
 
-    public function approveLeave(Request $request, $id){
+    public function approveLeave($id){
 
         $employee_leave  = EmployeeLeave::where('id', $id)
                                             ->first();
@@ -106,7 +70,6 @@ class FormApprovalController extends Controller
                     EmployeeLeave::Where('id', $id)->update([
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
-                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                     ]);
                 }else{
@@ -119,7 +82,6 @@ class FormApprovalController extends Controller
                 EmployeeLeave::Where('id', $id)->update([
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
-                    'approval_remarks' => $request->approval_remarks,
                     'level' => 2,
                 ]);
             }
@@ -128,21 +90,14 @@ class FormApprovalController extends Controller
         }
     }
 
-    public function declineLeave(Request $request, $id){
-        EmployeeLeave::Where('id', $id)->update([
-                        'status' => 'Declined',
-                        'approval_remarks' => $request->approval_remarks,
-                    ]);
+    public function declineLeave($id){
+        EmployeeLeave::Where('id', $id)->update(['status' => 'Declined',]);
         Alert::success('Leave has been declined.')->persistent('Dismiss');
         return back();
     }
 
     public function form_overtime_approval(Request $request)
     { 
-        $today = date('Y-m-d');
-        $from_date = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
-        $to_date = isset($request->to) ? $request->to : date('Y-m-d');
-
         $filter_status = isset($request->status) ? $request->status : 'Pending';
         $approver_id = auth()->user()->id;
         $overtimes = EmployeeOvertime::with('approver.approver_info','user')
@@ -150,32 +105,25 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status',$filter_status)
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->orderBy('created_at','DESC')
                                 ->get();
 
-        $for_approval = EmployeeOvertime::whereHas('approver',function($q) use($approver_id) {
+        $for_approval = EmployeeOvertime::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Pending')
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
-                                
-        $approved = EmployeeOvertime::whereHas('approver',function($q) use($approver_id) {
+        $approved = EmployeeOvertime::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->where('status','Approved')
                                 ->count();
-
-        $declined = EmployeeOvertime::whereHas('approver',function($q) use($approver_id) {
+        $declined = EmployeeOvertime::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->where('status','Declined')
                                 ->count();
         
@@ -187,9 +135,6 @@ class FormApprovalController extends Controller
             'approved' => $approved,
             'declined' => $declined,
             'approver_id' => $approver_id,
-            'from' => $from_date,
-            'to' => $to_date,
-            'status' => $filter_status,
         ));
 
     }
@@ -207,14 +152,12 @@ class FormApprovalController extends Controller
                     EmployeeOvertime::Where('id', $employee_overtime->id)->update([
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
-                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                         'break_hrs' => $request->break_hrs,
                         'ot_approved_hrs' => $ot_approved_hrs
                     ]);
                 }else{
                     EmployeeOvertime::Where('id', $employee_overtime->id)->update([
-                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                         'break_hrs' => $request->break_hrs,
                         'ot_approved_hrs' => $request->ot_approved_hrs
@@ -226,7 +169,6 @@ class FormApprovalController extends Controller
                 EmployeeOvertime::Where('id', $employee_overtime->id)->update([
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
-                    'approval_remarks' => $request->approval_remarks,
                     'level' => 2,
                     'break_hrs' => $request->break_hrs,
                     'ot_approved_hrs' => $ot_approved_hrs
@@ -237,22 +179,15 @@ class FormApprovalController extends Controller
         }
     }
 
-    public function declineOvertime(Request $request,$id){
-        EmployeeOvertime::Where('id', $id)->update([
-                            'status' => 'Declined',
-                            'approval_remarks' => $request->approval_remarks,
-                        ]);
-        Alert::success('Overtime has been declined.')->persistent('Dismiss');
+    public function declineOvertime($id){
+        EmployeeOvertime::Where('id', $id)->update(['status' => 'Declined',]);
+        Alert::success('Leave has been declined.')->persistent('Dismiss');
         return back();
     }
 
 
     public function form_wfh_approval(Request $request)
     { 
-        $today = date('Y-m-d');
-        $from_date = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
-        $to_date = isset($request->to) ? $request->to : date('Y-m-d');
-
         $filter_status = isset($request->status) ? $request->status : 'Pending';
         $approver_id = auth()->user()->id;
         $wfhs = EmployeeWfh::with('approver.approver_info','user')
@@ -260,8 +195,6 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status',$filter_status)
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->orderBy('created_at','DESC')
                                 ->get();
 
@@ -270,24 +203,18 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Pending')
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $approved = EmployeeWfh::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Approved')
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $declined = EmployeeWfh::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Declined')
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         
         return view('for-approval.wfh-approval',
@@ -298,9 +225,6 @@ class FormApprovalController extends Controller
             'approved' => $approved,
             'declined' => $declined,
             'approver_id' => $approver_id,
-            'from' => $from_date,
-            'to' => $to_date,
-            'status' => $filter_status,
         ));
 
     }
@@ -319,14 +243,12 @@ class FormApprovalController extends Controller
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
                         'approve_percentage' => $request->approve_percentage,
-                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                     ]);
                 }else{
                     EmployeeWfh::Where('id', $id)->update([
                         'level' => 1,
                         'approve_percentage' => $request->approve_percentage,
-                        'approval_remarks' => $request->approval_remarks,
                     ]);
                 }
             }
@@ -335,7 +257,6 @@ class FormApprovalController extends Controller
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
                     'approve_percentage' => $request->approve_percentage,
-                    'approval_remarks' => $request->approval_remarks,
                     'level' => 2,
                 ]);
             }
@@ -344,22 +265,14 @@ class FormApprovalController extends Controller
         }
     }
 
-    public function declineWfh(Request $request,$id){
-        EmployeeWfh::Where('id', $id)->update([
-                'status' => 'Declined',
-                'approval_remarks' => $request->approval_remarks,
-        ]);
+    public function declineWfh($id){
+        EmployeeWfh::Where('id', $id)->update(['status' => 'Declined',]);
         Alert::success('Wfh has been declined.')->persistent('Dismiss');
         return back();
     }
 
     public function form_ob_approval(Request $request)
     { 
-
-        $today = date('Y-m-d');
-        $from_date = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
-        $to_date = isset($request->to) ? $request->to : date('Y-m-d');
-
         $filter_status = isset($request->status) ? $request->status : 'Pending';
         $approver_id = auth()->user()->id;
         $obs = EmployeeOb::with('approver.approver_info','user')
@@ -367,8 +280,6 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status',$filter_status)
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->orderBy('created_at','DESC')
                                 ->get();
 
@@ -377,24 +288,18 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Pending')
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $approved = EmployeeOb::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Approved')
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $declined = EmployeeOb::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Declined')
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         
         return view('for-approval.ob-approval',
@@ -405,14 +310,11 @@ class FormApprovalController extends Controller
             'approved' => $approved,
             'declined' => $declined,
             'approver_id' => $approver_id,
-            'from' => $from_date,
-            'to' => $to_date,
-            'status' => $filter_status,
         ));
 
     }
 
-    public function approveOb(Request $request,$id){
+    public function approveOb($id){
 
         $employee_ob = EmployeeOb::where('id', $id)
                                             ->first();
@@ -425,14 +327,12 @@ class FormApprovalController extends Controller
                     EmployeeOb::Where('id', $id)->update([
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
-                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                     ]);
 
                 }else{
                     EmployeeOb::Where('id', $id)->update([
                         'level' => 1,
-                        'approval_remarks' => $request->approval_remarks,
                     ]);
                 }
             }
@@ -440,7 +340,6 @@ class FormApprovalController extends Controller
                 EmployeeOb::Where('id', $id)->update([
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
-                    'approval_remarks' => $request->approval_remarks,
                     'level' => 2,
                 ]);
             }
@@ -449,21 +348,14 @@ class FormApprovalController extends Controller
         }
     }
 
-    public function declineOb(Request $request,$id){
-        EmployeeOb::Where('id', $id)->update([
-                    'status' => 'Declined',
-                    'approval_remarks' => $request->approval_remarks,
-        ]);
+    public function declineOb($id){
+        EmployeeOb::Where('id', $id)->update(['status' => 'Declined',]);
         Alert::success('OB has been declined.')->persistent('Dismiss');
         return back();
     }
 
     public function form_dtr_approval(Request $request)
     { 
-        $today = date('Y-m-d');
-        $from_date = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
-        $to_date = isset($request->to) ? $request->to : date('Y-m-d');
-
         $filter_status = isset($request->status) ? $request->status : 'Pending';
         $approver_id = auth()->user()->id;
         $dtrs = EmployeeDtr::with('approver.approver_info','user')
@@ -471,8 +363,6 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status',$filter_status)
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->orderBy('created_at','DESC')
                                 ->get();
 
@@ -481,24 +371,18 @@ class FormApprovalController extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Pending')
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $approved = EmployeeDtr::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Approved')
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         $declined = EmployeeDtr::with('approver.approver_info','user')
                                 ->whereHas('approver',function($q) use($approver_id) {
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status','Declined')
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
                                 ->count();
         
         return view('for-approval.dtr-approval',
@@ -509,14 +393,11 @@ class FormApprovalController extends Controller
             'approved' => $approved,
             'declined' => $declined,
             'approver_id' => $approver_id,
-            'from' => $from_date,
-            'to' => $to_date,
-            'status' => $filter_status,
         ));
 
     }
 
-    public function approveDtr(Request $request,$id){
+    public function approveDtr($id){
         $employee_dtr = EmployeeDtr::where('id', $id)->first();
         if($employee_dtr){
             $level = '';
@@ -526,13 +407,11 @@ class FormApprovalController extends Controller
                     EmployeeDtr::Where('id', $id)->update([
                         'approved_date' => date('Y-m-d'),
                         'status' => 'Approved',
-                        'approval_remarks' => $request->approval_remarks,
                         'level' => 1,
                     ]);
                 }else{
                     EmployeeDtr::Where('id', $id)->update([
-                        'approval_remarks' => $request->approval_remarks,
-                        'level' => 1
+                        'level' => 1,
                     ]);
                 }
             }
@@ -540,7 +419,6 @@ class FormApprovalController extends Controller
                 EmployeeDtr::Where('id', $id)->update([
                     'approved_date' => date('Y-m-d'),
                     'status' => 'Approved',
-                    'approval_remarks' => $request->approval_remarks,
                     'level' => 2,
                 ]);
             }
@@ -549,11 +427,8 @@ class FormApprovalController extends Controller
         }
     }
 
-    public function declineDtr(Request $request,$id){
-        EmployeeDtr::Where('id', $id)->update([
-                        'status' => 'Declined',
-                        'approval_remarks' => $request->approval_remarks,
-                    ]);
+    public function declineDtr($id){
+        EmployeeDtr::Where('id', $id)->update(['status' => 'Declined',]);
         Alert::success('DTR has been declined.')->persistent('Dismiss');
         return back();
     }

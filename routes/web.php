@@ -11,7 +11,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-use App\HikAttLog2;
+
 
 Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
@@ -47,17 +47,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('new-leave','EmployeeLeaveController@new');
     Route::post('edit-leave/{id}', 'EmployeeLeaveController@edit_leave');
     Route::get('disable-leave/{id}', 'EmployeeLeaveController@disable_leave');
-    Route::post('request-to-cancel-leave/{id}', 'EmployeeLeaveController@request_to_cancel');
-    Route::get('void-to-cancel-leave/{id}', 'EmployeeLeaveController@void_request_to_cancel');
-    Route::get('approve-request-to-cancel-leave/{id}', 'EmployeeLeaveController@approve_request_to_cancel');
-    Route::get('decline-request-to-cancel-leave/{id}', 'EmployeeLeaveController@decline_request_to_cancel');
 
     //Overtime
     Route::get('overtime','EmployeeOvertimeController@overtime');
     Route::post('new-overtime','EmployeeOvertimeController@new');
     Route::post('edit-overtime/{id}', 'EmployeeOvertimeController@edit_overtime');
     Route::get('disable-overtime/{id}', 'EmployeeOvertimeController@disable_overtime');    
-    Route::get('check-valid-overtime', 'EmployeeOvertimeController@checkValidOvertime');    
 
     //Work-from-home
     Route::get('work-from-home', 'EmployeeWfhController@wfh');
@@ -79,25 +74,25 @@ Route::group(['middleware' => 'auth'], function () {
 
     //FOR APPROVAL
     Route::get('for-leave','FormApprovalController@form_leave_approval');
-    Route::post('approve-leave/{id}','FormApprovalController@approveLeave');
-    Route::post('decline-leave/{id}','FormApprovalController@declineLeave');
+    Route::get('approve-leave/{id}','FormApprovalController@approveLeave');
+    Route::get('decline-leave/{id}','FormApprovalController@declineLeave');
 
     Route::get('for-overtime','FormApprovalController@form_overtime_approval');
     Route::post('approve-ot-hrs/{employee_overtime}','FormApprovalController@approveOvertime');
-    Route::post('decline-overtime/{id}','FormApprovalController@declineOvertime');
+    Route::get('decline-overtime/{id}','FormApprovalController@declineOvertime');
 
     Route::get('for-work-from-home','FormApprovalController@form_wfh_approval');
     // Route::get('approve-wfh/{id}','FormApprovalController@approveWfh');
-    Route::post('decline-wfh/{id}','FormApprovalController@declineWfh');
+    Route::get('decline-wfh/{id}','FormApprovalController@declineWfh');
     Route::post('approve-wfh-percentage/{id}','FormApprovalController@approveWfh');
     
     Route::get('for-official-business','FormApprovalController@form_ob_approval');
-    Route::post('approve-ob/{id}','FormApprovalController@approveOb');
-    Route::post('decline-ob/{id}','FormApprovalController@declineOb');
+    Route::get('approve-ob/{id}','FormApprovalController@approveOb');
+    Route::get('decline-ob/{id}','FormApprovalController@declineOb');
 
     Route::get('for-dtr-correction','FormApprovalController@form_dtr_approval');
-    Route::post('approve-dtr/{id}','FormApprovalController@approveDtr');
-    Route::post('decline-dtr/{id}','FormApprovalController@declineDtr');
+    Route::get('approve-dtr/{id}','FormApprovalController@approveDtr');
+    Route::get('decline-dtr/{id}','FormApprovalController@declineDtr');
 
     //employees
     Route::get('employees', 'EmployeeController@view');
@@ -165,15 +160,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('update-biocode', 'EmployeeController@updatebiocode');
     Route::get('biologs-employee', 'EmployeeController@employee_attendance');
     Route::get('bio-per-location', 'EmployeeController@biologs_per_location');
-    Route::get('bio-per-location-hik', 'EmployeeController@biologs_per_location_hik');
-    Route::get('bio-per-location-export', 'EmployeeController@biologs_per_location_export');
     Route::get('pmi-local', 'EmployeeController@localbio');
     Route::get('biometrics-per-company', 'EmployeeController@perCompany');
     Route::get('sync-biometrics','EmployeeController@sync');
     Route::get('sync-biometric-per-employee','EmployeeController@sync_per_employee');
-    Route::get('sync-biometric-per-employee-hik','EmployeeController@sync_per_employee_hik');
 
-    Route::get('sync-per-employee','EmployeeController@sync_per_employee');
     Route::get('sync-hik-att-logs','EmployeeController@sync_hik');
 
     //Payroll
@@ -191,8 +182,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('department', 'DepartmentController@department_index');
     Route::get('enable-department/{id}', 'DepartmentController@enable_department');
     Route::get('disable-department/{id}', 'DepartmentController@disable_department');
-    Route::get('edit-deparment/{id}', 'DepartmentController@edit_department');
-    Route::post('update-department/{id}', 'DepartmentController@update_department');
 
     // Loan Type
     Route::get('loan-type', 'LoanTypeController@loanTypes_index');
@@ -250,19 +239,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('employee-leave-credits', 'LeaveCreditsController@index');
     Route::post('new-employee-leave-credit', 'LeaveCreditsController@store');
 
-    //Employee Leave Balances
-    Route::get('employee-leave-balances', 'LeaveBalancesController@index');
-
     // Employee Earned Leaves
     Route::get('employee-earned-leaves', 'EmployeeEarnedLeaveController@index');
-    Route::get('manual-employee-earned-leaves', 'EmployeeEarnedLeaveController@manual');
-    Route::post('manual-employee-earned-leaves-store', 'EmployeeEarnedLeaveController@manual_store');
-    Route::get('manual-employee-earned-leaves-delete', 'EmployeeEarnedLeaveController@manual_delete');
 
     //User
     Route::get('/users','UserController@index');
     Route::get('/edit-user-role/{user}','UserController@editUserRole');
-    Route::get('/change-password/{user}','UserController@changePassword');
     Route::post('/update-user-role/{user}','UserController@updateUserRole');
     Route::post('/update-user-password/{user}','UserController@updateUserPassword');
 
@@ -273,21 +255,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/hr-approver-setting','HrApproverSettingController@index');
     Route::post('/save-hr-approver-setting','HrApproverSettingController@store');
     Route::get('/remove-hr-approver/{id}','HrApproverSettingController@remove'); 
-
-    //Timekeeping Dashboard
-    
-
-    Route::get('/timekeeping-dashboard','TimekeepingDashboardController@index');
-    Route::get('/reset-leave/{id}','TimekeepingDashboardController@reset_leave');
-    Route::get('/reset-ob/{id}','TimekeepingDashboardController@reset_ob');
-    Route::get('/reset-wfh/{id}','TimekeepingDashboardController@reset_wfh');
-    Route::get('/reset-ot/{id}','TimekeepingDashboardController@reset_ot');
-    Route::get('/reset-dtr/{id}','TimekeepingDashboardController@reset_dtr');
 });
 Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');
-Route::post('upload-employee-rate', 'EmployeeController@reverseRate');
-
-Route::get('hik-logs', function(){
-    return HikAttLog2::orderBy('authDate')->get()->take(5);
-});

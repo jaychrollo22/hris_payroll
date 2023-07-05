@@ -8,7 +8,7 @@
               <div class="card-body">
                 <div class="media">                
                   <div class="media-body">
-                    <h4 class="mb-4">For Approval</h4>
+                    <h4 class="mb-4">For Appoval</h4>
                     <a href="/for-leave?status=Pending" class="h2 card-text text-white">{{$for_approval}}</a>
                   </div>
                 </div>
@@ -39,61 +39,12 @@
               </div>
             </div>
           </div>            
-          
-          <div class='col-lg-2 mt-2'>
-            <div class="card card-light-blue">
-              <div class="card-body">
-                <div class="media">                
-                  <div class="media-body">
-                    <h4 class="mb-4">Request to Cancel</h4>
-                    <a href="/for-leave?request_to_cancel=1" class="h2 card-text text-white">{{$request_to_cancel}}</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>  
-      
-
         </div>
         <div class='row'>
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">For Approval Leave</h4>
-
-                <form method='get' onsubmit='show();' enctype="multipart/form-data">
-                  <div class=row>
-                    <div class='col-md-2'>
-                      <div class="form-group">
-                        <label class="text-right">From</label>
-                        <input type="date" value='{{$from}}' class="form-control form-control-sm" name="from"
-                            max='{{ date('Y-m-d') }}' onchange='get_min(this.value);' required />
-                      </div>
-                    </div>
-                    <div class='col-md-2'>
-                      <div class="form-group">
-                        <label class="text-right">To</label>
-                        <input type="date" value='{{$to}}' class="form-control form-control-sm" id='to' name="to" required />
-                      </div>
-                    </div>
-                    <div class='col-md-2 mr-2'>
-                      <div class="form-group">
-                        <label class="text-right">Status</label>
-                        <select data-placeholder="Select Status" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='status' required>
-                          <option value="">-- Select Status --</option>
-                          <option value="Approved" @if ('Approved' == $status) selected @endif>Approved</option>
-                          <option value="Pending" @if ('Pending' == $status) selected @endif>Pending</option>
-                          <option value="Cancelled" @if ('Cancelled' == $status) selected @endif>Cancelled</option>
-                          <option value="Declined" @if ('Declined' == $status) selected @endif>Declined</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class='col-md-2'>
-                      <button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
-                    </div>
-                  </div>
-                </form>
-                
                 <div class="table-responsive">
                   <table class="table table-hover table-bordered tablewithSearch">
                     <thead>
@@ -101,9 +52,6 @@
                         <th>Employee Name</th>
                         <th>Form Type</th>
                         <th>Date</th>
-                        <th>Count</th>
-                        <th>With Pay </th>
-                        <th>Half Day </th>
                         <th>Status</th> 
                         <th>Approvers</th> 
                         <th>Reason/Remarks</th> 
@@ -114,32 +62,16 @@
                     <tbody> 
                       @foreach ($leaves as $form_approval)
                       <tr>
-                        <td>
-                            <strong>{{$form_approval->user->employee->last_name . ' ' . $form_approval->user->employee->first_name }}</strong> <br>
-                            <small>Position : {{$form_approval->user->employee->position}}</small> <br>
-                            <small>Location : {{$form_approval->user->employee->location}}</small> <br>
-                            <small>Department : {{ $form_approval->user->employee->department ? $form_approval->user->employee->department->name : ""}}</small> 
-                        </td>
+                        <td>{{$form_approval->user->name}}</td>
                         <td>{{$form_approval->leave->leave_type}}</td>
                         <td>{{date('M d, Y', strtotime($form_approval->date_from))}} - {{date('M d, Y', strtotime($form_approval->date_to))}}</td>
-                        <td>{{get_count_days($form_approval->schedule,$form_approval->date_from,$form_approval->date_to,$form_approval->halfday)}}</td>
-                        @if($form_approval->withpay == 1)   
-                          <td>Yes</td>
-                        @else
-                          <td>No</td>
-                        @endif  
-                        @if($form_approval->halfday == 1)   
-                          <td>Yes</td>
-                        @else
-                          <td></td>
-                        @endif  
                         <td>
                           @if ($form_approval->status == 'Pending')
                             <label class="badge badge-warning">{{ $form_approval->status }}</label>
                           @elseif($form_approval->status == 'Approved')
-                            <label class="badge badge-success" title="{{$form_approval->approval_remarks}}">{{ $form_approval->status }}</label>
-                          @elseif($form_approval->status == 'Declined' || $form_approval->status == 'Cancelled')
-                            <label class="badge badge-danger" title="{{$form_approval->approval_remarks}}">{{ $form_approval->status }}</label>
+                            <label class="badge badge-success">{{ $form_approval->status }}</label>
+                          @elseif($form_approval->status == 'Rejected' || $form_approval->status == 'Cancelled')
+                            <label class="badge badge-danger">{{ $form_approval->status }}</label>
                           @endif  
                         </td>
                         <td id="tdStatus{{ $form_approval->id }}">
@@ -171,30 +103,18 @@
                         </td>
                         <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
 
-                          @php
-                              $approver_last = '';
-                          @endphp
                           @foreach($form_approval->approver as $k => $approver)
                             @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'Pending')
-                              <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#leave-approved-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Approve">
+                              <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" onclick="approve({{ $form_approval->id }})">
                                 <i class="ti-check btn-icon-prepend"></i>                                                    
                               </button>
-                              <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" data-target="#leave-declined-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Decline">
+                              <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" onclick="decline({{ $form_approval->id }})">
                                 <i class="ti-close btn-icon-prepend"></i>                                                    
                               </button> 
                             @endif<br> 
-
-                            @php
-                                $approver_last = $approver->approver_id;
-                            @endphp
                           @endforeach
 
-                          @if($approver_last == $approver_id && $form_approval->request_to_cancel == '1')
-                            <button type="button" id="view{{ $form_approval->id }}" class="btn btn-warning btn-rounded btn-icon"
-                              data-target="#requestToCancelLeave{{ $form_approval->id }}" data-toggle="modal" title='Request to Cancel'>
-                              <i class="fa fa-ban"></i>
-                          @endif
-
+                          
                         </td>
                         </tr>
                       @endforeach                        
@@ -207,44 +127,85 @@
         </div>
     </div>
 </div>
+@endsection
 
-@foreach ($leaves as $leave)
-  @include('for-approval.remarks.leave_approved_remarks')
-  @include('for-approval.remarks.leave_declined_remarks')
-  @include('for-approval.request_to_cancel.leave_request_to_cancel')
-@endforeach
+@section('ForApprovalScript')
+	<script>
+		function approve(id) {
+			var element = document.getElementById('tdActionId'+id);
+			var dataID = element.getAttribute('data-id');
+			swal({
+					title: "Are you sure?",
+					text: "You want to approve this leave?",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willApprove) => {
+					if (willApprove) {
+						document.getElementById("loader").style.display = "block";
+						$.ajax({
+							url: "approve-leave/" + id,
+							method: "GET",
+							data: {
+								id: id
+							},
+							headers: {
+								'X-CSRF-TOKEN': '{{ csrf_token() }}'
+							},
+							success: function(data) {
+								document.getElementById("loader").style.display = "none";
+								swal("Leave has been Approved!", {
+									icon: "success",
+								}).then(function() {
+									location.reload();
+								});
+							}
+						})
 
-@php
-function get_count_days($data,$date_from,$date_to,$halfday)
- {
+					} else {
+            swal({text:"You stop the approval of leave.",icon:"success"});
+					}
+				});
+		}
+		function decline(id) {
+			var element = document.getElementById('tdActionId'+id);
+			var dataID = element.getAttribute('data-id');
+			swal({
+					title: "Are you sure?",
+					text: "You want to decline this leave?",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willDecline) => {
+					if (willDecline) {
+						document.getElementById("loader").style.display = "block";
+						$.ajax({
+							url: "decline-leave/" + id,
+							method: "GET",
+							data: {
+								id: id
+							},
+							headers: {
+								'X-CSRF-TOKEN': '{{ csrf_token() }}'
+							},
+							success: function(data) {
+								document.getElementById("loader").style.display = "none";
+								swal("Leave has been declined!", {
+									icon: "success",
+								}).then(function() {
+									location.reload();
+								});
+							}
+						})
 
-    if($date_from == $date_to){
-        $count = 1;
-    }else{
-      $data = ($data->pluck('name'))->toArray();
-      $count = 0;
-      $startTime = strtotime($date_from);
-      $endTime = strtotime($date_to);
+					} else {
+            swal({text:"You stop the approval of leave.",icon:"success"});
+					}
+				});
+		}
 
-      for ( $i = $startTime; $i <= $endTime; $i = $i + 86400 ) {
-        $thisDate = date( 'l', $i ); // 2010-05-01, 2010-05-02, etc
-        if(in_array($thisDate,$data)){
-            $count= $count+1;
-        }
-      }
-    }
-
-    if($count == 1 && $halfday == 1){
-      return '0.5';
-    }else{
-      return($count);
-    }
-    
- } 
-@endphp  
-
-
-
-
+	</script>
 @endsection
 

@@ -28,24 +28,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $schedules = [];
+
         $attendance_controller = new AttendanceController;
         $sevendays = date('Y-m-d',strtotime("-7 days"));
-        if(auth()->user()->employee){
-            if(auth()->user()->employee->employee_number){
-                $attendance_now = $attendance_controller->get_attendances(date('Y-m-d'),date('Y-m-d'),auth()->user()->employee->employee_number)->first();
-                $attendances = $attendance_controller->get_attendances($sevendays,date('Y-m-d',strtotime("-1 day")),auth()->user()->employee->employee_number);
-            }else{
-                $attendance_now = null;
-                $attendances = null;
-            }
-
-            $schedules = ScheduleData::where('schedule_id',auth()->user()->employee->schedule_id)->get();
-        }else{
-            $attendance_now = null;
-            $attendances = null;
-        }
-        
+        $attendance_now = $attendance_controller->get_attendances(date('Y-m-d'),date('Y-m-d'),auth()->user()->employee->employee_number)->first();
+        $attendances = $attendance_controller->get_attendances($sevendays,date('Y-m-d',strtotime("-1 day")),auth()->user()->employee->employee_number);
         // dd($attendances->unique('time_in','Y-m-d'));
         $date_ranges = $attendance_controller->dateRange($sevendays,date('Y-m-d',strtotime("-1 day")));
         $handbook = Handbook::orderBy('id','desc')->first();
@@ -68,7 +55,7 @@ class HomeController extends Controller
         ->orderBy('holiday_date','asc')->get();
         // dd($holidays);
 
-        
+        $schedules = ScheduleData::where('schedule_id',auth()->user()->employee->schedule_id)->get();
 
         return view('dashboards.home',
         array(

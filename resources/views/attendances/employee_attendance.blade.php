@@ -19,7 +19,7 @@
                             <select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='employee[]' multiple required>
                                 <option value="">-- Select Employee --</option>
                                  @foreach($employees as $emp)
-                                    <option value="{{$emp->employee_number}}" @if($emp_code) @if (in_array($emp->employee_number,$emp_code)) selected @endif @endif>{{$emp->employee_number}} - {{$emp->first_name}} {{$emp->last_name}}</option>
+                                    <option value="{{$emp->employee_number}}" @if ($emp->employee_number == $emp_code) selected @endif >{{$emp->employee_number}} - {{$emp->first_name}} {{$emp->last_name}}</option>
                                  @endforeach
                               </select>
                         </div>
@@ -61,7 +61,6 @@
                                 <td>User ID</td>
                                 <td>Name</td>
                                 <td>Date</td>
-                                <td>Day</td>
                                 <td>Time In</td>
                                 <td>Time Out</td>
                                 <td>Work </td>
@@ -91,24 +90,20 @@
                         <tbody>
   
                             @foreach(array_reverse($date_range) as $date_r)
-                            @php
-                                $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
-                            @endphp
                             <tr>
                                 <td>{{$emp->employee_number}}</td>
                                 <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
-                                <td class="@if($employee_schedule) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
-                                <td>{{date('l',strtotime($date_r))}}</td>
+                                <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
                                 
                                 @php   
-                                    $overtime = '';
+                                
                                     $time_in_data = '';
                                     $time_out_data = '';
 
                                     $if_has_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($date_r)));
                                     $if_has_wfh = employeeHasWFHDetails($emp->approved_wfhs,date('Y-m-d',strtotime($date_r)));
                                     $if_has_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($date_r)));
-                                    $if_dtr_correction = '';
+                                
                                     $time_in_out = 0;
                                     $time_in = ($emp->attendances)->whereBetween('time_in',[$date_r." 00:00:00", $date_r." 23:59:59"])->first();
                                     $time_out = null;
@@ -121,21 +116,14 @@
                                     $dtr_correction_time_out = "";
                                     $dtr_correction_both = "";
                                     if($if_has_dtr){
-                                        if($if_has_dtr->time_in){
-                                            $dtr_correction_time_in = $if_has_dtr->correction == 'Time-in' ? $if_has_dtr->time_in : "";
-                                        }
-                                        if($if_has_dtr->time_out){
-                                            $dtr_correction_time_out = $if_has_dtr->correction == 'Time-out' ? $if_has_dtr->time_out : "";
-                                        }
-                                        
+                                        $dtr_correction_time_in = $if_has_dtr->correction == 'Time-in' ? $if_has_dtr->time_in : "";
+                                        $dtr_correction_time_out = $if_has_dtr->correction == 'Time-out' ? $if_has_dtr->time_out : "";
 
                                         if($if_has_dtr->correction == 'Both'){
-                                            $dtr_correction_time_in = $if_has_dtr->time_in ? $if_has_dtr->time_in : ""; 
-                                            $dtr_correction_time_out = $if_has_dtr->time_out ? $if_has_dtr->time_out : "";
+                                            $dtr_correction_time_in = $if_has_dtr->time_in;
+                                            $dtr_correction_time_out = $if_has_dtr->time_out;
                                         }
                                         $dtr_correction_both = $if_has_dtr->correction == 'Both'  ? $if_has_dtr : "";
-
-                                        $if_dtr_correction = 'DTR Correction';
                                     }
 
                                     
@@ -144,98 +132,33 @@
                                 @if($if_has_ob)
                                     @php
                                         $ob_start = new DateTime($if_has_ob->date_from); 
-                                        $ob_diff = $ob_start->diff(new DateTime($if_has_ob->date_to));
-                                        $work_diff_hours = round($ob_diff->s / 3600 + $ob_diff->i / 60 + $ob_diff->h + $ob_diff->days * 24, 2);
-                                        $work = (double) $work+$work_diff_hours;
-                                        $overtime = 0;
-                                        // if($work_diff_hours){
-                                        //     $overtime = (double) number_format(double($work_diff_hours) - $employee_schedule['working_hours'],2);
-                                        // }
+                                        $ob_diff = $ob_start->diff(new DateTime($if_has_ob->date_to)); 
                                     @endphp
-                                    <td>{{date('h:i A',strtotime($if_has_ob->date_from))}}</td>
-                                    <td>{{date('h:i A',strtotime($if_has_ob->date_to))}}</td>
+                                    <td>{{$if_has_ob->date_from}}</td>
+                                    <td>{{$if_has_ob->date_to}}</td>
                                     <td>{{ $ob_diff->h }} hrs. {{ $ob_diff->i }} mins. </td>
                                     <td></td>
                                     <td></td>
-                                    <td>
-                                        @if($overtime > .5)
-                                            {{$overtime}} hrs
-                                            @php
-                                                $overtimes = (double) $overtimes +round($overtime,2);
-                                            @endphp
-                                        @else
-                                            0 hrs
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @php
-                                        $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r))) : "";
-
-                                        if($approved_overtime_hrs){
-                                            $approved_overtimes = (double) $approved_overtimes + ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs);
-                                        }
-                                        @endphp
-                                        {{$approved_overtime_hrs ? (double) ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs) : 0 }} hrs
-                                    </td>
-                                    <td>
-                                        0 hrs
-                                    </td>
-                                    <td>
-                                        @php
-                                        $night_diff_ot = $night_diff_ot + round(night_difference(strtotime($if_has_ob->date_from),strtotime($if_has_ob->date_to)),2);
-                                        echo round(night_difference(strtotime($if_has_ob->date_from),strtotime($if_has_ob->date_to)),2)." hrs";
-                                        @endphp
-
-                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td>OB</td>
                                 @elseif($if_has_wfh)
                                     @php
                                         $wfh_start = new DateTime($if_has_wfh->date_from); 
                                         $wfh_diff = $wfh_start->diff(new DateTime($if_has_wfh->date_to)); 
-                                        $work_diff_hours = round($wfh_diff->s / 3600 + $wfh_diff->i / 60 + $wfh_diff->h + $wfh_diff->days * 24, 2);
-                                        $work = (double) $work+$work_diff_hours;
-                                        $overtime = 0;
-                                        // if($work_diff_hours && $employee_schedule['working_hours'] > 0){
-                                        //     $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
-                                        // }
-                                        
                                     @endphp
-                                    <td>{{date('h:i A',strtotime($if_has_wfh->date_from))}}</td>
-                                    <td>{{date('h:i A',strtotime($if_has_wfh->date_to))}}</td>
-                                    <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins.</td>
+                                    <td>{{$if_has_wfh->date_from}}</td>
+                                    <td>{{$if_has_wfh->date_to}}</td>
+                                    <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins. </td>
                                     <td></td>
                                     <td></td>
-                                    <td>
-                                        @if($overtime > .5)
-                                            {{$overtime}} hrs
-                                            @php
-                                                $overtimes = (double) $overtimes +round($overtime,2);
-                                            @endphp
-                                        @else
-                                            0 hrs
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @php
-                                        $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r))) : "";
-
-                                        if($approved_overtime_hrs){
-                                            $approved_overtimes = (double) $approved_overtimes + ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs);
-                                        }
-                                        @endphp
-                                        {{$approved_overtime_hrs ? (double) ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs) : 0 }} hrs
-                                    </td>
-                                    <td>
-                                        0 hrs
-                                    </td>
-                                    <td>
-                                        @php
-                                        $night_diff_ot = $night_diff_ot + round(night_difference(strtotime($if_has_wfh->date_from),strtotime($if_has_wfh->date_to)),2);
-                                        echo round(night_difference(strtotime($if_has_wfh->date_from),strtotime($if_has_wfh->date_to)),2)." hrs";
-                                        @endphp
-
-                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td>{{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : "WFH"}}</td>
                                 @else
@@ -246,9 +169,7 @@
                                             @if($dtr_correction_time_in)
                                                 {{date('h:i A',strtotime($dtr_correction_time_in))}}
                                             @else
-                                                @if($time_in)
-                                                    {{date('h:i A',strtotime($time_in->time_in))}}
-                                                @endif  
+                                                {{date('h:i A',strtotime($time_in->time_in))}}
                                             @endif  
                                         </td>
                                         {{-- Time out --}}
@@ -336,6 +257,10 @@
                                         <td></td>
                                         <td></td>
                                     @else
+                                        @php
+                                            $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
+                                        @endphp
+
                                         {{-- Working Hours --}}
                                         <td>
                                             @if($time_in || $if_has_dtr)
@@ -348,7 +273,7 @@
                                                     if($dtr_correction_time_in){
                                                         $employee_time_in = $dtr_correction_time_in;
                                                     }else{
-                                                        $employee_time_in = $time_in ? $time_in->time_in : "";
+                                                        $employee_time_in = $time_in->time_in;
                                                     }
 
                                                     if($dtr_correction_time_out){
@@ -363,32 +288,27 @@
                                                             $time_out_data = $time_in->time_out ? $time_in->time_out : "";
                                                         }
                                                     }
-                                                    if($employee_time_in){
-                                                        if(strtotime(date('H:i:00',strtotime($employee_time_in))) >= strtotime($time_in_from))
-                                                        {
-                                                            $time_in_data = $employee_time_in;
-                                                        }
-                                                        else
-                                                        {
-                                                            $time_in_data = date('Y-m-d ' . $time_in_from,strtotime($employee_time_in));
-                                                        }
+
+                                                    if(strtotime(date('H:i:00',strtotime($employee_time_in))) >= strtotime($time_in_from))
+                                                    {
+                                                        $time_in_data = $employee_time_in;
                                                     }
-                                                    
+                                                    else
+                                                    {
+                                                        $time_in_data = date('Y-m-d ' . $time_in_from,strtotime($employee_time_in));
+                                                    }
                                                 @endphp
                                                 @php
-                                                    if($time_in_data){
-                                                        $start_datetime = new DateTime($time_in_data); 
-                                                        if($time_out_data){
-                                                            $diff = $start_datetime->diff(new DateTime($time_out_data)); 
-                                                        }
+                                                    $start_datetime = new DateTime($time_in_data); 
+                                                    if($time_out_data){
+                                                        $diff = $start_datetime->diff(new DateTime($time_out_data)); 
                                                     }
                                                 @endphp
-                                                @if($time_in_data && $time_out_data)
+                                                @if($time_out_data)
                                                     {{ $diff->h }} hrs. {{ $diff->i }} mins. 
                                                     @php
                                                         $work_diff_hours = round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);
                                                         $work = (double) $work+$work_diff_hours;
-                                                        $overtime = (double) number_format($work_diff_hours,2);
                                                     @endphp
                                                 @endif
                                             @endif
@@ -400,40 +320,22 @@
                                                 $time_in_data_full =  date('Y-m-d h:i:s',strtotime($time_in_data));
                                                 $time_in_data_date =  date('Y-m-d',strtotime($time_in_data));
                                                 $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
-                                                $schedule_time_in_with_grace =  date('Y-m-d h:15:s',strtotime($schedule_time_in));
                                                 $schedule_time_in =  date('Y-m-d h:i:s',strtotime($schedule_time_in));
                                                 $schedule_time_in_final =  new DateTime($schedule_time_in);
                                                 $late_diff_hours = 0;
 
-                                                if(date('Y-m-d h:i',strtotime($time_in_data)) > date('Y-m-d h:i',strtotime($schedule_time_in_with_grace))){
-
-                                                    //IF Attendance Exceed in Grace Period
-                                                    $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
-                                                    $new_time_in_within_grace = date('Y-m-d h:i:s',strtotime($new_schedule_time_in));
-                                                    $new_time_in_within_grace = new DateTime($new_time_in_within_grace);
-                                                    $late_diff = $new_time_in_within_grace->diff(new DateTime($time_in_data_full));
-                                                    $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);    
-                                                    
-                                                    if($dtr_correction_time_out){
-                                                        $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($time_in_data)))/3600);
-                                                    }else{
-                                                        $working_minutes = (double) (((strtotime($time_out_data) - (double) strtotime($time_in_data)))/3600);
-                                                    }
-
-                                                }else{
-                                                    //IF Attendance is Within Grace Period
-                                                    $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
-                                                    $new_time_in_within_grace = date('Y-m-d h:i:s',strtotime($new_schedule_time_in));
-                                                    if($dtr_correction_time_out){
-                                                        $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($new_time_in_within_grace)))/3600);
-                                                    }else{
-                                                        $working_minutes = (double) (((strtotime($time_out_data) - (double) strtotime($new_time_in_within_grace)))/3600);
-                                                    }
+                                                if(date('Y-m-d h:i:s',strtotime($time_in_data)) > date('Y-m-d h:i:s',strtotime($schedule_time_in))){
+                                                    $late_diff = $schedule_time_in_final->diff(new DateTime($time_in_data_full));
+                                                    $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);                                        
                                                 }
 
                                                 $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("Y-m-d ".$employee_schedule['time_in_to']))))/60;
                                                 
-                                                
+                                                if($dtr_correction_time_out){
+                                                    $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($time_in_data)))/3600);
+                                                }else{
+                                                    $working_minutes = (double) (((strtotime($time_out_data) - (double) strtotime($time_in_data)))/3600);
+                                                }
                                             
                                                 $overtime = (double) number_format($working_minutes - $employee_schedule['working_hours'],2);
                                                 if($late > 0)
@@ -446,14 +348,10 @@
 
                                                 //Undertime
                                                 $undertime_hrs = 0;
-                                                $undertime = (double) number_format($employee_schedule['working_hours'] - $working_minutes,2);
-                                                if($undertime > 0){
-                                                    if($late_diff_hours > 0){
-                                                        $undertime_hrs = number_format(($undertime*60*-1)/60,2) - $late_diff_hours;
-                                                    }else{
-                                                        $undertime_hrs = $undertime;
-                                                    }
-                                                }   
+                                                $undertime = (double) number_format($working_minutes - $employee_schedule['working_hours'],2);
+                                                if($undertime < 0){
+                                                    $undertime_hrs = number_format(($undertime*60*-1)/60,2) - $late_diff_hours;
+                                                }
 
                                             @endphp
 
@@ -486,7 +384,7 @@
                                             </td>
                                             <td>
                                                     @php
-                                                    $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r))) : "";
+                                                    $approved_overtime_hrs = employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r)));
 
                                                     if($approved_overtime_hrs){
                                                         $approved_overtimes = (double) $approved_overtimes + ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs);
@@ -515,46 +413,10 @@
                                         @else
                                             <td></td>
                                             <td></td>
-                                            @if($time_in || $if_has_dtr)
-                                                <td>
-                                                    @if($overtime > .5)
-                                                        {{$overtime}} hrs
-                                                        @php
-                                                            $overtimes = (double) $overtimes +round($overtime,2);
-                                                        @endphp
-                                                    @else
-                                                        0 hrs
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @php
-                                                    $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r))) : "";
-            
-                                                    if($approved_overtime_hrs){
-                                                        $approved_overtimes = (double) $approved_overtimes + ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs);
-                                                    }
-                                                    @endphp
-                                                    {{$approved_overtime_hrs ? (double) ($approved_overtime_hrs->ot_approved_hrs - $approved_overtime_hrs->break_hrs) : 0 }} hrs
-                                                </td>
-
-                                                <td>
-                                                    0 hrs
-                                                </td>
-                                                <td>
-                                                    @php
-                                                    $night_diff_ot = $night_diff_ot + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
-                                                    echo round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2)." hrs";
-                                                    @endphp
-    
-                                                </td>
-
-                                            @else
-                                                <td></td>
-                                                <td></td>
-                                            
-                                                <td></td>
-                                                <td></td>
-                                            @endif
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                             <td></td>
                                         @endif
                                     @endif
@@ -562,10 +424,13 @@
                                     {{-- Remarks --}}
                                     <td>
                                         @if($time_in == null)
-                                            @if($employee_schedule)
+                                            @if((date('l',strtotime($date_r)) == "Saturday") || (date('l',strtotime($date_r)) == "Sunday"))
+                                                
+                                            @else
                                                 @php 
                                                     $is_absent = '';
                                                     $if_leave = '';
+                                                    $if_dtr_correction = '';
                                                     $if_attendance_holiday = '';
                                                     $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
                                                     $if_attendance_holiday_status = '';
@@ -573,26 +438,19 @@
                                                         $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
                                                         if($if_attendance_holiday){
 
-                                                            $check_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)),$employee_schedule);
-                                                            $check_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                                            $check_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                                            $check_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                            $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                            $if_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                            $if_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                            $if_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
 
-                                                            if($check_leave || $check_wfh || $check_ob || $check_dtr){
+                                                            if($if_leave || $if_wfh || $if_ob || $if_dtr){
                                                                 $if_attendance_holiday_status = 'With-Pay';
-                                                                if($check_leave){
-                                                                    if($check_leave == 'SL Without-Pay' || $check_leave == 'VL Without-Pay'){
-                                                                        $if_attendance_holiday_status = 'Without-Pay';
-                                                                    }else{
-                                                                        $if_attendance_holiday_status = 'With-Pay';
-                                                                    }
-                                                                }
                                                             }else{
                                                                 $if_attendance_holiday_status = checkHasAttendanceHolidayStatus($if_attendance_holiday, $emp->employee_number);
                                                             }
                                                         }
                                                     }else{
-                                                        $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
+                                                        $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)));
                                                         if(empty($if_leave)){
                                                             if(empty($if_has_dtr)){
                                                                 if($dtr_correction_time_out == null){
@@ -600,7 +458,9 @@
                                                                         $is_absent = 'Absent';
                                                                     }
                                                                 }
-                                                            }
+                                                            }else{
+                                                                $if_dtr_correction = 'DTR Correction';
+                                                            } 
                                                         } 
                                                     }
                                                         
@@ -616,11 +476,7 @@
                                                 if($time_out_data == null){
                                                     $is_absent = 'Absent';
                                                 }
-                                                
-                                                $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
-
                                             @endphp  
-                                            {{$if_leave}}
                                             {{$is_absent}}
                                         @endif
                                     </td>
@@ -628,7 +484,7 @@
                             </tr>
                             @endforeach
                             <tr>
-                                <td colspan='6'>Total</td>
+                                <td colspan='5'>Total</td>
                                 <td >{{$work}} hrs</td>
                                 <td >{{$lates}} hrs</td>
                                 <td >{{$undertimes}} hrs </td>

@@ -106,9 +106,6 @@
                                 @if(auth()->user()->id == '353' || auth()->user()->id == '1')
                                     <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployee" title="Upload Employees"><i class="ti-arrow-up btn-icon-prepend"></i></button>
                                 @endif
-                                @if(auth()->user()->id == '1')
-                                    <button type="button" class="btn btn-outline-primary btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployeeRevertRate" title="Upload Rate Employees"><i class="ti-arrow-up btn-icon-prepend"></i></button>
-                                @endif
                             @endif
                             @if (checkUserPrivilege('employees_export',auth()->user()->id) == 'yes')
                                 <a href="/employees-export?company={{$company}}&department={{$department}}" class="btn btn-outline-danger btn-icon-text btn-sm text-center float-right" title="Export OTPMS"><i class="ti-arrow-down btn-icon-prepend"></i></a>
@@ -169,8 +166,8 @@
                             <table class="table table-hover table-bordered" id="datatableEmployee">
                                 <thead>
                                     <tr>
+                                        {{-- <th>Action</th> --}}
                                         <th>Biometric Code</th>
-                                        <th>User ID</th>
                                         <th>Employee</th>
                                         <th>Company</th>
                                         <th>Department</th>
@@ -182,7 +179,6 @@
                                 <tbody>
                                     @foreach($employees as $employee)
                                     <tr>
-                                        
                                         <td>
                                             @if (checkUserPrivilege('employees_view',auth()->user()->id) == 'yes')
                                                 <a href="/account-setting-hr/{{$employee->user_id}}" class="text-success btn-sm text-center">
@@ -191,7 +187,6 @@
                                             @endif
                                             {{$employee->employee_number}}
                                         </td>
-                                        <td>{{$employee->user_id}} </td>
                                         <td>
                                             <small><img class="rounded-circle" style='width:34px;height:34px;' src='{{URL::asset($employee->avatar)}}' onerror="this.src='{{URL::asset('/images/no_image.png')}}';"></small>
                                             {{$employee->last_name}}, {{$employee->first_name}}  </small>
@@ -216,7 +211,6 @@
         </div>
     </div>
 </div>
-@include('employees.updateEmployeeRate')
 @include('employees.uploadEmployee')
 @include('employees.newEmployee')
 {{-- @include('employees.capture_image') --}}

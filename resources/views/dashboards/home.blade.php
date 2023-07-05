@@ -17,7 +17,7 @@
           <div class="row">
             <div class="col-md-10  transparent">
                 <div class="row">
-                    <div class="col-md-4 mb-4 transparent">
+                    <div class="col-md-4 mb-4  stretch-card transparent">
                         <div class="card">
                           <div class="card-body">
                             <h3 class="card-title">{{date('M d, Y')}}</h3>
@@ -27,10 +27,11 @@
                                   <p class="card-text">Time In : 
                                     @if($attendance_now != null){{date('h:i A',strtotime($attendance_now->time_in))}} <br>
                                       @if($attendance_now->time_out == null )
-                                          @php
-                                            $employee_schedule = employeeSchedule($schedules,$attendance_now->time_in,$schedules[0]->schedule_id)
-                                          @endphp
-                                          Estimated Out : {{$employee_schedule ? date('h:i A',strtotime($employee_schedule['time_out_from'])) : ""}}
+                                          @if (strtotime(date('H:i:00',strtotime($attendance_now->time_in))) >= strtotime("07:00:00"))
+                                            Estimated Out : {{date('h:i A', strtotime($attendance_now->time_in . " +10 hours +30 minutes"))}} 
+                                          @else
+                                            Estimated Out : 05:30 PM 
+                                          @endif
                                        @else
                                        Time Out : {{date('h:i A',strtotime($attendance_now->time_out))}}
                                        @endif
@@ -42,78 +43,9 @@
                               </div>
                           </div>
                         </div>
-                        @if(count(auth()->user()->subbordinates) > 0)
-                        <div class="card">
-                          <div class="card-body">
-                            <p class="card-title ">Subordinates <small>({{date('M d, Y')}})</small></p>
-                              <div class="table-responsive" >
-                                <table class="table table-hover table-bordered tablewithSearchonly" >
-                                  <thead>
-                                    <tr>
-                                      <th>Name</th>
-                                      <th>In</th>
-                                      <th>Out</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                      
-                                    @foreach(auth()->user()->subbordinates as $emp)
-                                    <tr>
-                                      <td>{{$emp->first_name}} {{$emp->last_name}} </td>
-                                      @php
-                                          // dd($attendance_employees);
-                                          $time_in = $attendance_employees->where('employee_code',$emp->employee_number)->first();
-                                      @endphp
-                                      <td>@if($time_in){{date('h:i a',strtotime($time_in->time_in))}}@endif</td>
-                                      <td>@if($time_in) @if($time_in->time_out){{date('h:i a',strtotime($time_in->time_out))}} @endif @endif</td>
-                                    </tr>
-                                    @endforeach
-                    
-                                  </tbody>
-                              </table>
-                              </div>
-                          </div>
-                        </div>
-                        @endif
                     </div>
-                    <div class="col-md-8">
-                      <div class="card">
-                        <div class="card-body">
-                          <h4 class="card-title">Calendar Events
-                            <span class="badge text-white m-2" style='background-color:#257e4a;'><small>Regular Holidays</small></span> 
-                            <span class="badge text-white m-2" style='background-color:#ff6600;'><small>Special Holidays</small></span> 
-                            <span class="badge text-white m-2" style='background-color:#ff0000;'><small>Birthday Celebrants</small></span>
-                          </h4>
-                          <div id="calendar" class="full-calendar"></div>
-                        </div>
-                      </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-4 ">
-                    
-                    
-                  </div>
-                </div>
-            </div>
-            <div class="col-md-2">
-              <div class='row'>
-                @if(count($announcements) > 0)
-                <div class="col-md-12">
-                  <div class="card">
-                    <div class="card-body">
-                      <h4 class="card-title">Announcements</h4>
-                      <ul class="list-star">
-                        @foreach($announcements as $announcement)
-                          <li><a href="{{url($announcement->attachment)}}" target='_blank' data-bs-toggle="tooltip" data-bs-placement="top" title="{{$announcement->user->name}}">{{$announcement->announcement_title}} </a> </li>
-                        @endforeach
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                @endif
-                @if(auth()->user()->employee->company_id=='11')
-                      <div class="col-md-12 mb-4  stretch-card transparent">
+                    @if(auth()->user()->employee->company_id=='11')
+                      <div class="col-md-4 mb-4  stretch-card transparent">
                           <div class="card">
                             <div class="card-body">
                               <h3 class="card-title">Employee Handbook</h3>
@@ -128,6 +60,70 @@
                           </div>
                       </div>
                     @endif
+                </div>
+                <div class="row">
+                  <div class="col-md-4 ">
+                    
+                    @if((auth()->user()->subbordinates->count()) != 0)
+                    <div class="card">
+                      <div class="card-body">
+                        <p class="card-title ">Subordinates <small>({{date('M d, Y')}})</small></p>
+                          <div class="table-responsive" >
+                            <table class="table table-hover table-bordered tablewithSearchonly" >
+                              <thead>
+                                <tr>
+                                  <th>Name</th>
+                                  <th>In</th>
+                                  <th>Out</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @foreach(auth()->user()->subbordinates as $emp)
+                                <tr>
+                                  <td>{{$emp->first_name}} {{$emp->last_name}} </td>
+                                  @php
+                                      // dd($attendance_employees);
+                                      $time_in = $attendance_employees->where('employee_code',$emp->employee_number)->first();
+                                  @endphp
+                                  <td>@if($time_in){{date('h:i a',strtotime($time_in->time_in))}}@endif</td>
+                                  <td>@if($time_in) @if($time_in->time_out){{date('h:i a',strtotime($time_in->time_out))}} @endif @endif</td>
+                                </tr>
+                                @endforeach
+                              </tbody>
+                          </table>
+                          </div>
+                      </div>
+                    </div>
+                    @endif
+                  </div>
+                  <div class="col-md-8">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4 class="card-title">Calendar Events
+                            <span class="badge text-white m-2" style='background-color:#257e4a;'><small>Regular Holidays</small></span> 
+                            <span class="badge text-white m-2" style='background-color:#ff6600;'><small>Special Holidays</small></span> 
+                            <span class="badge text-white m-2" style='background-color:#ff0000;'><small>Birthday Celebrants</small></span>
+                          </h4>
+                          <div id="calendar" class="full-calendar"></div>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+              <div class='row mt-2'>
+                <div class="col-md-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <h4 class="card-title">Announcements</h4>
+                      <ul class="list-star">
+                        @foreach($announcements as $announcement)
+                          <li><a href="{{url($announcement->attachment)}}" target='_blank' data-bs-toggle="tooltip" data-bs-placement="top" title="{{$announcement->user->name}}">{{$announcement->announcement_title}} </a> </li>
+                        @endforeach
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>    

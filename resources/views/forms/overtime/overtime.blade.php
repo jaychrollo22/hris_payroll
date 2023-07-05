@@ -18,15 +18,15 @@
           <div class='col-lg-2'>
             <div class="card card-light-danger">
               <div class="card-body">
-                <div class="media">
+                <div class="media">                
                   <div class="media-body">
-                    <h4 class="mb-4">Declined/Cancelled</h4>
-                    <h2 class="card-text">{{($overtimes->where('status','Cancelled'))->count() + ($overtimes->where('status','Declined'))->count()}}</h2>
+                    <h4 class="mb-4">Denied/Cancelled</h4>
+                    <h2 class="card-text">{{($overtimes->where('status','Cancelled'))->count()}}</h2>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </div> 
           <div class='col-lg-2'>
             <div class="card text-success">
               <div class="card-body">
@@ -72,19 +72,8 @@
                       <tr>
                         <td> {{ date('M. d, Y ', strtotime($overtime->created_at)) }}</td>
                         <td> {{ date('M. d, Y ', strtotime($overtime->ot_date)) }}</td>
-                        <td> {{ date('M. d, Y h:i A', strtotime($overtime->start_time)) }} - {{ date('M. d, Y h:i A', strtotime($overtime->end_time)) }}</td>
-                        <td> 
-                          @php
-                            $startTime = new DateTime($overtime->start_time);
-                            $endTime = new DateTime($overtime->end_time);
-
-                            // Calculate the time difference
-                            $timeDifference = $endTime->diff($startTime);
-                            // Convert the time difference to decimal hours
-                            $total = ($timeDifference->days * 24) + $timeDifference->h + ($timeDifference->i / 60);
-                          @endphp
-                          {{ number_format($total,2)}}
-                        </td>
+                        <td> {{ date('h:i A', strtotime($overtime->start_time)) }} - {{ date('h:i A', strtotime($overtime->end_time)) }}</td>
+                        <td> {{ number_format((strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600,2)}}</td>
                         <td> {{$overtime->break_hrs}}</td>
                         <td> {{$overtime->ot_approved_hrs}}</td>
                         <td>{{ $overtime->remarks }}</td>
@@ -98,29 +87,25 @@
                           @endif                        
                         </td>
                         <td>
-                          @if(count($overtime->approver) > 0)
-                            @foreach($overtime->approver as $approver)
-                              @if($overtime->level >= $approver->level)
-                                @if ($overtime->level == 0 && $overtime->status == 'Declined')
-                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                                @elseif ($overtime->level == 1 && $overtime->status == 'Declined')
-                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                                @else
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
-                                @endif
+                          @foreach($overtime->approver as $approver)
+                            @if($overtime->level >= $approver->level)
+                              @if ($overtime->level == 0 && $overtime->status == 'Declined')
+                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @elseif ($overtime->level == 1 && $overtime->status == 'Declined')
+                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
                               @else
-                                @if ($overtime->status == 'Declined')
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                                @elseif ($overtime->status == 'Approved')
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
-                                @else
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
-                                @endif
-                              @endif<br>
-                            @endforeach
-                          @else
-                            <label class="badge badge-danger mt-1">No Approver</label>
-                          @endif
+                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                              @endif
+                            @else
+                              @if ($overtime->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @elseif ($overtime->status == 'Approved')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                              @endif
+                            @endif<br>
+                          @endforeach
                         </td>
 
                         <td id="tdActionId{{ $overtime->id }}" data-id="{{ $overtime->id }}">

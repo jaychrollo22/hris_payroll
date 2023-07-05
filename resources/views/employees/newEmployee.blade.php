@@ -135,7 +135,7 @@
                                 Department
                                 <select data-placeholder="Department" class="form-control form-control-sm js-example-basic-single " style='width:100%;' name='department' required>
                                     <option value="">--Select Department--</option>
-                                    <option value="0">N/A</option>
+                                    <option value="N/A">N/A</option>
                                     @foreach($departments as $department)
                                       <option value="{{$department->id}}">{{$department->code}} - {{$department->name}}</option>
                                     @endforeach
@@ -156,7 +156,7 @@
                                     <option value="">--Select Project--</option>
                                     <option value="N/A">N/A</option>
                                     @foreach($projects as $project)
-                                      <option value="{{$project->project_id}}">{{$project->project_id . '-' . $project->project_title}}</option>
+                                      <option value="{{$project->project_id}}">{{$project->project_id}}</option>
                                     @endforeach
                                 </select>
                               </div>
@@ -260,7 +260,7 @@
                                 <div class='row'> 
                                     <div class='col-md-6'>
                                       Monthly Rate
-                                      <input type="number" name="rate" step="any" class='form-control form-control-sm required' placeholder="Monthly Rate"/>
+                                      <input type="number" name="rate" class='form-control form-control-sm required' placeholder="Monthly Rate"/>
                                     </div>
                                     <div class='col-md-6'>
                                       Work Description

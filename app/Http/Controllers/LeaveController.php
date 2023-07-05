@@ -41,7 +41,6 @@ class LeaveController extends Controller
     public function leave_report(Request $request)
     {   
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
-
         $companies = Company::whereHas('employee_has_company')
                                 ->whereIn('id',$allowed_companies)
                                 ->get();

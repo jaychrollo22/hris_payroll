@@ -21,15 +21,12 @@
           @endforeach
           </div>
         </div>
-        <div id="appOB">
-
-        
           <div class="form-group row">
             <div class='align-self-center col-md-2 text-right'>
               Date
             </div>
             <div class='col-md-4'>
-              <input type="date" name='applied_date' class="form-control" v-model="applied_date" @change="validateDates" required>
+              <input type="date" name='applied_date' class="form-control" required>
             </div>
           </div>
           <div class="form-group row">
@@ -37,13 +34,13 @@
               Time in
             </div>
             <div class='col-md-4'>
-              <input type="datetime-local" name='date_from' class="form-control" v-model="date_from" :min="min_date" :max="ob_max_date" @change="validateDates" required>
+              <input type="time" name='date_from' class="form-control" required>
             </div>
             <div class='align-self-center col-md-2 text-right'>
                Time out
             </div>
             <div class='col-md-4'>
-              <input type="datetime-local" name='date_to' class="form-control" v-model="date_to" :min="date_from" :max="max_date" @change="validateDates" required>
+              <input type="time" name='date_to' class="form-control" required>
             </div>
           </div>
           <div class="form-group row">
@@ -78,7 +75,6 @@
               <input type="file" name="attachment" class="form-control"  placeholder="Upload Supporting Documents" multiple>
             </div>
           </div>
-        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -88,31 +84,3 @@
     </div>
   </div>
 </div>
-
-
-<script>
-  var app = new Vue({
-      el: '#appOB',
-      data() {
-        return {
-          date_from: '',
-          date_to: '',
-          applied_date: '',
-          ob_max_date: '',
-          min_date: '',
-          max_date: '',
-        };
-      },
-      methods: {
-        validateDates() {
-          if (this.applied_date) {
-            const obDate = new Date(this.applied_date);
-            obDate.setDate(obDate.getDate() + 1);
-            this.min_date = this.applied_date + ' 00:00:00';
-            this.ob_max_date = this.applied_date + ' 23:00:00';
-            this.max_date = obDate.toISOString().split('T')[0] + ' 23:00:00';
-          }
-        }
-      },
-  });
-</script>

@@ -5,57 +5,24 @@ namespace App\Http\Controllers;
 use App\Leave;
 use App\Employee;
 use App\EmployeeLeaveCredit;
-use App\Company;
-use App\Department;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class LeaveCreditsController extends Controller
 {
     //
-    public function index(Request $request){
-
-        $company = isset($request->company) ? $request->company : "";
-        $department = isset($request->department) ? $request->department : "";
+    public function index(){
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
-
-        $companies = Company::whereHas('employee_has_company')
-                                ->whereIn('id',$allowed_companies)
-                                ->get();
-        $departments = [];
-        if($company){
-            $department_companies = Employee::when($company,function($q) use($company){
-                            $q->where('company_id',$company);
-                        })
-                        ->groupBy('department_id')
-                        ->pluck('department_id')
-                        ->toArray();
-
-            $departments = Department::whereIn('id',$department_companies)->where('status','1')
-                    ->orderBy('name')
-                    ->get();
-        }else{
-            $departments = Department::where('status','1')->orderBy('name')->get();
-        }
-        
 
         $leaveCredits = EmployeeLeaveCredit::all();
         $leaveTypes = Leave::all();
         $employees_selection = Employee::whereIn('company_id',$allowed_companies)->where('status','Active')->get();
 
-        
-
-        $employees = Employee::with('department','company','employee_leave_credits.leave')
+         $employees = Employee::with('department','company','employee_leave_credits.leave')
                                 ->whereIn('company_id',$allowed_companies)
                                 ->where('status','Active')
                                 ->whereHas('employee_leave_credits')
-                                ->when($company,function($q) use($company){
-                                    $q->where('company_id',$company);
-                                })
-                                ->when($department,function($q) use($department){
-                                    $q->where('department_id',$department);
-                                })
                                 ->orderBy('first_name','ASC')
                                 ->get();
 
@@ -65,10 +32,6 @@ class LeaveCreditsController extends Controller
             'leaveTypes' => $leaveTypes,
             'employees' => $employees,
             'employees_selection' => $employees_selection,
-            'companies' => $companies,
-            'departments' => $departments,
-            'company' => $company,
-            'department' => $department,
         ));
     }
 

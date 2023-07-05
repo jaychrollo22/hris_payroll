@@ -24,15 +24,12 @@
           </div>
           
         </div>
-        <div id="appDTR">
-
-       
           <div class="form-group row">
             <div class='col-md-2'>
                Date
             </div>
             <div class='col-md-4'>
-              <input type="date" name='dtr_date' class="form-control" v-model="dtr_date" @change="validateDates" required>
+              <input type="date" name='dtr_date' class="form-control" required>
             </div>
             <div class='col-md-2'>
               DTR Type
@@ -50,13 +47,13 @@
                   Time-In
                 </div>
                 <div class='col-md-4'>
-                  <input type="datetime-local" name='time_in' id="time_in" v-model="time_in" :min="min_date" :max="dtr_max_date" @change="validateDates" class="form-control" required>
+                  <input type="time" name='time_in' id="time_in" class="form-control" required>
                 </div>
                 <div class='col-md-2'>
                   Time-out
                 </div>
                 <div class='col-md-4'>
-                  <input type="datetime-local" name='time_out' id="time_out" class="form-control" v-model="time_out" :min="time_in" :max="max_date" @change="validateDates" required>
+                  <input type="time" name='time_out' id="time_out" class="form-control" required>
                 </div>
           </div>
           <div class="form-group row">
@@ -75,42 +72,15 @@
             <div class='col-md-10'>
               <input type="file" name="attachment" class="form-control"  placeholder="Upload Supporting Documents">
             </div>
+          
           </div>
         </div>
-      </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button name="btnDtr" type="submit" class="btn btn-primary">Save</button>
+        <button name="btnDtr" type="submit" class="btn btn-primary" {{ (auth()->user()->employee->immediate_sup_data != null) ? "" : 'disabled'}}>Save</button>
       </div>
     </form>      
     </div>
   </div>
 </div>
-
-<script>
-  var app = new Vue({
-      el: '#appDTR',
-      data() {
-        return {
-          time_in: '',
-          time_out: '',
-          dtr_date: '',
-          dtr_max_date: '',
-          min_date: '',
-          max_date: '',
-        };
-      },
-      methods: {
-        validateDates() {
-          if (this.dtr_date) {
-            const obDate = new Date(this.dtr_date);
-            obDate.setDate(obDate.getDate() + 1);
-            this.min_date = this.dtr_date + ' 00:00:00';
-            this.dtr_max_date = this.dtr_date + ' 23:00:00';
-            this.max_date = obDate.toISOString().split('T')[0] + ' 23:00:00';
-          }
-        }
-      },
-  });
-</script>

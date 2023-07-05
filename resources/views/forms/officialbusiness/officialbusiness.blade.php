@@ -2,44 +2,6 @@
 @section('content')
 <div class="main-panel">
     <div class="content-wrapper">
-        <div class='row grid-margin'>
-          <div class='col-lg-2 '>
-            <div class="card card-tale">
-              <div class="card-body">
-                <div class="media">                
-                  <div class="media-body">
-                    <h4 class="mb-4">Pending</h4>
-                    <h2 class="card-text">{{($obs->where('status','Pending'))->count()}}</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> 
-          <div class='col-lg-2'>
-            <div class="card card-light-danger">
-              <div class="card-body">
-                <div class="media">
-                  <div class="media-body">
-                    <h4 class="mb-4">Declined/Cancelled</h4>
-                    <h2 class="card-text">{{($obs->where('status','Cancelled'))->count() + ($obs->where('status','Declined'))->count()}}</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class='col-lg-2'>
-            <div class="card text-success">
-              <div class="card-body">
-                <div class="media">                
-                  <div class="media-body">
-                    <h4 class="mb-4">Approved</h4>
-                    <h2 class="card-text">{{($obs->where('status','Approved'))->count()}}</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> 
-        </div>
         <div class='row'>
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
@@ -69,9 +31,9 @@
                     <tbody>
                       @foreach ($obs as $ob)
                       <tr>
-                        <td> {{ date('M. d, Y', strtotime($ob->created_at)) }} </td>
-                        <td> {{ date('M. d, Y', strtotime($ob->applied_date)) }} </td>
-                        <td> {{ date('M. d, Y h:i A', strtotime($ob->date_from)) }} - {{ date('M. d, Y h:i A', strtotime($ob->date_to)) }}  </td>
+                        <td> {{ $ob->created_at }} </td>
+                        <td> {{ date('d/m/Y', strtotime($ob->applied_date)) }} </td>
+                        <td> {{ date('H:i', strtotime($ob->date_from)) }} - {{ date('H:i', strtotime($ob->date_to)) }}  </td>
                         <td> {{$ob->destination}}</td>
                         <td> {{$ob->persontosee}}</td>
                         <td> 
@@ -89,29 +51,25 @@
                           @endif                        
                         </td>
                         <td id="tdStatus{{ $ob->id }}">
-                          @if(count($ob->approver) > 0)
-                            @foreach($ob->approver as $approver)
-                              @if($ob->level >= $approver->level)
-                                @if ($ob->level == 0 && $ob->status == 'Declined')
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                                @elseif ($ob->level == 1 && $ob->status == 'Declined')
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                                @else
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
-                                @endif
+                          @foreach($ob->approver as $approver)
+                            @if($ob->level >= $approver->level)
+                              @if ($ob->level == 0 && $ob->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @elseif ($ob->level == 1 && $ob->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
                               @else
-                                @if ($ob->status == 'Declined')
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                                @elseif ($ob->status == 'Approved')
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
-                                @else
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
-                                @endif
-                              @endif<br>
-                            @endforeach
-                          @else
-                            <label class="badge badge-danger mt-1">No Approver</label>
-                          @endif
+                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                              @endif
+                            @else
+                              @if ($ob->status == 'Declined')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                              @elseif ($ob->status == 'Approved')
+                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                              @else
+                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                              @endif
+                            @endif<br>
+                          @endforeach
                       </td>
                         
                         <td id="tdActionId{{ $ob->id }}" data-id="{{ $ob->id }}">
@@ -160,18 +118,18 @@
                 </div>
               </div>
             </div>
+            @include('forms.officialbusiness.apply_ob')
           </div>
         </div>
     </div>
 </div>
-
 @foreach ($obs as $ob)
   @include('forms.officialbusiness.edit_ob')
+@endforeach  
+@foreach ($obs as $ob)
   @include('forms.officialbusiness.view_ob')
 @endforeach  
-
-@include('forms.officialbusiness.apply_ob') 
-
+ @include('forms.officialbusiness.apply_ob') 
 @endsection
 @section('obScript')
 	<script>

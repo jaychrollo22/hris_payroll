@@ -52,10 +52,6 @@
 														<i class="fa fa-check"></i>
 													</button>
 												@endif
-												<a href="/edit-deparment/{{$department->id}}" class="btn btn-outline-info btn-icon-text btn-sm">
-													Edit
-													<i class="ti-pencil btn-icon-append"></i>
-												</a>
 											</td>
 										</tr>
 									@endforeach

@@ -229,7 +229,7 @@
                                     <small>{{$value->relation}}</small>
                                 </div>
                                 <div class='col-md-9'>
-                                    <small>{{$value->first_name . ' ' . $value->last_name}}</small>
+                                    <small>{{$value->first_name . ' ' . $value->first_name}}</small>
                                 </div>
                             </div>
                             @endforeach                            

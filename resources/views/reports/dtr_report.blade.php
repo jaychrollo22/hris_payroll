@@ -82,8 +82,8 @@
                                             <td>{{date('m/d/Y', strtotime($form_approval->created_at))}}</td>
                                             <td>{{date('m/d/Y', strtotime($form_approval->dtr_date))}}</td>
                                             <td>{{$form_approval->correction}}</td>
-                                            <td> {{(isset($form_approval->time_in)) ? date('m/d/Y h:i A', strtotime($form_approval->time_in)) : '----'}}</td>
-                                            <td> {{(isset($form_approval->time_out)) ? date('m/d/Y h:i A', strtotime($form_approval->time_out)) : '----'}}</td>
+                                            <td> {{(isset($form_approval->time_in)) ? date('h:i A', strtotime($form_approval->time_in)) : '----'}}</td>
+                                            <td> {{(isset($form_approval->time_out)) ? date('h:i A', strtotime($form_approval->time_out)) : '----'}}</td>
                                             <td>{{$form_approval->remarks}}</td>
                                             <td>{{$form_approval->status}}</td>
                                         </tr>

@@ -1,23 +1,13 @@
 <?php
 use App\ApplicantSystemNotification;
 use App\UserAllowedCompany;
-use App\UserAllowedLocation;
-use App\UserAllowedProject;
 use App\UserPrivilege;
 use App\Employee;
 use App\EmployeeLeave;
 use App\EmployeeEarnedLeave;
-use App\EmployeeLeaveCredit;
 use App\Holiday;
 use App\Attendance;
 
-function employee_name($employee_names,$employee_number){
-    foreach($employee_names as $item){
-        if($item['employee_number'] == $employee_number){
-            return $item->last_name . ' ' . $item->first_name;
-        }
-    }
-}
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
     if (count($capitals[1]) >= 2) {
@@ -93,23 +83,6 @@ function dateRangeHelper( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
 
     return $dates;
 }
-function dateRangeHelperLeave( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
-    $dates = [];
-    $current = strtotime( $first );
-    $last = strtotime( $last );
-
-    while( $current <= $last ) {
-        $curr = date('D',$current);
-        if ($curr == 'Sun') {
-            $current = strtotime( $step, $current);
-        }else{
-            $dates[] = date( $format, $current);
-            $current = strtotime( $step, $current );
-        }
-    }
-
-    return $dates;
-}
 
 function dateRange( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
     $dates = [];
@@ -149,37 +122,24 @@ function isRestDay( $date ) {
     return $check;
 }
 
-function employeeHasLeave($employee_leaves = array(), $check_date,$schedule = array()){
-    if(count($employee_leaves) > 0 && $schedule){
+function employeeHasLeave($employee_leaves = array(), $check_date){
+    if(count($employee_leaves) > 0){
         foreach($employee_leaves as $item){
-            if($item['date_from'] == $item['date_to']){
-                if(date('Y-m-d',strtotime($check_date)) == date('Y-m-d',strtotime($item['date_from']))){
-                    $status = 'Without-Pay';
-                    if($item['withpay'] == 1){
-                        $status = 'With-Pay';
-                    }
-                    if($item['halfday'] == '1'){
-                        return $item['leave']['code'] . ' ' . $item['halfday_status'] . ' ' . $status;
-                    }else{
-                        return $item['leave']['code'] . ' ' . $status;
-                    }
-                }
-            }else{
-                $date_range = dateRangeHelperLeave($item['date_from'],$item['date_to']);
-                if(count($date_range) > 0){
-                    foreach($date_range as $date_r){
-                        if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
-                            $status = 'Without-Pay';
-                            if($item['withpay'] == 1){
-                                $status = 'With-Pay';
-                            }
-                            if($item['halfday'] == '1'){
-                                
-                                return $item['leave']['code'] . ' ' . $item['halfday_status'] . ' ' . $status;
-                            }else{
-                                return $item['leave']['code'] . ' ' . $status;
-                            }
+            $date_range = dateRangeHelper($item['date_from'],$item['date_to']);
+            if(count($date_range) > 0){
+                foreach($date_range as $date_r){
+                    if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
+                        $status = 'Without-Pay';
+                        if($item['withpay'] == 1){
+                            $status = 'With-Pay';
                         }
+                        if($item['halfday'] == '1'){
+                            
+                            return $item['leave']['code'] . ' ' . $item['halfday_status'] . ' ' . $status;
+                        }else{
+                            return $item['leave']['code'] . ' ' . $status;
+                        }
+                        
                     }
                 }
             }
@@ -256,24 +216,6 @@ function getUserAllowedCompanies($user_id){
         return [];
     }
 }
-function getUserAllowedLocations($user_id){
-    $user_allowed_locations = UserAllowedLocation::where('user_id',$user_id)->first();
-
-    if($user_allowed_locations){
-        return json_decode($user_allowed_locations->location_ids);
-    }else{
-        return [];
-    }
-}
-function getUserAllowedProjects($user_id){
-    $user_allowed_projects = UserAllowedProject::where('user_id',$user_id)->first();
-
-    if($user_allowed_projects){
-        return json_decode($user_allowed_projects->project_ids);
-    }else{
-        return [];
-    }
-}
 
 function checkUserPrivilege($field,$user_id){
     $user_privilege = UserPrivilege::select('id')->where($field,'on')->where('user_id',$user_id)->first();
@@ -293,80 +235,40 @@ function checkUserAllowedOvertime($user_id){
     }
 }
 
-function checkUsedSLVLSILLeave($user_id,$leave_type,$date_hired){
+function checkUsedVacationLeave($user_id){
+    $employee_vl = EmployeeLeave::where('user_id',$user_id)
+                                    ->where('leave_type','1')
+                                    ->where('status','Approved')
+                                    ->get();
 
     $count = 0;
-    if($date_hired){
-        $today  = date('Y-m-d');
-        $date_hired_md = date('m-d',strtotime($date_hired));
-        $date_hired_m = date('m',strtotime($date_hired));
-        $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-        $this_year = date('Y');
-
-        $date_hired_this_year = $this_year . '-'. $date_hired_md;
-
-        if($today > $date_hired_this_year  ){
-            $filter_date_leave = $this_year . '-'. $date_hired_md;
-        }else{
-            $filter_date_leave = $last_year . '-'. $date_hired_md;
-        }
-        $employee_vl = EmployeeLeave::where('user_id',$user_id)
-                                        ->where('leave_type',$leave_type)
-                                        ->where('status','Approved')
-                                        ->where('date_from','>',$filter_date_leave)
-                                        ->get();
-        
-        $date_today = date('Y-m-d');
-        if($employee_vl){
-            foreach($employee_vl as $leave){
-                if($leave->withpay == 1 && $leave->halfday == 1){
-                    if(date('Y-m-d',strtotime($leave->date_from)) <= $date_today){
-                        $count += 0.5;
-                    }
-                }else{
-                    $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
-                    if($date_range){
-                        foreach($date_range as $date_r){
-                            $leave_Date = date('Y-m-d', strtotime($date_r));
-                            if($leave->withpay == 1 && $leave_Date <= $date_today){
-                                $count += 1;
-                            }
+    if($employee_vl){
+        foreach($employee_vl as $leave){
+            if($leave->withpay == 1 && $leave->halfday == 1){
+                $count += 0.5;
+            }else{
+                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                if($date_range){
+                    foreach($date_range as $date_r){
+                        $date_today = date('Y-m-d');
+                        $leave_Date = date('Y-m-d', strtotime($date_r));
+                        if($leave->withpay == 1 && $leave_Date <= $date_today){
+                            $count += 1;
                         }
                     }
                 }
-                
             }
+            
         }
     }
     return $count;
 }
 
-function checkEarnedLeave($user_id,$leave_type,$date_hired){
-
-    //Get From Last Year Earned
-    if($date_hired){
-        $today  = date('Y-m-d');
-        $date_hired_md = date('m-d',strtotime($date_hired));
-        $date_hired_m = date('m',strtotime($date_hired));
-        $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-        $this_year = date('Y');
-
-        $date_hired_this_year = $this_year . '-'. $date_hired_md;
-        $date_hired_last_year = $last_year . '-'. $date_hired_md;
-
-        if($today >= $date_hired_this_year){ //if Date hired meets todays date get earned leaves from last year to this year date_hired
-            $date_hired_this_minus_1_month = date('Y-m-d', strtotime('-1 month', strtotime($date_hired_this_year)) );
-            return $vl_earned = EmployeeEarnedLeave::where('user_id',$user_id)
-                                                        ->where('leave_type',$leave_type)
-                                                        ->whereNull('converted_to_cash')
-                                                        ->whereBetween('earned_date', [$date_hired_last_year, $date_hired_this_minus_1_month])
-                                                        ->sum('earned_leave');
-        }else{
-            return 0;
-        }
-    }
-
-    
+function checkEarnedLeave($user_id,$leave_type){
+    return $vl_earned = EmployeeEarnedLeave::where('user_id',$user_id)
+                                    ->where('leave_type',$leave_type)
+                                    ->whereNull('converted_to_cash')
+                                    ->sum('earned_leave');
     
 }
 
@@ -629,17 +531,6 @@ function checkHasAttendanceHolidayStatus($date,$employee_code){
         return 'With-Pay';
     }else{
         return 'Without-Pay';
-    }
-}
-
-function checkEmployeeLeaveCredits($user_id, $leave_type){
-    $employee_leave = EmployeeLeaveCredit::where('user_id',$user_id)
-                                    ->where('leave_type',$leave_type)
-                                    ->first();
-    if($employee_leave){
-        return $employee_leave->count;
-    }else{
-        return 0;
     }
 }
 

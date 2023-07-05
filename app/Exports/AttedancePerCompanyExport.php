@@ -24,7 +24,7 @@ class AttedancePerCompanyExport implements FromView
         $to_date = $this->to;
         $company = $this->company;
         if ($from_date != null) {
-            $attendances = Employee::select('employee_number','user_id','first_name','last_name','location','schedule_id')
+            $attendances = Employee::select('employee_number','user_id','first_name','last_name','location')
                                         ->with(['attendances' => function ($query) use ($from_date, $to_date) {
                                             $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                                     ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])

@@ -10,21 +10,19 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 
 class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function __construct($company,$from,$to,$percentage)
+    public function __construct($company,$from,$to)
     {
         $this->company = $company;
         $this->from = $from;
         $this->to = $to;
-        $this->percentage = $percentage ? $percentage : '100';
     }
 
     public function query()
     {
         $company = $this->company;
         return EmployeeWfh::query()->with('user','employee')
-                                ->whereDate('applied_date','>=',$this->from)
-                                ->whereDate('applied_date','<=',$this->to)
-                                ->where('approve_percentage','=',$this->percentage)
+                                ->whereDate('date_from','>=',$this->from)
+                                ->whereDate('date_from','<=',$this->to)
                                 ->whereHas('employee',function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
@@ -37,7 +35,7 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'USER ID',
-            // 'EMPLOYEE NAME',
+            'EMPLOYEE NAME',
             'DATE',
             'FIRST ACTUAL TIME IN',
             'SECOND ACTUAL TIME OUT',
@@ -47,10 +45,10 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
 
     public function map($employee_wfh): array
     {
-        $remarks = $employee_wfh->approve_percentage ? 'WFH-' . $employee_wfh->approve_percentage . '%' : "";
+        $remarks = $employee_wfh->approve_percentage ? 'Work from Home ' . $employee_wfh->approve_percentage . '%' : "";
         return [
             $employee_wfh->employee->employee_number,
-            // $employee_wfh->user->name,
+            $employee_wfh->user->name,
             date('d/m/Y',strtotime($employee_wfh->applied_date)),
             date('H:i',strtotime($employee_wfh->date_from)),
             date('H:i',strtotime($employee_wfh->date_to)),

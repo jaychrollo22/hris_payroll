@@ -51,11 +51,9 @@ class AutoEarnedLeave extends Command
 
         $month = date('m');
         $day = date('d');
-        $year = date('Y');
-        $today = date('Y-m-d');
         $classifications = [1,2,3,5];
 
-        $companies = [14,11,7,2,1]; //PLC, OBN , PIVI, MAC, PMI
+        $companies = [14,11,7];
 
         $employees = Employee::select('id','user_id','classification','original_date_hired')
                                 ->whereIn('classification',$classifications)
@@ -85,8 +83,6 @@ class AutoEarnedLeave extends Command
                                     $earned_leave->user_id = $employee->user_id;
                                     $earned_leave->earned_day = $day;
                                     $earned_leave->earned_month = $month;
-                                    $earned_leave->earned_year = $year;
-                                    $earned_leave->earned_date = $today;
                                     $earned_leave->save();
                                     $count++;
                                 }   
@@ -97,18 +93,14 @@ class AutoEarnedLeave extends Command
                             $earned_leave->user_id = $employee->user_id;
                             $earned_leave->earned_day = $day;
                             $earned_leave->earned_month = $month;
-                            $earned_leave->earned_year = $year;
-                            $earned_leave->earned_date = $today;
                             $earned_leave->save();
                             $count++;
                         }
-                    }else if($employee->classification = '1' || $employee->classification = '2' || $employee->classification = '6'){ // Regular and Probitionary and Project Based Old
+                    }else if($employee->classification = '1' || $employee->classification = '2'){ // Regular and Probitionary
                         $earned_leave->leave_type = 1;
                         $earned_leave->user_id = $employee->user_id;
                         $earned_leave->earned_day = $day;
                         $earned_leave->earned_month = $month;
-                        $earned_leave->earned_year = $year;
-                        $earned_leave->earned_date = $today;
                         $earned_leave->earned_leave = 0.833;
                         $earned_leave->save();
                         $count++;
@@ -126,11 +118,8 @@ class AutoEarnedLeave extends Command
 
         $month = date('m');
         $day = date('d');
-        $year = date('Y');
-        $today = date('Y-m-d');
-        
         $classifications = [1,2,3];
-        $companies = [14,11,7,2,1]; //PLC, OBN , PIVI, MAC, PMI
+        $companies = [14,11,7];
 
         $employees = Employee::select('id','user_id','classification','original_date_hired')
                                 ->whereIn('classification',$classifications)
@@ -155,19 +144,15 @@ class AutoEarnedLeave extends Command
                             $earned_leave->user_id = $employee->user_id;
                             $earned_leave->earned_day = $day;
                             $earned_leave->earned_month = $month;
-                            $earned_leave->earned_year = $year;
-                            $earned_leave->earned_date = $today;
                             $earned_leave->earned_leave = 0.833;
                             $earned_leave->leave_type = 2;
                             $earned_leave->save();
                             $count++;
                         }
-                    }else if($employee->classification = '1' || $employee->classification = '2' || $employee->classification = '6'){ // Regular and Probitionary and Project Based Old
+                    }else{
                         $earned_leave->user_id = $employee->user_id;
                         $earned_leave->earned_day = $day;
                         $earned_leave->earned_month = $month;
-                        $earned_leave->earned_year = $year;
-                        $earned_leave->earned_date = $today;
                         $earned_leave->earned_leave = 0.833;
                         $earned_leave->leave_type = 2;
                         $earned_leave->save();

@@ -40,14 +40,10 @@
                                                 Edit
                                                 <i class="ti-file btn-icon-append"></i>
                                             </a>
-                                            <a href="/change-password/{{$user->id}}" class="btn btn-outline-info btn-icon-text btn-sm">
+                                            <button data-toggle="modal" data-target="#editUserPassword{{$user->id}}" type="button" class="btn btn-outline-info btn-icon-text btn-sm">
                                                 Change Password
                                                 <i class="ti-key btn-icon-append"></i>
-                                            </a>
-                                            {{-- <button data-toggle="modal" data-target="#editUserPassword{{$user->id}}" type="button" class="btn btn-outline-info btn-icon-text btn-sm">
-                                                Change Password
-                                                <i class="ti-key btn-icon-append"></i>
-                                            </button> --}}
+                                            </button>
                                         </td>
                                     </tr>
                                     @endforeach

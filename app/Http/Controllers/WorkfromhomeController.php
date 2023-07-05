@@ -33,21 +33,16 @@ class WorkfromhomeController extends Controller
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
         $status =  isset($request->status) ? $request->status : "Approved";
-        $percentage =  isset($request->percentage) ? $request->percentage : "";
         $employee_wfhs = [];
         if(isset($request->from) && isset($request->to)){
             $employee_wfhs = EmployeeWfh::with('user','employee')
-                                        ->whereDate('applied_date','>=',$from)
-                                        ->whereDate('applied_date','<=',$to)
+                                        ->whereDate('date_from','>=',$from)
+                                        ->whereDate('date_from','<=',$to)
                                         ->whereHas('employee',function($q) use($company){
                                             $q->where('company_id',$company);
                                         })
-                                        ->where('status',$status);
-            if($percentage){
-                $employee_wfhs = $employee_wfhs->where('approve_percentage',$percentage);
-            }
-
-            $employee_wfhs = $employee_wfhs->get();
+                                        ->where('status',$status)
+                                        ->get();
         }
         
 
@@ -57,7 +52,6 @@ class WorkfromhomeController extends Controller
             'from'=>$from,
             'to'=>$to,
             'status'=>$status,
-            'percentage'=>$percentage,
             'employee_wfhs' => $employee_wfhs,
             'companies' => $companies
         ));
@@ -67,9 +61,8 @@ class WorkfromhomeController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $from = isset($request->from) ? $request->from : "";
         $to =  isset($request->to) ? $request->to : "";
-        $percentage =  isset($request->percentage) ? $request->percentage : "";
         $company_detail = Company::where('id',$company)->first();
-        return Excel::download(new EmployeeWfhExport($company,$from,$to,$percentage), 'Work From Home ' . $company_detail->company_code . ' ' . $from . ' to ' . $to . '.xlsx');
+        return Excel::download(new EmployeeWfhExport($company,$from,$to), 'Work From Home ' . $company_detail->company_code . ' ' . $from . ' to ' . $to . '.xlsx');
     }
 
 }
