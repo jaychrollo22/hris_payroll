@@ -3,15 +3,15 @@
 @section('content')
 <div class="content">
     <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <img src="{{asset('login_css/images/present.png')}}" alt="Image" class="img-fluid">
+      <div class="row ">
+        <div class="col-md-6 text-center">
+          <img src="{{asset('login_css/images/present.png')}}" alt="Image" class="img-fluid c">
         </div>
         <div class="col-md-6 ">
           <div class="row justify-content-center">
             <div class="col-md-8">
               <div class="mb-4">
-              <h3>Sign In to </h3>
+              <h3>Human Resource Information System </h3>
               <p class="mb-4"><strong>{{ config('app.name', 'Laravel') }}</strong></p>
             </div>
             <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}" onsubmit='show()'>
