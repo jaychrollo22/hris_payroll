@@ -19,7 +19,7 @@
 							<table class="table table-hover table-bordered tablewithSearch">
 								<thead>
 									<tr>
-										<th>Date</th>
+										<th>Earned Date</th>
 										<th>Employee</th>
 										<th>Classification</th>
 										<th>Company</th>
@@ -33,7 +33,7 @@
 									@foreach ($earned_leaves as $item)
 									
                                         <tr>
-                                            <td>{{ date('Y-m-d',strtotime($item->created_at))}}</td>
+                                            <td>{{ date('Y-m-d',strtotime($item->earned_date))}}</td>
                                             <td>{{ $item->employee->first_name . ' ' . $item->employee->last_name}}</td>
                                             <td>{{ $item->employee->classification_info->name}}</td>
                                             <td>{{ $item->employee->company->company_name}}</td>

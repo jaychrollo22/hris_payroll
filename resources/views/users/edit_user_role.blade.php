@@ -13,6 +13,10 @@
                                
                                 <div class="row">
                                     <div class='col-md-12 form-group'>
+                                        Name
+                                        <input type="text" name="name" value="{{$user->name}}" class="form-control">
+                                    </div>
+                                    <div class='col-md-12 form-group'>
                                         Email
                                         <input type="email" name="email" value="{{$user->email}}" class="form-control">
                                     </div>
@@ -30,10 +34,34 @@
                                         @php
                                             $user_allowed_companies = $user->user_allowed_company ? json_decode($user->user_allowed_company->company_ids) : [];
                                         @endphp
-                                        <select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company[]' multiple>
+                                        <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company[]' multiple>
                                             <option value="">-- Select Company --</option>
                                                 @foreach($companies as $company)
                                                 <option value="{{$company->id}}" @if (in_array($company->id,$user_allowed_companies)) selected @endif>{{$company->company_name}}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        Location
+                                        @php
+                                            $user_allowed_locations = $user->user_allowed_location ? json_decode($user->user_allowed_location->location_ids) : [];
+                                        @endphp
+                                        <select data-placeholder="Select Location" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='location[]' multiple>
+                                            <option value="">-- Select Location --</option>
+                                                @foreach($locations as $location)
+                                                <option value="{{$location->location}}" @if (in_array($location->location,$user_allowed_locations)) selected @endif>{{$location->location}}</option>
+                                                @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        Project
+                                        @php
+                                            $user_allowed_projects = $user->user_allowed_project ? json_decode($user->user_allowed_project->project_ids) : [];
+                                        @endphp
+                                        <select data-placeholder="Select Project" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='project[]' multiple>
+                                            <option value="">-- Select Project --</option>
+                                                @foreach($projects as $project)
+                                                <option value="{{$project->project_id}}" @if (in_array($project->project_id,$user_allowed_projects)) selected @endif>{{$project->project_id}}</option>
                                                 @endforeach
                                         </select>
                                     </div>
@@ -201,7 +229,19 @@
                                         @else
                                             <input type="checkbox" name="biometrics_per_location" id="biometrics_per_location{{$user->id}}">
                                         @endif
-                                        Per Location
+                                        Per Location (ZK TECO)
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
+                                            @if($user->user_privilege->biometrics_per_location_hik == 'on')
+                                                <input type="checkbox" name="biometrics_per_location_hik" id="biometrics_per_location_hik{{$user->id}}" value="{{ $user->user_privilege->biometrics_per_location_hik }}" checked>
+                                            @else
+                                                <input type="checkbox" name="biometrics_per_location_hik" id="biometrics_per_location_hik{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="biometrics_per_location_hik" id="biometrics_per_location_hik{{$user->id}}">
+                                        @endif
+                                        Per Location (HIK VISION)
                                         <br>
                                         <br>
                                         @if($user->user_privilege)
@@ -226,6 +266,18 @@
                                             <input type="checkbox" name="biometrics_sync" id="biometrics_sync{{$user->id}}">
                                         @endif
                                         Sync Biometric
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
+                                            @if($user->user_privilege->timekeeping_dashboard == 'on')
+                                                <input type="checkbox" name="timekeeping_dashboard" id="timekeeping_dashboard{{$user->id}}" value="{{ $user->user_privilege->timekeeping_dashboard }}" checked>
+                                            @else
+                                                <input type="checkbox" name="timekeeping_dashboard" id="timekeeping_dashboard{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="timekeeping_dashboard" id="timekeeping_dashboard{{$user->id}}">
+                                        @endif
+                                        Timekeeping Dashboard
                                         <br>
                                         <br>
                                     </div>

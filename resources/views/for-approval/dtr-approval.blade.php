@@ -45,6 +45,37 @@
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">For Approval DTR</h4>
+                <form method='get' onsubmit='show();' enctype="multipart/form-data">
+                  <div class=row>
+                    <div class='col-md-2'>
+                      <div class="form-group">
+                        <label class="text-right">From</label>
+                        <input type="date" value='{{$from}}' class="form-control form-control-sm" name="from" onchange='get_min(this.value);' required />
+                      </div>
+                    </div>
+                    <div class='col-md-2'>
+                      <div class="form-group">
+                        <label class="text-right">To</label>
+                        <input type="date" value='{{$to}}' class="form-control form-control-sm" id='to' name="to" required />
+                      </div>
+                    </div>
+                    <div class='col-md-2 mr-2'>
+                      <div class="form-group">
+                        <label class="text-right">Status</label>
+                        <select data-placeholder="Select Status" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='status' required>
+                          <option value="">-- Select Status --</option>
+                          <option value="Approved" @if ('Approved' == $status) selected @endif>Approved</option>
+                          <option value="Pending" @if ('Pending' == $status) selected @endif>Pending</option>
+                          <option value="Cancelled" @if ('Cancelled' == $status) selected @endif>Cancelled</option>
+                          <option value="Declined" @if ('Declined' == $status) selected @endif>Declined</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class='col-md-2'>
+                      <button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
+                    </div>
+                  </div>
+                </form>
                 <div class="table-responsive">
                   <table class="table table-hover table-bordered tablewithSearch">
                     <thead>
@@ -57,6 +88,7 @@
                         <th>Time-Out</th>
                         <th>Reason</th>
                         <th>Approvers</th>
+                        <th>Attachment</th>
                         <th>Status</th>
                         <th>Action </th> 
                       </tr>
@@ -64,7 +96,12 @@
                     <tbody> 
                       @foreach ($dtrs as $form_approval)
                       <tr>
-                        <td>{{$form_approval->user->name}}</td>
+                        <td>
+                            <strong>{{$form_approval->user->name}}</strong> <br>
+                            <small>Position : {{$form_approval->user->employee->position}}</small> <br>
+                            <small>Location : {{$form_approval->user->employee->location}}</small> <br>
+                            <small>Department : {{ $form_approval->user->employee->department ? $form_approval->user->employee->department->name : ""}}</small>
+                        </td>
                         <td>{{date('m/d/Y', strtotime($form_approval->created_at))}}</td>
                         <td>{{date('m/d/Y', strtotime($form_approval->dtr_date))}}</td>
                         <td>{{$form_approval->correction}}</td>
@@ -93,21 +130,26 @@
                           @endforeach
                         </td>
                         <td>
+                          @if($form_approval->attachment)
+                          <a href="{{url($form_approval->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>
+                          @endif
+                        </td>
+                        <td>
                           @if ($form_approval->status == 'Pending')
                             <label class="badge badge-warning">{{ $form_approval->status }}</label>
                           @elseif($form_approval->status == 'Approved')
-                            <label class="badge badge-success">{{ $form_approval->status }}</label>
+                            <label class="badge badge-success" title="{{$form_approval->approval_remarks}}">{{ $form_approval->status }}</label>
                           @elseif($form_approval->status == 'Declined' || $form_approval->status == 'Cancelled')
-                            <label class="badge badge-danger">{{ $form_approval->status }}</label>
+                            <label class="badge badge-danger" title="{{$form_approval->approval_remarks}}">{{ $form_approval->status }}</label>
                           @endif  
                         </td>
                         <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
                           @foreach($form_approval->approver as $k => $approver)
                             @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'Pending')
-                              <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" onclick="approve({{ $form_approval->id }})">
+                              <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#dtr-approved-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Approve">
                                 <i class="ti-check btn-icon-prepend"></i>                                                    
                               </button>
-                              <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" onclick="decline({{ $form_approval->id }})">
+                              <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" data-target="#dtr-declined-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Decline">
                                 <i class="ti-close btn-icon-prepend"></i>                                                    
                               </button> 
                             @endif<br> 
@@ -124,7 +166,13 @@
         </div>
     </div>
 </div>
-@endsection
+
+
+@foreach ($dtrs as $dtr)
+  @include('for-approval.remarks.dtr_approved_remarks')
+  @include('for-approval.remarks.dtr_declined_remarks')
+@endforeach
+
 @php
 function get_count_days($data,$date_from,$date_to)
  {
@@ -143,83 +191,7 @@ function get_count_days($data,$date_from,$date_to)
     return($count);
  } 
 @endphp  
-@section('ForApprovalScript')
-	<script>
-		function approve(id) {
-			var element = document.getElementById('tdActionId'+id);
-			var dataID = element.getAttribute('data-id');
-			swal({
-					title: "Are you sure?",
-					text: "You want to approve this dtr?",
-					icon: "warning",
-					buttons: true,
-					dangerMode: true,
-				})
-				.then((willApprove) => {
-					if (willApprove) {
-						document.getElementById("loader").style.display = "block";
-						$.ajax({
-							url: "approve-dtr/" + id,
-							method: "GET",
-							data: {
-								id: id
-							},
-							headers: {
-								'X-CSRF-TOKEN': '{{ csrf_token() }}'
-							},
-							success: function(data) {
-								document.getElementById("loader").style.display = "none";
-								swal("Dtr has been Approved!", {
-									icon: "success",
-								}).then(function() {
-									location.reload();
-								});
-							}
-						})
 
-					} else {
-                        swal({text:"You stop the approval of dtr.",icon:"success"});
-					}
-				});
-		}
-		function decline(id) {
-			var element = document.getElementById('tdActionId'+id);
-			var dataID = element.getAttribute('data-id');
-			swal({
-					title: "Are you sure?",
-					text: "You want to decline this dtr?",
-					icon: "warning",
-					buttons: true,
-					dangerMode: true,
-				})
-				.then((willDecline) => {
-					if (willDecline) {
-						document.getElementById("loader").style.display = "block";
-						$.ajax({
-							url: "decline-dtr/" + id,
-							method: "GET",
-							data: {
-								id: id
-							},
-							headers: {
-								'X-CSRF-TOKEN': '{{ csrf_token() }}'
-							},
-							success: function(data) {
-								document.getElementById("loader").style.display = "none";
-								swal("DTR has been declined!", {
-									icon: "success",
-								}).then(function() {
-									location.reload();
-								});
-							}
-						})
 
-					} else {
-                        swal({text:"You stop the approval of dtr.",icon:"success"});
-					}
-				});
-		}
-
-	</script>
 @endsection
 

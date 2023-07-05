@@ -45,17 +45,50 @@
             <div class="card">
               <div class="card-body">
                 <h4 class="card-title">For Approval Overtime</h4>
+
+                <form method='get' onsubmit='show();' enctype="multipart/form-data">
+                  <div class=row>
+                    <div class='col-md-2'>
+                      <div class="form-group">
+                        <label class="text-right">From</label>
+                        <input type="date" value='{{$from}}' class="form-control form-control-sm" name="from" onchange='get_min(this.value);' required />
+                      </div>
+                    </div>
+                    <div class='col-md-2'>
+                      <div class="form-group">
+                        <label class="text-right">To</label>
+                        <input type="date" value='{{$to}}' class="form-control form-control-sm" id='to' name="to" required />
+                      </div>
+                    </div>
+                    <div class='col-md-2 mr-2'>
+                      <div class="form-group">
+                        <label class="text-right">Status</label>
+                        <select data-placeholder="Select Status" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='status' required>
+                          <option value="">-- Select Status --</option>
+                          <option value="Approved" @if ('Approved' == $status) selected @endif>Approved</option>
+                          <option value="Pending" @if ('Pending' == $status) selected @endif>Pending</option>
+                          <option value="Cancelled" @if ('Cancelled' == $status) selected @endif>Cancelled</option>
+                          <option value="Declined" @if ('Declined' == $status) selected @endif>Declined</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class='col-md-2'>
+                      <button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
+                    </div>
+                  </div>
+                </form>
+
                 <div class="table-responsive">
                   <table class="table table-hover table-bordered tablewithSearch">
                     <thead>
                       <tr>
                         <th>Employee Name</th>
                         <th>Date Filed</th>
-                        <th>OT Date</th> 
-                        <th>OT Time</th> 
+                        <th>OT Details</th> 
                         <th>OT Requested (Hrs)</th>
                         <th>Break (Hrs)</th>
                         <th>OT Approved (Hrs)</th>
+                        <th>Total Approved (Hrs)</th>
                         <th>Remarks </th>
                         <th>Approvers </th>
                         <th>Status </th>
@@ -65,13 +98,33 @@
                     <tbody> 
                       @foreach ($overtimes as $form_approval)
                       <tr>
-                        <td>{{$form_approval->user->name}}</td>
+                        <td>
+                            <strong>{{$form_approval->user->name}}</strong> <br>
+                            <small>Position : {{$form_approval->user->employee_info->position}}</small> <br>
+                            <small>Location : {{$form_approval->user->employee_info->location}}</small> <br>
+                            <small>Department : {{ $form_approval->user->employee_info->department ? $form_approval->user->employee_info->department->name : ""}}</small>
+                        </td>
                         <td>{{date('d/m/Y', strtotime($form_approval->created_at))}}</td>
-                        <td>{{date('d/m/Y', strtotime($form_approval->ot_date))}}</td>
-                        <td>{{date('h:i A', strtotime($form_approval->start_time))}} - {{date('h:i A', strtotime($form_approval->end_time))}}</td>
-                        <td> {{ number_format((strtotime($form_approval->end_time)-strtotime($form_approval->start_time))/3600,2)}}</td>
+                        <td>
+                          Date : {{date('d/m/Y', strtotime($form_approval->ot_date))}} <br>
+                          Time : {{date('d/m/Y h:i A', strtotime($form_approval->start_time))}} - {{date('d/m/Y h:i A', strtotime($form_approval->end_time))}}
+                        </td>
+                        <td>
+                          @php
+                            $startTime = new DateTime($form_approval->start_time);
+                            $endTime = new DateTime($form_approval->end_time);
+
+                            // Calculate the time difference
+                            $timeDifference = $endTime->diff($startTime);
+                            // Convert the time difference to decimal hours
+                            $total = ($timeDifference->days * 24) + $timeDifference->h + ($timeDifference->i / 60);
+                          @endphp
+                          {{ number_format($total,2)}}</td>
                         <td>{{$form_approval->break_hrs}}</td>
                         <td>{{$form_approval->ot_approved_hrs}}</td>
+                        <td>
+                          {{ $form_approval->ot_approved_hrs ? $form_approval->ot_approved_hrs - $form_approval->break_hrs : ""}}
+                        </td>
 
                         <td>
                           <p title="{{$form_approval->remarks}}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
@@ -99,9 +152,9 @@
                           @if ($form_approval->status == 'Pending')
                             <label class="badge badge-warning">{{ $form_approval->status }}</label>
                           @elseif($form_approval->status == 'Approved')
-                            <label class="badge badge-success">{{ $form_approval->status }}</label>
+                            <label class="badge badge-success" title="{{$form_approval->approval_remarks}}">{{ $form_approval->status }}</label>
                           @elseif($form_approval->status == 'Declined' || $form_approval->status == 'Cancelled')
-                            <label class="badge badge-danger">{{ $form_approval->status }}</label>
+                            <label class="badge badge-danger" title="{{$form_approval->approval_remarks}}">{{ $form_approval->status }}</label>
                           @endif  
                         </td>
                         <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
@@ -111,7 +164,7 @@
                               <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#approve-ot-hrs-{{ $form_approval->id }}" data-toggle="modal" title='Approve'>
                                 <i class="ti-check btn-icon-prepend"></i>                                                    
                               </button>
-                              <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" onclick="decline({{ $form_approval->id }})">
+                              <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" data-target="#overtime-declined-remarks-{{ $form_approval->id }}" data-toggle="modal" title='Decline'>
                                 <i class="ti-close btn-icon-prepend"></i>                                                    
                               </button> 
                             @endif<br> 
@@ -130,52 +183,12 @@
         </div>
     </div>
 </div>
-@endsection
 
 @foreach ($overtimes as $overtime)
-  @include('for-approval.add-approve-hrs')
+  @include('for-approval.remarks.overtime_approved_remarks')
+  @include('for-approval.remarks.overtime_declined_remarks')
 @endforeach 
 
-@section('ForApprovalScript')
-	<script>
-		function decline(id) {
-			var element = document.getElementById('tdActionId'+id);
-			var dataID = element.getAttribute('data-id');
-			swal({
-					title: "Are you sure?",
-					text: "You want to decline this overtime?",
-					icon: "warning",
-					buttons: true,
-					dangerMode: true,
-				})
-				.then((willDecline) => {
-					if (willDecline) {
-						document.getElementById("loader").style.display = "block";
-						$.ajax({
-							url: "decline-overtime/" + id,
-							method: "GET",
-							data: {
-								id: id
-							},
-							headers: {
-								'X-CSRF-TOKEN': '{{ csrf_token() }}'
-							},
-							success: function(data) {
-								document.getElementById("loader").style.display = "none";
-								swal("Overtime has been declined!", {
-									icon: "success",
-								}).then(function() {
-									location.reload();
-								});
-							}
-						})
 
-					} else {
-            swal({text:"You stop the approval of overtime.",icon:"success"});
-					}
-				});
-		}
-
-	</script>
 @endsection
 

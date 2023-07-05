@@ -52,7 +52,7 @@ class Employee extends Model implements Auditable
     }
     public function user_info()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
     public function attendances() {
@@ -77,6 +77,10 @@ class Employee extends Model implements Auditable
 
     public function approved_leaves() {
         return $this->hasMany(EmployeeLeave::class,'user_id','user_id')->where('status','Approved');
+    }
+
+    public function approved_leaves_with_pay() {
+        return $this->hasMany(EmployeeLeave::class,'user_id','user_id')->where('with_pay','1')->where('status','Approved');
     }
 
     public function approved_obs() {
