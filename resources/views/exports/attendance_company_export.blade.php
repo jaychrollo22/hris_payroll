@@ -3,7 +3,7 @@
         <tr>
             <td>USER ID</td>
             {{-- <td>Biometric ID</td> --}}
-            <td>NAME</td>
+            {{-- <td>NAME</td> --}}
             <td>DATE</td>
             <td>FIRST ACTUAL TIME IN</td>
             <td>SECOND ACTUAL TIME OUT</td>
@@ -29,7 +29,7 @@
         <tr>
             <td>{{$emp->employee_number}}</td>
             {{-- <td>{{$emp->employee_number}}</td> --}}
-            <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
+            {{-- <td>{{$emp->first_name . ' ' . $emp->last_name}}</td> --}}
             <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
 
             @php
@@ -54,7 +54,7 @@
                 <td>{{$if_has_wfh->date_from}}</td>
                 <td>{{$if_has_wfh->date_to}}</td>
                 <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins. </td>
-                <td>{{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : ""}}</td>
+                <td>{{ $if_has_wfh->approve_percentage ? 'WFH-' . $if_has_wfh->approve_percentage .'%' : ""}}</td>
             @else
                 @php
                     $time_in_out = 0;
@@ -71,6 +71,11 @@
                     if($if_has_dtr){
                         $dtr_correction_time_in = $if_has_dtr->correction == 'Time-in' ? $if_has_dtr->time_in : "";
                         $dtr_correction_time_out = $if_has_dtr->correction == 'Time-out' ? $if_has_dtr->time_out : "";
+
+                        if($if_has_dtr->correction == 'Both'){
+                            $dtr_correction_time_in = $if_has_dtr->time_in;
+                            $dtr_correction_time_out = $if_has_dtr->time_out;
+                        }
                         $dtr_correction_both = $if_has_dtr->correction == 'Both'  ? $if_has_dtr : "";
                     }
                 @endphp
@@ -238,43 +243,87 @@
                     <td>
                         @php
                             $check_if_holiday = '';
+
+                            $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
                         @endphp
                         @if($time_in == null)
-                            @if((date('l',strtotime($date_r)) == "Saturday") || (date('l',strtotime($date_r)) == "Sunday"))
-                                
-                            @else
+                            @if($employee_schedule)
                                 @php 
-                                    $is_absent = '';
-                                    $if_leave = '';
-                                    $if_attendance_holiday = '';
-                                    $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
-                                    $if_attendance_holiday_status = '';
-                                    if($check_if_holiday){
-                                        $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
-                                        if($if_attendance_holiday){
+                                $is_absent = '';
+                                $if_leave = '';
+                                $if_attendance_holiday = '';
+                                $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
+                                $if_attendance_holiday_status = '';
+                                if($check_if_holiday){
+                                    $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
+                                    if($if_attendance_holiday){
 
-                                            $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                            $if_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                            $if_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                        $check_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)),$employee_schedule);
+                                        $check_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                        $check_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                        $check_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
 
-                                            if($if_leave || $if_wfh || $if_ob){
-                                                $if_attendance_holiday_status = 'With-Pay';
-                                            }else{
-                                                $if_attendance_holiday_status = checkHasAttendanceHolidayStatus($if_attendance_holiday, $emp->employee_number);
+                                        if($check_leave || $check_wfh || $check_ob || $check_dtr){
+                                            $if_attendance_holiday_status = 'With-Pay';
+                                            if($check_leave){
+                                                if($check_leave == 'SL Without-Pay' || $check_leave == 'VL Without-Pay'){
+                                                    $if_attendance_holiday_status = 'Without-Pay';
+                                                }else{
+                                                    $if_attendance_holiday_status = 'With-Pay';
+                                                }
+                                            }
+                                        }else{
+                                            $if_attendance_holiday_status = checkHasAttendanceHolidayStatus($if_attendance_holiday, $emp->employee_number);
+                                        }
+                                    }
+                                }else{
+                                    $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
+                                    if(empty($if_leave)){
+                                        if(empty($if_has_dtr)){
+                                            if($dtr_correction_time_out == null){
+                                                if($time_out == null){
+                                                    $is_absent = 'Absent';
+                                                }
                                             }
                                         }
-                                    }else{
-                                        $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)));
-                                        if(empty($if_leave)){
-                                            if(empty($if_has_dtr)){
-                                                $is_absent = 'Absent';
-                                            }
-                                        } 
-                                    }      
-                                @endphp
-                                {{$is_absent}}
-                                {{$if_attendance_holiday_status}}
+                                    } 
+                                }
+                                    
+                            @endphp
+                            {{$is_absent}}
+                            {{$if_attendance_holiday_status}}
                             @endif
+                        @else
+                            @php
+                                //CWTOAM
+                                $time_out_status = '';
+                                if($time_in->time_out){
+                                    $time_out_default = date('Y-m-d H:i:s',strtotime($time_in->time_out));
+                                    $date_time_in = date('Y-m-d',strtotime($time_in->time_in));
+                                    $date_time_in_validator = $date_time_in . ' 24:00:00';
+                                    if($time_out_default > $date_time_in_validator){
+                                        $time_out_status = 'CWTOAM';
+                                    }
+                                }elseif($dtr_correction_time_out){
+                                    $time_out_default = date('Y-m-d H:i:s',strtotime($dtr_correction_time_out));
+                                    $date_time_in = date('Y-m-d',strtotime($time_in->time_in));
+                                    $date_time_in_validator = $date_time_in . ' 24:00:00';
+                                    if($time_out_default > $date_time_in_validator){
+                                        $time_out_status = 'CWTOAM';
+                                    }
+                                }
+
+                                //HDAM
+                                $compressed_work_with_saturday = '';
+                                if((date('l',strtotime($date_r)) == "Saturday")){ // if Compressed Work (With Saturday)
+                                    if($emp->schedule_id == '9'){
+                                        $compressed_work_with_saturday = 'HDAM';
+                                    }   
+                                    
+                                }
+                            @endphp
+                            {{$time_out_status}}
+                            {{$compressed_work_with_saturday}}
                         @endif
                     </td>
 

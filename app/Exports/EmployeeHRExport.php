@@ -11,11 +11,13 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 
 class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function __construct($company,$department,$allowed_companies)
+    public function __construct($company,$department,$allowed_companies,$allowed_locations,$allowed_projects)
     {
         $this->company = $company;
         $this->department = $department;
         $this->allowed_companies = $allowed_companies;
+        $this->allowed_locations = $allowed_locations;
+        $this->allowed_projects = $allowed_projects;
     }
 
     public function query()
@@ -23,6 +25,8 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
         $company = $this->company;
         $department = $this->department;
         $allowed_companies = json_decode($this->allowed_companies);
+        $allowed_locations = json_decode($this->allowed_locations);
+        $allowed_projects = json_decode($this->allowed_projects);
         return Employee::query()->with('company','department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info','classification_info')
                                 ->when($company,function($q) use($company){
                                     $q->where('company_id',$company);
@@ -31,6 +35,12 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
                                     $q->where('department_id',$department);
                                 })
                                 ->whereIn('company_id',$allowed_companies)
+                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                    $q->whereIn('location',$allowed_locations);
+                                })
+                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                    $q->whereIn('project',$allowed_projects);
+                                })
                                 ->where('status','Active');
     }
 
@@ -64,6 +74,8 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             'Bank Account Number',
             'Date Hired',
             'Personal Email',
+            'Company Email',
+            'Immediate Superior ID',
             'Immediate Superior',
             'Schedule ID',
             'Location',
@@ -80,6 +92,8 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
         $company = $employee->company ? $employee->company->company_name : "";
         $department = $employee->department ? $employee->department->name : "";
         $classification_info = $employee->classification_info ? $employee->classification_info->name : "";
+        $immediate_sup_data = $employee->immediate_sup_data ? $employee->immediate_sup_data->name : "";
+        $company_email = $employee->user_info ? $employee->user_info->email : "";
     
         return [
             $employee->employee_number,
@@ -109,7 +123,9 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             $employee->bank_account_number,
             date('d/m/Y',strtotime($employee->original_date_hired)),
             $employee->personal_email,
+            $company_email,
             $employee->immediate_sup,
+            $immediate_sup_data,
             $employee->schedule_id,
             $employee->location,
             $employee->project,

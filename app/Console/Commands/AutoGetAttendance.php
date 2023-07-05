@@ -55,7 +55,7 @@ class AutoGetAttendance extends Command
         $employee_numbers = Employee::pluck('employee_number')->toArray();
         $attendances = iclocktransactions_mysql::whereIn('emp_code',$employee_numbers)
                                                     ->whereIn('terminal_id',$terminals)
-                                                    ->whereBetween('punch_time',[$from,$to])
+                                                    ->whereBetween('punch_time',[$from." 00:00:01", $to." 23:59:59"])
                                                     ->orderBy('punch_time','asc')
                                                     ->get();
         
@@ -76,10 +76,10 @@ class AutoGetAttendance extends Command
                         $count++; 
                     }
                 }
-                else if($att->punch_state == 1)
+                else if($att->punch_state == 1 || $att->punch_state == 5)
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
-                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                     $update = [
                         'time_out' =>  date('Y-m-d H:i:s', strtotime($att->punch_time)),
                         'device_out' => $att->terminal_alias,

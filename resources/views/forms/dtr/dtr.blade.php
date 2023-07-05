@@ -2,6 +2,44 @@
 @section('content')
 <div class="main-panel">
     <div class="content-wrapper">
+      <div class='row grid-margin'>
+        <div class='col-lg-2 '>
+          <div class="card card-tale">
+            <div class="card-body">
+              <div class="media">                
+                <div class="media-body">
+                  <h4 class="mb-4">Pending</h4>
+                  <h2 class="card-text">{{($dtrs->where('status','Pending'))->count()}}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> 
+        <div class='col-lg-2'>
+          <div class="card card-light-danger">
+            <div class="card-body">
+              <div class="media">
+                <div class="media-body">
+                  <h4 class="mb-4">Declined/Cancelled</h4>
+                  <h2 class="card-text">{{($dtrs->where('status','Cancelled'))->count() + ($dtrs->where('status','Declined'))->count()}}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='col-lg-2'>
+          <div class="card text-success">
+            <div class="card-body">
+              <div class="media">                
+                <div class="media-body">
+                  <h4 class="mb-4">Approved</h4>
+                  <h2 class="card-text">{{($dtrs->where('status','Approved'))->count()}}</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>
         <div class='row'>
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
@@ -34,8 +72,8 @@
                         <td> {{ date('M. d, Y ', strtotime($dtr->created_at)) }}</td>
                         <td> {{ date('M. d, Y ', strtotime($dtr->dtr_date)) }}</td>
                         <td>{{ $dtr->correction }}</td>
-                        <td> {{(isset($dtr->time_in)) ? date('h:i A', strtotime($dtr->time_in)) : '----'}}</td>
-                        <td> {{(isset($dtr->time_out)) ? date('h:i A', strtotime($dtr->time_out)) : '----'}}</td>
+                        <td> {{(isset($dtr->time_in)) ? date('M. d, Y h:i A', strtotime($dtr->time_in)) : '----'}}</td>
+                        <td> {{(isset($dtr->time_out)) ? date('M. d, Y h:i A', strtotime($dtr->time_out)) : '----'}}</td>
                         <td>
                           <p title="{{ $dtr->remarks }}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
                             {{ $dtr->remarks }}
@@ -51,21 +89,25 @@
                           @endif                        
                         </td>
                         <td id="tdStatus{{ $dtr->id }}">
-                          @foreach($dtr->approver as $approver)
-                            @if($dtr->level >= $approver->level)
-                              @if ($dtr->level == 0 && $dtr->status == 'Declined')
-                              {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                              @else
-                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
-                              @endif
-                            @else
-                              @if ($dtr->status == 'Declined')
+                          @if(count($dtr->approver) > 0)
+                            @foreach($dtr->approver as $approver)
+                              @if($dtr->level >= $approver->level)
+                                @if ($dtr->level == 0 && $dtr->status == 'Declined')
                                 {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @else
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                @endif
                               @else
-                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
-                              @endif
-                            @endif<br>
-                          @endforeach
+                                @if ($dtr->status == 'Declined')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @else
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                                @endif
+                              @endif<br>
+                            @endforeach
+                          @else
+                            <label class="badge badge-danger mt-1">No Approver</label>
+                          @endif
                         </td>
                         <td id="tdActionId{{ $dtr->id }}" data-id="{{ $dtr->id }}">
                           @if ($dtr->status == 'Pending' and $dtr->level == 0)
@@ -119,11 +161,9 @@
 </div>
 @foreach ($dtrs as $dtr)
   @include('forms.dtr.edit_dtr')
-@endforeach  
-@foreach ($dtrs as $dtr)
   @include('forms.dtr.view_dtr')
 @endforeach  
- @include('forms.dtr.apply_dtr') 
+@include('forms.dtr.apply_dtr') 
 @endsection
 @section('dtrScript')
 	<script>

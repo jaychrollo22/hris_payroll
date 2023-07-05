@@ -29,6 +29,7 @@ use App\IclockTransation;
 use App\MaritalStatus;
 use App\IclockTerminal;
 use App\AttPunch;
+use App\UserAllowedOvertime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -37,6 +38,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 use App\Exports\EmployeesExport;
 use App\Exports\EmployeeHRExport;
+use App\Exports\AttendancePerLocationExport;
 
 class EmployeeController extends Controller
 {
@@ -45,6 +47,8 @@ class EmployeeController extends Controller
     {
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
@@ -66,7 +70,7 @@ class EmployeeController extends Controller
                                                 })
                                                 ->when($classification,function($q) use($classification){
                                                     if($classification == 'N/A'){
-                                                        $q->whereNull('classification')->orWhere('classification','');
+                                                        $q->whereNull('classification');
                                                     }else{
                                                         $q->where('classification',$classification);
                                                     }  
@@ -79,6 +83,12 @@ class EmployeeController extends Controller
                                                     }
                                                 })
                                                 ->whereIn('company_id',$allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
                                                 ->groupBy('classification')
                                                 ->orderBy('classification','ASC')
                                                 ->get();
@@ -101,17 +111,24 @@ class EmployeeController extends Controller
                                                 })
                                                 ->when($gender,function($q) use($gender){
                                                     if($gender == 'N/A'){
-                                                        $q->whereNull('gender')->orWhere('gender','');
+                                                        $q->whereNull('gender');
                                                     }else{
                                                         $q->where('gender',$gender);
                                                     }
                                                 })
                                                 ->whereIn('company_id',$allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
                                                 ->groupBy('gender')
                                                 ->orderBy('gender','ASC')
                                                 ->get();
 
-        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info')
+        $employees = Employee::select('id','user_id','employee_number','first_name','last_name','department_id','company_id','immediate_sup','classification','status')
+                                ->with('department', 'immediate_sup_data', 'user_info', 'company','classification_info')
                                 ->when($company,function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
@@ -123,17 +140,23 @@ class EmployeeController extends Controller
                                 })
                                 ->when($classification,function($q) use($classification){
                                     if($classification == 'N/A'){
-                                        $q->whereNull('classification')->orWhere('classification','');
+                                        $q->whereNull('classification');
                                     }else{
                                         $q->where('classification',$classification);
                                     }  
                                 })
                                 ->when($gender,function($q) use($gender){
                                     if($gender == 'N/A'){
-                                        $q->whereNull('gender')->orWhere('gender','');
+                                        $q->whereNull('gender');
                                     }else{
                                         $q->where('gender',$gender);
                                     }
+                                })     
+                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                    $q->whereIn('location',$allowed_locations);
+                                })
+                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                    $q->whereIn('project',$allowed_projects);
                                 })
                                 ->whereIn('company_id',$allowed_companies)
                                 ->get();
@@ -202,6 +225,12 @@ class EmployeeController extends Controller
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $allowed_companies = json_encode($allowed_companies);
 
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_locations = json_encode($allowed_locations);
+
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+        $allowed_projects = json_encode($allowed_projects);
+
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $company_info = Company::where('id',$company)->first();
@@ -209,7 +238,7 @@ class EmployeeController extends Controller
 
         $access_rate = checkUserPrivilege('employees_rate',auth()->user()->id);
 
-        return Excel::download(new EmployeesExport($company,$department,$allowed_companies,$access_rate), 'Master List '. $company_name .' .xlsx');
+        return Excel::download(new EmployeesExport($company,$department,$allowed_companies,$access_rate,$allowed_locations,$allowed_projects), 'Master List '. $company_name .' .xlsx');
     }
 
     public function export_hr(Request $request) 
@@ -218,12 +247,18 @@ class EmployeeController extends Controller
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $allowed_companies = json_encode($allowed_companies);
 
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_locations = json_encode($allowed_locations);
+
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+        $allowed_projects = json_encode($allowed_projects);
+
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $company_info = Company::where('id',$company)->first();
         $company_name = $company_info ? $company_info->company_code : "";
 
-        return Excel::download(new EmployeeHRExport($company,$department,$allowed_companies), 'Master List '. $company_name .' .xlsx');
+        return Excel::download(new EmployeeHRExport($company,$department,$allowed_companies,$allowed_locations,$allowed_projects), 'Master List '. $company_name .' .xlsx');
     }
 
     public function new(Request $request)
@@ -265,6 +300,7 @@ class EmployeeController extends Controller
             $employee->position = $request->position;
             $employee->nick_name = $request->nickname;
             $employee->level = $request->level;
+            $employee->gender = $request->gender;
             $employee->obanana_date_hired = $request->date_hired;
             $employee->birth_date = $request->birthdate;
             $employee->birth_place = $request->birthplace;
@@ -347,8 +383,43 @@ class EmployeeController extends Controller
         }
     }
 
+    public function reverseRate(Request $request){
+        $path = $request->file('file')->getRealPath();
+        $data = Excel::toArray(new EmployeesImport, $request->file('file'));
+
+        if(count($data[0]) > 0)
+        {
+            $save_count = 0;
+            $not_save = [];
+            foreach($data[0] as $key => $value)
+            {
+                
+                $validate = Employee::where('id',$value['id'])->first();
+
+                if($validate){
+                    $old_values = json_decode($value['old_values'],true);
+                    if(isset($old_values['rate'])){
+                        if(empty($validate->rate) && $old_values['rate']){
+                            $employee = Employee::findOrFail($value['id']);
+                            $employee->rate =  $old_values['rate'];
+                            $employee->work_description =  isset($old_values['work_description']) ? $old_values['work_description'] : "";
+                            $employee->save();
+                            $save_count++;
+                        }
+                        
+                    }
+                   
+                }
+            }
+            Alert::success('Successfully Import Employees (' . $save_count. ')')->persistent('Dismiss');
+            return redirect('/employees');
+        }
+    }
+
     public function upload(Request $request){
 
+        ini_set('memory_limit', '-1');
+        
         $path = $request->file('file')->getRealPath();
         $data = Excel::toArray(new EmployeesImport, $request->file('file'));
 
@@ -883,7 +954,7 @@ class EmployeeController extends Controller
             }
 
             Alert::success('Successfully Import Employees (' . $save_count. ')')->persistent('Dismiss');
-            return back();
+            return redirect('/employees');
             
         }
     }
@@ -891,7 +962,7 @@ class EmployeeController extends Controller
     public function employeeSettingsHR(User $user)
     {
 
-        $user = User::where('id',$user->id)->with('employee.department','employee.payment_info','employee.contact_person','employee.beneficiaries','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+        $user = User::where('id',$user->id)->with('allowed_overtime','employee.department','employee.payment_info','employee.contact_person','employee.beneficiaries','employee.employee_vessel','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
 
         $classifications = Classification::get();
 
@@ -965,6 +1036,7 @@ class EmployeeController extends Controller
         return back();
 
     }
+
     public function updateEmpInfoHR(Request $request, $id){
         
         $employee = Employee::findOrFail($id);
@@ -988,8 +1060,11 @@ class EmployeeController extends Controller
         $employee->bank_name = $request->bank_name;
         $employee->bank_account_number = $request->bank_account_number;
 
-        $employee->work_description = $request->work_description;
-        $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
+        if(checkUserPrivilege('employees_rate',auth()->user()->id) == 'yes'){
+            $employee->work_description = $request->work_description;
+            $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
+        }
+       
         $employee->status = $request->status;
 
         $employee->date_resigned = $request->status == 'Inactive' ? $request->date_resigned : null;
@@ -997,6 +1072,7 @@ class EmployeeController extends Controller
         $employee->save();
 
         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+
         if(isset($request->approver)){
 
             $count_approver = count($request->approver);
@@ -1036,6 +1112,25 @@ class EmployeeController extends Controller
                 $new_employee_vessel->user_id = $employee->user_id;
                 $new_employee_vessel->vessel_name = $request->vessel_name;
                 $new_employee_vessel->save();
+            }
+        }
+
+        if($request->level != 1){ // Validate if User not Rank and File
+            $check_user_allowed_overtime = UserAllowedOvertime::where('user_id',$employee->user_id)->first();
+            if(empty($check_user_allowed_overtime)){
+                $new_user_allowed_overtime = new UserAllowedOvertime;
+                $new_user_allowed_overtime->user_id = $employee->user_id;
+                $new_user_allowed_overtime->allowed_overtime = $request->allowed_overtime;
+                $new_user_allowed_overtime->save();
+            }else{
+                $check_user_allowed_overtime->allowed_overtime = $request->allowed_overtime;
+                $check_user_allowed_overtime->save();
+            }
+        }else{
+            $check_user_allowed_overtime = UserAllowedOvertime::where('user_id',$employee->user_id)->first();
+            if($check_user_allowed_overtime){
+                $check_user_allowed_overtime->allowed_overtime = null;
+                $check_user_allowed_overtime->save();
             }
         }
         
@@ -1167,10 +1262,21 @@ class EmployeeController extends Controller
 
     public function employee_attendance(Request $request)
     {
+        ini_set('memory_limit', '-1');
+    
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
         $attendance_controller = new AttendanceController;
-        $employees = Employee::where('status','Active')
+        $employees = Employee::select('id','user_id','employee_number','first_name','last_name')->where('status','Active')
                                 ->whereIn('company_id', $allowed_companies)
+                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                    $q->whereIn('location',$allowed_locations);
+                                })
+                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                    $q->whereIn('project',$allowed_projects);
+                                })
                                 ->get();
         $from_date = $request->from;
         $to_date = $request->to;
@@ -1181,7 +1287,8 @@ class EmployeeController extends Controller
         $schedule_id = null;
         $emp_data = [];
         if ($from_date != null) {
-            $emp_data = Employee::with(['attendances' => function ($query) use ($from_date, $to_date) {
+            $emp_data = Employee::select('id','user_id','employee_number','first_name','last_name','schedule_id')
+                                    ->with(['attendances' => function ($query) use ($from_date, $to_date) {
                                             $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                                     ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                                     ->orderBy('time_in','asc')
@@ -1190,6 +1297,13 @@ class EmployeeController extends Controller
                                     }])
                                     ->whereIn('employee_number', $request->employee)
                                     ->whereIn('company_id', $allowed_companies)
+                                    ->when($allowed_locations,function($q) use($allowed_locations){
+                                        $q->whereIn('location',$allowed_locations);
+                                    })
+                                    ->when($allowed_projects,function($q) use($allowed_projects){
+                                        $q->whereIn('project',$allowed_projects);
+                                    })
+                                    ->where('status','Active')
                                     ->get();
 
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
@@ -1215,9 +1329,13 @@ class EmployeeController extends Controller
     public function perCompany(Request $request)
     {
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
         $companies = Company::whereHas('employee_has_company')
                                 ->whereIn('id',$allowed_companies)
                                 ->get();
+
         $attendance_controller = new AttendanceController;
         $company = $request->company;
         $from_date = $request->from;
@@ -1229,7 +1347,7 @@ class EmployeeController extends Controller
         $employees = [];
         
         if ($from_date != null) {
-            $emp_data = Employee::select('employee_number','user_id','first_name','last_name','location')
+            $emp_data = Employee::select('employee_number','user_id','first_name','last_name','location','schedule_id')
                                 ->with(['attendances' => function ($query) use ($from_date, $to_date) {
                                     $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                     ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
@@ -1237,33 +1355,39 @@ class EmployeeController extends Controller
                                     ->orderby('time_out','desc')
                                     ->orderBy('id','asc');
                                 }])
-                                ->with(['leaves' => function ($query) use ($from_date, $to_date) {
+                                ->with(['approved_leaves' => function ($query) use ($from_date, $to_date) {
                                     $query->whereBetween('date_from', [$from_date, $to_date])
                                     ->where('status','Approved')
                                     ->orderBy('id','asc');
-                                },'leaves.leave'])
-                                ->with(['wfhs' => function ($query) use ($from_date, $to_date) {
+                                },'approved_leaves.leave'])
+                                ->with(['approved_wfhs' => function ($query) use ($from_date, $to_date) {
                                     $query->whereBetween('applied_date', [$from_date, $to_date])
                                     ->where('status','Approved')
                                     ->orderBy('id','asc');
                                 }])
-                                ->with(['obs' => function ($query) use ($from_date, $to_date) {
+                                ->with(['approved_obs' => function ($query) use ($from_date, $to_date) {
                                     $query->whereBetween('applied_date', [$from_date, $to_date])
                                     ->where('status','Approved')
                                     ->orderBy('id','asc');
                                 }])
-                                ->with(['dtrs' => function ($query) use ($from_date, $to_date) {
+                                ->with(['approved_dtrs' => function ($query) use ($from_date, $to_date) {
                                     $query->whereBetween('dtr_date', [$from_date, $to_date])
                                     ->where('status','Approved')
                                     ->orderBy('id','asc');
                                 }])
                                 ->where('company_id', $company)
+                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                    $q->whereIn('location',$allowed_locations);
+                                })
+                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                    $q->whereIn('project',$allowed_projects);
+                                })    
                                 ->where('status','Active')
                                 ->get();
             // dd($company_employees);
-            $schedules = ScheduleData::where('schedule_id', 1)->get();
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
         }
+        $schedules = ScheduleData::all();
 
         return view(
             'attendances.employee_company',
@@ -1282,32 +1406,120 @@ class EmployeeController extends Controller
     }
     public function biologs_per_location(Request $request)
     {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
+        $employee_names = Employee::select('id','employee_number','first_name','last_name')
+                                                ->whereIn('company_id', $allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
+                                                ->where('status','Active')
+                                                ->get();
+
+        $employee_numbers = Employee::whereIn('company_id', $allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
+                                                ->where('status','Active')
+                                                ->pluck('employee_number')
+                                                ->toArray();
+
         $terminals = IclockTerminal::get();
+        $location = $request->location;
         $from_date = $request->from;
         $to_date = $request->to;
         $attendances = array();
         if ($from_date != null) {
-            $attendances = IclockTransation::whereBetween('punch_time', [$from_date, $to_date])
-                ->where('terminal_id', $request->location)
-                ->whereIn('punch_state', array(0, 1))
-                ->with('emp_data', 'location')
-                ->orderBy('emp_code', 'desc')
-                ->orderBy('punch_time', 'asc')
-                ->get();
-            // dd($attendances);
+            $attendances = IclockTransation::whereBetween('punch_time', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                ->where('terminal_id', $request->location)
+                                ->whereIn('punch_state', array(0, 1, 5))
+                                ->whereIn('emp_code', $employee_numbers)
+                                ->with('emp_data', 'location')
+                                ->orderBy('emp_code', 'desc')
+                                ->orderBy('punch_time', 'asc')
+                                ->get();
         }
 
         return view(
             'attendances.employee_attendance_location',
             array(
                 'header' => 'biometrics',
+                'location' => $location,
                 'from_date' => $from_date,
                 'to_date' => $to_date,
                 'terminals' => $terminals,
                 'attendances' => $attendances,
+                'employee_names' => $employee_names,
             )
         );
     }
+
+    public function biologs_per_location_export(Request $request){
+
+        $location = isset($request->location) ? $request->location : "";
+        $from = isset($request->from) ? $request->from : "";
+        $to =  isset($request->to) ? $request->to : "";
+        $terminal = IclockTerminal::where('id',$location)->first();
+        return Excel::download(new AttendancePerLocationExport($location,$from,$to), $terminal->alias . ' ' . $from . ' to ' . $to . ' Attendance Per Location Export.xlsx');
+    }
+
+    public function biologs_per_location_hik(Request $request)
+    {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
+        $employee_names = Employee::select('id','employee_number','first_name','last_name')
+                                                ->whereIn('company_id', $allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
+                                                ->where('status','Active')
+                                                ->get();
+
+        $terminals = HikAttLog::select('deviceName')->groupBy('deviceName')
+                                    ->orderBy('deviceName' , 'ASC')
+                                    ->get();
+
+        $location = $request->location;
+        $from_date = $request->from;
+        $to_date = $request->to;
+        $attendances = array();
+        if ($from_date != null) {
+            $attendances = HikAttLog::whereBetween('authDateTime', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                ->where('deviceName', $request->location)
+                                ->orderBy('employeeID', 'desc')
+                                ->orderBy('authDateTime', 'asc')
+                                ->get();
+        }
+
+        return view(
+            'attendances.employee_attendance_location_hik',
+            array(
+                'header' => 'biometrics',
+                'location' => $location,
+                'from_date' => $from_date,
+                'to_date' => $to_date,
+                'terminals' => $terminals,
+                'attendances' => $attendances,
+                'employee_names' => $employee_names,
+            )
+        );
+    }
+
     public function newBio(Request $request)
     {
         // dd($request->all());
@@ -1384,7 +1596,10 @@ class EmployeeController extends Controller
 
     public function sync(Request $request)
     {
-        
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
         $terminals = iclockterminal_mysql::get();
         $terminals_hik = HikAttLog::select('deviceName')->groupBy('deviceName')
                                     ->orderBy('deviceName' , 'ASC')
@@ -1392,11 +1607,29 @@ class EmployeeController extends Controller
 
         if($request->terminal)
         {
-            // dd($request->all());
-        $attendances = iclocktransactions_mysql::where('terminal_id','=',$request->terminal)->whereBetween('punch_time',[$request->from,$request->to])->orderBy('punch_time','asc')->get();
-        foreach($attendances as $att)
+
+            $from = $request->from;
+            $to = $request->to;
+
+            $employee_numbers = Employee::whereIn('company_id', $allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
+                                                ->where('status','Active')
+                                                ->pluck('employee_number')
+                                                ->toArray();
+
+            $attendances = iclocktransactions_mysql::whereIn('emp_code',$employee_numbers)
+                                                    ->where('terminal_id','=',$request->terminal)
+                                                    ->whereBetween('punch_time',[$from." 00:00:01", $to." 23:59:59"])
+                                                    ->orderBy('punch_time','asc')
+                                                    ->get();
+            foreach($attendances as $att)
             {
-              if($att->punch_state == 0)
+                if($att->punch_state == 0)
                 {
                         $attend = Attendance::where('employee_code',$att->emp_code)->whereDate('time_in',date('Y-m-d', strtotime($att->punch_time)))->first();
                         if($attend == null)
@@ -1409,10 +1642,10 @@ class EmployeeController extends Controller
                         }
                     
                 }
-                else if($att->punch_state == 1)
+                else if($att->punch_state == 1 || $att->punch_state == 5)
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
-                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                     $update = [
                         'time_out' =>  date('Y-m-d H:i:s', strtotime($att->punch_time)),
                         'device_out' => $att->terminal_alias,
@@ -1436,21 +1669,28 @@ class EmployeeController extends Controller
                 }
             }
         }
+        
+        $employees = Employee::where('status','Active')
+                                ->whereIn('company_id', $allowed_companies)
+                                ->get();
+
         return view('employees.sync', array(
             'header' => 'biometrics',
             'terminals' => $terminals,
             'terminals_hik' => $terminals_hik,
+            'employees' => $employees,
         ));
     }
 
     public function sync_per_employee(Request $request)
     {
-        $from = $request->from_per_employee;
-        $to = $request->to_per_employee;
-        $employee_code = $request->employee_code;
+        $from = $request->from_biotime;
+        $to = $request->to_biotime;
+        $employee_code = $request->employee;
 
-        $attendances = iclocktransactions_mysql::where('emp_code','=',$employee_code)->whereBetween('punch_time',[$from,$to])->orderBy('punch_time','asc')->get();
+        $attendances = iclocktransactions_mysql::whereIn('emp_code',$employee_code)->whereBetween('punch_time',[$from." 00:00:01", $to." 23:59:59"])->orderBy('punch_time','asc')->get();
         
+        $count = 0;
         foreach($attendances as $att)
         {
             if($att->punch_state == 0)
@@ -1463,13 +1703,14 @@ class EmployeeController extends Controller
                         $attendance->time_in = date('Y-m-d H:i:s',strtotime($att->punch_time));
                         $attendance->device_in = $att->terminal_alias;
                         $attendance->save(); 
+                        $count++;
                     }
                 
             }
-            else if($att->punch_state == 1)
+            else if($att->punch_state == 1 || $att->punch_state == 5)
             {
                 $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
-                $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                 $update = [
                     'time_out' =>  date('Y-m-d H:i:s', strtotime($att->punch_time)),
                     'device_out' => $att->terminal_alias,
@@ -1479,8 +1720,8 @@ class EmployeeController extends Controller
                 $attendance_in = Attendance::where('employee_code',$att->emp_code)
                 ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
                 Attendance::where('employee_code',$att->emp_code)
-                ->whereBetween('time_in',[$time_in_before,$time_in_after])
-                ->update($update);
+                            ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                            ->update($update);
 
                 if($attendance_in ==  null)
                 {
@@ -1490,22 +1731,26 @@ class EmployeeController extends Controller
                     $attendance->device_out = $att->terminal_alias;
                     $attendance->save(); 
                 }
+
+                $count++;
             }
         }
-       
+        // Alert::warning('Sync count : ' . $count)->persistent('Success');
         return back();
     }
 
     public function sync_hik(Request $request)
     {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
         $from = $request->from_hik;
         $to = $request->to_hik;
         $terminal = $request->terminal_hik;
-        
-        $employee_numbers = Employee::pluck('employee_number')->toArray();
 
         $attendances = HikAttLog::where('deviceName',$terminal)
-                                ->whereIn('employeeID',$employee_numbers)
                                 ->whereBetween('authDate',[$from,$to])
                                 ->orderBy('authDate','asc')
                                 ->orderBy('direction','asc')
@@ -1531,7 +1776,73 @@ class EmployeeController extends Controller
                 else if($att->direction == 'Out' || $att->direction == 'OUT' )
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->authDateTime));
-                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
+                    $update = [
+                        'time_out' =>  date('Y-m-d H:i:s', strtotime($att->authDateTime)),
+                        'device_out' => $att->deviceName,
+                        // 'last_id' =>$att->id,
+                    ];
+                    // return $time_in_after . ' - ' .$time_in_before;
+                    $attendance_in = Attendance::where('employee_code',$att->employeeID)
+                    ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
+
+                    Attendance::where('employee_code',$att->employeeID)
+                    ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                    ->update($update);
+
+                    if($attendance_in ==  null)
+                    {
+                        $attendance = new Attendance;
+                        $attendance->employee_code  = $att->employeeID;   
+                        $attendance->time_out = date('Y-m-d H:i:s', strtotime($att->authDateTime));
+                        $attendance->device_out = $att->deviceName;
+                        $attendance->save(); 
+                    }
+
+                    $count++;
+                }
+            }
+        }
+
+        return back();
+    }
+
+    public function sync_per_employee_hik(Request $request)
+    {
+        $from = $request->from_hik;
+        $to = $request->to_hik;
+        $employee_code = $request->employee;
+
+
+        $employee_numbers = Employee::whereIn('employee_number',$employee_code)->where('status','Active')->pluck('employee_number')->toArray();
+
+        $attendances = HikAttLog::whereIn('employeeID',$employee_numbers)
+                                ->whereBetween('authDate',[$from,$to])
+                                ->orderBy('authDate','asc')
+                                ->orderBy('direction','asc')
+                                ->get();
+        
+        $count = 0;
+        if(count($attendances) > 0){
+            foreach($attendances as $att)
+            {
+                if($att->direction == 'In' || $att->direction == 'IN')
+                {
+                    $attend = Attendance::where('employee_code',$att->emp_code)->whereDate('time_in',date('Y-m-d', strtotime($att->authDate)))->first();
+                    if($attend == null)
+                    {
+                        $attendance = new Attendance;
+                        $attendance->employee_code  = $att->employeeID;   
+                        $attendance->time_in = date('Y-m-d H:i:s',strtotime($att->authDateTime));
+                        $attendance->device_in = $att->deviceName;
+                        $attendance->save();
+                        $count++; 
+                    }
+                }
+                else if($att->direction == 'Out' || $att->direction == 'OUT' )
+                {
+                    $time_in_after = date('Y-m-d H:i:s',strtotime($att->authDateTime));
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                     $update = [
                         'time_out' =>  date('Y-m-d H:i:s', strtotime($att->authDateTime)),
                         'device_out' => $att->deviceName,

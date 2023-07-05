@@ -42,21 +42,34 @@ class EmployeeDtrController extends Controller
             $emp = Employee::where('user_id',auth()->user()->id)->first();
             $new_dtr->schedule_id = $emp->schedule_id;
             $new_dtr->correction = $request->correction;
+            
+            // if($request->correction == 'Both'){
+            //     $stime = $request->time_in;
+            //     $etime = $request->time_out;   
+            //     $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
+            //     $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;     
+            //     if($stime > $etime ){
+            //         $new_dtr->time_out = date('Y-m-d', strtotime($request->dtr_date. ' + 1 day')).' '.$request->time_out;
+            //     }             
+            // }else if($request->correction == 'Time-in'){
+            //     $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
+            //     $new_dtr->time_out = null;
+            // }else{
+            //     $new_dtr->time_in = null;
+            //     $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;
+            // }      
+            
             if($request->correction == 'Both'){
-                $stime = $request->time_in;
-                $etime = $request->time_out;   
-                $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
-                $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;     
-                if($stime > $etime ){
-                    $new_dtr->time_out = date('Y-m-d', strtotime($request->dtr_date. ' + 1 day')).' '.$request->time_out;
-                }             
+                $new_dtr->time_in = $request->time_in;
+                $new_dtr->time_out = $request->time_out;                
             }else if($request->correction == 'Time-in'){
-                $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
+                $new_dtr->time_in = $request->time_in;
                 $new_dtr->time_out = null;
             }else{
                 $new_dtr->time_in = null;
-                $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;
-            }        
+                $new_dtr->time_out = $request->time_out;
+            }      
+
             $new_dtr->remarks = $request->remarks;
             
             if($request->file('attachment')){
@@ -88,21 +101,33 @@ class EmployeeDtrController extends Controller
         $new_dtr->user_id = Auth::user()->id;
         $new_dtr->dtr_date = $request->dtr_date;
         $new_dtr->correction = $request->correction;
+        // if($request->correction == 'Both'){
+        //     $stime = $request->time_in;
+        //     $etime = $request->time_out;   
+        //     $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
+        //     $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;     
+        //     if($stime > $etime ){
+        //         $new_dtr->time_out = date('Y-m-d', strtotime($request->dtr_date. ' + 1 day')).' '.$request->time_out;
+        //     }             
+        // }else if($request->correction == 'Time-in'){
+        //     $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
+        //     $new_dtr->time_out = null;
+        // }else{
+        //     $new_dtr->time_in = null;
+        //     $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;
+        // }     
+        
         if($request->correction == 'Both'){
-            $stime = $request->time_in;
-            $etime = $request->time_out;   
-            $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
-            $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;     
-            if($stime > $etime ){
-                $new_dtr->time_out = date('Y-m-d', strtotime($request->dtr_date. ' + 1 day')).' '.$request->time_out;
-            }             
+            $new_dtr->time_in = $request->time_in;
+            $new_dtr->time_out = $request->time_out;                
         }else if($request->correction == 'Time-in'){
-            $new_dtr->time_in = $request->dtr_date.' '.$request->time_in;
+            $new_dtr->time_in = $request->time_in;
             $new_dtr->time_out = null;
         }else{
             $new_dtr->time_in = null;
-            $new_dtr->time_out = $request->dtr_date.' '.$request->time_out;
-        }       
+            $new_dtr->time_out = $request->time_out;
+        }  
+
         $new_dtr->remarks = $request->remarks;
 
         if($request->file('attachment')){

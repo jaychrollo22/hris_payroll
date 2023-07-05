@@ -2,6 +2,45 @@
 @section('content')
 <div class="main-panel">
     <div class="content-wrapper">
+        <div class='row grid-margin'>
+          <div class='col-lg-2 '>
+            <div class="card card-tale">
+              <div class="card-body">
+                <div class="media">                
+                  <div class="media-body">
+                    <h4 class="mb-4">Pending</h4>
+                    <h2 class="card-text">{{($wfhs->where('status','Pending'))->count()}}</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
+          <div class='col-lg-2'>
+            <div class="card card-light-danger">
+              <div class="card-body">
+                <div class="media">
+                
+                  <div class="media-body">
+                    <h4 class="mb-4">Declined/Cancelled</h4>
+                    <h2 class="card-text">{{($wfhs->where('status','Cancelled'))->count() + ($wfhs->where('status','Declined'))->count()}}</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
+          <div class='col-lg-2'>
+            <div class="card text-success">
+              <div class="card-body">
+                <div class="media">                
+                  <div class="media-body">
+                    <h4 class="mb-4">Approved</h4>
+                    <h2 class="card-text">{{($wfhs->where('status','Approved'))->count()}}</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
+        </div>
         <div class='row'>
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
@@ -30,9 +69,9 @@
                     <tbody>
                       @foreach ($wfhs as $wfh)
                       <tr>
-                        <td> {{ date('d/m/Y', strtotime($wfh->created_at)) }}</td>
-                        <td> {{ date('d/m/Y', strtotime($wfh->applied_date)) }} </td>
-                        <td> {{ date('H:i', strtotime($wfh->date_from)) }} - {{ date('H:i', strtotime($wfh->date_to)) }}  </td>
+                        <td> {{ date('M. d, Y', strtotime($wfh->created_at)) }}</td>
+                        <td> {{ date('M. d, Y', strtotime($wfh->applied_date)) }} </td>
+                        <td> {{ date('h:i A', strtotime($wfh->date_from)) }} - {{ date('h:i A', strtotime($wfh->date_to)) }}  </td>
                         {{-- <td>{{get_count_days($wfh->schedule,$wfh->date_from,$wfh->date_to)}}</td> --}}
                         <td>
                           <p title="{{ $wfh->remarks }}" style="width: 250px;white-space: nowrap; overflow: hidden;text-overflow: ellipsis;">
@@ -49,25 +88,29 @@
                           @endif                        
                         </td>
                         <td id="tdStatus{{ $wfh->id }}">
-                          @foreach($wfh->approver as $approver)
-                            @if($wfh->level >= $approver->level)
-                              @if ($wfh->level == 0 && $wfh->status == 'Declined')
-                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                              @elseif ($wfh->level == 1 && $wfh->status == 'Declined')
-                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                          @if(count($wfh->approver) > 0)
+                            @foreach($wfh->approver as $approver)
+                              @if($wfh->level >= $approver->level)
+                                @if ($wfh->level == 0 && $wfh->status == 'Declined')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @elseif ($wfh->level == 1 && $wfh->status == 'Declined')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @else
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                @endif
                               @else
-                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
-                              @endif
-                            @else
-                              @if ($wfh->status == 'Declined')
-                                {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                              @elseif ($wfh->status == 'Approved')
-                                {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
-                              @else
-                                {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
-                              @endif
-                            @endif<br>
-                          @endforeach
+                                @if ($wfh->status == 'Declined')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @elseif ($wfh->status == 'Approved')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                @else
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">Pending</label>
+                                @endif
+                              @endif<br>
+                            @endforeach
+                          @else
+                            <label class="badge badge-danger mt-1">No Approver</label>
+                          @endif
                         </td>
                         <td id="tdActionId{{ $wfh->id }}" data-id="{{ $wfh->id }}">
                           @if ($wfh->status == 'Pending' and $wfh->level == 0)

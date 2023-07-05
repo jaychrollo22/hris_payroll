@@ -273,8 +273,8 @@
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo mr-5" href="{{ url('/') }}"><img src="{{ URL::asset(config('logo.logos')::first()->logo) }}" class="mr-2" alt="logo" /></a>
-                <a class="navbar-brand brand-logo-mini" href="{{ url('/') }}"><img src="{{ URL::asset(config('logo.logos')::first()->icon) }}" alt="logo" /></a>
+                <a class="navbar-brand brand-logo mr-5" href="{{ url('/') }}"><img src="{{ auth()->user()->employee->company ? URL::asset('company_images/' . auth()->user()->employee->company->company_code . '.png')  : ""}}" onerror="this.src='{{ URL::asset('/images/no_image.png') }}';" style="height:auto;max-height:60px" class="mr-2 ml-2" alt="logo" /></a>
+                <a class="navbar-brand brand-logo-mini" href="{{ url('/') }}"><img src="{{ auth()->user()->employee->company ? URL::asset('company_images/' . auth()->user()->employee->company->company_code . '.png')  : ""}}" onerror="this.src='{{ URL::asset('/images/no_image.png') }}';" style="height:auto" alt="logo" /></a>
             </div>
 
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -284,6 +284,7 @@
                 <ul class="navbar-nav mr-lg-2">
                     <li class="nav-item nav-search d-none d-lg-block">
                         <div class="input-group">
+                            
                         </div>
                     </li>
                 </ul>
@@ -317,6 +318,12 @@
             <!-- partial:partials/_sidebar.html -->
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
+                    <li class="nav-item @if ($header == 'account-setting') active @endif">
+                        <a class="nav-link" href="{{ url('/account-setting') }}" onclick='show()'>
+                            <i class="ti-settings menu-icon"></i>
+                            <span class="menu-title">{{auth()->user()->employee->first_name . ' ' . auth()->user()->employee->last_name}}</span>   
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <hr>
                         <h5>Employee</h5>
@@ -342,7 +349,10 @@
                         <div class="collapse @if ($header == 'forms') show @endif" id="forms">
                             <ul class="nav flex-column sub-menu @if ($header == 'forms') show @endif">
                                 <li class="nav-item "> <a class="nav-link active" href="{{ url('/file-leave') }}">Leave</a></li>
-                                @if(checkUserAllowedOvertime(auth()->user()->id) == 'yes')
+                                @php
+                                    $user_allowed_overtime = auth()->user()->allowed_overtime ? auth()->user()->allowed_overtime->allowed_overtime : "";
+                                @endphp
+                                @if(checkUserAllowedOvertime(auth()->user()->id) == 'yes' || $user_allowed_overtime == 'on')
                                     <li class="nav-item "> <a class="nav-link " href="{{ url('/overtime') }}">Overtime</a></li>
                                 @endif
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/work-from-home') }}">Work from home</a></li>
@@ -398,6 +408,15 @@
                         <h5>Super Admin</h5>
                     </li>
 
+                    @if (checkUserPrivilege('timekeeping_dashboard',auth()->user()->id) == 'yes')
+                    <li class="nav-item @if ($header == 'Timekeeping') active @endif">
+                        <a class="nav-link" href="{{ url('/timekeeping-dashboard') }}" onclick='show()'>
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">Timekeeping</span>
+                        </a>
+                    </li>
+                    @endif
+
                     @if (checkUserPrivilege('employees_view',auth()->user()->id) == 'yes')
                     <li class="nav-item @if ($header == 'employees') active @endif ">
                         <a class="nav-link" href="{{ url('/employees') }}" onclick='show()'>
@@ -410,7 +429,7 @@
                     @if (checkUserPrivilege('biometrics_per_employee',auth()->user()->id) == 'yes' || checkUserPrivilege('biometrics_per_location',auth()->user()->id) == 'yes' || checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes' || checkUserPrivilege('biometrics_sync',auth()->user()->id) == 'yes')
                     <li class="nav-item @if ($header == 'biometrics') active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#biometrics" aria-expanded="false" aria-controls="ui-basic">
-                            <i class="icon-cog menu-icon"></i>
+                            <i class="icon-clock menu-icon"></i>
                             <span class="menu-title">Biometrics</span>
                             <i class="menu-arrow"></i>
                         </a>
@@ -421,7 +440,10 @@
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biologs-employee') }}">Per Employee</a></li>
                                 @endif
                                 @if (checkUserPrivilege('biometrics_per_location',auth()->user()->id) == 'yes')
-                                <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location (ZK)</a></li>
+                                @endif
+                                @if (checkUserPrivilege('biometrics_per_location_hik',auth()->user()->id) == 'yes')
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location-hik') }}">Per Location (HIK)</a></li>
                                 @endif
                                 @if (checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biometrics-per-company') }}">Per Company</a></li>
@@ -511,6 +533,14 @@
                     @if(checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-leave-credits') }}">Employee Leave Credits</a>
+                    </li>
+                    @endif
+                    @if(checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes' && (auth()->user()->id == '1' || auth()->user()->id == '660'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/manual-employee-earned-leaves') }}">Manual Earned Leaves</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/employee-leave-balances') }}">Employee Leave Balances</a>
                     </li>
                     @endif
                     @if(checkUserPrivilege('masterfiles_employee_leave_earned',auth()->user()->id) == 'yes')
@@ -751,6 +781,27 @@
                 , "sDom": "lfrti"
 
             });
+            $('#validateLevel').change(function() {
+                var selectedValue = $(this).val();
+                console.log(selectedValue);
+                
+                if (selectedValue != '1' ) {
+                    $('#isAllowedOvertime').show();
+                } else {
+                    $('#isAllowedOvertime').hide();
+                }
+            });
+            $('#validateLevel').load(function() {
+                var selectedValue = $(this).val();
+                console.log(selectedValue);
+                
+                if (selectedValue != '1' ) {
+                    $('#isAllowedOvertime').show();
+                } else {
+                    $('#isAllowedOvertime').hide();
+                }
+            });
+
         });
 
     </script>
@@ -920,6 +971,25 @@
             $("#privacy-beneficiaries").click(function() {
                 $("#submit-beneficiaries-btn").attr("disabled", !this.checked);
             });
+
+           
+            // Get references to the input fields
+            var $break_hrs = $('#break_hrs');
+            var $approve_hrs = $('#approve_hrs');
+            var $total_approve_hours = $('#total_approve_hours');
+
+            // Add event listeners to the input fields
+            $break_hrs.on('keyup', calculate);
+            $approve_hrs.on('keyup', calculate);
+
+            // Define the calculate function
+            function calculate() {
+                var value_break_hrs = parseFloat($break_hrs.val()) || 0;
+                var value_approve_hrs = parseFloat($approve_hrs.val()) || 0;
+                var total_approve_hrs = value_approve_hrs - value_break_hrs;
+                $total_approve_hours.val(total_approve_hrs);
+            }
+   
 
         });
     </script>

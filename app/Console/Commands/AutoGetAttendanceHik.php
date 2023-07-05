@@ -50,10 +50,7 @@ class AutoGetAttendanceHik extends Command
         $from = date('Y-m-d',strtotime('-1 day'));
         $to = date('Y-m-d');
         
-        $employee_numbers = Employee::pluck('employee_number')->toArray();
-
-        $attendances = HikAttLog::whereIn('employeeID',$employee_numbers)
-                                                    ->whereBetween('authDate',[$from,$to])
+        $attendances = HikAttLog::whereBetween('authDate',[$from." 00:00:01", $to." 23:59:59"])
                                                     ->orderBy('authDate','asc')
                                                     ->orderBy('direction','asc')
                                                     ->get();
@@ -78,7 +75,7 @@ class AutoGetAttendanceHik extends Command
                 else if($att->direction == 'Out' || $att->direction == 'OUT' )
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->authDateTime));
-                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                     $update = [
                         'time_out' =>  date('Y-m-d H:i:s', strtotime($att->authDateTime)),
                         'device_out' => $att->deviceName,

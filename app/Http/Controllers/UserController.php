@@ -5,6 +5,9 @@ use App\Bank;
 use App\User;
 use App\UserPrivilege;
 use App\UserAllowedCompany;
+use App\UserAllowedProject;
+use App\UserAllowedLocation;
+
 use App\Level;
 use App\Company;
 use App\Employee;
@@ -15,6 +18,10 @@ use App\EmployeeContactPerson;
 use App\MaritalStatus;
 use App\Classification;
 use App\EmployeeCompany;
+
+use App\Project;
+use App\Location;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -30,7 +37,7 @@ class UserController extends Controller
 
         if(auth()->user()->id == '353' || auth()->user()->id == '1'){
             $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
-            $users = User::with('user_allowed_company','user_privilege')->get();
+            $users = User::select('id','name','email','status','role')->get();
 
             return view('users.index',
             array(
@@ -52,6 +59,8 @@ class UserController extends Controller
     public function editUserRole(User $user){
 
         $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
+        $projects = Project::orderBy('project_id','ASC')->get();
+        $locations = Location::orderBy('location','ASC')->get();
         $user = User::with('user_allowed_company','user_privilege')
                         ->where('id',$user->id)
                         ->first();
@@ -61,6 +70,22 @@ class UserController extends Controller
             'header' => 'edit_user_role',
             'user' => $user,
             'companies' => $companies,
+            'projects' => $projects,
+            'locations' => $locations,
+        ));
+
+    }
+    public function changePassword(User $user){
+
+        
+        $user = User::with('user_allowed_company','user_privilege')
+                        ->where('id',$user->id)
+                        ->first();
+
+        return view('users.change_password',
+        array(
+            'header' => 'users',
+            'user' => $user
         ));
 
     }
@@ -69,6 +94,7 @@ class UserController extends Controller
         if($user){
             $user = User::findOrFail($user->id);
             $user->email = $request->email;
+            $user->name = $request->name;
             $user->role = $request->role;
             $user->save();
 
@@ -85,6 +111,34 @@ class UserController extends Controller
                 }
             }else{
                 $user_allowed_company = UserAllowedCompany::where('user_id',$user->id)->delete();
+            }
+            if($request->location){
+                $user_allowed_location = UserAllowedLocation::where('user_id',$user->id)->first(); 
+                if($user_allowed_location){
+                    $user_allowed_location->location_ids = json_encode($request->location,true);
+                    $user_allowed_location->save();
+                }else{
+                    $new_user_allowed_location = new UserAllowedLocation;
+                    $new_user_allowed_location->user_id = $user->id;
+                    $new_user_allowed_location->location_ids = json_encode($request->location,true);
+                    $new_user_allowed_location->save();
+                }
+            }else{
+                $user_allowed_location = UserAllowedLocation::where('user_id',$user->id)->delete();
+            }
+            if($request->project){
+                $user_allowed_project = UserAllowedProject::where('user_id',$user->id)->first(); 
+                if($user_allowed_project){
+                    $user_allowed_project->project_ids = json_encode($request->project,true);
+                    $user_allowed_project->save();
+                }else{
+                    $new_user_allowed_project = new UserAllowedProject;
+                    $new_user_allowed_project->user_id = $user->id;
+                    $new_user_allowed_project->project_ids = json_encode($request->project,true);
+                    $new_user_allowed_project->save();
+                }
+            }else{
+                $user_allowed_project = UserAllowedProject::where('user_id',$user->id)->delete();
             }
 
             $user_privilege = UserPrivilege::where('user_id',$user->id)->first();
@@ -105,8 +159,10 @@ class UserController extends Controller
 
                 $user_privilege->biometrics_per_employee = $request->biometrics_per_employee;
                 $user_privilege->biometrics_per_location = $request->biometrics_per_location;
+                $user_privilege->biometrics_per_location_hik = $request->biometrics_per_location_hik;
                 $user_privilege->biometrics_per_company = $request->biometrics_per_company;
                 $user_privilege->biometrics_sync = $request->biometrics_sync;
+                $user_privilege->timekeeping_dashboard = $request->timekeeping_dashboard;
 
                 $user_privilege->settings_view = $request->settings_view;
                 $user_privilege->settings_add = $request->settings_add;
@@ -141,8 +197,10 @@ class UserController extends Controller
 
                 $new_user_privilege->biometrics_per_employee = $request->biometrics_per_employee;
                 $new_user_privilege->biometrics_per_location = $request->biometrics_per_location;
+                $new_user_privilege->biometrics_per_location_hik = $request->biometrics_per_location_hik;
                 $new_user_privilege->biometrics_per_company = $request->biometrics_per_company;
                 $new_user_privilege->biometrics_sync = $request->biometrics_sync;
+                $new_user_privilege->timekeeping_dashboard = $request->timekeeping_dashboard;
 
                 $new_user_privilege->settings_view = $request->settings_view;
                 $new_user_privilege->settings_add = $request->settings_add;
@@ -185,16 +243,16 @@ class UserController extends Controller
         array(
             'header' => 'user1',
             'user' => $user,
-            'header' => 'employees',
-                'classifications' => $classifications,
-                'employees' => $employees,
-                'marital_statuses' => $marital_statuses,
-                'departments' => $departments,
-                'levels' => $levels,
-                'users' => $users,
-                'banks' => $banks,
-                'schedules' => $schedules,
-                'companies' => $companies,
+            'header' => 'account-setting',
+            'classifications' => $classifications,
+            'employees' => $employees,
+            'marital_statuses' => $marital_statuses,
+            'departments' => $departments,
+            'levels' => $levels,
+            'users' => $users,
+            'banks' => $banks,
+            'schedules' => $schedules,
+            'companies' => $companies,
         ));
     
     }
@@ -348,7 +406,7 @@ class UserController extends Controller
         $user->save();
 
         Alert::success('Successfully Updated')->persistent('Dismiss');
-        return back();
+        return redirect('/users');
 
     }
 }
