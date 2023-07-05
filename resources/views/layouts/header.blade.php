@@ -387,11 +387,11 @@
                         </a>
                         <div class="collapse @if ($header == 'for-approval') show @endif" id="for-approval">
                             <ul class="nav flex-column sub-menu @if ($header == 'for-approval') show @endif">
-                                <li class="nav-item "> <a class="nav-link active" href="{{ url('/for-leave') }}">Leave</a></li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for-overtime') }}">Overtime</a></li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for-work-from-home') }}">Work from home</a></li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for-official-business') }}">Official Business</a></li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction</a></li>
+                                <li class="nav-item "><a class="nav-link active" href="{{ url('/for-leave') }}">Leave <span class="badge badge-warning">{{ session('pending_leave_count') }}</span></a></li>
+                                <li class="nav-item "><a class="nav-link " href="{{ url('/for-overtime') }}">Overtime <span class="badge badge-warning">{{ session('pending_overtime_count') }}</span></a></li>
+                                <li class="nav-item "><a class="nav-link " href="{{ url('/for-work-from-home') }}">Work From Home <span class="badge badge-warning">{{ session('pending_wfh_count') }}</span></a></li>
+                                <li class="nav-item "><a class="nav-link " href="{{ url('/for-official-business') }}">Official Business <span class="badge badge-warning">{{ session('pending_ob_count') }}</span></a></li>
+                                <li class="nav-item "><a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction <span class="badge badge-warning">{{ session('pending_dtr_count') }}</span></a></li>
                             </ul>
                         </div>
                     </li>
