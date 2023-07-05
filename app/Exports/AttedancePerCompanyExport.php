@@ -31,12 +31,36 @@ class AttedancePerCompanyExport implements FromView
                                                     ->orderBy('time_in','asc')
                                                     ->orderby('time_out','desc')
                                                     ->orderBy('id','asc');
-                                            }])
-                                            ->where('company_id', $company)
-                                            ->where('status','Active')
-                                            ->get();
+                                            }
+                                        ])
+                                        ->with(['approved_leaves' => function ($query) use ($from_date, $to_date) {
+                                            $query->whereBetween('date_from', [$from_date, $to_date])
+                                            ->where('status','Approved')
+                                            ->orderBy('id','asc');
+                                        },'approved_leaves.leave'])
+                                        ->with(['approved_wfhs' => function ($query) use ($from_date, $to_date) {
+                                            $query->whereBetween('applied_date', [$from_date, $to_date])
+                                            ->where('status','Approved')
+                                            ->orderBy('id','asc');
+                                        }])
+                                        ->with(['approved_obs' => function ($query) use ($from_date, $to_date) {
+                                            $query->whereBetween('applied_date', [$from_date, $to_date])
+                                            ->where('status','Approved')
+                                            ->orderBy('id','asc');
+                                        }])
+                                        ->with(['approved_dtrs' => function ($query) use ($from_date, $to_date) {
+                                            $query->whereBetween('dtr_date', [$from_date, $to_date])
+                                            ->where('status','Approved')
+                                            ->orderBy('id','asc');
+                                        }])
+                                        ->where('company_id', $company)
+                                        ->where('status','Active')
+                                        ->get();
+                                        
             $date_range =  dateRange($from_date, $to_date);
-            $schedules = ScheduleData::where('schedule_id', 1)->get();
+            
+            $schedules = ScheduleData::all();
+
             return view('exports.attendance_company_export', [
                 'attendances' => $attendances,
                 'date_range' => $date_range,

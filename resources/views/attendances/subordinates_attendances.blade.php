@@ -582,7 +582,13 @@
                                                                     }
                                                                 }
                                                             }else{
-                                                                $if_attendance_holiday_status = checkHasAttendanceHolidayStatus($if_attendance_holiday, $emp->employee_number);
+                                                                $check_attendance = checkHasAttendanceHolidayStatus($emp->attendances,$if_attendance_holiday);
+
+                                                                if(empty($check_attendance)){
+                                                                    $is_absent = 'Absent';
+                                                                }else{
+                                                                    $if_attendance_holiday_status = 'With-Pay';
+                                                                }
                                                             }
                                                         }
                                                     }else{

@@ -49,7 +49,7 @@
                         </p>
                         @if($date_range)
                         {{-- <button class='btn btn-info mb-1' onclick="exportTableToExcel('employee_attendance','{{$from_date}} - {{$to_date}}')">Export</button> --}}
-                        <a href="attendance-per-company-export?company={{$company}}&from={{$from_date}}&to={{$to_date}}" class='btn btn-info mb-1'>Export</a>
+                        <a href="attendance-per-company-export?company={{$company}}&from={{$from_date}}&to={{$to_date}}" class='btn btn-info mb-1'>Export {{count($emp_data)}} Employees</a>
                         @endif
 
 
@@ -246,63 +246,9 @@
                                                     </td>
 
                                                     @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()))
-                                                        {{-- @php
-                                                        $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
-                                                        $late = (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
-                                                        $working_minutes = (((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600);
-                                                        $overtime = number_format($working_minutes - $schedules[$id]->working_hours,2);
-                                                        if($late > 0)
-                                                        {
-                                                        $late_data = $late;
-                                                        }
-                                                        else {
-                                                        $late_data = 0;
-
-                                                        }
-                                                        $undertime = number_format($working_minutes - $schedules[$id]->working_hours + ($late_data/60),2);
-                                                        @endphp --}}
-
-                                                        {{-- <td>
-                                                            {{number_format($late_data/60,2)}} hrs
-                                                        @php
-                                                        $lates = $lates+ round($late_data/60,2);
-                                                        @endphp
-                                                        </td>
-                                                        <td>
-                                                            @if($undertime < 0) {{number_format(($undertime*60*-1)/60,2)}} hrs @php $undertimes=$undertimes + round(($undertime*60*-1)/60,2); @endphp @else 0 hrs @endif </td>
-                                                        <td>
-                                                            @if($overtime > .5)
-                                                            {{$overtime}} hrs
-                                                            @php
-                                                            $overtimes = $overtimes +round($overtime,2);
-                                                            @endphp
-                                                            @else
-                                                            0 hrs
-                                                            @endif
-                                                        </td>
-                                                        <td>0 hrs</td>
-                                                        <td>
-                                                            0 hrs
-                                                        </td>
-                                                        <td>
-                                                            @php
-                                                            $night_diff_ot = $night_diff_ot + round(night_difference(strtotime($time_in_data),strtotime($time_in->time_out)),2);
-                                                            echo round(night_difference(strtotime($time_in_data),strtotime($time_in->time_out)),2)." hrs";
-                                                            @endphp
-
-                                                        </td>
-                                                        <td>
-                                                            <small>Time In : {{$time_in->device_in}} <br>
-                                                                Time Out : {{$time_in->device_out}}</small>
-                                                        </td> --}}
+                                                        
                                                         @else
-                                                        {{-- <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td> --}}
+                                                        
 
                                                     @endif
                                                 @endif
@@ -336,8 +282,15 @@
                                                                                     $if_attendance_holiday_status = 'With-Pay';
                                                                                 }
                                                                             }
-                                                                        }else{
-                                                                            $if_attendance_holiday_status = checkHasAttendanceHolidayStatus($if_attendance_holiday, $emp->employee_number);
+                                                                        }
+                                                                        else{
+                                                                            $check_attendance = checkHasAttendanceHolidayStatus($emp->attendances,$if_attendance_holiday);
+
+                                                                            if(empty($check_attendance)){
+                                                                                $is_absent = 'Absent';
+                                                                            }else{
+                                                                                $if_attendance_holiday_status = 'With-Pay';
+                                                                            }
                                                                         }
                                                                     }
                                                                 }else{

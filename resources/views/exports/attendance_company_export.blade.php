@@ -26,11 +26,13 @@
     <tbody>
 
         @foreach(array_reverse($date_range) as $date_r)
+        @php
+            $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
+        @endphp
         <tr>
             <td>{{$emp->employee_number}}</td>
-            {{-- <td>{{$emp->employee_number}}</td> --}}
             {{-- <td>{{$emp->first_name . ' ' . $emp->last_name}}</td> --}}
-            <td class="@if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray())) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
+            <td class="@if($employee_schedule) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
 
             @php
                 $if_has_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($date_r)));
@@ -45,7 +47,7 @@
                 <td>{{$if_has_ob->date_from}}</td>
                 <td>{{$if_has_ob->date_to}}</td>
                 <td>{{ $ob_diff->h }} hrs. {{ $ob_diff->i }} mins. </td>
-                <td></td>
+                <td>OB</td>
             @elseif($if_has_wfh)
                 @php
                     $wfh_start = new DateTime($if_has_wfh->date_from); 
@@ -54,7 +56,7 @@
                 <td>{{$if_has_wfh->date_from}}</td>
                 <td>{{$if_has_wfh->date_to}}</td>
                 <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins. </td>
-                <td>{{ $if_has_wfh->approve_percentage ? 'WFH-' . $if_has_wfh->approve_percentage .'%' : ""}}</td>
+                <td>{{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : "WFH"}}</td>
             @else
                 @php
                     $time_in_out = 0;
@@ -64,21 +66,17 @@
                     {
                         $time_out = ($emp->attendances)->whereBetween('time_out',[$date_r." 00:00:00", $date_r." 23:59:59"])->where('time_in',null)->first();
                     }
-
+                    
                     $dtr_correction_time_in = "";
                     $dtr_correction_time_out = "";
                     $dtr_correction_both = "";
                     if($if_has_dtr){
                         $dtr_correction_time_in = $if_has_dtr->correction == 'Time-in' ? $if_has_dtr->time_in : "";
                         $dtr_correction_time_out = $if_has_dtr->correction == 'Time-out' ? $if_has_dtr->time_out : "";
-
-                        if($if_has_dtr->correction == 'Both'){
-                            $dtr_correction_time_in = $if_has_dtr->time_in;
-                            $dtr_correction_time_out = $if_has_dtr->time_out;
-                        }
                         $dtr_correction_both = $if_has_dtr->correction == 'Both'  ? $if_has_dtr : "";
                     }
                 @endphp
+                
                 @if($dtr_correction_both)
                     @php
                         $dtr_start = new DateTime($if_has_dtr->time_in); 
@@ -89,7 +87,7 @@
                     <td>{{ $dtr_diff->h }} hrs. {{ $dtr_diff->i }} mins.</td>
                     <td>DTR Correction</td>
                 @else
-           
+                
                     @if($dtr_correction_time_in)
                         <td>{{date('h:i A',strtotime($dtr_correction_time_in))}}</td>
                     @else
@@ -145,7 +143,7 @@
                         @endif
                     @endif
                     
-               
+                    
                     {{-- Time Out --}}
                     @if($time_in_out == 1)
                     <td></td>
@@ -178,63 +176,9 @@
                         </td>
 
                         @if(in_array(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray()))
-                            {{-- @php
-                            $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
-                            $late = (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - strtotime(date("01-01-2022 h:i",strtotime("01-01-2022 ".$schedules[$id]->time_in_to))))/60;
-                            $working_minutes = (((strtotime($time_in->time_out) - strtotime($time_in_data)))/3600);
-                            $overtime = number_format($working_minutes - $schedules[$id]->working_hours,2);
-                            if($late > 0)
-                            {
-                            $late_data = $late;
-                            }
-                            else {
-                            $late_data = 0;
-
-                            }
-                            $undertime = number_format($working_minutes - $schedules[$id]->working_hours + ($late_data/60),2);
-                            @endphp --}}
-
-                            {{-- <td>
-                                {{number_format($late_data/60,2)}} hrs
-                            @php
-                            $lates = $lates+ round($late_data/60,2);
-                            @endphp
-                            </td>
-                            <td>
-                                @if($undertime < 0) {{number_format(($undertime*60*-1)/60,2)}} hrs @php $undertimes=$undertimes + round(($undertime*60*-1)/60,2); @endphp @else 0 hrs @endif </td>
-                            <td>
-                                @if($overtime > .5)
-                                {{$overtime}} hrs
-                                @php
-                                $overtimes = $overtimes +round($overtime,2);
-                                @endphp
-                                @else
-                                0 hrs
-                                @endif
-                            </td>
-                            <td>0 hrs</td>
-                            <td>
-                                0 hrs
-                            </td>
-                            <td>
-                                @php
-                                $night_diff_ot = $night_diff_ot + round(night_difference(strtotime($time_in_data),strtotime($time_in->time_out)),2);
-                                echo round(night_difference(strtotime($time_in_data),strtotime($time_in->time_out)),2)." hrs";
-                                @endphp
-
-                            </td>
-                            <td>
-                                <small>Time In : {{$time_in->device_in}} <br>
-                                    Time Out : {{$time_in->device_out}}</small>
-                            </td> --}}
+                            
                             @else
-                            {{-- <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td> --}}
+                            
 
                         @endif
                     @endif
@@ -242,56 +186,66 @@
                     {{-- Remarks --}}
                     <td>
                         @php
-                            $check_if_holiday = '';
-
-                            $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
+                            $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
                         @endphp
                         @if($time_in == null)
                             @if($employee_schedule)
                                 @php 
-                                $is_absent = '';
-                                $if_leave = '';
-                                $if_attendance_holiday = '';
-                                $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
-                                $if_attendance_holiday_status = '';
-                                if($check_if_holiday){
-                                    $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
-                                    if($if_attendance_holiday){
+                                    $is_absent = '';
+                                    $if_leave = '';
+                                    $if_attendance_holiday = '';
+                                    $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
+                                    $if_attendance_holiday_status = '';
+                                    if($check_if_holiday){
+                                        $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
+                                        if($if_attendance_holiday){
 
-                                        $check_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)),$employee_schedule);
-                                        $check_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                        $check_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                        $check_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                            $check_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)),$employee_schedule);
+                                            $check_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                            $check_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                            $check_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
 
-                                        if($check_leave || $check_wfh || $check_ob || $check_dtr){
-                                            $if_attendance_holiday_status = 'With-Pay';
-                                            if($check_leave){
-                                                if($check_leave == 'SL Without-Pay' || $check_leave == 'VL Without-Pay'){
-                                                    $if_attendance_holiday_status = 'Without-Pay';
+                                            
+
+                                            if($check_leave || $check_wfh || $check_ob || $check_dtr){
+                                                $if_attendance_holiday_status = 'With-Pay';
+                                                if($check_leave){
+                                                    if($check_leave == 'SL Without-Pay' || $check_leave == 'VL Without-Pay'){
+                                                        $if_attendance_holiday_status = 'Without-Pay';
+                                                    }else{
+                                                        $if_attendance_holiday_status = 'With-Pay';
+                                                    }
+                                                }
+                                            }
+                                            else{
+
+                                                $check_attendance = checkHasAttendanceHolidayStatus($emp->attendances,$if_attendance_holiday);
+
+                                                if(empty($check_attendance)){
+                                                    $is_absent = 'Absent';
                                                 }else{
                                                     $if_attendance_holiday_status = 'With-Pay';
                                                 }
+                                                
                                             }
-                                        }else{
-                                            $if_attendance_holiday_status = checkHasAttendanceHolidayStatus($if_attendance_holiday, $emp->employee_number);
                                         }
-                                    }
-                                }else{
-                                    $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
-                                    if(empty($if_leave)){
-                                        if(empty($if_has_dtr)){
-                                            if($dtr_correction_time_out == null){
-                                                if($time_out == null){
-                                                    $is_absent = 'Absent';
+                                    }else{
+                                        $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
+                                        if(empty($if_leave)){
+                                            if(empty($if_has_dtr)){
+                                                if($dtr_correction_time_out == null){
+                                                    if($time_out == null){
+                                                        $is_absent = 'Absent';
+                                                    }
                                                 }
                                             }
-                                        }
-                                    } 
-                                }
-                                    
-                            @endphp
-                            {{$is_absent}}
-                            {{$if_attendance_holiday_status}}
+                                        } 
+                                    }
+                                        
+                                @endphp
+                                {{$if_leave}}
+                                {{$is_absent}}
+                                {{$if_attendance_holiday_status}}
                             @endif
                         @else
                             @php

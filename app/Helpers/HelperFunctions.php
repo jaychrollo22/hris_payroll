@@ -621,19 +621,16 @@ function checkHasAttendanceHoliday($date,$employee_code,$location){
     }
 }
 
-function checkHasAttendanceHolidayStatus($date,$employee_code){
-    $attendance = Attendance::select('id')
-                        ->where('employee_code',$employee_code)
-                        ->where(function($q) use($date){
-                            $q->whereDate('time_in',$date)
-                                ->orWhereDate('time_out',$date);
-                        })
-                        ->first();
-    if($attendance){
-        return 'With-Pay';
-    }else{
-        return 'Without-Pay';
+function checkHasAttendanceHolidayStatus($attendances=array(),$check_date){
+    $status =  '';
+    if(count($attendances) > 0 && $check_date){
+        foreach($attendances as $item){            
+            if(date('Y-m-d',strtotime($item['time_in'])) == date('Y-m-d',strtotime($check_date))){
+               return $item['time_in'];
+            }
+        }
     }
+    return $status;
 }
 
 function checkEmployeeLeaveCredits($user_id, $leave_type){
