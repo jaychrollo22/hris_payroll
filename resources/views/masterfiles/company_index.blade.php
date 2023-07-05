@@ -20,7 +20,6 @@
 								<thead>
 									<tr>
 										<th>Company Logo</th>
-										<th>Company Icon</th>
 										<th>Company Name</th>
 										<th>Company Code</th>
 										<th>Date Created</th>
@@ -30,9 +29,8 @@
 								<tbody>
 									@foreach ($companies as $company)
 										<tr>
-											<td class="py-1"><img src="{{ url($company->logo) }}" class="img-sm me-3 rounded-circle" alt="image">
+											<td class="py-1"> <img  src="{{ url('company_images/'.$company->company_code.'.png') }}" width="100px" height="auto" alt="">
 											</td>
-											<td class="py-1"><img src="{{ url($company->icon) }}" class="img-sm me-3 rounded-circle" alt="image">
 											</td>
 											<td>{{ $company->company_name }}</td>
 											<td>{{ $company->company_code }}</td>
