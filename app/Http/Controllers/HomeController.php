@@ -74,13 +74,13 @@ class HomeController extends Controller
         ->orderBy('holiday_date','asc')->get();
         // dd($holidays);
         
-        session([
-            'pending_leave_count'=>$this->pending_leave_count(auth()->user()->id),
-            'pending_overtime_count'=>$this->pending_overtime_count(auth()->user()->id),
-            'pending_wfh_count'=>$this->pending_wfh_count(auth()->user()->id),
-            'pending_ob_count'=>$this->pending_ob_count(auth()->user()->id),
-            'pending_dtr_count'=>$this->pending_dtr_count(auth()->user()->id),
-        ]);
+        // session([
+        //     'pending_leave_count'=>$this->pending_leave_count(auth()->user()->id),
+        //     'pending_overtime_count'=>$this->pending_overtime_count(auth()->user()->id),
+        //     'pending_wfh_count'=>$this->pending_wfh_count(auth()->user()->id),
+        //     'pending_ob_count'=>$this->pending_ob_count(auth()->user()->id),
+        //     'pending_dtr_count'=>$this->pending_dtr_count(auth()->user()->id),
+        // ]);
 
         return view('dashboards.home',
         array(
