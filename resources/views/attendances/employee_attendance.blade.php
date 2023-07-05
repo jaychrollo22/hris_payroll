@@ -405,8 +405,7 @@
                                                 $schedule_time_in_final =  new DateTime($schedule_time_in);
                                                 $late_diff_hours = 0;
 
-                                                if(date('Y-m-d h:i',strtotime($time_in_data)) > date('Y-m-d h:i',strtotime($schedule_time_in_with_grace))){
-
+                                                if(date('Y-m-d h:i',strtotime($schedule_time_in_with_grace)) > date('Y-m-d h:i',strtotime($time_in_data_full))){
                                                     //IF Attendance Exceed in Grace Period
                                                     $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
                                                     $new_time_in_within_grace = date('Y-m-d h:i:s',strtotime($new_schedule_time_in));
@@ -433,9 +432,11 @@
 
                                                 $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("Y-m-d ".$employee_schedule['time_in_to']))))/60;
                                                 
+                                                $overtime = 0;
+                                                if($working_minutes > $employee_schedule['working_hours']){
+                                                    $overtime = (double) number_format($working_minutes - $employee_schedule['working_hours'],2);
+                                                }
                                                 
-                                            
-                                                $overtime = (double) number_format($working_minutes - $employee_schedule['working_hours'],2);
                                                 if($late > 0)
                                                 {
                                                     $late_data = $late;
