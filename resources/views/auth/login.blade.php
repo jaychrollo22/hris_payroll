@@ -42,9 +42,9 @@
                     </div>
                 @endif
               <input type="submit" value="Log In" class="btn text-white btn-block btn-primary">
-              <div class="d-flex mt-2 align-items-center">
+              {{-- <div class="d-flex mt-2 align-items-center">
                 <a class="mx-auto" style="text-decoration:none;" href="https://support.obanana.com" target="_blank" class="forgot-pass">Submit a Ticket</a>
-              </div>
+              </div> --}}
              
 
               {{-- <span class="d-block text-left my-4 text-muted text-right"> or sign in with</span>
