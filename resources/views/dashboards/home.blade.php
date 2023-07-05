@@ -112,22 +112,20 @@
                   </div>
                 </div>
                 @endif
-                @if(auth()->user()->employee->company_id=='11')
-                      <div class="col-md-12 mb-4  stretch-card transparent">
-                          <div class="card">
-                            <div class="card-body">
-                              <h3 class="card-title">Employee Handbook</h3>
-                              <div class="media">
-                                  <i class="ti-book icon-md text-info d-flex align-self-center mr-3"></i>
-                                  <div class="media-body">
-                                    <p class="card-text">Handbook updated {{date('m.d.y',strtotime($handbook->created_at))}}</p>
-                                    <a href="{{url($handbook->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-primary btn-fw btn-sm">View Handbook</button></a>
-                                  </div>
+                    <div class="col-md-12 mb-4  stretch-card transparent">
+                        <div class="card">
+                          <div class="card-body">
+                            <h3 class="card-title">Employee Handbook</h3>
+                            <div class="media">
+                                <i class="ti-book icon-md text-info d-flex align-self-center mr-3"></i>
+                                <div class="media-body">
+                                  <p class="card-text">Handbook updated {{date('m.d.y',strtotime($handbook->created_at))}}</p>
+                                  <a href="{{url($handbook->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-primary btn-fw btn-sm">View Handbook</button></a>
                                 </div>
-                            </div>
+                              </div>
                           </div>
-                      </div>
-                    @endif
+                        </div>
+                    </div>
               </div>
             </div>
           </div>    
