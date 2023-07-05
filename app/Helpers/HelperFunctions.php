@@ -7,9 +7,17 @@ use App\UserPrivilege;
 use App\Employee;
 use App\EmployeeLeave;
 use App\EmployeeEarnedLeave;
+use App\EmployeeLeaveCredit;
 use App\Holiday;
 use App\Attendance;
 
+function employee_name($employee_names,$employee_number){
+    foreach($employee_names as $item){
+        if($item['employee_number'] == $employee_number){
+            return $item->last_name . ' ' . $item->first_name;
+        }
+    }
+}
 function getInitial($text) {
     preg_match_all('#([A-Z]+)#', $text, $capitals);
     if (count($capitals[1]) >= 2) {
@@ -85,6 +93,23 @@ function dateRangeHelper( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
 
     return $dates;
 }
+function dateRangeHelperLeave( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
+    $dates = [];
+    $current = strtotime( $first );
+    $last = strtotime( $last );
+
+    while( $current <= $last ) {
+        $curr = date('D',$current);
+        if ($curr == 'Sun') {
+            $current = strtotime( $step, $current);
+        }else{
+            $dates[] = date( $format, $current);
+            $current = strtotime( $step, $current );
+        }
+    }
+
+    return $dates;
+}
 
 function dateRange( $first, $last, $step = '+1 day', $format = 'Y-m-d' ) {
     $dates = [];
@@ -124,10 +149,9 @@ function isRestDay( $date ) {
     return $check;
 }
 
-function employeeHasLeave($employee_leaves = array(), $check_date){
-    if(count($employee_leaves) > 0){
+function employeeHasLeave($employee_leaves = array(), $check_date,$schedule = array()){
+    if(count($employee_leaves) > 0 && $schedule){
         foreach($employee_leaves as $item){
-
             if($item['date_from'] == $item['date_to']){
                 if(date('Y-m-d',strtotime($check_date)) == date('Y-m-d',strtotime($item['date_from']))){
                     $status = 'Without-Pay';
@@ -141,7 +165,7 @@ function employeeHasLeave($employee_leaves = array(), $check_date){
                     }
                 }
             }else{
-                $date_range = dateRangeHelper($item['date_from'],$item['date_to']);
+                $date_range = dateRangeHelperLeave($item['date_from'],$item['date_to']);
                 if(count($date_range) > 0){
                     foreach($date_range as $date_r){
                         if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
@@ -155,7 +179,6 @@ function employeeHasLeave($employee_leaves = array(), $check_date){
                             }else{
                                 return $item['leave']['code'] . ' ' . $status;
                             }
-                            
                         }
                     }
                 }
@@ -281,12 +304,16 @@ function checkUsedSLVLSILLeave($user_id,$leave_type,$date_hired){
         $this_year = date('Y');
 
         $date_hired_this_year = $this_year . '-'. $date_hired_md;
-        $date_hired_last_year = $last_year . '-'. $date_hired_md;
 
+        if($today > $date_hired_this_year  ){
+            $filter_date_leave = $this_year . '-'. $date_hired_md;
+        }else{
+            $filter_date_leave = $last_year . '-'. $date_hired_md;
+        }
         $employee_vl = EmployeeLeave::where('user_id',$user_id)
                                         ->where('leave_type',$leave_type)
                                         ->where('status','Approved')
-                                        ->where('date_from','>',$date_hired_last_year)
+                                        ->where('date_from','>',$filter_date_leave)
                                         ->get();
         
         $date_today = date('Y-m-d');
@@ -602,6 +629,17 @@ function checkHasAttendanceHolidayStatus($date,$employee_code){
         return 'With-Pay';
     }else{
         return 'Without-Pay';
+    }
+}
+
+function checkEmployeeLeaveCredits($user_id, $leave_type){
+    $employee_leave = EmployeeLeaveCredit::where('user_id',$user_id)
+                                    ->where('leave_type',$leave_type)
+                                    ->first();
+    if($employee_leave){
+        return $employee_leave->count;
+    }else{
+        return 0;
     }
 }
 

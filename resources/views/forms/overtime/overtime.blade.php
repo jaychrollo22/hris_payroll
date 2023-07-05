@@ -72,8 +72,19 @@
                       <tr>
                         <td> {{ date('M. d, Y ', strtotime($overtime->created_at)) }}</td>
                         <td> {{ date('M. d, Y ', strtotime($overtime->ot_date)) }}</td>
-                        <td> {{ date('h:i A', strtotime($overtime->start_time)) }} - {{ date('h:i A', strtotime($overtime->end_time)) }}</td>
-                        <td> {{ number_format((strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600,2)}}</td>
+                        <td> {{ date('M. d, Y h:i A', strtotime($overtime->start_time)) }} - {{ date('M. d, Y h:i A', strtotime($overtime->end_time)) }}</td>
+                        <td> 
+                          @php
+                            $startTime = new DateTime($overtime->start_time);
+                            $endTime = new DateTime($overtime->end_time);
+
+                            // Calculate the time difference
+                            $timeDifference = $endTime->diff($startTime);
+                            // Convert the time difference to decimal hours
+                            $total = ($timeDifference->days * 24) + $timeDifference->h + ($timeDifference->i / 60);
+                          @endphp
+                          {{ number_format($total,2)}}
+                        </td>
                         <td> {{$overtime->break_hrs}}</td>
                         <td> {{$overtime->ot_approved_hrs}}</td>
                         <td>{{ $overtime->remarks }}</td>

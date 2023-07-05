@@ -25,6 +25,7 @@ class EmployeeLeaveController extends Controller
         $used_vl = checkUsedSLVLSILLeave(auth()->user()->id,1,$employee_status->original_date_hired);
         $used_sl = checkUsedSLVLSILLeave(auth()->user()->id,2,$employee_status->original_date_hired);
         $used_sil = checkUsedSLVLSILLeave(auth()->user()->id,10,$employee_status->original_date_hired);
+
         $used_ml = checkUsedLeave(auth()->user()->id,3);
         $used_pl = checkUsedLeave(auth()->user()->id,4);
         $used_spl = checkUsedLeave(auth()->user()->id,5);
@@ -83,65 +84,152 @@ class EmployeeLeaveController extends Controller
 
     public function new(Request $request)
     {
-        $new_leave = new EmployeeLeave;
+        $employee = Employee::where('user_id',Auth::user()->id)->first();
+        $count_days = get_count_days_leave($employee->ScheduleData,$request->date_from,$request->date_to);
+        if($request->withpay == 'on'){
+            if($count_days == 1){
+                if($request->halfday == '1'){
+                    $count_days = 0.5;
+                }
+            }
+            if($request->leave_balances >= $count_days){
+                $new_leave = new EmployeeLeave;
+                $new_leave->user_id = Auth::user()->id;
+                $emp = Employee::where('user_id',auth()->user()->id)->first();
+                $new_leave->schedule_id = $emp->schedule_id;
+                $new_leave->leave_type = $request->leave_type;
+                $new_leave->date_from = $request->date_from;
+                $new_leave->date_to = $request->date_to;
+                $new_leave->reason = $request->reason;
+                $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
+                $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
+                $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : "" ; 
 
-        $new_leave->user_id = Auth::user()->id;
-        $emp = Employee::where('user_id',auth()->user()->id)->first();
-        $new_leave->schedule_id = $emp->schedule_id;
-        $new_leave->leave_type = $request->leave_type;
-        $new_leave->date_from = $request->date_from;
-        $new_leave->date_to = $request->date_to;
-        $new_leave->reason = $request->reason;
-        $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
-        $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
-        $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : "" ; 
+                if($request->file('attachment')){
+                    $logo = $request->file('attachment');
+                    $original_name = $logo->getClientOriginalName();
+                    $name = time() . '_' . $logo->getClientOriginalName();
+                    $logo->move(public_path() . '/images/', $name);
+                    $file_name = '/images/' . $name;
+                    $new_leave->attachment = $file_name;
+                }
 
-        if($request->file('attachment')){
-            $logo = $request->file('attachment');
-            $original_name = $logo->getClientOriginalName();
-            $name = time() . '_' . $logo->getClientOriginalName();
-            $logo->move(public_path() . '/images/', $name);
-            $file_name = '/images/' . $name;
-            $new_leave->attachment = $file_name;
+                $new_leave->status = 'Pending';
+                $new_leave->level = 0;
+                $new_leave->created_by = Auth::user()->id;
+                $new_leave->save();
+
+                Alert::success('Successfully Store')->persistent('Dismiss');
+                return back();
+            }else{
+                Alert::warning('Insufficient Balance. Please try again.')->persistent('Dismiss');
+                return back();
+            }
+        }else{
+            $new_leave = new EmployeeLeave;
+            $new_leave->user_id = Auth::user()->id;
+            $emp = Employee::where('user_id',auth()->user()->id)->first();
+            $new_leave->schedule_id = $emp->schedule_id;
+            $new_leave->leave_type = $request->leave_type;
+            $new_leave->date_from = $request->date_from;
+            $new_leave->date_to = $request->date_to;
+            $new_leave->reason = $request->reason;
+            $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
+            $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
+            $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : "" ; 
+
+            if($request->file('attachment')){
+                $logo = $request->file('attachment');
+                $original_name = $logo->getClientOriginalName();
+                $name = time() . '_' . $logo->getClientOriginalName();
+                $logo->move(public_path() . '/images/', $name);
+                $file_name = '/images/' . $name;
+                $new_leave->attachment = $file_name;
+            }
+
+            $new_leave->status = 'Pending';
+            $new_leave->level = 0;
+            $new_leave->created_by = Auth::user()->id;
+            $new_leave->save();
+
+            Alert::success('Successfully Store')->persistent('Dismiss');
+            return back();
         }
-        
-        $new_leave->status = 'Pending';
-        $new_leave->level = 0;
-        $new_leave->created_by = Auth::user()->id;
-        $new_leave->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
-        return back();
+        
     }
 
 
     public function edit_leave(Request $request, $id)
     {
-        $new_leave = EmployeeLeave::findOrFail($id);
-        $new_leave->user_id = Auth::user()->id;
-        $new_leave->leave_type = $request->leave_type;
-        $new_leave->date_from = $request->date_from;
-        $new_leave->date_to = $request->date_to;
-        $new_leave->reason = $request->reason;
-        $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
-        $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
-        $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : ""; 
+        $employee = Employee::where('user_id',Auth::user()->id)->first();
+        $count_days = get_count_days_leave($employee->ScheduleData,$request->date_from,$request->date_to);
+        if($request->withpay == 'on'){
 
-        $logo = $request->file('attachment');
-        if(isset($logo)){
-            $original_name = $logo->getClientOriginalName();
-            $name = time() . '_' . $logo->getClientOriginalName();
-            $logo->move(public_path() . '/images/', $name);
-            $file_name = '/images/' . $name;
-            $new_leave->attachment = $file_name;
+            if($count_days == 1){
+                if($request->halfday == '1'){
+                    $count_days = 0.5;
+                }
+            }
+
+            if($request->leave_balances >= $count_days){
+                $new_leave = EmployeeLeave::findOrFail($id);
+                $new_leave->user_id = Auth::user()->id;
+                $new_leave->leave_type = $request->leave_type;
+                $new_leave->date_from = $request->date_from;
+                $new_leave->date_to = $request->date_to;
+                $new_leave->reason = $request->reason;
+                $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
+                $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
+                $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : ""; 
+
+                $logo = $request->file('attachment');
+                if(isset($logo)){
+                    $original_name = $logo->getClientOriginalName();
+                    $name = time() . '_' . $logo->getClientOriginalName();
+                    $logo->move(public_path() . '/images/', $name);
+                    $file_name = '/images/' . $name;
+                    $new_leave->attachment = $file_name;
+                }
+                $new_leave->status = 'Pending';
+                $new_leave->level = 0;
+                $new_leave->created_by = Auth::user()->id;
+                $new_leave->save();
+
+                Alert::success('Successfully Updated')->persistent('Dismiss');
+                return back();
+            }else{
+
+                Alert::warning('Insufficient Balance. Please try again.')->persistent('Dismiss');
+                return back();
+            }
+        }else{
+            $new_leave = EmployeeLeave::findOrFail($id);
+            $new_leave->user_id = Auth::user()->id;
+            $new_leave->leave_type = $request->leave_type;
+            $new_leave->date_from = $request->date_from;
+            $new_leave->date_to = $request->date_to;
+            $new_leave->reason = $request->reason;
+            $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
+            $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
+            $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : ""; 
+
+            $logo = $request->file('attachment');
+            if(isset($logo)){
+                $original_name = $logo->getClientOriginalName();
+                $name = time() . '_' . $logo->getClientOriginalName();
+                $logo->move(public_path() . '/images/', $name);
+                $file_name = '/images/' . $name;
+                $new_leave->attachment = $file_name;
+            }
+            $new_leave->status = 'Pending';
+            $new_leave->level = 0;
+            $new_leave->created_by = Auth::user()->id;
+            $new_leave->save();
+
+            Alert::success('Successfully Updated')->persistent('Dismiss');
+            return back();
         }
-        $new_leave->status = 'Pending';
-        $new_leave->level = 0;
-        $new_leave->created_by = Auth::user()->id;
-        $new_leave->save();
-
-        Alert::success('Successfully Updated')->persistent('Dismiss');
-        return back();
     }
 
     public function disable_leave($id)

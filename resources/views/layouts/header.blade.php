@@ -440,7 +440,10 @@
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biologs-employee') }}">Per Employee</a></li>
                                 @endif
                                 @if (checkUserPrivilege('biometrics_per_location',auth()->user()->id) == 'yes')
-                                <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location (ZK)</a></li>
+                                @endif
+                                @if (checkUserPrivilege('biometrics_per_location_hik',auth()->user()->id) == 'yes')
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location-hik') }}">Per Location (HIK)</a></li>
                                 @endif
                                 @if (checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biometrics-per-company') }}">Per Company</a></li>
@@ -530,6 +533,14 @@
                     @if(checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-leave-credits') }}">Employee Leave Credits</a>
+                    </li>
+                    @endif
+                    @if(checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes' && (auth()->user()->id == '1' || auth()->user()->id == '660'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/manual-employee-earned-leaves') }}">Manual Earned Leaves</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/employee-leave-balances') }}">Employee Leave Balances</a>
                     </li>
                     @endif
                     @if(checkUserPrivilege('masterfiles_employee_leave_earned',auth()->user()->id) == 'yes')

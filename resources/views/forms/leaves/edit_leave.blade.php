@@ -55,7 +55,7 @@
                       <div class='row'>
                         <div class='col-md-6'>
                           <label class="form-check-label ">
-
+                            <input type="hidden" v-model="leave_balances" name="leave_balances" :value="leave_balances">
                             <div>
                               <label class="form-check-label ">
                                 @if($leave->withpay == 1)
@@ -150,6 +150,7 @@
   var app = new Vue({
           el: '#app' + '<?php echo $leave->id; ?>',
           data : {
+              leave_balances : '',
               leave_type : '<?php echo $leave->leave_type; ?>',
               isAllowedWithPay : true,
               vl_balance : '<?php echo $vl_balance; ?>',
@@ -165,8 +166,10 @@
           },
           methods: {
             validateLeave() {
+              this.leave_balances = '';
               if(this.leave_type == '1'){ // Vacation Leave
                   if(Number(this.vl_balance) > 0){
+                    this.leave_balances = this.vl_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -174,6 +177,7 @@
               }
               else if(this.leave_type == '2'){ // Sick Leave
                   if(Number(this.sl_balance) > 0){
+                    this.leave_balances = this.sl_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -181,6 +185,7 @@
               }
               else if(this.leave_type == '3'){ // Maternity Leave
                   if(Number(this.ml_balance) > 0){
+                    this.leave_balances = this.ml_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -188,6 +193,7 @@
               }
               else if(this.leave_type == '4'){ // Paternity Leave
                   if(Number(this.pl_balance) > 0){
+                    this.leave_balances = this.pl_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -195,6 +201,7 @@
               }
               else if(this.leave_type == '5'){ // SPL
                   if(Number(this.spl_balance) > 0){
+                    this.leave_balances = this.spl_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -202,6 +209,7 @@
               }
               else if(this.leave_type == '7'){ // SPLW
                   if(Number(this.splw_balance) > 0){
+                    this.leave_balances = this.splw_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -209,6 +217,7 @@
               }
               else if(this.leave_type == '9'){ // SPLVV
                   if(Number(this.splvv_balance) > 0){
+                    this.leave_balances = this.splvv_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;

@@ -127,7 +127,8 @@ class EmployeeController extends Controller
                                                 ->orderBy('gender','ASC')
                                                 ->get();
 
-        $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info')
+        $employees = Employee::select('id','user_id','employee_number','first_name','last_name','department_id','company_id','immediate_sup','classification','status')
+                                ->with('department', 'immediate_sup_data', 'user_info', 'company','classification_info')
                                 ->when($company,function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
@@ -382,8 +383,43 @@ class EmployeeController extends Controller
         }
     }
 
+    public function reverseRate(Request $request){
+        $path = $request->file('file')->getRealPath();
+        $data = Excel::toArray(new EmployeesImport, $request->file('file'));
+
+        if(count($data[0]) > 0)
+        {
+            $save_count = 0;
+            $not_save = [];
+            foreach($data[0] as $key => $value)
+            {
+                
+                $validate = Employee::where('id',$value['id'])->first();
+
+                if($validate){
+                    $old_values = json_decode($value['old_values'],true);
+                    if(isset($old_values['rate'])){
+                        if(empty($validate->rate) && $old_values['rate']){
+                            $employee = Employee::findOrFail($value['id']);
+                            $employee->rate =  $old_values['rate'];
+                            $employee->work_description =  isset($old_values['work_description']) ? $old_values['work_description'] : "";
+                            $employee->save();
+                            $save_count++;
+                        }
+                        
+                    }
+                   
+                }
+            }
+            Alert::success('Successfully Import Employees (' . $save_count. ')')->persistent('Dismiss');
+            return redirect('/employees');
+        }
+    }
+
     public function upload(Request $request){
 
+        ini_set('memory_limit', '-1');
+        
         $path = $request->file('file')->getRealPath();
         $data = Excel::toArray(new EmployeesImport, $request->file('file'));
 
@@ -1024,8 +1060,11 @@ class EmployeeController extends Controller
         $employee->bank_name = $request->bank_name;
         $employee->bank_account_number = $request->bank_account_number;
 
-        $employee->work_description = $request->work_description;
-        $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
+        if(checkUserPrivilege('employees_rate',auth()->user()->id) == 'yes'){
+            $employee->work_description = $request->work_description;
+            $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
+        }
+       
         $employee->status = $request->status;
 
         $employee->date_resigned = $request->status == 'Inactive' ? $request->date_resigned : null;
@@ -1033,6 +1072,7 @@ class EmployeeController extends Controller
         $employee->save();
 
         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+
         if(isset($request->approver)){
 
             $count_approver = count($request->approver);
@@ -1222,12 +1262,14 @@ class EmployeeController extends Controller
 
     public function employee_attendance(Request $request)
     {
+        ini_set('memory_limit', '-1');
+    
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $allowed_locations = getUserAllowedLocations(auth()->user()->id);
         $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
         $attendance_controller = new AttendanceController;
-        $employees = Employee::where('status','Active')
+        $employees = Employee::select('id','user_id','employee_number','first_name','last_name')->where('status','Active')
                                 ->whereIn('company_id', $allowed_companies)
                                 ->when($allowed_locations,function($q) use($allowed_locations){
                                     $q->whereIn('location',$allowed_locations);
@@ -1245,7 +1287,8 @@ class EmployeeController extends Controller
         $schedule_id = null;
         $emp_data = [];
         if ($from_date != null) {
-            $emp_data = Employee::with(['attendances' => function ($query) use ($from_date, $to_date) {
+            $emp_data = Employee::select('id','user_id','employee_number','first_name','last_name','schedule_id')
+                                    ->with(['attendances' => function ($query) use ($from_date, $to_date) {
                                             $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                                     ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                                     ->orderBy('time_in','asc')
@@ -1260,6 +1303,7 @@ class EmployeeController extends Controller
                                     ->when($allowed_projects,function($q) use($allowed_projects){
                                         $q->whereIn('project',$allowed_projects);
                                     })
+                                    ->where('status','Active')
                                     ->get();
 
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
@@ -1367,6 +1411,17 @@ class EmployeeController extends Controller
         $allowed_locations = getUserAllowedLocations(auth()->user()->id);
         $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
+        $employee_names = Employee::select('id','employee_number','first_name','last_name')
+                                                ->whereIn('company_id', $allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
+                                                ->where('status','Active')
+                                                ->get();
+
         $employee_numbers = Employee::whereIn('company_id', $allowed_companies)
                                                 ->when($allowed_locations,function($q) use($allowed_locations){
                                                     $q->whereIn('location',$allowed_locations);
@@ -1403,6 +1458,7 @@ class EmployeeController extends Controller
                 'to_date' => $to_date,
                 'terminals' => $terminals,
                 'attendances' => $attendances,
+                'employee_names' => $employee_names,
             )
         );
     }
@@ -1414,6 +1470,54 @@ class EmployeeController extends Controller
         $to =  isset($request->to) ? $request->to : "";
         $terminal = IclockTerminal::where('id',$location)->first();
         return Excel::download(new AttendancePerLocationExport($location,$from,$to), $terminal->alias . ' ' . $from . ' to ' . $to . ' Attendance Per Location Export.xlsx');
+    }
+
+    public function biologs_per_location_hik(Request $request)
+    {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
+        $employee_names = Employee::select('id','employee_number','first_name','last_name')
+                                                ->whereIn('company_id', $allowed_companies)
+                                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                                    $q->whereIn('location',$allowed_locations);
+                                                })
+                                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                                    $q->whereIn('project',$allowed_projects);
+                                                })
+                                                ->where('status','Active')
+                                                ->get();
+
+        $terminals = HikAttLog::select('deviceName')->groupBy('deviceName')
+                                    ->orderBy('deviceName' , 'ASC')
+                                    ->get();
+
+        $location = $request->location;
+        $from_date = $request->from;
+        $to_date = $request->to;
+        $attendances = array();
+        if ($from_date != null) {
+            $attendances = HikAttLog::whereBetween('authDateTime', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                ->where('deviceName', $request->location)
+                                ->orderBy('employeeID', 'desc')
+                                ->orderBy('authDateTime', 'asc')
+                                ->get();
+        }
+
+        return view(
+            'attendances.employee_attendance_location_hik',
+            array(
+                'header' => 'biometrics',
+                'location' => $location,
+                'from_date' => $from_date,
+                'to_date' => $to_date,
+                'terminals' => $terminals,
+                'attendances' => $attendances,
+                'employee_names' => $employee_names,
+            )
+        );
     }
 
     public function newBio(Request $request)
@@ -1541,7 +1645,7 @@ class EmployeeController extends Controller
                 else if($att->punch_state == 1 || $att->punch_state == 5)
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
-                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                     $update = [
                         'time_out' =>  date('Y-m-d H:i:s', strtotime($att->punch_time)),
                         'device_out' => $att->terminal_alias,
@@ -1606,7 +1710,7 @@ class EmployeeController extends Controller
             else if($att->punch_state == 1 || $att->punch_state == 5)
             {
                 $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
-                $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                 $update = [
                     'time_out' =>  date('Y-m-d H:i:s', strtotime($att->punch_time)),
                     'device_out' => $att->terminal_alias,
@@ -1616,8 +1720,8 @@ class EmployeeController extends Controller
                 $attendance_in = Attendance::where('employee_code',$att->emp_code)
                 ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
                 Attendance::where('employee_code',$att->emp_code)
-                ->whereBetween('time_in',[$time_in_before,$time_in_after])
-                ->update($update);
+                            ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                            ->update($update);
 
                 if($attendance_in ==  null)
                 {
@@ -1672,7 +1776,7 @@ class EmployeeController extends Controller
                 else if($att->direction == 'Out' || $att->direction == 'OUT' )
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->authDateTime));
-                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                     $update = [
                         'time_out' =>  date('Y-m-d H:i:s', strtotime($att->authDateTime)),
                         'device_out' => $att->deviceName,
@@ -1738,7 +1842,7 @@ class EmployeeController extends Controller
                 else if($att->direction == 'Out' || $att->direction == 'OUT' )
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->authDateTime));
-                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-20 hour' , strtotime ( $time_in_after ) )) ;
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
                     $update = [
                         'time_out' =>  date('Y-m-d H:i:s', strtotime($att->authDateTime)),
                         'device_out' => $att->deviceName,

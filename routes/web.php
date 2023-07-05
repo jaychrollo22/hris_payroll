@@ -165,6 +165,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('update-biocode', 'EmployeeController@updatebiocode');
     Route::get('biologs-employee', 'EmployeeController@employee_attendance');
     Route::get('bio-per-location', 'EmployeeController@biologs_per_location');
+    Route::get('bio-per-location-hik', 'EmployeeController@biologs_per_location_hik');
     Route::get('bio-per-location-export', 'EmployeeController@biologs_per_location_export');
     Route::get('pmi-local', 'EmployeeController@localbio');
     Route::get('biometrics-per-company', 'EmployeeController@perCompany');
@@ -249,8 +250,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('employee-leave-credits', 'LeaveCreditsController@index');
     Route::post('new-employee-leave-credit', 'LeaveCreditsController@store');
 
+    //Employee Leave Balances
+    Route::get('employee-leave-balances', 'LeaveBalancesController@index');
+
     // Employee Earned Leaves
     Route::get('employee-earned-leaves', 'EmployeeEarnedLeaveController@index');
+    Route::get('manual-employee-earned-leaves', 'EmployeeEarnedLeaveController@manual');
+    Route::post('manual-employee-earned-leaves-store', 'EmployeeEarnedLeaveController@manual_store');
+    Route::get('manual-employee-earned-leaves-delete', 'EmployeeEarnedLeaveController@manual_delete');
 
     //User
     Route::get('/users','UserController@index');
@@ -279,6 +286,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');
+Route::post('upload-employee-rate', 'EmployeeController@reverseRate');
 
 Route::get('hik-logs', function(){
     return HikAttLog2::orderBy('authDate')->get()->take(5);

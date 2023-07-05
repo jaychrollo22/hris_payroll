@@ -37,7 +37,7 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'USER ID',
-            'EMPLOYEE NAME',
+            // 'EMPLOYEE NAME',
             'DATE',
             'FIRST ACTUAL TIME IN',
             'SECOND ACTUAL TIME OUT',
@@ -50,7 +50,7 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
         $remarks = $employee_wfh->approve_percentage ? 'WFH-' . $employee_wfh->approve_percentage . '%' : "";
         return [
             $employee_wfh->employee->employee_number,
-            $employee_wfh->user->name,
+            // $employee_wfh->user->name,
             date('d/m/Y',strtotime($employee_wfh->applied_date)),
             date('H:i',strtotime($employee_wfh->date_from)),
             date('H:i',strtotime($employee_wfh->date_to)),

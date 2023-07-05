@@ -75,7 +75,7 @@
                                         <td>{{$item->user->name}}</td>
                                         <td>{{date('d/m/Y', strtotime($item->created_at))}}</td>
                                         <td>{{ date('d/m/Y ', strtotime($item->applied_date)) }}</td>
-                                        <td>{{ date('H:i', strtotime($item->date_from)) }} - {{ date('H:i', strtotime($item->date_to)) }}  </td>
+                                        <td>{{ date('d/m/Y h:i A', strtotime($item->date_from)) }} - {{ date('d/m/Y h:i A', strtotime($item->date_to)) }}  </td>
                                         <td>{{get_count_days($item->schedule,$item->date_from,$item->date_to)}}</td>
                                         <td>{{$item->remarks}}</td>
                                         <td>{{$item->status}}</td>

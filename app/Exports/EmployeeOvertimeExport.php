@@ -38,7 +38,7 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
         return [
             'USER ID',
             'EMPLOYEE NAME',
-            'OT DATE',
+            'DATE',
             'MAX OVERTIME',
             'HOURS WORKED CAP SPWH',
             'COMPUTE RW OT',
@@ -58,7 +58,8 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
         $sun = $this->isSUN($employee_ot->ot_date); //Sunday
         $rh = $this->isRH($employee_ot->ot_date); //Regular Holiday
         $sph = $this->isSPH($employee_ot->ot_date); //Special Holiday
-        $remarks = $this->isRemarks($employee_ot->end_time); //Remarks
+        // $remarks = $this->isRemarks($employee_ot->end_time); //Remarks
+        $remarks = ''; //Remarks
 
         $ot_approved_hrs = $employee_ot->ot_approved_hrs - $employee_ot->break_hrs;
 

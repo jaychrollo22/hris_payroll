@@ -17,10 +17,19 @@
                         <input type="hidden" name="status" value="Approved">
 
                         <div class="col-md-12 mb-2">
-                            Requested Overtime (hrs): {{ number_format((strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600,2)}}
                             @php
-                                $total = number_format((strtotime($overtime->end_time)-strtotime($overtime->start_time))/3600,2);
+
+                                $startTime = new DateTime($overtime->start_time);
+                                $endTime = new DateTime($overtime->end_time);
+
+                                // Calculate the time difference
+                                $timeDifference = $endTime->diff($startTime);
+                                // Convert the time difference to decimal hours
+                                $total = ($timeDifference->days * 24) + $timeDifference->h + ($timeDifference->i / 60);
                             @endphp
+                            @if($overtime->end_time && $overtime->start_time)
+                                Requested Overtime (hrs): {{ number_format((float)$total, 2, '.', '') }}
+                            @endif
                         </div>
                         <div class='col-md-12 form-group'>
                             Break (hrs):
@@ -37,9 +46,9 @@
                         <div class='col-md-12 form-group'>
                             Approve Overtime (hrs):
                             @php
-                                $approve_hrs = $overtime->ot_approved_hrs ? $overtime->ot_approved_hrs : $total;
+                                $approve_hrs = $overtime->ot_approved_hrs ? $overtime->ot_approved_hrs : number_format((float)$total, 2, '.', '');
                             @endphp
-                            <input id="approve_hrs" type="number" name='ot_approved_hrs' value='{{ $approve_hrs }}' max="{{$total}}" step='0.01' class="form-control" required>
+                            <input id="approve_hrs" type="number" name='ot_approved_hrs' value='{{ $approve_hrs }}' max="{{number_format($total,2)}}" step='0.01' class="form-control" required>
                         </div>
                         <div class='col-md-12 form-group'>
                             Total Approve Overtime (hrs):

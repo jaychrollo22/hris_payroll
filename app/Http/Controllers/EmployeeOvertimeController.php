@@ -83,6 +83,8 @@ class EmployeeOvertimeController extends Controller
         $new_overtime = EmployeeOvertime::findOrFail($id);
         $new_overtime->user_id = Auth::user()->id;
         $new_overtime->ot_date = $request->ot_date;
+        $new_overtime->start_time =  date('Y-m-d H:i:s',strtotime($request->start_time));
+        $new_overtime->end_time = date('Y-m-d H:i:s',strtotime($request->end_time)); 
         $logo = $request->file('attachment');
         if(isset($logo)){
             $original_name = $logo->getClientOriginalName();

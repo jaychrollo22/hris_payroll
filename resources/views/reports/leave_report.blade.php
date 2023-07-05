@@ -100,7 +100,12 @@
 											{{$form_approval->status}}
 										  </td>
 										  <td>{{ $form_approval->approved_date ? date('d/m/Y', strtotime($form_approval->approved_date)) : ""}}</td>
-										  <td>{{$form_approval->reason}}</td>
+										  <td>
+												{{$form_approval->reason}} <br>
+												@if($form_approval->attachment)
+													<a href="{{url($form_approval->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>
+												@endif
+										  </td>
 										  </tr>
 										@endforeach                        
 									  </tbody>

@@ -69,9 +69,9 @@
                     <tbody>
                       @foreach ($obs as $ob)
                       <tr>
-                        <td> {{ $ob->created_at }} </td>
-                        <td> {{ date('d/m/Y', strtotime($ob->applied_date)) }} </td>
-                        <td> {{ date('H:i', strtotime($ob->date_from)) }} - {{ date('H:i', strtotime($ob->date_to)) }}  </td>
+                        <td> {{ date('M. d, Y', strtotime($ob->created_at)) }} </td>
+                        <td> {{ date('M. d, Y', strtotime($ob->applied_date)) }} </td>
+                        <td> {{ date('M. d, Y h:i A', strtotime($ob->date_from)) }} - {{ date('M. d, Y h:i A', strtotime($ob->date_to)) }}  </td>
                         <td> {{$ob->destination}}</td>
                         <td> {{$ob->persontosee}}</td>
                         <td> 
@@ -160,18 +160,18 @@
                 </div>
               </div>
             </div>
-            @include('forms.officialbusiness.apply_ob')
           </div>
         </div>
     </div>
 </div>
+
 @foreach ($obs as $ob)
   @include('forms.officialbusiness.edit_ob')
-@endforeach  
-@foreach ($obs as $ob)
   @include('forms.officialbusiness.view_ob')
 @endforeach  
- @include('forms.officialbusiness.apply_ob') 
+
+@include('forms.officialbusiness.apply_ob') 
+
 @endsection
 @section('obScript')
 	<script>

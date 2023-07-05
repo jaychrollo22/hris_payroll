@@ -37,7 +37,7 @@ class UserController extends Controller
 
         if(auth()->user()->id == '353' || auth()->user()->id == '1'){
             $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
-            $users = User::with('user_allowed_company','user_privilege')->get();
+            $users = User::select('id','name','email','status','role')->get();
 
             return view('users.index',
             array(
@@ -159,6 +159,7 @@ class UserController extends Controller
 
                 $user_privilege->biometrics_per_employee = $request->biometrics_per_employee;
                 $user_privilege->biometrics_per_location = $request->biometrics_per_location;
+                $user_privilege->biometrics_per_location_hik = $request->biometrics_per_location_hik;
                 $user_privilege->biometrics_per_company = $request->biometrics_per_company;
                 $user_privilege->biometrics_sync = $request->biometrics_sync;
                 $user_privilege->timekeeping_dashboard = $request->timekeeping_dashboard;
@@ -196,6 +197,7 @@ class UserController extends Controller
 
                 $new_user_privilege->biometrics_per_employee = $request->biometrics_per_employee;
                 $new_user_privilege->biometrics_per_location = $request->biometrics_per_location;
+                $new_user_privilege->biometrics_per_location_hik = $request->biometrics_per_location_hik;
                 $new_user_privilege->biometrics_per_company = $request->biometrics_per_company;
                 $new_user_privilege->biometrics_sync = $request->biometrics_sync;
                 $new_user_privilege->timekeeping_dashboard = $request->timekeeping_dashboard;

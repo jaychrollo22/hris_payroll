@@ -53,7 +53,7 @@
                     <div class='col-sm-5'>
                       <div class='row'>
                         <div class='col-md-6'>
-                        
+                          <input type="hidden" v-model="leave_balances" name="leave_balances" :value="leave_balances">
                           <div>
                             <label class="form-check-label ">
                               <input type="checkbox" name="withpay" class="form-check-input" :disabled="isAllowedWithPay" v-model="with_pay">
@@ -129,6 +129,7 @@
               with_pay : '',
               leave_type : '',
               isAllowedWithPay : true,
+              leave_balances : '',
               vl_balance : '<?php echo $vl_balance; ?>',
               sl_balance : '<?php echo $sl_balance; ?>',
               ml_balance : '<?php echo $ml_balance; ?>',
@@ -139,8 +140,10 @@
           },
           methods: {
             validateLeave() {
+              this.leave_balances = '';
               if(this.leave_type == '1'){ // Vacation Leave
                   if(Number(this.vl_balance) > 0){
+                    this.leave_balances = this.vl_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -148,6 +151,7 @@
               }
               else if(this.leave_type == '2'){ // Sick Leave
                   if(Number(this.sl_balance) > 0){
+                    this.leave_balances = this.sl_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -155,6 +159,7 @@
               }
               else if(this.leave_type == '3'){ // Maternity Leave
                   if(Number(this.ml_balance) > 0){
+                    this.leave_balances = this.ml_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -162,6 +167,7 @@
               }
               else if(this.leave_type == '4'){ // Paternity Leave
                   if(Number(this.pl_balance) > 0){
+                    this.leave_balances = this.pl_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -169,6 +175,7 @@
               }
               else if(this.leave_type == '5'){ // SPL
                   if(Number(this.spl_balance) > 0){
+                    this.leave_balances = this.spl_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -176,6 +183,7 @@
               }
               else if(this.leave_type == '7'){ // SPLW
                   if(Number(this.splw_balance) > 0){
+                    this.leave_balances = this.splw_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
@@ -183,6 +191,7 @@
               }
               else if(this.leave_type == '9'){ // SPLVV
                   if(Number(this.splvv_balance) > 0){
+                    this.leave_balances = this.splvv_balance;
                     this.isAllowedWithPay = false;
                   }else{
                     this.isAllowedWithPay = true;
