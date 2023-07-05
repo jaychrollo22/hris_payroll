@@ -115,13 +115,13 @@ class HomeController extends Controller
         $from_date = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
         $to_date = date('Y-m-d');
     
-        return EmployeeLeave::select('user_id')->with('approver.approver_info','user')
+        return EmployeeLeave::select('user_id')->with('approver.approver_info')
                                     ->whereHas('approver',function($q) use($approver_id) {
                                         $q->where('approver_id',$approver_id);
                                     })
+                                    ->where('status','Pending')
                                     ->whereDate('created_at','>=',$from_date)
                                     ->whereDate('created_at','<=',$to_date)
-                                    ->where('status','Pending')
                                     ->count();
     }
     public function pending_overtime_count($approver_id){
@@ -130,13 +130,12 @@ class HomeController extends Controller
         $from_date = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
         $to_date = date('Y-m-d');
     
-        return EmployeeOvertime::select('user_id')->with('approver.approver_info','user')
-                                    ->whereHas('approver',function($q) use($approver_id) {
+        return EmployeeOvertime::select('user_id')->whereHas('approver',function($q) use($approver_id) {
                                         $q->where('approver_id',$approver_id);
                                     })
+                                    ->where('status','Pending')
                                     ->whereDate('created_at','>=',$from_date)
                                     ->whereDate('created_at','<=',$to_date)
-                                    ->where('status','Pending')
                                     ->count();
     }
     public function pending_wfh_count($approver_id){
@@ -145,8 +144,7 @@ class HomeController extends Controller
         $from_date = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
         $to_date = date('Y-m-d');
     
-        return EmployeeWfh::select('user_id')->with('approver.approver_info','user')
-                                    ->whereHas('approver',function($q) use($approver_id) {
+        return EmployeeWfh::select('user_id')->whereHas('approver',function($q) use($approver_id) {
                                         $q->where('approver_id',$approver_id);
                                     })
                                     ->where('status','Pending')
@@ -161,8 +159,7 @@ class HomeController extends Controller
         $from_date = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
         $to_date = date('Y-m-d');
     
-        return EmployeeOb::select('user_id')->with('approver.approver_info','user')
-                                    ->whereHas('approver',function($q) use($approver_id) {
+        return EmployeeOb::select('user_id')->whereHas('approver',function($q) use($approver_id) {
                                         $q->where('approver_id',$approver_id);
                                     })
                                     ->where('status','Pending')
@@ -177,8 +174,7 @@ class HomeController extends Controller
         $from_date = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
         $to_date = date('Y-m-d');
     
-        return EmployeeDtr::select('user_id')->with('approver.approver_info','user')
-                                    ->whereHas('approver',function($q) use($approver_id) {
+        return EmployeeDtr::select('user_id')->whereHas('approver',function($q) use($approver_id) {
                                         $q->where('approver_id',$approver_id);
                                     })
                                     ->where('status','Pending')
