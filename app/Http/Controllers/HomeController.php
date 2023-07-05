@@ -73,7 +73,7 @@ class HomeController extends Controller
         })
         ->orderBy('holiday_date','asc')->get();
         // dd($holidays);
-
+        
         session([
             'pending_leave_count'=>$this->pending_leave_count(auth()->user()->id),
             'pending_overtime_count'=>$this->pending_overtime_count(auth()->user()->id),
@@ -120,8 +120,8 @@ class HomeController extends Controller
                                         $q->where('approver_id',$approver_id);
                                     })
                                     ->where('status','Pending')
-                                    ->whereDate('created_at','>=',$from_date)
-                                    ->whereDate('created_at','<=',$to_date)
+                                    // ->whereDate('created_at','>=',$from_date)
+                                    // ->whereDate('created_at','<=',$to_date)
                                     ->count();
     }
     public function pending_overtime_count($approver_id){
@@ -134,8 +134,8 @@ class HomeController extends Controller
                                         $q->where('approver_id',$approver_id);
                                     })
                                     ->where('status','Pending')
-                                    ->whereDate('created_at','>=',$from_date)
-                                    ->whereDate('created_at','<=',$to_date)
+                                    // ->whereDate('created_at','>=',$from_date)
+                                    // ->whereDate('created_at','<=',$to_date)
                                     ->count();
     }
     public function pending_wfh_count($approver_id){
@@ -148,8 +148,8 @@ class HomeController extends Controller
                                         $q->where('approver_id',$approver_id);
                                     })
                                     ->where('status','Pending')
-                                    ->whereDate('created_at','>=',$from_date)
-                                    ->whereDate('created_at','<=',$to_date)
+                                    // ->whereDate('created_at','>=',$from_date)
+                                    // ->whereDate('created_at','<=',$to_date)
                                     ->count();
     }
     
@@ -163,8 +163,8 @@ class HomeController extends Controller
                                         $q->where('approver_id',$approver_id);
                                     })
                                     ->where('status','Pending')
-                                    ->whereDate('created_at','>=',$from_date)
-                                    ->whereDate('created_at','<=',$to_date)
+                                    // ->whereDate('created_at','>=',$from_date)
+                                    // ->whereDate('created_at','<=',$to_date)
                                     ->count();
     }
     
@@ -178,8 +178,8 @@ class HomeController extends Controller
                                         $q->where('approver_id',$approver_id);
                                     })
                                     ->where('status','Pending')
-                                    ->whereDate('created_at','>=',$from_date)
-                                    ->whereDate('created_at','<=',$to_date)
+                                    // ->whereDate('created_at','>=',$from_date)
+                                    // ->whereDate('created_at','<=',$to_date)
                                     ->count();
     }
 }
