@@ -5,7 +5,7 @@
     <div class="container">
       <div class="row ">
         <div class="col-md-6 text-center">
-          <img src="{{asset('login_css/images/present.png')}}" alt="Image" class="img-fluid c">
+          <img src="{{asset('login_css/images/logo.png')}}" alt="Image" class="img-fluid c">
         </div>
         <div class="col-md-6 ">
           <div class="row justify-content-center">
