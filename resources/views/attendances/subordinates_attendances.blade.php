@@ -396,6 +396,7 @@
                                                 $time_in_data_full =  date('Y-m-d h:i:s',strtotime($time_in_data));
                                                 $time_in_data_date =  date('Y-m-d',strtotime($time_in_data));
                                                 $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
+                                                $schedule_time_out =  $time_in_data_date . ' ' . $employee_schedule['time_out_to'];
                                                 $schedule_time_in_with_grace =  date('Y-m-d h:15:s',strtotime($schedule_time_in));
                                                 $schedule_time_in =  date('Y-m-d h:i:s',strtotime($schedule_time_in));
                                                 $schedule_time_in_final =  new DateTime($schedule_time_in);
@@ -442,10 +443,24 @@
                                                 $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("Y-m-d ".$employee_schedule['time_in_to']))))/60;
                                                 
                                                 $overtime = 0;
-                                                if($work_diff_hours > $employee_schedule['working_hours']){
-                                                    $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
-                                                }
                                                 
+                                                if($emp->schedule_info->is_flexi == 1){
+                                                    //Is Schedule is flexi time
+                                                    if($work_diff_hours > $employee_schedule['working_hours']){
+                                                        $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
+                                                    }
+                                                }else{
+                                                    //Not Flexi
+                                                    if($time_in_data){
+                                                        $start_datetime = new DateTime($schedule_time_out); 
+                                                        if(date('Y-m-d h:i:s',strtotime($schedule_time_out)) < date('Y-m-d h:i:s',strtotime($time_out_data))){
+                                                            $new_diff = $start_datetime->diff(new DateTime($time_out_data));
+                                                            $work_ot_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
+                                                            $overtime = (double) number_format($work_ot_diff_hours,2); 
+                                                        }
+                                                    }
+                                                }
+                                                    
                                                 if($late > 0)
                                                 {
                                                     $late_data = $late;
