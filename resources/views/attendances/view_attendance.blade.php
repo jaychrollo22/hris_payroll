@@ -42,6 +42,7 @@
                             <tr>
                                 <td>User ID</td>
                                 <td>Name</td>
+                                <td>Schedule</td>
                                 <td>Date</td>
                                 <td>Day</td>
                                 <td>Time In</td>
@@ -79,6 +80,14 @@
                             <tr>
                                 <td>{{$emp->employee_number}}</td>
                                 <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
+                                <td>
+                                    @if($employee_schedule)
+                                        <small>{{$emp->schedule_info->schedule_name}}</small><br>
+                                        <small>Time in : {{date('h:i A',strtotime($employee_schedule['time_in_from'])) . '/' . date('h:i A',strtotime($employee_schedule['time_in_to']))}}</small><br>
+                                        <small>Time out : {{date('h:i A',strtotime($employee_schedule['time_out_from'])) . '/' . date('h:i A',strtotime($employee_schedule['time_out_to']))}}</small><br>
+                                        <small>Total Hours : {{$employee_schedule['working_hours']}}</small><br>
+                                    @endif
+                                </td>
                                 <td class="@if($employee_schedule) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
                                 <td>{{date('l',strtotime($date_r))}}</td>
                                 
@@ -366,12 +375,13 @@
                                                     }
                                                 @endphp
                                                 @if($time_in_data && $time_out_data)
-                                                    {{ $diff->h }} hrs. {{ $diff->i }} mins. 
+                                                    
                                                     @php
                                                         $work_diff_hours = round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);
                                                         $work = (double) $work+$work_diff_hours;
                                                         $overtime = (double) number_format($work_diff_hours,2);
                                                     @endphp
+                                                    {{ $diff->h }} hrs. {{ $diff->i }} mins. ({{$work_diff_hours}})
                                                 @endif
                                             @endif
                                         </td>
@@ -379,35 +389,25 @@
                                         @if($employee_schedule && $time_in_data && $time_out_data)
                                             @php
                                                 //Lates
-                                                $time_in_data_full =  date('Y-m-d h:i:s',strtotime($time_in_data));
+                                                $time_in_data_full =  date('Y-m-d H:i:s',strtotime($time_in_data));
                                                 $time_in_data_date =  date('Y-m-d',strtotime($time_in_data));
                                                 $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
                                                 $schedule_time_out =  $time_in_data_date . ' ' . $employee_schedule['time_out_to'];
-                                                $schedule_time_in_with_grace =  date('Y-m-d h:15:s',strtotime($schedule_time_in));
-                                                $schedule_time_in =  date('Y-m-d h:i:s',strtotime($schedule_time_in));
+                                                $schedule_time_in_with_grace =  date('Y-m-d H:15:s',strtotime($schedule_time_in));
+                                                $schedule_time_in =  date('Y-m-d H:i:s',strtotime($schedule_time_in));
                                                 $schedule_time_in_final =  new DateTime($schedule_time_in);
                                                 $late_diff_hours = 0;
 
-                                                if($emp->schedule_info->is_with_grace_period == 1){
-                                                    if(date('Y-m-d h:i',strtotime($time_in_data_full)) > date('Y-m-d h:i',strtotime($schedule_time_in_with_grace))){
+                                                if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
+                                                    if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
                                                         //IF Attendance Exceed in Grace Period
                                                         $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
                                                         $new_time_in_within_grace = date('Y-m-d h:i:s',strtotime($new_schedule_time_in));
                                                         $new_time_in_within_grace = new DateTime($new_time_in_within_grace);
                                                         $late_diff = $new_time_in_within_grace->diff(new DateTime($time_in_data_full));
                                                         $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
-                                                        $working_minutes = $work_diff_hours;
-                                                    }else{
-                                                        //IF Attendance is Within Grace Period
-                                                        $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
-                                                        $new_time_in_within_grace = date('Y-m-d h:i:s',strtotime($new_schedule_time_in));
-                                                        if($dtr_correction_time_out){
-                                                            $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($new_time_in_within_grace)))/3600);
-                                                        }else{
-                                                            $working_minutes = (double) (((strtotime($time_out_data) - (double) strtotime($new_time_in_within_grace)))/3600);
-                                                        }
                                                     }
-                                                }else{
+                                                }else{ // Flexi Time Schedule
                                                     if($time_in_data && $schedule_time_in){
                                                         $time_in_data_full =  date('Y-m-d h:i:s',strtotime($time_in_data));
                                                         $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
@@ -417,54 +417,55 @@
                                                             $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
                                                         }
                                                     }
-                                                    
-                                                    
-                                                    if($dtr_correction_time_out){
-                                                        $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($time_in_data_full)))/3600);
-                                                    }else{
-                                                        $working_minutes = (double) (((strtotime($time_out_data) - (double) strtotime($time_in_data_full)))/3600);
-                                                    }
                                                 }
                                                 
-                                                $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("Y-m-d ".$employee_schedule['time_in_to']))))/60;
-                                                
                                                 $overtime = 0;
-                                                
-                                                if($emp->schedule_info->is_flexi == 1){
-                                                    //Is Schedule is flexi time
+                                                $undertime_hrs = 0;
+
+                                                if($emp->schedule_info->is_flexi == 1){ //Is Schedule is flexi time
+                                    
+                                                    //Overtime
                                                     if($work_diff_hours > $employee_schedule['working_hours']){
                                                         $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
                                                     }
+
+                                                    //Undertime
+                                                    if($employee_schedule['working_hours'] > $work_diff_hours){
+                                                        $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
+                                                        if($undertime > 0){
+                                                            if($late_diff_hours > 0){
+                                                                $undertime_hrs = $undertime - $late_diff_hours;
+                                                            }else{
+                                                                $undertime_hrs = $undertime;
+                                                            }
+                                                        }  
+                                                    }
+                                                
                                                 }else{
                                                     //Not Flexi
                                                     if($time_in_data){
-                                                        $start_datetime = new DateTime($schedule_time_out); 
+                                                        $start_datetime = new DateTime($schedule_time_out);
+                                                        
+                                                        //Overtime 
                                                         if(date('Y-m-d h:i:s',strtotime($schedule_time_out)) < date('Y-m-d h:i:s',strtotime($time_out_data))){
                                                             $new_diff = $start_datetime->diff(new DateTime($time_out_data));
                                                             $work_ot_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
                                                             $overtime = (double) number_format($work_ot_diff_hours,2); 
                                                         }
-                                                    }
-                                                }
-                                                    
-                                                if($late > 0)
-                                                {
-                                                    $late_data = $late;
-                                                }
-                                                else {
-                                                    $late_data = 0;
-                                                }
 
-                                                //Undertime
-                                                $undertime_hrs = 0;
-                                                $undertime = (double) number_format($employee_schedule['working_hours'] - $working_minutes,2);
-                                                if($undertime > 0){
-                                                    if($late_diff_hours > 0){
-                                                        $undertime_hrs = number_format(($undertime*60*-1)/60,2) - $late_diff_hours;
-                                                    }else{
-                                                        $undertime_hrs = $undertime;
+                                                        //Undertime
+                                                        if($time_out_data && $schedule_time_out){
+                                                            if(date('Y-m-d h:i:s',strtotime($schedule_time_out)) > date('Y-m-d h:i:s',strtotime($time_out_data))){
+                                                                $time_out_datetime = new DateTime($time_out_data);
+                                                                $new_diff = $time_out_datetime->diff(new DateTime($schedule_time_out));
+                                                                $work_ut_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
+                                                                $undertime_hrs = (double) number_format($work_ut_diff_hours,2); 
+                                                            }
+                                                        }
+                                                       
+                                                        
                                                     }
-                                                }   
+                                                }
 
                                             @endphp
 
@@ -646,7 +647,7 @@
                             </tr>
                             @endforeach
                             <tr>
-                                <td colspan='6'>Total</td>
+                                <td colspan='7'>Total</td>
                                 <td >{{$work}} hrs</td>
                                 <td >{{$lates}} hrs</td>
                                 <td >{{$undertimes}} hrs </td>
