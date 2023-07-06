@@ -425,11 +425,16 @@
                                                         }
                                                     }
                                                 }else{
-                                                    $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
-                                                    if(date('Y-m-d h:i',strtotime($time_in_data_full)) > date('Y-m-d h:i',strtotime($schedule_time_in))){
-                                                        $late_diff = $schedule_time_in->diff(new DateTime($time_in_data_full));
-                                                        $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
+                                                    if($time_in_data && $schedule_time_in){
+                                                        $time_in_data_full =  date('Y-m-d h:i:s',strtotime($time_in_data));
+                                                        $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
+                                                        $schedule_time_in_final =  new DateTime($schedule_time_in);
+                                                        if(date('Y-m-d h:i',strtotime($time_in_data_full)) > date('Y-m-d h:i',strtotime($schedule_time_in))){
+                                                            $late_diff = $schedule_time_in_final->diff(new DateTime($time_in_data_full));
+                                                            $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
+                                                        }
                                                     }
+                                                    
                                                     
                                                     if($dtr_correction_time_out){
                                                         $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($time_in_data_full)))/3600);
