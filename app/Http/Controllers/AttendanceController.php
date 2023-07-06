@@ -39,7 +39,7 @@ class AttendanceController extends Controller
         // dd($attendances);
 
         $emp_data = Employee::select('id','user_id','employee_number','first_name','last_name','schedule_id')
-                                ->with(['attendances' => function ($query) use ($from_date, $to_date) {
+                                ->with(['schedule_info','attendances' => function ($query) use ($from_date, $to_date) {
                                         $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                         ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                         ->orderBy('time_in','asc')
@@ -74,7 +74,7 @@ class AttendanceController extends Controller
         $emp_data = [];
         if ($from_date != null) {
             $emp_data = Employee::select('id','user_id','employee_number','first_name','last_name','schedule_id')
-                                    ->with(['attendances' => function ($query) use ($from_date, $to_date) {
+                                    ->with(['schedule_info','attendances' => function ($query) use ($from_date, $to_date) {
                                             $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                                     ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                                     ->orderBy('time_in','asc')

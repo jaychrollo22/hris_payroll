@@ -30,6 +30,10 @@ class Employee extends Model implements Auditable
     {
         return $this->belongsTo(Level::class,'level','id');
     }
+    public function schedule_info()
+    {
+        return $this->belongsTo(Schedule::class,'schedule_id','id');
+    }
     public function department()
     {
         return $this->belongsTo(Department::class);

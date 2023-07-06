@@ -387,28 +387,39 @@
                                                 $schedule_time_in_final =  new DateTime($schedule_time_in);
                                                 $late_diff_hours = 0;
 
-                                                if(date('Y-m-d h:i',strtotime($time_in_data_full)) > date('Y-m-d h:i',strtotime($schedule_time_in_with_grace))){
-                                                    //IF Attendance Exceed in Grace Period
-                                                    $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
-                                                    $new_time_in_within_grace = date('Y-m-d h:i:s',strtotime($new_schedule_time_in));
-                                                    
-                                                    $new_time_in_within_grace = new DateTime($new_time_in_within_grace);
-                                                    $late_diff = $new_time_in_within_grace->diff(new DateTime($time_in_data_full));
-                                                    $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
-                                            
-                                                    $working_minutes = $work_diff_hours;
-
-                                                }else{
-                                                    //IF Attendance is Within Grace Period
-                                                    $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
-                                                    $new_time_in_within_grace = date('Y-m-d h:i:s',strtotime($new_schedule_time_in));
-                                                    if($dtr_correction_time_out){
-                                                        $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($new_time_in_within_grace)))/3600);
+                                                if($emp->schedule_info->is_with_grace_period == 1){
+                                                    if(date('Y-m-d h:i',strtotime($time_in_data_full)) > date('Y-m-d h:i',strtotime($schedule_time_in_with_grace))){
+                                                        //IF Attendance Exceed in Grace Period
+                                                        $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
+                                                        $new_time_in_within_grace = date('Y-m-d h:i:s',strtotime($new_schedule_time_in));
+                                                        $new_time_in_within_grace = new DateTime($new_time_in_within_grace);
+                                                        $late_diff = $new_time_in_within_grace->diff(new DateTime($time_in_data_full));
+                                                        $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
+                                                        $working_minutes = $work_diff_hours;
                                                     }else{
-                                                        $working_minutes = (double) (((strtotime($time_out_data) - (double) strtotime($new_time_in_within_grace)))/3600);
+                                                        //IF Attendance is Within Grace Period
+                                                        $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
+                                                        $new_time_in_within_grace = date('Y-m-d h:i:s',strtotime($new_schedule_time_in));
+                                                        if($dtr_correction_time_out){
+                                                            $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($new_time_in_within_grace)))/3600);
+                                                        }else{
+                                                            $working_minutes = (double) (((strtotime($time_out_data) - (double) strtotime($new_time_in_within_grace)))/3600);
+                                                        }
+                                                    }
+                                                }else{
+                                                    $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
+                                                    if(date('Y-m-d h:i',strtotime($time_in_data_full)) > date('Y-m-d h:i',strtotime($schedule_time_in))){
+                                                        $late_diff = $schedule_time_in->diff(new DateTime($time_in_data_full));
+                                                        $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
+                                                    }
+                                                    
+                                                    if($dtr_correction_time_out){
+                                                        $working_minutes = (double) (((strtotime($dtr_correction_time_out) - (double) strtotime($time_in_data_full)))/3600);
+                                                    }else{
+                                                        $working_minutes = (double) (((strtotime($time_out_data) - (double) strtotime($time_in_data_full)))/3600);
                                                     }
                                                 }
-
+                                                
                                                 $late =  (double) (strtotime(date("01-01-2022 h:i",strtotime($time_in_data))) - (double) strtotime(date("01-01-2022 h:i",strtotime("Y-m-d ".$employee_schedule['time_in_to']))))/60;
                                                 
                                                 $overtime = 0;
@@ -568,6 +579,7 @@
                                                                     }
                                                                 }
                                                             }else{
+                                                                
                                                                 $check_attendance = checkHasAttendanceHolidayStatus($emp->attendances,$if_attendance_holiday);
 
                                                                 if(empty($check_attendance)){
