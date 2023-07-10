@@ -233,11 +233,16 @@ function employeeHasWFHDetails($employee_wfhs = array(), $check_date){
 
 function employeeHasOTDetails($employee_ots = array(), $check_date){
     if(count($employee_ots) > 0){
+        $total_approved_overtime = 0;
         foreach($employee_ots as $item){
             if(date('Y-m-d',strtotime($item['ot_date'])) == date('Y-m-d',strtotime($check_date))){
-                return $item;
+
+                $total = $item['ot_approved_hrs'] - $item['break_hrs'];
+
+                $total_approved_overtime += $total;
             }
         }
+        return $total_approved_overtime;
     }
 }
 
