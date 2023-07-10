@@ -420,17 +420,17 @@
                                                     if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
                                                         //IF Attendance Exceed in Grace Period
                                                         $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
-                                                        $new_time_in_within_grace = date('Y-m-d h:i:s',strtotime($new_schedule_time_in));
+                                                        $new_time_in_within_grace = date('Y-m-d H:i:s',strtotime($new_schedule_time_in));
                                                         $new_time_in_within_grace = new DateTime($new_time_in_within_grace);
                                                         $late_diff = $new_time_in_within_grace->diff(new DateTime($time_in_data_full));
                                                         $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
                                                     }
                                                 }else{ // Flexi Time Schedule
                                                     if($time_in_data && $schedule_time_in){
-                                                        $time_in_data_full =  date('Y-m-d h:i:s',strtotime($time_in_data));
+                                                        $time_in_data_full =  date('Y-m-d H:i:s',strtotime($time_in_data));
                                                         $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
                                                         $schedule_time_in_final =  new DateTime($schedule_time_in);
-                                                        if(date('Y-m-d h:i',strtotime($time_in_data_full)) > date('Y-m-d h:i',strtotime($schedule_time_in))){
+                                                        if(date('Y-m-d H:i',strtotime($time_in_data_full)) > date('Y-m-d H:i',strtotime($schedule_time_in))){
                                                             $late_diff = $schedule_time_in_final->diff(new DateTime($time_in_data_full));
                                                             $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
                                                         }
@@ -465,7 +465,7 @@
                                                         $start_datetime = new DateTime($schedule_time_out);
                                                         
                                                         //Overtime 
-                                                        if(date('Y-m-d h:i:s',strtotime($schedule_time_out)) < date('Y-m-d h:i:s',strtotime($time_out_data))){
+                                                        if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) < date('Y-m-d H:i:s',strtotime($time_out_data))){
                                                             $new_diff = $start_datetime->diff(new DateTime($time_out_data));
                                                             $work_ot_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
                                                             $overtime = (double) number_format($work_ot_diff_hours,2); 
@@ -473,7 +473,7 @@
 
                                                         //Undertime
                                                         if($time_out_data && $schedule_time_out){
-                                                            if(date('Y-m-d h:i:s',strtotime($schedule_time_out)) > date('Y-m-d h:i:s',strtotime($time_out_data))){
+                                                            if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) > date('Y-m-d H:i:s',strtotime($time_out_data))){
                                                                 $time_out_datetime = new DateTime($time_out_data);
                                                                 $new_diff = $time_out_datetime->diff(new DateTime($schedule_time_out));
                                                                 $work_ut_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
