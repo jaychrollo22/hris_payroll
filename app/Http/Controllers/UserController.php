@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Bank;
 use App\User;
 use App\UserPrivilege;
@@ -33,117 +34,125 @@ use Maatwebsite\Excel\Facades\Excel;
 class UserController extends Controller
 {
     //
-    public function index(){
+    public function index()
+    {
 
-        if(auth()->user()->id == '353' || auth()->user()->id == '1'){
-            $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
-            $users = User::select('id','name','email','status','role')->get();
+        // if(auth()->user()->id == '353' || auth()->user()->id == '1'){
+        $companies = Company::whereHas('employee_has_company')->orderBy('company_name', 'ASC')->get();
+        $users = User::select('id', 'name', 'email', 'status', 'role')->get();
 
-            return view('users.index',
+        return view(
+            'users.index',
             array(
                 'header' => 'users',
                 'users' => $users,
                 'companies' => $companies,
-            ));
-        }else{
-            return redirect('/');
-        }
-        
+            )
+        );
+        // }else{
+        //     return redirect('/');
+        // }
+
     }
 
-    public function export() 
+    public function export()
     {
         return Excel::download(new UsersExport, 'Users.xlsx');
     }
 
-    public function editUserRole(User $user){
+    public function editUserRole(User $user)
+    {
 
-        $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
-        $projects = Project::orderBy('project_id','ASC')->get();
-        $locations = Location::orderBy('location','ASC')->get();
-        $user = User::with('user_allowed_company','user_privilege')
-                        ->where('id',$user->id)
-                        ->first();
+        $companies = Company::whereHas('employee_has_company')->orderBy('company_name', 'ASC')->get();
+        $projects = Project::orderBy('project_id', 'ASC')->get();
+        $locations = Location::orderBy('location', 'ASC')->get();
+        $user = User::with('user_allowed_company', 'user_privilege')
+            ->where('id', $user->id)
+            ->first();
 
-        return view('users.edit_user_role',
-        array(
-            'header' => 'edit_user_role',
-            'user' => $user,
-            'companies' => $companies,
-            'projects' => $projects,
-            'locations' => $locations,
-        ));
-
+        return view(
+            'users.edit_user_role',
+            array(
+                'header' => 'edit_user_role',
+                'user' => $user,
+                'companies' => $companies,
+                'projects' => $projects,
+                'locations' => $locations,
+            )
+        );
     }
-    public function changePassword(User $user){
+    public function changePassword(User $user)
+    {
 
-        
-        $user = User::with('user_allowed_company','user_privilege')
-                        ->where('id',$user->id)
-                        ->first();
 
-        return view('users.change_password',
-        array(
-            'header' => 'users',
-            'user' => $user
-        ));
+        $user = User::with('user_allowed_company', 'user_privilege')
+            ->where('id', $user->id)
+            ->first();
 
+        return view(
+            'users.change_password',
+            array(
+                'header' => 'users',
+                'user' => $user
+            )
+        );
     }
 
-    public function updateUserRole(Request $request, User $user){
-        if($user){
+    public function updateUserRole(Request $request, User $user)
+    {
+        if ($user) {
             $user = User::findOrFail($user->id);
             $user->email = $request->email;
             $user->name = $request->name;
             $user->role = $request->role;
             $user->save();
 
-            if($request->company){
-                $user_allowed_company = UserAllowedCompany::where('user_id',$user->id)->first(); 
-                if($user_allowed_company){
-                    $user_allowed_company->company_ids = json_encode($request->company,true);
+            if ($request->company) {
+                $user_allowed_company = UserAllowedCompany::where('user_id', $user->id)->first();
+                if ($user_allowed_company) {
+                    $user_allowed_company->company_ids = json_encode($request->company, true);
                     $user_allowed_company->save();
-                }else{
+                } else {
                     $new_user_allowed_company = new UserAllowedCompany;
                     $new_user_allowed_company->user_id = $user->id;
-                    $new_user_allowed_company->company_ids = json_encode($request->company,true);
+                    $new_user_allowed_company->company_ids = json_encode($request->company, true);
                     $new_user_allowed_company->save();
                 }
-            }else{
-                $user_allowed_company = UserAllowedCompany::where('user_id',$user->id)->delete();
+            } else {
+                $user_allowed_company = UserAllowedCompany::where('user_id', $user->id)->delete();
             }
-            if($request->location){
-                $user_allowed_location = UserAllowedLocation::where('user_id',$user->id)->first(); 
-                if($user_allowed_location){
-                    $user_allowed_location->location_ids = json_encode($request->location,true);
+            if ($request->location) {
+                $user_allowed_location = UserAllowedLocation::where('user_id', $user->id)->first();
+                if ($user_allowed_location) {
+                    $user_allowed_location->location_ids = json_encode($request->location, true);
                     $user_allowed_location->save();
-                }else{
+                } else {
                     $new_user_allowed_location = new UserAllowedLocation;
                     $new_user_allowed_location->user_id = $user->id;
-                    $new_user_allowed_location->location_ids = json_encode($request->location,true);
+                    $new_user_allowed_location->location_ids = json_encode($request->location, true);
                     $new_user_allowed_location->save();
                 }
-            }else{
-                $user_allowed_location = UserAllowedLocation::where('user_id',$user->id)->delete();
+            } else {
+                $user_allowed_location = UserAllowedLocation::where('user_id', $user->id)->delete();
             }
-            if($request->project){
-                $user_allowed_project = UserAllowedProject::where('user_id',$user->id)->first(); 
-                if($user_allowed_project){
-                    $user_allowed_project->project_ids = json_encode($request->project,true);
+            if ($request->project) {
+                $user_allowed_project = UserAllowedProject::where('user_id', $user->id)->first();
+                if ($user_allowed_project) {
+                    $user_allowed_project->project_ids = json_encode($request->project, true);
                     $user_allowed_project->save();
-                }else{
+                } else {
                     $new_user_allowed_project = new UserAllowedProject;
                     $new_user_allowed_project->user_id = $user->id;
-                    $new_user_allowed_project->project_ids = json_encode($request->project,true);
+                    $new_user_allowed_project->project_ids = json_encode($request->project, true);
                     $new_user_allowed_project->save();
                 }
-            }else{
-                $user_allowed_project = UserAllowedProject::where('user_id',$user->id)->delete();
+            } else {
+                $user_allowed_project = UserAllowedProject::where('user_id', $user->id)->delete();
             }
 
-            $user_privilege = UserPrivilege::where('user_id',$user->id)->first();
-            
-            if($user_privilege){
+            $user_privilege = UserPrivilege::where('user_id', $user->id)->first();
+
+            if ($user_privilege) {
                 $user_privilege->employees_view = $request->employees_view;
                 $user_privilege->employees_edit = $request->employees_edit;
                 $user_privilege->employees_add = $request->employees_add;
@@ -168,7 +177,7 @@ class UserController extends Controller
                 $user_privilege->settings_add = $request->settings_add;
                 $user_privilege->settings_edit = $request->settings_edit;
                 $user_privilege->settings_delete = $request->settings_delete;
-                
+
                 $user_privilege->masterfiles_companies = $request->masterfiles_companies;
                 $user_privilege->masterfiles_departments = $request->masterfiles_departments;
                 $user_privilege->masterfiles_loan_types = $request->masterfiles_loan_types;
@@ -179,7 +188,7 @@ class UserController extends Controller
                 $user_privilege->save();
                 Alert::success('Successfully Updated')->persistent('Dismiss');
                 return back();
-            }else{
+            } else {
                 $new_user_privilege = new UserPrivilege;
                 $new_user_privilege->user_id = $user->id;
                 $new_user_privilege->employees_view = $request->employees_view;
@@ -213,13 +222,11 @@ class UserController extends Controller
                 $new_user_privilege->masterfiles_employee_leave_credits = $request->masterfiles_employee_leave_credits;
                 $new_user_privilege->masterfiles_employee_leave_earned = $request->masterfiles_employee_leave_earned;
                 $new_user_privilege->masterfiles_employee_allowances = $request->masterfiles_employee_allowances;
-                
+
                 $new_user_privilege->save();
                 Alert::success('Successfully Updated')->persistent('Dismiss');
                 return back();
             }
-
-            
         }
     }
 
@@ -235,29 +242,31 @@ class UserController extends Controller
         $departments = Department::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
-        $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info','employee.classification_info','employee.level_info','employee.ScheduleData','employee.immediate_sup_data','approvers.approver_data','subbordinates')->first();
+        $user = User::where('id', auth()->user()->id)->with('employee.department', 'employee.payment_info', 'employee.classification_info', 'employee.level_info', 'employee.ScheduleData', 'employee.immediate_sup_data', 'approvers.approver_data', 'subbordinates')->first();
 
-       
 
-        return view('users.user_settings',
-        array(
-            'header' => 'user1',
-            'user' => $user,
-            'header' => 'account-setting',
-            'classifications' => $classifications,
-            'employees' => $employees,
-            'marital_statuses' => $marital_statuses,
-            'departments' => $departments,
-            'levels' => $levels,
-            'users' => $users,
-            'banks' => $banks,
-            'schedules' => $schedules,
-            'companies' => $companies,
-        ));
-    
+
+        return view(
+            'users.user_settings',
+            array(
+                'header' => 'user1',
+                'user' => $user,
+                'header' => 'account-setting',
+                'classifications' => $classifications,
+                'employees' => $employees,
+                'marital_statuses' => $marital_statuses,
+                'departments' => $departments,
+                'levels' => $levels,
+                'users' => $users,
+                'banks' => $banks,
+                'schedules' => $schedules,
+                'companies' => $companies,
+            )
+        );
     }
-    
-    public function updateInfo(Request $request, $id){
+
+    public function updateInfo(Request $request, $id)
+    {
 
         $employee = Employee::findOrFail($id);
         $employee->first_name = $request->first_name;
@@ -280,10 +289,10 @@ class UserController extends Controller
 
         Alert::success('Successfully Updated')->persistent('Dismiss');
         return back();
-
     }
 
-    public function updateEmpInfo(Request $request, $id){
+    public function updateEmpInfo(Request $request, $id)
+    {
 
         $employee = Employee::findOrFail($id);
         $employee->company_id = $request->company;
@@ -303,37 +312,35 @@ class UserController extends Controller
         $employee->employee_number = $request->biometric_code;
         $employee->save();
 
-        $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+        $approver = EmployeeApprover::where('user_id', $employee->user_id)->delete();
         $level = 1;
-        foreach($request->approver as  $approver)
-        {
+        foreach ($request->approver as  $approver) {
             $new_approver = new EmployeeApprover;
             $new_approver->user_id = $employee->user_id;
             $new_approver->approver_id = $approver;
             $new_approver->level = $level;
             $new_approver->save();
-            $level = $level+1;
-
+            $level = $level + 1;
         }
         Alert::success('Successfully Updated')->persistent('Dismiss');
         return back();
-
     }
 
-    public function updateEmpContactInfo(Request $request, $id){
-        $employee = Employee::where('user_id',$id)->first();
+    public function updateEmpContactInfo(Request $request, $id)
+    {
+        $employee = Employee::where('user_id', $id)->first();
 
-        if($employee){
-            $employee_contact_person = EmployeeContactPerson::where('user_id',$employee->user_id)->first();
+        if ($employee) {
+            $employee_contact_person = EmployeeContactPerson::where('user_id', $employee->user_id)->first();
 
-            if(empty($employee_contact_person)){
+            if (empty($employee_contact_person)) {
                 $new_contact_person = new EmployeeContactPerson;
                 $new_contact_person->user_id = $employee->user_id;
                 $new_contact_person->name = $request->name;
                 $new_contact_person->contact_number = $request->contact_number;
                 $new_contact_person->relation = $request->relation;
                 $new_contact_person->save();
-            }else{
+            } else {
                 $employee_contact_person->name = $request->name;
                 $employee_contact_person->contact_number = $request->contact_number;
                 $employee_contact_person->relation = $request->relation;
@@ -347,66 +354,59 @@ class UserController extends Controller
 
     public function uploadAvatar(Request $request)
     {
-        $employee = Employee::where('user_id',auth()->user()->id)->first();
-        if($request->hasFile('file'))
-        {
+        $employee = Employee::where('user_id', auth()->user()->id)->first();
+        if ($request->hasFile('file')) {
             $attachment = $request->file('file');
             $original_name = $attachment->getClientOriginalName();
-            $name = time().'_'.$attachment->getClientOriginalName();
-            $attachment->move(public_path().'/avatar/', $name);
-            $file_name = '/avatar/'.$name;
+            $name = time() . '_' . $attachment->getClientOriginalName();
+            $attachment->move(public_path() . '/avatar/', $name);
+            $file_name = '/avatar/' . $name;
             $employee->avatar = $file_name;
             $employee->save();
             Alert::success('Successfully avatar uploaded.')->persistent('Dismiss');
             return back();
-            
         }
     }
     public function uploadSignature(Request $request)
     {
-        $employee = Employee::where('user_id',auth()->user()->id)->first();
-        if($request->hasFile('signature'))
-        {
+        $employee = Employee::where('user_id', auth()->user()->id)->first();
+        if ($request->hasFile('signature')) {
             $attachment = $request->file('signature');
             $original_name = $attachment->getClientOriginalName();
-            $name = time().'_'.$attachment->getClientOriginalName();
-            $attachment->move(public_path().'/signature/', $name);
-            $file_name = '/signature/'.$name;
+            $name = time() . '_' . $attachment->getClientOriginalName();
+            $attachment->move(public_path() . '/signature/', $name);
+            $file_name = '/signature/' . $name;
             $employee->signature = $file_name;
             $employee->save();
             Alert::success('Successfully signature uploaded.')->persistent('Dismiss');
             return back();
-            
         }
     }
     public function get_salary(Request $request)
     {
         // return $request;
-        $user = User::where('id',auth()->user()->id)->with('employee.department','employee.payment_info')->first();
+        $user = User::where('id', auth()->user()->id)->with('employee.department', 'employee.payment_info')->first();
         $data = Hash::check($request->password_salary, $user->password);
-        if($data == true)
-        {
+        if ($data == true) {
             return $user;
-        }
-        else
-        {
+        } else {
             return $request;
         }
     }
 
-    public function updateUserPassword(Request $request,User $user){
+    public function updateUserPassword(Request $request, User $user)
+    {
 
         $validator = $request->validate([
             'password' => 'required|confirmed',
             'password_confirmation' => 'required'
         ]);
-    
+
         $user = User::findOrFail($user->id);
         $user->password = bcrypt($request->input('password'));
         $user->save();
 
         Alert::success('Successfully Updated')->persistent('Dismiss');
         return redirect('/users');
-
     }
 }
