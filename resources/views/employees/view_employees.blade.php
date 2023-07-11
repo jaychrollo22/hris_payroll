@@ -103,9 +103,9 @@
                         <h4 class="card-title">Employees 
                             @if (checkUserPrivilege('employees_add',auth()->user()->id) == 'yes')
                                 <button type="button" class="btn btn-outline-success btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#newEmployee"><i class="ti-plus btn-icon-prepend"></i></button>
-                                @if(auth()->user()->id == '353' || auth()->user()->id == '1')
-                                    <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployee" title="Upload Employees"><i class="ti-arrow-up btn-icon-prepend"></i></button>
-                                @endif
+                                {{-- @if(auth()->user()->id == '353' || auth()->user()->id == '1') --}}
+                                <button type="button" class="btn btn-outline-warning btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployee" title="Upload Employees"><i class="ti-arrow-up btn-icon-prepend"></i></button>
+                                {{-- @endif --}}
                                 @if(auth()->user()->id == '1')
                                     <button type="button" class="btn btn-outline-primary btn-icon-text btn-sm text-center" data-toggle="modal" data-target="#uploadEmployeeRevertRate" title="Upload Rate Employees"><i class="ti-arrow-up btn-icon-prepend"></i></button>
                                 @endif
