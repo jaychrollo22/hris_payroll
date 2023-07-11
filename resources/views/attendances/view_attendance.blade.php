@@ -629,12 +629,13 @@
                                         @else
                                             @php
                                                 $is_absent = '';
-                                                if($time_out_data == null){
-                                                    $is_absent = 'Absent';
+                                                $if_leave = '';
+                                                if($employee_schedule){
+                                                    if($time_out_data == null){
+                                                        $is_absent = 'Absent';
+                                                    }
+                                                    $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
                                                 }
-                                                
-                                                $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
-
                                             @endphp  
                                             {{$if_leave}}
                                             {{$is_absent}}
