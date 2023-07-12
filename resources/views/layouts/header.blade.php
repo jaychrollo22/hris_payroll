@@ -352,9 +352,9 @@
                                 @php
                                     $user_allowed_overtime = auth()->user()->allowed_overtime ? auth()->user()->allowed_overtime->allowed_overtime : "";
                                 @endphp
-                                @if(checkUserAllowedOvertime(auth()->user()->id) == 'yes' || $user_allowed_overtime == 'on')
+                                {{-- @if(checkUserAllowedOvertime(auth()->user()->id) == 'yes' || $user_allowed_overtime == 'on') --}}
                                     <li class="nav-item "> <a class="nav-link " href="{{ url('/overtime') }}">Overtime</a></li>
-                                @endif
+                                {{-- @endif --}}
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/work-from-home') }}">Work from home</a></li>
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/official-business') }}">Official Business</a>
                                 </li>
