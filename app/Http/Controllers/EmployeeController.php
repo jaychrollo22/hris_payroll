@@ -39,6 +39,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use App\Exports\EmployeesExport;
 use App\Exports\EmployeeHRExport;
 use App\Exports\AttendancePerLocationExport;
+use App\Exports\EmployeeAssociateExport;
 
 class EmployeeController extends Controller
 {
@@ -261,6 +262,28 @@ class EmployeeController extends Controller
         return Excel::download(new EmployeeHRExport($company,$department,$allowed_companies,$allowed_locations,$allowed_projects), 'Master List '. $company_name .' .xlsx');
     }
 
+    public function export_employee_associates(Request $request) 
+    {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_companies = json_encode($allowed_companies);
+
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_locations = json_encode($allowed_locations);
+
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+        $allowed_projects = json_encode($allowed_projects);
+
+        $company = isset($request->company) ? $request->company : "";
+        $department = isset($request->department) ? $request->department : "";
+        $company_info = Company::where('id',$company)->first();
+        $company_name = $company_info ? $company_info->company_code : "";
+
+        $access_rate = checkUserPrivilege('employees_rate',auth()->user()->id);
+
+        return Excel::download(new EmployeeAssociateExport($company,$department,$allowed_companies,$access_rate,$allowed_locations,$allowed_projects), 'Employee Associates '. $company_name .' .xlsx');
+    }
+
     public function new(Request $request)
     {
 
@@ -327,7 +350,7 @@ class EmployeeController extends Controller
             $employee->location = $request->location;
             $employee->work_description = $request->work_description;
             $employee->rate = isset($request->rate) ? Crypt::encryptString($request->rate) : "";
-
+            $employee->tax_application = $request->tax_application;
 
             if($request->hasFile('file'))
             {
@@ -1063,6 +1086,7 @@ class EmployeeController extends Controller
         if(checkUserPrivilege('employees_rate',auth()->user()->id) == 'yes'){
             $employee->work_description = $request->work_description;
             $employee->rate = $request->rate ? Crypt::encryptString($request->rate) : "";
+            $employee->tax_application = $request->tax_application;
         }
        
         $employee->status = $request->status;

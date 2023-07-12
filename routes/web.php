@@ -41,7 +41,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('attendance-per-company-export', 'AttendanceController@attendancePerCompanyExport');
 
 
-
     //Leaves
     Route::get('file-leave', 'EmployeeLeaveController@leaveBalances');
     Route::post('new-leave','EmployeeLeaveController@new');
@@ -110,6 +109,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('account-setting-hr/updateContactInfoHR/{id}', 'EmployeeController@updateContactInfoHR');
     Route::post('account-setting-hr/updateBeneficiariesHR/{id}', 'EmployeeController@updateBeneficiariesHR');
     Route::get('account-setting-hr/getBeneficiariesHR/{id}', 'EmployeeController@getBeneficiariesHR');
+
+    Route::get('associate-employees-export','EmployeeController@export_employee_associates');
+
 
     //Payslips
     Route::get('payslips', 'PayslipController@view');

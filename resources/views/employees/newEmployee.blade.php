@@ -265,9 +265,17 @@
                                     <div class='col-md-6'>
                                       Work Description
                                       <select data-placeholder="Work Description" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='work_description' required>
-                                        <option value="">-- Bank Work Description --</option>
+                                        <option value="">-- Work Description --</option>
                                         <option value="Monthly">Monthly</option>
                                         <option value="Non-Monthly">Non-Monthly</option>
+                                      </select>
+                                    </div>
+                                    <div class='col-md-4'>
+                                      TAX Application
+                                      <select data-placeholder="TAX Application" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='tax_application' required>
+                                        <option value="">-- TAX Application --</option>
+                                        <option value="Minimum">Minimum</option>
+                                        <option value="Non-Minimum">Non-Minimum</option>
                                       </select>
                                     </div>
                                 </div>

@@ -158,9 +158,17 @@
                   <div class='col-md-4'>
                     WORK DESCRIPTION
                     <select data-placeholder="Work Description" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='work_description' required>
-                      <option value="">-- Bank Work Description --</option>
+                      <option value="">-- Work Description --</option>
                       <option value="Monthly" @if ($user->employee->work_description == 'Monthly') selected @endif>Monthly</option>
                       <option value="Non-Monthly" @if ($user->employee->work_description == 'Non-Monthly') selected @endif>Non-Monthly</option>
+                    </select>
+                  </div>
+                  <div class='col-md-4'>
+                    TAX APPLICATION
+                    <select data-placeholder="TAX Application" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='tax_application' required>
+                      <option value="">-- TAX Application --</option>
+                      <option value="Minimum" @if ($user->employee->tax_application == 'Minimum') selected @endif>Minimum</option>
+                      <option value="Non-Minimum" @if ($user->employee->tax_application == 'Non-Minimum') selected @endif>Non-Minimum</option>
                     </select>
                   </div>
                   <div class='col-md-4'>

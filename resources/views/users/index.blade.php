@@ -36,18 +36,14 @@
                                         <td>{{$user->email}}</td>
                                         <td>{{$user->role}}</td>
                                         <td>
-                                            <a href="/edit-user-role/{{$user->id}}" class="btn btn-outline-info btn-icon-text btn-sm">
+                                            <a href="/edit-user-role/{{$user->id}}" target="_blank" class="btn btn-outline-info btn-icon-text btn-sm">
                                                 Edit
                                                 <i class="ti-file btn-icon-append"></i>
                                             </a>
-                                            <a href="/change-password/{{$user->id}}" class="btn btn-outline-info btn-icon-text btn-sm">
+                                            <a href="/change-password/{{$user->id}}" target="_blank" class="btn btn-outline-info btn-icon-text btn-sm">
                                                 Change Password
                                                 <i class="ti-key btn-icon-append"></i>
                                             </a>
-                                            {{-- <button data-toggle="modal" data-target="#editUserPassword{{$user->id}}" type="button" class="btn btn-outline-info btn-icon-text btn-sm">
-                                                Change Password
-                                                <i class="ti-key btn-icon-append"></i>
-                                            </button> --}}
                                         </td>
                                     </tr>
                                     @endforeach
