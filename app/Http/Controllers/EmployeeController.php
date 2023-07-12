@@ -51,6 +51,8 @@ class EmployeeController extends Controller
         $allowed_locations = getUserAllowedLocations(auth()->user()->id);
         $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
+        $default_limit = 1000;
+        $search = isset($request->search) ? $request->search : "";
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $status = isset($request->status) ? $request->status : "Active";
@@ -130,6 +132,14 @@ class EmployeeController extends Controller
 
         $employees = Employee::select('id','user_id','employee_number','first_name','last_name','department_id','company_id','immediate_sup','classification','status')
                                 ->with('department', 'immediate_sup_data', 'user_info', 'company','classification_info')
+                                ->when($search,function($q) use($search){
+                                    $q->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')->orWhere('employee_number', 'like' , '%' .  $search . '%');
+                                    $q->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"]);
+                                    $q->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
+                                })
+                                ->when(empty($company),function($q) use($default_limit){
+                                    $q->limit($default_limit);
+                                })
                                 ->when($company,function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
@@ -213,6 +223,7 @@ class EmployeeController extends Controller
                 'banks' => $banks,
                 'schedules' => $schedules,
                 'companies' => $companies,
+                'search' => $search,
                 'company' => $company,
                 'department' => $department,
                 'status' => $status,
@@ -1360,8 +1371,32 @@ class EmployeeController extends Controller
                                 ->whereIn('id',$allowed_companies)
                                 ->get();
 
+
+        $department_companies = Employee::where('company_id',$allowed_companies)
+                                        ->groupBy('department_id')
+                                        ->pluck('department_id')
+                                        ->toArray();
+
+        $departments = Department::whereIn('id',$department_companies)->where('status','1')
+                                        ->orderBy('name')
+                                        ->get();
+
+        $location_companies = Employee::where('company_id',$allowed_companies)
+                                        ->groupBy('location')
+                                        ->pluck('location')
+                                        ->toArray();
+
+        $locations = Location::whereIn('location',$location_companies)
+                                        ->orderBy('location')
+                                        ->get();
+
+
         $attendance_controller = new AttendanceController;
-        $company = $request->company;
+        
+        $company = isset($request->company) ? $request->company : "";
+        $department = isset($request->department) ? $request->department : "";
+        $location = isset($request->location) ? $request->location : "";
+
         $from_date = $request->from;
         $to_date = $request->to;
         $date_range =  [];
@@ -1405,10 +1440,16 @@ class EmployeeController extends Controller
                                 })
                                 ->when($allowed_projects,function($q) use($allowed_projects){
                                     $q->whereIn('project',$allowed_projects);
-                                })    
-                                ->where('status','Active')
-                                ->get();
-            // dd($company_employees);
+                                });
+            if($department){
+                $emp_data = $emp_data->where('department_id', $department);
+            }
+            if($location){
+                $emp_data = $emp_data->where('location', $location);
+            }
+
+            $emp_data =  $emp_data->where('status','Active')->get();
+            
             $date_range =  $attendance_controller->dateRange($from_date, $to_date);
         }
         $schedules = ScheduleData::all();
@@ -1418,6 +1459,8 @@ class EmployeeController extends Controller
             array(
                 'header' => 'biometrics',
                 'company' => $company,
+                'department' => $department,
+                'location' => $location,
                 'from_date' => $from_date,
                 'to_date' => $to_date,
                 'date_range' => $date_range,
@@ -1425,6 +1468,8 @@ class EmployeeController extends Controller
                 'schedules' => $schedules,
                 'emp_data' => $emp_data,
                 'companies' => $companies,
+                'departments' => $departments,
+                'locations' => $locations,
             )
         );
     }

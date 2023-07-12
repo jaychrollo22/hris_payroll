@@ -125,7 +125,12 @@
 						<p class="card-description">
 						<form method='get' onsubmit='show();' enctype="multipart/form-data">
 							<div class=row>
-								<div class='col-md-3'>
+                                <div class='col-md-2'>
+									<div class="form-group">
+                                        <input type="text" class="form-control" name="search" placeholder="Search Name / Biometric Code" value="{{$search}}">
+                                    </div>
+                                </div>
+								<div class='col-md-2'>
 									<div class="form-group">
 										
                                         <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company'>
@@ -137,7 +142,7 @@
 										
 									</div>
 								</div>
-								<div class='col-md-3'>
+								<div class='col-md-2'>
 									<div class="form-group">
 										
                                         <select data-placeholder="Select Department" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='department'>
@@ -161,7 +166,8 @@
 									</div>
 								</div>
 								<div class='col-md-2'>
-									<button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
+									<button type="submit" class="btn btn-primary">Filter</button>
+                                    <a href="/employees" class="btn btn-warning">Reset Filter</a>
 								</div>
 							</div>
 							

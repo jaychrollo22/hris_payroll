@@ -12,47 +12,57 @@
                         <p class="card-description">
                             <form method='get' onsubmit='show();' enctype="multipart/form-data">
                                 <div class=row>
-                                    <div class='col-md-3'>
-                                        <div class="form-group row">
-                                            <label class="col-sm-4 col-form-label text-right">Company</label>
-                                            <div class="col-sm-8">
-                                                <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
-                                                    <option value="">-- Select Employee --</option>
-                                                    @foreach($companies as $comp)
-                                                    <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                    <div class='col-md-2'>
+                                        <div class="form-group">
+                                            <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
+                                                <option value="">-- Select Employee --</option>
+                                                @foreach($companies as $comp)
+                                                <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class='col-md-3'>
-                                        <div class="form-group row">
-                                            <label class="col-sm-4 col-form-label text-right">From</label>
-                                            <div class="col-sm-8">
-                                                <input type="date" value='{{$from_date}}' class="form-control" name="from" max='{{date('d/m/Y')}}' onchange='get_min(this.value);' required />
-                                            </div>
+                                    <div class='col-md-2'>
+                                        <div class="form-group">
+                                            <select data-placeholder="Select Department" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='department'>
+                                                <option value="">-- Select Department --</option>
+                                                @foreach($departments as $dep)
+                                                <option value="{{$dep->id}}" @if ($dep->id == $department) selected @endif>{{$dep->name}} - {{$dep->code}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class='col-md-3'>
-                                        <div class="form-group row">
-                                            <label class="col-sm-4 col-form-label text-right">To</label>
-                                            <div class="col-sm-8">
-                                                <input type="date" value='{{$to_date}}' class="form-control" name="to" id='to' max='{{date('d/m/Y')}}' required />
-                                            </div>
+                                    <div class='col-md-2'>
+                                        <div class="form-group">
+                                            <select data-placeholder="Select Location" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='location'>
+                                                <option value="">-- Select Location --</option>
+                                                @foreach($locations as $loc)
+                                                <option value="{{$loc->location}}" @if ($loc->location == $location) selected @endif>{{$loc->location}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class='col-md-3'>
-                                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                                    <div class='col-md-2'>
+                                        <div class="form-group">
+                                            <input type="date" value='{{$from_date}}' class="form-control" name="from" max='{{date('d/m/Y')}}' onchange='get_min(this.value);' required />
+                                        </div>
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <div class="form-group">
+                                            <input type="date" value='{{$to_date}}' class="form-control" name="to" id='to' max='{{date('d/m/Y')}}' required />
+                                        </div>
+                                    </div>
+                                    <div class='col-md-2'>
+                                        <button type="submit" class="btn btn-primary">Filter</button>
+                                        <a href="/biometrics-per-company" class="btn btn-warning">Reset Filter</a>
                                     </div>
                                 </div>
                             </form>
                         </p>
                         @if($date_range)
-                        {{-- <button class='btn btn-info mb-1' onclick="exportTableToExcel('employee_attendance','{{$from_date}} - {{$to_date}}')">Export</button> --}}
                         <a href="attendance-per-company-export?company={{$company}}&from={{$from_date}}&to={{$to_date}}" class='btn btn-info mb-1'>Export {{count($emp_data)}} Employees</a>
                         @endif
-
-
+                        
                         <div class="table-responsive">
 
                             <table border="1" class="table table-hover table-bordered employee_attendance" id='employee_attendance'>
