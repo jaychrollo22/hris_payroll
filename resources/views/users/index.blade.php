@@ -21,12 +21,12 @@
                         <h4 class="card-title">Filter</h4>
 						<form method='get' onsubmit='show();' enctype="multipart/form-data">
 							<div class=row>
-                                <div class='col-md-3'>
+                                <div class='col-md-6'>
 									<div class="form-group">
                                         <input type="text" class="form-control" name="search" placeholder="Search Name / Biometric Code" value="{{$search}}">
                                     </div>
                                 </div>
-                                <div class='col-md-2'>
+                                <div class='col-md-6'>
 									<button type="submit" class="btn btn-primary">Filter</button>
                                     <a href="/users" class="btn btn-warning">Reset Filter</a>
 								</div>
