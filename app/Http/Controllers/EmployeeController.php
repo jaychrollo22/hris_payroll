@@ -172,36 +172,7 @@ class EmployeeController extends Controller
                                 ->whereIn('company_id',$allowed_companies)
                                 ->get();
 
-        $employees_active = Employee::select('id','user_id','employee_number','first_name','last_name','department_id','company_id','immediate_sup','classification','status')
-                                ->with('department', 'immediate_sup_data', 'user_info', 'company','classification_info')
-                                ->when($search,function($q) use($search){
-                                    $q->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')->orWhere('employee_number', 'like' , '%' .  $search . '%');
-                                    $q->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"]);
-                                    $q->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
-                                })
-                                ->when($company,function($q) use($company){
-                                    $q->where('company_id',$company);
-                                })
-                                ->when($department,function($q) use($department){
-                                    $q->where('department_id',$department);
-                                })
-                                ->when($status,function($q) use($status){
-                                    $q->where('status',$status);
-                                })
-                                ->when($classification,function($q) use($classification){
-                                    if($classification == 'N/A'){
-                                        $q->whereNull('classification');
-                                    }else{
-                                        $q->where('classification',$classification);
-                                    }  
-                                })
-                                ->when($gender,function($q) use($gender){
-                                    if($gender == 'N/A'){
-                                        $q->whereNull('gender');
-                                    }else{
-                                        $q->where('gender',$gender);
-                                    }
-                                })     
+        $employees_active = Employee::select('id','user_id')     
                                 ->when($allowed_locations,function($q) use($allowed_locations){
                                     $q->whereIn('location',$allowed_locations);
                                 })
@@ -209,6 +180,7 @@ class EmployeeController extends Controller
                                     $q->whereIn('project',$allowed_projects);
                                 })
                                 ->whereIn('company_id',$allowed_companies)
+                                ->where('status','Active')
                                 ->count();
        
         if($company){
