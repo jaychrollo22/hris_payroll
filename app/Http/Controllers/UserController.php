@@ -33,15 +33,24 @@ use Maatwebsite\Excel\Facades\Excel;
 class UserController extends Controller
 {
     //
-    public function index(){
+    public function index(Request $request){
 
         if(auth()->user()->id == '353' || auth()->user()->id == '1'){
+            $search = isset($request->search) ? $request->search : "";
+            $limit = isset($request->limit) ? $request->limit : 1000;
             $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
             $users = User::select('id','name','email','status','role')
                             ->whereHas('employee',function($q){
                                 $q->where('status','Active');
                             })
-                            ->orWhere('id','1')
+                            ->when($search,function($q) use($search){
+                                $q->whereHas('employee',function($w) use($search){
+                                    $w->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')->orWhere('employee_number', 'like' , '%' .  $search . '%');
+                                    $w->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"]);
+                                    $w->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
+                                });
+                            })
+                            ->limit($limit)
                             ->get();
 
             return view('users.index',
@@ -49,6 +58,7 @@ class UserController extends Controller
                 'header' => 'users',
                 'users' => $users,
                 'companies' => $companies,
+                'search' => $search,
             ));
         }else{
             return redirect('/');
