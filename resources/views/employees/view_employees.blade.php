@@ -89,7 +89,7 @@
 
                             <div class="media-body">
                                 <h4 class="mb-4">Active</h4>
-                                <h2 class="card-text">{{$employees->where('status','Active')->count()}}</h2>
+                                <h2 class="card-text">{{$employees_active}}</h2>
                             </div>
                         </div>
                     </div>
