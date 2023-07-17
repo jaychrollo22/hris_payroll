@@ -91,7 +91,7 @@
 							</form>
 						</p>
 						
-						@if(auth()->user()->id == '1' || auth()->user()->id == '353')
+						@if (checkUserPrivilege('biometrics_per_location_hik',auth()->user()->id) == 'yes')
 						<p class="card-description">
 							<form method='get' action='sync-hik-att-logs' onsubmit='show();' enctype="multipart/form-data">
 								<div class=row>
