@@ -90,6 +90,7 @@
                             @foreach(array_reverse($date_range) as $date_r)
                             @php
                                 $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
+                                $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
                             @endphp
                             <tr>
                                 <td>{{$emp->employee_number}}</td>
@@ -481,30 +482,36 @@
                                             @endphp
 
                                             <td>
-                                                {{  $late_diff_hours }} hrs
-                                                @php
-                                                    $lates = (double) $lates+$late_diff_hours;
-                                                @endphp
+                                                @if(empty($check_if_holiday))
+                                                    {{  $late_diff_hours }} hrs
+                                                    @php
+                                                        $lates = (double) $lates+$late_diff_hours;
+                                                    @endphp
+                                                @endif
                                             </td>
                                             <td>
                                                 {{-- Undertime --}}
-                                                @if($undertime_hrs > 0) 
-                                                    {{$undertime_hrs}} hrs 
-                                                    @php 
-                                                        $undertimes=$undertimes + $undertime_hrs; 
-                                                    @endphp 
-                                                @else 
-                                                    0 hrs 
+                                                @if(empty($check_if_holiday))
+                                                    @if($undertime_hrs > 0) 
+                                                        {{$undertime_hrs}} hrs 
+                                                        @php 
+                                                            $undertimes=$undertimes + $undertime_hrs; 
+                                                        @endphp 
+                                                    @else 
+                                                        0 hrs 
+                                                    @endif 
                                                 @endif 
                                             </td>
                                             <td>
-                                                @if($overtime > .5)
-                                                    {{$overtime}} hrs
-                                                    @php
-                                                        $overtimes = (double) $overtimes +round($overtime,2);
-                                                    @endphp
-                                                @else
-                                                    0 hrs
+                                                @if(empty($check_if_holiday))
+                                                    @if($overtime > .5)
+                                                        {{$overtime}} hrs
+                                                        @php
+                                                            $overtimes = (double) $overtimes +round($overtime,2);
+                                                        @endphp
+                                                    @else
+                                                        0 hrs
+                                                    @endif
                                                 @endif
                                             </td>
                                             <td>
@@ -521,11 +528,12 @@
                                                 0 hrs
                                             </td>
                                             <td>
-                                                @php
-                                                $night_diff_ot = $night_diff_ot + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
-                                                echo round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2)." hrs";
-                                                @endphp
-
+                                                @if(empty($check_if_holiday))
+                                                    @php
+                                                    $night_diff_ot = $night_diff_ot + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
+                                                    echo round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2)." hrs";
+                                                    @endphp
+                                                @endif
                                             </td>
                                             <td>
                                                 @if($time_in)
@@ -540,13 +548,15 @@
                                             <td></td>
                                             @if($time_in || $if_has_dtr)
                                                 <td>
-                                                    @if($overtime > .5)
-                                                        {{$overtime}} hrs
-                                                        @php
-                                                            $overtimes = (double) $overtimes +round($overtime,2);
-                                                        @endphp
-                                                    @else
-                                                        0 hrs
+                                                    @if(empty($check_if_holiday))
+                                                        @if($overtime > .5)
+                                                            {{$overtime}} hrs
+                                                            @php
+                                                                $overtimes = (double) $overtimes +round($overtime,2);
+                                                            @endphp
+                                                        @else
+                                                            0 hrs
+                                                        @endif
                                                     @endif
                                                 </td>
                                                 <td>
@@ -564,11 +574,12 @@
                                                     0 hrs
                                                 </td>
                                                 <td>
-                                                    @php
-                                                    $night_diff_ot = $night_diff_ot + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
-                                                    echo round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2)." hrs";
-                                                    @endphp
-    
+                                                    @if(empty($check_if_holiday))
+                                                        @php
+                                                        $night_diff_ot = $night_diff_ot + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
+                                                        echo round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2)." hrs";
+                                                        @endphp
+                                                    @endif
                                                 </td>
 
                                             @else
@@ -590,7 +601,6 @@
                                                     $is_absent = '';
                                                     $if_leave = '';
                                                     $if_attendance_holiday = '';
-                                                    $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
                                                     $if_attendance_holiday_status = '';
                                                     if($check_if_holiday){
                                                         $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
@@ -652,6 +662,7 @@
                                                 }
                                             @endphp  
                                             {{$if_leave}}
+                                            {{$if_dtr_correction}}
                                             {{$is_absent}}
                                         @endif
                                     </td>
