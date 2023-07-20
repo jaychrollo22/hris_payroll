@@ -61,6 +61,7 @@
                         <th>OT Requested (Hrs)</th>
                         <th>Break (Hrs)</th>
                         <th>OT Approved (Hrs)</th>
+                        <th>Total OT Approved (Hrs)</th>
                         <th>Remarks </th>
                         <th>Status </th>
                         <th>Approvers </th>
@@ -87,6 +88,7 @@
                         </td>
                         <td> {{$overtime->break_hrs}}</td>
                         <td> {{$overtime->ot_approved_hrs}}</td>
+                        <td>{{$overtime->ot_approved_hrs - $overtime->break_hrs}}</td>
                         <td>{{ $overtime->remarks }}</td>
                         <td id="tdStatus{{ $overtime->id }}">
                           @if ($overtime->status == 'Pending')
