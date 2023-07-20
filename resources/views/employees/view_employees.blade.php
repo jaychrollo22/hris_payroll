@@ -161,6 +161,8 @@
                                             <option value="">-- Select Status --</option>
                                             <option value="Active" @if ($status == 'Active') selected @endif>Active</option>
                                             <option value="Inactive" @if ($status == 'Inactive') selected @endif>Inactive</option>
+                                            <option value="Resigned" @if ($status == 'Resigned') selected @endif>Resigned</option>
+                                            <option value="Terminated" @if ($status == 'Terminated') selected @endif>Terminated</option>
                                         </select>
 										
 									</div>
