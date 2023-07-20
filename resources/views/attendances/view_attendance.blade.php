@@ -147,13 +147,15 @@
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        @if($overtime > .5)
-                                            {{$overtime}} hrs
-                                            @php
-                                                $overtimes = (double) $overtimes +round($overtime,2);
-                                            @endphp
-                                        @else
-                                            0 hrs
+                                        @if(empty($check_if_holiday))
+                                            @if($overtime > .5)
+                                                {{$overtime}} hrs
+                                                @php
+                                                    $overtimes = (double) $overtimes +round($overtime,2);
+                                                @endphp
+                                            @else
+                                                0 hrs
+                                            @endif
                                         @endif
                                     </td>
                                     <td>
@@ -196,13 +198,15 @@
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        @if($overtime > .5)
-                                            {{$overtime}} hrs
-                                            @php
-                                                $overtimes = (double) $overtimes +round($overtime,2);
-                                            @endphp
-                                        @else
-                                            0 hrs
+                                        @if(empty($check_if_holiday))
+                                            @if($overtime > .5)
+                                                {{$overtime}} hrs
+                                                @php
+                                                    $overtimes = (double) $overtimes +round($overtime,2);
+                                                @endphp
+                                            @else
+                                                0 hrs
+                                            @endif
                                         @endif
                                     </td>
                                     <td>
