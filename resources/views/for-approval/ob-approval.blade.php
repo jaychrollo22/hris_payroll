@@ -77,11 +77,26 @@
                     </div>
                   </div>
                 </form>
+
+                @if(empty($status) || $status == 'Pending')
+                  <label>
+                    <input type="checkbox" id="selectAll">
+                    <span id="labelSelectAll">Select All</span> 
+                  </label>
+                @endif
+
+                <button class="btn btn-success btn-sm mb-2" id="approveAllBtn" style="display: none;">Approve</button>
+                <button class="btn btn-danger btn-sm mb-2" id="disApproveAllBtn" style="display: none;">Disapprove</button>
                 
                 <div class="table-responsive">
                   <table class="table table-hover table-bordered tablewithSearch">
                     <thead>
                       <tr>
+                        @if(empty($status) || $status == 'Pending')
+                          <th>
+                            Select
+                          </th>
+                        @endif
                         <th>Employee Name</th>
                         <th>Date Filed</th>
                         <th>Date</th>
@@ -98,6 +113,17 @@
                     <tbody> 
                       @foreach ($obs as $form_approval)
                       <tr>
+                        @if(empty($status) || $status == 'Pending')
+                            <td align="center">
+                              @foreach($form_approval->approver as $k => $approver)
+                                @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'Pending')
+                                  
+                                    <input type="checkbox" class="checkbox-item" data-id="{{$form_approval->id}}">
+                                  </td>
+                                @endif
+                              @endforeach
+                            </td>
+                          @endif
                         <td>
                             <strong>{{$form_approval->user->name}}</strong> <br>
                             <small>Position : {{$form_approval->user->employee->position}}</small> <br>
@@ -171,6 +197,158 @@
         </div>
     </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+      // "Select All" checkbox click event
+      $('#selectAll').on('click', function() {
+          const isChecked = $(this).prop('checked');
+          $('.checkbox-item').prop('checked', isChecked);
+          updateSelectedCount();
+
+          if ($(this).is(':checked')) {
+
+            const selectedCount = $('.checkbox-item:checked').length;
+
+            if(selectedCount > 0){
+              
+              // Checkbox is checked, show the button
+              $('#approveAllBtn').show();
+              $('#disApproveAllBtn').show();
+
+            }
+          } else {
+              // Checkbox is unchecked, hide the button
+              $('#approveAllBtn').hide();
+              $('#disApproveAllBtn').hide();
+
+              $('#labelSelectAll').text('Select All');
+          }
+      });
+
+      $('.checkbox-item').on('click', function() {
+          if ($(this).is(':checked')) {
+              // Checkbox is checked, show the button
+              $('#approveAllBtn').show();
+              $('#disApproveAllBtn').show();
+          } else {
+              // Checkbox is unchecked, hide the button
+              $('#approveAllBtn').hide();
+              $('#disApproveAllBtn').hide();
+
+              $('#labelSelectAll').text('Select All');
+          }
+
+          updateSelectedCount();
+      });
+
+      // Submit button click event to perform the POST request
+      $('#approveAllBtn').on('click', function() {
+          swal({
+            title: "Are you sure?",
+            text: "You want to approve this OB?",
+            icon: "warning",
+            buttons: true,
+          })
+          .then((willCancel) => {
+            if (willCancel) {
+              document.getElementById("loader").style.display = "block";
+                  
+              const selectedItems = [];
+              
+              $('.checkbox-item:checked').each(function() {
+                  const id = $(this).data('id'); // Get the 'data-id' attribute value
+                  selectedItems.push({ id: id });
+              });
+
+              const dataToSend = {
+                  ids: JSON.stringify(selectedItems)
+              };
+
+              $.ajax({
+                  headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  },
+                  type: 'POST',
+                  url: '/approve-ob-all',
+                  data: dataToSend,
+                  dataType: 'json',
+                  success: function(response) {
+                    console.log(response)
+                    document.getElementById("loader").style.display = "none";
+                    swal("OB has been Approved " + "("+response+")", {
+                      icon: "success",
+                    }).then(function() {
+                      location.reload();
+                    });
+                  },
+                  error: function(error) {
+                      console.error('Error sending AJAX POST request:', error);
+                  }
+              });
+            }
+          });
+      });
+
+      // Submit button click event to perform the POST request
+      $('#disApproveAllBtn').on('click', function() {
+          swal({
+            title: "Are you sure?",
+            text: "You want to disapprove this OB?",
+            icon: "warning",
+            buttons: true,
+          })
+          .then((willCancel) => {
+            if (willCancel) {
+              document.getElementById("loader").style.display = "block";
+              
+              const selectedItems = [];
+              
+              $('.checkbox-item:checked').each(function() {
+                  const id = $(this).data('id'); // Get the 'data-id' attribute value
+                  selectedItems.push({ id: id });
+              });
+
+              const dataToSend = {
+                  ids: JSON.stringify(selectedItems)
+              };
+
+              $.ajax({
+                  headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  },
+                  type: 'POST',
+                  url: '/disapprove-ob-all',
+                  data: dataToSend,
+                  dataType: 'json',
+                  success: function(response) {
+                    console.log(response)
+                    document.getElementById("loader").style.display = "none";
+                    swal("OB has been Disapproved " + "("+response+")", {
+                      icon: "success",
+                    }).then(function() {
+                      location.reload();
+                    });
+                  },
+                  error: function(error) {
+                      console.error('Error sending AJAX POST request:', error);
+                  }
+              });
+            }
+          });
+      });
+
+  
+      function updateSelectedCount() {
+          const selectedCount = $('.checkbox-item:checked').length;
+          $('#approveAllBtn').text( '('+ selectedCount + ') Approve');
+          $('#disApproveAllBtn').text( '('+ selectedCount + ') Disapprove');
+      }
+
+
+  });
+</script>
+
 @foreach ($obs as $ob)
   @include('for-approval.remarks.ob_approved_remarks')
   @include('for-approval.remarks.ob_declined_remarks')

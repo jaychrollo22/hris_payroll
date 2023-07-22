@@ -129,6 +129,79 @@ class FormApprovalController extends Controller
         return back();
     }
 
+    public function approveLeaveAll(Request $request){
+        
+        $ids = json_decode($request->ids,true);
+
+        $count = 0;
+        if(count($ids) > 0){
+            
+            foreach($ids as $id){
+                $employee_dtr = EmployeeLeave::where('id', $id)->first();
+                if($employee_dtr){
+                    $level = '';
+                    $employee_approver = EmployeeApprover::where('user_id', $employee_dtr->user_id)->where('approver_id', auth()->user()->id)->first();
+                    if($employee_dtr->level == 0){
+                        if($employee_approver->as_final == 'on'){
+                            EmployeeLeave::Where('id', $id)->update([
+                                'approved_date' => date('Y-m-d'),
+                                'status' => 'Approved',
+                                'approval_remarks' => 'Approved',
+                                'level' => 1,
+                            ]);
+                            $count++;
+                        }else{
+                            EmployeeLeave::Where('id', $id)->update([
+                                'approval_remarks' => 'Approved',
+                                'level' => 1
+                            ]);
+                            $count++;
+                        }
+                    }
+                    else if($employee_dtr->level == 1){
+                        if($employee_approver->as_final == 'on'){
+                            EmployeeLeave::Where('id', $id)->update([
+                                'approved_date' => date('Y-m-d'),
+                                'status' => 'Approved',
+                                'approval_remarks' => 'Approved',
+                                'level' => 2,
+                            ]);
+                            $count++;
+                        }
+                    }
+                }
+            }
+
+            return $count;
+
+        }else{
+            return 'error';
+        }
+    }
+
+    public function disapproveLeaveAll(Request $request){
+        
+        $ids = json_decode($request->ids,true);
+
+        $count = 0;
+        if(count($ids) > 0){
+            
+            foreach($ids as $id){
+                EmployeeLeave::Where('id', $id)->update([
+                    'status' => 'Declined',
+                    'approval_remarks' => 'Declined',
+                ]);
+
+                $count++;
+            }
+
+            return $count;
+
+        }else{
+            return 'error';
+        }
+    }
+
     public function form_overtime_approval(Request $request)
     { 
         $today = date('Y-m-d');
@@ -338,6 +411,79 @@ class FormApprovalController extends Controller
         return back();
     }
 
+    public function approveWfhAll(Request $request){
+        
+        $ids = json_decode($request->ids,true);
+
+        $count = 0;
+        if(count($ids) > 0){
+            
+            foreach($ids as $id){
+                $employee_dtr = EmployeeWfh::where('id', $id)->first();
+                if($employee_dtr){
+                    $level = '';
+                    $employee_approver = EmployeeApprover::where('user_id', $employee_dtr->user_id)->where('approver_id', auth()->user()->id)->first();
+                    if($employee_dtr->level == 0){
+                        if($employee_approver->as_final == 'on'){
+                            EmployeeWfh::Where('id', $id)->update([
+                                'approved_date' => date('Y-m-d'),
+                                'status' => 'Approved',
+                                'approval_remarks' => 'Approved',
+                                'level' => 1,
+                            ]);
+                            $count++;
+                        }else{
+                            EmployeeWfh::Where('id', $id)->update([
+                                'approval_remarks' => 'Approved',
+                                'level' => 1
+                            ]);
+                            $count++;
+                        }
+                    }
+                    else if($employee_dtr->level == 1){
+                        if($employee_approver->as_final == 'on'){
+                            EmployeeWfh::Where('id', $id)->update([
+                                'approved_date' => date('Y-m-d'),
+                                'status' => 'Approved',
+                                'approval_remarks' => 'Approved',
+                                'level' => 2,
+                            ]);
+                            $count++;
+                        }
+                    }
+                }
+            }
+
+            return $count;
+
+        }else{
+            return 'error';
+        }
+    }
+
+    public function disapproveWfhAll(Request $request){
+        
+        $ids = json_decode($request->ids,true);
+
+        $count = 0;
+        if(count($ids) > 0){
+            
+            foreach($ids as $id){
+                EmployeeWfh::Where('id', $id)->update([
+                    'status' => 'Declined',
+                    'approval_remarks' => 'Declined',
+                ]);
+
+                $count++;
+            }
+
+            return $count;
+
+        }else{
+            return 'error';
+        }
+    }
+
     public function form_ob_approval(Request $request)
     { 
 
@@ -438,6 +584,79 @@ class FormApprovalController extends Controller
         return back();
     }
 
+    public function approveObAll(Request $request){
+        
+        $ids = json_decode($request->ids,true);
+
+        $count = 0;
+        if(count($ids) > 0){
+            
+            foreach($ids as $id){
+                $employee_dtr = EmployeeOb::where('id', $id)->first();
+                if($employee_dtr){
+                    $level = '';
+                    $employee_approver = EmployeeApprover::where('user_id', $employee_dtr->user_id)->where('approver_id', auth()->user()->id)->first();
+                    if($employee_dtr->level == 0){
+                        if($employee_approver->as_final == 'on'){
+                            EmployeeOb::Where('id', $id)->update([
+                                'approved_date' => date('Y-m-d'),
+                                'status' => 'Approved',
+                                'approval_remarks' => 'Approved',
+                                'level' => 1,
+                            ]);
+                            $count++;
+                        }else{
+                            EmployeeOb::Where('id', $id)->update([
+                                'approval_remarks' => 'Approved',
+                                'level' => 1
+                            ]);
+                            $count++;
+                        }
+                    }
+                    else if($employee_dtr->level == 1){
+                        if($employee_approver->as_final == 'on'){
+                            EmployeeOb::Where('id', $id)->update([
+                                'approved_date' => date('Y-m-d'),
+                                'status' => 'Approved',
+                                'approval_remarks' => 'Approved',
+                                'level' => 2,
+                            ]);
+                            $count++;
+                        }
+                    }
+                }
+            }
+
+            return $count;
+
+        }else{
+            return 'error';
+        }
+    }
+
+    public function disapproveObAll(Request $request){
+        
+        $ids = json_decode($request->ids,true);
+
+        $count = 0;
+        if(count($ids) > 0){
+            
+            foreach($ids as $id){
+                EmployeeOb::Where('id', $id)->update([
+                    'status' => 'Declined',
+                    'approval_remarks' => 'Declined',
+                ]);
+
+                $count++;
+            }
+
+            return $count;
+
+        }else{
+            return 'error';
+        }
+    }
+
     public function form_dtr_approval(Request $request)
     { 
         $today = date('Y-m-d');
@@ -531,5 +750,78 @@ class FormApprovalController extends Controller
                     ]);
         Alert::success('DTR has been declined.')->persistent('Dismiss');
         return back();
+    }
+
+    public function approveDtrAll(Request $request){
+        
+        $ids = json_decode($request->ids,true);
+
+        $count = 0;
+        if(count($ids) > 0){
+            
+            foreach($ids as $id){
+                $employee_dtr = EmployeeDtr::where('id', $id)->first();
+                if($employee_dtr){
+                    $level = '';
+                    $employee_approver = EmployeeApprover::where('user_id', $employee_dtr->user_id)->where('approver_id', auth()->user()->id)->first();
+                    if($employee_dtr->level == 0){
+                        if($employee_approver->as_final == 'on'){
+                            EmployeeDtr::Where('id', $id)->update([
+                                'approved_date' => date('Y-m-d'),
+                                'status' => 'Approved',
+                                'approval_remarks' => 'Approved',
+                                'level' => 1,
+                            ]);
+                            $count++;
+                        }else{
+                            EmployeeDtr::Where('id', $id)->update([
+                                'approval_remarks' => 'Approved',
+                                'level' => 1
+                            ]);
+                            $count++;
+                        }
+                    }
+                    else if($employee_dtr->level == 1){
+                        if($employee_approver->as_final == 'on'){
+                            EmployeeDtr::Where('id', $id)->update([
+                                'approved_date' => date('Y-m-d'),
+                                'status' => 'Approved',
+                                'approval_remarks' => 'Approved',
+                                'level' => 2,
+                            ]);
+                            $count++;
+                        }
+                    }
+                }
+            }
+
+            return $count;
+
+        }else{
+            return 'error';
+        }
+    }
+
+    public function disapproveDtrAll(Request $request){
+        
+        $ids = json_decode($request->ids,true);
+
+        $count = 0;
+        if(count($ids) > 0){
+            
+            foreach($ids as $id){
+                EmployeeDtr::Where('id', $id)->update([
+                    'status' => 'Declined',
+                    'approval_remarks' => 'Declined',
+                ]);
+
+                $count++;
+            }
+
+            return $count;
+
+        }else{
+            return 'error';
+        }
     }
 }

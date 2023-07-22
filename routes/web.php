@@ -51,6 +51,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('approve-request-to-cancel-leave/{id}', 'EmployeeLeaveController@approve_request_to_cancel');
     Route::get('decline-request-to-cancel-leave/{id}', 'EmployeeLeaveController@decline_request_to_cancel');
 
+    Route::post('approve-leave-all','FormApprovalController@approveLeaveAll');
+    Route::post('disapprove-leave-all','FormApprovalController@disapproveLeaveAll');
+
     //Overtime
     Route::get('overtime','EmployeeOvertimeController@overtime');
     Route::post('new-overtime','EmployeeOvertimeController@new');
@@ -63,12 +66,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('new-wfh','EmployeeWfhController@new');
     Route::post('edit-wfh/{id}','EmployeeWfhController@edit_wfh');
     Route::get('disable-wfh/{id}','EmployeeWfhController@disable_wfh');
+    // Route::post('approve-wfh-all','FormApprovalController@approveWfhAll');
+    // Route::post('disapprove-wfh-all','FormApprovalController@disapproveWfhAll');
 
     //official-business
     Route::get('official-business', 'EmployeeObController@ob');
     Route::post('new-ob','EmployeeObController@new');
     Route::post('edit-ob/{id}', 'EmployeeObController@edit_ob');
-    Route::get('disable-ob/{id}', 'EmployeeObController@disable_ob');       
+    Route::get('disable-ob/{id}', 'EmployeeObController@disable_ob');  
+    
+    Route::post('approve-ob-all','FormApprovalController@approveObAll');
+    Route::post('disapprove-ob-all','FormApprovalController@disapproveObAll');
 
     //DTR Correction
     Route::get('dtr-correction', 'EmployeeDtrController@dtr');
@@ -97,6 +105,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('for-dtr-correction','FormApprovalController@form_dtr_approval');
     Route::post('approve-dtr/{id}','FormApprovalController@approveDtr');
     Route::post('decline-dtr/{id}','FormApprovalController@declineDtr');
+    Route::post('approve-dtr-all','FormApprovalController@approveDtrAll');
+    Route::post('disapprove-dtr-all','FormApprovalController@disapproveDtrAll');
 
     //employees
     Route::get('employees', 'EmployeeController@view');
