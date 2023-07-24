@@ -53,13 +53,13 @@ class EmployeeAllowanceController extends Controller
         // Validation
         $this->validate($request, [
             'allowance_type' => 'required',
-            'employee' => 'required',
+            'user_id' => 'required',
             'amount' => 'required', 'min:1',
         ]);
 
         $employeeAllowances = new EmployeeAllowance;
         $employeeAllowances->allowance_id = $request->allowance_type;
-        $employeeAllowances->employee_id = $request->employee;
+        $employeeAllowances->user_id = $request->user_id;
         $employeeAllowances->allowance_amount = $request->amount;
         $employeeAllowances->schedule = $request->schedule;
         $employeeAllowances->status = 'Active';
