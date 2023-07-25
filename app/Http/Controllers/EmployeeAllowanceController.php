@@ -17,12 +17,22 @@ class EmployeeAllowanceController extends Controller
      */
     public function index()
     {
-        $employeeAllowances = EmployeeAllowance::all();
+        
         $allowanceTypes = Allowance::all();
         
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
 
-        $employees = Employee::whereIn('company_id',$allowed_companies)->get();
+        $employees = Employee::whereIn('company_id',$allowed_companies)
+                                    ->where('status','Active')
+                                    ->get();
+        $user_ids = Employee::whereIn('company_id',$allowed_companies)
+                                    ->where('status','Active')
+                                    ->get();
+
+        $employeeAllowances = EmployeeAllowance::whereHas('employee',function($q) use($allowed_companies){
+                                                    $q->whereIn('company_id',$allowed_companies);
+                                                })
+                                                ->get();
 
         return view('employee_allowances.employee_allowance', array(
             'header' => 'masterfiles',
