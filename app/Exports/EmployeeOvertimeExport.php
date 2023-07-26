@@ -37,7 +37,7 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'USER ID',
-            'EMPLOYEE NAME',
+            // 'EMPLOYEE NAME',
             'DATE',
             'MAX OVERTIME',
             'HOURS WORKED CAP SPWH',
@@ -79,7 +79,7 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
 
         return [
             $employee_ot->employee->employee_number,
-            $employee_ot->user->name,
+            // $employee_ot->user->name,
             date('d/m/Y',strtotime($employee_ot->ot_date)),
             gmdate('H:i', floor($max_overtime * 3600)),
             gmdate('H:i', floor($hours_worked_cap_spwh * 3600)),
