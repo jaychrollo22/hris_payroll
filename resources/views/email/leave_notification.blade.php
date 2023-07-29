@@ -15,4 +15,4 @@ With Pay: No<br>
 @endif  
 Remarks: {{$details['details']['reason']}} <br>
 Last Update: {{appFormatFullDate($details['details']['updated_at'])}} <br>
-Link: <a href="http://124.6.185.87:8035/for-leave">Click Here</a> <br>
+Link: <a href="https://hris.pivi.com.ph/for-leave">Click Here</a> <br>
