@@ -14,8 +14,8 @@
                   <div class=row>
                     <div class='col-md-4'>
                         <div class="form-group">
-                          <select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='employee[]' multiple>
-                              <option value="">-- Select Employee --</option>
+                          <select data-placeholder="Filter By Employee" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='employee[]' multiple>
+                              <option value="">-- Filter By Employee --</option>
                               @foreach($employees as $emp)
                                   <option value="{{$emp->employee_number}}" @if($emp_code) @if (in_array($emp->employee_number,$emp_code)) selected @endif @endif>{{$emp->employee_number}} - {{$emp->first_name}} {{$emp->last_name}}</option>
                               @endforeach
@@ -24,8 +24,8 @@
                     </div>
                     <div class='col-md-3'>
                           <div class="form-group">
-                              <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company'>
-                                  <option value="">-- Select Company --</option>
+                              <select data-placeholder="Filter By Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company'>
+                                  <option value="">-- Filter By Company --</option>
                                   @foreach($companies as $comp)
                                   <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
                                   @endforeach
