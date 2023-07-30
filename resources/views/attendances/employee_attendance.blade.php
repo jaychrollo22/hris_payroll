@@ -12,45 +12,49 @@
                 <p class="card-description">
                   <form method='get' onsubmit='show();'  enctype="multipart/form-data">
                   <div class=row>
+                    
                     <div class='col-md-3'>
-                      <div class="form-group row">
-                        <label class="col-sm-4 col-form-label text-right">Employee</label>
-                        <div class="col-sm-8">
-                            <select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='employee[]' multiple required>
-                                <option value="">-- Select Employee --</option>
-                                 @foreach($employees as $emp)
-                                    <option value="{{$emp->employee_number}}" @if($emp_code) @if (in_array($emp->employee_number,$emp_code)) selected @endif @endif>{{$emp->employee_number}} - {{$emp->first_name}} {{$emp->last_name}}</option>
-                                 @endforeach
+                          <div class="form-group">
+                              <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company'>
+                                  <option value="">-- Select Company --</option>
+                                  @foreach($companies as $comp)
+                                  <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
+                                  @endforeach
                               </select>
-                        </div>
+                          </div>
+                    </div>
+                    <div class='col-md-4'>
+                        <div class="form-group">
+                          <select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='employee[]' multiple>
+                              <option value="">-- Select Employee --</option>
+                              @foreach($employees as $emp)
+                                  <option value="{{$emp->employee_number}}" @if($emp_code) @if (in_array($emp->employee_number,$emp_code)) selected @endif @endif>{{$emp->employee_number}} - {{$emp->first_name}} {{$emp->last_name}}</option>
+                              @endforeach
+                          </select>
+                        </div> 
+                    </div>
+                    <div class='col-md-2'>
+                      <div class="form-group">
+                        <input type="date" value='{{$from_date}}' class="form-control" name="from" max='{{date('Y-m-d')}}' onchange='get_min(this.value);' required/>
+                      </div>
+                    </div>
+                    <div class='col-md-2'>
+                      <div class="form-group">
+                        <input type="date" value='{{$to_date}}'  class="form-control" name="to" id='to' max='{{date('Y-m-d')}}' required/>
                       </div>
                     </div>
                     <div class='col-md-3'>
-                      <div class="form-group row">
-                        <label class="col-sm-4 col-form-label text-right">From</label>
-                        <div class="col-sm-8">
-                          <input type="date" value='{{$from_date}}' class="form-control" name="from" max='{{date('Y-m-d')}}' onchange='get_min(this.value);' required/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class='col-md-3'>
-                      <div class="form-group row">
-                        <label class="col-sm-4 col-form-label text-right">To</label>
-                        <div class="col-sm-8">
-                          <input type="date" value='{{$to_date}}'  class="form-control" name="to" id='to' max='{{date('Y-m-d')}}' required/>
-                        </div>
-                      </div>
-                    </div>
-                    <div class='col-md-3'>
-                      <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                        <button type="submit" class="btn btn-primary mb-2">Submit</button>
+                        @if($date_range)
+                            <button class='btn btn-info mb-2' onclick="exportTableToExcel('employee_attendance','{{$from_date}} - {{$to_date}}')">Export</button>
+                        @endif
+                    
                     </div>
                   </div>
+                  
                   </form>
                 </p>
-                @if($date_range)
-                  <button class='btn btn-info mb-2' onclick="exportTableToExcel('employee_attendance','{{$from_date}} - {{$to_date}}')">Export</button>
-                @endif
-              
+                
                 
                 <div class="table-responsive">
 

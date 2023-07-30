@@ -1335,7 +1335,13 @@ class EmployeeController extends Controller
         $emp_code = $request->employee;
         $schedule_id = null;
         $emp_data = [];
+
+        $company = isset($request->company) ? $request->company : "";
+
         if ($from_date != null) {
+            
+            
+
             $emp_data = Employee::select('id','user_id','employee_number','first_name','last_name','schedule_id')
                                     ->with(['schedule_info','attendances' => function ($query) use ($from_date, $to_date) {
                                             $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
@@ -1344,8 +1350,13 @@ class EmployeeController extends Controller
                                                     ->orderby('time_out','desc')
                                                     ->orderBy('id','asc');
                                     }])
-                                    ->whereIn('employee_number', $request->employee)
                                     ->whereIn('company_id', $allowed_companies)
+                                    ->when($emp_code,function($q) use($emp_code){
+                                        $q->whereIn('employee_number', $emp_code);
+                                    })
+                                    ->when($company,function($q) use($company){
+                                        $q->where('company_id', $company);
+                                    })
                                     ->when($allowed_locations,function($q) use($allowed_locations){
                                         $q->whereIn('location',$allowed_locations);
                                     })
@@ -1360,6 +1371,10 @@ class EmployeeController extends Controller
         }
         $schedules = ScheduleData::all();
         
+        $companies = Company::whereHas('employee_has_company')
+                                ->whereIn('id',$allowed_companies)
+                                ->get();
+
         return view(
             'attendances.employee_attendance',
             array(
@@ -1372,6 +1387,8 @@ class EmployeeController extends Controller
                 'schedules' => $schedules,
                 'emp_code' => $emp_code,
                 'emp_data' => $emp_data,
+                'companies' => $companies,
+                'company' => $company,
             )
         );
     }
