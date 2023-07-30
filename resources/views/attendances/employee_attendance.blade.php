@@ -12,17 +12,6 @@
                 <p class="card-description">
                   <form method='get' onsubmit='show();'  enctype="multipart/form-data">
                   <div class=row>
-                    
-                    <div class='col-md-3'>
-                          <div class="form-group">
-                              <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company'>
-                                  <option value="">-- Select Company --</option>
-                                  @foreach($companies as $comp)
-                                  <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
-                                  @endforeach
-                              </select>
-                          </div>
-                    </div>
                     <div class='col-md-4'>
                         <div class="form-group">
                           <select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='employee[]' multiple>
@@ -33,6 +22,17 @@
                           </select>
                         </div> 
                     </div>
+                    <div class='col-md-3'>
+                          <div class="form-group">
+                              <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company'>
+                                  <option value="">-- Select Company --</option>
+                                  @foreach($companies as $comp)
+                                  <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+                    </div>
+                    
                     <div class='col-md-2'>
                       <div class="form-group">
                         <input type="date" value='{{$from_date}}' class="form-control" name="from" max='{{date('Y-m-d')}}' onchange='get_min(this.value);' required/>
