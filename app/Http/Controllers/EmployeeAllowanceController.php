@@ -22,10 +22,8 @@ class EmployeeAllowanceController extends Controller
         
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
 
-        $employees = Employee::whereIn('company_id',$allowed_companies)
-                                    ->where('status','Active')
-                                    ->get();
-        $user_ids = Employee::whereIn('company_id',$allowed_companies)
+        $employees = Employee::select('id','user_id','first_name','last_name','middle_name')
+                                    ->whereIn('company_id',$allowed_companies)
                                     ->where('status','Active')
                                     ->get();
 
