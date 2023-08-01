@@ -78,13 +78,14 @@
 
 	</div>
 </div>
+
 @include('employee_allowances.new_emp_allowance')
-@endsection
 
 @foreach ($employeeAllowances as $employee_allowance)
-@include('employee_allowances.edit_emp_allowance')
+	@include('employee_allowances.edit_emp_allowance')
 @endforeach
 
+@endsection
 @section('empAllowScript')
 	<script>
 		function disable(id) {
