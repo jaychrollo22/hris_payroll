@@ -12,7 +12,7 @@ class EmployeeAllowance extends Model implements Auditable
     //
     public function employee()
     {
-        return $this->belongsTo(Employee::class,'user_id','user_id');
+        return $this->belongsTo(Employee::class,'user_id','user_id')->select('id','user_id','first_name','last_name','middle_name','company_id','department_id');
     }
     public function allowance()
     {
