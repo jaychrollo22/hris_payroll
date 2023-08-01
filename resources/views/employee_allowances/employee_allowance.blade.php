@@ -39,7 +39,11 @@
 							<tbody>
 								@foreach ($employeeAllowances as $employeeAllowance)
 									<tr>
-										<td>{{ $employeeAllowance->allowance->name }}</td>
+										<td>
+											<a href="/edit-employee-allowance/{{$employeeAllowance->id}}" target="_blank" class="ml-3 mr-3">
+												<i class="ti-pencil"></i>
+											</a>
+											{{ $employeeAllowance->allowance->name }}</td>
 										<td>
 											{{ $employeeAllowance->employee ? $employeeAllowance->employee->last_name . ', ' . $employeeAllowance->employee->first_name . ' ' . $employeeAllowance->employee->middle_name : "" }}
 										</td>
@@ -55,16 +59,10 @@
 													class="badge badge-danger">{{ $employeeAllowance->status }}</label>
 											@endif
 										</td>
-										<td id="tdActionId{{ $employeeAllowance->id }}" data-id="{{ $employeeAllowance->id }}">
+										<td id="tdActionId{{ $employeeAllowance->id }}" data-id="{{ $employeeAllowance->id }}" align="center">
 											@if ($employeeAllowance->status == 'Active')
-												<button type="button" id="edit{{ $employeeAllowance->id }}" class="btn btn-info btn-rounded btn-icon"
-													data-target="#editEmpAllowance{{ $employeeAllowance->id }}" data-toggle="modal" title='Edit'>
-													<i class="ti-pencil-alt"></i>
-												</button>
-												<button title='Disable' id="{{ $employeeAllowance->id }}" onclick="disable(this.id)"
-													class="btn btn-rounded btn-danger btn-icon">
-													<i class="fa fa-ban"></i>
-												</button>
+												<i id="{{ $employeeAllowance->id }}" class="fa fa-ban text-warning" title="Inactive" onclick="disable(this.id)" style="cursor:pointer;font-size:1.5em;"></i>
+												<i id="{{ $employeeAllowance->id }}" class="fa fa-trash text-danger" title="Delete" onclick="deleteAllowance(this.id)" style="cursor:pointer;font-size:1.5em;"></i>
 											@endif
 										</td>
 									</tr>
@@ -78,13 +76,7 @@
 
 	</div>
 </div>
-
 @include('employee_allowances.new_emp_allowance')
-
-@foreach ($employeeAllowances as $employee_allowance)
-	@include('employee_allowances.edit_emp_allowance')
-@endforeach
-
 @endsection
 @section('empAllowScript')
 	<script>
@@ -93,7 +85,7 @@
 			var dataID = element.getAttribute('data-id');
 			swal({
 					title: "Are you sure?",
-					text: "Once disabled, you will not be able to recover this data!",
+					text: "You want to disable this Employee Allowance?",
 					icon: "warning",
 					buttons: true,
 					dangerMode: true,
@@ -112,7 +104,43 @@
 							},
 							success: function(data) {
 								document.getElementById("loader").style.display = "none";
-								swal("Employee Allowance has been disable!", {
+								swal("Employee Allowance has been disabled!", {
+									icon: "success",
+								}).then(function() {
+									document.getElementById("tdId" + id).innerHTML =
+										"<label class='badge badge-danger'>Inactive</label>";
+									document.querySelector('#tdActionId' + id).innerHTML = "";
+								});
+							}
+						})
+
+					} else {
+						swal("Employee allowance is safe!");
+					}
+				});
+		}
+		function deleteAllowance(id) {
+			var element = document.getElementById('tdActionId' + id);
+			var dataID = element.getAttribute('data-id');
+			swal({
+					title: "Are you sure?",
+					text: "You want to delete this Employee Allowance",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willDisable) => {
+					if (willDisable) {
+						document.getElementById("loader").style.display = "block";
+						$.ajax({
+							url: "delete-employee-allowance/" + id,
+							method: "GET",
+							headers: {
+								'X-CSRF-TOKEN': '{{ csrf_token() }}'
+							},
+							success: function(data) {
+								document.getElementById("loader").style.display = "none";
+								swal("Employee Allowance has been deleted!", {
 									icon: "success",
 								}).then(function() {
 									document.getElementById("tdId" + id).innerHTML =

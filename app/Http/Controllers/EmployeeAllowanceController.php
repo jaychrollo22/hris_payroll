@@ -90,12 +90,18 @@ class EmployeeAllowanceController extends Controller
         $employeeAllowances->save();
 
         Alert::success('Successfully Store')->persistent('Dismiss');
-        return back();
+        return redirect('/employee-allowance');
     }
     public function disable($id)
     {
         EmployeeAllowance::Where('id', $id)->update(['status' => 'Inactive']);
         Alert::success('Employee Allowance Inactive')->persistent('Dismiss');
+        return back();
+    }
+    public function delete($id)
+    {
+        EmployeeAllowance::Where('id', $id)->delete();
+        Alert::success('Employee Allowance has been deleted.')->persistent('Dismiss');
         return back();
     }
 
@@ -116,9 +122,35 @@ class EmployeeAllowanceController extends Controller
      * @param  \App\EmployeeAllowance  $employeeAllowance
      * @return \Illuminate\Http\Response
      */
-    public function edit(EmployeeAllowance $employeeAllowance)
+    public function edit($id)
     {
-        //
+
+        $allowanceTypes = Allowance::all();
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+
+        $employee_allowance = EmployeeAllowance::with('employee')
+                                                    ->whereHas('employee',function($q) use($allowed_companies){
+                                                        $q->whereIn('company_id',$allowed_companies);
+                                                    })
+                                                    ->where('id',$id)
+                                                    ->first();
+        $employees = Employee::select('id','user_id','first_name','last_name','middle_name')
+                                    ->whereIn('company_id',$allowed_companies)
+                                    ->where('status','Active')
+                                    ->get(); 
+
+        if($employee_allowance){
+            return view('employee_allowances.edit_emp_allowance', array(
+                'header' => 'masterfiles',
+                'allowanceTypes' => $allowanceTypes,
+                'employee_allowance' => $employee_allowance,
+                'employees' => $employees
+            ));
+        }else{
+            return 'You are not allowed to proceed. Thank you.';
+        }
+        
     }
 
 
