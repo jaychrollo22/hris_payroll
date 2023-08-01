@@ -62,8 +62,8 @@
 										<td id="tdActionId{{ $employeeAllowance->id }}" data-id="{{ $employeeAllowance->id }}" align="center">
 											@if ($employeeAllowance->status == 'Active')
 												<i id="{{ $employeeAllowance->id }}" class="fa fa-ban text-warning" title="Inactive" onclick="disable(this.id)" style="cursor:pointer;font-size:1.5em;"></i>
-												<i id="{{ $employeeAllowance->id }}" class="fa fa-trash text-danger" title="Delete" onclick="deleteAllowance(this.id)" style="cursor:pointer;font-size:1.5em;"></i>
 											@endif
+											<i id="{{ $employeeAllowance->id }}" class="fa fa-trash text-danger" title="Delete" onclick="deleteAllowance(this.id)" style="cursor:pointer;font-size:1.5em;"></i>
 										</td>
 									</tr>
 								@endforeach
