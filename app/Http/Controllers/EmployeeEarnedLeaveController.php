@@ -109,9 +109,10 @@ class EmployeeEarnedLeaveController extends Controller
                         $year = date('Y',strtotime($leave_date));
                         $month = date('m',strtotime($leave_date));
                         $day = date('d',strtotime($leave_date));
-                        
+                        $earned_date = date('Y-m-d',strtotime($leave_date));
+
                         $check_if_exist_vl = EmployeeEarnedLeave::where('user_id',$request->user_id)
-                                                                    ->where('earned_date',$leave_date)
+                                                                    ->where('earned_date',$earned_date)
                                                                     ->where('leave_type',1)
                                                                     ->first();
         
@@ -124,14 +125,14 @@ class EmployeeEarnedLeaveController extends Controller
                                 $earned_leave->earned_day = $day;
                                 $earned_leave->earned_month = $month;
                                 $earned_leave->earned_year = $year;
-                                $earned_leave->earned_date = $leave_date;
+                                $earned_leave->earned_date = $earned_date;
                                 $earned_leave->earned_leave = 0.833;
                                 $earned_leave->save();
                                 $count++;
                         }
         
                         $check_if_exist_sl = EmployeeEarnedLeave::where('user_id',$request->user_id)
-                                                                    ->where('earned_date',$leave_date)
+                                                                    ->where('earned_date',$earned_date)
                                                                     ->where('leave_type',2)
                                                                     ->first();
         
@@ -142,7 +143,7 @@ class EmployeeEarnedLeaveController extends Controller
                                 $earned_leave->earned_day = $day;
                                 $earned_leave->earned_month = $month;
                                 $earned_leave->earned_year = $year;
-                                $earned_leave->earned_date = $leave_date;
+                                $earned_leave->earned_date = $earned_date;
                                 $earned_leave->earned_leave = 0.833;
                                 $earned_leave->save();
                                 $count++;
