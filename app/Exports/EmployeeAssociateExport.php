@@ -310,6 +310,13 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
             }
         }
 
+        if(empty($rest_day_1)){
+            $rest_day_1 = 'Not Applicable';
+        }
+        if(empty($rest_day_2)){
+            $rest_day_2 = 'Not Applicable';
+        }
+
         if($employee->schedule_info){
             if($employee->schedule_info->is_flexi == 1){
                 $branch = 'BRANCH 2';
