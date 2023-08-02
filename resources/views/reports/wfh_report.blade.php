@@ -90,7 +90,7 @@
 										<tr>
 										  <td>{{$form_approval->user->id}}</td>
 										  <td>{{$form_approval->user->name}}</td>
-										  <td>{{date('d/m/Y', strtotime($form_approval->created_at))}}</td>
+										  <td>{{date('d/m/Y h:i A', strtotime($form_approval->created_at))}}</td>
 										  <td>{{date('d/m/Y', strtotime($form_approval->applied_date))}}</td>
 										  <td>{{date('h:i A', strtotime($form_approval->date_from)) . '-' . date('h:i A', strtotime($form_approval->date_to))}}</td>
 										  <td>

@@ -70,6 +70,7 @@
                                             <th>Correction</th>
                                             <th>Time-in</th>
                                             <th>Time-Out</th>
+                                            <th>Approved Date</th>
                                             <th>Remarks</th>
                                             <th>Status</th>
 										</tr>
@@ -79,12 +80,13 @@
 										<tr>
                                             <td>{{$form_approval->user->id}}</td>
                                             <td>{{$form_approval->user->name}}</td>
-                                            <td>{{date('m/d/Y', strtotime($form_approval->created_at))}}</td>
+                                            <td>{{date('m/d/Y h:i A', strtotime($form_approval->created_at))}}</td>
                                             <td>{{date('m/d/Y', strtotime($form_approval->dtr_date))}}</td>
                                             <td>{{$form_approval->correction}}</td>
                                             <td> {{(isset($form_approval->time_in)) ? date('m/d/Y h:i A', strtotime($form_approval->time_in)) : '----'}}</td>
                                             <td> {{(isset($form_approval->time_out)) ? date('m/d/Y h:i A', strtotime($form_approval->time_out)) : '----'}}</td>
-                                            <td>{{$form_approval->remarks}}</td>
+                                            <td>{{date('d/m/Y', strtotime($form_approval->approved_date))}}</td>
+											<td>{{$form_approval->remarks}}</td>
                                             <td>{{$form_approval->status}}</td>
                                         </tr>
 										@endforeach                        
