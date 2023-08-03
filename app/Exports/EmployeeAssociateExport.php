@@ -235,37 +235,42 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
             foreach($employee->ScheduleData as $item){
                 if($item->name == 'Monday'){
                     $first_expected_time_in_monday = $item->time_in_from;
-                    $shift_computation_monday = gmdate('H:i', floor($item->working_hours * 3600));
+                    // $shift_computation_monday = gmdate('H:i', floor($item->working_hours * 3600));
                 }
                 if($item->name == 'Tuesday'){
                     $first_expected_time_in_tuesday = $item->time_in_from;
-                    $shift_computation_tuesday = gmdate('H:i', floor($item->working_hours * 3600));
+                    // $shift_computation_tuesday = gmdate('H:i', floor($item->working_hours * 3600));
                 }
                 if($item->name == 'Wednesday'){
                     $first_expected_time_in_wednesday = $item->time_in_from;
-                    $shift_computation_wednesday = gmdate('H:i', floor($item->working_hours * 3600));
+                    // $shift_computation_wednesday = gmdate('H:i', floor($item->working_hours * 3600));
                 }
                 if($item->name == 'Thursday'){
                     $first_expected_time_in_thursday = $item->time_in_from;
-                    $shift_computation_thursday = gmdate('H:i', floor($item->working_hours * 3600));
+                    // $shift_computation_thursday = gmdate('H:i', floor($item->working_hours * 3600));
                 }
                 if($item->name == 'Friday'){
                     $first_expected_time_in_friday = $item->time_in_from;
-                    $shift_computation_friday = gmdate('H:i', floor($item->working_hours * 3600));
+                    // $shift_computation_friday = gmdate('H:i', floor($item->working_hours * 3600));
                 }
                 if($item->name == 'Saturday'){
                     $first_expected_time_in_saturday = $item->time_in_from;
-                    $shift_computation_saturday = gmdate('H:i', floor($item->working_hours * 3600));
+                    // $shift_computation_saturday = gmdate('H:i', floor($item->working_hours * 3600));
                 }
                 if($item->name == 'Sunday'){
                     $first_expected_time_in_sunday = $item->time_in_from;
-                    $shift_computation_sunday = gmdate('H:i', floor($item->working_hours * 3600));
+                    // $shift_computation_sunday = gmdate('H:i', floor($item->working_hours * 3600));
                 }
             }
         }
+        
 
         if(empty($first_expected_time_in_monday)){
-            $rest_day_1 = 'Monday';
+            if(empty($rest_day_1)){
+                $rest_day_1 = 'Monday';
+            }else{
+                $rest_day_2 = 'Monday';
+            }
         }
         if(empty($first_expected_time_in_tuesday)){
             if(empty($rest_day_1)){
@@ -315,6 +320,115 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
         }
         if(empty($rest_day_2)){
             $rest_day_2 = 'Not Applicable';
+        }
+
+        if($employee->schedule_info){
+            $schedule_info = $employee->schedule_info->schedule_name;
+
+            if (str_contains($schedule_info, 'Compressed')) {
+
+                
+                //RestDay 2
+                if($rest_day_1 == 'Monday' || $rest_day_2 == 'Monday'){
+                    $shift_computation_monday = 'Regular Shift';
+                }else{
+                    $shift_computation_monday = 'Comp-Work';
+                }
+
+                if($rest_day_1 == 'Tuesday' || $rest_day_2 == 'Tuesday'){
+                    $shift_computation_tuesday = 'Regular Shift';
+                }else{
+                    $shift_computation_tuesday = 'Comp-Work';
+                }
+
+                if($rest_day_1 == 'Wednesay' || $rest_day_2 == 'Wednesay'){
+                    $shift_computation_wednesday = 'Regular Shift';
+                }else{
+                    $shift_computation_wednesday = 'Comp-Work';
+                }
+
+                if($rest_day_1 == 'Thursday' || $rest_day_2 == 'Thursday'){
+                    $shift_computation_thursday = 'Regular Shift';
+                }else{
+                    $shift_computation_thursday = 'Comp-Work';
+                }
+
+                if($rest_day_1 == 'Friday' || $rest_day_2 == 'Friday'){
+                    $shift_computation_friday = 'Regular Shift';
+                }else{
+                    $shift_computation_friday = 'Comp-Work';
+                }
+
+                if($rest_day_1 == 'Saturday' || $rest_day_2 == 'Saturday'){
+                    $shift_computation_saturday = 'Regular Shift';
+                }else{
+                    $shift_computation_saturday = 'Comp-Work';
+                }
+
+                if($rest_day_1 == 'Sunday' || $rest_day_2 == 'Sunday'){
+                    $shift_computation_sunday = 'Regular Shift';
+                }else{
+                    $shift_computation_sunday = 'Comp-Work';
+                }
+
+            }else{
+                if($employee->schedule_info->is_flexi == 1){
+                    
+
+                    //RestDay 1
+                    if($rest_day_1 == 'Monday' || $rest_day_2 == 'Monday'){
+                        $shift_computation_monday = 'Regular Shift';
+                    }else{
+                        $shift_computation_monday = 'Flexi-Time';
+                    }
+
+                    if($rest_day_1 == 'Tuesday' || $rest_day_2 == 'Tuesday'){
+                        $shift_computation_tuesday = 'Regular Shift';
+                    }else{
+                        $shift_computation_tuesday = 'Flexi-Time';
+                    }
+
+                    if($rest_day_1 == 'Wednesay' || $rest_day_2 == 'Wednesay'){
+                        $shift_computation_wednesday = 'Regular Shift';
+                    }else{
+                        $shift_computation_wednesday = 'Flexi-Time';
+                    }
+
+                    if($rest_day_1 == 'Thursday' || $rest_day_2 == 'Thursday'){
+                        $shift_computation_thursday = 'Regular Shift';
+                    }else{
+                        $shift_computation_thursday = 'Flexi-Time';
+                    }
+
+                    if($rest_day_1 == 'Friday' ||  $rest_day_2 == 'Friday'){
+                        $shift_computation_friday = 'Regular Shift';
+                    }else{
+                        $shift_computation_friday = 'Flexi-Time';
+                    }
+
+                    if($rest_day_1 == 'Saturday' || $rest_day_2 == 'Saturday'){
+                        $shift_computation_saturday = 'Regular Shift';
+                    }else{
+                        $shift_computation_saturday = 'Flexi-Time';
+                    }
+
+                    if($rest_day_1 == 'Sunday' || $rest_day_2 == 'Sunday'){
+                        $shift_computation_sunday = 'Regular Shift';
+                    }else{
+                        $shift_computation_sunday = 'Flexi-Time';
+                    }
+                    
+                }else{
+
+                    $shift_computation_monday = 'Regular Shift';
+                    $shift_computation_tuesday = 'Regular Shift';
+                    $shift_computation_wednesday = 'Regular Shift';
+                    $shift_computation_thursday = 'Regular Shift';
+                    $shift_computation_friday = 'Regular Shift';
+                    $shift_computation_saturday = 'Regular Shift';
+                    $shift_computation_sunday = 'Regular Shift'; 
+                }
+            }
         }
 
         if($employee->schedule_info){
