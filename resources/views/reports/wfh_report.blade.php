@@ -99,7 +99,13 @@
 										  <td>{{$form_approval->approve_percentage ? 'WFH-' . $form_approval->approve_percentage . '%' : "" }}</td>
 										  <td>{{date('d/m/Y', strtotime($form_approval->approved_date))}}</td>
 										 
-										  <td>{{$form_approval->remarks}}</td>
+										  	<td>
+												{{$form_approval->remarks}}
+												<br>
+												@if($form_approval->attachment)
+													<a href="{{url($form_approval->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>
+												@endif
+											</td>
 										  </tr>
 										@endforeach                        
 									  </tbody>

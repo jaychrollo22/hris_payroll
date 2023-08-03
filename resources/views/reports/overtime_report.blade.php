@@ -84,7 +84,13 @@
                                         <td>{{$item->ot_approved_hrs}}</td>
                                         <td>{{$item->ot_approved_hrs - $item->break_hrs}}</td>
                                         <td>{{ $item->approved_date ? date('d/m/Y', strtotime($item->approved_date)) : ""}}</td>
-                                        <td>{{$item->remarks}}</td>
+                                        <td>
+                                            {{$item->remarks}}
+                                            <br>
+                                            @if($item->attachment)
+                                                <a href="{{url($item->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>
+                                            @endif
+                                        </td>
                                         <td>{{$item->status}}</td>
                                     </tr>
                                     @endforeach
