@@ -213,8 +213,7 @@ class EmployeeController extends Controller
         $projects = Project::get();
 
         
-        $companies = Company::whereHas('employee_has_company')
-                                    ->whereIn('id',$allowed_companies)
+        $companies = Company::whereIn('id',$allowed_companies)
                                     ->orderBy('company_name','ASC')
                                     ->get();
 
