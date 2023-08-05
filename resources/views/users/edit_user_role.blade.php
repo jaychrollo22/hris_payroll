@@ -361,6 +361,30 @@
                                         <br>
                                         <br>
                                         @if($user->user_privilege)
+                                            @if($user->user_privilege->masterfiles_locations == 'on')
+                                                <input type="checkbox" name="masterfiles_locations" id="masterfiles_locations{{$user->id}}" value="{{ $user->user_privilege->masterfiles_locations }}" checked>
+                                            @else
+                                                <input type="checkbox" name="masterfiles_locations" id="masterfiles_locations{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="masterfiles_locations" id="masterfiles_locations{{$user->id}}">
+                                        @endif
+                                        Locations
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
+                                            @if($user->user_privilege->masterfiles_projects == 'on')
+                                                <input type="checkbox" name="masterfiles_projects" id="masterfiles_projects{{$user->id}}" value="{{ $user->user_privilege->masterfiles_projects }}" checked>
+                                            @else
+                                                <input type="checkbox" name="masterfiles_projects" id="masterfiles_projects{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="masterfiles_projects" id="masterfiles_projects{{$user->id}}">
+                                        @endif
+                                        Projects
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
                                             @if($user->user_privilege->masterfiles_loan_types == 'on')
                                                 <input type="checkbox" name="masterfiles_loan_types" id="masterfiles_loan_types{{$user->id}}" value="{{ $user->user_privilege->masterfiles_loan_types }}" checked>
                                             @else
@@ -381,7 +405,7 @@
                                         @else
                                             <input type="checkbox" name="masterfiles_employee_leave_credits" id="masterfiles_employee_leave_credits{{$user->id}}">
                                         @endif
-                                        Employee Leave Credits
+                                        Employee Leave Credits / Manual Earned Leaves
                                         <br>
                                         <br>
                                         @if($user->user_privilege)

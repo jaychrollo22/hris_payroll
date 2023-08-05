@@ -514,11 +514,21 @@
                         <a class="nav-link" href="{{ url('/department') }}">Departments</a>
                     </li>
                     @endif
-                    @if(checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes')
+                    @if(checkUserPrivilege('masterfiles_locations',auth()->user()->id) == 'yes')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/location') }}">Locations</a>
+                    </li>
+                    @endif
+                    @if(checkUserPrivilege('masterfiles_projects',auth()->user()->id) == 'yes')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/project') }}">Projects</a>
+                    </li>
+                    @endif
+                    {{-- @if(checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/loan-type') }}">Loan Types</a>
                     </li>
-                    @endif
+                    @endif --}}
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-incentive') }}">Employee Incentives</a>
                     </li> --}}

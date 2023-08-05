@@ -186,6 +186,8 @@ class UserController extends Controller
                 
                 $user_privilege->masterfiles_companies = $request->masterfiles_companies;
                 $user_privilege->masterfiles_departments = $request->masterfiles_departments;
+                $user_privilege->masterfiles_locations = $request->masterfiles_locations;
+                $user_privilege->masterfiles_projects = $request->masterfiles_projects;
                 $user_privilege->masterfiles_loan_types = $request->masterfiles_loan_types;
                 $user_privilege->masterfiles_employee_leave_credits = $request->masterfiles_employee_leave_credits;
                 $user_privilege->masterfiles_employee_leave_earned = $request->masterfiles_employee_leave_earned;
@@ -224,6 +226,8 @@ class UserController extends Controller
 
                 $new_user_privilege->masterfiles_companies = $request->masterfiles_companies;
                 $new_user_privilege->masterfiles_departments = $request->masterfiles_departments;
+                $new_user_privilege->masterfiles_locations = $request->masterfiles_locations;
+                $new_user_privilege->masterfiles_projects = $request->masterfiles_projects;
                 $new_user_privilege->masterfiles_loan_types = $request->masterfiles_loan_types;
                 $new_user_privilege->masterfiles_employee_leave_credits = $request->masterfiles_employee_leave_credits;
                 $new_user_privilege->masterfiles_employee_leave_earned = $request->masterfiles_employee_leave_earned;

@@ -206,6 +206,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('edit-deparment/{id}', 'DepartmentController@edit_department');
     Route::post('update-department/{id}', 'DepartmentController@update_department');
 
+    // Location
+    Route::post('store-location', 'LocationController@store');
+    Route::get('location', 'LocationController@index');
+    Route::get('edit-location/{id}', 'LocationController@edit');
+    Route::post('update-location/{id}', 'LocationController@update');
+
+    // Project
+    Route::post('store-project', 'ProjectController@store');
+    Route::get('project', 'ProjectController@index');
+    Route::get('edit-project/{id}', 'ProjectController@edit');
+    Route::post('update-project/{id}', 'ProjectController@update');
+
     // Loan Type
     Route::get('loan-type', 'LoanTypeController@loanTypes_index');
     Route::post('newLoanType', 'LoanTypeController@store_loanType');
