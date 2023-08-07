@@ -18,8 +18,14 @@ class EmployeeLeaveController extends Controller
 {
 
  
-    public function leaveBalances()
+    public function leaveBalances(Request $request)
     {
+
+        $today = date('Y-m-d');
+        $from = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
+        $to = isset($request->to) ? $request->to : date('Y-m-d');
+        $status = isset($request->status) ? $request->status : 'Pending';
+
         $employee_status = Employee::select('original_date_hired','classification','gender')->where('user_id',auth()->user()->id)->first();
 
         $used_vl = checkUsedSLVLSILLeave(auth()->user()->id,1,$employee_status->original_date_hired);
@@ -38,7 +44,18 @@ class EmployeeLeaveController extends Controller
 
         
         $leave_types = Leave::all(); //masterfile
-        $employee_leaves = EmployeeLeave::with('user','leave','schedule')->where('user_id',auth()->user()->id)->get();
+        $employee_leaves = EmployeeLeave::with('user','leave','schedule')
+                                            ->where('user_id',auth()->user()->id)
+                                            ->where('status',$status)
+                                            ->whereDate('created_at','>=',$from)
+                                            ->whereDate('created_at','<=',$to)
+                                            ->orderBy('created_at','DESC')
+                                            ->get();
+
+        $employee_leaves_all = EmployeeLeave::with('user','leave','schedule')
+                                            ->where('user_id',auth()->user()->id)
+                                            ->get();
+
         $get_leave_balances = new LeaveBalanceController;
         $get_approvers = new EmployeeApproverController;
         $leave_balances = EmployeeLeaveCredit::with('leave')->where('user_id',auth()->user()->id)->get();
@@ -58,12 +75,14 @@ class EmployeeLeaveController extends Controller
             }
         }
 
+
         return view('forms.leaves.leaves',
         array(
             'header' => 'forms',
             'leave_balances' => $leave_balances,
             'all_approvers' => $all_approvers,
             'employee_leaves' => $employee_leaves,
+            'employee_leaves_all' => $employee_leaves_all,
             'leave_types' => $leave_types,
             'employee_status' => $employee_status,
             'used_vl' => $used_vl,
@@ -78,6 +97,9 @@ class EmployeeLeaveController extends Controller
             'earned_sl' => $earned_sl,
             'earned_sil' => $earned_sil,
             'allowed_to_file' => $allowed_to_file,
+            'from' => $from,
+            'to' => $to,
+            'status' => $status,
         ));
     }  
 

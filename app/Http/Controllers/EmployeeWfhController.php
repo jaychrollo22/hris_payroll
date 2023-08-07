@@ -13,11 +13,26 @@ class EmployeeWfhController extends Controller
 {
    
 
-    public function wfh ()
+    public function wfh(Request $request)
     { 
+        $today = date('Y-m-d');
+        $from = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
+        $to = isset($request->to) ? $request->to : date('Y-m-d');
+        $status = isset($request->status) ? $request->status : 'Pending';
         
         $get_approvers = new EmployeeApproverController;
-        $wfhs = EmployeeWfh::with('user','schedule')->where('user_id',auth()->user()->id)->get();
+        $wfhs = EmployeeWfh::with('user','schedule')
+                                ->where('user_id',auth()->user()->id)
+                                ->where('status',$status)
+                                ->whereDate('created_at','>=',$from)
+                                ->whereDate('created_at','<=',$to)
+                                ->orderBy('created_at','DESC')
+                                ->get();
+
+        $wfhs_all = EmployeeWfh::with('user','schedule')
+                                ->where('user_id',auth()->user()->id)
+                                ->get();
+
         $tasks = WfhTask::with('task')->get();
         $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
         return view('forms.wfh.wfh',
@@ -26,6 +41,10 @@ class EmployeeWfhController extends Controller
             'all_approvers' => $all_approvers,
             'tasks' => $tasks,
             'wfhs' => $wfhs,
+            'wfhs_all' => $wfhs_all,
+            'from' => $from,
+            'to' => $to,
+            'status' => $status,
         ));
 
     }

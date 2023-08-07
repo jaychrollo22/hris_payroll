@@ -10,17 +10,37 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class EmployeeObController extends Controller
 {
-    public function ob ()
+    public function ob(Request $request)
     { 
         
+        $today = date('Y-m-d');
+        $from = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
+        $to = isset($request->to) ? $request->to : date('Y-m-d');
+        $status = isset($request->status) ? $request->status : 'Pending';
+
         $get_approvers = new EmployeeApproverController;
-        $obs = EmployeeOb::with('user')->where('user_id',auth()->user()->id)->get();
+        $obs = EmployeeOb::with('user')
+                            ->where('user_id',auth()->user()->id)
+                            ->where('status',$status)
+                            ->whereDate('created_at','>=',$from)
+                            ->whereDate('created_at','<=',$to)
+                            ->orderBy('created_at','DESC')
+                            ->get();
+
+        $obs_all = EmployeeOb::with('user')
+                            ->where('user_id',auth()->user()->id)
+                            ->get();
+                            
         $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
         return view('forms.officialbusiness.officialbusiness',
         array(
             'header' => 'forms',
             'all_approvers' => $all_approvers,
             'obs' => $obs,
+            'obs_all' => $obs_all,
+            'from' => $from,
+            'to' => $to,
+            'status' => $status,
         ));
 
     }

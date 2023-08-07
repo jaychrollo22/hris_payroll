@@ -9,7 +9,7 @@
                 <div class="media">                
                   <div class="media-body">
                     <h4 class="mb-4">Pending</h4>
-                    <h2 class="card-text">{{($overtimes->where('status','Pending'))->count()}}</h2>
+                    <h2 class="card-text">{{($overtimes_all->where('status','Pending'))->count()}}</h2>
                   </div>
                 </div>
               </div>
@@ -21,7 +21,7 @@
                 <div class="media">
                   <div class="media-body">
                     <h4 class="mb-4">Declined/Cancelled</h4>
-                    <h2 class="card-text">{{($overtimes->where('status','Cancelled'))->count() + ($overtimes->where('status','Declined'))->count()}}</h2>
+                    <h2 class="card-text">{{($overtimes_all->where('status','Cancelled'))->count() + ($overtimes_all->where('status','Declined'))->count()}}</h2>
                   </div>
                 </div>
               </div>
@@ -33,7 +33,7 @@
                 <div class="media">                
                   <div class="media-body">
                     <h4 class="mb-4">Approved</h4>
-                    <h2 class="card-text">{{($overtimes->where('status','Approved'))->count()}}</h2>
+                    <h2 class="card-text">{{($overtimes_all->where('status','Approved'))->count()}}</h2>
                   </div>
                 </div>
               </div>
@@ -51,6 +51,40 @@
                     Apply Overtime
                   </button>
                 </p>
+
+                <form method='get' onsubmit='show();' enctype="multipart/form-data">
+                  <div class=row>
+                    <div class='col-md-2'>
+                      <div class="form-group">
+                        <label class="text-right">From</label>
+                        <input type="date" value='{{$from}}' class="form-control form-control-sm" name="from"
+                            max='{{ date('Y-m-d') }}' onchange='get_min(this.value);' required />
+                      </div>
+                    </div>
+                    <div class='col-md-2'>
+                      <div class="form-group">
+                        <label class="text-right">To</label>
+                        <input type="date" value='{{$to}}' class="form-control form-control-sm" id='to' name="to" required />
+                      </div>
+                    </div>
+                    <div class='col-md-2 mr-2'>
+                      <div class="form-group">
+                        <label class="text-right">Status</label>
+                        <select data-placeholder="Select Status" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='status' required>
+                          <option value="">-- Select Status --</option>
+                          <option value="Approved" @if ('Approved' == $status) selected @endif>Approved</option>
+                          <option value="Pending" @if ('Pending' == $status) selected @endif>Pending</option>
+                          <option value="Cancelled" @if ('Cancelled' == $status) selected @endif>Cancelled</option>
+                          <option value="Declined" @if ('Declined' == $status) selected @endif>Declined</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class='col-md-2'>
+                      <button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
+                    </div>
+                  </div>
+                </form>
+
                 <div class="table-responsive">
                   <table class="table table-hover table-bordered tablewithSearch">
                     <thead>
@@ -71,7 +105,7 @@
                     <tbody>
                       @foreach ($overtimes as $overtime)
                       <tr>
-                        <td> {{ date('M. d, Y ', strtotime($overtime->created_at)) }}</td>
+                        <td> {{ date('M. d, Y h:i A', strtotime($overtime->created_at)) }}</td>
                         <td> {{ date('M. d, Y ', strtotime($overtime->ot_date)) }}</td>
                         <td> {{ date('M. d, Y h:i A', strtotime($overtime->start_time)) }} - {{ date('M. d, Y h:i A', strtotime($overtime->end_time)) }}</td>
                         <td> 
