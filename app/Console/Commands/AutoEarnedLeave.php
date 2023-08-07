@@ -50,7 +50,7 @@ class AutoEarnedLeave extends Command
     public function getEmployeeEarnedVacationLeaves(){
 
         $month = date('m');
-        $day = date('d');
+        $day = date('01');
         $year = date('Y');
         $today = date('Y-m-d');
         $classifications = [1,2,3,5];
@@ -61,15 +61,15 @@ class AutoEarnedLeave extends Command
                                 ->whereIn('classification',$classifications)
                                 ->whereIn('company_id',$companies)
                                 ->where('status','Active')
-                                ->whereDay('original_date_hired',$day)
                                 ->get();
-
         $count = 0;
         if(count($employees)){
             foreach($employees as $employee){
-                $check_if_exist = EmployeeEarnedLeave::where('user_id',$employee->user_id)
-                                                        ->where('earned_day',$day)
-                                                        ->where('earned_month',$month)
+                $check_if_exist = EmployeeEarnedLeave::where('user_id',$employee->user_id)   
+                                                        ->where(function($q) use($month,$year){
+                                                            $q->whereMonth('earned_date',$month)
+                                                            ->whereYear('earned_date',$year);
+                                                        })
                                                         ->where('leave_type',1)
                                                         ->first();
                 if(empty($check_if_exist)){
@@ -125,7 +125,7 @@ class AutoEarnedLeave extends Command
     public function getEmployeeEarnedSickLeaves(){
 
         $month = date('m');
-        $day = date('d');
+        $day = date('01');
         $year = date('Y');
         $today = date('Y-m-d');
         
@@ -136,7 +136,6 @@ class AutoEarnedLeave extends Command
                                 ->whereIn('classification',$classifications)
                                 ->whereIn('company_id',$companies)
                                 ->where('status','Active')
-                                ->whereDay('original_date_hired',$day)
                                 ->get();
 
         $count = 0;
@@ -144,8 +143,10 @@ class AutoEarnedLeave extends Command
             foreach($employees as $employee){
 
                 $check_if_exist = EmployeeEarnedLeave::where('user_id',$employee->user_id)
-                                                        ->where('earned_day',$day)
-                                                        ->where('earned_month',$month)
+                                                        ->where(function($q) use($month,$year){
+                                                            $q->whereMonth('earned_date',$month)
+                                                            ->whereYear('earned_date',$year);
+                                                        })
                                                         ->where('leave_type',2)
                                                         ->first();
                 if(empty($check_if_exist)){

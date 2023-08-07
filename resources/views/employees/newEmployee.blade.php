@@ -93,7 +93,7 @@
                             <div class='row mb-2'>
                               <div class='col-md-4'>
                                 Personal Email
-                                  <input type="email" name="personal_email" class='form-control form-control-sm required' placeholder="Personal Email"/>
+                                  <input type="email" name="personal_email" class='form-control form-control-sm' placeholder="Personal Email"/>
                                 </div>
                               <div class='col-md-4'>
                                 Personal Contact Number
