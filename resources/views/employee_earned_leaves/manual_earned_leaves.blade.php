@@ -18,7 +18,7 @@
                         <form method='POST' action='manual-employee-earned-leaves-store' onsubmit='show()'>
                             <div class="row">
                                     @csrf
-                                    <div class="col-md-4 form-group">
+                                    <div class="col-md-3 mt-1">
                                         Employee : 
                                         <select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-multiple "
                                             style='width:100%;' name='user_id' required>
@@ -29,16 +29,17 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 mt-1">
                                         From : 
                                         <input type="month" class="form-control" name="from" value="{{$date_from}}">
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 mt-1">
                                         To : 
                                         <input type="month" class="form-control" name="to" value="{{$date_to}}">
                                     </div>
-                                    <div class="col-md-2">
-                                        <button class="btn btn-md btn-primary">Submit</button>
+                                    <div class="col-md-3 mt-1">
+                                        <button class="btn btn-md btn-primary mt-1">Submit</button>
+                                        <a href="/employee-earned-leaves" class="btn btn-info mt-1">Earned Leaves</a>
                                     </div>
                             </div>
                         </form>
@@ -53,19 +54,21 @@
                                             <th>Classification</th>
                                             <th>Company</th>
                                             <th>Type</th>
-                                            <th>Earned</th>
+                                            <th>Month</th>
+                                            <th>Year</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($earned_leaves as $item)
                                             <tr>
-                                                <td>{{ date('Y-m-d',strtotime($item->earned_date))}}</td>
+                                                <td>{{ date('F Y',strtotime($item->earned_date))}}</td>
                                                 <td>{{ $item->employee->first_name . ' ' . $item->employee->last_name}}</td>
                                                 <td>{{ $item->employee->classification_info->name}}</td>
                                                 <td>{{ $item->employee->company->company_name}}</td>
                                                 <td>{{ $item->leave_type_info->leave_type}}</td>
-                                                <td>{{ $item->earned_leave}}</td>
+                                                <td>{{ date('F',strtotime($item->earned_date))}}</td>
+											    <td>{{ date('Y',strtotime($item->earned_date))}}</td>
                                                 <td align="center">
                                                     <button  id="{{ $item->id }}" class="btn btn-icon btn-warning" onclick="cancel('{{$item->id}}','{{$item->employee->user_id}}','{{$date_from}}','{{$date_to}}')">
                                                         <i class="fa fa-trash"></i>
