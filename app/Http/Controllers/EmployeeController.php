@@ -1069,6 +1069,10 @@ class EmployeeController extends Controller
         $projects = Project::get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
+
+        $level_id = Level::where('id',$user->employee->level)
+                            ->orWhere('name',$user->employee->level)
+                            ->first();
         
         return view('employees.employee_settings_hr',
         array(
@@ -1085,6 +1089,7 @@ class EmployeeController extends Controller
             'banks' => $banks,
             'schedules' => $schedules,
             'companies' => $companies,
+            'level_id' => $level_id
         ));
     
     }

@@ -82,7 +82,7 @@
                 @endif
                 <div class='col-md-4'>
                   @php
-                    $employee_level = $user->employee ? $user->employee->level : "";
+                    $employee_level = $level_id ? $level_id->id : "";
                     $user_allowed_overtime = $user->allowed_overtime ? $user->allowed_overtime->allowed_overtime : "";
                   @endphp
                   Level
@@ -94,11 +94,10 @@
                       @endif
                       
                   </small>
-
                   <select v-on:change="validateLevel" v-model="employee_level" class="form-control form-control-sm required" style='width:100%;' name='level' required>
                     <option value="">--Select Level--</option>
                     @foreach($levels as $level)
-                      <option value="{{$level->id}}" @if ($user->employee->level == $level->id) selected @endif>{{$level->name}}</option>
+                      <option value="{{$level->id}}" @if ($level_id->id == $level->id) selected @endif>{{$level->name}}</option>
                     @endforeach
                   </select>
                 </div>
