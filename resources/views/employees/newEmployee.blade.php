@@ -174,7 +174,7 @@
                                 <select data-placeholder="Level" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='level' required>
                                   <option value="">--Select Level--</option>
                                   @foreach($levels as $level)
-                                    <option value="{{$level->name}}">{{$level->name}}</option>
+                                    <option value="{{$level->id}}">{{$level->name}}</option>
                                   @endforeach
                                 </select>
                               </div>

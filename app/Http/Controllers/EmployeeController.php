@@ -376,6 +376,8 @@ class EmployeeController extends Controller
             $employee->rate = isset($request->rate) ? Crypt::encryptString($request->rate) : "";
             $employee->tax_application = $request->tax_application;
 
+            $employee->is_new_employee = 1;
+
             if($request->hasFile('file'))
             {
                 $attachment = $request->file('file');
@@ -402,20 +404,48 @@ class EmployeeController extends Controller
             $employeeCompany->emp_code = $request->biometric_code;
             $employeeCompany->schedule_id = 1;
             $employeeCompany->company_id = $request->company;
+            
             $employeeCompany->save();
 
-            if(isset($request->approver)){
+            // if(isset($request->approver)){
                 
+            //     $level = 1;
+            //     if(count($request->approver) > 0){
+            //         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
+            //         foreach($request->approver as  $approver)
+            //         {
+            //             $new_approver = new EmployeeApprover;
+            //             $new_approver->user_id = $employee->user_id;
+            //             $new_approver->approver_id = $approver['approver_id'];
+            //             $new_approver->level = $level;
+            //             $new_approver->as_final = isset($approver['as_final']) ? $approver['as_final'] : "";
+            //             $new_approver->save();
+            //             $level = $level+1;
+            //         }
+            //     }
+            // }
+
+            if(isset($request->approver)){
+
+                $count_approver = count($request->approver);
                 $level = 1;
                 if(count($request->approver) > 0){
-                    $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
-                    foreach($request->approver as  $approver)
+                    foreach($request->approver as $k =>  $approver_item)
                     {
                         $new_approver = new EmployeeApprover;
+                        
+                        if($count_approver == 1 && $k == 0){
+                            $new_approver->as_final = "on";
+                        }
+    
+                        if($count_approver == 2 && $k == 1){
+                            $new_approver->as_final = "on";
+                        }
+    
                         $new_approver->user_id = $employee->user_id;
-                        $new_approver->approver_id = $approver['approver_id'];
+                        $new_approver->approver_id = $approver_item['approver_id'];
                         $new_approver->level = $level;
-                        $new_approver->as_final = isset($approver['as_final']) ? $approver['as_final'] : "";
+                        
                         $new_approver->save();
                         $level = $level+1;
                     }
