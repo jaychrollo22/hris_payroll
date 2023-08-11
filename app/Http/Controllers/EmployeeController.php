@@ -1324,8 +1324,8 @@ class EmployeeController extends Controller
     {
        
         $comp_code = str_pad($compId, 2, '0', STR_PAD_LEFT);
-        $user_id = str_pad($user_id, 5, '0', STR_PAD_LEFT);
-        $emp_code = $comp_code . $year . $user_id;
+        $user_id = str_pad($user_id, 4, '0', STR_PAD_LEFT);
+        $emp_code = $comp_code . substr($year, -2) . $user_id;
         return $emp_code;
     }
 
