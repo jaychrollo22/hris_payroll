@@ -789,6 +789,15 @@
                 // }
             });
 
+            $('.employee_seabased_attendance').DataTable({
+                // "ordering": true,
+                // "pageLength": 100,
+                // "paging":         false,
+                // "fixedColumns":   {
+                //     "left": 2
+                // }
+            });
+
             $('.tablewithSearchonly').DataTable({
                 "paging": false
                 , "sDom": "lfrti"

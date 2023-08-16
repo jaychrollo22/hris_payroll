@@ -7,11 +7,17 @@ use App\Employee;
 use App\PersonnelEmployee;
 use App\Company;
 use App\ScheduleData;
+use App\SeabasedAttendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Exports\AttedancePerCompanyExport;
+
+use App\Imports\EmployeeSeabasedAttendanceImport;
+
 use Excel;
+
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AttendanceController extends Controller
 {
@@ -187,5 +193,68 @@ class AttendanceController extends Controller
         $company_detail = Company::where('id',$company)->first();
         return Excel::download(new AttedancePerCompanyExport($company,$from,$to),  'Attendance Data ' . $company_detail->company_code . ' ' . $from . ' to ' . $to . '.xlsx');
 
+    }
+
+    public function seabasedAttendances(Request $request){
+        
+        ini_set('memory_limit', '-1');
+
+        $from_date = $request->from;
+        $to_date = $request->to;
+
+        $attendances = SeabasedAttendance::with('employee')->orderBy('time_in','asc')
+                                            ->orderBy('id','asc')
+                                            ->where(function($q) use ($from_date, $to_date) {
+                                                $q->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                                ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"]);
+                                            })
+                                            ->get();
+
+        return view('attendances.employee_seabased_attendances',
+        array(
+            'header' => 'attendances',
+            'from_date' => $from_date,
+            'to_date' => $to_date,
+            'attendances' => $attendances
+        )); 
+    }
+
+    public function uploadSeabasedAttendance(Request $request){
+        
+        $path = $request->file('file')->getRealPath();
+        $data = Excel::toArray(new EmployeeSeabasedAttendanceImport, $request->file('file'));
+
+        if(count($data[0]) > 0)
+        {
+            $save_count = 0;
+            $not_save = [];
+            foreach($data[0] as $key => $value)
+            {
+                if(isset($value['attendance_date'])){
+                    $new_attendance = new SeabasedAttendance;
+                    $new_attendance->employee_code =  $value['employee_code'];
+
+                    $attendance_date = isset($value['attendance_date']) ? ($value['attendance_date'] - 25569) * 86400 : null;
+                    $attendance_date = isset($value['attendance_date']) ? gmdate("Y-m-d", $attendance_date) : null;
+
+                    $time_in = isset($value['time_in']) ? ($value['time_in'] - 25569) * 86400 : null;
+                    $time_in = isset($value['time_in']) ? gmdate("Y-m-d H:i:s", $time_in) : null;
+
+                    $time_out = isset($value['time_out']) ? ($value['time_out'] - 25569) * 86400 : null;
+                    $time_out = isset($value['time_out']) ? gmdate("Y-m-d H:i:s", $time_out) : null;
+
+                    $new_attendance->attendance_date =  $attendance_date;
+                    $new_attendance->time_in =  $time_in;
+                    $new_attendance->time_out =  $time_out;
+                    $new_attendance->shift =  $value['shift'];
+                    $new_attendance->created_by =  auth()->user()->id;
+                    $new_attendance->save();
+                    $save_count++;
+                    
+                }
+            }
+            Alert::success('Successfully Import Attendances (' . $save_count. ')')->persistent('Dismiss');
+            return redirect('/seabased-attendances');
+        }
     }
 }
