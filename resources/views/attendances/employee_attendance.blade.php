@@ -159,15 +159,13 @@
                                         $overtime = 0;
                                         $undertime_hrs = 0;
 
-                                        if($if_has_ob->date_from && $if_has_ob->date_to){
+                                        $ob_start = new DateTime($if_has_ob->date_from); 
+                                        $ob_diff = $ob_start->diff(new DateTime($if_has_ob->date_to));
+                                        $work_diff_hours = round($ob_diff->s / 3600 + $ob_diff->i / 60 + $ob_diff->h + $ob_diff->days * 24, 2);
+                                        $work = (double) $work+$work_diff_hours;
 
-                                            $ob_start = new DateTime($if_has_ob->date_from); 
-                                            $ob_diff = $ob_start->diff(new DateTime($if_has_ob->date_to));
-                                            $work_diff_hours = round($ob_diff->s / 3600 + $ob_diff->i / 60 + $ob_diff->h + $ob_diff->days * 24, 2);
-                                            $work = (double) $work+$work_diff_hours;
-                                            
+                                        if($if_has_ob->date_from && $if_has_ob->date_to && $employee_schedule){
                                             //Lates
-                                            
                                             $time_in_data_full =  date('Y-m-d H:i:s',strtotime($if_has_ob->date_from));
                                             $time_in_data_date =  date('Y-m-d',strtotime($if_has_ob->date_from));
                                             $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
@@ -310,20 +308,18 @@
                                     <td>OB</td>
                                 @elseif($if_has_wfh)
                                     @php
-                                    
+
                                         $late_diff_hours = 0;
                                         $overtime = 0;
                                         $undertime_hrs = 0;
 
-                                        if($if_has_wfh->date_from && $if_has_wfh->date_to){
+                                        $wfh_start = new DateTime($if_has_wfh->date_from); 
+                                        $wfh_diff = $wfh_start->diff(new DateTime($if_has_wfh->date_to)); 
+                                        $work_diff_hours = round($wfh_diff->s / 3600 + $wfh_diff->i / 60 + $wfh_diff->h + $wfh_diff->days * 24, 2);
+                                        $work = (double) $work+$work_diff_hours;
 
-                                            $wfh_start = new DateTime($if_has_wfh->date_from); 
-                                            $wfh_diff = $wfh_start->diff(new DateTime($if_has_wfh->date_to)); 
-                                            $work_diff_hours = round($wfh_diff->s / 3600 + $wfh_diff->i / 60 + $wfh_diff->h + $wfh_diff->days * 24, 2);
-                                            $work = (double) $work+$work_diff_hours;
-
+                                        if($if_has_wfh->date_from && $if_has_wfh->date_to && $employee_schedule){
                                             //Lates
-                                            
                                             $time_in_data_full =  date('Y-m-d H:i:s',strtotime($if_has_wfh->date_from));
                                             $time_in_data_date =  date('Y-m-d',strtotime($if_has_wfh->date_from));
                                             $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
