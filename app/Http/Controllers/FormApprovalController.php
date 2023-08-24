@@ -67,7 +67,7 @@ class FormApprovalController extends Controller
                                 ->where('request_to_cancel','1')
                                 ->count();
         
-        session(['pending_leave_count'=>$for_approval]);
+        session(['pending_leave_count'=>$for_approval + $request_to_cancel]);
 
         return view('for-approval.leave-approval',
         array(

@@ -62,6 +62,13 @@ class LoginController extends Controller
                                         ->whereDate('created_at','>=',$from_date)
                                         ->whereDate('created_at','<=',$to_date)
                                         ->count();
+            $request_to_cancel = EmployeeLeave::select('user_id')
+                                        ->whereIn('user_id',$user_ids)
+                                        ->whereDate('created_at','>=',$from_date)
+                                        ->whereDate('created_at','<=',$to_date)
+                                        ->where('request_to_cancel','1')
+                                        ->count();
+
             $pending_overtime_count = EmployeeOvertime::select('user_id')
                                         ->whereIn('user_id',$user_ids)
                                         ->where('status','Pending')
@@ -88,7 +95,7 @@ class LoginController extends Controller
                                         ->count();
 
             session([
-                'pending_leave_count'=>$pending_leave_count,
+                'pending_leave_count'=>$pending_leave_count + $request_to_cancel,
                 'pending_overtime_count'=>$pending_overtime_count,
                 'pending_wfh_count'=>$pending_wfh_count,
                 'pending_dtr_count'=>$pending_dtr_count,
