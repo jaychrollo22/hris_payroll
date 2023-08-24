@@ -1763,7 +1763,7 @@ class EmployeeController extends Controller
                                                     ->get();
             foreach($attendances as $att)
             {
-                if($att->punch_state == 0)
+                if($att->punch_state == 0) // Timein
                 {
                         $attend = Attendance::where('employee_code',$att->emp_code)->whereDate('time_in',date('Y-m-d', strtotime($att->punch_time)))->first();
                         if($attend == null)
@@ -1776,10 +1776,13 @@ class EmployeeController extends Controller
                         }
                     
                 }
-                else if($att->punch_state == 1 || $att->punch_state == 5)
+                else if($att->punch_state == 1 || $att->punch_state == 5) // Timeout
                 {
+                    
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->punch_time));
-                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
+
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-23 hour' , strtotime ( $time_in_after ) ));
+                    
                     $update = [
                         'time_out' =>  date('Y-m-d H:i:s', strtotime($att->punch_time)),
                         'device_out' => $att->terminal_alias,
