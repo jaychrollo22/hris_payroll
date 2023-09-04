@@ -1897,7 +1897,9 @@ class EmployeeController extends Controller
         if(count($attendances) > 0){
             foreach($attendances as $att)
             {
-                if($att->direction == 'In' || $att->direction == 'IN')
+                $direction = str_replace(' ', '', $att->direction);
+
+                if($direction == 'In' || $direction == 'IN')
                 {
                     $attend = Attendance::where('employee_code',$att->emp_code)->whereDate('time_in',date('Y-m-d', strtotime($att->authDate)))->first();
                     if($attend == null)
@@ -1910,7 +1912,7 @@ class EmployeeController extends Controller
                         $count++; 
                     }
                 }
-                else if($att->direction == 'Out' || $att->direction == 'OUT' )
+                else if($direction == 'Out' || $direction == 'OUT' )
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->authDateTime));
                     $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
@@ -1963,7 +1965,9 @@ class EmployeeController extends Controller
         if(count($attendances) > 0){
             foreach($attendances as $att)
             {
-                if($att->direction == 'In' || $att->direction == 'IN')
+                $direction = str_replace(' ', '', $att->direction);
+
+                if($direction == 'In' || $direction == 'IN')
                 {
                     $attend = Attendance::where('employee_code',$att->emp_code)->whereDate('time_in',date('Y-m-d', strtotime($att->authDate)))->first();
                     if($attend == null)
@@ -1976,7 +1980,7 @@ class EmployeeController extends Controller
                         $count++; 
                     }
                 }
-                else if($att->direction == 'Out' || $att->direction == 'OUT' )
+                else if($direction == 'Out' || $direction == 'OUT' )
                 {
                     $time_in_after = date('Y-m-d H:i:s',strtotime($att->authDateTime));
                     $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
