@@ -15,7 +15,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 class EmployeesExport implements FromQuery, WithHeadings, WithMapping
 {
 
-    public function __construct($company,$department,$allowed_companies,$access_rate,$allowed_locations,$allowed_projects)
+    public function __construct($company,$department,$allowed_companies,$access_rate,$allowed_locations,$allowed_projects,$status)
     {
         $this->company = $company;
         $this->department = $department;
@@ -23,12 +23,14 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
         $this->allowed_locations = $allowed_locations;
         $this->allowed_projects = $allowed_projects;
         $this->access_rate = $access_rate;
+        $this->status = $status;
     }
 
     public function query()
     {
         $company = $this->company;
         $department = $this->department;
+        $status = $this->status;
         $allowed_companies = json_decode($this->allowed_companies);
         $allowed_locations = json_decode($this->allowed_locations);
         $allowed_projects = json_decode($this->allowed_projects);
@@ -70,7 +72,9 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
                                         ->when($allowed_projects,function($q) use($allowed_projects){
                                             $q->whereIn('project',$allowed_projects);
                                         })
-                                        ->where('status','Active');
+                                        ->when($status,function($q) use($status){
+                                            $q->where('status',$status);
+                                        });
     }
 
 

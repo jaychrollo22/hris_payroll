@@ -258,12 +258,15 @@ class EmployeeController extends Controller
 
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
+        $status = isset($request->status) ? $request->status : "Active";
         $company_info = Company::where('id',$company)->first();
         $company_name = $company_info ? $company_info->company_code : "";
 
         $access_rate = checkUserPrivilege('employees_rate',auth()->user()->id);
 
-        return Excel::download(new EmployeesExport($company,$department,$allowed_companies,$access_rate,$allowed_locations,$allowed_projects), 'Master List '. $company_name .' .xlsx');
+        
+
+        return Excel::download(new EmployeesExport($company,$department,$allowed_companies,$access_rate,$allowed_locations,$allowed_projects,$status), 'Master List '. $company_name .' .xlsx');
     }
 
     public function export_hr(Request $request) 
@@ -280,10 +283,11 @@ class EmployeeController extends Controller
 
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
+        $status = isset($request->status) ? $request->status : "Active";
         $company_info = Company::where('id',$company)->first();
         $company_name = $company_info ? $company_info->company_code : "";
 
-        return Excel::download(new EmployeeHRExport($company,$department,$allowed_companies,$allowed_locations,$allowed_projects), 'Master List '. $company_name .' .xlsx');
+        return Excel::download(new EmployeeHRExport($company,$department,$allowed_companies,$allowed_locations,$allowed_projects,$status), 'Master List '. $company_name .' .xlsx');
     }
 
     public function export_employee_associates(Request $request) 
@@ -300,12 +304,13 @@ class EmployeeController extends Controller
 
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
+        $status = isset($request->status) ? $request->status : "Active";
         $company_info = Company::where('id',$company)->first();
         $company_name = $company_info ? $company_info->company_code : "";
 
         $access_rate = checkUserPrivilege('employees_rate',auth()->user()->id);
 
-        return Excel::download(new EmployeeAssociateExport($company,$department,$allowed_companies,$access_rate,$allowed_locations,$allowed_projects), 'Employee Associates '. $company_name .' .xlsx');
+        return Excel::download(new EmployeeAssociateExport($company,$department,$allowed_companies,$access_rate,$allowed_locations,$allowed_projects,$status), 'Employee Associates '. $company_name .' .xlsx');
     }
 
     public function new(Request $request)
