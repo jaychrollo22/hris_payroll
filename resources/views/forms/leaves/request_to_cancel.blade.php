@@ -28,7 +28,7 @@
                       Reason to Cancel Leave
                     </div>
                     <div class='col-md-10'>
-                      <textarea  name='request_to_cancel_remarks' class="form-control" rows='4' required @if($leave->request_to_cancel == null || $leave->request_to_cancel == '1') disabled @endif>{{$leave->request_to_cancel_remarks}}</textarea>
+                      <textarea  name='request_to_cancel_remarks' class="form-control" rows='4' required>{{$leave->request_to_cancel_remarks}}</textarea>
                     </div>
                   </div>
                 </div>

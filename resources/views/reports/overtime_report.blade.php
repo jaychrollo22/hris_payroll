@@ -79,7 +79,19 @@
                                         <td>{{date('d/m/Y h:i A', strtotime($item->created_at))}}</td>
                                         <td>{{date('d/m/Y', strtotime($item->ot_date))}}</td>
                                         <td>{{date('d/m/Y h:i A', strtotime($item->start_time))}} - {{date('d/m/Y h:i A', strtotime($item->end_time))}}</td>
-                                        <td>{{intval((strtotime($item->end_time)-strtotime($item->start_time))/60/60)}}</td>
+                                        {{-- <td>{{intval((strtotime($item->end_time)-strtotime($item->start_time))/60/60)}}</td> --}}
+                                        <td>
+                                            @php
+                                                $startTime = new DateTime($item->start_time);
+                                                $endTime = new DateTime($item->end_time);
+
+                                                // Calculate the time difference
+                                                $timeDifference = $endTime->diff($startTime);
+                                                // Convert the time difference to decimal hours
+                                                $total = ($timeDifference->days * 24) + $timeDifference->h + ($timeDifference->i / 60);
+                                            @endphp
+                                            {{ number_format($total,2)}}
+                                        </td>
                                         <td>{{$item->break_hrs}}</td>
                                         <td>{{$item->ot_approved_hrs}}</td>
                                         <td>{{$item->ot_approved_hrs - $item->break_hrs}}</td>
