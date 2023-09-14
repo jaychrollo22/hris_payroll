@@ -69,7 +69,18 @@
                               <td> {{$attendance->employeeID}}</td>
                               <td>{{date('Y-m-d',strtotime($attendance->authDateTime))}}</td>
                               <td>{{date('h:i A',strtotime($attendance->authDateTime))}}</td>
-                              <td>{{($attendance->direction == 'In') ? "Time In" : "Time Out"}}</td>
+                              <td>
+                                @php
+                                    $direction = str_replace(' ', '', $attendance->direction);
+                                    $type = '';
+                                    if($direction == 'In' || $direction == 'IN'){
+                                      $type = 'Time In';
+                                    }else if($direction == 'Out' || $direction == 'OUT'){
+                                      $type = 'Time Out';
+                                    }
+                                @endphp
+                                {{ $type }}
+                              </td>
                               <td>{{$attendance->deviceName}}</td>
                           </tr>
                         @endforeach
