@@ -176,6 +176,7 @@ class UserController extends Controller
                 $user_privilege->biometrics_per_location = $request->biometrics_per_location;
                 $user_privilege->biometrics_per_location_hik = $request->biometrics_per_location_hik;
                 $user_privilege->biometrics_per_company = $request->biometrics_per_company;
+                $user_privilege->biometrics_per_seabased = $request->biometrics_per_seabased;
                 $user_privilege->biometrics_sync = $request->biometrics_sync;
                 $user_privilege->timekeeping_dashboard = $request->timekeeping_dashboard;
 
@@ -216,6 +217,7 @@ class UserController extends Controller
                 $new_user_privilege->biometrics_per_location = $request->biometrics_per_location;
                 $new_user_privilege->biometrics_per_location_hik = $request->biometrics_per_location_hik;
                 $new_user_privilege->biometrics_per_company = $request->biometrics_per_company;
+                $new_user_privilege->biometrics_per_seabased = $request->biometrics_per_seabased;
                 $new_user_privilege->biometrics_sync = $request->biometrics_sync;
                 $new_user_privilege->timekeeping_dashboard = $request->timekeeping_dashboard;
 

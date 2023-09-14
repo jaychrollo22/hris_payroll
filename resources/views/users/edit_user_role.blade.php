@@ -257,6 +257,18 @@
                                         <br>
                                         <br>
                                         @if($user->user_privilege)
+                                            @if($user->user_privilege->biometrics_per_seabased == 'on')
+                                                <input type="checkbox" name="biometrics_per_seabased" id="biometrics_per_seabased{{$user->id}}" value="{{ $user->user_privilege->biometrics_per_seabased }}" checked>
+                                            @else
+                                                <input type="checkbox" name="biometrics_per_seabased" id="biometrics_per_seabased{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="biometrics_per_seabased" id="biometrics_per_seabased{{$user->id}}">
+                                        @endif
+                                        Per Seabased
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
                                             @if($user->user_privilege->biometrics_sync == 'on')
                                                 <input type="checkbox" name="biometrics_sync" id="biometrics_sync{{$user->id}}" value="{{ $user->user_privilege->biometrics_sync }}" checked>
                                             @else

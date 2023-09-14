@@ -14,7 +14,7 @@ class AttendanceSeabasedExport implements FromView
         $this->to = $to;
     }
 
-    public function view(): View
+    public function view(): View 
     {
         $from_date = $this->from;
         $to_date = $this->to;
@@ -31,6 +31,11 @@ class AttendanceSeabasedExport implements FromView
             return view('exports.attendance_seabased_export', [
                 'attendances' => $attendances,
             ]);
+        }else{
+            return view('exports.attendance_seabased_export', [
+                'attendances' => [],
+            ]);
         }
+
     }
 }

@@ -451,6 +451,9 @@
                                 @if (checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biometrics-per-company') }}">Per Company</a></li>
                                 @endif
+                                @if (checkUserPrivilege('biometrics_per_seabased',auth()->user()->id) == 'yes')
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/seabased-attendances') }}">Per Seabased</a></li>
+                                @endif
                                 @if (checkUserPrivilege('biometrics_sync',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/sync-biometrics') }}">Sync Biometrics</a></li>
                                 @endif
