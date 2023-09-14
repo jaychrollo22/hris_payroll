@@ -23,7 +23,7 @@ class LeaveBalancesController extends Controller
                                 ->whereIn('id',$allowed_companies)
                                 ->get();
 
-        $company = isset($request->company) ? $request->company : $allowed_companies[0];
+        $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
 
         $departments = [];
@@ -41,26 +41,29 @@ class LeaveBalancesController extends Controller
         }else{
             $departments = Department::where('status','1')->orderBy('name')->get();
         }
+        $employees = [];
+        if($company){
 
-        $employees = Employee::select('id','user_id','employee_number','first_name','last_name','department_id','company_id','status','original_date_hired')->with('department','company','employee_leave_credits.leave')
-                                ->whereIn('company_id',$allowed_companies)
-                                ->where('status','Active')
-                                ->whereHas('employee_leave_credits')
-                                ->when($company,function($q) use($company){
-                                    $q->where('company_id',$company);
-                                })
-                                ->when($department,function($q) use($department){
-                                    $q->where('department_id',$department);
-                                })
-                                ->when($allowed_locations,function($q) use($allowed_locations){
-                                    $q->whereIn('location',$allowed_locations);
-                                })
-                                ->when($allowed_projects,function($q) use($allowed_projects){
-                                    $q->whereIn('project',$allowed_projects);
-                                }) 
-                                ->orderBy('first_name','ASC')
-                                ->get();
-                                
+            $employees = Employee::select('id','user_id','employee_number','first_name','last_name','department_id','company_id','status','original_date_hired')->with('department','company','employee_leave_credits.leave')
+                                    ->whereIn('company_id',$allowed_companies)
+                                    ->where('status','Active')
+                                    ->whereHas('employee_leave_credits')
+                                    ->when($company,function($q) use($company){
+                                        $q->where('company_id',$company);
+                                    })
+                                    ->when($department,function($q) use($department){
+                                        $q->where('department_id',$department);
+                                    })
+                                    ->when($allowed_locations,function($q) use($allowed_locations){
+                                        $q->whereIn('location',$allowed_locations);
+                                    })
+                                    ->when($allowed_projects,function($q) use($allowed_projects){
+                                        $q->whereIn('project',$allowed_projects);
+                                    })
+                                    ->orderBy('first_name','ASC')
+                                    ->get();
+
+        }                       
         return view('employee_leave_balances.index', array(
             'header' => 'masterfiles',
             'employees' => $employees,
