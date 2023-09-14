@@ -46,6 +46,7 @@ class EmployeeEarnedLeaveController extends Controller
                                                 })
                                                 ->orderBy('user_id','ASC')
                                                 ->orderBy('earned_date',$order_by)
+                                                ->limit(500)
                                                 ->get();
 
         return view('employee_earned_leaves.index', array(
