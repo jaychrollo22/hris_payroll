@@ -12,13 +12,13 @@
                         <h4 class="card-text mt-2">{{$user->employee->position}}</h4>
                         <h5 class="card-text mt-2">Biometric Code : {{$user->employee->employee_number}}</h5>
                         {{-- <h5 class="card-text mt-2">Employee Code : {{$user->employee->employee_code}}</h5> --}}
-                        <img class='border' src='{{URL::asset($user->employee->signature)}}' onerror="this.src='{{URL::asset('/images/signature.png')}}';" height='100px;' width='225px;'> <br>
-                        {{-- <button class="btn btn-primary btn-sm mt-3" data-toggle="modal" data-target="#uploadAvatar">
+                        <img class='border' src='{{URL::asset($user->employee->signature)}}' onerror="this.src='{{URL::asset('/images/signature.png')}}';" height='100px;' width='auto;'> <br>
+                        <button class="btn btn-primary btn-sm mt-3" data-toggle="modal" data-target="#uploadAvatar">
                             Upload Avatar
                         </button>
                         <button class="btn btn-info btn-sm mt-3" data-toggle="modal" data-target="#uploadSignature">
                             Upload Signature
-                        </button> --}}
+                        </button>
                     </div>
                 </div>
                 <div class="card mt-3">
@@ -402,6 +402,8 @@
 </div>
 </div>
 </div>
+@include('employees.upload_avatar')
+@include('employees.upload_signature')
 @include('employees.edit_info')
 @include('employees.edit_employee_info')
 @include('employees.edit_contact_info')

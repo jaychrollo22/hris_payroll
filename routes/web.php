@@ -23,6 +23,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('updateInfo/{id}', 'UserController@updateInfo');
     Route::post('updateEmpInfo/{id}', 'UserController@updateEmpInfo');
     Route::post('updateEmpContactInfo/{id}', 'UserController@updateEmpContactInfo');
+    
 
     //employees
     Route::get('/dashboard', 'HomeController@index')->name('home');
@@ -123,6 +124,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('account-setting-hr/updateContactInfoHR/{id}', 'EmployeeController@updateContactInfoHR');
     Route::post('account-setting-hr/updateBeneficiariesHR/{id}', 'EmployeeController@updateBeneficiariesHR');
     Route::get('account-setting-hr/getBeneficiariesHR/{id}', 'EmployeeController@getBeneficiariesHR');
+    Route::post('account-setting-hr/uploadAvatarHr/{id}', 'EmployeeController@uploadAvatarHr');
+    Route::post('account-setting-hr/uploadSignatureHr/{id}', 'EmployeeController@uploadSignatureHr');
 
     Route::get('associate-employees-export','EmployeeController@export_employee_associates');
 

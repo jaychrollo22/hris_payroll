@@ -1299,6 +1299,40 @@ class EmployeeController extends Controller
         }
     }
 
+    public function uploadAvatarHr(Request $request,$id)
+    {
+        $employee = Employee::where('user_id',$id)->first();
+        if($request->hasFile('file'))
+        {
+            $attachment = $request->file('file');
+            $name = $employee->user_id . '.png';
+            $attachment->move(public_path().'/avatar/', $name);
+            $file_name = '/avatar/'.$name;
+            $employee->avatar = $file_name;
+            $employee->save();
+            Alert::success('Successfully avatar uploaded.')->persistent('Dismiss');
+            return back();
+            
+        }
+    }
+
+    public function uploadSignatureHr(Request $request,$id)
+    {
+        $employee = Employee::where('user_id',$id)->first();
+        if($request->hasFile('signature'))
+        {
+            $attachment = $request->file('signature');
+            $name = $employee->user_id . '.png';
+            $attachment->move(public_path().'/signature/', $name);
+            $file_name = '/signature/'.$name;
+            $employee->signature = $file_name;
+            $employee->save();
+            Alert::success('Successfully signature uploaded.')->persistent('Dismiss');
+            return back();
+            
+        }
+    }
+
     public function getBeneficiariesHR($id){
         return $employee_beneficiary = EmployeeBeneficiary::where('user_id',$id)->get();
     }
