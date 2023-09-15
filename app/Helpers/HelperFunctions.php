@@ -364,7 +364,7 @@ function checkEarnedLeave($user_id,$leave_type,$date_hired){
         $date_hired_last_year = $last_year . '-'. $date_hired_md;
 
         if($today >= $date_hired_this_year){ //if Date hired meets todays date get earned leaves from last year to this year date_hired
-            $date_hired_this_minus_1_month = date('Y-m-d', strtotime('+0 month', strtotime($date_hired_this_year)) );
+            $date_hired_this_minus_1_month = date('Y-m-d', strtotime('-1 month', strtotime($date_hired_this_year)) );
             return $vl_earned = EmployeeEarnedLeave::where('user_id',$user_id)
                                                         ->where('leave_type',$leave_type)
                                                         ->whereNull('converted_to_cash')
