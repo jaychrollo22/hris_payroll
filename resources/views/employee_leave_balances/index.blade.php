@@ -86,30 +86,43 @@
 
                                                 $vl_beginning_balance = 0;
                                                 $sl_beginning_balance = 0;
-                                                if($total_months > 11){ //
+                                                // if($total_months > 11){ //
                                                 
-                                                    $original_date_hired_m_d = date('m-d',strtotime($employee->original_date_hired));
-                                                    $original_date_hired_m = date('m',strtotime($employee->original_date_hired));
-                                                    $today = date('Y-m-d');
-                                                    $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-                                                    $original_date_hired = $last_year . '-' . $original_date_hired_m_d;
+                                                //     $original_date_hired_m_d = date('m-d',strtotime($employee->original_date_hired));
+                                                //     $original_date_hired_m = date('m',strtotime($employee->original_date_hired));
+                                                //     $today = date('Y-m-d');
+                                                //     $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+                                                //     $original_date_hired = $last_year . '-' . $original_date_hired_m_d;
 
-                                                    if($last_year == 2022){
-                                                        $vl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,1);
-                                                        $sl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,2);
-                                                    }
-                                                }
-                                                else{
+                                                //     if($last_year == 2022){
+                                                //         $vl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,1);
+                                                //         $sl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,2);
+                                                //     }
+                                                // }
+                                                // else{
+                                                //     $vl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,1);
+                                                //     $sl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,2);
+                                                // }
+
+                                                $today  = date('Y-m-d');
+                                                $date_hired_md = date('m-d',strtotime($employee->original_date_hired));
+                                                $date_hired_m = date('m',strtotime($employee->original_date_hired));
+                                                $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+                                                $this_year = date('Y');
+
+                                                $date_hired_this_year = $this_year . '-'. $date_hired_md;
+
+                                                if($last_year == 2022 && $today < $date_hired_this_year){
                                                     $vl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,1);
                                                     $sl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,2);
                                                 }
                                                 
                                                 $total_vl = $vl_beginning_balance + $earned_vl;
                                                 $total_sl = $sl_beginning_balance + $earned_sl;
+
                                             @endphp
-                                            
-                                            Total VL : {{$total_vl}} Used : {{$used_vl}} Remaining Balance : {{$total_vl - $used_vl }} <br>
-                                            Total SL : {{$total_sl}} Used : {{$used_sl}} Remaining Balance : {{$total_sl - $used_sl }} <br> 
+                                            Total VL : {{ ceil($total_vl) }} Used : {{$used_vl}} Remaining Balance : {{ ceil($total_vl) - $used_vl }} <br>
+                                            Total SL : {{ ceil($total_sl) }} Used : {{$used_sl}} Remaining Balance : {{ ceil($total_sl) - $used_sl }} <br> 
 
 
                                         </td>
