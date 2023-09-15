@@ -262,10 +262,26 @@
                             </div>
                             <div class='row m-2 border-bottom'>
                                 <div class='col-md-3 '>
+                                    <small>Company </small>
+                                </div>
+                                <div class='col-md-9'>
+                                    @if($user->employee->company) {{$user->employee->company->company_name}} @endif
+                                </div>
+                            </div>
+                            <div class='row m-2 border-bottom'>
+                                <div class='col-md-3 '>
                                     <small>Deparment </small>
                                 </div>
                                 <div class='col-md-9'>
                                     @if($user->employee->department) {{$user->employee->department->name}} @endif
+                                </div>
+                            </div>
+                            <div class='row m-2 border-bottom'>
+                                <div class='col-md-3 '>
+                                    <small>Location </small>
+                                </div>
+                                <div class='col-md-9'>
+                                    @if($user->employee->location) {{$user->employee->location}} @endif
                                 </div>
                             </div>
                             <div class='row  m-2 border-bottom'>
