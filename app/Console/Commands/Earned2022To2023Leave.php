@@ -51,7 +51,7 @@ class Earned2022To2023Leave extends Command
     {
         $year = 2023;
         $classifications = [1,2,3];
-        $companies = [5];
+        $companies = [14,11,7,2,1,4,16,5];
 
         $employees = Employee::whereYear('original_date_hired','<',$year)
                                 ->where('status','Active')
