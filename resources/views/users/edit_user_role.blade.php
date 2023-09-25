@@ -269,6 +269,18 @@
                                         <br>
                                         <br>
                                         @if($user->user_privilege)
+                                            @if($user->user_privilege->biometrics_per_hik_vision == 'on')
+                                                <input type="checkbox" name="biometrics_per_hik_vision" id="biometrics_per_hik_vision{{$user->id}}" value="{{ $user->user_privilege->biometrics_per_hik_vision }}" checked>
+                                            @else
+                                                <input type="checkbox" name="biometrics_per_hik_vision" id="biometrics_per_hik_vision{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="biometrics_per_hik_vision" id="biometrics_per_hik_vision{{$user->id}}">
+                                        @endif
+                                        Per HIK Vision
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
                                             @if($user->user_privilege->biometrics_sync == 'on')
                                                 <input type="checkbox" name="biometrics_sync" id="biometrics_sync{{$user->id}}" value="{{ $user->user_privilege->biometrics_sync }}" checked>
                                             @else

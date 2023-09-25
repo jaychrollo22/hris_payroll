@@ -8,7 +8,7 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Attendances (Seabased)</h4>
+                <h4 class="card-title">Attendances (HIK)</h4>
                 <p class="card-description">
                   <form method='get' onsubmit='show();'  enctype="multipart/form-data">
                     <div class=row>                      
@@ -26,8 +26,7 @@
                       </div>
                       <div class='col-md-3'>
                           <button type="submit" class="btn btn-primary mb-2">Filter</button>
-                          <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#uploadSeabasedAttendance" title="Upload Attendance">Upload</button>
-                          <a class='btn btn-info mb-2' href="/seabased-attendances-export?from={{$from_date}}&to={{$to_date}}">Export</a>
+                          <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#uploadHikAttendance" title="Upload Attendance">Upload</button>
                       </div>
                     </div>
                   </form>
@@ -44,7 +43,7 @@
                               <td>Time Out</td>
                               <td>Shift</td>
                               <td>Working Hours</td>
-                              <td>Night Diff</td>
+                              {{-- <td>Night Diff</td> --}}
                               <td>Uploaded Date</td>
                               {{-- <td>Uploaded By</td> --}}
                           </tr>
@@ -54,22 +53,24 @@
                           <tr>
                               <td>{{$attendance->employee_code}}</td>
                               <td>@if($attendance->employee){{$attendance->employee->first_name}} {{$attendance->employee->last_name}}@endif</td>
-                              <td>{{date('Y-m-d',strtotime($attendance->attendance_date))}}</td>
-                              <td>{{date('Y-m-d h:i A',strtotime($attendance->time_in))}}</td>
-                              <td>{{date('Y-m-d h:i A',strtotime($attendance->time_out))}}</td>
+                              <td>{{$attendance->time_in ? date('Y-m-d',strtotime($attendance->time_in)) : ""}}</td>
+                              <td>{{$attendance->time_in ? date('Y-m-d h:i A',strtotime($attendance->time_in)) : ""}}</td>
+                              <td>{{$attendance->time_out ? date('Y-m-d h:i A',strtotime($attendance->time_out)) : ""}}</td>
                               <td>{{$attendance->shift}}</td>
                               <td>
-                                @php
-                                  $working_hours_start = new DateTime($attendance->time_in); 
-                                  $working_hours_diff = $working_hours_start->diff(new DateTime($attendance->time_out)); 
-                                @endphp
-                                {{ $working_hours_diff->h }} hrs. {{ $working_hours_diff->i }} mins.
+                                @if($attendance->time_in && $attendance->time_out)
+                                    @php
+                                    $working_hours_start = new DateTime($attendance->time_in); 
+                                    $working_hours_diff = $working_hours_start->diff(new DateTime($attendance->time_out)); 
+                                    @endphp
+                                    {{ $working_hours_diff->h }} hrs. {{ $working_hours_diff->i }} mins.
+                                @endif
                               </td>
-                              <td>
+                              {{-- <td>
                                 @php
                                   echo round(night_difference(strtotime($attendance->time_in),strtotime($attendance->time_out)),2)." hrs";
                                 @endphp
-                              </td>
+                              </td> --}}
                               <td>{{date('Y-m-d h:i A',strtotime($attendance->created_at))}}</td>
                           </tr>
                         @endforeach
@@ -85,7 +86,7 @@
     </div>
 </div>
 
-@include('attendances.upload_seabased_attendance')
+@include('attendances.upload_hik_attendance')
 
 
 @php

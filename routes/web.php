@@ -45,6 +45,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('seabased-attendances-export', 'AttendanceController@attendanceSeabasedAttendnaceExport');
     Route::post('upload-seabased-attendance', 'AttendanceController@uploadSeabasedAttendance');
 
+    Route::get('hik-attendances', 'AttendanceController@hikAttendances');
+    Route::get('hik-attendances-export', 'AttendanceController@attendanceHikAttendnaceExport');
+    Route::post('upload-hik-attendance', 'AttendanceController@uploadHikAttendance');
 
     //Leaves
     Route::get('file-leave', 'EmployeeLeaveController@leaveBalances');

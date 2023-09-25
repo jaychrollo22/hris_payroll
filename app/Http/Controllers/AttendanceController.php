@@ -8,13 +8,15 @@ use App\PersonnelEmployee;
 use App\Company;
 use App\ScheduleData;
 use App\SeabasedAttendance;
+use App\HikAttLog;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-use App\Exports\AttedancePerCompanyExport;
+use App\Exports\AttedancePerCompanyExport;;
 
 use App\Exports\AttendanceSeabasedExport;
 use App\Imports\EmployeeSeabasedAttendanceImport;
+use App\Imports\HikAttLogAttendanceImport;
 
 use Excel;
 
@@ -291,5 +293,110 @@ class AttendanceController extends Controller
 
         return Excel::download(new AttendanceSeabasedExport($from,$to),  'Attendance Data ' . $from . ' to ' . $to . '.xlsx');
 
+    }
+
+    public function hikAttendances(Request $request){
+        
+        ini_set('memory_limit', '-1');
+
+        $from_date = $request->from ." 00:00:01";
+        $to_date = $request->to ." 23:59:59";
+        $terminal = $request->terminal_hik;
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
+        $attendances = Attendance::whereBetween('created_at',[$from_date,$to_date])
+                                ->where('is_upload_hik','1')
+                                ->orderBy('created_at','asc')
+                                ->get();
+
+        return view('attendances.employee_hik_attendances',
+        array(
+            'header' => 'attendances',
+            'terminal' => $from_date,
+            'from_date' => $from_date,
+            'to_date' => $to_date,
+            'attendances' => $attendances
+        )); 
+    }
+
+    public function uploadHikAttendance(Request $request){
+        
+        $path = $request->file('file')->getRealPath();
+        $data = Excel::toArray(new HikAttLogAttendanceImport, $request->file('file'));
+
+        if(count($data[0]) > 0)
+        {
+            $save_count = 0;
+            $not_save = [];
+            foreach($data[0] as $key => $value)
+            {
+                
+                if($value['time']){
+
+                    $person_id = str_replace("'","",$value['person_id']);
+                
+                    $attendance_date = isset($value['time']) ? date('Y-m-d H:i',strtotime($value['time'])) : null;
+
+                    $direction = '';
+                    if($value['attendance_status'] == 'Check-in'){
+                        $direction = 'In';
+                    }
+                    elseif($value['attendance_status'] == 'Check-out'){
+                        $direction = 'Out';
+                    }
+
+                    if($direction == 'In' || $direction == 'IN')
+                    {
+                        $attend = Attendance::where('employee_code',$person_id)->whereDate('time_in',date('Y-m-d', strtotime($attendance_date)))->first();
+                        if($attend == null)
+                        {
+                            $attendance = new Attendance;
+                            $attendance->employee_code  = $person_id;   
+                            $attendance->time_in = date('Y-m-d H:i:s',strtotime($attendance_date));
+                            $attendance->device_in = $value['attendance_check_point'];
+                            $attendance->is_upload_hik = 1;
+                            $attendance->save();
+                            $save_count++; 
+                        }
+                    }
+                    else if($direction == 'Out' || $direction == 'OUT' )
+                    {
+                        $time_in_after = date('Y-m-d H:i:s',strtotime($attendance_date));
+                        $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
+                        
+                        $update = [
+                            'time_out' =>  date('Y-m-d H:i:s', strtotime($attendance_date)),
+                            'device_out' => $value['attendance_check_point'],
+                        ];
+
+                        $attendance_in = Attendance::where('employee_code',$person_id)
+                        ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
+
+                        Attendance::where('employee_code',$person_id)
+                        ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                        ->update($update);
+
+                        if($attendance_in ==  null)
+                        {
+                            $attendance = new Attendance;
+                            $attendance->employee_code  = $person_id;   
+                            $attendance->time_out = date('Y-m-d H:i:s', strtotime($attendance_date));
+                            $attendance->device_out = $value['attendance_check_point'];
+                            $attendance->is_upload_hik = 1;
+                            $attendance->save(); 
+                            $save_count++;
+                        }   
+                    }
+                }
+                
+            }
+
+            Alert::success('Successfully Import Attendances (' . $save_count. ')')->persistent('Dismiss');
+            return redirect('/hik-attendances');
+           
+        }
     }
 }
