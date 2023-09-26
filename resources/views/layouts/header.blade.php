@@ -429,7 +429,12 @@
                     </li>
                     @endif
 
-                    @if (checkUserPrivilege('biometrics_per_employee',auth()->user()->id) == 'yes' || checkUserPrivilege('biometrics_per_location',auth()->user()->id) == 'yes' || checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes' || checkUserPrivilege('biometrics_sync',auth()->user()->id) == 'yes')
+                    @if (checkUserPrivilege('biometrics_per_employee',auth()->user()->id) == 'yes' 
+                            || checkUserPrivilege('biometrics_per_location',auth()->user()->id) == 'yes' 
+                            || checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes' 
+                            || checkUserPrivilege('biometrics_per_seabased',auth()->user()->id) == 'yes' 
+                            || checkUserPrivilege('biometrics_per_hik_vision',auth()->user()->id) == 'yes' 
+                            || checkUserPrivilege('biometrics_sync',auth()->user()->id) == 'yes')
                     <li class="nav-item @if ($header == 'biometrics') active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#biometrics" aria-expanded="false" aria-controls="ui-basic">
                             <i class="icon-clock menu-icon"></i>
