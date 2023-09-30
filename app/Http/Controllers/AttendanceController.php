@@ -315,9 +315,8 @@ class AttendanceController extends Controller
         return view('attendances.employee_hik_attendances',
         array(
             'header' => 'attendances',
-            'terminal' => $from_date,
-            'from_date' => $from_date,
-            'to_date' => $to_date,
+            'from_date' => $request->from,
+            'to_date' => $request->to,
             'attendances' => $attendances
         )); 
     }
@@ -331,13 +330,25 @@ class AttendanceController extends Controller
         {
             $save_count = 0;
             $not_save = [];
+
+            $start_date = '';
+            $end_date = '';
+            $is_first = true;
+
             foreach($data[0] as $key => $value)
             {
                 
                 if($value['time']){
 
+                    
                     $person_id = str_replace("'","",$value['person_id']);               
                     $attendance_date = isset($value['time']) ? date('Y-m-d H:i',strtotime($value['time'])) : null;
+
+                    if($is_first){
+                        $is_first = false;
+                        $start_date = date('Y-m-d',strtotime($attendance_date));
+                    }
+
                     $direction = '';
                     if($value['attendance_status'] == 'Check-in'){
                         $direction = 'In';
@@ -348,17 +359,19 @@ class AttendanceController extends Controller
                     
                     $check_attendace = HikVisionAttendance::select('id')
                                                             ->where('employee_code',$person_id)
-                                                            ->where('attendance_date',date('Y-m-d H:i:s',strtotime($attendance_date)))
+                                                            ->where('attendance_date',$attendance_date)
                                                             ->where('direction',$direction)
                                                             ->first();
                     if(empty($check_attendace)){
                         $new_attendance = new HikVisionAttendance;
                         $new_attendance->employee_code = $person_id;   
-                        $new_attendance->attendance_date = date('Y-m-d H:i:s',strtotime($attendance_date));
+                        $new_attendance->attendance_date = $attendance_date;
                         $new_attendance->direction = $direction;
                         $new_attendance->device = $value['attendance_check_point'];
                         $new_attendance->save();
                         $save_count++;
+
+                        $end_date = date('Y-m-d',strtotime($attendance_date));
                     }
                     
 
@@ -367,7 +380,7 @@ class AttendanceController extends Controller
             }
 
             Alert::success('Successfully Import Attendances (' . $save_count. ')')->persistent('Dismiss');
-            return redirect('/hik-attendances');
+            return redirect('/hik-attendances?from='.$start_date.'&to='.$end_date);
            
         }
     }
