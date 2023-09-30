@@ -9,6 +9,7 @@ use App\Company;
 use App\ScheduleData;
 use App\SeabasedAttendance;
 use App\HikAttLog;
+use App\HikVisionAttendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -307,8 +308,7 @@ class AttendanceController extends Controller
         $allowed_locations = getUserAllowedLocations(auth()->user()->id);
         $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
-        $attendances = Attendance::whereBetween('created_at',[$from_date,$to_date])
-                                ->where('is_upload_hik','1')
+        $attendances = HikVisionAttendance::whereBetween('attendance_date',[$from_date,$to_date])
                                 ->orderBy('created_at','asc')
                                 ->get();
 
@@ -336,10 +336,8 @@ class AttendanceController extends Controller
                 
                 if($value['time']){
 
-                    $person_id = str_replace("'","",$value['person_id']);
-                
+                    $person_id = str_replace("'","",$value['person_id']);               
                     $attendance_date = isset($value['time']) ? date('Y-m-d H:i',strtotime($value['time'])) : null;
-
                     $direction = '';
                     if($value['attendance_status'] == 'Check-in'){
                         $direction = 'In';
@@ -347,49 +345,23 @@ class AttendanceController extends Controller
                     elseif($value['attendance_status'] == 'Check-out'){
                         $direction = 'Out';
                     }
-
-                    if($direction == 'In' || $direction == 'IN')
-                    {
-                        $attend = Attendance::where('employee_code',$person_id)->whereDate('time_in',date('Y-m-d', strtotime($attendance_date)))->first();
-                        if($attend == null)
-                        {
-                            $attendance = new Attendance;
-                            $attendance->employee_code  = $person_id;   
-                            $attendance->time_in = date('Y-m-d H:i:s',strtotime($attendance_date));
-                            $attendance->device_in = $value['attendance_check_point'];
-                            $attendance->is_upload_hik = 1;
-                            $attendance->save();
-                            $save_count++; 
-                        }
+                    
+                    $check_attendace = HikVisionAttendance::select('id')
+                                                            ->where('employee_code',$person_id)
+                                                            ->where('attendance_date',date('Y-m-d H:i:s',strtotime($attendance_date)))
+                                                            ->where('direction',$direction)
+                                                            ->first();
+                    if(empty($check_attendace)){
+                        $new_attendance = new HikVisionAttendance;
+                        $new_attendance->employee_code = $person_id;   
+                        $new_attendance->attendance_date = date('Y-m-d H:i:s',strtotime($attendance_date));
+                        $new_attendance->direction = $direction;
+                        $new_attendance->device = $value['attendance_check_point'];
+                        $new_attendance->save();
+                        $save_count++;
                     }
-                    else if($direction == 'Out' || $direction == 'OUT' )
-                    {
-                        $time_in_after = date('Y-m-d H:i:s',strtotime($attendance_date));
-                        $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
-                        
-                        $update = [
-                            'time_out' =>  date('Y-m-d H:i:s', strtotime($attendance_date)),
-                            'device_out' => $value['attendance_check_point'],
-                        ];
+                    
 
-                        $attendance_in = Attendance::where('employee_code',$person_id)
-                        ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
-
-                        Attendance::where('employee_code',$person_id)
-                        ->whereBetween('time_in',[$time_in_before,$time_in_after])
-                        ->update($update);
-
-                        if($attendance_in ==  null)
-                        {
-                            $attendance = new Attendance;
-                            $attendance->employee_code  = $person_id;   
-                            $attendance->time_out = date('Y-m-d H:i:s', strtotime($attendance_date));
-                            $attendance->device_out = $value['attendance_check_point'];
-                            $attendance->is_upload_hik = 1;
-                            $attendance->save(); 
-                            $save_count++;
-                        }   
-                    }
                 }
                 
             }
