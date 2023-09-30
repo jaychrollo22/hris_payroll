@@ -25,6 +25,7 @@ use App\Company;
 use App\ScheduleData;
 use App\PersonnelEmployee;
 use App\HikAttLog;
+use App\HikVisionAttendance;
 use App\IclockTransation;
 use App\MaritalStatus;
 use App\IclockTerminal;
@@ -1774,8 +1775,11 @@ class EmployeeController extends Controller
         $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
         $terminals = iclockterminal_mysql::get();
-        $terminals_hik = HikAttLog::select('deviceName')->groupBy('deviceName')
-                                    ->orderBy('deviceName' , 'ASC')
+        // $terminals_hik = HikVisionAttendance::select('deviceName')->groupBy('deviceName')
+        //                             ->orderBy('deviceName' , 'ASC')
+        //                             ->get();
+        $terminals_hik = HikVisionAttendance::select('device')->groupBy('device')
+                                    ->orderBy('device' , 'ASC')
                                     ->get();
 
         if($request->terminal)
@@ -1972,6 +1976,144 @@ class EmployeeController extends Controller
                     {
                         $attendance = new Attendance;
                         $attendance->employee_code  = $att->employeeID;   
+                        $attendance->time_out = date('Y-m-d H:i:s', strtotime($att->authDateTime));
+                        $attendance->device_out = $att->deviceName;
+                        $attendance->save(); 
+                    }
+
+                    $count++;
+                }
+            }
+        }
+
+        return back();
+    }
+
+    public function sync_hik_with_upload(Request $request)
+    {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
+        $from = $request->from_hik;
+        $to = $request->to_hik;
+        $terminal = $request->terminal_hik;
+
+        $attendances = HikVisionAttendance::where('device',$terminal)
+                                ->whereBetween('attendance_date',[$from,$to])
+                                ->orderBy('attendance_date','asc')
+                                ->orderBy('direction','asc')
+                                ->get();
+        
+        $count = 0;
+        if(count($attendances) > 0){
+            foreach($attendances as $att)
+            {
+                $direction = str_replace(' ', '', $att->direction);
+
+                if($direction == 'In' || $direction == 'IN')
+                {
+                    $attend = Attendance::where('employee_code',$att->employee_code)->whereDate('time_in',date('Y-m-d', strtotime($att->attendance_date)))->first();
+                    if($attend == null)
+                    {
+                        $attendance = new Attendance;
+                        $attendance->employee_code  = $att->employee_code;   
+                        $attendance->time_in = date('Y-m-d H:i:s',strtotime($att->attendance_date));
+                        $attendance->device_in = $att->device;
+                        $attendance->save();
+                        $count++; 
+                    }
+                }
+                else if($direction == 'Out' || $direction == 'OUT' )
+                {
+                    $time_in_after = date('Y-m-d H:i:s',strtotime($att->attendance_date));
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
+                    $update = [
+                        'time_out' =>  date('Y-m-d H:i:s', strtotime($att->attendance_date)),
+                        'device_out' => $att->device,
+                        // 'last_id' =>$att->id,
+                    ];
+                    // return $time_in_after . ' - ' .$time_in_before;
+                    $attendance_in = Attendance::where('employee_code',$att->employee_code)
+                    ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
+
+                    Attendance::where('employee_code',$att->employee_code)
+                    ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                    ->update($update);
+
+                    if($attendance_in ==  null)
+                    {
+                        $attendance = new Attendance;
+                        $attendance->employee_code  = $att->employee_code;   
+                        $attendance->time_out = date('Y-m-d H:i:s', strtotime($att->attendance_date));
+                        $attendance->device_out = $att->device;
+                        $attendance->save(); 
+                    }
+
+                    $count++;
+                }
+            }
+        }
+
+        return back();
+    }
+
+    public function sync_per_employee_hik_with_upload(Request $request)
+    {
+        $from = $request->from_hik;
+        $to = $request->to_hik;
+        $employee_code = $request->employee;
+
+
+        $employee_numbers = Employee::whereIn('employee_number',$employee_code)->where('status','Active')->pluck('employee_number')->toArray();
+
+        $attendances = HikVisionAttendance::whereIn('empoyee_code',$employee_numbers)
+                                ->whereBetween('attendance_date',[$from,$to])
+                                ->orderBy('attendance_date','asc')
+                                ->orderBy('direction','asc')
+                                ->get();
+        
+        $count = 0;
+        if(count($attendances) > 0){
+            foreach($attendances as $att)
+            {
+                $direction = str_replace(' ', '', $att->direction);
+
+                if($direction == 'In' || $direction == 'IN')
+                {
+                    $attend = Attendance::where('employee_code',$att->employee_code)->whereDate('time_in',date('Y-m-d', strtotime($att->attendance_date)))->first();
+                    if($attend == null)
+                    {
+                        $attendance = new Attendance;
+                        $attendance->employee_code  = $att->empoyee_code;   
+                        $attendance->time_in = date('Y-m-d H:i:s',strtotime($att->attendance_date));
+                        $attendance->device_in = $att->deviceName;
+                        $attendance->save();
+                        $count++; 
+                    }
+                }
+                else if($direction == 'Out' || $direction == 'OUT' )
+                {
+                    $time_in_after = date('Y-m-d H:i:s',strtotime($att->attendance_date));
+                    $time_in_before = date('Y-m-d H:i:s', strtotime ( '-22 hour' , strtotime ( $time_in_after ) )) ;
+                    $update = [
+                        'time_out' =>  date('Y-m-d H:i:s', strtotime($att->attendance_date)),
+                        'device_out' => $att->deviceName,
+                        // 'last_id' =>$att->id,
+                    ];
+                    // return $time_in_after . ' - ' .$time_in_before;
+                    $attendance_in = Attendance::where('employee_code',$att->empoyee_code)
+                    ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
+
+                    Attendance::where('employee_code',$att->empoyee_code)
+                    ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                    ->update($update);
+
+                    if($attendance_in ==  null)
+                    {
+                        $attendance = new Attendance;
+                        $attendance->employee_code  = $att->empoyee_code;   
                         $attendance->time_out = date('Y-m-d H:i:s', strtotime($att->authDateTime));
                         $attendance->device_out = $att->deviceName;
                         $attendance->save(); 

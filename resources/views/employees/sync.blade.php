@@ -102,7 +102,7 @@
 												<select data-placeholder="Terminal" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='terminal_hik' required>
 													<option value="">--Terminal--</option>
 													  @foreach($terminals_hik as $terminal)
-														<option value="{{$terminal->deviceName}}">{{$terminal->deviceName}}</option>
+														<option value="{{$terminal->device}}">{{$terminal->device}}</option>
 													  @endforeach
 												  </select>
 											</div>

@@ -193,10 +193,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('biometrics-per-company', 'EmployeeController@perCompany');
     Route::get('sync-biometrics','EmployeeController@sync');
     Route::get('sync-biometric-per-employee','EmployeeController@sync_per_employee');
-    Route::get('sync-biometric-per-employee-hik','EmployeeController@sync_per_employee_hik');
+    // Route::get('sync-biometric-per-employee-hik','EmployeeController@sync_per_employee_hik');
+    Route::get('sync-biometric-per-employee-hik','EmployeeController@sync_per_employee_hik_with_upload');
 
-    Route::get('sync-per-employee','EmployeeController@sync_per_employee');
-    Route::get('sync-hik-att-logs','EmployeeController@sync_hik');
+    // Route::get('sync-per-employee','EmployeeController@sync_per_employee');
+    Route::get('sync-hik-att-logs','EmployeeController@sync_hik_with_upload');
 
     //Payroll
     Route::get('pay-reg', 'PayslipController@payroll_datas');
