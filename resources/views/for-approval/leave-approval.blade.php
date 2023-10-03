@@ -112,6 +112,7 @@
                             Select
                           </th>
                         @endif
+                        <th>Date Filed</th>
                         <th>Employee Name</th>
                         <th>Form Type</th>
                         <th>Date</th>
@@ -122,6 +123,7 @@
                         <th>Approvers</th> 
                         <th>Reason/Remarks</th> 
                         <th>Attachment</th>
+                        <th>Approved Date</th>
                         <th>Action </th> 
                       </tr>
                     </thead>
@@ -139,6 +141,7 @@
                             @endforeach
                           </td>
                         @endif
+                        <td>{{date('M. d, Y h:i A', strtotime($form_approval->created_at))}}</td>
                         <td>
                             <strong>{{$form_approval->user->employee->last_name . ' ' . $form_approval->user->employee->first_name }}</strong> <br>
                             <small>Position : {{$form_approval->user->employee->position}}</small> <br>
@@ -194,8 +197,8 @@
                           <a href="{{url($form_approval->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>
                           @endif
                         </td>
+                        <td>{{date('M. d, Y', strtotime($form_approval->approved_date))}}</td>
                         <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
-
                           @php
                               $approver_last = '';
                           @endphp
