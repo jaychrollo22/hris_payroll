@@ -322,7 +322,9 @@ class EmployeeController extends Controller
                                         ->where('company_id',$request->company)
                                         ->first();
 
-        if(empty($validate_employee)){
+        $validate_user = User::where('email',$request->work_email)->first();
+
+        if(empty($validate_employee) && empty($validate_user)){
 
             $company = Company::findOrfail($request->company);
             // dd($company);
@@ -412,24 +414,6 @@ class EmployeeController extends Controller
             $employeeCompany->company_id = $request->company;
             
             $employeeCompany->save();
-
-            // if(isset($request->approver)){
-                
-            //     $level = 1;
-            //     if(count($request->approver) > 0){
-            //         $approver = EmployeeApprover::where('user_id',$employee->user_id)->delete();
-            //         foreach($request->approver as  $approver)
-            //         {
-            //             $new_approver = new EmployeeApprover;
-            //             $new_approver->user_id = $employee->user_id;
-            //             $new_approver->approver_id = $approver['approver_id'];
-            //             $new_approver->level = $level;
-            //             $new_approver->as_final = isset($approver['as_final']) ? $approver['as_final'] : "";
-            //             $new_approver->save();
-            //             $level = $level+1;
-            //         }
-            //     }
-            // }
 
             if(isset($request->approver)){
 
@@ -533,128 +517,128 @@ class EmployeeController extends Controller
                                 $user->save();
 
                                 $user_id = $user->id;
-                            }else{
-                                $user_id = $validate->id;
-                            }
-                        }
-                        $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
-                        $employee = new Employee;
-                        $employee->user_id = $user_id;
-                        $employee->employee_number = $value['employee_number'];
-                        $employee->employee_code =  $employee_code;
-                        $employee->first_name = $value['first_name'];
-                        $employee->last_name = $value['last_name'];
-                        $employee->middle_name = $value['middle_name'];
-                        $employee->name_suffix = isset($value['name_suffix']) ? $value['name_suffix'] : "";
+                                    
+                                $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
+                                $employee = new Employee;
+                                $employee->user_id = $user_id;
+                                $employee->employee_number = $value['employee_number'];
+                                $employee->employee_code =  $employee_code;
+                                $employee->first_name = $value['first_name'];
+                                $employee->last_name = $value['last_name'];
+                                $employee->middle_name = $value['middle_name'];
+                                $employee->name_suffix = isset($value['name_suffix']) ? $value['name_suffix'] : "";
 
-                        $employee->classification = isset($value['classification']) ? $value['classification'] : "";
-                        $employee->department_id = isset($value['department_id']) ? $value['department_id'] : "";
-                        $employee->company_id = isset($value['company_id']) ? $value['company_id'] : "";
-                        $employee->original_date_hired = isset($value['date_hired']) && !empty($value['date_hired']) ? date('Y-m-d',strtotime($value['date_hired'])) : null;
+                                $employee->classification = isset($value['classification']) ? $value['classification'] : "";
+                                $employee->department_id = isset($value['department_id']) ? $value['department_id'] : "";
+                                $employee->company_id = isset($value['company_id']) ? $value['company_id'] : "";
+                                $employee->original_date_hired = isset($value['date_hired']) && !empty($value['date_hired']) ? date('Y-m-d',strtotime($value['date_hired'])) : null;
 
-                        $employee->position = isset($value['position']) ? $value['position'] : "";
-                        $employee->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
-                        $employee->level = $value['level'];
-                        $employee->date_regularized = isset($value['date_regularized']) && !empty($value['date_regularized']) ? date('Y-m-d',strtotime($value['date_regularized'])) : null;
-                        $employee->date_resigned = isset($value['date_resigned']) && !empty($value['date_resigned']) ? date('Y-m-d',strtotime($value['date_resigned'])) : null;
-                        $employee->birth_date = isset($value['birth_date']) && !empty($value['birth_date']) ? date('Y-m-d',strtotime($value['birth_date'])) : null;
-                        $employee->birth_place = isset($value['birth_place']) ? $value['birth_place'] : "";
-                        $employee->gender = isset($value['gender']) ? $value['gender'] : "";
-                        $employee->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
-                        $employee->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
-                        $employee->present_address = isset($value['present_address']) ? $value['present_address'] : "";
-                        $employee->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
-                        $employee->phil_number = isset($value['philhealth_number']) ? $value['philhealth_number'] : "";
-                        $employee->sss_number = isset($value['sss_number']) ? $value['sss_number'] : "";
-                        $employee->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
-                        $employee->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
-                        $employee->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
-                        $employee->bank_account_number = isset($value['bank_account_number']) ? $value['bank_account_number'] : "";
-                        $employee->personal_email = isset($value['personal_email']) ? $value['personal_email'] : "";
-                        $employee->area = isset($value['area']) ? $value['area'] : "";
-                        $employee->religion = isset($value['religion']) ? $value['religion'] : "";
-                        $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
+                                $employee->position = isset($value['position']) ? $value['position'] : "";
+                                $employee->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
+                                $employee->level = $value['level'];
+                                $employee->date_regularized = isset($value['date_regularized']) && !empty($value['date_regularized']) ? date('Y-m-d',strtotime($value['date_regularized'])) : null;
+                                $employee->date_resigned = isset($value['date_resigned']) && !empty($value['date_resigned']) ? date('Y-m-d',strtotime($value['date_resigned'])) : null;
+                                $employee->birth_date = isset($value['birth_date']) && !empty($value['birth_date']) ? date('Y-m-d',strtotime($value['birth_date'])) : null;
+                                $employee->birth_place = isset($value['birth_place']) ? $value['birth_place'] : "";
+                                $employee->gender = isset($value['gender']) ? $value['gender'] : "";
+                                $employee->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
+                                $employee->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
+                                $employee->present_address = isset($value['present_address']) ? $value['present_address'] : "";
+                                $employee->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
+                                $employee->phil_number = isset($value['philhealth_number']) ? $value['philhealth_number'] : "";
+                                $employee->sss_number = isset($value['sss_number']) ? $value['sss_number'] : "";
+                                $employee->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
+                                $employee->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
+                                $employee->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
+                                $employee->bank_account_number = isset($value['bank_account_number']) ? $value['bank_account_number'] : "";
+                                $employee->personal_email = isset($value['personal_email']) ? $value['personal_email'] : "";
+                                $employee->area = isset($value['area']) ? $value['area'] : "";
+                                $employee->religion = isset($value['religion']) ? $value['religion'] : "";
+                                $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
 
-                        $employee->location = isset($value['location']) ? $value['location'] : "";
-                        $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
-                        $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
-                        
-                        $employee->status = "Active";
-                        $employee->save();
+                                $employee->location = isset($value['location']) ? $value['location'] : "";
+                                $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
+                                $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
+                                
+                                $employee->status = "Active";
+                                $employee->save();
 
-                        //Leave Beginning Balance
-                        if(isset($value['vl_balance'])){
-                            if($value['vl_balance']){
-                                $vl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
-                                                                        ->where('leave_type','1') // VL
-                                                                        ->first();
-                                if($vl_leave_credit){
-                                    $vl_leave_credit->count = $value['vl_balance'];
-                                    $vl_leave_credit->save();
-                                }else{
-                                    $vl_leave_credit = new EmployeeLeaveCredit;
-                                    $vl_leave_credit->leave_type = '1';
-                                    $vl_leave_credit->user_id = $user_id;
-                                    $vl_leave_credit->count = $value['vl_balance'];
-                                    $vl_leave_credit->save();
+                                //Leave Beginning Balance
+                                if(isset($value['vl_balance'])){
+                                    if($value['vl_balance']){
+                                        $vl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                                ->where('leave_type','1') // VL
+                                                                                ->first();
+                                        if($vl_leave_credit){
+                                            $vl_leave_credit->count = $value['vl_balance'];
+                                            $vl_leave_credit->save();
+                                        }else{
+                                            $vl_leave_credit = new EmployeeLeaveCredit;
+                                            $vl_leave_credit->leave_type = '1';
+                                            $vl_leave_credit->user_id = $user_id;
+                                            $vl_leave_credit->count = $value['vl_balance'];
+                                            $vl_leave_credit->save();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                        if(isset($value['sl_balance'])){
-                            if($value['sl_balance']){
-                                $sl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
-                                                                        ->where('leave_type','2') // SL
-                                                                        ->first();
-                                if($sl_leave_credit){
-                                    $sl_leave_credit->count = $value['sl_balance'];
-                                    $sl_leave_credit->save();
-                                }else{
-                                    $sl_leave_credit = new EmployeeLeaveCredit;
-                                    $sl_leave_credit->leave_type = '2';
-                                    $sl_leave_credit->user_id = $user_id;
-                                    $sl_leave_credit->count = $value['sl_balance'];
-                                    $sl_leave_credit->save();
+                                if(isset($value['sl_balance'])){
+                                    if($value['sl_balance']){
+                                        $sl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                                ->where('leave_type','2') // SL
+                                                                                ->first();
+                                        if($sl_leave_credit){
+                                            $sl_leave_credit->count = $value['sl_balance'];
+                                            $sl_leave_credit->save();
+                                        }else{
+                                            $sl_leave_credit = new EmployeeLeaveCredit;
+                                            $sl_leave_credit->leave_type = '2';
+                                            $sl_leave_credit->user_id = $user_id;
+                                            $sl_leave_credit->count = $value['sl_balance'];
+                                            $sl_leave_credit->save();
+                                        }
+                                    }
                                 }
-                            }
-                        }
 
-                        if(isset($value['el_balance'])){
-                            if($value['el_balance']){
-                                $el_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
-                                                                        ->where('leave_type','6') // EL
-                                                                        ->first();
-                                if($el_leave_credit){
-                                    $el_leave_credit->count = $value['el_balance'];
-                                    $el_leave_credit->save();
-                                }else{
-                                    $el_leave_credit = new EmployeeLeaveCredit;
-                                    $el_leave_credit->leave_type = '6';
-                                    $el_leave_credit->user_id = $user_id;
-                                    $el_leave_credit->count = $value['el_balance'];
-                                    $el_leave_credit->save();
+                                if(isset($value['el_balance'])){
+                                    if($value['el_balance']){
+                                        $el_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                                ->where('leave_type','6') // EL
+                                                                                ->first();
+                                        if($el_leave_credit){
+                                            $el_leave_credit->count = $value['el_balance'];
+                                            $el_leave_credit->save();
+                                        }else{
+                                            $el_leave_credit = new EmployeeLeaveCredit;
+                                            $el_leave_credit->leave_type = '6';
+                                            $el_leave_credit->user_id = $user_id;
+                                            $el_leave_credit->count = $value['el_balance'];
+                                            $el_leave_credit->save();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                        
-                        if(isset($value['sil_balance'])){
-                            if($value['sil_balance']){
-                                $sil_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
-                                                                        ->where('leave_type','10') // SIL
-                                                                        ->first();
-                                if($sil_leave_credit){
-                                    $sil_leave_credit->count = $value['sil_balance'];
-                                    $sil_leave_credit->save();
-                                }else{
-                                    $sil_leave_credit = new EmployeeLeaveCredit;
-                                    $sil_leave_credit->leave_type = '10';
-                                    $sil_leave_credit->user_id = $user_id;
-                                    $sil_leave_credit->count = $value['sil_balance'];
-                                    $sil_leave_credit->save();
+                                
+                                if(isset($value['sil_balance'])){
+                                    if($value['sil_balance']){
+                                        $sil_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                                ->where('leave_type','10') // SIL
+                                                                                ->first();
+                                        if($sil_leave_credit){
+                                            $sil_leave_credit->count = $value['sil_balance'];
+                                            $sil_leave_credit->save();
+                                        }else{
+                                            $sil_leave_credit = new EmployeeLeaveCredit;
+                                            $sil_leave_credit->leave_type = '10';
+                                            $sil_leave_credit->user_id = $user_id;
+                                            $sil_leave_credit->count = $value['sil_balance'];
+                                            $sil_leave_credit->save();
+                                        }
+                                    }
                                 }
-                            }
-                        }
 
-                        $save_count+=1;
+                                $save_count+=1;
+
+                            }
+                        }
 
                     }else{
                         $check_if_exist = Employee::where('employee_number',$value['employee_number'])->first();
@@ -910,128 +894,128 @@ class EmployeeController extends Controller
                                 $user->save();
 
                                 $user_id = $user->id;
-                            }else{
-                                $user_id = $validate->id;
-                            }
-                        }
-                        $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
-                        $employee_number = $this->generate_biometric_code(date('Y',strtotime($value['original_date_hired'])), $company->id, $user_id);
-                        $employee = new Employee;
-                        $employee->user_id = $user_id;
-                        $employee->employee_number = $employee_number;
-                        $employee->employee_code =  $employee_code;
-                        $employee->first_name = $value['first_name'];
-                        $employee->last_name = $value['last_name'];
-                        $employee->middle_name = $value['middle_name'];
-                        $employee->name_suffix = isset($value['name_suffix']) ? $value['name_suffix'] : "";
-                        $employee->classification = isset($value['classification']) ? $value['classification'] : "";
-                        $employee->department_id = isset($value['department_id']) ? $value['department_id'] : "";
-                        $employee->company_id = isset($value['company_id']) ? $value['company_id'] : "";
-                        $employee->original_date_hired = isset($value['original_date_hired']) && $value['original_date_hired'] ? date('Y-m-d',strtotime($value['original_date_hired'])) : "";
+                           
+                                $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($value['original_date_hired'])), $company->id);
+                                $employee_number = $this->generate_biometric_code(date('Y',strtotime($value['original_date_hired'])), $company->id, $user_id);
+                                $employee = new Employee;
+                                $employee->user_id = $user_id;
+                                $employee->employee_number = $employee_number;
+                                $employee->employee_code =  $employee_code;
+                                $employee->first_name = $value['first_name'];
+                                $employee->last_name = $value['last_name'];
+                                $employee->middle_name = $value['middle_name'];
+                                $employee->name_suffix = isset($value['name_suffix']) ? $value['name_suffix'] : "";
+                                $employee->classification = isset($value['classification']) ? $value['classification'] : "";
+                                $employee->department_id = isset($value['department_id']) ? $value['department_id'] : "";
+                                $employee->company_id = isset($value['company_id']) ? $value['company_id'] : "";
+                                $employee->original_date_hired = isset($value['original_date_hired']) && $value['original_date_hired'] ? date('Y-m-d',strtotime($value['original_date_hired'])) : "";
 
-                        $employee->position = isset($value['position']) ? $value['position'] : "";
-                        $employee->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
-                        $employee->level = $value['level'];
-                        $employee->date_regularized = isset($value['date_regularized']) && !empty($value['date_regularized']) ? date('Y-m-d',strtotime($value['date_regularized'])) : null;
-                        $employee->date_resigned = isset($value['date_resigned']) && !empty($value['date_resigned']) ? date('Y-m-d',strtotime($value['date_resigned'])) : null;
-                        $employee->birth_date = isset($value['birth_date']) && !empty($value['birth_date']) ? date('Y-m-d',strtotime($value['birth_date'])) : null;
-                        $employee->birth_place = isset($value['birth_place']) ? $value['birth_place'] : "";
-                        $employee->gender = isset($value['gender']) ? $value['gender'] : "";
-                        $employee->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
-                        $employee->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
-                        $employee->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
-                        $employee->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
-                        $employee->phil_number = isset($value['philhealth_number']) ? $value['philhealth_number'] : "";
-                        $employee->sss_number = isset($value['sss_number']) ? $value['sss_number'] : "";
-                        $employee->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
-                        $employee->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
-                        $employee->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
-                        $employee->bank_account_number = isset($value['bank_account_number']) ? $value['bank_account_number'] : "";
-                        $employee->personal_email = isset($value['personal_email']) ? $value['personal_email'] : "";
-                        $employee->area = isset($value['area']) ? $value['area'] : "";
-                        $employee->religion = isset($value['religion']) ? $value['religion'] : "";
-                        $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
+                                $employee->position = isset($value['position']) ? $value['position'] : "";
+                                $employee->nick_name = isset($value['nick_name']) ? $value['nick_name'] : "";
+                                $employee->level = $value['level'];
+                                $employee->date_regularized = isset($value['date_regularized']) && !empty($value['date_regularized']) ? date('Y-m-d',strtotime($value['date_regularized'])) : null;
+                                $employee->date_resigned = isset($value['date_resigned']) && !empty($value['date_resigned']) ? date('Y-m-d',strtotime($value['date_resigned'])) : null;
+                                $employee->birth_date = isset($value['birth_date']) && !empty($value['birth_date']) ? date('Y-m-d',strtotime($value['birth_date'])) : null;
+                                $employee->birth_place = isset($value['birth_place']) ? $value['birth_place'] : "";
+                                $employee->gender = isset($value['gender']) ? $value['gender'] : "";
+                                $employee->marital_status = isset($value['marital_status']) ? $value['marital_status'] : "";
+                                $employee->permanent_address = isset($value['permanent_address']) ? $value['permanent_address'] : "";
+                                $employee->present_address = isset($value['permanent_address']) ? $value['present_address'] : "";
+                                $employee->personal_number = isset($value['personal_number']) ? $value['personal_number'] : "";
+                                $employee->phil_number = isset($value['philhealth_number']) ? $value['philhealth_number'] : "";
+                                $employee->sss_number = isset($value['sss_number']) ? $value['sss_number'] : "";
+                                $employee->tax_number = isset($value['tax_number']) ? $value['tax_number'] : "";
+                                $employee->hdmf_number = isset($value['hdmf_number']) ? $value['hdmf_number'] : "";
+                                $employee->bank_name = isset($value['bank_name']) ? $value['bank_name'] : "";
+                                $employee->bank_account_number = isset($value['bank_account_number']) ? $value['bank_account_number'] : "";
+                                $employee->personal_email = isset($value['personal_email']) ? $value['personal_email'] : "";
+                                $employee->area = isset($value['area']) ? $value['area'] : "";
+                                $employee->religion = isset($value['religion']) ? $value['religion'] : "";
+                                $employee->schedule_id = isset($value['schedule_id']) ? $value['schedule_id'] : "1";
 
-                        $employee->location = isset($value['location']) ? $value['location'] : "";
-                        $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
-                        $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
+                                $employee->location = isset($value['location']) ? $value['location'] : "";
+                                $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
+                                $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
 
-                        $employee->status = "Active";
-                        $employee->save();
+                                $employee->status = "Active";
+                                $employee->save();
 
-                        //Leave Beginning Balance
-                        if(isset($value['vl_balance'])){
-                            if($value['vl_balance']){
-                                $vl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
-                                                                        ->where('leave_type','1') // VL
-                                                                        ->first();
-                                if($vl_leave_credit){
-                                    $vl_leave_credit->count = $value['vl_balance'];
-                                    $vl_leave_credit->save();
-                                }else{
-                                    $vl_leave_credit = new EmployeeLeaveCredit;
-                                    $vl_leave_credit->leave_type = '1';
-                                    $vl_leave_credit->user_id = $user_id;
-                                    $vl_leave_credit->count = $value['vl_balance'];
-                                    $vl_leave_credit->save();
+                                //Leave Beginning Balance
+                                if(isset($value['vl_balance'])){
+                                    if($value['vl_balance']){
+                                        $vl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                                ->where('leave_type','1') // VL
+                                                                                ->first();
+                                        if($vl_leave_credit){
+                                            $vl_leave_credit->count = $value['vl_balance'];
+                                            $vl_leave_credit->save();
+                                        }else{
+                                            $vl_leave_credit = new EmployeeLeaveCredit;
+                                            $vl_leave_credit->leave_type = '1';
+                                            $vl_leave_credit->user_id = $user_id;
+                                            $vl_leave_credit->count = $value['vl_balance'];
+                                            $vl_leave_credit->save();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                        if(isset($value['sl_balance'])){
-                            if($value['sl_balance']){
-                                $sl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
-                                                                        ->where('leave_type','2') // SL
-                                                                        ->first();
-                                if($sl_leave_credit){
-                                    $sl_leave_credit->count = $value['sl_balance'];
-                                    $sl_leave_credit->save();
-                                }else{
-                                    $sl_leave_credit = new EmployeeLeaveCredit;
-                                    $sl_leave_credit->leave_type = '2';
-                                    $sl_leave_credit->user_id = $user_id;
-                                    $sl_leave_credit->count = $value['sl_balance'];
-                                    $sl_leave_credit->save();
+                                if(isset($value['sl_balance'])){
+                                    if($value['sl_balance']){
+                                        $sl_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                                ->where('leave_type','2') // SL
+                                                                                ->first();
+                                        if($sl_leave_credit){
+                                            $sl_leave_credit->count = $value['sl_balance'];
+                                            $sl_leave_credit->save();
+                                        }else{
+                                            $sl_leave_credit = new EmployeeLeaveCredit;
+                                            $sl_leave_credit->leave_type = '2';
+                                            $sl_leave_credit->user_id = $user_id;
+                                            $sl_leave_credit->count = $value['sl_balance'];
+                                            $sl_leave_credit->save();
+                                        }
+                                    }
                                 }
-                            }
-                        }
 
-                        if(isset($value['el_balance'])){
-                            if($value['el_balance']){
-                                $el_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
-                                                                        ->where('leave_type','6') // EL
-                                                                        ->first();
-                                if($el_leave_credit){
-                                    $el_leave_credit->count = $value['el_balance'];
-                                    $el_leave_credit->save();
-                                }else{
-                                    $el_leave_credit = new EmployeeLeaveCredit;
-                                    $el_leave_credit->leave_type = '6';
-                                    $el_leave_credit->user_id = $check_if_exist->user_id;
-                                    $el_leave_credit->count = $value['el_balance'];
-                                    $el_leave_credit->save();
+                                if(isset($value['el_balance'])){
+                                    if($value['el_balance']){
+                                        $el_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                                ->where('leave_type','6') // EL
+                                                                                ->first();
+                                        if($el_leave_credit){
+                                            $el_leave_credit->count = $value['el_balance'];
+                                            $el_leave_credit->save();
+                                        }else{
+                                            $el_leave_credit = new EmployeeLeaveCredit;
+                                            $el_leave_credit->leave_type = '6';
+                                            $el_leave_credit->user_id = $check_if_exist->user_id;
+                                            $el_leave_credit->count = $value['el_balance'];
+                                            $el_leave_credit->save();
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                        
-                        if(isset($value['sil_balance'])){
-                            if($value['sil_balance']){
-                                $sil_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
-                                                                        ->where('leave_type','10') // SIL
-                                                                        ->first();
-                                if($sil_leave_credit){
-                                    $sil_leave_credit->count = $value['sil_balance'];
-                                    $sil_leave_credit->save();
-                                }else{
-                                    $sil_leave_credit = new EmployeeLeaveCredit;
-                                    $sil_leave_credit->leave_type = '10';
-                                    $sil_leave_credit->user_id = $check_if_exist->user_id;
-                                    $sil_leave_credit->count = $value['sil_balance'];
-                                    $sil_leave_credit->save();
+                                
+                                if(isset($value['sil_balance'])){
+                                    if($value['sil_balance']){
+                                        $sil_leave_credit = EmployeeLeaveCredit::where('user_id',$user_id)
+                                                                                ->where('leave_type','10') // SIL
+                                                                                ->first();
+                                        if($sil_leave_credit){
+                                            $sil_leave_credit->count = $value['sil_balance'];
+                                            $sil_leave_credit->save();
+                                        }else{
+                                            $sil_leave_credit = new EmployeeLeaveCredit;
+                                            $sil_leave_credit->leave_type = '10';
+                                            $sil_leave_credit->user_id = $check_if_exist->user_id;
+                                            $sil_leave_credit->count = $value['sil_balance'];
+                                            $sil_leave_credit->save();
+                                        }
+                                    }
                                 }
-                            }
-                        }
 
-                        $save_count+=1;
+                                $save_count+=1;
+
+                            }
+                        }
                     }
                 }
             }
