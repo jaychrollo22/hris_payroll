@@ -197,7 +197,12 @@
                           <a href="{{url($form_approval->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>
                           @endif
                         </td>
-                        <td>{{date('M. d, Y', strtotime($form_approval->approved_date))}}</td>
+                        <td>
+                          @if ($form_approval->status == 'Approved')
+                            {{ $form_approval->approved_date ? date('M. d, Y', strtotime($form_approval->approved_date)) : ""}}
+                          @endif
+                        
+                        </td>
                         <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
                           @php
                               $approver_last = '';
