@@ -238,7 +238,7 @@ class AttendanceController extends Controller
                 if(isset($value['attendance_date'])){
 
                     $check_attendace = SeabasedAttendance::where('employee_code',$value['employee_code'])
-                                                            ->where('attendance_date',$value['attendance_date'])
+                                                            ->where('attendance_date',date('Y-m-d',strtotime($value['attendance_date'])))
                                                             ->where('shift',$value['shift'])
                                                             ->first();
                     if($check_attendace){
@@ -252,7 +252,7 @@ class AttendanceController extends Controller
                         $check_attendace->updated_by =  auth()->user()->id;
                         $check_attendace->save();
                         $save_count++;
-                        
+
                     }else{
                         $new_attendance = new SeabasedAttendance;
                         $new_attendance->employee_code =  $value['employee_code'];
