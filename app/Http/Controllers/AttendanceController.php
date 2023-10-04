@@ -234,6 +234,7 @@ class AttendanceController extends Controller
             $not_save = [];
             foreach($data[0] as $key => $value)
             {
+                // return $value;
                 if(isset($value['attendance_date'])){
 
                     $check_attendace = SeabasedAttendance::where('employee_code',$value['employee_code'])
@@ -241,37 +242,26 @@ class AttendanceController extends Controller
                                                             ->where('shift',$value['shift'])
                                                             ->first();
                     if($check_attendace){
-                        $attendance_date = isset($value['attendance_date']) ? ($value['attendance_date'] - 25569) * 86400 : null;
-                        $attendance_date = isset($value['attendance_date']) ? gmdate("Y-m-d", $attendance_date) : null;
+                    
+                        $time_in = $this->convertTime($value['time_in']);
+                        $time_out = $this->convertTime($value['time_out']);
 
-                        $time_in = isset($value['time_in']) ? ($value['time_in'] - 25569) * 86400 : null;
-                        $time_in = isset($value['time_in']) ? gmdate("Y-m-d H:i:s", $time_in) : null;
-
-                        $time_out = isset($value['time_out']) ? ($value['time_out'] - 25569) * 86400 : null;
-                        $time_out = isset($value['time_out']) ? gmdate("Y-m-d H:i:s", $time_out) : null;
-
-                        $check_attendace->attendance_date =  $attendance_date;
-                        $check_attendace->time_in =  $time_in;
-                        $check_attendace->time_out =  $time_out;
+                        $check_attendace->attendance_date =  date('Y-m-d',strtotime($value['attendance_date']));
+                        $check_attendace->time_in =  date('Y-m-d',strtotime($value['attendance_date'])) . ' ' . $time_in;
+                        $check_attendace->time_out =  date('Y-m-d',strtotime($value['attendance_date'])) . ' ' .$time_out;
                         $check_attendace->updated_by =  auth()->user()->id;
                         $check_attendace->save();
                         $save_count++;
+                        
                     }else{
                         $new_attendance = new SeabasedAttendance;
                         $new_attendance->employee_code =  $value['employee_code'];
+                        $time_in = $this->convertTime($value['time_in']);
+                        $time_out = $this->convertTime($value['time_out']);
 
-                        $attendance_date = isset($value['attendance_date']) ? ($value['attendance_date'] - 25569) * 86400 : null;
-                        $attendance_date = isset($value['attendance_date']) ? gmdate("Y-m-d", $attendance_date) : null;
-
-                        $time_in = isset($value['time_in']) ? ($value['time_in'] - 25569) * 86400 : null;
-                        $time_in = isset($value['time_in']) ? gmdate("Y-m-d H:i:s", $time_in) : null;
-
-                        $time_out = isset($value['time_out']) ? ($value['time_out'] - 25569) * 86400 : null;
-                        $time_out = isset($value['time_out']) ? gmdate("Y-m-d H:i:s", $time_out) : null;
-
-                        $new_attendance->attendance_date =  $attendance_date;
-                        $new_attendance->time_in =  $time_in;
-                        $new_attendance->time_out =  $time_out;
+                        $new_attendance->attendance_date =  date('Y-m-d',strtotime($value['attendance_date']));
+                        $new_attendance->time_in =  date('Y-m-d',strtotime($value['attendance_date'])) . ' ' .$time_in;
+                        $new_attendance->time_out = date('Y-m-d',strtotime($value['attendance_date'])) . ' ' .$time_out;
                         $new_attendance->shift =  $value['shift'];
                         $new_attendance->created_by =  auth()->user()->id;
                         $new_attendance->save();
@@ -285,6 +275,24 @@ class AttendanceController extends Controller
             Alert::success('Successfully Import Attendances (' . $save_count. ')')->persistent('Dismiss');
             return redirect('/seabased-attendances');
         }
+    }
+
+    public function convertTime($time){
+        $decimalValue = $time;
+
+        // Calculate total minutes in a day
+        $totalMinutesInADay = 24 * 60;
+
+        // Calculate the total minutes for the given decimal fraction of a day
+        $totalMinutes = $decimalValue * $totalMinutesInADay;
+
+        // Convert minutes to hours and minutes
+        $hours = floor($totalMinutes / 60);
+        $minutes = $totalMinutes % 60;
+
+        // Format the result as H:i (hours and minutes)
+        return $timeFormatted = sprintf("%02d:%02d", $hours, $minutes);
+
     }
 
     public function attendanceSeabasedAttendnaceExport(Request $request){
