@@ -2052,7 +2052,7 @@ class EmployeeController extends Controller
 
         $employee_numbers = Employee::whereIn('employee_number',$employee_code)->where('status','Active')->pluck('employee_number')->toArray();
 
-        $attendances = HikVisionAttendance::whereIn('empoyee_code',$employee_numbers)
+        $attendances = HikVisionAttendance::whereIn('employee_code',$employee_numbers)
                                 ->whereBetween('attendance_date',[$from,$to])
                                 ->orderBy('attendance_date','asc')
                                 ->orderBy('direction','asc')
@@ -2070,7 +2070,7 @@ class EmployeeController extends Controller
                     if($attend == null)
                     {
                         $attendance = new Attendance;
-                        $attendance->employee_code  = $att->empoyee_code;   
+                        $attendance->employee_code  = $att->employee_code;   
                         $attendance->time_in = date('Y-m-d H:i:s',strtotime($att->attendance_date));
                         $attendance->device_in = $att->deviceName;
                         $attendance->save();
@@ -2087,17 +2087,17 @@ class EmployeeController extends Controller
                         // 'last_id' =>$att->id,
                     ];
                     // return $time_in_after . ' - ' .$time_in_before;
-                    $attendance_in = Attendance::where('employee_code',$att->empoyee_code)
+                    $attendance_in = Attendance::where('employee_code',$att->employee_code)
                     ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
 
-                    Attendance::where('employee_code',$att->empoyee_code)
+                    Attendance::where('employee_code',$att->employee_code)
                     ->whereBetween('time_in',[$time_in_before,$time_in_after])
                     ->update($update);
 
                     if($attendance_in ==  null)
                     {
                         $attendance = new Attendance;
-                        $attendance->employee_code  = $att->empoyee_code;   
+                        $attendance->employee_code  = $att->employee_code;   
                         $attendance->time_out = date('Y-m-d H:i:s', strtotime($att->authDateTime));
                         $attendance->device_out = $att->deviceName;
                         $attendance->save(); 
