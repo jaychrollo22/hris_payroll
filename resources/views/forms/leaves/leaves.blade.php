@@ -116,6 +116,11 @@
                                 if($last_year == 2022 && $today < $date_hired_this_year){
                                     $sl_beginning_balance = $leave->count;
                                 }
+
+
+                                if($total_months < 11){
+                                  $sl_beginning_balance = $leave->count;
+                                }
                                 
                                 $total_sl = $sl_beginning_balance + $earned_sl;
                               @endphp
@@ -240,8 +245,13 @@
                                   if($last_year == 2022 && $today < $date_hired_this_year){
                                       $sl_beginning_balance = $leave->count;
                                   }
+
+                                  if($total_months < 11){
+                                    $sl_beginning_balance = $leave->count;
+                                  }
                                   
                                   $count_sl = ceil($sl_beginning_balance + $earned_sl) - $used_sl;
+                                  
                                   if($count_sl > 0){
                                     if($total_months > 11){
                                         $is_allowed_to_file_sl = true;
