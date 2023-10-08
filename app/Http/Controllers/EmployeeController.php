@@ -1450,6 +1450,92 @@ class EmployeeController extends Controller
             )
         );
     }
+
+    public function employee_attendance_report(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+    
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
+        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
+
+        $attendance_controller = new AttendanceController;
+        $employees = Employee::select('id','user_id','employee_number','first_name','last_name')->where('status','Active')
+                                ->whereIn('company_id', $allowed_companies)
+                                ->when($allowed_locations,function($q) use($allowed_locations){
+                                    $q->whereIn('location',$allowed_locations);
+                                })
+                                ->when($allowed_projects,function($q) use($allowed_projects){
+                                    $q->whereIn('project',$allowed_projects);
+                                })
+                                ->get();
+        $from_date = $request->from;
+        $to_date = $request->to;
+        $date_range =  [];
+        $attendances = [];
+        $schedules = [];
+        $emp_code = $request->employee;
+        $schedule_id = null;
+        $emp_data = [];
+
+        $company = isset($request->company) ? $request->company : "";
+
+        if ($from_date != null) {
+            
+            
+
+            $emp_data = Employee::select('id','user_id','employee_number','first_name','last_name','schedule_id')
+                                    ->with(['schedule_info','attendances' => function ($query) use ($from_date, $to_date) {
+                                            $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                                    ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
+                                                    ->orderBy('time_in','asc')
+                                                    ->orderby('time_out','desc')
+                                                    ->orderBy('id','asc');
+                                    }])
+                                    ->whereIn('company_id', $allowed_companies)
+                                    ->when($emp_code,function($q) use($emp_code){
+                                        $q->whereIn('employee_number', $emp_code);
+                                    })
+                                    ->when($company,function($q) use($company){
+                                        $q->where('company_id', $company);
+                                    })
+                                    ->when($allowed_locations,function($q) use($allowed_locations){
+                                        $q->whereIn('location',$allowed_locations);
+                                    })
+                                    ->when($allowed_projects,function($q) use($allowed_projects){
+                                        $q->whereIn('project',$allowed_projects);
+                                    })
+                                    ->where('status','Active')
+                                    ->get();
+
+            $date_range =  $attendance_controller->dateRange($from_date, $to_date);
+           
+        }
+        $schedules = ScheduleData::all();
+        
+        $companies = Company::whereHas('employee_has_company')
+                                ->whereIn('id',$allowed_companies)
+                                ->get();
+
+        return view(
+            'attendances.employee_attendance_report',
+            array(
+                'header' => 'biometrics',
+                'employees' => $employees,
+                'from_date' => $from_date,
+                'to_date' => $to_date,
+                'date_range' => $date_range,
+                'attendances' => $attendances,
+                'schedules' => $schedules,
+                'emp_code' => $emp_code,
+                'emp_data' => $emp_data,
+                'companies' => $companies,
+                'company' => $company,
+            )
+        );
+    }
+
+
     public function perCompany(Request $request)
     {
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
