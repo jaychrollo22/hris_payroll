@@ -20,23 +20,46 @@
                     <div class="col-md-4 mb-4 transparent">
                         <div class="card">
                           <div class="card-body">
-                            <h3 class="card-title">{{date('M d, Y')}}</h3>
+                            <h3 class="card-title">{{date('M d, Y')}} </h3>
                             <div class="media">
                                 <i class="ti-time icon-md text-info d-flex align-self-center mr-3"></i>
                                 <div class="media-body">
                                   <p class="card-text">Time In : 
                                     @if($attendance_now != null){{date('h:i A',strtotime($attendance_now->time_in))}} <br>
-                                      @if($attendance_now->time_out == null )
-                                          @php
-                                            $employee_schedule = employeeSchedule($schedules,$attendance_now->time_in,$schedules[0]->schedule_id)
-                                          @endphp
-                                          Estimated Out : {{$employee_schedule ? date('h:i A',strtotime($employee_schedule['time_out_from'])) : ""}}
-                                       @else
-                                       Time Out : {{date('h:i A',strtotime($attendance_now->time_out))}}
-                                       @endif
-                                     @else NO TIME IN 
-                                     @endif</p>
-                                  <span id="span"></span>
+                                    @if($attendance_now->time_out == null )
+                                        @php
+                                          $employee_schedule = employeeSchedule($schedules,$attendance_now->time_in,$schedules[0]->schedule_id);
+                                          $estimated_out = "";
+                                          if($employee_schedule != null)
+                                          {
+                                            if(date('h:i A',strtotime($attendance_now->time_in)) < date('h:i A',strtotime($employee_schedule['time_in_from'])))
+                                            {
+                                                $estimated_out = date('h:i A',strtotime($employee_schedule['time_out_from']));
+                                            }
+                                            else
+                                            {
+                                                $hours = intval($employee_schedule['working_hours']);
+                                                $minutes = ($employee_schedule['working_hours']-$hours)*60;
+                                                $estimated_out = date('h:i A', strtotime("+".$hours." hours",strtotime($attendance_now->time_in)));
+                                                $estimated_out = date('h:i A', strtotime("+".$minutes." minutes",strtotime($estimated_out)));
+                                            }
+                                            if(date('h:i A',strtotime($attendance_now->time_in)) > date('h:i A',strtotime($employee_schedule['time_in_to'])))
+                                            {
+                                                $estimated_out = date('h:i A',strtotime($employee_schedule['time_out_to']));
+                                            }
+
+                                          }
+                                          else {
+                                            $estimated_out = "No Schedule";
+                                          }
+                                          
+                                        @endphp
+                                        Estimated Out : {{$estimated_out}} 
+                                     @else
+                                     Time Out : {{date('h:i A',strtotime($attendance_now->time_out))}}
+                                     @endif
+                                   @else NO TIME IN 
+                                   @endif</p>
                                    {{-- <button type="button" class="btn btn-outline-danger btn-fw btn-sm">Time Out</button> --}}
                                 </div>
                               </div>
@@ -155,20 +178,7 @@
     </div>
   </div>
 </div>
-<script>
-  var span = document.getElementById('span');
 
-  function time() {
-  var d = new Date();
-  var s = d.getSeconds();
-  var m = d.getMinutes();
-  var h = d.getHours();
-  span.textContent = 
-      ("0" + h).substr(-2) + ":" + ("0" + m).substr(-2) + ":" + ("0" + s).substr(-2);
-  }
-
-  setInterval(time, 1000);
-</script>
 @endsection
 @section('footer')
 <script>

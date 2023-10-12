@@ -293,6 +293,7 @@
                 </ul>
                 <ul class="navbar-nav navbar-nav-right">
                     <li class="nav-item nav-profile dropdown">
+                        <span id="span"></span>
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
                             <img class="rounded-circle" style='width:34px;height:34px;' src='{{ URL::asset(auth()->user()->employee->avatar) }}' onerror="this.src='{{ URL::asset('/images/no_image.png') }}';">
                         </a>
@@ -664,7 +665,20 @@
     {{-- <script src="{{ asset('body_css/js/form-validation.js') }}"></script>
     <script src="{{ asset('body_css/js/bt-maxLength.js') }}"></script> --}}
     @yield('footer')
-
+    <script>
+        var span = document.getElementById('span');
+      
+        function time() {
+        var d = new Date();
+        var s = d.getSeconds();
+        var m = d.getMinutes();
+        var h = d.getHours();
+        span.textContent = 
+            ("0" + h).substr(-2) + ":" + ("0" + m).substr(-2) + ":" + ("0" + s).substr(-2);
+        }
+      
+        setInterval(time, 1000);
+      </script>
     <script type='text/javascript'>
         function exportTableToExcel(tableID, filename = '') {
             var downloadLink;
