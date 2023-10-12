@@ -15,6 +15,10 @@ use App\HikAttLog2;
 
 Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
+
+    //QR
+    Route::get('qr', 'QrCodeController@generateQrCode');
+
     //Users
     Route::get('account-setting', 'UserController@accountSetting');
     Route::post('upload-avatar', 'UserController@uploadAvatar');
