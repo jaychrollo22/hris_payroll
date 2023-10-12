@@ -66,7 +66,7 @@
                           </div>
                         </div>
                         @if(count(auth()->user()->subbordinates) > 0)
-                        <div class="card">
+                        <div class="card mt-2">
                           <div class="card-body">
                             <p class="card-title ">Subordinates <small>({{date('M d, Y')}})</small></p>
                               <div class="table-responsive" >
