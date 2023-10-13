@@ -337,9 +337,9 @@ class EmployeeController extends Controller
             $user->status = "Active";
             $user->save();
 
-            // $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($request->date_hired)), $company->id);
-            $employee_code = $request->biometric_code;
+            $employee_code = $this->generate_emp_code('Employee', $company->company_code, date('Y',strtotime($request->date_hired)), $company->id);
             $employee_number = $this->generate_biometric_code(date('Y',strtotime($request->date_hired)), $company->id ,$user->id);
+            $employee_number = $request->biometric_code;
 
             $employee = new Employee;
             $employee->employee_number = $employee_number;
