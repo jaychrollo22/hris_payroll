@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>QR</title>
 
     <style>
         body {
@@ -35,7 +35,7 @@
         .company-logo img {
             width: 150px;
             height: auto;
-            margin-bottom: 5px;
+            margin-bottom: 15px;
         }
 
         .name {
