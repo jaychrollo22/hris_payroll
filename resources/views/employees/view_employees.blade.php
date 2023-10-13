@@ -199,6 +199,9 @@
                                                 <a href="/account-setting-hr/{{$employee->user_id}}" class="text-success btn-sm text-center">
                                                     <i class="ti-pencil btn-icon-prepend"></i>
                                                 </a>
+                                                {{-- <a href="/generate-qr/{{$employee->id}}" target="_blank" class="text-primary btn-sm text-center">
+                                                    <i class="ti-layout-grid2 btn-icon-prepend"></i>
+                                                </a> --}}
                                             @endif
                                             {{$employee->employee_number}}
                                         </td>

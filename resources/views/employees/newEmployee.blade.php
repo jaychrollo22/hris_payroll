@@ -14,7 +14,6 @@
                 <div class="col-md-12 mx-0">
                   <form id="msform" class='text-center' method='post' onsubmit='show()' action='{{url('/new-employee')}}' enctype="multipart/form-data">
                     {{ csrf_field() }}
-                      <!-- progressbar -->
                       <ul id="progressbar">
                           <li class="active user" id="account" class=''><strong>Personal</strong></li>
                           <li class='employment'><strong>Employment</strong></li>
@@ -187,10 +186,6 @@
                                     @endforeach
                                 </select>
                               </div>
-                              {{-- <div class='col-md-4'>
-                                Biometric Code
-                                <input type="text" name="biometric_code" class='form-control form-control-sm required' placeholder="BIOMETRIC CODE"/>
-                              </div> --}}
                               <div class='col-md-4'>
                                Date Hired
                                 <input type="date" name="date_hired" class='form-control form-control-sm required' placeholder="Start Date"/>
@@ -353,10 +348,6 @@
           </div>
       </div>
       </div>
-      {{-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save</button>
-      </div> --}}
     </div>
   </div>
 <script>

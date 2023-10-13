@@ -13,11 +13,13 @@
 */
 use App\HikAttLog2;
 
+Route::get('qr/{employee_id}', 'QrCodeController@viewQrCode');
+
 Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
 
     //QR
-    Route::get('qr', 'QrCodeController@generateQrCode');
+    Route::get('generate-qr/{employee_id}', 'QrCodeController@generateQrCode');
 
     //Users
     Route::get('account-setting', 'UserController@accountSetting');
