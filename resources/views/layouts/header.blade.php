@@ -7,14 +7,9 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta content="Holdings, Construction Company, Shipping, Logistics, Ship Building" name="keywords">
-    <meta content="Premium Infinite Ventures" property="og:title">
-    <meta content="Holdings, Construction Company, Shipping, Logistics, Ship Building" property="og:description">
-    <meta content="login_css/images/present.png" property="og:image">
-    <meta content="https://app.pivi.com.ph:8035/" property="og:url">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>HRIS</title>
+    <title>Timekeeping and Payroll</title>
     <link rel="shortcut icon" href="{{ URL::asset(config('logo.logos')::first()->icon) }}">
     <!-- Scripts -->
     {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
@@ -276,8 +271,8 @@
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-                <a class="navbar-brand brand-logo mr-5" href="{{ url('/') }}"><img src="{{ auth()->user()->employee->company ? URL::asset('company_images/' . auth()->user()->employee->company->company_code . '.png')  : ""}}" onerror="this.src='{{ URL::asset('/images/no_image.png') }}';" style="height:auto;max-height:60px" class="mr-2 ml-2" alt="logo" /></a>
-                <a class="navbar-brand brand-logo-mini" href="{{ url('/') }}"><img src="{{ auth()->user()->employee->company ? URL::asset('company_images/' . auth()->user()->employee->company->company_code . '.png')  : ""}}" onerror="this.src='{{ URL::asset('/images/no_image.png') }}';" style="height:auto" alt="logo" /></a>
+                <a class="navbar-brand brand-logo mr-5" href="{{ url('/') }}"><img src="{{ auth()->user()->employee->company ? URL::asset(auth()->user()->employee->company->logo)  : ""}}" onerror="this.src='{{ URL::asset('/images/no_image.png') }}';" style="height:auto;max-height:60px" class="mr-2 ml-2" alt="logo" /></a>
+                <a class="navbar-brand brand-logo-mini" href="{{ url('/') }}"><img src="{{ auth()->user()->employee->company ? URL::asset(auth()->user()->employee->company->logo)  : ""}}" onerror="this.src='{{ URL::asset('/images/no_image.png') }}';" style="height:auto" alt="logo" /></a>
             </div>
 
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
