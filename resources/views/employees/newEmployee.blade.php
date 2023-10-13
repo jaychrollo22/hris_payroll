@@ -187,10 +187,10 @@
                                     @endforeach
                                 </select>
                               </div>
-                              {{-- <div class='col-md-4'>
+                              <div class='col-md-4'>
                                 Biometric Code
                                 <input type="text" name="biometric_code" class='form-control form-control-sm required' placeholder="BIOMETRIC CODE"/>
-                              </div> --}}
+                              </div>
                               <div class='col-md-4'>
                                Date Hired
                                 <input type="date" name="date_hired" class='form-control form-control-sm required' placeholder="Start Date"/>
