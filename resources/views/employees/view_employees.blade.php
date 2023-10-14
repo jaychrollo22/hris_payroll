@@ -196,10 +196,10 @@
                                         
                                         <td>
                                             @if (checkUserPrivilege('employees_view',auth()->user()->id) == 'yes')
-                                                <a href="/account-setting-hr/{{$employee->user_id}}" class="text-success btn-sm text-center">
+                                                <a href="/account-setting-hr/{{$employee->user_id}}" class="text-success btn-sm text-center" title="View Employee">
                                                     <i class="ti-pencil btn-icon-prepend"></i>
                                                 </a>
-                                                <a href="/generate-qr/{{$employee->id}}" target="_blank" class="text-primary btn-sm text-center">
+                                                <a href="/generate-qr/{{$employee->id}}" target="_blank" class="text-primary btn-sm text-center" title="Generate QR">
                                                     <i class="ti-layout-grid2 btn-icon-prepend"></i>
                                                 </a>
                                             @endif
