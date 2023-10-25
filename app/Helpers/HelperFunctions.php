@@ -354,14 +354,14 @@ function checkEarnedLeave($user_id,$leave_type,$date_hired){
 
     //Get From Last Year Earned
     if($date_hired){
-        $today  = date('Y-m-d');
+        $today  = date('Y-m-d'); //2023-10-25
         $date_hired_md = date('m-d',strtotime($date_hired));
         $date_hired_m = date('m',strtotime($date_hired));
         $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
         $this_year = date('Y');
 
-        $date_hired_this_year = $this_year . '-'. $date_hired_md;
-        $date_hired_last_year = $last_year . '-'. $date_hired_md;
+        $date_hired_this_year = $this_year . '-'. $date_hired_md; //2023-12-12
+        $date_hired_last_year = $last_year . '-'. $date_hired_md; //2022-12-12
 
         if($today >= $date_hired_this_year){ //if Date hired meets todays date get earned leaves from last year to this year date_hired
             $date_hired_this_minus_1_month = date('Y-m-d', strtotime('-1 month', strtotime($date_hired_this_year)) );
@@ -370,7 +370,18 @@ function checkEarnedLeave($user_id,$leave_type,$date_hired){
                                                         ->whereNull('converted_to_cash')
                                                         ->whereBetween('earned_date', [$date_hired_last_year, $date_hired_this_minus_1_month])
                                                         ->sum('earned_leave');
-        }else{
+        }
+        else if($today < $date_hired_this_year){
+            if($last_year > 2022){
+                $date_hired_last_year_minus_1_year = date('Y-m-d', strtotime('-1 year', strtotime($date_hired_last_year)) ); //2021-12-12
+                return $vl_earned = EmployeeEarnedLeave::where('user_id',$user_id)
+                                                            ->where('leave_type',$leave_type)
+                                                            ->whereNull('converted_to_cash')
+                                                            ->whereBetween('earned_date', [$date_hired_last_year_minus_1_year, $date_hired_last_year])
+                                                            ->sum('earned_leave');
+            }
+        }
+        else{
             return 0;
         }
     }
