@@ -54,7 +54,7 @@
                                 <td>Approved Overtime</td>
                                 <td>Night Diff</td>
                                 <td>OT Night Diff</td>
-                                <td>Device</th>
+                                {{-- <td>Device</th> --}}
                                 <td>Remarks</th>
   
                             </tr>
@@ -535,7 +535,6 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
                                     @else
                                         {{-- Working Hours --}}
                                         <td>
@@ -733,14 +732,14 @@
                                                     @endphp
                                                 @endif
                                             </td>
-                                            <td>
+                                            {{-- <td>
                                                 @if($time_in)
                                                     <small>
                                                         Time In : {{$time_in->device_in}} <br>
                                                         Time Out : {{$time_in->device_out}}
                                                     </small>
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                         @else
                                             <td></td>
                                             <td></td>
@@ -784,7 +783,6 @@
                                                 <td></td>
                                                 <td></td>
                                             
-                                                <td></td>
                                                 <td></td>
                                             @endif
                                             <td></td>
@@ -876,7 +874,7 @@
                                 <td >{{$approved_overtimes}} hrs</td>
                                 <td >0 hrs</td>
                                 <td >{{$night_diff_ot}} hrs</td>
-                                <td ></td>
+                                {{-- <td ></td> --}}
                                 <td ></td>
                             </tr>
                         </tbody>

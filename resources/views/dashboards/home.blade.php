@@ -26,8 +26,7 @@
                                 <div class="media-body">
                                   <p class="card-text">Time In : 
                                     @if($attendance_now != null){{date('h:i A',strtotime($attendance_now->time_in))}} <br>
-                                    @if($attendance_now->time_out == null )
-                                        @php
+                                    @php
                                           $employee_schedule = employeeSchedule($schedules,$attendance_now->time_in,$schedules[0]->schedule_id);
                                           $estimated_out = "";
                                           if($employee_schedule != null)
@@ -54,9 +53,12 @@
                                           }
                                           
                                         @endphp
+                                    @if($attendance_now->time_out == null )
+                                        
                                         Estimated Out : {{$estimated_out}} 
                                      @else
-                                     Time Out : {{date('h:i A',strtotime($attendance_now->time_out))}}
+                                     Time Out : {{date('h:i A',strtotime($attendance_now->time_out))}} <br>
+                                     Estimated Out : {{$estimated_out}} 
                                      @endif
                                    @else NO TIME IN 
                                    @endif</p>
