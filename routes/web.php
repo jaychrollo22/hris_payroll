@@ -13,7 +13,8 @@
 */
 use App\HikAttLog2;
 
-Route::get('qr/{employee_id}', 'QrCodeController@viewQrCode');
+// Route::get('qr/{employee_id}', 'QrCodeController@viewQrCode');
+Route::get('qr/{employee_id}', 'QrCodeController@viewDecyptQrCode');
 
 Auth::routes();
 Route::group(['middleware' => 'auth'], function () {
@@ -236,6 +237,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('project', 'ProjectController@index');
     Route::get('edit-project/{id}', 'ProjectController@edit');
     Route::post('update-project/{id}', 'ProjectController@update');
+
+    // Vessel
+    Route::post('store-vessel', 'VesselController@store');
+    Route::get('vessel', 'VesselController@index');
+    Route::get('edit-vessel/{id}', 'VesselController@edit');
+    Route::post('update-vessel/{id}', 'VesselController@update');
 
     // Loan Type
     Route::get('loan-type', 'LoanTypeController@loanTypes_index');
