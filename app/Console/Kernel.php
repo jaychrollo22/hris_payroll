@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\AutoGetAttendance::class,
         Commands\AutoGetAttendanceHik::class,
+        Commands\AutoGetAttendanceHikManual::class,
         Commands\LeaveApproval::class,
         Commands\OfficialBusinessApproval::class,
         Commands\OvertimeApproval::class,
@@ -33,6 +34,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('command:auto_get_attendance')->twiceDaily(8,20);
         $schedule->command('command:auto_get_attendance_hik')->twiceDaily(8,20);
+        $schedule->command('command:auto_get_attendance_hik_manual')->twiceDaily(8,20);
 
         $schedule->command('command:leave_approval')->everyFiveMinutes();
         $schedule->command('command:official_business_approval')->everyFiveMinutes();
