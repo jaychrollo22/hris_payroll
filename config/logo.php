@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'logos' => "",
+    'logos' => App\Setting::class,
 ];
