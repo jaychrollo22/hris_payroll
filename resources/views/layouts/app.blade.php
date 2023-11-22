@@ -3,29 +3,30 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <link rel="shortcut icon" href="{{config('logo.logos')::first()->icon}}">
+    <link rel="shortcut icon" href="{{ URL::asset(config('logo.logos')::first()->icon)}}">
     <!-- Scripts -->
-    {{-- <script src="/js/app.js') }}" defer></script> --}}
+    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
     {{-- <link rel="stylesheet" href="{{asset('login_css/fonts/icomoon/style.css')}}">
     <link rel="stylesheet" href="{{asset('login_css/css/owl.carousel.min.css')}}">
     <link rel="stylesheet" href="{{asset('login_css/css/bootstrap.min.css')}}"> --}}
-    <link rel="stylesheet" href="/login_css/css/style.css">
+    <link rel="stylesheet" href="{{asset('login_css/css/style.css')}}">
 
-    <link rel="stylesheet" href="/body_css/vendors/feather/feather.css">
-	<link rel="stylesheet" href="/body_css/vendors/ti-icons/css/themify-icons.css">
-	<link rel="stylesheet" href="/body_css/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="{{ asset('body_css/vendors/feather/feather.css') }}">
+	<link rel="stylesheet" href="{{ asset('body_css/vendors/ti-icons/css/themify-icons.css') }}">
+	<link rel="stylesheet" href="{{ asset('body_css/vendors/css/vendor.bundle.base.css') }}">
 
-    <link rel="stylesheet" href="/body_css/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
-	<link rel="stylesheet" href="/body_css/vendors/ti-icons/css/themify-icons.css">
-	<link rel="stylesheet" type="text/css" href="/body_css/js/select.dataTables.min.css">
+    <link rel="stylesheet" href="{{ asset('body_css/vendors/datatables.net-bs4/dataTables.bootstrap4.css') }}">
+	<link rel="stylesheet" href="{{ asset('body_css/vendors/ti-icons/css/themify-icons.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ asset('body_css/js/select.dataTables.min.css') }}">
 	<!-- Plugin css for this page -->
-	<link rel="stylesheet" href="/body_css/vendors/select2/select2.min.css">
-	<link rel="stylesheet" href="/body_css/vendors/select2-bootstrap-theme/select2-bootstrap.min.css">
-	<link rel="stylesheet" href="/body_css/css/vertical-layout-light/style.css">
+	<link rel="stylesheet" href="{{ asset('body_css/vendors/select2/select2.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('body_css/vendors/select2-bootstrap-theme/select2-bootstrap.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('body_css/css/vertical-layout-light/style.css') }}">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -40,7 +41,7 @@
             width: 100%;
             height: 100%;
             z-index: 9999;
-            background: url("/login_css/images/loader.gif')}}") 50% 50% no-repeat white ;
+            background: url("{{ asset('login_css/images/loader.gif')}}") 50% 50% no-repeat white ;
             opacity: .8;
             background-size:120px 120px;
         }
@@ -241,7 +242,7 @@
   
 
     <!-- Styles -->
-    {{-- <link href="/css/app.css" rel="stylesheet"> --}}
+    {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
 </head>
 <body>
     <div id = "loader" style="display:none;" class="loader">
@@ -257,36 +258,36 @@
     <script src="{{asset('login_css/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('login_css/js/main.js')}}"></script> --}}
 
-    <script src="/body_css/vendors/js/vendor.bundle.base.js"></script>
+    <script src="{{ asset('body_css/vendors/js/vendor.bundle.base.js') }}"></script>
 	<!-- endinject -->
 	<!-- Plugin js for this page -->
-	<script src="/body_css/vendors/chart.js/Chart.min.js"></script>
+	<script src="{{ asset('body_css/vendors/chart.js/Chart.min.js') }}"></script>
 
-	<script src="/body_css/vendors/select2/select2.min.js"></script>
+	<script src="{{ asset('body_css/vendors/select2/select2.min.js') }}"></script>
 
-    <script src="/body_css/js/dashboard.js"></script>
-	<script src="/body_css/js/select2.js"></script>
+    <script src="{{ asset('body_css/js/dashboard.js') }}"></script>
+	<script src="{{ asset('body_css/js/select2.js') }}"></script>
 
 
-	<script src="/body_css/vendors/datatables.net/jquery.dataTables.js"></script>
-	<script src="/body_css/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
-	<script src="/body_css/vendors/jquery.repeater/jquery.repeater.min.js"></script>
+	<script src="{{ asset('body_css/vendors/datatables.net/jquery.dataTables.js') }}"></script>
+	<script src="{{ asset('body_css/vendors/datatables.net-bs4/dataTables.bootstrap4.js') }}"></script>
+	<script src="{{ asset('body_css/vendors/jquery.repeater/jquery.repeater.min.js') }}"></script>
 
-	<script src="/body_css/js/dataTables.select.min.js"></script>
+	<script src="{{ asset('body_css/js/dataTables.select.min.js') }}"></script>
 
-	<script src="/body_css/js/off-canvas.js"></script>
-	<script src="/body_css/js/hoverable-collapse.js"></script>
-	<script src="/body_css/js/template.js"></script>
-	<script src="/body_css/js/settings.js"></script>
-	<script src="/body_css/js/todolist.js"></script>
+	<script src="{{ asset('body_css/js/off-canvas.js') }}"></script>
+	<script src="{{ asset('body_css/js/hoverable-collapse.js') }}"></script>
+	<script src="{{ asset('body_css/js/template.js') }}"></script>
+	<script src="{{ asset('body_css/js/settings.js') }}"></script>
+	<script src="{{ asset('body_css/js/todolist.js') }}"></script>
 
-	<script src="/body_css/js/tabs.js"></script>
-	<script src="/body_css/js/form-repeater.js"></script>
-	<script src="/body_css/vendors/sweetalert/sweetalert.min.js"></script>
+	<script src="{{ asset('body_css/js/tabs.js') }}"></script>
+	<script src="{{ asset('body_css/js/form-repeater.js') }}"></script>
+	<script src="{{ asset('body_css/vendors/sweetalert/sweetalert.min.js') }}"></script>
     
-    <script src="/body_css/vendors/inputmask/jquery.inputmask.bundle.js"></script>
-    <script src="/body_css/vendors/inputmask/jquery.inputmask.bundle.js"></script>
-    <script src="/body_css/js/inputmask.js"></script>
+    <script src="{{ asset('body_css/vendors/inputmask/jquery.inputmask.bundle.js') }}"></script>
+    <script src="{{ asset('body_css/vendors/inputmask/jquery.inputmask.bundle.js') }}"></script>
+    <script src="{{ asset('body_css/js/inputmask.js') }}"></script>
     @include('sweetalert::alert')
     <script type='text/javascript'>
         function show() {
