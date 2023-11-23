@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Employee;
 use App\Allowance;
+use App\Company;
 use App\EmployeeAllowance;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+
+use App\Exports\EmployeeAllowanceExport;
+use Excel;
 
 class EmployeeAllowanceController extends Controller
 {
@@ -15,39 +19,46 @@ class EmployeeAllowanceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        
-        $allowanceTypes = Allowance::all();
-        
-        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        if(checkUserPrivilege('masterfiles_employee_allowances',auth()->user()->id) == 'yes'){
 
-        $employees = Employee::select('id','user_id','first_name','last_name','middle_name')
-                                    ->whereIn('company_id',$allowed_companies)
-                                    ->where('status','Active')
+            $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+
+            $companies = Company::whereHas('employee_has_company')
+                                    ->whereIn('id',$allowed_companies)
                                     ->get();
 
-        $employeeAllowances = EmployeeAllowance::whereHas('employee',function($q) use($allowed_companies){
-                                                    $q->whereIn('company_id',$allowed_companies);
-                                                })
-                                                ->get();
+            $company = isset($request->company) ? $request->company : "";
+            $status = isset($request->status) ? $request->status : "Active";
 
-        return view('employee_allowances.employee_allowance', array(
-            'header' => 'masterfiles',
-            'employeeAllowances' => $employeeAllowances,
-            'allowanceTypes' => $allowanceTypes,
-            'employees' => $employees,
+            $employees = Employee::select('id','user_id','first_name','last_name','middle_name')
+                                        ->whereIn('company_id',$allowed_companies)
+                                        ->where('status','Active')
+                                        ->get();
 
-        ));
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+            $employeeAllowances = EmployeeAllowance::whereHas('employee',function($q) use($company){
+                                                        $q->where('company_id',$company);
+                                                    })
+                                                    ->where('status',$status)
+                                                    ->get();
+
+            $allowanceTypes = Allowance::all();
+
+            return view('employee_allowances.employee_allowance', array(
+                'header' => 'masterfiles',
+                'employeeAllowances' => $employeeAllowances,
+                'allowanceTypes' => $allowanceTypes,
+                'employees' => $employees,
+                'companies' => $companies,
+                'company' => $company,
+                'status' => $status,
+
+            ));
+               
+        }else{
+            return 'Not Allowed. Please contact administrator. Thank you';
+        }   
     }
 
     /**
@@ -68,14 +79,19 @@ class EmployeeAllowanceController extends Controller
         $employeeAllowances = new EmployeeAllowance;
         $employeeAllowances->allowance_id = $request->allowance_type;
         $employeeAllowances->user_id = $request->user_id;
-        $employeeAllowances->allowance_amount = $request->amount;
+        $employeeAllowances->description = $request->description;
+        $employeeAllowances->application = $request->application;
+        $employeeAllowances->type = $request->type;
         $employeeAllowances->schedule = $request->schedule;
+        $employeeAllowances->allowance_amount = $request->amount;
+        $employeeAllowances->end_date = $request->end_date;
         $employeeAllowances->status = 'Active';
         $employeeAllowances->save();
 
         Alert::success('Successfully Store')->persistent('Dismiss');
         return back();
     }
+    
     public function update(Request $request, $id)
     {
         // Validation
@@ -85,35 +101,31 @@ class EmployeeAllowanceController extends Controller
 
         $employeeAllowances = EmployeeAllowance::findOrFail($id);
         $employeeAllowances->allowance_amount = $request->amount;
+        $employeeAllowances->description = $request->description;
+        $employeeAllowances->application = $request->application;
+        $employeeAllowances->type = $request->type;
         $employeeAllowances->schedule = $request->schedule;
+        $employeeAllowances->allowance_amount = $request->amount;
+        $employeeAllowances->end_date = $request->end_date;
         $employeeAllowances->status = 'Active';
         $employeeAllowances->save();
 
         Alert::success('Successfully Store')->persistent('Dismiss');
-        return redirect('/employee-allowance');
+        return redirect('edit-employee-allowance/' . $id);
     }
+
     public function disable($id)
     {
         EmployeeAllowance::Where('id', $id)->update(['status' => 'Inactive']);
         Alert::success('Employee Allowance Inactive')->persistent('Dismiss');
         return back();
     }
+
     public function delete($id)
     {
         EmployeeAllowance::Where('id', $id)->delete();
         Alert::success('Employee Allowance has been deleted.')->persistent('Dismiss');
         return back();
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\EmployeeAllowance  $employeeAllowance
-     * @return \Illuminate\Http\Response
-     */
-    public function show(EmployeeAllowance $employeeAllowance)
-    {
-        //
     }
 
     /**
@@ -154,14 +166,11 @@ class EmployeeAllowanceController extends Controller
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\EmployeeAllowance  $employeeAllowance
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(EmployeeAllowance $employeeAllowance)
-    {
-        //
+    public function export(Request $request){
+        $company = isset($request->company) ? $request->company : "";
+        $status = isset($request->status) ? $request->status : "";
+        $company_detail = Company::where('id',$company)->first();
+        return Excel::download(new EmployeeAllowanceExport($company,$status), $company_detail->company_code. ' Employee Allowances Export.xlsx');
     }
+
 }

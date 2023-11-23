@@ -257,6 +257,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('edit-employee-allowance/{id}', 'EmployeeAllowanceController@edit');
     Route::get('delete-employee-allowance/{id}', 'EmployeeAllowanceController@delete');
     Route::get('disableEmp-allowance/{id}', 'EmployeeAllowanceController@disable');
+    Route::get('employee-allowance-export', 'EmployeeAllowanceController@export');
 
     // Employee Incentive
     Route::get('employee-incentive', 'EmployeeIncentiveController@index');

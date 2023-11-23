@@ -7,7 +7,6 @@
 		<div class="col-lg-12 grid-margin stretch-card">
 			<div class="card">
 				<div class="card-body">
-					<h4 class="card-title">Employee Allowances</h4>
 					<p class="card-description">
 						<button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal"
 							data-target="#newEmpAllowance">
@@ -15,23 +14,64 @@
 							New Employee Allowance
 						</button>
 					</p>
-					@if ($errors->any())
-						@foreach ($errors->all() as $error)
-							<div class="alert alert-danger alert-dismissible fade show" role="alert">
-								{{ $error }}
 
+					<h4 class="card-title">Employee Allowances </h4>
+						@if ($errors->any())
+							@foreach ($errors->all() as $error)
+								<div class="alert alert-danger alert-dismissible fade show" role="alert">
+									{{ $error }}
+
+								</div>
+							@endforeach
+						@endif
+					<h4 class="card-title">Filter</h4>
+					<p class="card-description">
+					<form method='get' onsubmit='show();' enctype="multipart/form-data">
+						<div class=row>
+							<div class='col-md-4'>
+								<div class="form-group">
+									<label class="text-right">Company</label>
+									<select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
+										<option value="">-- Select Company --</option>
+										@foreach($companies as $comp)
+										<option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
+										@endforeach
+									</select>
+								</div>
 							</div>
-						@endforeach
-					@endif
+							<div class='col-md-2 mr-2'>
+								<div class="form-group">
+									<label class="text-right">Status</label>
+									<select data-placeholder="Select Status" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='status' required>
+										<option value="">-- Select Status --</option>
+										<option value="Active" @if ('Active' == $status) selected @endif>Active</option>
+										<option value="Inactive" @if ('Inactive' == $status) selected @endif>Inactive</option>
+									</select>
+								</div>
+							</div>
+							<div class='col-md-2'>
+								<button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Generate</button>
+							</div>
+						</div>
+						
+					</form>
+					</p>
+					<a href="/employee-allowance-export?company={{$company}}&status={{$status}}" title="Export" class="btn btn-outline-primary btn-icon-text btn-sm text-center mb-2"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+					
+
 					<div class="table-responsive">
 						<table class="table table-hover table-bordered tablewithSearch">
 							<thead>
 								<tr>
-									<th>Allowance Type</th>
+									<th>User ID</th>
 									<th>Employee</th>
+									<th>Particular</th>
+									<th>Description</th>
+									<th>Application</th>
+									<th>Type</th>
+									<th>Credit Schedule</th>
 									<th>Amount</th>
-									<th>Schedule</th>
-									<th>Date Created</th>
+									<th>End Date</th>
 									<th>Status</th>
 									<th>Action</th>
 								</tr>
@@ -43,13 +83,21 @@
 											<a href="/edit-employee-allowance/{{$employeeAllowance->id}}" target="_blank" class="ml-3 mr-3">
 												<i class="ti-pencil"></i>
 											</a>
-											{{ $employeeAllowance->allowance->name }}</td>
+											{{ $employeeAllowance->employee ? $employeeAllowance->employee->employee_number : "" }}
+										</td>
 										<td>
 											{{ $employeeAllowance->employee ? $employeeAllowance->employee->last_name . ', ' . $employeeAllowance->employee->first_name . ' ' . $employeeAllowance->employee->middle_name : "" }}
 										</td>
-										<td>{{ number_format($employeeAllowance->allowance_amount) }}</td>
+										<td>
+											
+											{{ $employeeAllowance->allowance->name }}
+										</td>
+										<td>{{ $employeeAllowance->description }}</td>
+										<td>{{ $employeeAllowance->application }}</td>
+										<td>{{ $employeeAllowance->type }}</td>
 										<td>{{ $employeeAllowance->schedule }}</td>
-										<td>{{ date('M d, Y', strtotime($employeeAllowance->created_at)) }}</td>
+										<td>{{ number_format($employeeAllowance->allowance_amount) }}</td>
+										<td>{{ $employeeAllowance->end_date ? date('M d, Y', strtotime($employeeAllowance->end_date)) : "" }}</td>
 										<td id="tdId{{ $employeeAllowance->id }}">
 											@if ($employeeAllowance->status == 'Active')
 												<label id="status{{ $employeeAllowance->id }}"
