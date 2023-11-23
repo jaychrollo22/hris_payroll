@@ -15,20 +15,24 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
         $this->company = $company;
         $this->from = $from;
         $this->to = $to;
-        $this->percentage = $percentage ? $percentage : '100';
+        $this->percentage = $percentage;
     }
 
     public function query()
     {
         $company = $this->company;
+        $percentage = $this->percentage;
         return EmployeeWfh::query()->with('user','employee')
                                 ->whereDate('applied_date','>=',$this->from)
                                 ->whereDate('applied_date','<=',$this->to)
-                                ->where('approve_percentage','=',$this->percentage)
+                                ->when(!empty($percentage),function($q) use($percentage){
+                                    $q->where('approve_percentage','=',$percentage);
+                                })
                                 ->whereHas('employee',function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
                                 ->where('status','Approved');
+       
     }
 
 
@@ -37,7 +41,6 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'USER ID',
-            // 'EMPLOYEE NAME',
             'DATE',
             'FIRST ACTUAL TIME IN',
             'SECOND ACTUAL TIME OUT',
@@ -47,10 +50,9 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
 
     public function map($employee_wfh): array
     {
-        $remarks = $employee_wfh->approve_percentage ? 'WFH-' . $employee_wfh->approve_percentage . '%' : "";
+        $remarks = 'WFH-' . $employee_wfh->approve_percentage . '%';
         return [
             $employee_wfh->employee->employee_number,
-            // $employee_wfh->user->name,
             date('d/m/Y',strtotime($employee_wfh->applied_date)),
             date('H:i',strtotime($employee_wfh->date_from)),
             date('H:i',strtotime($employee_wfh->date_to)),
@@ -66,7 +68,7 @@ class EmployeeWfhExport implements FromQuery, WithHeadings, WithMapping
        $endTime = strtotime($date_to);
    
        for ( $i = $startTime; $i <= $endTime; $i = $i + 86400 ) {
-         $thisDate = date( 'l', $i ); // 2010-05-01, 2010-05-02, etc
+         $thisDate = date( 'l', $i );
          if(in_array($thisDate,$data)){
              $count= $count+1;
          }

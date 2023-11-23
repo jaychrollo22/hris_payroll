@@ -119,7 +119,7 @@
                             <div class='row mb-2'>
                               <div class='col-md-4'>
                                 Company
-                                <select data-placeholder="Company" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='company' required>
+                                <select id="company" data-placeholder="Company" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='company' required>
                                   <option value="">--Select Company--</option>
                                   @foreach($companies as $company)
                                     <option value="{{$company->id}}">{{$company->company_name}} - {{$company->company_code}}</option>
@@ -161,12 +161,22 @@
                               </div>
                               <div class='col-md-4'>
                                 Classification
-                                <select data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='classification' required>
+                                <select id="emp_classification" data-placeholder="Classification" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='classification' required onchange="showVesselSelection()">
                                   <option value="">--Select Classification--</option>
                                   @foreach($classifications as $classification)
                                     <option value="{{$classification->id}}">{{$classification->name}}</option>
                                   @endforeach
                               </select>
+                              </div>
+                              <div class='col-md-4' id="vesselSelection">
+                                Vessel
+                                <select id="vessel" data-placeholder="Vessel" class="form-control form-control-sm js-example-basic-single vessel-selection" style='width:100%;' name='vessel'>
+                                    <option value="">--Select Vessel--</option>
+                                    <option value="N/A">N/A</option>
+                                    @foreach($vessels as $vessel)
+                                      <option value="{{$vessel->code}}">{{$vessel->code . ' - ' . $vessel->name}}</option>
+                                    @endforeach
+                                </select>
                               </div>
                               <div class='col-md-4'>
                                 Level
@@ -439,4 +449,28 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+</script>
+
+<script>
+  function showVesselSelection() {
+    var companyDropdown = document.getElementById("company");
+    var classificationDropdown = document.getElementById("emp_classification");
+    var selectedCompany = companyDropdown.value;
+    var selectedClassication = classificationDropdown.value;
+    var vessel = document.getElementById("vessel");
+    var vesselSelectionDiv = document.getElementById("vesselSelection");
+
+    console.log(selectedCompany);
+
+    // Reset vessel selection
+    // Check if the selected company is not empty
+    if (selectedCompany == "6" && selectedClassication == "4") {
+      // Show the vessel selection
+      vesselSelectionDiv.style.display = "block";
+    } else {
+      // Hide the vessel selection if no company is selected
+      vesselSelectionDiv.style.display = "none";
+      vessel.value = "";
+    }
+  }
 </script>

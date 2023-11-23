@@ -13,6 +13,7 @@ use App\EmployeeVessel;
 use App\Department;
 use App\Location;
 use App\Project;
+use App\Vessel;
 use App\Schedule;
 use App\Attendance;
 use App\iclockterminal_mysql;
@@ -212,6 +213,7 @@ class EmployeeController extends Controller
         $marital_statuses = MaritalStatus::get();
         $locations = Location::orderBy('location','ASC')->get();
         $projects = Project::get();
+        $vessels = Vessel::where('status','Active')->get();
 
         
         $companies = Company::whereIn('id',$allowed_companies)
@@ -241,6 +243,7 @@ class EmployeeController extends Controller
                 'department' => $department,
                 'status' => $status,
                 'employees_active' => $employees_active,
+                'vessels' => $vessels,
             )
         );
     }
@@ -352,6 +355,7 @@ class EmployeeController extends Controller
             $employee->company_id = $request->company;
             $employee->location = $request->location;
             $employee->project = $request->project;
+            $employee->vessel = $request->vessel;
             $employee->position = $request->position;
             $employee->nick_name = $request->nickname;
             $employee->level = $request->level;
@@ -1057,6 +1061,7 @@ class EmployeeController extends Controller
         $departments = Department::get();
         $locations = Location::orderBy('location','ASC')->get();
         $projects = Project::get();
+        $vessels = Vessel::where('status','Active')->get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
 
@@ -1074,6 +1079,7 @@ class EmployeeController extends Controller
             'departments' => $departments,
             'locations' => $locations,
             'projects' => $projects,
+            'vessels' => $vessels,
             'levels' => $levels,
             'users' => $users,
             'banks' => $banks,
@@ -1118,6 +1124,7 @@ class EmployeeController extends Controller
         $employee->department_id = $request->department;
         $employee->location = $request->location;
         $employee->project = $request->project;
+        $employee->vessel = $request->vessel;
         $employee->classification = $request->classification;
         $employee->phil_number = $request->philhealth;
         $employee->level = $request->level;

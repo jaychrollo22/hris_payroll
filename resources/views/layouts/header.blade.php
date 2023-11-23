@@ -264,6 +264,10 @@
             -moz-appearance: textfield;
         }
 
+        .vessel-selection {
+            display: none;
+        }
+
     </style>
 </head>
 
@@ -533,6 +537,11 @@
                     @if(checkUserPrivilege('masterfiles_projects',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/project') }}">Projects</a>
+                    </li>
+                    @endif
+                    @if(checkUserPrivilege('masterfiles_vessels',auth()->user()->id) == 'yes')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/vessel') }}">Vessels</a>
                     </li>
                     @endif
                     {{-- @if(checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes')

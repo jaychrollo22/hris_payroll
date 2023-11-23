@@ -74,6 +74,7 @@
 									  <thead>
 										<tr>
 										  <th>User ID</th>
+										  <th>Employee Number</th>
 										  <th>Employee Name</th>
 										  <th>Date Filed</th>
 										  <th>WFH Date</th>
@@ -89,6 +90,7 @@
 										@foreach ($employee_wfhs as $form_approval)
 										<tr>
 										  <td>{{$form_approval->user->id}}</td>
+										  <td>{{$form_approval->employee->employee_number}}</td>
 										  <td>{{$form_approval->user->name}}</td>
 										  <td>{{date('d/m/Y h:i A', strtotime($form_approval->created_at))}}</td>
 										  <td>{{date('d/m/Y', strtotime($form_approval->applied_date))}}</td>
