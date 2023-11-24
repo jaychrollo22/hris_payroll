@@ -101,7 +101,7 @@
                         </div>
                         @endif
                     </div>
-                    <div class="col-md-8">
+                    {{-- <div class="col-md-8">
                       <div class="card">
                         <div class="card-body">
                           <h4 class="card-title">Calendar Events
@@ -112,7 +112,7 @@
                           <div id="calendar" class="full-calendar"></div>
                         </div>
                       </div>
-                  </div>
+                  </div> --}}
                 </div>
                 <div class="row">
                   <div class="col-md-4 ">
