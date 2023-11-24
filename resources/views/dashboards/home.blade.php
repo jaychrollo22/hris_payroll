@@ -101,7 +101,7 @@
                         </div>
                         @endif
                     </div>
-                    {{-- <div class="col-md-8">
+                    <div class="col-md-8">
                       <div class="card">
                         <div class="card-body">
                           <h4 class="card-title">Calendar Events
@@ -109,10 +109,10 @@
                             <span class="badge text-white m-2" style='background-color:#ff6600;'><small>Special Holidays</small></span> 
                             <span class="badge text-white m-2" style='background-color:#ff0000;'><small>Birthday Celebrants</small></span>
                           </h4>
-                          <div id="calendar" class="full-calendar"></div>
+                          {{-- <div id="calendar" class="full-calendar"></div> --}}
                         </div>
                       </div>
-                  </div> --}}
+                  </div>
                 </div>
                 <div class="row">
                   <div class="col-md-4 ">
