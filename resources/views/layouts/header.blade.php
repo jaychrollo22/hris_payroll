@@ -630,6 +630,15 @@
         </li>
         @endif
         @endif
+
+        @if (auth()->user()->id == 1)
+            <li class="nav-item @if ($header == 'employee_performance_evaluations_report') active @endif">
+                <a class="nav-link" href="{{ url('/hr-performance-plan-review') }}" onclick='show()'>
+                    <i class="ti-calendar menu-icon"></i>
+                    <span class="menu-title">PPR Report</span>
+                </a>
+            </li>
+        @endif
         </ul>
         </nav>
         <!-- partial -->

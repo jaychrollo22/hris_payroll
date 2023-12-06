@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\EmployeePerformanceEvaluation;
+use App\Company;
 
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -31,6 +32,53 @@ class EmployeePerformanceEvaluationContoller extends Controller
             'header' => 'employee_performance_evaluations',
             'employee_performance_evaluation' => $employee_performance_evaluation,
             'status' => $status
+        ));
+
+
+    }
+
+    public function hr_index(Request $request)
+    {
+
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $search = isset($request->search) ? $request->search : "";
+        $company = isset($request->company) ? $request->company : "";
+
+        $status = $request->status ? $request->status : "";
+        $employee_performance_evaluation = EmployeePerformanceEvaluation::with('user','employee')
+                                                                                ->when(!empty($status),function($q) use($status){
+                                                                                    $q->where('status',$status);
+                                                                                })
+                                                                                ->when(!empty($search),function($q) use($search){
+                                                                                    $q->whereHas('employee',function($w) use($search){
+                                                                                        $w->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')
+                                                                                        ->orWhere('employee_number', 'like' , '%' .  $search . '%')
+                                                                                        ->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"])
+                                                                                        ->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
+                                                                                    });
+                                                                                })
+                                                                                ->when(!empty($company),function($q) use($company){
+                                                                                    $q->whereHas('employee',function($w) use($company){
+                                                                                        $w->where('company_id',$company);
+                                                                                    });
+                                                                                })
+                                                                                ->whereHas('employee',function($q) use($allowed_companies){
+                                                                                    $q->whereIn('company_id',$allowed_companies);
+                                                                                })
+                                                                                ->orderBy('review_date','DESC')
+                                                                                ->get();
+        
+        $companies = Company::whereIn('id',$allowed_companies)
+                                    ->orderBy('company_name','ASC')
+                                    ->get();
+
+        return view('employee_performance_evaluations.hr_index',array(
+            'header' => 'employee_performance_evaluations_report',
+            'employee_performance_evaluation' => $employee_performance_evaluation,
+            'status' => $status,
+            'companies' => $companies,
+            'search' => $search,
+            'company' => $company,
         ));
 
 
@@ -129,7 +177,49 @@ class EmployeePerformanceEvaluationContoller extends Controller
      */
     public function show($id)
     {
-        //
+        $ppr = EmployeePerformanceEvaluation::where('id',$id)->first();
+
+                                                  
+        $employee_performance_evaluation = [];
+        $employee_performance_evaluation['id'] = $ppr->id;
+        $employee_performance_evaluation['calendar_year'] = $ppr->calendar_year;
+        $employee_performance_evaluation['review_date'] = $ppr->review_date;
+        $employee_performance_evaluation['period'] = $ppr->period;
+        $employee_performance_evaluation['financial_perspective'] = json_decode($ppr->financial_perspective,true);
+        $employee_performance_evaluation['customer_focus'] = json_decode($ppr->customer_focus,true);
+        $employee_performance_evaluation['operation_efficiency'] = json_decode($ppr->operation_efficiency,true);
+        $employee_performance_evaluation['people'] = json_decode($ppr->people,true);
+        $employee_performance_evaluation['integrity'] = json_decode($ppr->integrity,true);
+        $employee_performance_evaluation['commitment'] = json_decode($ppr->commitment,true);
+        $employee_performance_evaluation['humility'] = json_decode($ppr->humility,true);
+        $employee_performance_evaluation['genuine_concern'] = json_decode($ppr->genuine_concern,true);
+        $employee_performance_evaluation['premium_service'] = json_decode($ppr->premium_service,true);
+        $employee_performance_evaluation['innovation'] = json_decode($ppr->innovation,true);
+        $employee_performance_evaluation['synergy'] = json_decode($ppr->synergy,true);
+        $employee_performance_evaluation['stewardship'] = json_decode($ppr->stewardship,true);
+        $employee_performance_evaluation['areas_of_strength'] = $ppr->areas_of_strength;
+        $employee_performance_evaluation['developmental_needs'] = $ppr->developmental_needs;
+        $employee_performance_evaluation['areas_for_enhancement'] = $ppr->areas_for_enhancement;
+        $employee_performance_evaluation['training_and_development_plans'] = $ppr->training_and_development_plans;
+        $employee_performance_evaluation['bsc_weight'] = $ppr->bsc_weight;
+        $employee_performance_evaluation['bsc_actual_score'] = $ppr->bsc_actual_score;
+        $employee_performance_evaluation['bsc_description'] = $ppr->bsc_description;
+        $employee_performance_evaluation['competency_weight'] = $ppr->competency_weight;
+        $employee_performance_evaluation['competency_actual_score'] = $ppr->competency_actual_score;
+        $employee_performance_evaluation['competency_description'] = $ppr->competency_description;
+        $employee_performance_evaluation['total_weight'] = $ppr->total_weight;
+        $employee_performance_evaluation['total_actual_score'] = $ppr->total_actual_score;
+
+
+        $employee_performance_evaluation['ratees_comments'] = $ppr->ratees_comments;
+        $employee_performance_evaluation['summary_ratees_comments_recommendation'] = $ppr->summary_ratees_comments_recommendation;
+        
+        $employee_performance_evaluation['status'] = $ppr->status;
+
+        return view('employee_performance_evaluations.view',array(
+            'header' => 'employee_performance_evaluations',
+            'ppr' => $employee_performance_evaluation,
+        ));
     }
 
     /**

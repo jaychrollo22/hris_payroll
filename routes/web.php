@@ -345,6 +345,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/edit-performance-plan-review/{id}','EmployeePerformanceEvaluationContoller@edit');
     Route::post('/update-performance-plan-review/{id}','EmployeePerformanceEvaluationContoller@update');
     Route::get('/submit-ppr-for-view/{id}','EmployeePerformanceEvaluationContoller@submitForReview');
+
+    Route::get('/hr-performance-plan-review','EmployeePerformanceEvaluationContoller@hr_index');
+    Route::get('/show-performance-plan-review/{id}','EmployeePerformanceEvaluationContoller@show');
    
 
 });
