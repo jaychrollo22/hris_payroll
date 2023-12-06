@@ -829,7 +829,7 @@
                             @if($ppr['status'] == 'Draft')
                                 <div class="text-center mt-5">
                                     <button type="submit" class="btn btn-primary">Submit Changes</button>
-                                    <a href="/submit-ppr-for-view/{{$ppr['id']}}" class="btn btn-success">Submit For Review</a>
+                                    <span id="{{ $ppr['id'] }}" onclick="submitForReview(this.id)" class="btn btn-success">Submit For Review</span>
                                 </div>
                             @elseif($ppr['status'] == 'For Review')
                                 <div class="text-center mt-5">
@@ -853,6 +853,25 @@
         </div>
     </div>
 </div>
+@endsection
+@section('empAllowScript')
+	<script>
+		function submitForReview(id) {
+			swal({
+					title: "Are you sure?",
+					text: "You want to submit this PPR for review?",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willDisable) => {
+					if (willDisable) {
+						document.getElementById("loader").style.display = "block";
+						window.location.href="/submit-ppr-for-view/" + id;
+					}
+				});
+		}
+	</script>
 @endsection
 
 <style>
