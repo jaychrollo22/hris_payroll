@@ -344,6 +344,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/save-performance-plan-review','EmployeePerformanceEvaluationContoller@store');
     Route::get('/edit-performance-plan-review/{id}','EmployeePerformanceEvaluationContoller@edit');
     Route::post('/update-performance-plan-review/{id}','EmployeePerformanceEvaluationContoller@update');
+    Route::get('/submit-ppr-for-view/{id}','EmployeePerformanceEvaluationContoller@submitForReview');
    
 
 });

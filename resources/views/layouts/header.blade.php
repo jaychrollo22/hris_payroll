@@ -369,6 +369,16 @@
                             </ul>
                         </div>
                     </li>
+
+                    @if (auth()->user()->id == 1 || auth()->user()->id == 5039)
+                    <li class="nav-item @if ($header == 'employee_performance_evaluations') active @endif">
+                        <a class="nav-link" href="{{ url('/performance-plan-review') }}" onclick='show()'>
+                            <i class="ti-calendar menu-icon"></i>
+                            <span class="menu-title">Performance Plan Review</span>
+                        </a>
+                    </li>
+                    @endif
+                    
                     {{-- <li class="nav-item @if ($header == 'payslips') active @endif">
                         <a class="nav-link" href="{{ url('/payslips') }}" onclick='show()'>
                             <i class="icon-briefcase menu-icon"></i>

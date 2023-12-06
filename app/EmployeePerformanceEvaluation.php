@@ -9,4 +9,15 @@ class EmployeePerformanceEvaluation extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class,'user_id','user_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id','id');
+    }
+
+
 }
