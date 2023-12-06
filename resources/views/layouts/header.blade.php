@@ -370,7 +370,7 @@
                         </div>
                     </li>
 
-                    @if (auth()->user()->id == 1 || auth()->user()->id == 5039)
+                    @if (auth()->user()->id == 1)
                     <li class="nav-item @if ($header == 'employee_performance_evaluations') active @endif">
                         <a class="nav-link" href="{{ url('/performance-plan-review') }}" onclick='show()'>
                             <i class="ti-calendar menu-icon"></i>
