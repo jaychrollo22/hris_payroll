@@ -140,6 +140,9 @@ class EmployeePerformanceEvaluationContoller extends Controller
             $new_eval->areas_for_enhancement = $request->areas_for_enhancement;
             $new_eval->training_and_development_plans = $request->training_and_development_plans;
 
+            $new_eval->total_weight = $request->total_weight;
+            $new_eval->total_actual_score = $request->total_actual_score;
+
             $new_eval->status = 'Draft';
             $new_eval->save();
 
@@ -319,6 +322,9 @@ class EmployeePerformanceEvaluationContoller extends Controller
             $ppr->developmental_needs = $request->developmental_needs;
             $ppr->areas_for_enhancement = $request->areas_for_enhancement;
             $ppr->training_and_development_plans = $request->training_and_development_plans;
+
+            $ppr->total_weight = $request->total_weight;
+            $ppr->total_actual_score = $request->total_actual_score;
             $ppr->save();
 
             Alert::success('Successfully updated')->persistent('Dismiss');
