@@ -782,8 +782,8 @@
                                         </tr>
                                         <tr>
                                             <td align="center">TOTAL</td>
-                                            <td align="center"><input disabled type="number" name="total_weight" value="{{$ppr['total_weight']}}" disabled></td>
-                                            <td align="center"><input disabled type="number" name="total_actual_score" value="{{$ppr['total_actual_score']}}" disabled></td>
+                                            <td align="center"><input disabled type="number" min="1" max="100" name="total_weight" value="{{$ppr['total_weight']}}" disabled></td>
+                                            <td align="center"><input disabled type="number" min="1" max="100" name="total_actual_score" value="{{$ppr['total_actual_score']}}" disabled></td>
                                             <td align="center"></td>
                                         </tr>
                                     </table>
