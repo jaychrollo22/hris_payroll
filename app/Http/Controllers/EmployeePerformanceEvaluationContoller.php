@@ -147,7 +147,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
             $new_eval->save();
 
             Alert::success('Successfully Store')->persistent('Dismiss');
-            return redirect('/performance-plan-review');
+            return redirect('edit-performance-plan-review/' . $new_eval->id);
         }else{
             Alert::warning('PPR Exists')->persistent('Dismiss');
             return back();
