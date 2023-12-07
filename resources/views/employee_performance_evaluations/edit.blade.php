@@ -770,20 +770,20 @@
                                         </tr>
                                         <tr>
                                             <td align="center">BSC</td>
-                                            <td align="center"><input type="number" min="1" max="100" name="bsc_weight" value="{{$ppr['bsc_weight']}}"></td>
+                                            <td align="center"><input type="number" id="bsc_weight" min="1" max="100" name="bsc_weight" value="{{$ppr['bsc_weight']}}" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                             <td align="center"><input type="number" min="1" max="100" name="bsc_actual_score" value="{{$ppr['bsc_actual_score']}}" disabled></td>
                                             <td align="center"><input type="text" name="bsc_description" width="100%" class="responsive-input" disabled></td>
                                         </tr>
                                         <tr>
                                             <td align="center">COMPETENCY</td>
-                                            <td align="center"><input type="number" min="1" max="100" name="competency_weight" value="{{$ppr['competency_weight']}}"></td>
+                                            <td align="center"><input type="number" id="competency_weight" min="1" max="100" name="competency_weight" value="{{$ppr['competency_weight']}}" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                             <td align="center"><input type="number" min="1" max="100" name="competency_actual_score" value="{{$ppr['competency_actual_score']}}" disabled></td>
                                             <td align="center"><input type="text" name="competency_description" width="100%" class="responsive-input" disabled></td>
                                         </tr>
                                         <tr>
                                             <td align="center">TOTAL</td>
-                                            <td align="center"><input type="number" name="total_weight" disabled></td>
-                                            <td align="center"><input type="number" name="total_actual_score" disabled></td>
+                                            <td align="center"><input type="number" id="total_weight" min="1" max="100" name="total_weight" readonly value="{{$ppr['total_weight']}}"></td>
+                                            <td align="center"><input type="number" name="total_actual_score" min="1" max="100" disabled></td>
                                             <td align="center"></td>
                                         </tr>
                                     </table>
@@ -873,6 +873,15 @@
 		}
 	</script>
 @endsection
+
+<script>
+    function updateSumTotalSummaryofRatingsWeight() {
+        const bsc_weight = parseFloat(document.getElementById('bsc_weight').value) || 0;
+        const competency_weight = parseFloat(document.getElementById('competency_weight').value) || 0;
+        const sum = bsc_weight + competency_weight;
+        document.getElementById('total_weight').value = sum;
+    }
+</script>
 
 <style>
 
