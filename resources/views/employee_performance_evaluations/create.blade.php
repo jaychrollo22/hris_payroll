@@ -12,7 +12,7 @@
                 <form method='POST' action='save-performance-plan-review' onsubmit="btnDtr.disabled = true; return true;"  enctype="multipart/form-data">
                     @csrf      
                     <div class="card-body">
-                            <h4 class="card-title">CREATE PERFORMANCE PLAN REVIEW (PPR)</h4>
+                            <h4 class="card-title">CREATE PERFORMANCE PLAN</h4>
                                 <div class="table-responsive">
                                     <table class="table-bordered" width="100%">
                                         <tr>

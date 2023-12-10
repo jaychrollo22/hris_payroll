@@ -6,7 +6,7 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">PERFORMANCE PLAN REVIEW (PPR)</h4>
+                <h4 class="card-title">MY PERFORMANCE PLAN</h4>
                 <p class="card-description">
                   <a href="/create-performance-plan-review" type="button" class="btn btn-outline-success btn-icon-text">
                     <i class="ti-plus btn-icon-prepend"></i>                                                    
