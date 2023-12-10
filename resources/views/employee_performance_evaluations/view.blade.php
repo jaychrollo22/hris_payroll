@@ -78,7 +78,7 @@
                                             <td align="center">OUTSTANDING</td>
                                             <td align="center">Performance is consistently superior and sustained to the standards required for the job.</td>
                                             <td align="center">5</td>
-                                            <td align="center">109% - 120%</td>
+                                            <td align="center">111% - 120%</td>
                                         </tr>
                                         <tr>
                                             <td align="center">EXCEED EXPECTATIONS</td>
