@@ -17,25 +17,25 @@
                                     <table class="table-bordered" width="100%">
                                         <tr>
                                             <td align="center">Calendar Year</td>
-                                            <td align="center"> {{ date('Y')}} </td>
+                                            <td align="center"> <input type="text" placeholder="Calendar Year" width="100%" class="responsive-input" name="calendar_year" value="January 2024 - December 2024" required></td>
                                             <td align="center">Review Date</td>
-                                            <td align="center"> {{ date('Y-m-d') }}</td>
+                                            <td align="center"> <input type="date" name="review_date"></td>
                                             <td align="center">Period</td>
                                             <td align="center" style="vertical-align: middle;">
                                                 <label class="mt-2">
-                                                    <input type="radio" name="period" value="MIDYEAR">
+                                                    <input type="radio" name="period" value="MIDYEAR" required>
                                                     MIDYEAR
                                                 </label>
                                                 <label class="mt-2">
-                                                    <input type="radio" name="period" value="ANNUAL">
+                                                    <input type="radio" name="period" value="ANNUAL" required>
                                                     ANNUAL
                                                 </label>
                                                 <label class="mt-2">
-                                                    <input type="radio" name="period" value="PROBATIONARY">
+                                                    <input type="radio" name="period" value="PROBATIONARY" required>
                                                     PROBATIONARY
                                                 </label>
                                                 <label class="mt-2" >
-                                                    <input type="radio" name="period" value="SPECIAL">
+                                                    <input type="radio" name="period" value="SPECIAL" required>
                                                     SPECIAL
                                                 </label>
                                             </td>
@@ -82,7 +82,7 @@
                                             <td align="center">OUTSTANDING</td>
                                             <td align="center">Performance is consistently superior and sustained to the standards  for the job.</td>
                                             <td align="center">5</td>
-                                            <td align="center">109% - 120%</td>
+                                            <td align="center">111% - 120%</td>
                                         </tr>
                                         <tr>
                                             <td align="center">EXCEED EXPECTATIONS</td>
@@ -151,12 +151,12 @@
                                             
                                             <tr>
                                                 <td style="width:200px!important;">Strat 1</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_1_objective_1]" id="financial_perspective[strat_1_objective_1]" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_metric_1]" id="financial_perspective[strat_1_metric_1]" placeholder="Metric" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_target_1]"  id="financial_perspective[strat_1_target_1]"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_start_completion_1]" placeholder="Start" id="financial_perspective[strat_1_target_start_completion_1]"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_end_completion_1]" placeholder="End" id="financial_perspective[strat_1_target_end_completion_1]"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_weight_1]" id="financial_perspective[strat_1_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_1_objective_1]" id="financial_perspective[strat_1_objective_1]" width="100%" class="responsive-input" placeholder="Input Here" required></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_metric_1]" id="financial_perspective[strat_1_metric_1]" placeholder="Metric" required></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_target_1]"  id="financial_perspective[strat_1_target_1]" required></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_start_completion_1]" placeholder="Start" id="financial_perspective[strat_1_target_start_completion_1]" required></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_end_completion_1]" placeholder="End" id="financial_perspective[strat_1_target_end_completion_1]" required></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_weight_1]" id="financial_perspective[strat_1_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()" required></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="financial_perspective[strat_1_review_actual_1]" disabled></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
                                             </tr>
@@ -792,7 +792,7 @@
                                         </tr>
                                     </table>
 
-                                    <table class="table-bordered mt-1" width="100%">
+                                    {{-- <table class="table-bordered mt-1" width="100%">
                                         <tr>
                                             <td width="50%" align="center" style="background-color: rgb(240, 240, 240)"><strong>AREAS OF STRENGTH</strong></td>
                                             <td width="50%" align="center" style="background-color: rgb(240, 240, 240)"><strong>DEVELOPMENTAL NEEDS</strong></td>
@@ -822,7 +822,7 @@
                                         <tr>
                                             <td colspan="2" align="center"><textarea style="max-width:2000px!important;" class="responsive-input" name="summary_ratees_comments_recommendation" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
                                         </tr>
-                                    </table>
+                                    </table> --}}
 
 
                                     

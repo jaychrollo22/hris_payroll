@@ -13,25 +13,25 @@
                                     <table class="table-bordered" width="100%">
                                         <tr>
                                             <td align="center">Calendar Year</td>
-                                            <td align="center"> {{ $ppr['calendar_year']}} </td>
+                                            <td align="center"> <input type="text" placeholder="Calendar Year" width="100%" class="responsive-input" name="calendar_year" value="{{ $ppr['calendar_year']}}" required>  </td>
                                             <td align="center">Review Date</td>
-                                            <td align="center"> {{ date('Y-m-d',strtotime($ppr['review_date'])) }}</td>
+                                            <td align="center"> <input type="date" name="review_date" value="{{ $ppr['review_date'] ? date('Y-m-d',strtotime($ppr['review_date'])) : "" }}"> </td>
                                             <td align="center">Period</td>
                                             <td align="center" style="vertical-align: middle;">
                                                 <label class="mt-2">
-                                                    <input type="radio" name="period" value="MIDYEAR" {{ $ppr['period'] === 'MIDYEAR' ? 'checked' : '' }}>
+                                                    <input type="radio" name="period" value="MIDYEAR" {{ $ppr['period'] === 'MIDYEAR' ? 'checked' : '' }} required>
                                                     MIDYEAR
                                                 </label>
                                                 <label class="mt-2">
-                                                    <input type="radio" name="period" value="ANNUAL" {{ $ppr['period'] === 'ANNUAL' ? 'checked' : '' }}>
+                                                    <input type="radio" name="period" value="ANNUAL" {{ $ppr['period'] === 'ANNUAL' ? 'checked' : '' }} required>
                                                     ANNUAL
                                                 </label>
                                                 <label class="mt-2">
-                                                    <input type="radio" name="period" value="PROBATIONARY" {{ $ppr['period'] === 'PROBATIONARY' ? 'checked' : '' }}>
+                                                    <input type="radio" name="period" value="PROBATIONARY" {{ $ppr['period'] === 'PROBATIONARY' ? 'checked' : '' }} required>
                                                     PROBATIONARY
                                                 </label>
                                                 <label class="mt-2" >
-                                                    <input type="radio" name="period" value="SPECIAL" {{ $ppr['period'] === 'SPECIAL' ? 'checked' : '' }}>
+                                                    <input type="radio" name="period" value="SPECIAL" {{ $ppr['period'] === 'SPECIAL' ? 'checked' : '' }} required>
                                                     SPECIAL
                                                 </label>
                                             </td>
@@ -788,7 +788,7 @@
                                         </tr>
                                     </table>
 
-                                    <table class="table-bordered mt-1" width="100%">
+                                    {{-- <table class="table-bordered mt-1" width="100%">
                                         <tr>
                                             <td width="50%" align="center" style="background-color: rgb(240, 240, 240)"><strong>AREAS OF STRENGTH</strong></td>
                                             <td width="50%" align="center" style="background-color: rgb(240, 240, 240)"><strong>DEVELOPMENTAL NEEDS</strong></td>
@@ -818,7 +818,7 @@
                                         <tr>
                                             <td colspan="2" align="center"><textarea style="max-width:2000px!important;" class="responsive-input" name="summary_ratees_comments_recommendation" cols="30" rows="7" placeholder="Input here" disabled>{{isset($ppr['summary_ratees_comments_recommendation']) ? $ppr['summary_ratees_comments_recommendation'] : ""}}</textarea></td>
                                         </tr>
-                                    </table>
+                                    </table> --}}
 
 
                                     

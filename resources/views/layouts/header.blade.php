@@ -335,7 +335,7 @@
                         <hr>
                         <h5>Employee</h5>
                     </li>
-                    <li class="nav-item @if ($header == '') active @endif">
+                    <li class="nav-item @if ($header == 'Dashboard') active @endif">
                         <a class="nav-link" href="{{ url('/') }}" onclick='show()'>
                             <i class="icon-grid menu-icon"></i>
                             <span class="menu-title">Dashboard</span>
@@ -370,11 +370,12 @@
                         </div>
                     </li>
 
-                    @if (auth()->user()->id == 1)
+                    {{-- @if (auth()->user()->id == 1 || checkifAllowedPerformancePlan()) --}}
+                    @if (checkifAllowedPerformancePlan() && date('Y-m-d') >= '2023-12-11')
                     <li class="nav-item @if ($header == 'employee_performance_evaluations') active @endif">
                         <a class="nav-link" href="{{ url('/performance-plan-review') }}" onclick='show()'>
                             <i class="ti-calendar menu-icon"></i>
-                            <span class="menu-title">Performance Plan Review</span>
+                            <span class="menu-title">My Performance Plan</span>
                         </a>
                     </li>
                     @endif
@@ -631,7 +632,7 @@
         @endif
         @endif
 
-        @if (auth()->user()->id == 1)
+        @if (checkUserPrivilege('reports_ppr',auth()->user()->id) == 'yes')
             <li class="nav-item @if ($header == 'employee_performance_evaluations_report') active @endif">
                 <a class="nav-link" href="{{ url('/hr-performance-plan-review') }}" onclick='show()'>
                     <i class="ti-calendar menu-icon"></i>

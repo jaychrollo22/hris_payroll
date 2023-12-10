@@ -106,13 +106,14 @@ class EmployeePerformanceEvaluationContoller extends Controller
     {
         $validate_ppr = EmployeePerformanceEvaluation::where('user_id',Auth::user()->id)
                                                         ->where('period',$request->period)
+                                                        ->where('calendar_year',$request->calendar_year)
                                                         ->first();
         if(empty($validate_ppr)){
 
             $new_eval = new EmployeePerformanceEvaluation;
             $new_eval->user_id = Auth::user()->id;
-            $new_eval->calendar_year = date('Y');
-            $new_eval->review_date = date('Y-m-d h:i:s');
+            $new_eval->calendar_year = $request->calendar_year ? $request->calendar_year : date('Y');
+            $new_eval->review_date = $request->review_date ? date('Y-m-d h:i:s',strtotime($request->review_date)) :  date('Y-m-d h:i:s');
             $new_eval->period = $request->period;
             $new_eval->financial_perspective = $request->financial_perspective ? json_encode($request->financial_perspective,true) : "";
             $new_eval->customer_focus = $request->customer_focus ? json_encode($request->customer_focus,true) : "";

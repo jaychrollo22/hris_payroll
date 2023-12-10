@@ -15,6 +15,22 @@ use App\EmployeeWfh;
 use App\EmployeeOb;
 use App\EmployeeDtr;
 
+function checkifAllowedPerformancePlan(){
+    $employee = Employee::select('id','user_id','classification','level')
+                                ->where('user_id',auth()->user()->id)
+                                ->first();
+
+    if($employee->classification == 1 || $employee->classification == 2){
+        if($employee->level == 3){
+            return true;
+        }else{
+            return false;
+        }
+    }else{
+        return false;
+    }
+}
+
 function employee_name($employee_names,$employee_number){
     foreach($employee_names as $item){
         if($item['employee_number'] == $employee_number){

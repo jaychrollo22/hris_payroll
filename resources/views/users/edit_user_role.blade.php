@@ -204,6 +204,18 @@
                                         Daily Time Record
                                         <br>
                                         <br>
+                                        @if($user->user_privilege)
+                                            @if($user->user_privilege->reports_ppr == 'on')
+                                                <input type="checkbox" name="reports_ppr" id="reports_ppr{{$user->id}}" value="{{ $user->user_privilege->reports_ppr }}" checked>
+                                            @else
+                                                <input type="checkbox" name="reports_ppr" id="reports_ppr{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="reports_dtr" id="reports_ppr{{$user->id}}">
+                                        @endif
+                                        Performance Plan Report
+                                        <br>
+                                        <br>
                                     </div>
                                     {{-- Biometrics --}}
                                     <div class="col-md-6 form-group">
