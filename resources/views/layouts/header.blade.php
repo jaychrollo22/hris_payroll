@@ -371,7 +371,7 @@
                     </li>
 
                     {{-- @if (auth()->user()->id == 1 || checkifAllowedPerformancePlan()) --}}
-                    @if (checkifAllowedPerformancePlan() && date('Y-m-d') >= '2023-12-12')
+                    @if (checkifAllowedPerformancePlan())
                     <li class="nav-item @if ($header == 'employee_performance_evaluations') active @endif">
                         <a class="nav-link" href="{{ url('/performance-plan-review') }}" onclick='show()'>
                             <i class="ti-calendar menu-icon"></i>
