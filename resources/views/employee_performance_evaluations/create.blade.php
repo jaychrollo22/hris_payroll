@@ -892,10 +892,6 @@
             if (submitButton.disabled) {
                 // Prevent form submission if the button is disabled
                 event.preventDefault();
-                alert("Checkbox must be checked to submit the form.");
-            } else {
-                // Form submission logic here
-                alert("Form submitted successfully!");
             }
         });
     });
