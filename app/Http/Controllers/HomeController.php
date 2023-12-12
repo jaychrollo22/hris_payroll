@@ -41,7 +41,7 @@ class HomeController extends Controller
         $sevendays = date('Y-m-d',strtotime("-7 days"));
         if(auth()->user()->employee){
             if(auth()->user()->employee->employee_number){
-                $attendance_now = $attendance_controller->get_attendances(date('Y-m-d'),date('Y-m-d'),auth()->user()->employee->employee_number)->first();
+                $attendance_now = $attendance_controller->get_attendances(date('Y-m-d'),date('Y-m-d'),auth()->user()->employee->employee_number)->orderBy('time_in','asc')->where('time_in','!=',null)->first();
                 $attendances = $attendance_controller->get_attendances($sevendays,date('Y-m-d',strtotime("-1 day")),auth()->user()->employee->employee_number);
             }else{
                 $attendance_now = null;

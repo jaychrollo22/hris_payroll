@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //employees
     Route::get('/dashboard', 'HomeController@index')->name('home');
+    Route::get('', 'HomeController@index');
     Route::get('/', 'HomeController@index');
     Route::get('/home', 'HomeController@index')->name('home');
     //approvers
