@@ -174,7 +174,7 @@ class AttendanceController extends Controller
         $attendances = Attendance::where('employee_code',$id)
         ->orderBy('time_in','asc')
         ->orderBy('id','asc')
-        ->where(function($q) use () {
+        ->where(function($q){
             $q->whereDate('time_in', date('Y-m-d'));
         })
         ->first();
