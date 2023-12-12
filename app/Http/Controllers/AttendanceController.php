@@ -169,6 +169,18 @@ class AttendanceController extends Controller
 
         return $attendances;
     }
+    public function get_attendance_now($id)
+    {
+        $attendances = Attendance::where('employee_code',$id)
+        ->orderBy('time_in','asc')
+        ->orderBy('id','asc')
+        ->where(function($q) use () {
+            $q->whereDate('time_in', date('Y-m-d'));
+        })
+        ->first();
+
+        return $attendances;
+    }
     public function get_all_attendances($employees,$from_date,$to_date)
     {
           $employees = PersonnelEmployee::whereIn('employee_code',$employees)->get();
