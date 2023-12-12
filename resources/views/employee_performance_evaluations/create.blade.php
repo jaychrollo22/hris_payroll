@@ -151,12 +151,12 @@
                                             
                                             <tr>
                                                 <td style="width:200px!important;">Strat 1</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_1_objective_1]" id="financial_perspective[strat_1_objective_1]" width="100%" class="responsive-input" placeholder="Input Here" required></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_metric_1]" id="financial_perspective[strat_1_metric_1]" placeholder="Metric" required></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_target_1]"  id="financial_perspective[strat_1_target_1]" required></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_start_completion_1]" placeholder="Start" id="financial_perspective[strat_1_target_start_completion_1]" required></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_end_completion_1]" placeholder="End" id="financial_perspective[strat_1_target_end_completion_1]" required></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_weight_1]" id="financial_perspective[strat_1_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()" required></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_1_objective_1]" id="financial_perspective[strat_1_objective_1]" width="100%" class="responsive-input" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_metric_1]" id="financial_perspective[strat_1_metric_1]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_target_1]"  id="financial_perspective[strat_1_target_1]"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_start_completion_1]" placeholder="Start" id="financial_perspective[strat_1_target_start_completion_1]"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_end_completion_1]" placeholder="End" id="financial_perspective[strat_1_target_end_completion_1]"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_weight_1]" id="financial_perspective[strat_1_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="financial_perspective[strat_1_review_actual_1]" disabled></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
                                             </tr>
@@ -806,7 +806,7 @@
                             </div>
 
                             <div class="text-center mt-5">
-                                <input type="checkbox" id="myCheckbox"> <i>I hereby certify that the performance plan has been discussed to me by my Immediate Superior  and that I,  Agree  on our agreed  set goals, target and job description</i> <br><br>
+                                <input type="checkbox" id="myCheckbox"> <i>I agree to the set objectives and strategies discussed with me by my superior.</i> <br><br>
                                 <button id="submitButton" type="submit" class="btn btn-primary" disabled>Submit Changes</button>
                             </div>
                             
