@@ -144,6 +144,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
             $new_eval->total_weight = $request->total_weight;
             $new_eval->total_actual_score = $request->total_actual_score;
 
+            $new_eval->level = 0;
             $new_eval->status = 'Draft';
             $new_eval->save();
 
