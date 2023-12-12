@@ -20,6 +20,28 @@ function checkifAllowedPerformancePlan(){
                                 ->where('user_id',auth()->user()->id)
                                 ->first();
 
+    $allowed_hrs = [467,
+                        449,
+                        2192,
+                        1998,
+                        1033,
+                        635,
+                        649,
+                        399,
+                        4331,
+                        2708,
+                        1006,
+                        396,
+                        1202,
+                        3905,
+                        1275,
+                        3873
+                    ];
+
+    if (in_array($employee->user_id, $allowed_hrs, true)){
+        return true;
+    }
+
     if($employee->classification == 1 || $employee->classification == 2){
         if($employee->level == 3){
             return true;
