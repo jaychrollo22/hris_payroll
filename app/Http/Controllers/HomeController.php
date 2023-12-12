@@ -53,7 +53,6 @@ class HomeController extends Controller
             $attendance_now = null;
             $attendances = null;
         }
-        dd($attendance_now);
         // dd($attendances->unique('time_in','Y-m-d'));
         $date_ranges = $attendance_controller->dateRange($sevendays,date('Y-m-d',strtotime("-1 day")));
         $handbook = Handbook::orderBy('id','desc')->first();
