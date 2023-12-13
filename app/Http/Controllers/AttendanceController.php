@@ -407,19 +407,17 @@ class AttendanceController extends Controller
     }
     public function store_logs(Request $request)
     {
-       
        foreach($request->data as $req)
        {
-   
+           
             $attendance = new AttendanceLog;
             $attendance->last_id = $req['id'];
             $attendance->emp_code = $req['employee']['emp_pin'];
             $attendance->date = date('Y-m-d',strtotime($req['punch_time']));
             $attendance->datetime = $req['punch_time'];
             $attendance->type = $req['punch_type'];
-            $attendance->location = $request['company'];
-            
-            // $attendance->ip_address = $req['terminal_info']['terminal_tcpip']." - ".$attendance['terminal_info']['terminal_name'];
+            $attendance->location = $request->location;
+            $attendance->ip_address = $req['terminal_info']['terminal_tcpip']."-".$req['terminal_info']['terminal_name'];
             $attendance->save();
        }
        
