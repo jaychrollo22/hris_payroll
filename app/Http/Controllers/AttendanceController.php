@@ -407,7 +407,6 @@ class AttendanceController extends Controller
     }
     public function store_logs(Request $request)
     {
-      
        $attendance = new AttendanceLog;
        $attendance->last_id = $request->id;
        $attendance->emp_code = $request->emp_code;
@@ -438,9 +437,9 @@ class AttendanceController extends Controller
         // $id = $attendance->last_id;
         if($attendance != null)
         {
-            return array('id' => $attendance);
+            return array('id' => $attendance->last_id);
         }
-        return array('id' => "no data");
+        return array('id' => 0);
     
     }
 }
