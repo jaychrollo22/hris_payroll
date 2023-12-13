@@ -432,4 +432,15 @@ class AttendanceController extends Controller
         );
        }
     }
+    public function getlastId($company)
+    {
+        $attendance = AttendanceLog::Where('location',$company)->orderBy('id','desc')->first();
+        // $id = $attendance->last_id;
+        if($attendance != null)
+        {
+            return array('id' => $attendance);
+        }
+        return array('id' => "no data");
+    
+    }
 }

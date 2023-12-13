@@ -18,3 +18,4 @@ use Illuminate\Http\Request;
 // });
 
 Route::post('save-attendance','AttendanceController@store_logs');
+Route::get('get-last-id/{company}','AttendanceController@getlastId');
