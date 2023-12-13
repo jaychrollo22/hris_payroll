@@ -12,6 +12,7 @@ use App\HikAttLog;
 use App\HikVisionAttendance;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\AttendanceLog;
 
 use App\Exports\AttedancePerCompanyExport;;
 
@@ -403,5 +404,32 @@ class AttendanceController extends Controller
             return redirect('/hik-attendances?from='.$start_date.'&to='.$end_date);
            
         }
+    }
+    public function store_logs(Request $request)
+    {
+      
+       $attendance = new AttendanceLog;
+       $attendance->last_id = $request->id;
+       $attendance->emp_code = $request->emp_code;
+       $attendance->date = $request->date;
+       $attendance->datetime = $request->datetime;
+       $attendance->type = $request->type;
+       $attendance->location = $request->location;
+       $attendance->ip_address = $request->ip_address;
+       $attendance->save();
+       if($attendance->id != null)
+       {
+       return array( 'code' => 200,
+        'attendance' => $attendance,
+        'message' => 'success',
+        );
+       }
+       else
+       {
+        return array( 'code' => 500,
+        'attendance' => $attendance,
+        'message' => 'error',
+        );
+       }
     }
 }
