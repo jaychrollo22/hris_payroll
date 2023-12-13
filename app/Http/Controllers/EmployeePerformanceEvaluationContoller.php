@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\EmployeePerformanceEvaluation;
 use App\Company;
+use App\EmployeeApprover;
 
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -181,7 +182,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
      */
     public function show($id)
     {
-        $ppr = EmployeePerformanceEvaluation::where('id',$id)->first();
+        $ppr = EmployeePerformanceEvaluation::with('approver.approver_info','user','employee.company','employee.department')->where('id',$id)->first();
 
                                                   
         $employee_performance_evaluation = [];
@@ -223,6 +224,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
         return view('employee_performance_evaluations.view',array(
             'header' => 'employee_performance_evaluations',
             'ppr' => $employee_performance_evaluation,
+            'ppr_details' => $ppr,
         ));
     }
 
@@ -234,7 +236,8 @@ class EmployeePerformanceEvaluationContoller extends Controller
      */
     public function edit($id)
     {
-        $ppr = EmployeePerformanceEvaluation::where('user_id',Auth::user()->id)
+        $ppr = EmployeePerformanceEvaluation::with('approver.approver_info','user','employee')
+                                                        ->where('user_id',Auth::user()->id)
                                                         ->where('id',$id)
                                                         ->first();
         if($ppr){                                             
@@ -273,10 +276,12 @@ class EmployeePerformanceEvaluationContoller extends Controller
             $employee_performance_evaluation['summary_ratees_comments_recommendation'] = $ppr->summary_ratees_comments_recommendation;
             
             $employee_performance_evaluation['status'] = $ppr->status;
+
+            // return $employee_performance_evaluation;
             
             return view('employee_performance_evaluations.edit',array(
                 'header' => 'employee_performance_evaluations',
-                'ppr' => $employee_performance_evaluation,
+                'ppr' => $employee_performance_evaluation
             ));
         }else{
             Alert::warning('Not Allowed')->persistent('Dismiss');
@@ -337,14 +342,177 @@ class EmployeePerformanceEvaluationContoller extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function performance_plan_approval(Request $request){
+
+        $today = date('Y-m-d');
+        $from_date = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
+        $to_date = isset($request->to) ? $request->to : date('Y-m-d');
+        
+        $filter_status = isset($request->status) ? $request->status : 'For Review';
+
+        $approver_id = auth()->user()->id;
+
+        $performance_plans = EmployeePerformanceEvaluation::with('approver.approver_info','user')
+                                ->whereHas('approver',function($q) use($approver_id) {
+                                    $q->where('approver_id',$approver_id);
+                                })
+                                ->where('status',$filter_status)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
+                                ->orderBy('created_at','DESC')
+                                ->get();
+
+        $user_ids = EmployeeApprover::select('user_id')->where('approver_id',$approver_id)->pluck('user_id')->toArray();
+
+        $for_approval = EmployeePerformanceEvaluation::whereIn('user_id',$user_ids)
+                                ->where('status','For Review')
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
+                                ->count();
+                                
+        $approved = EmployeePerformanceEvaluation::whereIn('user_id',$user_ids)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
+                                ->where('status','Approved')
+                                ->count();
+
+        $declined = EmployeePerformanceEvaluation::whereIn('user_id',$user_ids)
+                                ->whereDate('created_at','>=',$from_date)
+                                ->whereDate('created_at','<=',$to_date)
+                                ->where('status','Declined')
+                                ->count();
+        
+        session(['pending_performance_eval_count'=>$for_approval]);
+                                
+        return view('employee_performance_evaluations.for_approval',array(
+            'header' => 'ppr_approval',
+            'performance_plans' => $performance_plans,
+            'for_approval' => $for_approval,
+            'approved' => $approved,
+            'declined' => $declined,
+            'approver_id' => $approver_id,
+            'from' => $from_date,
+            'to' => $to_date,
+            'status' => $filter_status,
+        ));
+    }
+
+    public function approvePpr(Request $request,$id){
+        $employee_ppr = EmployeePerformanceEvaluation::where('id', $id)->first();
+        if($employee_ppr){
+            $level = '';
+            if($employee_ppr->level == 0){
+                $employee_approver = EmployeeApprover::where('user_id', $employee_ppr->user_id)->where('approver_id', auth()->user()->id)->first();
+                if($employee_approver->as_final == 'on'){
+                    EmployeePerformanceEvaluation::Where('id', $id)->update([
+                        'approved_by' =>auth()->user()->id,
+                        'approved_by_date' => date('Y-m-d'),
+                        'status' => 'Approved',
+                        'approval_remarks' => $request->approval_remarks,
+                        'level' => 1,
+                    ]);
+                }else{
+                    EmployeePerformanceEvaluation::Where('id', $id)->update([
+                        'approval_remarks' => $request->approval_remarks,
+                        'level' => 1
+                    ]);
+                }
+            }
+            else if($employee_ppr->level == 1){
+                EmployeePerformanceEvaluation::Where('id', $id)->update([
+                    'approved_by' =>auth()->user()->id,
+                    'approved_by_date' => date('Y-m-d'),
+                    'status' => 'Approved',
+                    'approval_remarks' => $request->approval_remarks,
+                    'level' => 2,
+                ]);
+            }
+            Alert::success('Performance Plan has been approved.')->persistent('Dismiss');
+            return back();
+        }
+    }
+
+    public function declinePpr(Request $request,$id){
+        EmployeePerformanceEvaluation::Where('id', $id)->update([
+                        'status' => 'Declined',
+                        'approval_remarks' => $request->approval_remarks,
+                    ]);
+        Alert::success('Performance Plan has been declined.')->persistent('Dismiss');
+        return back();
+    }
+
+    public function approvePprAll(Request $request){
+        
+        $ids = json_decode($request->ids,true);
+
+        $count = 0;
+        if(count($ids) > 0){
+            
+            foreach($ids as $id){
+                $employee_ppr = EmployeePerformanceEvaluation::where('id', $id)->first();
+                if($employee_ppr){
+                    $level = '';
+                    $employee_approver = EmployeeApprover::where('user_id', $employee_ppr->user_id)->where('approver_id', auth()->user()->id)->first();
+                    if($employee_ppr->level == 0){
+                        if($employee_approver->as_final == 'on'){
+                            EmployeePerformanceEvaluation::Where('id', $id)->update([
+                                'approved_by' =>auth()->user()->id,
+                                'approved_by_date' => date('Y-m-d'),
+                                'status' => 'Approved',
+                                'approval_remarks' => 'Approved',
+                                'level' => 1,
+                            ]);
+                            $count++;
+                        }else{
+                            EmployeePerformanceEvaluation::Where('id', $id)->update([
+                                'approval_remarks' => 'Approved',
+                                'level' => 1
+                            ]);
+                            $count++;
+                        }
+                    }
+                    else if($employee_dtr->level == 1){
+                        if($employee_approver->as_final == 'on'){
+                            EmployeePerformanceEvaluation::Where('id', $id)->update([
+                                'approved_by' =>auth()->user()->id,
+                                'approved_by_date' => date('Y-m-d'),
+                                'status' => 'Approved',
+                                'approval_remarks' => 'Approved',
+                                'level' => 2,
+                            ]);
+                            $count++;
+                        }
+                    }
+                }
+            }
+
+            return $count;
+
+        }else{
+            return 'error';
+        }
+    }
+
+    public function disapprovePprAll(Request $request){
+        
+        $ids = json_decode($request->ids,true);
+
+        $count = 0;
+        if(count($ids) > 0){
+            
+            foreach($ids as $id){
+                EmployeePerformanceEvaluation::Where('id', $id)->update([
+                    'status' => 'Declined',
+                    'approval_remarks' => 'Declined',
+                ]);
+
+                $count++;
+            }
+
+            return $count;
+
+        }else{
+            return 'error';
+        }
     }
 }

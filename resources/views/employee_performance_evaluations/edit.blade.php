@@ -868,31 +868,32 @@
             if(total_weight != 100){
                 alert('Warning : Total weight must be equal to 100% to proceed. Please try again.');
                 return false;
-            }else if(default_fp_strat_1_objective_1 == '' || default_fp_strat_1_objective_1 == null){
-                fp_strat_1_objective_1.required = true;
-                fp_strat_1_objective_1.focus();
-                alert('Warning : Some fields are required.');
-                return false;
-            }else if(default_strat_1_metric_1 == '' || default_strat_1_metric_1 == null){
-                strat_1_metric_1.required = true;
-                strat_1_metric_1.focus();
-                alert('Warning : Some fields are required.');
-                return false;
-            }else if(default_strat_1_target_1 == '' || default_strat_1_target_1 == null){
-                strat_1_target_1.required = true;
-                strat_1_target_1.focus();
-                alert('Warning : Some fields are required.');
-                return false;
-            }else if(default_strat_1_target_start_completion_1 == '' || default_strat_1_target_start_completion_1 == null){
-                strat_1_target_start_completion_1.required = true;
-                strat_1_target_start_completion_1.focus();
-                alert('Warning : Some fields are required.');
-                return false;
-            }else if(default_strat_1_target_end_completion_1 == '' || default_strat_1_target_end_completion_1 == null){
-                strat_1_target_end_completion_1.required = true;
-                strat_1_target_end_completion_1.focus();
-                alert('Warning : Some fields are required.');
-                return false;
+            // } 
+            // else if(default_fp_strat_1_objective_1 == '' || default_fp_strat_1_objective_1 == null){
+            //     fp_strat_1_objective_1.required = true;
+            //     fp_strat_1_objective_1.focus();
+            //     alert('Warning : Some fields are required.');
+            //     return false;
+            // }else if(default_strat_1_metric_1 == '' || default_strat_1_metric_1 == null){
+            //     strat_1_metric_1.required = true;
+            //     strat_1_metric_1.focus();
+            //     alert('Warning : Some fields are required.');
+            //     return false;
+            // }else if(default_strat_1_target_1 == '' || default_strat_1_target_1 == null){
+            //     strat_1_target_1.required = true;
+            //     strat_1_target_1.focus();
+            //     alert('Warning : Some fields are required.');
+            //     return false;
+            // }else if(default_strat_1_target_start_completion_1 == '' || default_strat_1_target_start_completion_1 == null){
+            //     strat_1_target_start_completion_1.required = true;
+            //     strat_1_target_start_completion_1.focus();
+            //     alert('Warning : Some fields are required.');
+            //     return false;
+            // }else if(default_strat_1_target_end_completion_1 == '' || default_strat_1_target_end_completion_1 == null){
+            //     strat_1_target_end_completion_1.required = true;
+            //     strat_1_target_end_completion_1.focus();
+            //     alert('Warning : Some fields are required.');
+            //     return false;
             }else{
                 return true;
             }

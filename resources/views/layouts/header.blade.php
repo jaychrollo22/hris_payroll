@@ -410,6 +410,7 @@
                                 <li class="nav-item "><a class="nav-link " href="{{ url('/for-work-from-home') }}">Work From Home <span class="badge badge-warning">{{ session('pending_wfh_count') }}</span></a></li>
                                 <li class="nav-item "><a class="nav-link " href="{{ url('/for-official-business') }}">Official Business <span class="badge badge-warning">{{ session('pending_ob_count') }}</span></a></li>
                                 <li class="nav-item "><a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction <span class="badge badge-warning">{{ session('pending_dtr_count') }}</span></a></li>
+                                <li class="nav-item "><a class="nav-link " href="{{ url('/for-performance-plan') }}">Performance Plan <span class="badge badge-warning">{{session('pending_performance_eval_count')}}</span></a></li>
                             </ul>
                         </div>
                     </li>

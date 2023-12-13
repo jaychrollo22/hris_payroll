@@ -60,7 +60,17 @@
                           <td>{{ $eval->calendar_year}}</td>
                           <td>{{ date('Y-m-d',strtotime($eval->review_date))}}</td>
                           <td>{{ $eval->period}}</td>
-                          <td>{{ $eval->status}}</td>
+                          <td>
+                            @if ($eval->status == 'Draft')
+                              <label class="badge badge-default">{{ $eval->status }}</label>
+                            @elseif ($eval->status == 'For Review')
+                              <label class="badge badge-warning">{{ $eval->status }}</label>
+                            @elseif($eval->status == 'Approved')
+                              <label class="badge badge-success" title="{{$eval->approval_remarks}}">{{ $eval->status }}</label>
+                            @elseif($eval->status == 'Declined' || $eval->status == 'Cancelled')
+                              <label class="badge badge-danger" title="{{$eval->approval_remarks}}">{{ $eval->status }}</label>
+                            @endif
+                          </td>
                         </tr>
                       @endforeach
                     </tbody>
