@@ -36,30 +36,29 @@
                 </form>
 
                 <div class="table-responsive">
-                  <table class="table table-hover table-bordered tablewithSearch">
+                  <table id="my-ppr" class="table table-hover table-bordered">
                     <thead>
                       <tr>
-                        <th>Employee Number</th>
-                        <th>Employee</th>
+                        <th>Date Filed</th>
                         <th>Calendar Date</th>
-                        <th>Review Date</th>
                         <th>PPR Period</th>
+                        <th>Review Date</th>
                         <th>Status</th>
+                        <th>Remarks</th>
                       </tr>
                     </thead>
                     <tbody>
                       @foreach ($employee_performance_evaluation as $eval)
                         <tr>
-                          <td>
+                          <td> 
                             <a href="/edit-performance-plan-review/{{$eval->id}}" class="text-success btn-sm text-center" title="Edit PPR">
                                 <i class="ti-pencil btn-icon-prepend"></i>
                             </a>
-                            {{ $eval->employee->employee_number}}
-                          </td>
-                          <td>{{ $eval->employee->first_name . ' ' . $eval->employee->last_name}}</td>
-                          <td>{{ $eval->calendar_year}}</td>
-                          <td>{{ date('Y-m-d',strtotime($eval->review_date))}}</td>
+                            {{ date('Y-m-d H:i A',strtotime($eval->created_at))}}</td>
+                          <td>
+                            {{ $eval->calendar_year}}</td>
                           <td>{{ $eval->period}}</td>
+                          <td>{{ $eval->approved_by_date ? date('Y-m-d',strtotime($eval->approved_by_date)) : ""}}</td>
                           <td>
                             @if ($eval->status == 'Draft')
                               <label class="badge badge-default">{{ $eval->status }}</label>
@@ -71,6 +70,7 @@
                               <label class="badge badge-danger" title="{{$eval->approval_remarks}}">{{ $eval->status }}</label>
                             @endif
                           </td>
+                          <td>{{ $eval->approval_remarks}}</td>
                         </tr>
                       @endforeach
                     </tbody>

@@ -737,6 +737,10 @@
         }
         $(document).ready(function() {
 
+            $('#my-ppr').DataTable({
+                "order": [[0, 'desc']] // Replace '0' with the index of the column you want to sort by
+            });
+
             $('.tablewithSearch').DataTable({
                 //"ordering": true,
                 //"pageLength": 100,

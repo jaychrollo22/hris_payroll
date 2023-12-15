@@ -54,9 +54,10 @@
                       <tr>
                         <th>Employee Number</th>
                         <th>Employee</th>
+                        <th>Date Filed</th>
                         <th>Calendar Date</th>
-                        <th>Review Date</th>
                         <th>PPR Period</th>
+                        <th>Review Date</th>
                         <th>Status</th>
                       </tr>
                     </thead>
@@ -70,9 +71,10 @@
                             {{ $eval->employee->employee_number}}
                           </td>
                           <td>{{ $eval->employee->first_name . ' ' . $eval->employee->last_name}}</td>
+                          <td>{{ date('Y-m-d',strtotime($eval->created_at))}}</td>
                           <td>{{ $eval->calendar_year}}</td>
-                          <td>{{ date('Y-m-d',strtotime($eval->review_date))}}</td>
                           <td>{{ $eval->period}}</td>
+                          <td>{{ $eval->approved_by_date ? date('Y-m-d',strtotime($eval->approved_by_date)) : ""}}</td>
                           <td>{{ $eval->status}}</td>
                         </tr>
                       @endforeach

@@ -96,12 +96,14 @@
                           </th>
                         @endif
                         <th>Employee Name</th>
-                        <th>Review Date</th>
+                        <th>Date Filed</th>
                         <th>Calendar Year</th>
                         <th>Period</th>
                         <th>Approvers</th>
+                        <th>Review Date</th>
                         <th>Status</th>
                         <th>Action </th> 
+                        <th>Remarks</th>
                       </tr>
                     </thead>
                     <tbody> 
@@ -124,7 +126,7 @@
                               <small>Company : {{$form_approval->user->employee->company->company_name}}</small> <br>
                               <small>Department : {{ $form_approval->user->employee->department ? $form_approval->user->employee->department->name : ""}}</small>
                           </td>
-                          <td>{{$form_approval->review_date}}</td>
+                          <td>{{ date('Y-m-d',strtotime($form_approval->created_at))}}</td>
                           <td>{{$form_approval->calendar_year}}</td>
                           <td>{{$form_approval->period}}</td>
                           <td id="tdStatus{{ $form_approval->id }}">
@@ -144,6 +146,7 @@
                               @endif<br> 
                             @endforeach
                           </td>
+                          <td>{{ $form_approval->approved_by_date ? date('Y-m-d',strtotime($form_approval->approved_by_date)) : ""}}</td>
                           <td>
                             @if ($form_approval->status == 'Draft')
                               <label class="badge badge-default">{{ $form_approval->status }}</label>
@@ -155,6 +158,7 @@
                               <label class="badge badge-danger" title="{{$form_approval->approval_remarks}}">{{ $form_approval->status }}</label>
                             @endif  
                           </td>
+                          
                           <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
 
                             <a href="/show-performance-plan-review/{{$form_approval->id}}" target="_blank" class="btn btn-primary btn-sm"><i class="ti-eye btn-icon-prepend"></i></a>
@@ -170,7 +174,11 @@
                               @endif<br> 
                             @endforeach
                           </td>
+
+                          <td>{{$form_approval->remarks}}</td>
+
                           </tr>
+                          
                         @endforeach                      
                     </tbody>
                   </table>

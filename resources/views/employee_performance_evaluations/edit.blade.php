@@ -801,7 +801,7 @@
                                 </div>
                             </div>
 
-                            @if($ppr['status'] == 'Draft')
+                            @if($ppr['status'] == 'Draft' || ($ppr['status'] == 'Declined' && $ppr['is_version'] == ''))
                                 <div class="text-center mt-5">
                                     <button type="submit" class="btn btn-primary">Submit Changes</button>
                                     <span id="{{ $ppr['id'] }}" onclick="submitForReview(this.id)" class="btn btn-success">Submit For Review</span>
