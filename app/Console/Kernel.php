@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         Commands\WorkFromHomeApproval::class,
         Commands\DailyTimeRecordApproval::class,
         Commands\AutoEarnedLeave::class,
+        Commands\PerformancePlanApproval::class,
     ];
 
     /**
@@ -41,6 +42,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:overtime_approval')->everyFiveMinutes();
         $schedule->command('command:work_from_home_approval')->everyFiveMinutes();
         $schedule->command('command:dtr_approval')->everyFiveMinutes();
+        $schedule->command('command:performance_plan_approval')->everyFiveMinutes();
         $schedule->command('command:auto_earned_leave')->dailyAt('8:00');
     }
 
