@@ -54,7 +54,7 @@
                             <a href="/edit-performance-plan-review/{{$eval->id}}" class="text-success btn-sm text-center" title="Edit PPR">
                                 <i class="ti-pencil btn-icon-prepend"></i>
                             </a>
-                            {{ date('Y-m-d H:i A',strtotime($eval->created_at))}}</td>
+                            {{ date('Y-m-d h:i A',strtotime($eval->created_at))}}</td>
                           <td>
                             {{ $eval->calendar_year}}</td>
                           <td>{{ $eval->period}}</td>

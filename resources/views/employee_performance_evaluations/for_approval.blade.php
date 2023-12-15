@@ -126,7 +126,7 @@
                               <small>Company : {{$form_approval->user->employee->company->company_name}}</small> <br>
                               <small>Department : {{ $form_approval->user->employee->department ? $form_approval->user->employee->department->name : ""}}</small>
                           </td>
-                          <td>{{ date('Y-m-d',strtotime($form_approval->created_at))}}</td>
+                          <td>{{ date('Y-m-d h:i A',strtotime($form_approval->created_at))}}</td>
                           <td>{{$form_approval->calendar_year}}</td>
                           <td>{{$form_approval->period}}</td>
                           <td id="tdStatus{{ $form_approval->id }}">

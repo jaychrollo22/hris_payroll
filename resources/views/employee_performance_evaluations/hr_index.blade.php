@@ -71,7 +71,7 @@
                             {{ $eval->employee->employee_number}}
                           </td>
                           <td>{{ $eval->employee->first_name . ' ' . $eval->employee->last_name}}</td>
-                          <td>{{ date('Y-m-d',strtotime($eval->created_at))}}</td>
+                          <td>{{ date('Y-m-d h:i A',strtotime($eval->created_at))}}</td>
                           <td>{{ $eval->calendar_year}}</td>
                           <td>{{ $eval->period}}</td>
                           <td>{{ $eval->approved_by_date ? date('Y-m-d',strtotime($eval->approved_by_date)) : ""}}</td>
