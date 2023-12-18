@@ -90,11 +90,11 @@
                   <table id="pprDataTable" class="table table-hover table-bordered tablewithSearch">
                     <thead>
                       <tr>
-                        @if(empty($status) || $status == 'For Review')
+                        {{-- @if(empty($status) || $status == 'For Review')
                           <th>
                             Select
                           </th>
-                        @endif
+                        @endif --}}
                         <th>Employee Name</th>
                         <th>Date Filed</th>
                         <th>Calendar Year</th>
@@ -109,7 +109,7 @@
                     <tbody> 
                         @foreach ($performance_plans as $form_approval)
                         <tr>
-                          @if(empty($status) || $status == 'For Review')
+                          {{-- @if(empty($status) || $status == 'For Review')
                             <td align="center">
                               @foreach($form_approval->approver as $k => $approver)
                                 @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'For Review')
@@ -119,7 +119,7 @@
                                 @endif
                               @endforeach
                             </td>
-                          @endif
+                          @endif --}}
                           <td>
                               <strong>{{$form_approval->user->name}}</strong> <br>
                               <small>Position : {{$form_approval->user->employee->position}}</small> <br>
