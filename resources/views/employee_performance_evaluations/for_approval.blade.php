@@ -175,7 +175,7 @@
                             @endforeach
                           </td>
 
-                          <td>{{$form_approval->remarks}}</td>
+                          <td>{{$form_approval->approval_remarks}}</td>
 
                           </tr>
                           
