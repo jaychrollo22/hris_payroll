@@ -68,11 +68,34 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                                                                 })
                                                                                 ->orderBy('review_date','DESC')
                                                                                 ->get();
+                                                                                
+        $draft = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
+                                    $q->whereIn('company_id',$allowed_companies);
+                                })
+                                ->where('status','Draft')
+                                ->count();
+
+        $for_approval = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
+                                    $q->whereIn('company_id',$allowed_companies);
+                                })
+                                ->where('status','For Review')
+                                ->count();
+                                
+        $approved = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
+                                    $q->whereIn('company_id',$allowed_companies);
+                                })
+                                ->where('status','Approved')
+                                ->count();
+
+        $declined = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
+                                    $q->whereIn('company_id',$allowed_companies);
+                                })
+                                ->where('status','Declined')
+                                ->count();
         
         $companies = Company::whereIn('id',$allowed_companies)
-                                    ->orderBy('company_name','ASC')
-                                    ->get();
-
+                                ->orderBy('company_name','ASC')
+                                ->get();
         return view('employee_performance_evaluations.hr_index',array(
             'header' => 'employee_performance_evaluations_report',
             'employee_performance_evaluation' => $employee_performance_evaluation,
@@ -80,6 +103,10 @@ class EmployeePerformanceEvaluationContoller extends Controller
             'companies' => $companies,
             'search' => $search,
             'company' => $company,
+            'draft' => $draft,
+            'for_approval' => $for_approval,
+            'approved' => $approved,
+            'declined' => $declined
         ));
 
 

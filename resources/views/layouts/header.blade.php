@@ -371,14 +371,12 @@
                     </li>
 
                     {{-- @if (auth()->user()->id == 1 || checkifAllowedPerformancePlan()) --}}
-                    @if (checkifAllowedPerformancePlan())
                     <li class="nav-item @if ($header == 'employee_performance_evaluations') active @endif">
                         <a class="nav-link" href="{{ url('/performance-plan-review') }}" onclick='show()'>
                             <i class="ti-calendar menu-icon"></i>
                             <span class="menu-title">My Performance Plan</span>
                         </a>
                     </li>
-                    @endif
                     
                     {{-- <li class="nav-item @if ($header == 'payslips') active @endif">
                         <a class="nav-link" href="{{ url('/payslips') }}" onclick='show()'>

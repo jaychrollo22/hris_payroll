@@ -2,6 +2,57 @@
 @section('content')
 <div class="main-panel">
     <div class="content-wrapper">
+        <div class='row grid-margin'>
+          
+          <div class='col-lg-2 mt-2'>
+            <div class="card card-tale">
+              <div class="card-body">
+                <div class="media">                
+                  <div class="media-body">
+                    <h4 class="mb-4">For Approval</h4>
+                    <a href="/hr-performance-plan-review?status=For Review" class="h2 card-text text-white">{{$for_approval}}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
+          <div class='col-lg-2 mt-2'>
+            <div class="card card-dark-blue">
+              <div class="card-body">
+                <div class="media">                
+                  <div class="media-body">
+                    <h4 class="mb-4">Approved</h4>
+                    <a href="/hr-performance-plan-review?status=Approved" class="h2 card-text text-white">{{$approved}}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
+          <div class='col-lg-2 mt-2'>
+            <div class="card card-light-danger">
+              <div class="card-body">
+                <div class="media">                
+                  <div class="media-body">
+                    <h4 class="mb-4">Declined / Rejected</h4>
+                    <a href="/hr-performance-plan-review?status=Declined" class="h2 card-text text-white">{{$declined}}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>     
+          <div class='col-lg-2 mt-2'>
+            <div class="card card-primary">
+              <div class="card-body">
+                <div class="media">                
+                  <div class="media-body">
+                    <h4 class="mb-4">Draft</h4>
+                    <a href="/hr-performance-plan-review?status=Draft" class="h2 card-text text-dark">{{$draft}}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>        
+        </div>
         <div class='row'>
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
@@ -75,7 +126,17 @@
                           <td>{{ $eval->calendar_year}}</td>
                           <td>{{ $eval->period}}</td>
                           <td>{{ $eval->approved_by_date ? date('Y-m-d',strtotime($eval->approved_by_date)) : ""}}</td>
-                          <td>{{ $eval->status}}</td>
+                          <td>
+                            @if ($eval->status == 'Draft')
+                              <label class="badge badge-default">{{ $eval->status }}</label>
+                            @elseif ($eval->status == 'For Review')
+                              <label class="badge badge-warning">{{ $eval->status }}</label>
+                            @elseif($eval->status == 'Approved')
+                              <label class="badge badge-success" title="{{$eval->approval_remarks}}">{{ $eval->status }}</label>
+                            @elseif($eval->status == 'Declined' || $eval->status == 'Cancelled')
+                              <label class="badge badge-danger" title="{{$eval->approval_remarks}}">{{ $eval->status }}</label>
+                            @endif
+                          </td>
                         </tr>
                       @endforeach
                     </tbody>
