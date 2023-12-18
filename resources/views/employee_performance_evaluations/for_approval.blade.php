@@ -321,7 +321,7 @@
                     success: function(response) {
                       console.log(response)
                       document.getElementById("loader").style.display = "none";
-                      swal(" DTR has been Disapproved " + "("+response+")", {
+                      swal(" Performance Plan has been Disapproved " + "("+response+")", {
                         icon: "success",
                       }).then(function() {
                         location.reload();
