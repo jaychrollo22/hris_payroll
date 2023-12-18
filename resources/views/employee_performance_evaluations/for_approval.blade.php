@@ -76,12 +76,12 @@
                     </div>
                   </div>
                 </form>
-                @if(empty($status) || $status == 'For Review')
+                {{-- @if(empty($status) || $status == 'For Review')
                   <label>
                     <input type="checkbox" id="selectAll">
                     <span id="labelSelectAll">Select All</span> 
                   </label>
-                @endif
+                @endif --}}
 
                 <button class="btn btn-success btn-sm mb-2" id="approveAllBtn" style="display: none;">Approve</button>
                 <button class="btn btn-danger btn-sm mb-2" id="disApproveAllBtn" style="display: none;">Disapprove</button>
