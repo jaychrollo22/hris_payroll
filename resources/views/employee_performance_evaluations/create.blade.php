@@ -103,7 +103,7 @@
                                             <td align="center">51% - 75%</td>
                                         </tr>
                                         <tr>
-                                            <td align="center">UNSATIFACTORY</td>
+                                            <td align="center">UNSATISFACTORY</td>
                                             <td align="center">Work performance is inadequate and inferior to the standards  of the position.  (Performance cannot be allowed to continue).</td>
                                             <td align="center">1</td>
                                             <td align="center">Below 50%</td>
