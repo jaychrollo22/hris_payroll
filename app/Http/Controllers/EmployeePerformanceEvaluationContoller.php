@@ -263,11 +263,19 @@ class EmployeePerformanceEvaluationContoller extends Controller
      */
     public function edit($id)
     {
-        $ppr = EmployeePerformanceEvaluation::with('approver.approver_info','user','employee')
+
+        if(Auth::user()->id == '1'){
+            $ppr = EmployeePerformanceEvaluation::with('approver.approver_info','user','employee')
+                                                        ->where('id',$id)
+                                                        ->first();
+        }else{
+            $ppr = EmployeePerformanceEvaluation::with('approver.approver_info','user','employee')
                                                         ->where('user_id',Auth::user()->id)
                                                         ->where('id',$id)
                                                         ->first();
-        if($ppr || Auth::user()->id == '1'){                                             
+        }
+        
+        if($ppr){                                             
             $employee_performance_evaluation = [];
             $employee_performance_evaluation['id'] = $ppr->id;
             $employee_performance_evaluation['calendar_year'] = $ppr->calendar_year;
