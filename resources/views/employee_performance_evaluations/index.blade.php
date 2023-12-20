@@ -53,7 +53,7 @@
                           <td> 
 
                             @if($eval->status == 'Approved')
-                              <a href="/show-performance-plan-review/{{$eval->id}}" class="text-success btn-sm text-center" title="Edit PPR">
+                              <a href="/show-performance-plan-review/{{$eval->id}}" class="text-success btn-sm text-center" title="View PPR">
                                   <i class="ti-pencil btn-icon-prepend"></i>
                               </a>
                             @else
