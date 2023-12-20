@@ -340,56 +340,56 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                                         ->first();
         if($ppr){   
 
-            if($ppr->status == 'Decline' && $ppr->is_version == ''){
+            // if($ppr->status == 'Decline' && $ppr->is_version == ''){
 
 
 
-                $new_eval = new EmployeePerformanceEvaluation;
-                $new_eval->user_id = Auth::user()->id;
-                $new_eval->calendar_year = $request->calendar_year ? $request->calendar_year : date('Y');
-                $new_eval->review_date = $request->review_date ? date('Y-m-d h:i:s',strtotime($request->review_date)) :  date('Y-m-d h:i:s');
-                $new_eval->period = $request->period;
-                $new_eval->financial_perspective = $request->financial_perspective ? json_encode($request->financial_perspective,true) : null;
-                $new_eval->customer_focus = $request->customer_focus ? json_encode($request->customer_focus,true) : null;
-                $new_eval->operation_efficiency = $request->operation_efficiency ? json_encode($request->operation_efficiency,true) : null;
-                $new_eval->people = $request->people ? json_encode($request->people,true) : null;
-                $new_eval->integrity = $request->integrity ? json_encode($request->integrity,true) : null;
-                $new_eval->commitment = $request->commitment ? json_encode($request->commitment,true) : null;
-                $new_eval->humility = $request->humility ? json_encode($request->humility,true) : null;
-                $new_eval->genuine_concern = $request->genuine_concern ? json_encode($request->genuine_concern,true) : null;
-                $new_eval->premium_service = $request->premium_service ? json_encode($request->premium_service,true) : null;
-                $new_eval->innovation = $request->innovation ? json_encode($request->innovation,true) : null;
-                $new_eval->synergy = $request->synergy ? json_encode($request->synergy,true) : null;
-                $new_eval->stewardship = $request->stewardship ? json_encode($request->stewardship,true) : null;
+            //     $new_eval = new EmployeePerformanceEvaluation;
+            //     $new_eval->user_id = Auth::user()->id;
+            //     $new_eval->calendar_year = $request->calendar_year ? $request->calendar_year : date('Y');
+            //     $new_eval->review_date = $request->review_date ? date('Y-m-d h:i:s',strtotime($request->review_date)) :  date('Y-m-d h:i:s');
+            //     $new_eval->period = $request->period;
+            //     $new_eval->financial_perspective = $request->financial_perspective ? json_encode($request->financial_perspective,true) : null;
+            //     $new_eval->customer_focus = $request->customer_focus ? json_encode($request->customer_focus,true) : null;
+            //     $new_eval->operation_efficiency = $request->operation_efficiency ? json_encode($request->operation_efficiency,true) : null;
+            //     $new_eval->people = $request->people ? json_encode($request->people,true) : null;
+            //     $new_eval->integrity = $request->integrity ? json_encode($request->integrity,true) : null;
+            //     $new_eval->commitment = $request->commitment ? json_encode($request->commitment,true) : null;
+            //     $new_eval->humility = $request->humility ? json_encode($request->humility,true) : null;
+            //     $new_eval->genuine_concern = $request->genuine_concern ? json_encode($request->genuine_concern,true) : null;
+            //     $new_eval->premium_service = $request->premium_service ? json_encode($request->premium_service,true) : null;
+            //     $new_eval->innovation = $request->innovation ? json_encode($request->innovation,true) : null;
+            //     $new_eval->synergy = $request->synergy ? json_encode($request->synergy,true) : null;
+            //     $new_eval->stewardship = $request->stewardship ? json_encode($request->stewardship,true) : null;
     
-                $new_eval->bsc_weight = $request->bsc_weight;
-                $new_eval->bsc_actual_score = $request->bsc_actual_score;
-                $new_eval->bsc_description = $request->bsc_description;
-                $new_eval->competency_weight = $request->competency_weight;
-                $new_eval->competency_actual_score = $request->competency_actual_score;
-                $new_eval->competency_description = $request->competency_description;
-                $new_eval->competency_actual_score = $request->competency_actual_score;
+            //     $new_eval->bsc_weight = $request->bsc_weight;
+            //     $new_eval->bsc_actual_score = $request->bsc_actual_score;
+            //     $new_eval->bsc_description = $request->bsc_description;
+            //     $new_eval->competency_weight = $request->competency_weight;
+            //     $new_eval->competency_actual_score = $request->competency_actual_score;
+            //     $new_eval->competency_description = $request->competency_description;
+            //     $new_eval->competency_actual_score = $request->competency_actual_score;
     
-                $new_eval->areas_of_strength = $request->areas_of_strength;
-                $new_eval->developmental_needs = $request->developmental_needs;
-                $new_eval->areas_for_enhancement = $request->areas_for_enhancement;
-                $new_eval->training_and_development_plans = $request->training_and_development_plans;
+            //     $new_eval->areas_of_strength = $request->areas_of_strength;
+            //     $new_eval->developmental_needs = $request->developmental_needs;
+            //     $new_eval->areas_for_enhancement = $request->areas_for_enhancement;
+            //     $new_eval->training_and_development_plans = $request->training_and_development_plans;
     
-                $new_eval->total_weight = $request->total_weight;
-                $new_eval->total_actual_score = $request->total_actual_score;
+            //     $new_eval->total_weight = $request->total_weight;
+            //     $new_eval->total_actual_score = $request->total_actual_score;
     
-                $new_eval->level = 0;
-                $new_eval->status = 'Draft';
-                $new_eval->save();
+            //     $new_eval->level = 0;
+            //     $new_eval->status = 'Draft';
+            //     $new_eval->save();
 
-                $ppr->is_version = 1;
-                $ppr->save();
+            //     $ppr->is_version = 1;
+            //     $ppr->save();
     
-                Alert::success('Successfully Store')->persistent('Dismiss');
-                return redirect('edit-performance-plan-review/' . $new_eval->id);   
+            //     Alert::success('Successfully Store')->persistent('Dismiss');
+            //     return redirect('edit-performance-plan-review/' . $new_eval->id);   
 
 
-            }else{
+            // }else{
 
                 $ppr->period = $request->period;
                 $ppr->financial_perspective = $request->financial_perspective ? json_encode($request->financial_perspective,true) : "";
@@ -424,7 +424,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
                 Alert::success('Successfully updated')->persistent('Dismiss');
                 return redirect('edit-performance-plan-review/' . $ppr->id);
 
-            }
+            // }
 
             
         
