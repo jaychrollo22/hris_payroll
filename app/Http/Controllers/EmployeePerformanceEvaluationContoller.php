@@ -40,8 +40,13 @@ class EmployeePerformanceEvaluationContoller extends Controller
 
     public function hr_index(Request $request)
     {
-
-        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        
+        if(auth()->user()->id == '3873'){
+            $allowed_companies = Company::select('id')->pluck('id')->toArray();
+        }else{
+            $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        }
+        
         $search = isset($request->search) ? $request->search : "";
         $company = isset($request->company) ? $request->company : "";
 
