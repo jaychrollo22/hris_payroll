@@ -5,11 +5,12 @@
         <div class='row'>
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
+                
                 <form method='POST' action='{{url('update-performance-plan-review/'.$ppr['id'])}}' onsubmit="btnDtr.disabled = true; return true;"  enctype="multipart/form-data">
                     @csrf      
-                    <div class="card-body">
-                            <h4 class="card-title">VIEW PERFORMANCE PLAN REVIEW (PPR)</h4>
-                                <div class="table-responsive">
+                    <div class="card-body" >
+                            <h4 class="card-title">VIEW PERFORMANCE PLAN REVIEW (PPR) <button class="btn btn-primary btn-sm" onclick="printDiv('contentToPrint')">Print</button></h4>
+                                <div class="table-responsive" id="contentToPrint">
                                     <table class="table-bordered" width="100%">
                                         <tr>
                                             <td align="center">Calendar Year</td>
@@ -800,20 +801,9 @@
                                 </div>
                             </div>
 
-                            {{-- @if($ppr['status'] == 'Draft')
-                                <div class="text-center mt-5">
-                                    <button type="submit" class="btn btn-primary">Submit Changes</button>
-                                    <span id="{{ $ppr['id'] }}" onclick="submitForReview(this.id)" class="btn btn-success">Submit For Review</span>
-                                </div>
-                            @elseif($ppr['status'] == 'For Review')
-                                <div class="text-center mt-5">
-                                    <button type="button" class="btn btn-success" disabled>For Review</button>
-                                </div>
-                            @elseif($ppr['status'] == 'Approved')
-                                <div class="text-center mt-5">
-                                    <button type="button" class="btn btn-success" disabled>Approved</button>
-                                </div>
-                            @endif --}}
+                
+
+                            
                             
                             
                         </div>
@@ -845,6 +835,18 @@
 					}
 				});
 		}
+
+        function printDiv(divId) {
+            var printContents = document.getElementById(divId).innerHTML;
+            var originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = printContents;
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+        }
+
 	</script>
 @endsection
 
