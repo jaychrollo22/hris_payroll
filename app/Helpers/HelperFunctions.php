@@ -595,6 +595,18 @@ function checkHasAttendanceHoliday($date,$employee_code,$location){
                                 $check_if_restday_6 = isRestDay($date_attendance_6);
                                 
                                 if($check_if_holiday_6){ //Holiday
+
+                                    $date_attendance_7 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_6) ) ));
+                                    $check_if_holiday_7 = checkIfHoliday($date_attendance_7,$location);
+                                    $check_if_restday_7 = isRestDay($date_attendance_7);
+                                    
+                                    if($check_if_holiday_7){ //Holiday
+            
+                                    }else{ //Regular Work
+                                        if($check_if_restday_7 == 0){ //Rest day no
+                                            return $date_attendance_7;
+                                        }
+                                    }
         
                                 }else{ //Regular Work
                                     if($check_if_restday_6 == 0){ //Rest day no
@@ -688,6 +700,18 @@ function checkHasAttendanceHoliday($date,$employee_code,$location){
                                     $check_if_restday_6 = isRestDay($date_attendance_6);
         
                                     if($check_if_holiday_6){ //Holiday
+
+                                        $date_attendance_7 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_6) ) ));
+                                        $check_if_holiday_7 = checkIfHoliday($date_attendance_7,$location);
+                                        $check_if_restday_7 = isRestDay($date_attendance_7);
+            
+                                        if($check_if_holiday_7){ //Holiday
+            
+                                        }else{ //Regular Work
+                                            if($check_if_restday_7 == 0){ //Rest day no
+                                                return $date_attendance_7;
+                                            }
+                                        }
         
                                     }else{ //Regular Work
                                         if($check_if_restday_6 == 0){ //Rest day no
