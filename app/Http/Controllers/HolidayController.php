@@ -14,12 +14,12 @@ class HolidayController extends Controller
     
     public function view ()
     {
-        $holidays = Holiday::where('status','Permanent')
-        ->orWhere(function ($query)
-        {
-            $query->where('status',null)->whereYear('holiday_date', '=', date('Y'));
-        })
-        ->orderBy('holiday_date','asc')->get();
+        $holidays = Holiday::
+        // ->orWhere(function ($query)
+        // {
+        //     $query->where('status',null)->whereYear('holiday_date', '=', date('Y'));
+        // })
+        orderBy('holiday_date','asc')->get();
 
         $locations = Location::orderBy('location','ASC')->get();
 

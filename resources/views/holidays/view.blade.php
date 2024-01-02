@@ -33,7 +33,7 @@
                         @foreach($holidays as $holiday)
                         <tr>
                             
-                            <td>{{date('Y.').date('m.d',strtotime($holiday->holiday_date))}}</td>
+                            <td>{{$holiday->holiday_date}}</td>
                             <td>{{$holiday->holiday_name}}</td>
                             <td>{{$holiday->holiday_type}}</td>
                             <td>{{$holiday->location}}</td>
