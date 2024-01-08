@@ -442,20 +442,25 @@ function checkEarnedLeave($user_id,$leave_type,$date_hired){
         $date_hired_last_year = $last_year . '-'. $date_hired_md; //2022-12-12
 
         if($today >= $date_hired_this_year){ //if Date hired meets todays date get earned leaves from last year to this year date_hired
-            $date_hired_this_minus_1_month = date('Y-m-d', strtotime('-1 month', strtotime($date_hired_this_year)) );
+            $date_hired_this_minus_1_month = date('Y-m-01', strtotime('-1 month', strtotime($date_hired_this_year)) );
             return $vl_earned = EmployeeEarnedLeave::where('user_id',$user_id)
                                                         ->where('leave_type',$leave_type)
                                                         ->whereNull('converted_to_cash')
                                                         ->whereBetween('earned_date', [$date_hired_last_year, $date_hired_this_minus_1_month])
+                                                        // ->take(10)
                                                         ->sum('earned_leave');
         }
         else if($today < $date_hired_this_year){
             if($last_year > 2022){
                 $date_hired_last_year_minus_1_year = date('Y-m-d', strtotime('-1 year', strtotime($date_hired_last_year)) ); //2021-12-12
+
                 return $vl_earned = EmployeeEarnedLeave::where('user_id',$user_id)
                                                             ->where('leave_type',$leave_type)
                                                             ->whereNull('converted_to_cash')
-                                                            ->whereBetween('earned_date', [$date_hired_last_year_minus_1_year, $date_hired_last_year])
+                                                            ->whereDate('earned_date', '>' , $date_hired_last_year_minus_1_year)
+                                                            ->whereDate('earned_date', '<' , $date_hired_last_year)
+                                                            // ->whereBetween('earned_date', [$date_hired_last_year_minus_1_year, $date_hired_last_year])
+                                                            // ->take(10)
                                                             ->sum('earned_leave');
             }
         }
