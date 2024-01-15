@@ -35,7 +35,7 @@ class EmployeeObExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'USER ID',
-            'EMPLOYEE NAME',
+            // 'EMPLOYEE NAME',
             'DATE',
             'FIRST ACTUAL TIME IN',
             'SECOND ACTUAL TIME OUT',
@@ -47,7 +47,7 @@ class EmployeeObExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             $employee_ob->employee->employee_number,
-            $employee_ob->user->name,
+            // $employee_ob->user->name,
             date('d/m/Y',strtotime($employee_ob->applied_date)),
             date('H:i',strtotime($employee_ob->date_from)),
             date('H:i',strtotime($employee_ob->date_to)),
