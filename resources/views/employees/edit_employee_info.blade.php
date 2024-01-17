@@ -203,6 +203,16 @@
                   <input type="date" name="date_resigned" value="{{ $user->employee->date_resigned }}" class='form-control form-control-sm' placeholder="Date"/>
                 </div>
 
+                <div class='col-md-4'>
+                  Cost Center
+                  <input type="text" class="form-control" name="cost_center" value="{{$user->employee->cost_center}}" placeholder="Cost Center">
+                </div>
+
+                <div class='col-md-4'>
+                  Branch Code
+                  <input type="text" class="form-control" name="branch_code" value="{{$user->employee->branch_code}}" placeholder="Branch Code">
+                </div>
+
               </div>
               <hr>
               <div class='row mb-2'>

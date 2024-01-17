@@ -373,6 +373,18 @@
                                     <div class="col-md-6 form-group">
                                         <h5>Masterfiles</h5>
                                         @if($user->user_privilege)
+                                            @if($user->user_privilege->masterfiles_early_cutoffs == 'on')
+                                                <input type="checkbox" name="masterfiles_early_cutoffs" id="masterfiles_early_cutoffs{{$user->id}}" value="{{ $user->user_privilege->masterfiles_early_cutoffs }}" checked>
+                                            @else
+                                                <input type="checkbox" name="masterfiles_early_cutoffs" id="masterfiles_early_cutoffs{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="masterfiles_early_cutoffs" id="masterfiles_early_cutoffs{{$user->id}}">
+                                        @endif
+                                        Early Cutoffs
+                                        <br>
+                                        <br>
+                                        @if($user->user_privilege)
                                             @if($user->user_privilege->masterfiles_companies == 'on')
                                                 <input type="checkbox" name="masterfiles_companies" id="masterfiles_companies{{$user->id}}" value="{{ $user->user_privilege->masterfiles_companies }}" checked>
                                             @else

@@ -14,6 +14,7 @@ use App\EmployeeOvertime;
 use App\EmployeeWfh;
 use App\EmployeeOb;
 use App\EmployeeDtr;
+use App\EarlyCutoff;
 
 function checkifAllowedPerformancePlan(){
     $employee = Employee::select('id','user_id','classification','level')
@@ -915,6 +916,19 @@ function checkEmployeeLeaveCredits($user_id, $leave_type){
         return $employee_leave->count;
     }else{
         return 0;
+    }
+}
+
+function checkIfEarlyCutoff($customDate){
+    $results = EarlyCutoff::whereDate('from', '<=', $customDate)
+                    ->whereDate('to', '>=', $customDate)
+                    ->where('status','Active')
+                    ->count();
+
+    if($results > 0){
+        return 'EARLY CUT-OFF';
+    }else{
+        return '';
     }
 }
 

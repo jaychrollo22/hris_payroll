@@ -250,6 +250,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('enable-loanType/{id}', 'LoanTypeController@enable_loanType');
     Route::get('disable-loanType/{id}', 'LoanTypeController@disable_loanType');
 
+    // Early Cutoffs
+    Route::post('store-early-cutoff', 'EarlyCutoffController@store');
+    Route::get('early-cutoff', 'EarlyCutoffController@index');
+    Route::get('edit-early-cutoff/{id}', 'EarlyCutoffController@edit');
+    Route::post('update-early-cutoff/{id}', 'EarlyCutoffController@update');
+
+
     // Employee Allowance
     Route::get('employee-allowance', 'EmployeeAllowanceController@index');
     Route::post('new-employee-allowance', 'EmployeeAllowanceController@store');
