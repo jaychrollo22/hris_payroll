@@ -400,22 +400,30 @@ function checkUsedSLVLSILLeave($user_id,$leave_type,$date_hired){
                                             ->where('leave_type',$leave_type)
                                             ->where('status','Approved')
                                             ->where('date_from','>',$filter_date_leave)
+                                            ->orderBy('halfday','ASC')
                                             ->get();
             
             $date_today = date('Y-m-d');
             if($employee_vl){
                 foreach($employee_vl as $leave){
-                    if($leave->withpay == 1 && $leave->halfday == 1){
+                    if($leave->withpay == '1' && $leave->halfday == '1'){
                         if(date('Y-m-d',strtotime($leave->date_from)) <= $date_today){
                             $count += 0.5;
                         }
                     }else{
-                        $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
-                        if($date_range){
-                            foreach($date_range as $date_r){
-                                $leave_Date = date('Y-m-d', strtotime($date_r));
-                                if($leave->withpay == 1 && $leave_Date <= $date_today){
-                                    $count += 1;
+                        if($leave->withpay == '1')
+                        {                        
+                            if($leave->date_from == $leave->date_to){
+                                $count += 1;
+                            }else{
+                                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                                if($date_range){
+                                    foreach($date_range as $date_r){
+                                        $leave_Date = date('Y-m-d', strtotime($date_r));
+                                        if($leave->withpay == 1 && $leave_Date <= $date_today){
+                                            $count += 1;
+                                        }
+                                    }
                                 }
                             }
                         }

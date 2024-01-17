@@ -84,7 +84,7 @@
 
                                 
                               @endphp
-                              {{ ceil($total_vl) }}
+                              {{ ceil($total_vl)  }}
                             @elseif ($leave->leave->id == '2')
                               @php
                                 $date_from = new DateTime($employee_status->original_date_hired);
