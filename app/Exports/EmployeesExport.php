@@ -75,7 +75,8 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
                                         })
                                         ->when($status,function($q) use($status){
                                             $q->where('status',$status);
-                                        });
+                                        })
+                                        ->where('classification','!=','7');
     }
 
 
