@@ -56,7 +56,8 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
                                             'hdmf_number',
                                             'phil_number',
                                             'tax_number',
-                                            'company_id'
+                                            'company_id',
+                                            'status'
                                         )
                                         ->with('company')
                                         ->when($company,function($q) use($company){
