@@ -384,54 +384,98 @@ function checkUsedSLVLSILLeave($user_id,$leave_type,$date_hired){
 
         }else{
 
-            $today  = date('Y-m-d');
-            $date_hired_md = date('m-d',strtotime($date_hired));
-            $date_hired_m = date('m',strtotime($date_hired));
-            $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-            $this_year = date('Y');
+            if($total_months > 12 && $total_months < 23){
 
-            $date_hired_this_year = $this_year . '-'. $date_hired_md;
-
-            if($today > $date_hired_this_year  ){
-                $filter_date_leave = $this_year . '-'. $date_hired_md;
-            }else{
-                $filter_date_leave = $last_year . '-'. $date_hired_md;
-            }
-            $employee_vl = EmployeeLeave::where('user_id',$user_id)
-                                            ->where('leave_type',$leave_type)
-                                            ->where('status','Approved')
-                                            ->where('date_from','>',$filter_date_leave)
-                                            ->orderBy('halfday','ASC')
-                                            ->get();
-            
-            $date_today = date('Y-m-d');
-            if($employee_vl){
-                foreach($employee_vl as $leave){
-                    if($leave->withpay == '1' && $leave->halfday == '1'){
-                        if(date('Y-m-d',strtotime($leave->date_from)) <= $date_today){
-                            $count += 0.5;
-                        }
-                    }else{
-                        if($leave->withpay == '1')
-                        {                        
-                            if($leave->date_from == $leave->date_to){
-                                $count += 1;
-                            }else{
-                                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
-                                if($date_range){
-                                    foreach($date_range as $date_r){
-                                        $leave_Date = date('Y-m-d', strtotime($date_r));
-                                        if($leave->withpay == 1 && $leave_Date <= $date_today){
-                                            $count += 1;
+                $filter_date_leave = date('Y-m-d', strtotime('+6 months', strtotime($date_hired)) );
+        
+                $employee_vl = EmployeeLeave::where('user_id',$user_id)
+                                                ->where('leave_type',$leave_type)
+                                                ->where('status','Approved')
+                                                ->where('date_from','>',$filter_date_leave)
+                                                ->orderBy('halfday','ASC')
+                                                ->get();
+                
+                $date_today = date('Y-m-d');
+                if($employee_vl){
+                    foreach($employee_vl as $leave){
+                        if($leave->withpay == '1' && $leave->halfday == '1'){
+                            if(date('Y-m-d',strtotime($leave->date_from)) <= $date_today){
+                                $count += 0.5;
+                            }
+                        }else{
+                            if($leave->withpay == '1')
+                            {                        
+                                if($leave->date_from == $leave->date_to){
+                                    $count += 1;
+                                }else{
+                                    $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                                    if($date_range){
+                                        foreach($date_range as $date_r){
+                                            $leave_Date = date('Y-m-d', strtotime($date_r));
+                                            if($leave->withpay == 1 && $leave_Date <= $date_today){
+                                                $count += 1;
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+                        
                     }
-                    
+                }
+
+            }else{
+                $today  = date('Y-m-d');
+                $date_hired_md = date('m-d',strtotime($date_hired));
+                $date_hired_m = date('m',strtotime($date_hired));
+                $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+                $this_year = date('Y');
+
+                $date_hired_this_year = $this_year . '-'. $date_hired_md;
+
+                if($today > $date_hired_this_year  ){
+                    $filter_date_leave = $this_year . '-'. $date_hired_md;
+                }else{
+                    $filter_date_leave = $last_year . '-'. $date_hired_md;
+                }
+                $employee_vl = EmployeeLeave::where('user_id',$user_id)
+                                                ->where('leave_type',$leave_type)
+                                                ->where('status','Approved')
+                                                ->where('date_from','>',$filter_date_leave)
+                                                ->orderBy('halfday','ASC')
+                                                ->get();
+                
+                $date_today = date('Y-m-d');
+                if($employee_vl){
+                    foreach($employee_vl as $leave){
+                        if($leave->withpay == '1' && $leave->halfday == '1'){
+                            if(date('Y-m-d',strtotime($leave->date_from)) <= $date_today){
+                                $count += 0.5;
+                            }
+                        }else{
+                            if($leave->withpay == '1')
+                            {                        
+                                if($leave->date_from == $leave->date_to){
+                                    $count += 1;
+                                }else{
+                                    $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                                    if($date_range){
+                                        foreach($date_range as $date_r){
+                                            $leave_Date = date('Y-m-d', strtotime($date_r));
+                                            if($leave->withpay == 1 && $leave_Date <= $date_today){
+                                                $count += 1;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
                 }
             }
+
+            
         }
     }
     return $count;
