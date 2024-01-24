@@ -32,6 +32,7 @@ use App\MaritalStatus;
 use App\IclockTerminal;
 use App\AttPunch;
 use App\UserAllowedOvertime;
+use App\CostCenter;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -1054,6 +1055,8 @@ class EmployeeController extends Controller
             $users = User::whereIn('id',$employee_approvers)->get();
         }
         
+        $company = Company::where('id',$user->employee->company_id)->first();
+
         $schedules = Schedule::get();
         $banks = Bank::get();
        
@@ -1064,6 +1067,12 @@ class EmployeeController extends Controller
         $vessels = Vessel::where('status','Active')->get();
         $marital_statuses = MaritalStatus::get();
         $companies = Company::get();
+        if($company){
+            $cost_centers = CostCenter::where('company_code',$company->company_code)->get();
+        }else{
+            $cost_centers = CostCenter::get();
+        }
+        
 
         $level_id = Level::where('id',$user->employee->level)
                             ->orWhere('name',$user->employee->level)
@@ -1079,6 +1088,7 @@ class EmployeeController extends Controller
             'departments' => $departments,
             'locations' => $locations,
             'projects' => $projects,
+            'cost_centers' => $cost_centers,
             'vessels' => $vessels,
             'levels' => $levels,
             'users' => $users,

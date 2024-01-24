@@ -204,8 +204,18 @@
                 </div>
 
                 <div class='col-md-4'>
+                  {{-- Cost Center
+                  <input type="text" class="form-control" name="cost_center" value="{{$user->employee->cost_center}}" placeholder="Cost Center"> --}}
+
                   Cost Center
-                  <input type="text" class="form-control" name="cost_center" value="{{$user->employee->cost_center}}" placeholder="Cost Center">
+                  <select id="cost_center" data-placeholder="Cost Center" class="form-control form-control-sm js-example-basic-single cost-center-selection" style='width:100%;' name='cost_center'>
+                      <option value="">--Select Cost Center--</option>
+                      <option value="N/A">N/A</option>
+                      @foreach($cost_centers as $cost_center)
+                        <option value="{{$cost_center->code}}" @if ($user->employee->cost_center == $cost_center->code) selected @endif>{{$cost_center->code . ' - ' . $cost_center->name}}</option>
+                      @endforeach
+                  </select>
+
                 </div>
 
                 <div class='col-md-4'>
