@@ -185,8 +185,8 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
         $shift_computation_saturday = '';
         $shift_computation_sunday = '';
 
-        $compute_sss = '1';
-        $schedule_computation_sss = 'Last Cut-Off';
+        $compute_sss = '';
+        $schedule_computation_sss = '';
         $override_referrence_amount_sss = '';
         $used_fix_referrence_amount_sss = '';
         $ee_share_sss_override = '';
