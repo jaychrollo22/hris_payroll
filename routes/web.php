@@ -256,6 +256,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('edit-early-cutoff/{id}', 'EarlyCutoffController@edit');
     Route::post('update-early-cutoff/{id}', 'EarlyCutoffController@update');
 
+    // Cost Centers
+    Route::post('store-cost-center', 'CostCenterController@store');
+    Route::get('cost-center', 'CostCenterController@index');
+    Route::get('edit-cost-center/{id}', 'CostCenterController@edit');
+    Route::post('update-cost-center/{id}', 'CostCenterController@update');
 
     // Employee Allowance
     Route::get('employee-allowance', 'EmployeeAllowanceController@index');

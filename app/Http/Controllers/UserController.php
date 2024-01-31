@@ -188,6 +188,7 @@ class UserController extends Controller
                 $user_privilege->settings_delete = $request->settings_delete;
                 
                 $user_privilege->masterfiles_early_cutoffs = $request->masterfiles_early_cutoffs;
+                $user_privilege->masterfiles_cost_centers = $request->masterfiles_cost_centers;
                 $user_privilege->masterfiles_companies = $request->masterfiles_companies;
                 $user_privilege->masterfiles_departments = $request->masterfiles_departments;
                 $user_privilege->masterfiles_locations = $request->masterfiles_locations;
@@ -233,6 +234,7 @@ class UserController extends Controller
                 $new_user_privilege->settings_delete = $request->settings_delete;
 
                 $new_user_privilege->masterfiles_early_cutoffs = $request->masterfiles_early_cutoffs;
+                $new_user_privilege->masterfiles_cost_centers = $request->masterfiles_cost_centers;
                 $new_user_privilege->masterfiles_companies = $request->masterfiles_companies;
                 $new_user_privilege->masterfiles_departments = $request->masterfiles_departments;
                 $new_user_privilege->masterfiles_locations = $request->masterfiles_locations;
