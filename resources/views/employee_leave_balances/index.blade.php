@@ -116,9 +116,18 @@
                                                     $vl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,1);
                                                     $sl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,2);
                                                 }
+
+                                                if($total_months >= 6 && $total_months < 12){ //6 months regularization
+
+                                                    $sl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,2);
+                                                    $total_sl = $sl_beginning_balance;
+
+                                                }else{
+                                                    $total_sl = $sl_beginning_balance + $earned_sl;
+                                                }
                                                 
                                                 $total_vl = $vl_beginning_balance + $earned_vl;
-                                                $total_sl = $sl_beginning_balance + $earned_sl;
+                                                
 
                                             @endphp
                                             Total VL : {{ ceil($total_vl) }} Used : {{$used_vl}} Remaining Balance : {{ ceil($total_vl) - $used_vl }} <br>
