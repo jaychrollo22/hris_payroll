@@ -21,7 +21,7 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
     {
         $company = $this->company;
         $status = $this->status;
-        return EmployeeAllowance::query()->with('employee')
+        return EmployeeAllowance::query()->with('employee.schedule_info','employee.company')
                             ->whereHas('employee',function($q) use($company){
                                 $q->where('company_id',$company);
                             })
@@ -32,11 +32,15 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'USER ID',
+            'EMPLOYEE ID NUMBER', // NEW
+            'EMPLOYEE NAME', // NEW
             'PARTICULAR',
             'DESCRIPTION',
             'APPLICATION',
             'TYPE',
             'CREDIT SCHEDULE',
+            'CREDIT COMPANY', // New
+            'CREDIT BRANCH', // New
             'AMOUNT',
             'END DATE',
         ];
@@ -45,14 +49,44 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
     public function map($employee_allowance): array
     {
         $employee_number = $employee_allowance->employee ? $employee_allowance->employee->employee_number : "";
+        $user_id = $employee_allowance->employee ? $employee_allowance->employee->user_id : "";
         $particular = $employee_allowance->allowance ? $employee_allowance->allowance->name : "";
+
+        $schedule = $employee_allowance->schedule;
+        if($employee_allowance->schedule == 'Bi-monthly'){
+            $schedule == 'Every Cut-Off';
+        }
+
+        $employee_name = $employee_allowance->employee ? $employee_allowance->employee->last_name . ', ' . $employee_allowance->employee->first_name . ' ' . $employee_allowance->employee->middle_name : "";
+
+        $branch = '';
+        if($employee_allowance->employee->schedule_info){
+            if($employee_allowance->employee->schedule_info->is_flexi == 1){
+                $branch = 'BRANCH 2';
+            }
+            else if($employee_allowance->employee->schedule_info->id == 9){
+                $branch = 'BRANCH 3';
+            }else{
+                $branch = 'BRANCH 1';
+            }   
+        }
+
+        $company = '';
+        if($employee_allowance->employee->company){
+            $company = $employee_allowance->employee->company->company_name;
+        }
+
         return [
             $employee_number,
+            $user_id,
+            $employee_name,
             $particular,
             $employee_allowance->description,
             $employee_allowance->application,
             $employee_allowance->type,
-            $employee_allowance->schedule,
+            $schedule,
+            $company,
+            $branch,
             $employee_allowance->allowance_amount,
             $employee_allowance->end_date
         ];
