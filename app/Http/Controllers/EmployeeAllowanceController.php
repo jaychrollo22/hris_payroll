@@ -100,6 +100,7 @@ class EmployeeAllowanceController extends Controller
         ]);
 
         $employeeAllowances = EmployeeAllowance::findOrFail($id);
+        $employeeAllowances->allowance_id = $request->allowance_type;
         $employeeAllowances->allowance_amount = $request->amount;
         $employeeAllowances->description = $request->description;
         $employeeAllowances->application = $request->application;
@@ -110,7 +111,7 @@ class EmployeeAllowanceController extends Controller
         $employeeAllowances->status = 'Active';
         $employeeAllowances->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Updated')->persistent('Dismiss');
         return redirect('edit-employee-allowance/' . $id);
     }
 
@@ -137,7 +138,7 @@ class EmployeeAllowanceController extends Controller
     public function edit($id)
     {
 
-        $allowanceTypes = Allowance::all();
+        $allowanceTypes = Allowance::where('status','Active')->get();
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
 

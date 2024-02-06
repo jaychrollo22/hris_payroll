@@ -15,8 +15,7 @@
 										<div class='col-lg-6 form-group'>
 											<label for="allowanceType">Particular</label>
 											<select data-placeholder="Select Particular"
-												class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='allowance_type'
-												disabled>
+												class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='allowance_type'>
 												<option value="">--Select Particular--</option>
 												@foreach ($allowanceTypes as $allowanceType)
 													<option value="{{ $allowanceType->id }}" {{ $employee_allowance->allowance_id == $allowanceType->id ? 'selected' : '' }}>
