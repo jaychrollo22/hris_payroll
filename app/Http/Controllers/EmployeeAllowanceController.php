@@ -43,7 +43,7 @@ class EmployeeAllowanceController extends Controller
                                                     ->where('status',$status)
                                                     ->get();
 
-            $allowanceTypes = Allowance::all();
+            $allowanceTypes = Allowance::where('status','Active')->get();
 
             return view('employee_allowances.employee_allowance', array(
                 'header' => 'masterfiles',
