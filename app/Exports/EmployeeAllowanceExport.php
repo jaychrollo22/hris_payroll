@@ -32,8 +32,8 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'USER ID',
-            'EMPLOYEE ID NUMBER', // NEW
-            'EMPLOYEE NAME', // NEW
+            // 'EMPLOYEE ID NUMBER', // NEW
+            // 'EMPLOYEE NAME', // NEW
             'PARTICULAR',
             'DESCRIPTION',
             'APPLICATION',
@@ -78,8 +78,8 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
 
         return [
             $employee_number,
-            $user_id,
-            $employee_name,
+            // $user_id,
+            // $employee_name,
             $particular,
             $employee_allowance->description,
             $employee_allowance->application,
