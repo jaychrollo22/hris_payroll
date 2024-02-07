@@ -34,6 +34,15 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
         $allowed_companies = json_decode($this->allowed_companies);
         $allowed_locations = json_decode($this->allowed_locations);
         $allowed_projects = json_decode($this->allowed_projects);
+
+        $duplicateUserIds = Employee::groupBy('user_id')
+                                    ->havingRaw('COUNT(user_id) > 1')
+                                    ->pluck('user_id');
+
+        $duplicateEmployeeNumber = Employee::groupBy('employee_number')
+                                    ->havingRaw('COUNT(employee_number) > 1')
+                                    ->pluck('employee_number');
+
         return Employee::query()->select('user_id',
                                             'employee_number',
                                             'original_date_hired',
@@ -76,7 +85,9 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
                                         ->when($status,function($q) use($status){
                                             $q->where('status',$status);
                                         })
-                                        ->where('classification','!=','7');
+                                        ->where('classification','!=','7')
+                                        ->whereNotIn('user_id',$duplicateUserIds)
+                                        ->whereNotIn('employee_number',$duplicateEmployeeNumber);
     }
 
 
