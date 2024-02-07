@@ -39,8 +39,8 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
             'APPLICATION',
             'TYPE',
             'CREDIT SCHEDULE',
-            'CREDIT COMPANY', // New
-            'CREDIT BRANCH', // New
+            // 'CREDIT COMPANY', // New
+            // 'CREDIT BRANCH', // New
             'AMOUNT',
             'END DATE',
         ];
@@ -85,8 +85,8 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
             $employee_allowance->application,
             $employee_allowance->type,
             $schedule,
-            $company,
-            $branch,
+            // $company,
+            // $branch,
             $employee_allowance->allowance_amount,
             $employee_allowance->end_date
         ];
