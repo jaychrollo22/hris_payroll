@@ -48,7 +48,7 @@
                                         </tr>
                                         <tr>
                                             <td>Department/unit</td>
-                                            <td>{{$ppr_details->employee->department->name}}</td>
+                                            <td>{{$ppr_details->employee->department ? $ppr_details->employee->department->name : ""}}</td>
                                         </tr>
                                         <tr>
                                             <td>Employee Name</td>

@@ -1449,8 +1449,7 @@ class EmployeeController extends Controller
         }
         $schedules = ScheduleData::all();
         
-        $companies = Company::whereHas('employee_has_company')
-                                ->whereIn('id',$allowed_companies)
+        $companies = Company::whereIn('id',$allowed_companies)
                                 ->get();
 
         return view(
@@ -1533,8 +1532,7 @@ class EmployeeController extends Controller
         }
         $schedules = ScheduleData::all();
         
-        $companies = Company::whereHas('employee_has_company')
-                                ->whereIn('id',$allowed_companies)
+        $companies = Company::whereIn('id',$allowed_companies)
                                 ->get();
 
         return view(
@@ -1562,8 +1560,7 @@ class EmployeeController extends Controller
         $allowed_locations = getUserAllowedLocations(auth()->user()->id);
         $allowed_projects = getUserAllowedProjects(auth()->user()->id);
 
-        $companies = Company::whereHas('employee_has_company')
-                                ->whereIn('id',$allowed_companies)
+        $companies = Company::whereIn('id',$allowed_companies)
                                 ->get();
 
 
