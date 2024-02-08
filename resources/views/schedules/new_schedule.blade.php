@@ -15,6 +15,10 @@
                   Schedule Name
                   <input type="text" name='schedule_name' class="form-control" placeholder="Schedule Name/Type" required>
                 </div>
+                <div class='col-md-12 form-group'>
+                  Is Flexi
+                  <input type="checkbox" name="is_flexi" class="form-controol" value="1" checked>
+                </div>
               </div>
               <div class="row border text-center">
                 <div class='col-md-3 border'>

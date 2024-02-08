@@ -27,6 +27,7 @@ class ScheduleController extends Controller
 
         $new_schedule = new Schedule;
         $new_schedule->schedule_name = $request->schedule_name;
+        $new_schedule->is_flexi = $request->is_flexi;
         $new_schedule->created_by = auth()->user()->id;
         $new_schedule->save();
 
