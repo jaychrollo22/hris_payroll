@@ -17,7 +17,7 @@
                                     <table class="table-bordered" width="100%">
                                         <tr>
                                             <td align="center">Calendar Year</td>
-                                            <td align="center"> <input type="text" placeholder="Calendar Year" width="100%" class="responsive-input" name="calendar_year" value="January 2024 - December 2024" required></td>
+                                            <td align="center"> <input type="text" placeholder="Calendar Year" width="100%" class="responsive-input myinput" name="calendar_year" value="January 2024 - December 2024" required></td>
                                             <td align="center">Review Date</td>
                                             <td align="center"> <input type="date" name="review_date"></td>
                                             <td align="center">Period</td>
@@ -151,36 +151,36 @@
                                             
                                             <tr>
                                                 <td style="width:200px!important;">Strat 1</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_1_objective_1]" id="financial_perspective[strat_1_objective_1]" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_metric_1]" id="financial_perspective[strat_1_metric_1]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_1_objective_1]" id="financial_perspective[strat_1_objective_1]" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_metric_1]" id="financial_perspective[strat_1_metric_1]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_target_1]"  id="financial_perspective[strat_1_target_1]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_start_completion_1]" placeholder="Start" id="financial_perspective[strat_1_target_start_completion_1]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_end_completion_1]" placeholder="End" id="financial_perspective[strat_1_target_end_completion_1]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_weight_1]" id="financial_perspective[strat_1_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="financial_perspective[strat_1_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 2</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_2_objective_1]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_2_metric_1]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_2_objective_1]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_2_metric_1]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_2_target_1]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_2_target_start_completion_1]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_2_target_end_completion_1]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_2_weight_1]" id="financial_perspective[strat_2_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="financial_perspective[strat_2_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_2_remarks_1]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_2_remarks_1]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 3</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_3_objective_1]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_3_metric_1]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_3_objective_1]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_3_metric_1]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_3_target_1]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="financial_perspective[strat_3_target_start_completion_1]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="financial_perspective[strat_3_target_end_completion_1]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_3_weight_1]" id="financial_perspective[strat_3_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="financial_perspective[strat_3_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_3_remarks_1]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_3_remarks_1]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" class="text-center">Objective 2 Profit</td>
@@ -188,36 +188,36 @@
                                             </tr>
                                             <tr>
                                                 <td style="width:200px!important;">Strat 1</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_1_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_metric_2]" placeholder="Metric" ></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_1_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here" ></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_metric_2]" placeholder="Metric" class="myinput" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_target_2]" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_start_completion_2]" placeholder="Start" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_1_target_end_completion_2]" placeholder="End" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_1_weight_2]" id="financial_perspective[strat_1_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="financial_perspective[strat_1_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_1_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 2</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_2_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_2_metric_2]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_2_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_2_metric_2]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_2_target_2]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_2_target_start_completion_2]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="financial_perspective[strat_2_target_end_completion_2]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_2_weight_2]" id="financial_perspective[strat_2_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="financial_perspective[strat_2_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_2_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_2_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 3</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_3_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_3_metric_2]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="financial_perspective[strat_3_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here" ></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_3_metric_2]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_3_target_2]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="financial_perspective[strat_3_target_start_completion_2]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="financial_perspective[strat_3_target_end_completion_2]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="financial_perspective[strat_3_weight_2]" id="financial_perspective[strat_3_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="financial_perspective[strat_3_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_3_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="financial_perspective[strat_3_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
 
                                             <tr>
@@ -235,36 +235,36 @@
                                             
                                             <tr>
                                                 <td style="width:200px!important;">Strat 1</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_1_objective_1]" id="" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_1_metric_1]" placeholder="Metric" ></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_1_objective_1]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here" ></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_1_metric_1]" placeholder="Metric" class="myinput" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_1_target_1]" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="customer_focus[strat_1_target_start_completion_1]" placeholder="Start" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="customer_focus[strat_1_target_end_completion_1]" placeholder="End" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_1_weight_1]" id="customer_focus[strat_1_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="customer_focus[strat_1_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_1_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_1_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 2</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_2_objective_1]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_2_metric_1]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_2_objective_1]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_2_metric_1]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_2_target_1]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="customer_focus[strat_2_target_start_completion_1]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="customer_focus[strat_2_target_end_completion_1]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_2_weight_1]" id="customer_focus[strat_2_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="customer_focus[strat_2_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_2_remarks_1]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_2_remarks_1]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 3</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_3_objective_1]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_3_metric_1]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_3_objective_1]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_3_metric_1]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_3_target_1]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="customer_focus[strat_3_target_start_completion_1]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="customer_focus[strat_3_target_end_completion_1]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_3_weight_1]" id="customer_focus[strat_3_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="customer_focus[strat_3_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_3_remarks_1]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_3_remarks_1]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" class="text-center">Objective 2</td>
@@ -272,36 +272,36 @@
                                             </tr>
                                             <tr>
                                                 <td style="width:200px!important;">Strat 1</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_1_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_1_metric_2]" placeholder="Metric" ></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_1_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here" ></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_1_metric_2]" placeholder="Metric" class="myinput" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_1_target_2]" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="customer_focus[strat_1_target_start_completion_2]" placeholder="Start" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="customer_focus[strat_1_target_end_completion_2]" placeholder="End" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_1_weight_2]" id="customer_focus[strat_1_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="customer_focus[strat_1_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_1_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_1_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 2</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_2_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_2_metric_2]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_2_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_2_metric_2]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_2_target_2]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="customer_focus[strat_2_target_start_completion_2]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="customer_focus[strat_2_target_end_completion_2]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_2_weight_2]" id="customer_focus[strat_2_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="customer_focus[strat_2_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_2_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_2_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 3</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_3_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_3_metric_2]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="customer_focus[strat_3_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here" ></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_3_metric_2]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_3_target_2]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="customer_focus[strat_3_target_start_completion_2]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="customer_focus[strat_3_target_end_completion_2]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_3_weight_2]" id="customer_focus[strat_3_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="customer_focus[strat_3_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_3_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="customer_focus[strat_3_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
 
 
@@ -320,36 +320,36 @@
                                             </tr>
                                             <tr>
                                                 <td style="width:200px!important;">Strat 1</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_1_objective_1]" id="" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_1_metric_1]" placeholder="Metric" ></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_1_objective_1]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here" ></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_1_metric_1]" placeholder="Metric" class="myinput" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_1_target_1]" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="operation_efficiency[strat_1_target_start_completion_1]" placeholder="Start" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="operation_efficiency[strat_1_target_end_completion_1]" placeholder="End" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_1_weight_1]" id="operation_efficiency[strat_1_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="operation_efficiency[strat_1_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_1_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_1_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 2</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_2_objective_1]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_2_metric_1]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_2_objective_1]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_2_metric_1]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_2_target_1]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="operation_efficiency[strat_2_target_start_completion_1]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="operation_efficiency[strat_2_target_end_completion_1]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_2_weight_1]" id="operation_efficiency[strat_2_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="operation_efficiency[strat_2_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_2_remarks_1]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_2_remarks_1]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 3</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_3_objective_1]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_3_metric_1]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_3_objective_1]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_3_metric_1]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_3_target_1]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="operation_efficiency[strat_3_target_start_completion_1]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="operation_efficiency[strat_3_target_end_completion_1]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_3_weight_1]" id="operation_efficiency[strat_3_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="operation_efficiency[strat_3_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_3_remarks_1]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_3_remarks_1]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" class="text-center">Objective 2</td>
@@ -357,36 +357,36 @@
                                             </tr>
                                             <tr>
                                                 <td style="width:200px!important;">Strat 1</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_1_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_1_metric_2]" placeholder="Metric" ></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_1_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here" ></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_1_metric_2]" placeholder="Metric" class="myinput" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_1_target_2]" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="operation_efficiency[strat_1_target_start_completion_2]" placeholder="Start" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="operation_efficiency[strat_1_target_end_completion_2]" placeholder="End" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_1_weight_2]" id="operation_efficiency[strat_1_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="operation_efficiency[strat_1_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_1_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_1_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 2</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_2_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_2_metric_2]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_2_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_2_metric_2]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_2_target_2]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="operation_efficiency[strat_2_target_start_completion_2]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="operation_efficiency[strat_2_target_end_completion_2]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_2_weight_2]" id="operation_efficiency[strat_2_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="operation_efficiency[strat_2_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_2_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_2_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 3</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_3_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_3_metric_2]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="operation_efficiency[strat_3_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here" ></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_3_metric_2]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_3_target_2]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="operation_efficiency[strat_3_target_start_completion_2]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="operation_efficiency[strat_3_target_end_completion_2]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_3_weight_2]" id="operation_efficiency[strat_3_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="operation_efficiency[strat_3_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_3_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="operation_efficiency[strat_3_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
 
                                             <tr>
@@ -404,36 +404,36 @@
                                             
                                             <tr>
                                                 <td style="width:200px!important;">Strat 1</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_1_objective_1]" id="" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_1_metric_1]" placeholder="Metric" ></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_1_objective_1]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here" ></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_1_metric_1]" placeholder="Metric" class="myinput" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_1_target_1]" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="people[strat_1_target_start_completion_1]" placeholder="Start" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="people[strat_1_target_end_completion_1]" placeholder="End" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_1_weight_1]" id="people[strat_1_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="people[strat_1_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_1_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_1_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 2</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_2_objective_1]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_2_metric_1]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_2_objective_1]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_2_metric_1]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_2_target_1]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="people[strat_2_target_start_completion_1]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="people[strat_2_target_end_completion_1]" placeholdaer="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_2_weight_1]" id="people[strat_2_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="people[strat_2_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_2_remarks_1]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_2_remarks_1]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 3</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_3_objective_1]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_3_metric_1]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_3_objective_1]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_3_metric_1]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_3_target_1]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="people[strat_3_target_start_completion_1]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="people[strat_3_target_end_completion_1]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_3_weight_1]" id="people[strat_3_weight_1]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="people[strat_3_review_actual_1]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_3_remarks_1]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_3_remarks_1]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2" class="text-center">Objective 2</td>
@@ -441,36 +441,36 @@
                                             </tr>
                                             <tr>
                                                 <td style="width:200px!important;">Strat 1</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_1_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_1_metric_2]" placeholder="Metric" ></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_1_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here" ></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_1_metric_2]" placeholder="Metric" class="myinput" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_1_target_2]" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="people[strat_1_target_start_completion_2]" placeholder="Start" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="people[strat_1_target_end_completion_2]" placeholder="End" ></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_1_weight_2]" id="people[strat_1_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="people[strat_1_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_1_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_1_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 2</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_2_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here"></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_2_metric_2]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_2_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here"></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_2_metric_2]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_2_target_2]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="people[strat_2_target_start_completion_2]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" name="people[strat_2_target_end_completion_2]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_2_weight_2]" id="people[strat_2_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="people[strat_2_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_2_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_2_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
                                             <tr>
                                                 <td>Strat 3</td>
-                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_3_objective_2]" id="" width="100%" class="responsive-input" placeholder="Input Here" ></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_3_metric_2]" placeholder="Metric"></td>
+                                                <td style="text-align: center; width:300px!important;"><input type="text" name="people[strat_3_objective_2]" id="" width="100%" class="responsive-input myinput" placeholder="Input Here" ></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_3_metric_2]" placeholder="Metric" class="myinput"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_3_target_2]"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="people[strat_3_target_start_completion_2]" placeholder="Start"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="date" width="100%" name="people[strat_3_target_end_completion_2]" placeholder="End"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="100" name="people[strat_3_weight_2]" id="people[strat_3_weight_2]" onkeyup="updateSumTotalSummaryofRatingsWeight()"></td>
                                                 <td style="text-align: center; width:10px!important;"><input type="number" class="text-align-center" min="1" max="5" name="people[strat_3_review_actual_2]" disabled></td>
-                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_3_remarks_2]" id="" width="100%" class="responsive-input" disabled></td>
+                                                <td style="text-align: center; width:10px!important;"><input type="text" name="people[strat_3_remarks_2]" id="" width="100%" class="responsive-input myinput" disabled></td>
                                             </tr>
 
                                         </tbody>
@@ -751,13 +751,13 @@
                                             <td align="center">BSC</td>
                                             <td align="center"><input type="number" class="text-align-center" id="bsc_weight" min="1" max="100" name="bsc_weight" readonly></td>
                                             <td align="center"><input type="number" class="text-align-center" min="1" max="100" name="bsc_actual_score" disabled></td>
-                                            <td align="center"><input type="text" name="bsc_description" width="100%" class="responsive-input" disabled></td>
+                                            <td align="center"><input type="text" name="bsc_description" width="100%" class="responsive-input myinput" disabled></td>
                                         </tr>
                                         <tr>
                                             <td align="center">COMPETENCY</td>
                                             <td align="center"><input type="number" class="text-align-center" id="competency_weight" min="1" max="100" name="competency_weight" readonly></td>
                                             <td align="center"><input type="number" class="text-align-center" min="1" max="100" name="competency_actual_score" disabled></td>
-                                            <td align="center"><input type="text" name="competency_description" width="100%" class="responsive-input" disabled></td>
+                                            <td align="center"><input type="text" name="competency_description" width="100%" class="responsive-input myinput" disabled></td>
                                         </tr>
                                         <tr>
                                             <td align="center">TOTAL</td>
@@ -773,8 +773,8 @@
                                             <td width="50%" align="center" style="background-color: rgb(240, 240, 240)"><strong>DEVELOPMENTAL NEEDS</strong></td>
                                         </tr>
                                         <tr>
-                                            <td align="center"><textarea width="100%" class="responsive-input" name="areas_of_strength" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
-                                            <td align="center"><textarea width="100%" class="responsive-input" name="developmental_needs" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
+                                            <td align="center"><textarea width="100%" class="responsive-input myinput" name="areas_of_strength" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
+                                            <td align="center"><textarea width="100%" class="responsive-input myinput" name="developmental_needs" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
                                         </tr>
                                    
                                         <tr>
@@ -782,20 +782,20 @@
                                             <td width="50%" align="center" style="background-color: rgb(240, 240, 240)"><strong>TRAINING & DEVELOPMENTAL PLANS</strong></td>
                                         </tr>
                                         <tr>
-                                            <td align="center"><textarea width="100%" class="responsive-input" name="areas_for_enhancement" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
-                                            <td align="center"><textarea width="100%" class="responsive-input" name="training_and_development_plans" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
+                                            <td align="center"><textarea width="100%" class="responsive-input myinput" name="areas_for_enhancement" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
+                                            <td align="center"><textarea width="100%" class="responsive-input myinput" name="training_and_development_plans" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2" align="center" style="background-color: rgb(240, 240, 240)"><strong>RATEE'S COMMENTS</strong></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2" align="center"><textarea style="max-width:2000px!important;" class="responsive-input" name="ratees_comments" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
+                                            <td colspan="2" align="center"><textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2" align="center" style="background-color: rgb(240, 240, 240)"><strong>SUMMARY OF RATER'S COMMENTS/RECOMMENDATIONS</strong></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2" align="center"><textarea style="max-width:2000px!important;" class="responsive-input" name="summary_ratees_comments_recommendation" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
+                                            <td colspan="2" align="center"><textarea style="max-width:2000px!important;" class="responsive-input myinput" name="summary_ratees_comments_recommendation" cols="30" rows="7" placeholder="Input here" disabled></textarea></td>
                                         </tr>
                                     </table> --}}
 
@@ -824,6 +824,9 @@
 @endsection
 
 <script>
+
+    
+
     function updateSumTotalSummaryofRatingsWeight() {
 
         //BSC 
@@ -873,6 +876,25 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
+
+        var inputFields = document.querySelectorAll('.myinput');
+
+        inputFields.forEach(function(inputField) {
+        inputField.addEventListener("input", function(event) {
+            var currentValue = this.value;
+            if (currentValue.includes('"')) {
+                this.value = currentValue.slice(0, -1);
+            }
+        });
+
+        inputField.addEventListener("paste", function(event) {
+                var pastedText = (event.clipboardData || window.clipboardData).getData('text');
+                if (pastedText.includes('"')) {
+                    event.preventDefault();
+                }
+            });
+        });
+
         // Function to enable/disable the submit button based on checkbox state
         function updateSubmitButtonState() {
             var checkbox = document.getElementById("myCheckbox");
