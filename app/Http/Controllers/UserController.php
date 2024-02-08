@@ -73,7 +73,7 @@ class UserController extends Controller
 
     public function editUserRole(User $user){
 
-        $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
+        $companies = Company::orderBy('company_name','ASC')->get();
         $projects = Project::orderBy('project_id','ASC')->get();
         $locations = Location::orderBy('location','ASC')->get();
         $user = User::with('user_allowed_company','user_privilege')
