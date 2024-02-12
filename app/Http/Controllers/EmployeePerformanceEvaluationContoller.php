@@ -83,17 +83,32 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $for_approval = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies);
                                 })
+                                ->when(!empty($company), function ($query) use ($company) {
+                                    $query->whereHas('employee',function($q) use($company){
+                                        $q->where('company_id',$company);
+                                    });
+                                })
                                 ->where('status','For Review')
                                 ->count();
                                 
         $approved = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies);
                                 })
+                                ->when(!empty($company), function ($query) use ($company) {
+                                    $query->whereHas('employee',function($q) use($company){
+                                        $q->where('company_id',$company);
+                                    });
+                                })
                                 ->where('status','Approved')
                                 ->count();
 
         $declined = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies);
+                                })
+                                ->when(!empty($company), function ($query) use ($company) {
+                                    $query->whereHas('employee',function($q) use($company){
+                                        $q->where('company_id',$company);
+                                    });
                                 })
                                 ->where('status','Declined')
                                 ->count();

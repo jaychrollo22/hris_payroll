@@ -89,7 +89,7 @@
                           <option value="Draft" @if ('Draft' == $status) selected @endif>Draft</option>
                           <option value="For Review" @if ('For Review' == $status) selected @endif>For Review</option>
                           <option value="Approved" @if ('Approved' == $status) selected @endif>Approved</option>
-                          <option value="Cancelled" @if ('Cancelled' == $status) selected @endif>Cancelled</option>
+                          <option value="Declined" @if ('Declined' == $status) selected @endif>Declined / Rejected</option>
                         </select>
                       </div>
                     </div>
