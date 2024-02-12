@@ -90,7 +90,7 @@
 										</td>
 										<td>
 											
-											{{ $employeeAllowance->allowance->name }}
+											{{ $employeeAllowance->allowance ? $employeeAllowance->allowance->name : "" }}
 										</td>
 										<td>{{ $employeeAllowance->description }}</td>
 										<td>{{ $employeeAllowance->application }}</td>
