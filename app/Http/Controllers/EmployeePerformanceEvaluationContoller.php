@@ -77,6 +77,11 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $draft = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies);
                                 })
+                                ->when(!empty($company), function ($query) use ($company) {
+                                    $query->whereHas('employee',function($q) use($company){
+                                        $q->where('company_id',$company);
+                                    });
+                                })
                                 ->where('status','Draft')
                                 ->count();
 
