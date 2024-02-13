@@ -885,11 +885,17 @@
             if (currentValue.includes('"')) {
                 this.value = currentValue.slice(0, -1);
             }
+            if (currentValue.includes('\\')) {
+                this.value = currentValue.slice(0, -1);
+            }
         });
 
         inputField.addEventListener("paste", function(event) {
                 var pastedText = (event.clipboardData || window.clipboardData).getData('text');
                 if (pastedText.includes('"')) {
+                    event.preventDefault();
+                }
+                if (pastedText.includes('\\')) {
                     event.preventDefault();
                 }
             });
