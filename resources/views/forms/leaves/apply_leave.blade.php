@@ -84,13 +84,13 @@
                       Date From 
                     </div>
                     <div class='col-md-4'>
-                      <input type="date" name='date_from' class="form-control" required>
+                      <input type="date" name='date_from' min='{{date('Y-m-d')}}' class="form-control" required>
                     </div>
                     <div class='col-md-2'>
                       Date To 
                     </div>
                     <div class='col-md-4'>
-                      <input type="date" name='date_to' class="form-control" required>
+                      <input type="date" name='date_to' min='{{date('Y-m-d')}}' class="form-control" required>
                     </div>
                   </div>
                   <div class="form-group row">
