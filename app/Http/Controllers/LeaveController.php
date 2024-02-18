@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use App\Exports\EmployeeLeaveExport;
 use Excel;
 
+use RealRashid\SweetAlert\Facades\Alert;
+
 class LeaveController extends Controller
 {
     //
@@ -27,17 +29,53 @@ class LeaveController extends Controller
             )
         );
     }
+
     public function leaveDetails()
     {
         $leave_types = Leave::get();
         return view(
             'leaves.leave_types',
             array(
-                'header' => 'Handbooks',
+                'header' => 'settings',
                 'leave_types' => $leave_types,
             )
         );
     }
+
+    public function store(Request $request)
+    {
+        $new_leave = new Leave;
+        $new_leave->leave_type = $request->leave_type;
+        $new_leave->code = $request->code;
+        $new_leave->save();
+
+        Alert::success('Successfully Store')->persistent('Dismiss');
+        return back();
+    }
+
+    public function edit($id)
+    {
+        $leave = Leave::where('id',$id)->get();
+        return view(
+            'leaves.edit',
+            array(
+                'header' => 'settings',
+                'leave' => $leave,
+            )
+        );
+    }
+
+    public function update(Request $request, $id)
+    {
+        $leave = Leave::where('id',$id)->first();
+        $leave->leave_type = $request->leave_type;
+        $leave->code = $request->code;
+        $leave->save();
+
+        Alert::success('Successfully Store')->persistent('Dismiss');
+        return back();
+    }
+
     public function leave_report(Request $request)
     {   
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);

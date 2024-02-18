@@ -36,7 +36,7 @@
                           $splw_balance = 0;
                           $splvv_balance = 0;
                       @endphp
-
+                    {{-- 
                       @if(count($leave_balances) > 0)
                         @foreach($leave_balances as $leave)
                         <tr>
@@ -383,8 +383,25 @@
                             }
                           @endphp
                         </tr>
-                      @endif
+                      @endif --}}
+                      
+                      @if(count($employee_leave_type_balance) > 0)
+                        @foreach($employee_leave_type_balance as $leave_balance)
 
+                          @php
+                            $used_leave = checkUsedLeave(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
+                            $total_balance = $leave_balance->total_balance;
+                            $remaining = $leave_balance->total_balance - $used_leave;
+                          @endphp
+
+                          <tr>
+                            <td>{{$leave_balance->leave_type}}</td>
+                            <td>{{$leave_balance->total_balance}}</td>
+                            <td>{{$used_leave}}</td>
+                            <td>{{$remaining > 0 ? $remaining : 0}}</td>
+                          <tr>
+                        @endforeach
+                      @endif
 
                     </tbody>
                   </table>

@@ -8,11 +8,15 @@ use App\ScheduleData;
 use App\Leave;
 use App\EmployeeLeave;
 use App\EmployeeLeaveCredit;
+
+use App\EmployeeLeaveTypeBalance;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 use DateTime;
+use DB;
 
 class EmployeeLeaveController extends Controller
 {
@@ -22,25 +26,37 @@ class EmployeeLeaveController extends Controller
     {
 
         $today = date('Y-m-d');
+        
+        $year = date('Y');
+
         $from = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
         $to = isset($request->to) ? $request->to : date('Y-m-d');
         $status = isset($request->status) ? $request->status : 'Pending';
 
-        $employee_status = Employee::select('original_date_hired','classification','gender')->where('user_id',auth()->user()->id)->first();
+        $employee_status = Employee::select('original_date_hired','classification','gender')
+                                        ->where('user_id',auth()->user()->id)
+                                        ->first();
 
-        $used_vl = checkUsedSLVLSILLeave(auth()->user()->id,1,$employee_status->original_date_hired);
-        $used_sl = checkUsedSLVLSILLeave(auth()->user()->id,2,$employee_status->original_date_hired);
-        $used_sil = checkUsedSLVLSILLeave(auth()->user()->id,10,$employee_status->original_date_hired);
+        $employee_leave_type_balance = EmployeeLeaveTypeBalance::select('leave_type','year', DB::raw('SUM(balance) as total_balance'))
+                                                                    ->groupBy('leave_type','year')
+                                                                    ->where('user_id',auth()->user()->id)
+                                                                    ->where('year',$year)
+                                                                    ->with('leave_type_info')
+                                                                    ->get();
 
-        $used_ml = checkUsedLeave(auth()->user()->id,3);
-        $used_pl = checkUsedLeave(auth()->user()->id,4);
-        $used_spl = checkUsedLeave(auth()->user()->id,5);
-        $used_splw = checkUsedLeave(auth()->user()->id,7);
-        $used_splvv = checkUsedLeave(auth()->user()->id,9);
+        // $used_vl = checkUsedSLVLSILLeave(auth()->user()->id,1,$employee_status->original_date_hired);
+        // $used_sl = checkUsedSLVLSILLeave(auth()->user()->id,2,$employee_status->original_date_hired);
+        // $used_sil = checkUsedSLVLSILLeave(auth()->user()->id,10,$employee_status->original_date_hired);
+
+        // $used_ml = checkUsedLeave(auth()->user()->id,3);
+        // $used_pl = checkUsedLeave(auth()->user()->id,4);
+        // $used_spl = checkUsedLeave(auth()->user()->id,5);
+        // $used_splw = checkUsedLeave(auth()->user()->id,7);
+        // $used_splvv = checkUsedLeave(auth()->user()->id,9);
        
-        $earned_vl = checkEarnedLeave(auth()->user()->id,1,$employee_status->original_date_hired);
-        $earned_sl = checkEarnedLeave(auth()->user()->id,2,$employee_status->original_date_hired);
-        $earned_sil = checkEarnedLeave(auth()->user()->id,10,$employee_status->original_date_hired);
+        // $earned_vl = checkEarnedLeave(auth()->user()->id,1,$employee_status->original_date_hired);
+        // $earned_sl = checkEarnedLeave(auth()->user()->id,2,$employee_status->original_date_hired);
+        // $earned_sil = checkEarnedLeave(auth()->user()->id,10,$employee_status->original_date_hired);
 
         
         $leave_types = Leave::all(); //masterfile
@@ -85,21 +101,26 @@ class EmployeeLeaveController extends Controller
             'employee_leaves_all' => $employee_leaves_all,
             'leave_types' => $leave_types,
             'employee_status' => $employee_status,
-            'used_vl' => $used_vl,
-            'used_sl' => $used_sl,
-            'used_sil' => $used_sil,
-            'used_ml' => $used_ml,
-            'used_pl' => $used_pl,
-            'used_spl' => $used_spl,
-            'used_splw' => $used_splw,
-            'used_splvv' => $used_splvv,
-            'earned_vl' => $earned_vl,
-            'earned_sl' => $earned_sl,
-            'earned_sil' => $earned_sil,
+            
+            // 'used_vl' => $used_vl,
+            // 'used_sl' => $used_sl,
+            // 'used_sil' => $used_sil,
+            // 'used_ml' => $used_ml,
+            // 'used_pl' => $used_pl,
+            // 'used_spl' => $used_spl,
+            // 'used_splw' => $used_splw,
+            // 'used_splvv' => $used_splvv,
+            // 'earned_vl' => $earned_vl,
+            // 'earned_sl' => $earned_sl,
+            // 'earned_sil' => $earned_sil,
+
             'allowed_to_file' => $allowed_to_file,
+
             'from' => $from,
             'to' => $to,
             'status' => $status,
+
+            'employee_leave_type_balance' => $employee_leave_type_balance
         ));
     }  
 

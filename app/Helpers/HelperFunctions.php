@@ -580,11 +580,19 @@ function checkUsedServiceIncentiveLeave($user_id){
     return $count;
 }
 
-function checkUsedLeave($user_id,$leave_type){
+function checkUsedLeave($user_id,$leave_type,$year){
+
+
     $employee_leave = EmployeeLeave::where('user_id',$user_id)
                                     ->where('leave_type',$leave_type)
                                     ->where('status','Approved')
-                                    ->get();
+                                    ->whereYear('date_from', '=', $year);
+    if($year == 2024){
+        $date_validate = date('Y-01-03'); // Start of Leave Date Validation in 2024
+        $employee_leave = $employee_leave->where('date_from' , '>=', $date_validate);
+    }
+
+    $employee_leave = $employee_leave->get();
 
     $count = 0;
     if($employee_leave){

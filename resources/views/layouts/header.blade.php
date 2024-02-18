@@ -497,7 +497,7 @@
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/allowances') }}">Allowances</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/incentives') }}">Incentives</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/handbooks') }}">Handbook</a></li>
-                                <li class="nav-item"> <a class="nav-link" href="{{ url('/leavee-settings') }}">Leave Type</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/leave-settings') }}">Leave Type</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/announcements') }}">Announcements</a></li>
                                 {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/logos') }}">Logos</a></li> --}}
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/hr-approver-setting') }}">HR Approver Setting</a></li>
