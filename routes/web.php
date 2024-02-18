@@ -153,8 +153,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('delete-holiday/{id}', 'HolidayController@delete_holiday');
     Route::post('edit-holiday/{id}', 'HolidayController@edit_holiday');
 
-    //formsLeave
-    Route::get('leavee-settings', 'LeaveController@leaveDetails');
+    //Leaves Types
+    Route::get('leave-settings', 'LeaveController@leaveDetails');
+    Route::post('new-leave-type', 'LeaveController@store');
+    Route::get('edit-leave-type/{id}', 'LeaveController@edit');
+    Route::post('update-leave-type/{id}', 'LeaveController@update');
 
     //Schedules
     Route::get('schedules', 'ScheduleController@schedules');
@@ -365,6 +368,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('decline-ppr/{id}','EmployeePerformanceEvaluationContoller@declinePpr');
     Route::post('approve-ppr-all','EmployeePerformanceEvaluationContoller@approvePprAll');
     Route::post('disapprove-ppr-all','EmployeePerformanceEvaluationContoller@disapprovePprAll');
+
+
+    //Employee Leave Type Balances
+    Route::get('/employee-leave-type-balances','EmployeeLeaveTypeBalanceController@index');
+    Route::post('/new-employee-leave-type-balance','EmployeeLeaveTypeBalanceController@store');
+    Route::get('/edit-employee-leave-type-balances/{id}','EmployeeLeaveTypeBalanceController@edit');
+    Route::post('/update-employee-leave-type-balance/{id}','EmployeeLeaveTypeBalanceController@update');
+    Route::get('/export-employee-leave-type-balances','EmployeeLeaveTypeBalanceController@export');
+    Route::post('/import-employee-leave-type-balances','EmployeeLeaveTypeBalanceController@import');
+
    
 
 });
