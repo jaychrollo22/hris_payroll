@@ -381,7 +381,7 @@
                     <li class="nav-item @if ($header == 'for-approval') active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#for-approval" aria-expanded="false" aria-controls="ui-basic">
                             <i class="icon-check menu-icon"></i>
-                            <span class="menu-title">For Approval</span>
+                            <span class="menu-title">For Approval <span class="badge badge-warning">{{ session('pending_leave_count')+session('pending_overtime_count')+session('pending_wfh_count')+session('pending_ob_count')+session('pending_dtr_count') }}</span></span>
                             <i class="menu-arrow"></i>
                         </a>
                         <div class="collapse @if ($header == 'for-approval') show @endif" id="for-approval">
@@ -444,9 +444,9 @@
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biologs-employee') }}">Per Employee</a></li>
                                 @endif
                                 @if (checkUserPrivilege('biometrics_per_location',auth()->user()->id) == 'yes')
-                                <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location (ZK)</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location</a></li>
                                 @endif
-                                @if (checkUserPrivilege('biometrics_per_location_hik',auth()->user()->id) == 'yes')
+                                {{-- @if (checkUserPrivilege('biometrics_per_location_hik',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location-hik') }}">Per Location (HIK)</a></li>
                                 @endif
                                 @if (checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes')
@@ -460,7 +460,7 @@
                                 @endif
                                 @if (checkUserPrivilege('biometrics_sync',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/sync-biometrics') }}">Sync Biometrics</a></li>
-                                @endif
+                                @endif --}}
                             </ul>
                         </div>
                     </li>
@@ -531,25 +531,25 @@
                         <a class="nav-link" href="{{ url('/project') }}">Projects</a>
                     </li>
                     @endif
-                    {{-- @if(checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes')
+                    @if(checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/loan-type') }}">Loan Types</a>
                     </li>
-                    @endif --}}
-                    {{-- <li class="nav-item">
+                    @endif
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-incentive') }}">Employee Incentives</a>
-                    </li> --}}
+                    </li>
                     @if(checkUserPrivilege('masterfiles_employee_allowances',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-allowance') }}">Employee Allowances</a>
                     </li>
                     @endif
-                    {{-- <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ url('/salary-management') }}">Salary Management</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-companies') }}">Employee Groups</a>
-                    </li> --}}
+                    </li>
                     @if(checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-leave-credits') }}">Employee Leave Credits</a>

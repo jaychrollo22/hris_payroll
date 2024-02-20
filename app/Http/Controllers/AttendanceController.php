@@ -60,7 +60,6 @@ class AttendanceController extends Controller
                                 ->where('employee_number', auth()->user()->employee->employee_number)
                                 ->where('status','Active')
                                 ->get();
-
         return view('attendances.view_attendance',
         array(
             'header' => 'attendances',
