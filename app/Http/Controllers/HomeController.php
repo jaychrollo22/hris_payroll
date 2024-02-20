@@ -59,6 +59,7 @@ class HomeController extends Controller
         $employees_under = auth()->user()->subbordinates;
         // dd(auth()->user()->employee);
         $attendance_employees = $attendance_controller->get_attendances_employees(date('Y-m-d'),date('Y-m-d'),$employees_under->pluck('employee_number')->toArray());
+   
         // dd($attendance_employees);
         $announcements = Announcement::with('user')->where('expired',null)
         ->orWhere('expired',">=",date('Y-m-d'))->get();
