@@ -56,7 +56,7 @@ class EmployeeLeaveController extends Controller
                                             ->where('user_id',auth()->user()->id)
                                             ->get();
 
-        $get_leave_balances = new LeaveBalanceController;
+        // $get_leave_balances = new LeaveBalanceController;
         $get_approvers = new EmployeeApproverController;
         $leave_balances = EmployeeLeaveCredit::with('leave')->where('user_id',auth()->user()->id)->get();
         $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
