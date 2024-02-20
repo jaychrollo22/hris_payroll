@@ -192,8 +192,8 @@ class AttendanceController extends Controller
         $attendances = Attendance::whereIn('employee_code',$employees)
         ->orderBy('time_in','asc')
         ->where(function($q) use ($from_date, $to_date) {
-            $q->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
-            ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"]);
+            $q->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"]);
+            // ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"]);
         })
         ->get();
 
