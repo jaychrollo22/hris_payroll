@@ -1420,7 +1420,7 @@ class EmployeeController extends Controller
             
             
 
-            $emp_data = Employee::select('id','user_id','employee_number','first_name','last_name','schedule_id')
+            $emp_data = Employee::select('id','user_id','employee_number','first_name','last_name','schedule_id','location')
                                     ->with(['schedule_info','attendances' => function ($query) use ($from_date, $to_date) {
                                             $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                                     ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
