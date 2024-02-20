@@ -26,37 +26,26 @@
                 <div class="form-group row">
                   <label for="leave_type" class="col-sm-2 col-form-label">Leave Type</label>
                     <div class="col-sm-4">
-                      {{-- <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email"> --}}
-                      <select v-on:change="validateLeave" v-model="leave_type" class="form-control"  id="leave_type" style='width:100%;' name='leave_type' required>
+                      <select class="form-control" id="leave_type" style='width:100%;' name='leave_type' required>
                         <option value="">--Select--</option>
-                        @foreach($leave_types as $leave_type)
-                          @if($leave_type->code == 'VL')
-                            <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
-                          @elseif($leave_type->code == 'SL')
-                            <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
-                          @elseif($is_allowed_to_file_sil && $leave_type->code == 'SIL' && $employee_status->classifcation == 'Project Based')
-                            <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
-                          @elseif($is_allowed_to_file_ml && $leave_type->code == 'ML')
-                            <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
-                          @elseif($is_allowed_to_file_pl && $leave_type->code == 'PL')
-                            <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
-                          @elseif($is_allowed_to_file_spl && $leave_type->code == 'SPL')
-                            <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
-                          @elseif($is_allowed_to_file_splw && $leave_type->code == 'SPLW')
-                            <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
-                          @elseif($is_allowed_to_file_splvv && $leave_type->code == 'SPLVV')
-                            <option value="{{$leave_type->id}}">{{$leave_type->leave_type}}</option>
-                          @endif
+                        @foreach($employee_leave_type_balance as $leave_type)
+                          @php
+                            $used_leave = checkUsedLeave(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
+                            $total_balance = $leave_balance->total_balance;
+                            $remaining = $leave_balance->total_balance - $used_leave;
+                          @endphp
+
+                          <option value="{{$leave_type->leave_type_info->id}}" data-balance="{{$remaining}}">{{$leave_type->leave_type_info->leave_type}}</option>
                         @endforeach
                       </select>
                     </div>
                     <div class='col-sm-5'>
                       <div class='row'>
                         <div class='col-md-6'>
-                          <input type="hidden" v-model="leave_balances" name="leave_balances" :value="leave_balances">
+                          <input type="hidden" id="leave_balances" name="leave_balances" value="">
                           <div>
                             <label class="form-check-label ">
-                              <input type="checkbox" name="withpay" class="form-check-input" :disabled="isAllowedWithPay" v-model="with_pay">
+                              <input type="checkbox" name="withpay" class="form-check-input" id="withPayCheckBox" disabled>
                               With Pay
                           </label>
                           </div>
@@ -122,83 +111,3 @@
     </div>
   </div>
 </div>
-<script>
-  var app = new Vue({
-          el: '#app',
-          data : {
-              with_pay : '',
-              leave_type : '',
-              isAllowedWithPay : true,
-              leave_balances : '',
-              vl_balance : '<?php echo $vl_balance; ?>',
-              sl_balance : '<?php echo $sl_balance; ?>',
-              ml_balance : '<?php echo $ml_balance; ?>',
-              pl_balance : '<?php echo $pl_balance; ?>',
-              spl_balance : '<?php echo $spl_balance; ?>',
-              splw_balance : '<?php echo $splw_balance; ?>',
-              splvv_balance : '<?php echo $splvv_balance; ?>',
-          },
-          methods: {
-            validateLeave() {
-              this.leave_balances = '';
-              if(this.leave_type == '1'){ // Vacation Leave
-                  if(Number(this.vl_balance) > 0){
-                    this.leave_balances = this.vl_balance;
-                    this.isAllowedWithPay = false;
-                  }else{
-                    this.isAllowedWithPay = true;
-                  }
-              }
-              else if(this.leave_type == '2'){ // Sick Leave
-                  if(Number(this.sl_balance) > 0){
-                    this.leave_balances = this.sl_balance;
-                    this.isAllowedWithPay = false;
-                  }else{
-                    this.isAllowedWithPay = true;
-                  }
-              }
-              else if(this.leave_type == '3'){ // Maternity Leave
-                  if(Number(this.ml_balance) > 0){
-                    this.leave_balances = this.ml_balance;
-                    this.isAllowedWithPay = false;
-                  }else{
-                    this.isAllowedWithPay = true;
-                  }
-              }
-              else if(this.leave_type == '4'){ // Paternity Leave
-                  if(Number(this.pl_balance) > 0){
-                    this.leave_balances = this.pl_balance;
-                    this.isAllowedWithPay = false;
-                  }else{
-                    this.isAllowedWithPay = true;
-                  }
-              }
-              else if(this.leave_type == '5'){ // SPL
-                  if(Number(this.spl_balance) > 0){
-                    this.leave_balances = this.spl_balance;
-                    this.isAllowedWithPay = false;
-                  }else{
-                    this.isAllowedWithPay = true;
-                  }
-              }
-              else if(this.leave_type == '7'){ // SPLW
-                  if(Number(this.splw_balance) > 0){
-                    this.leave_balances = this.splw_balance;
-                    this.isAllowedWithPay = false;
-                  }else{
-                    this.isAllowedWithPay = true;
-                  }
-              }
-              else if(this.leave_type == '9'){ // SPLVV
-                  if(Number(this.splvv_balance) > 0){
-                    this.leave_balances = this.splvv_balance;
-                    this.isAllowedWithPay = false;
-                  }else{
-                    this.isAllowedWithPay = true;
-                  }
-              }
-              
-            }
-          },
-  });
-</script>

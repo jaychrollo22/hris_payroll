@@ -202,9 +202,32 @@ class EmployeeLeaveController extends Controller
         
     }
 
+    public function edit($id){
+        $year = date('Y');
+
+        $leave = EmployeeLeave::findOrFail($id);
+        $get_approvers = new EmployeeApproverController;
+        $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
+        $employee_leave_type_balance = EmployeeLeaveTypeBalance::select('leave_type','year', DB::raw('SUM(balance) as total_balance'))
+                                                                    ->groupBy('leave_type','year')
+                                                                    ->where('user_id',auth()->user()->id)
+                                                                    ->where('year',$year)
+                                                                    ->with('leave_type_info')
+                                                                    ->get();
+
+        return view('forms.leaves.edit_leave',array(
+            'header' => 'forms',
+            'leave'=>$leave,
+            'all_approvers'=>$all_approvers,
+            'get_approvers'=>$get_approvers,
+            'employee_leave_type_balance' => $employee_leave_type_balance
+        ));
+    }
 
     public function edit_leave(Request $request, $id)
     {
+
+        
         $employee = Employee::where('user_id',Auth::user()->id)->first();
         $count_days = get_count_days_leave($employee->ScheduleData,$request->date_from,$request->date_to);
         if($request->withpay == 'on'){

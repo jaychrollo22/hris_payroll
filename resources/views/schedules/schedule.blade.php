@@ -64,9 +64,6 @@
               </div>
             </div>
           </div>
-          @foreach($schedules as $schedule)
-            @include('schedules.edit_schedule')
-          @endforeach
           @include('schedules.new_schedule')
           @php
             function set_data_final($data,$schedule)

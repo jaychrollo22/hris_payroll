@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
     //Leaves
     Route::get('file-leave', 'EmployeeLeaveController@leaveBalances');
     Route::post('new-leave','EmployeeLeaveController@new');
+    Route::get('edit-leave/{id}', 'EmployeeLeaveController@edit');
     Route::post('edit-leave/{id}', 'EmployeeLeaveController@edit_leave');
     Route::get('disable-leave/{id}', 'EmployeeLeaveController@disable_leave');
     Route::post('request-to-cancel-leave/{id}', 'EmployeeLeaveController@request_to_cancel');

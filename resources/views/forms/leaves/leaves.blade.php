@@ -17,374 +17,6 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @php
-                          $is_allowed_to_file_vl = false;
-                          $is_allowed_to_file_sl = false;
-                          $is_allowed_to_file_sil = false;
-
-                          $is_allowed_to_file_ml = false;
-                          $is_allowed_to_file_pl = false;
-                          $is_allowed_to_file_spl = false;
-                          $is_allowed_to_file_splw = false;
-                          $is_allowed_to_file_splvv = false;
-
-                          $vl_balance = 0;
-                          $sl_balance = 0;
-                          $pl_balance = 0;
-                          $ml_balance = 0;
-                          $spl_balance = 0;
-                          $splw_balance = 0;
-                          $splvv_balance = 0;
-                      @endphp
-                    {{-- 
-                      @if(count($leave_balances) > 0)
-                        @foreach($leave_balances as $leave)
-                        <tr>
-                          <td>{{$leave->leave->leave_type}}</td>
-                          <td>
-                            @if ($leave->leave->id == '1')
-                              @php
-                                $date_from = new DateTime($employee_status->original_date_hired);
-                                $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
-                                $total_months = (($date_diff->y) * 12) + ($date_diff->m);
-
-                                // $vl_beginning_balance = 0;
-                                // if($total_months > 11){ //
-                                  
-                                //   $original_date_hired_m_d = date('m-d',strtotime($employee_status->original_date_hired));
-                                //   $original_date_hired_m = date('m',strtotime($employee_status->original_date_hired));
-                                //   $today = date('Y-m-d');
-                                //   $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-                                //   $original_date_hired = $last_year . '-' . $original_date_hired_m_d;
-
-                                //   if($last_year == 2022){
-                                //       $vl_beginning_balance = $leave->count;
-                                //   }
-                                // }
-                                // else{
-                                //   $vl_beginning_balance = $leave->count;
-                                // }
-                                
-                                
-                                  $vl_beginning_balance = 0;
-                                  $today  = date('Y-m-d');
-                                  $date_hired_md = date('m-d',strtotime($employee_status->original_date_hired));
-                                  $date_hired_m = date('m',strtotime($employee_status->original_date_hired));
-                                  $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-                                  $this_year = date('Y');
-
-                                  $date_hired_this_year = $this_year . '-'. $date_hired_md;
-
-                                  if($last_year == 2022 && $today < $date_hired_this_year){
-                                      $vl_beginning_balance = $leave->count;
-                                  }
-                                  
-                                  $total_vl = $vl_beginning_balance + $earned_vl;
-                                
-
-                                
-                              @endphp
-                              {{ ceil($total_vl)  }}
-                            @elseif ($leave->leave->id == '2')
-                              @php
-                                $date_from = new DateTime($employee_status->original_date_hired);
-                                $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
-                                $total_months = (($date_diff->y) * 12) + ($date_diff->m);
-
-                                $sl_beginning_balance = 0;
-                                // if($total_months > 11){ //
-                                  
-                                //   $original_date_hired_m_d = date('m-d',strtotime($employee_status->original_date_hired));
-                                //   $original_date_hired_m = date('m',strtotime($employee_status->original_date_hired));
-                                //   $today = date('Y-m-d');
-                                //   $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-                                //   $original_date_hired = $last_year . '-' . $original_date_hired_m_d;
-
-                                //   if($last_year == 2022){
-                                //       $sl_beginning_balance = $leave->count;
-                                //   }
-                                // }
-                                // else{
-                                //   $sl_beginning_balance = $leave->count;
-                                // }
-
-                                $sl_beginning_balance = 0;
-
-                                if($total_months >= 6 && $total_months < 12){ //6 months regularization
-
-                                  $sl_beginning_balance = $leave->count;
-                                  $total_sl = $sl_beginning_balance;
-
-                                }else{
-                                  $sl_beginning_balance = 0;
-                                  $today  = date('Y-m-d');
-                                  $date_hired_md = date('m-d',strtotime($employee_status->original_date_hired));
-                                  $date_hired_m = date('m',strtotime($employee_status->original_date_hired));
-                                  $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-                                  $this_year = date('Y');
-
-                                  $date_hired_this_year = $this_year . '-'. $date_hired_md;
-
-                                  if($last_year == 2022 && $today < $date_hired_this_year){
-                                      $sl_beginning_balance = $leave->count;
-                                  }
-
-
-                                  if($total_months < 11){
-                                    $sl_beginning_balance = $leave->count;
-                                  }
-                                  
-                                  $total_sl = $sl_beginning_balance + $earned_sl;
-                                }
-                              @endphp
-                                {{ ceil($total_sl) }}
-                            @elseif ($leave->leave->id == '10')
-                                {{$earned_sil + $leave->count}}
-                            @elseif ($leave->leave->id == '3')
-                                {{$leave->count}}
-                            @elseif ($leave->leave->id == '4')
-                                {{$leave->count}}
-                            @elseif ($leave->leave->id == '5')
-                                {{$leave->count}}
-                            @elseif ($leave->leave->id == '7')
-                                {{$leave->count}}
-                            @elseif ($leave->leave->id == '8')
-                                {{$leave->count}}
-                            @endif
-                          </td>
-                          <td>
-                            @if ($leave->leave->id == '1')
-                                {{$used_vl}}
-                            @elseif ($leave->leave->id == '2')
-                                {{$used_sl}}
-                            @elseif ($leave->leave->id == '10')
-                                {{$used_sil}}
-                            @elseif ($leave->leave->id == '3')
-                                {{$used_ml}}
-                            @elseif ($leave->leave->id == '4')
-                                {{$used_pl}}
-                            @elseif ($leave->leave->id == '5')
-                                {{$used_spl}}
-                            @elseif ($leave->leave->id == '7')
-                                {{$used_splw}}
-                            @elseif ($leave->leave->id == '8')
-                                {{$used_splvv}}
-                            @endif
-                          </td>
-                          <td>
-                            @if ($leave->leave->id == '1')
-                                @php
-                                  $date_from = new DateTime($employee_status->original_date_hired);
-                                  $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
-                                  $total_months = (($date_diff->y) * 12) + ($date_diff->m);
-
-                                  // $vl_beginning_balance = 0;
-                                  // if($total_months > 11){ //
-                                    
-                                  //   $original_date_hired_m_d = date('m-d',strtotime($employee_status->original_date_hired));
-                                  //   $original_date_hired_m = date('m',strtotime($employee_status->original_date_hired));
-                                  //   $today = date('Y-m-d');
-                                  //   $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-                                  //   $original_date_hired = $last_year . '-' . $original_date_hired_m_d;
-
-                                  //   if($last_year == 2022){
-                                  //       $vl_beginning_balance = $leave->count;
-                                  //   }
-                                  // }
-                                  // else{
-                                  //   $vl_beginning_balance = $leave->count;
-                                  // }
-                                  
-                                  
-                                  
-                                    $vl_beginning_balance = 0;
-                                    $today  = date('Y-m-d');
-                                    $date_hired_md = date('m-d',strtotime($employee_status->original_date_hired));
-                                    $date_hired_m = date('m',strtotime($employee_status->original_date_hired));
-                                    $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-                                    $this_year = date('Y');
-
-                                    $date_hired_this_year = $this_year . '-'. $date_hired_md;
-
-                                    if($last_year == 2022 && $today < $date_hired_this_year){
-                                        $vl_beginning_balance = $leave->count;
-                                    }
-                                    
-                                    $count_vl = ceil($vl_beginning_balance + $earned_vl) - $used_vl;
-                                    if($count_vl > 0){
-                                      if($total_months > 11){
-                                          $is_allowed_to_file_vl = true;
-                                      }else{
-                                          $is_allowed_to_file_vl = false;
-                                      }
-                                    }else{
-                                      $is_allowed_to_file_vl = false;
-                                    }
-
-                                    $vl_balance = $count_vl;
-                                  
-
-                                @endphp
-                                {{ $vl_balance }}
-                            @elseif ($leave->leave->id == '2')
-                                
-                                @php
-                                  $date_from = new DateTime($employee_status->original_date_hired);
-                                  $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
-                                  $total_months = (($date_diff->y) * 12) + ($date_diff->m);
-
-                                  // $sl_beginning_balance = 0;
-                                  // if($total_months > 11){ //
-                                    
-                                  //   $original_date_hired_m_d = date('m-d',strtotime($employee_status->original_date_hired));
-                                  //   $original_date_hired_m = date('m',strtotime($employee_status->original_date_hired));
-                                  //   $today = date('Y-m-d');
-                                  //   $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-                                  //   $original_date_hired = $last_year . '-' . $original_date_hired_m_d;
-
-                                  //   if($last_year == 2022){
-                                  //       $sl_beginning_balance = $leave->count;
-                                  //   }
-                                  // }
-                                  // else{
-                                  //   $sl_beginning_balance = $leave->count;
-                                  // }
-
-                                  if($total_months >= 6 && $total_months < 12){
-                                    
-                                    $count_sl = $leave->count - $used_sl;
-               
-                                  }else{
-                                    $sl_beginning_balance = 0;
-                                    $today  = date('Y-m-d');
-                                    $date_hired_md = date('m-d',strtotime($employee_status->original_date_hired));
-                                    $date_hired_m = date('m',strtotime($employee_status->original_date_hired));
-                                    $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-                                    $this_year = date('Y');
-
-                                    $date_hired_this_year = $this_year . '-'. $date_hired_md;
-
-                                    if($last_year == 2022 && $today < $date_hired_this_year){
-                                        $sl_beginning_balance = $leave->count;
-                                    }
-
-                                    if($total_months < 11){
-                                      $sl_beginning_balance = $leave->count;
-                                    }
-                                    
-                                    $count_sl = ceil($sl_beginning_balance + $earned_sl) - $used_sl;
-                                    
-                                    if($count_sl > 0){
-                                      if($total_months > 11){
-                                          $is_allowed_to_file_sl = true;
-                                      }else{
-                                          $is_allowed_to_file_sl = false;
-                                      }
-                                    }else{
-                                      $is_allowed_to_file_sl = false;
-                                    }
-                                  }
-
-                                  $sl_balance = $count_sl;
-                                @endphp
-                                {{ $sl_balance}}
-                            @elseif ($leave->leave->id == '10')
-                                {{($leave->count + $earned_sil) - $used_sil}}
-                                @php
-                                  $count_sil = ($leave->count + $earned_sil) - $used_sil;
-                                  if($count_sil > 0){
-                                    $is_allowed_to_file_sil = true;
-                                  }else{
-                                    $is_allowed_to_file_sil = false;
-                                  }
-                                @endphp
-                            @elseif ($leave->leave->id == '3')
-                                {{($leave->count) - $used_ml}}
-                                @php
-                                  $count_ml = ($leave->count) - $used_ml;
-                                  if($count_ml > 0){
-                                    $is_allowed_to_file_ml = true;
-                                  }else{
-                                    $is_allowed_to_file_ml = false;
-                                  }
-
-                                  $ml_balance = $count_ml;
-                                @endphp
-                            @elseif ($leave->leave->id == '4')
-                                {{($leave->count) - $used_pl}}
-                                @php
-                                  $count_pl = ($leave->count) - $used_pl;
-                                  if($count_pl > 0){
-                                    $is_allowed_to_file_pl = true;
-                                  }else{
-                                    $is_allowed_to_file_pl = false;
-                                  }
-
-                                  $pl_balance = $count_pl;
-                                @endphp
-                            @elseif ($leave->leave->id == '5')
-                                  {{($leave->count) - $used_spl}}
-                                  @php
-                                    $count_spl = ($leave->count) - $used_spl;
-                                  if($count_spl > 0){
-                                    $is_allowed_to_file_spl = true;
-                                  }else{
-                                    $is_allowed_to_file_spl = false;
-                                  }
-                                  $spl_balance = $count_spl;
-                                @endphp
-                            @elseif ($leave->leave->id == '7')
-                                {{($leave->count) - $used_splw}}
-                                @php
-                                  $count_splw = ($leave->count) - $used_splw;
-                                  if($count_splw > 0){
-                                    $is_allowed_to_file_splw = true;
-                                  }else{
-                                    $is_allowed_to_file_splw = false;
-                                  }
-
-                                  $splw_balance = $count_splw;
-                                @endphp
-                            @elseif ($leave->leave->id == '9')
-                                {{($leave->count) - $used_splvv}}
-                                @php
-                                  $count_splvv = ($leave->count) - $used_splvv;
-                                  if($count_splvv > 0){
-                                    $is_allowed_to_file_splvv = true;
-                                  }else{
-                                    $is_allowed_to_file_splvv = false;
-                                  }
-                                  $splvv_balance = $count_splvv;
-                                @endphp
-                            @endif
-                          </td>
-                        </tr>
-                        @endforeach
-                      @else
-                        <tr>
-                          <td>VL</td>
-                          <td>{{$earned_vl}}</td>
-                          <td>{{$used_vl}}</td>
-                          <td>{{$earned_vl}}</td>
-                          @php
-                            if(($earned_vl) >= 1){
-                              $is_allowed_to_file_vl = true;
-                            }
-                          @endphp
-                        </tr>
-                        <tr>
-                          <td>SL</td>
-                          <td>{{$earned_sl}}</td>
-                          <td>{{$used_sl}}</td>
-                          <td>{{$earned_sl}}</td>
-                          @php
-                            if(($earned_sl) >= 1){
-                              $is_allowed_to_file_sl = true;
-                            }
-                          @endphp
-                        </tr>
-                      @endif --}}
-                      
                       @if(count($employee_leave_type_balance) > 0)
                         @foreach($employee_leave_type_balance as $leave_balance)
 
@@ -577,10 +209,9 @@
                               data-target="#view_leave{{ $employee_leave->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
                             </button>            
-                            <button type="button" id="edit{{ $employee_leave->id }}" class="btn btn-info btn-rounded btn-icon"
-                              data-target="#edit_leave{{ $employee_leave->id }}" data-toggle="modal" title='Edit'>
+                            <a href="edit-leave/{{$employee_leave->id}}" class="btn btn-info btn-rounded btn-icon" title='Edit'>
                               <i class="ti-pencil-alt"></i>
-                            </button>
+                            </a>
                             <button title='Cancel' id="{{ $employee_leave->id }}" onclick="cancel(this.id)"
                               class="btn btn-rounded btn-danger btn-icon">
                               <i class="fa fa-ban"></i>
@@ -677,7 +308,6 @@ function get_count_days($data,$date_from,$date_to,$halfday)
 @include('forms.leaves.apply_leave') 
 
 @foreach ($employee_leaves as $leave)
-  @include('forms.leaves.edit_leave')
   @include('forms.leaves.view_leave') 
   @include('forms.leaves.request_to_cancel') 
 @endforeach
@@ -729,6 +359,25 @@ function get_count_days($data,$date_from,$date_to,$halfday)
 					}
 				});
 		}
-
 	</script>
+
+  <script>
+    document.getElementById('leave_type').addEventListener('change', function() {
+      var selectedOption = this.options[this.selectedIndex];
+      var balanceValue = selectedOption.getAttribute('data-balance');
+      if (balanceValue !== null) {
+        var checkbox = document.getElementById('withPayCheckBox');
+        if(Number(balanceValue) > 0){
+          checkbox.disabled = false;
+          var leave_balances = document.getElementById('leave_balances');
+          leave_balances.value = balanceValue;
+        }else{
+          checkbox.disabled = true;
+          var leave_balances = document.getElementById('leave_balances');
+          leave_balances.value = 0;
+        }
+      }
+    });
+  </script>
+
 @endsection

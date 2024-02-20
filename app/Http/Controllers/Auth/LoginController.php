@@ -15,6 +15,10 @@ use App\EmployeePerformanceEvaluation;
 
 use App\EmployeeApprover;
 
+use App\Employee;
+
+use Illuminate\Support\Facades\Auth;
+
 class LoginController extends Controller
 {
     /*
@@ -49,66 +53,76 @@ class LoginController extends Controller
 
     public function authenticated(Request $request, $user) {
 
-        if(auth()->user()->employee_under->count() != 0){
+        $employee = Employee::select('user_id','status')
+                            ->where('user_id',$user->id)
+                            ->where('status','Active')
+                            ->first();
 
-            $user_ids = EmployeeApprover::select('user_id')->where('approver_id',$user->id)->pluck('user_id')->toArray();
+        if($employee || $user->id == 1){
+            if(auth()->user()->employee_under->count() != 0){
 
-            $today = date('Y-m-d');
-            $from_date = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
-            $to_date = date('Y-m-d');
+                $user_ids = EmployeeApprover::select('user_id')->where('approver_id',$user->id)->pluck('user_id')->toArray();
 
-            $pending_leave_count = EmployeeLeave::select('user_id')
-                                        ->whereIn('user_id',$user_ids)
-                                        ->where('status','Pending')
-                                        ->whereDate('created_at','>=',$from_date)
-                                        ->whereDate('created_at','<=',$to_date)
-                                        ->count();
-            $request_to_cancel = EmployeeLeave::select('user_id')
-                                        ->whereIn('user_id',$user_ids)
-                                        ->whereDate('created_at','>=',$from_date)
-                                        ->whereDate('created_at','<=',$to_date)
-                                        ->where('request_to_cancel','1')
-                                        ->count();
+                $today = date('Y-m-d');
+                $from_date = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
+                $to_date = date('Y-m-d');
 
-            $pending_overtime_count = EmployeeOvertime::select('user_id')
-                                        ->whereIn('user_id',$user_ids)
-                                        ->where('status','Pending')
-                                        ->whereDate('created_at','>=',$from_date)
-                                        ->whereDate('created_at','<=',$to_date)
-                                        ->count();
-            $pending_wfh_count = EmployeeWfh::select('user_id')
-                                        ->whereIn('user_id',$user_ids)
-                                        ->where('status','Pending')
-                                        ->whereDate('created_at','>=',$from_date)
-                                        ->whereDate('created_at','<=',$to_date)
-                                        ->count();
-            $pending_dtr_count = EmployeeDtr::select('user_id')
-                                        ->whereIn('user_id',$user_ids)
-                                        ->where('status','Pending')
-                                        ->whereDate('created_at','>=',$from_date)
-                                        ->whereDate('created_at','<=',$to_date)
-                                        ->count();
-            $pending_ob_count = EmployeeOb::select('user_id')
-                                        ->whereIn('user_id',$user_ids)
-                                        ->where('status','Pending')
-                                        ->whereDate('created_at','>=',$from_date)
-                                        ->whereDate('created_at','<=',$to_date)
-                                        ->count();
+                $pending_leave_count = EmployeeLeave::select('user_id')
+                                            ->whereIn('user_id',$user_ids)
+                                            ->where('status','Pending')
+                                            ->whereDate('created_at','>=',$from_date)
+                                            ->whereDate('created_at','<=',$to_date)
+                                            ->count();
+                $request_to_cancel = EmployeeLeave::select('user_id')
+                                            ->whereIn('user_id',$user_ids)
+                                            ->whereDate('created_at','>=',$from_date)
+                                            ->whereDate('created_at','<=',$to_date)
+                                            ->where('request_to_cancel','1')
+                                            ->count();
 
-            $pending_ppr_count = EmployeePerformanceEvaluation::whereIn('user_id',$user_ids)
-                                        ->where('status','For Review')
-                                        ->whereDate('created_at','>=',$from_date)
-                                        ->whereDate('created_at','<=',$to_date)
-                                        ->count();
+                $pending_overtime_count = EmployeeOvertime::select('user_id')
+                                            ->whereIn('user_id',$user_ids)
+                                            ->where('status','Pending')
+                                            ->whereDate('created_at','>=',$from_date)
+                                            ->whereDate('created_at','<=',$to_date)
+                                            ->count();
+                $pending_wfh_count = EmployeeWfh::select('user_id')
+                                            ->whereIn('user_id',$user_ids)
+                                            ->where('status','Pending')
+                                            ->whereDate('created_at','>=',$from_date)
+                                            ->whereDate('created_at','<=',$to_date)
+                                            ->count();
+                $pending_dtr_count = EmployeeDtr::select('user_id')
+                                            ->whereIn('user_id',$user_ids)
+                                            ->where('status','Pending')
+                                            ->whereDate('created_at','>=',$from_date)
+                                            ->whereDate('created_at','<=',$to_date)
+                                            ->count();
+                $pending_ob_count = EmployeeOb::select('user_id')
+                                            ->whereIn('user_id',$user_ids)
+                                            ->where('status','Pending')
+                                            ->whereDate('created_at','>=',$from_date)
+                                            ->whereDate('created_at','<=',$to_date)
+                                            ->count();
 
-            session([
-                'pending_leave_count'=>$pending_leave_count + $request_to_cancel,
-                'pending_overtime_count'=>$pending_overtime_count,
-                'pending_wfh_count'=>$pending_wfh_count,
-                'pending_dtr_count'=>$pending_dtr_count,
-                'pending_ob_count'=>$pending_ob_count,
-                'pending_performance_eval_count'=>$pending_ppr_count
-            ]);
+                $pending_ppr_count = EmployeePerformanceEvaluation::whereIn('user_id',$user_ids)
+                                            ->where('status','For Review')
+                                            ->whereDate('created_at','>=',$from_date)
+                                            ->whereDate('created_at','<=',$to_date)
+                                            ->count();
+
+                session([
+                    'pending_leave_count'=>$pending_leave_count + $request_to_cancel,
+                    'pending_overtime_count'=>$pending_overtime_count,
+                    'pending_wfh_count'=>$pending_wfh_count,
+                    'pending_dtr_count'=>$pending_dtr_count,
+                    'pending_ob_count'=>$pending_ob_count,
+                    'pending_performance_eval_count'=>$pending_ppr_count
+                ]);
+            }
+        }else{
+            Auth::logout();
+            return redirect()->route('login')->with('message', 'Please contact Administrator.');
         }
     }
 
