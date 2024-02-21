@@ -134,6 +134,30 @@
                 <div class="col-md-12">
                   <div class="card mt-2">
                     <div class="card-body " style="overflow-y: scroll; height:400px;">
+                      <p class="card-title">Welcome new Hires</p>
+                      <ul class="icon-data-list" >
+                        @foreach($employees_new_hire as $employee)
+                        <li>
+                          <div class="d-flex">
+                            <img src="{{URL::asset($employee->avatar)}}"  onerror="this.src='{{URL::asset('/images/no_image.png')}}';" alt="user">
+                            <div>
+                              <p class="text-info mb-1"><small>{{$employee->first_name}} {{$employee->last_name}}</small></p>
+                              <p class="mb-0"><small>{{$employee->company->company_name}}</small></p>
+                              <p class="mb-0"><small>{{$employee->position}}</small></p>
+                              <small>{{date('M. d',strtotime($employee->original_date_hired))}}</small>
+                            </div>
+                          </div>
+                        </li>
+                        @endforeach
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class='row'>
+                <div class="col-md-12">
+                  <div class="card mt-2">
+                    <div class="card-body " style="overflow-y: scroll; height:400px;">
                       <p class="card-title">Birthday Celebrants</p>
                       <ul class="icon-data-list" >
                         @foreach($employee_birthday_celebrants as $celebrant)
