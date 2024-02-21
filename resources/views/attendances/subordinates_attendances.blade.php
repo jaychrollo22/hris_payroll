@@ -881,7 +881,6 @@
                                 <td >0 hrs</td>
                                 <td >{{$night_diff_ot}} hrs</td>
                                 <td ></td>
-                                <td ></td>
                             </tr>
                         </tbody>
   
