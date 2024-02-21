@@ -548,7 +548,6 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td></td>
                                     @else
                                         {{-- Working Hours --}}
                                         <td>
@@ -791,7 +790,7 @@
                                                 <td></td>
                                             
                                                 <td></td>
-                                                {{-- <td></td> --}}
+                                                <td></td>
                                             @endif
                                         @endif
                                     @endif
