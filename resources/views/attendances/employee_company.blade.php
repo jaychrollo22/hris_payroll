@@ -105,7 +105,7 @@
                                 
                                 <tbody>
 
-                                    @foreach(array_reverse($date_range) as $date_r)
+                                    @foreach($date_range as $date_r)
                                     @php
                                         $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
                                     @endphp
