@@ -38,7 +38,7 @@ class HomeController extends Controller
      
         $schedules = [];
         $attendance_controller = new AttendanceController;
-        $employee_birthday_celebrants = Employee::whereMonth('birth_date',date('m'))->orderByRaw('DAY(birth_date)')->get();
+        $employee_birthday_celebrants = Employee::whereMonth('birth_date',date('m'))->orderByRaw('DAY(birth_date)')->where('status','Active')->get();
         $employees_new_hire = Employee::where('original_date_hired',">=",date("Y-m-d", strtotime("-1 months")))->orderBy('original_date_hired','desc')->get();
         $sevendays = date('Y-m-d',strtotime("-7 days"));
         if(auth()->user()->employee){
