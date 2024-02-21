@@ -68,7 +68,6 @@
                                 <td>Approved Overtime</td>
                                 <td>Night Diff</td>
                                 <td>OT Night Diff</td>
-                                <td>Device</th>
                                 <td>Remarks</th>
   
                             </tr>
@@ -747,14 +746,7 @@
                                                     @endphp
                                                 @endif
                                             </td>
-                                            <td>
-                                                @if($time_in)
-                                                    <small>
-                                                        Time In : {{$time_in->device_in}} <br>
-                                                        Time Out : {{$time_in->device_out}}
-                                                    </small>
-                                                @endif
-                                            </td>
+                                           
                                         @else
                                             <td></td>
                                             <td></td>
@@ -801,7 +793,6 @@
                                                 <td></td>
                                                 <td></td>
                                             @endif
-                                            <td></td>
                                         @endif
                                     @endif
                                     
