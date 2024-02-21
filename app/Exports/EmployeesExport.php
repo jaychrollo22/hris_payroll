@@ -66,6 +66,7 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
                                             'phil_number',
                                             'tax_number',
                                             'company_id',
+                                            'date_resigned',
                                             'status'
                                         )
                                         ->with('company')
@@ -127,6 +128,7 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
             'ID NUMBER PHILHEALTH',
             'ID NUMBER TIN',
             'STATUS',
+            'SEPARATION DATE',
         ];
     }
 
@@ -147,6 +149,7 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
             $rate = "";
         }
         
+        $date_resigned = $employee->date_resigned ? date('d/m/Y',strtotime($employee->date_resigned)) : "";
         
         return [
             $employee->employee_number,
@@ -172,6 +175,7 @@ class EmployeesExport implements FromQuery, WithHeadings, WithMapping
             $employee->phil_number,
             $employee->tax_number,
             $employee->status,
+            $date_resigned
         ];
         
     }
