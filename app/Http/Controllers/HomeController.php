@@ -38,6 +38,7 @@ class HomeController extends Controller
      
         $schedules = [];
         $attendance_controller = new AttendanceController;
+        $employee_birthday_celebrants = Employee::whereMonth('birth_date',date('m'))->orderByRaw('DAY(birth_date)')->get();
         $sevendays = date('Y-m-d',strtotime("-7 days"));
         if(auth()->user()->employee){
             if(auth()->user()->employee->employee_number){
@@ -69,9 +70,10 @@ class HomeController extends Controller
         ->get();
 
         $holidays = Holiday::where('status','Permanent')
+        ->whereMonth('holiday_date',date('m'))
         ->orWhere(function ($query)
         {
-            $query->where('status',null)->whereYear('holiday_date', '=', date('Y'));
+            $query->where('status',null)->whereYear('holiday_date', '=', date('Y'))->whereMonth('holiday_date',date('m'));
         })
         ->orderBy('holiday_date','asc')->get();
         
@@ -87,6 +89,7 @@ class HomeController extends Controller
             'announcements' => $announcements ,
             'attendance_employees' => $attendance_employees ,
             'holidays' => $holidays ,
+            'employee_birthday_celebrants' => $employee_birthday_celebrants ,
         ));
     }
 

@@ -15,7 +15,7 @@
             </div>
         </div>
           <div class="row">
-            <div class="col-md-10  transparent">
+            <div class="col-md-9  transparent">
                 <div class="row">
                     <div class="col-md-4 mb-4 transparent">
                         <div class="card">
@@ -101,58 +101,56 @@
                         </div>
                         @endif
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-5 ">
                       <div class="card">
                         <div class="card-body">
-                          <h4 class="card-title">Calendar Events
-                            <span class="badge text-white m-2" style='background-color:#257e4a;'><small>Regular Holidays</small></span> 
-                            <span class="badge text-white m-2" style='background-color:#ff6600;'><small>Special Holidays</small></span> 
-                            <span class="badge text-white m-2" style='background-color:#ff0000;'><small>Birthday Celebrants</small></span>
-                          </h4>
-                          {{-- <div id="calendar" class="full-calendar"></div> --}}
+                          <p class="card-title mb-0">(<small><i>{{date('M 01')}} - {{date('M t')}}</i></small>)</p>
+                          <div class="table-responsive">
+                            <table class="table table-striped table-borderless">
+                              <thead>
+                                <tr>
+                                  <th>Holiday</th>
+                                  <th>Date</th>
+                                </tr>  
+                              </thead>
+                              <tbody>
+                                @foreach($holidays as $holiday)
+                                <tr>
+                                  <td>{{$holiday->holiday_name}}</td>
+                                  <td class="font-weight-medium"><div class="badge badge-success">{{date('M d',strtotime($holiday->holiday_date))}}</div></td>
+                                </tr>
+                                @endforeach
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
                       </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-4 ">
-                    
-                    
-                  </div>
+                      
+                    </div>
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3 ">
               <div class='row'>
-                @if(count($announcements) > 0)
                 <div class="col-md-12">
-                  <div class="card">
-                    <div class="card-body">
-                      <h4 class="card-title">Announcements</h4>
-                      <ul class="list-star">
-                        @foreach($announcements as $announcement)
-                          <li><a href="{{url($announcement->attachment)}}" target='_blank' data-bs-toggle="tooltip" data-bs-placement="top" title="{{$announcement->user->name}}">{{$announcement->announcement_title}} </a> </li>
+                  <div class="card mt-2">
+                    <div class="card-body " style="overflow-y: scroll; height:400px;">
+                      <p class="card-title">Birthday Celebrants</p>
+                      <ul class="icon-data-list" >
+                        @foreach($employee_birthday_celebrants as $celebrant)
+                        <li>
+                          <div class="d-flex">
+                            <img src="{{URL::asset($celebrant->avatar)}}"  onerror="this.src='{{URL::asset('/images/no_image.png')}}';" alt="user">
+                            <div>
+                              <p class="text-info mb-1"><small>{{$celebrant->first_name}} {{$celebrant->last_name}}</small></p>
+                              <small>{{date('M d',strtotime($celebrant->birth_date))}}</small>
+                            </div>
+                          </div>
+                        </li>
                         @endforeach
                       </ul>
                     </div>
                   </div>
                 </div>
-                @endif
-                @if(auth()->user()->employee->company_id=='11')
-                      <div class="col-md-12 mb-4  stretch-card transparent">
-                          <div class="card">
-                            <div class="card-body">
-                              <h3 class="card-title">Employee Handbook</h3>
-                              <div class="media">
-                                  <i class="ti-book icon-md text-info d-flex align-self-center mr-3"></i>
-                                  <div class="media-body">
-                                    <p class="card-text">Handbook updated {{date('m.d.y',strtotime($handbook->created_at))}}</p>
-                                    <a href="{{url($handbook->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-primary btn-fw btn-sm">View Handbook</button></a>
-                                  </div>
-                                </div>
-                            </div>
-                          </div>
-                      </div>
-                    @endif
               </div>
             </div>
           </div>    
@@ -230,7 +228,7 @@
         {
           day = "0"+day;
         }
-        console.log(celebrants[ii]);
+        // console.log(celebrants[ii]);
         var data = {};
         data.title = celebrants[ii].first_name+" "+celebrants[ii].last_name;
         data.start = year + "-"+month+"-"+day;
