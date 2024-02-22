@@ -88,11 +88,13 @@
 
                           @php
                             $used_leave = checkUsedLeave($item->user_id,$item->leave_type_info->id,$item->year);
-                            $total_balance = $item->total_balance;
-                            $remaining = $item->total_balance - $used_leave;
+                            $balance = $item->balance;
+                            $remaining = $item->balance - $used_leave;
                           @endphp
                           <td>{{ $item->user->id}}</td>
-                          <td>{{ $item->employee->first_name . ' ' . $item->employee->last_name}}</td>
+                          <td>
+                            {{ $item->employee->first_name . ' ' . $item->employee->last_name}}
+                          </td>
                           <td>{{ $item->employee->company->company_name}}</td>
                           <td>{{ $item->employee->department->name}}</td>
                           <td>{{ $item->employee->original_date_hired}}</td>
