@@ -798,6 +798,7 @@
                                                     $if_leave = '';
                                                     $if_attendance_holiday = '';
                                                     $if_attendance_holiday_status = '';
+
                                                     if($check_if_holiday){
                                                         $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
                                                         if($if_attendance_holiday){

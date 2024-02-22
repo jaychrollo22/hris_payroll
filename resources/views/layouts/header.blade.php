@@ -361,7 +361,7 @@
                             </ul>
                         </div>
                     </li>
-                    {{-- <li class="nav-item @if ($header == 'payslips') active @endif">
+                    <li class="nav-item @if ($header == 'payslips') active @endif">
                         <a class="nav-link" href="{{ url('/payslips') }}" onclick='show()'>
                             <i class="icon-briefcase menu-icon"></i>
                             <span class="menu-title">Payslips</span>
@@ -372,7 +372,7 @@
                             <i class="fa fa-money menu-icon"></i>
                             <span class="menu-title">Loans</span>
                         </a>
-                    </li> --}}
+                    </li>
                     @if (auth()->user()->employee_under->count() != 0)
                     <li class="nav-item">
                         <hr>
@@ -446,7 +446,7 @@
                                 @if (checkUserPrivilege('biometrics_per_location',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location</a></li>
                                 @endif
-                                {{-- @if (checkUserPrivilege('biometrics_per_location_hik',auth()->user()->id) == 'yes')
+                                @if (checkUserPrivilege('biometrics_per_location_hik',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location-hik') }}">Per Location (HIK)</a></li>
                                 @endif
                                 @if (checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes')
@@ -460,7 +460,7 @@
                                 @endif
                                 @if (checkUserPrivilege('biometrics_sync',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/sync-biometrics') }}">Sync Biometrics</a></li>
-                                @endif --}}
+                                @endif
                             </ul>
                         </div>
                     </li>
