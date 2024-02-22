@@ -159,6 +159,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('new-leave-type', 'LeaveController@store');
     Route::get('edit-leave-type/{id}', 'LeaveController@edit');
     Route::post('update-leave-type/{id}', 'LeaveController@update');
+    Route::get('delete-leave-type/{id}', 'LeaveController@delete');
 
     //Schedules
     Route::get('schedules', 'ScheduleController@schedules');

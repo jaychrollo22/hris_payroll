@@ -19,7 +19,7 @@
 								<option value="">--Select Employee--</option>
 								@foreach ($employees_selection as $employee)
 									<option value="{{ $employee->user_id }}" {{ old('employee') == $employee->user_id ? 'selected' : '' }}>
-										{{ $employee->last_name . ', ' . $employee->first_name . ' ' . $employee->middle_name }}</option>
+										{{ $employee->last_name . ', ' . $employee->first_name . ' ' . $employee->middle_name }} ({{$employee->original_date_hired}})</option>
 								@endforeach
 							</select>
 						</div>
@@ -32,7 +32,7 @@
 								<option value="">--Select Leave Type--</option>
 								@foreach ($leave_types as $leaveType)
 									<option value="{{ $leaveType->code }}">
-										{{ $leaveType->leave_type }}</option>
+										{{ $leaveType->leave_type }} - {{ $leaveType->code }}</option>
 								@endforeach
 							</select>
 						</div>

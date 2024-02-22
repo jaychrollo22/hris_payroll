@@ -76,6 +76,7 @@
                         <th>Year</th> 
                         <th>Leave Type</th> 
                         <th>Leave Balance</th> 
+                        <th>Additional Leave</th> 
                         <th>Used</th> 
                         <th>Remaining</th> 
                         <th>Action</th> 
@@ -98,6 +99,7 @@
                           <td>{{ $item->year}}</td>
                           <td>{{ $item->leave_type}}</td>
                           <td>{{ $item->balance}}</td>
+                          <td>0</td>
                           <td>{{ $used_leave > 0 ? $used_leave : 0 }}</td>
                           <td>{{ $remaining > 0 ? $remaining : 0 }}</td>
                           <td>

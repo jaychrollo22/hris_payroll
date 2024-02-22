@@ -121,7 +121,10 @@ class EmployeeLeaveTypeBalanceController extends Controller
         $new->save();
 
         Alert::success('Successfully Store')->persistent('Dismiss');
-        return back();
+
+        $employee = Employee::select('company_id')->where('user_id',$request->user_id)->first();
+        return redirect('employee-leave-type-balances?search=&company='.$employee->company_id.'&department=&status=');
+
     }
 
     /**

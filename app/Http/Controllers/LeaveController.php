@@ -140,5 +140,13 @@ class LeaveController extends Controller
         ));
     }    
 
+    public function delete($id){
+        $leave = Leave::where('id',$id)->delete();
+
+        Alert::success('Successfully Deleted')->persistent('Dismiss');
+
+        return back();
+    }
+
 
 }

@@ -43,21 +43,6 @@ class EmployeeLeaveController extends Controller
                                                                     ->where('year',$year)
                                                                     ->with('leave_type_info')
                                                                     ->get();
-
-        // $used_vl = checkUsedSLVLSILLeave(auth()->user()->id,1,$employee_status->original_date_hired);
-        // $used_sl = checkUsedSLVLSILLeave(auth()->user()->id,2,$employee_status->original_date_hired);
-        // $used_sil = checkUsedSLVLSILLeave(auth()->user()->id,10,$employee_status->original_date_hired);
-
-        // $used_ml = checkUsedLeave(auth()->user()->id,3);
-        // $used_pl = checkUsedLeave(auth()->user()->id,4);
-        // $used_spl = checkUsedLeave(auth()->user()->id,5);
-        // $used_splw = checkUsedLeave(auth()->user()->id,7);
-        // $used_splvv = checkUsedLeave(auth()->user()->id,9);
-       
-        // $earned_vl = checkEarnedLeave(auth()->user()->id,1,$employee_status->original_date_hired);
-        // $earned_sl = checkEarnedLeave(auth()->user()->id,2,$employee_status->original_date_hired);
-        // $earned_sil = checkEarnedLeave(auth()->user()->id,10,$employee_status->original_date_hired);
-
         
         $leave_types = Leave::all(); //masterfile
         $employee_leaves = EmployeeLeave::with('user','leave','schedule')
@@ -101,18 +86,6 @@ class EmployeeLeaveController extends Controller
             'employee_leaves_all' => $employee_leaves_all,
             'leave_types' => $leave_types,
             'employee_status' => $employee_status,
-            
-            // 'used_vl' => $used_vl,
-            // 'used_sl' => $used_sl,
-            // 'used_sil' => $used_sil,
-            // 'used_ml' => $used_ml,
-            // 'used_pl' => $used_pl,
-            // 'used_spl' => $used_spl,
-            // 'used_splw' => $used_splw,
-            // 'used_splvv' => $used_splvv,
-            // 'earned_vl' => $earned_vl,
-            // 'earned_sl' => $earned_sl,
-            // 'earned_sil' => $earned_sil,
 
             'allowed_to_file' => $allowed_to_file,
 
