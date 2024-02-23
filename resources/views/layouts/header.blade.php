@@ -583,7 +583,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-companies') }}">Employee Groups</a>
                     </li> --}}
-                    @if(checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes')
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/employee-leave-type-balances') }}">Employee Leave Balances</a>
+                    </li>
+
+                    {{-- @if(checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-leave-credits') }}">Employee Leave Credits</a>
                     </li>
@@ -600,7 +605,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-earned-leaves') }}">Employee Earned Leaves</a>
                     </li>
-                    @endif
+                    @endif --}}
                 </ul>
             </div>
         </li>
