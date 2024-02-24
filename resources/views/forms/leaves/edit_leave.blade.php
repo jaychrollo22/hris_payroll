@@ -61,18 +61,14 @@
                                     </div>
                                     <div class='col-md-6'>
                                       <label class="form-check-label ">
-                                        @if($leave->halfday == 1)
-                                            <input id="editViewleaveHalfday" type="checkbox" name="halfday" class="form-check-input" value="1" checked>  
-                                        @else
-                                            <input id="editViewleaveHalfday" type="checkbox" name="halfday" class="form-check-input" value="0">  
-                                        @endif
+                                            <input id="editViewleaveHalfday" type="checkbox" name="halfday" class="form-check-input" value="1" {{ $leave->halfday == 1 ? 'checked' : "" }}>  
                                         Halfday
                                     </label>
 
                                     <br>
                                       @if($leave->halfday == 1)
                                         <div class="edithalfDayStatus">
-                                          <select name="halfday_status" class="form-control" value="{{$leave->halfday_status}}">
+                                          <select id="halfday_status" name="halfday_status" class="form-control" value="{{$leave->halfday_status}}">
                                               <option value="">Choose One</option>
                                               <option value="First Shift" {{ $leave->halfday_status == 'First Shift' ? 'selected' : ''}}>First Shift</option>
                                               <option value="Second Shift" {{ $leave->halfday_status == 'Second Shift' ? 'selected' : ''}}>Second Shift</option>
@@ -80,7 +76,7 @@
                                         </div>
                                       @else
                                       <div class="edithalfDayStatus">
-                                        <select name="halfday_status" class="form-control">
+                                        <select id="halfday_status" name="halfday_status" class="form-control">
                                             <option value="">Choose One</option>
                                             <option value="First Shift">First Shift</option>
                                             <option value="Second Shift">Second Shift</option>
@@ -102,7 +98,7 @@
                                 Date To 
                               </div>
                               <div class='col-md-4'>
-                                <input type="date" name='date_to' class="form-control" value="{{$leave->date_to}}" required>
+                                <input id="dateToLeave" type="date" name='date_to' class="form-control" value="{{$leave->date_to}}" required>
                               </div>
                             </div>
                             <div class="form-group row">
@@ -128,7 +124,7 @@
                               @if($leave->attachment)
                                 <a href="{{url($leave->attachment)}}" target='_blank'><button type="button" class="btn btn-outline-info btn-fw ">View Attachment</button></a>
                               @endif
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <a href="/file-leave" type="button" class="btn btn-secondary">Close</a>
                               <button type="submit" class="btn btn-primary">Save</button>
                           </div>
                         </div>
@@ -156,6 +152,24 @@
       }
     }
   });
+</script>
+
+<script>
+  var halfdayCheck = document.getElementById('editViewleaveHalfday');
+  var dateTo = document.getElementById('dateToLeave');
+  var halfday_status = document.getElementById('halfday_status');
+
+  function updatehalfdayCheck() {
+        if(halfdayCheck.checked) {
+            dateTo.disabled = true;
+            halfday_status.setAttribute('required', true); 
+        } else {
+            dateTo.disabled = false;
+            halfday_status.removeAttribute('required');
+        }
+    }
+    halfdayCheck.addEventListener('change', updatehalfdayCheck);
+    window.onload = updatehalfdayCheck;
 </script>
 
 @endsection

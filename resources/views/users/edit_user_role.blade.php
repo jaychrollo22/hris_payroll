@@ -477,8 +477,8 @@
                                         @else
                                             <input type="checkbox" name="masterfiles_employee_leave_credits" id="masterfiles_employee_leave_credits{{$user->id}}">
                                         @endif
-                                        Employee Leave Credits / Manual Earned Leaves
-                                        <br>
+                                        Employee Leave Credits / Employee Leave Balances
+                                        {{-- <br>
                                         <br>
                                         @if($user->user_privilege)
                                             @if($user->user_privilege->masterfiles_employee_leave_earned == 'on')
@@ -488,8 +488,8 @@
                                             @endif
                                         @else
                                             <input type="checkbox" name="masterfiles_employee_leave_earned" id="masterfiles_employee_leave_earned{{$user->id}}">
-                                        @endif
-                                        Employee Earned Leaves
+                                        @endif --}}
+                                        {{-- Employee Earned Leaves --}}
                                         <br>
                                         <br>
                                         @if($user->user_privilege)

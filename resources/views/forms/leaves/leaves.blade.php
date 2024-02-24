@@ -210,6 +210,7 @@
                               <i class="ti-eye"></i>
                             </button>            
                             <a href="edit-leave/{{$employee_leave->id}}" class="btn btn-info btn-rounded btn-icon" title='Edit'>
+                              <br>
                               <i class="ti-pencil-alt"></i>
                             </a>
                             <button title='Cancel' id="{{ $employee_leave->id }}" onclick="cancel(this.id)"
@@ -379,5 +380,24 @@ function get_count_days($data,$date_from,$date_to,$halfday)
       }
     });
   </script>
+
+  <script>
+    var halfdayCheck = document.getElementById('leaveHalfday');
+    var dateTo = document.getElementById('dateToLeave');
+    var halfday_status = document.getElementById('halfday_status');
+
+    function updatehalfdayCheck() {
+          if(halfdayCheck.checked) {
+              dateTo.disabled = true;
+              halfday_status.setAttribute('required', true); 
+          } else {
+              dateTo.disabled = false;
+              halfday_status.removeAttribute('required');
+          }
+      }
+      halfdayCheck.addEventListener('change', updatehalfdayCheck);
+      window.onload = updatehalfdayCheck;
+  </script>
+
 
 @endsection

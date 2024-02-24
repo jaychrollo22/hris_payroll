@@ -95,14 +95,20 @@
                           <td>
                             {{ $item->employee->first_name . ' ' . $item->employee->last_name}}
                           </td>
-                          <td>{{ $item->employee->company->company_name}}</td>
-                          <td>{{ $item->employee->department->name}}</td>
+                          <td>{{ $item->employee->company ? $item->employee->company->company_name : ""}}</td>
+                          <td>{{  $item->employee->department ? $item->employee->department->name : ""}}</td>
                           <td>{{ $item->employee->original_date_hired}}</td>
                           <td>{{ $item->year}}</td>
                           <td>{{ $item->leave_type}}</td>
                           <td>{{ $item->balance}}</td>
                           <td>0</td>
-                          <td>{{ $used_leave > 0 ? $used_leave : 0 }}</td>
+                          <td>
+                            @if($used_leave > 0)
+                              <a href="employee-used-leaves/{{$item->user->id}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
+                            @else
+                              0
+                            @endif
+                          </td>
                           <td>{{ $remaining > 0 ? $remaining : 0 }}</td>
                           <td>
                             <a href="edit-employee-leave-type-balances/{{$item->id}}?search={{$search}}&company={{$company}}&department={{$department}}&status={{$status}}" class="btn btn-sm btn-primary">Edit</a>

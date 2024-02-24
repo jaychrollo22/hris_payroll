@@ -101,11 +101,26 @@ class EmployeeLeaveController extends Controller
     public function new(Request $request)
     {
         $employee = Employee::where('user_id',Auth::user()->id)->first();
-        $count_days = get_count_days_leave($employee->ScheduleData,$request->date_from,$request->date_to);
+
+        $date_from = $request->date_from;
+        $date_to = $request->date_to;
+
+        if($request->halfday == '1'){
+            $date_to = $request->date_from;
+        }
+
+        $count_days = get_count_days_leave($employee->ScheduleData,$date_from,$date_to);
+
+        if($count_days == 0){
+            Alert::warning('Wrong Filing of Leave. Please check your application and then try again.')->persistent('Dismiss');
+            return back();
+        }
+
         if($request->withpay == 'on'){
             if($count_days == 1){
                 if($request->halfday == '1'){
                     $count_days = 0.5;
+                    $date_to = $request->date_from;
                 }
             }
             if($request->leave_balances >= $count_days){
@@ -114,8 +129,8 @@ class EmployeeLeaveController extends Controller
                 $emp = Employee::where('user_id',auth()->user()->id)->first();
                 $new_leave->schedule_id = $emp->schedule_id;
                 $new_leave->leave_type = $request->leave_type;
-                $new_leave->date_from = $request->date_from;
-                $new_leave->date_to = $request->date_to;
+                $new_leave->date_from = $date_from;
+                $new_leave->date_to = $date_to;
                 $new_leave->reason = $request->reason;
                 $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
                 $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
@@ -147,8 +162,8 @@ class EmployeeLeaveController extends Controller
             $emp = Employee::where('user_id',auth()->user()->id)->first();
             $new_leave->schedule_id = $emp->schedule_id;
             $new_leave->leave_type = $request->leave_type;
-            $new_leave->date_from = $request->date_from;
-            $new_leave->date_to = $request->date_to;
+            $new_leave->date_from = $date_from;
+            $new_leave->date_to = $date_to;
             $new_leave->reason = $request->reason;
             $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
             $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
@@ -199,10 +214,23 @@ class EmployeeLeaveController extends Controller
 
     public function edit_leave(Request $request, $id)
     {
-
-        
         $employee = Employee::where('user_id',Auth::user()->id)->first();
-        $count_days = get_count_days_leave($employee->ScheduleData,$request->date_from,$request->date_to);
+        
+        $date_from = $request->date_from;
+        $date_to = $request->date_to;
+
+        if(isset($request->halfday)){
+            if($request->halfday == '1'){
+                $date_to = date('Y-m-d',strtotime($request->date_from));
+            } 
+        }
+
+        $count_days = get_count_days_leave($employee->ScheduleData,$date_from,$date_to);
+
+        if($count_days == 0){
+            Alert::warning('Wrong Filing of Leave. Please check your application and then try again.')->persistent('Dismiss');
+            return back();
+        }
         if($request->withpay == 'on'){
 
             if($count_days == 1){
@@ -215,8 +243,8 @@ class EmployeeLeaveController extends Controller
                 $new_leave = EmployeeLeave::findOrFail($id);
                 $new_leave->user_id = Auth::user()->id;
                 $new_leave->leave_type = $request->leave_type;
-                $new_leave->date_from = $request->date_from;
-                $new_leave->date_to = $request->date_to;
+                $new_leave->date_from = $date_from;
+                $new_leave->date_to = $date_to;
                 $new_leave->reason = $request->reason;
                 $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
                 $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
@@ -246,8 +274,8 @@ class EmployeeLeaveController extends Controller
             $new_leave = EmployeeLeave::findOrFail($id);
             $new_leave->user_id = Auth::user()->id;
             $new_leave->leave_type = $request->leave_type;
-            $new_leave->date_from = $request->date_from;
-            $new_leave->date_to = $request->date_to;
+            $new_leave->date_from = $date_from;
+            $new_leave->date_to = $date_to;
             $new_leave->reason = $request->reason;
             $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
             $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 

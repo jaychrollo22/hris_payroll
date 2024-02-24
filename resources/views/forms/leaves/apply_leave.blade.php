@@ -57,7 +57,7 @@
                             Halfday
                             <br>
                             <div class="halfDayStatus">
-                                <select name="halfday_status" class="form-control">
+                                <select id="halfday_status" name="halfday_status" class="form-control">
                                     <option value="">Choose One</option>
                                     <option value="First Shift">First Shift</option>
                                     <option value="Second Shift">Second Shift</option>
@@ -79,7 +79,7 @@
                       Date To 
                     </div>
                     <div class='col-md-4'>
-                      <input type="date" name='date_to' class="form-control" required>
+                      <input id="dateToLeave" type="date" name='date_to' class="form-control" required>
                     </div>
                   </div>
                   <div class="form-group row">

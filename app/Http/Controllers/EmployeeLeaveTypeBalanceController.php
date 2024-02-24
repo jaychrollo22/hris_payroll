@@ -9,6 +9,7 @@ use App\Employee;
 use App\Company;
 use App\Department;
 use App\Leave;
+use App\EmployeeLeave;
 
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -246,6 +247,34 @@ class EmployeeLeaveTypeBalanceController extends Controller
             return redirect('employee-leave-type-balances?search=&company='.$company.'&department=&status=Active');
 
             
+        }
+    }
+
+    public function employee_used_leaves(Request $request,$id)
+    {
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $year = isset($request->year) ? $request->year : date('Y');
+        $leave_type = isset($request->leave_type) ? $request->leave_type : "";
+        $withpay_status = isset($request->withpay_status) ? $request->withpay_status : "1";
+        $status = isset($request->status) ? $request->status : "Approved";
+
+        $employee = Employee::where('user_id',$id)->first();
+        $employee_leaves = EmployeeLeave::where('user_id',$id)
+                                    ->where('withpay',$withpay_status)
+                                    ->where('status',$status)
+                                    ->whereYear('date_from', '=', $year)
+                                    ->get();
+
+        if($employee_leaves){
+            return view('employee_leave_type_balances.employee_used_leaves',array(
+                'header' => 'employee_leave_type_balances',
+                'employee'=>$employee,
+                'employee_leaves'=>$employee_leaves,
+                'year'=>$year,
+                'status'=>$status,
+            ));     
+        }else{
+            return "No Employee Found!";
         }
     }
 }

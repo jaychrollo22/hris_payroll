@@ -379,6 +379,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/update-employee-leave-type-balance/{id}','EmployeeLeaveTypeBalanceController@update');
     Route::get('/export-employee-leave-type-balances','EmployeeLeaveTypeBalanceController@export');
     Route::post('/import-employee-leave-type-balances','EmployeeLeaveTypeBalanceController@import');
+    Route::get('/employee-used-leaves/{id}','EmployeeLeaveTypeBalanceController@employee_used_leaves');
 
    
 

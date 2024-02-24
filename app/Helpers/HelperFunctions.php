@@ -5,7 +5,9 @@ use App\UserAllowedLocation;
 use App\UserAllowedProject;
 use App\UserPrivilege;
 use App\Employee;
+use App\Leave;
 use App\EmployeeLeave;
+use App\EmployeeLeaveTypeBalance;
 use App\EmployeeEarnedLeave;
 use App\EmployeeLeaveCredit;
 use App\Holiday;
@@ -111,7 +113,7 @@ function get_count_days_leave($data,$date_from,$date_to)
     $endTime = strtotime($date_to);
 
     for ( $i = $startTime; $i <= $endTime; $i = $i + 86400 ) {
-      $thisDate = date( 'l', $i ); // 2010-05-01, 2010-05-02, etc
+      $thisDate = date( 'l', $i );
       if(in_array($thisDate,$data)){
           $count= $count+1;
       }
@@ -613,6 +615,51 @@ function checkUsedLeave($user_id,$leave_type,$year){
     }
 
     return $count;
+}
+
+function checkRemainingBalance($user_id,$leave_type,$year){
+
+    $leave = Leave::where('id',$leave_type)->first();
+    
+    $employee_leave_balance = EmployeeLeaveTypeBalance::where('user_id',$user_id)
+                                    ->where('leave_type',$leave->code)
+                                    ->where('year', '=', $year)
+                                    ->sum('balance');
+
+    $employee_leave = EmployeeLeave::where('user_id',$user_id)
+                                    ->where('leave_type',$leave_type)
+                                    ->where('status','Approved')
+                                    ->whereYear('date_from', '=', $year);
+    if($year == 2024){
+        $date_validate = date('Y-01-03'); // Start of Leave Date Validation in 2024
+        $employee_leave = $employee_leave->where('date_from' , '>=', $date_validate);
+    }
+
+    $employee_leave = $employee_leave->get();
+
+    $count = 0;
+    if($employee_leave){
+        foreach($employee_leave as $leave){
+            if($leave->withpay == 1 && $leave->halfday == 1){
+                $count += 0.5;
+            }else{
+                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                if($date_range){
+                    foreach($date_range as $date_r){
+                        if($leave->withpay == 1){
+                            $count += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if($employee_leave_balance > 0){
+        return $employee_leave_balance - $count;
+    }else{
+        return 0;
+    }
 }
 
 function checkIfHoliday($date,$location){
