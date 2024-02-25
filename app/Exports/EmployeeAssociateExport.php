@@ -337,42 +337,86 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
                     $shift_computation_monday = 'Regular Shift';
                 }else{
                     $shift_computation_monday = 'Comp-Work';
+                    if($employee->level == 'RANK&FILE' || $employee->level == 1){
+                        $shift_computation_monday = 'Comp-Work RNF';
+                    }
+                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                        $shift_computation_monday = 'Comp-Work MGR';
+                    }
                 }
 
                 if($rest_day_1 == 'Tuesday' || $rest_day_2 == 'Tuesday'){
                     $shift_computation_tuesday = 'Regular Shift';
                 }else{
                     $shift_computation_tuesday = 'Comp-Work';
+
+                    if($employee->level == 'RANK&FILE' || $employee->level == 1){
+                        $shift_computation_tuesday = 'Comp-Work RNF';
+                    }
+                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                        $shift_computation_tuesday = 'Comp-Work MGR';
+                    }
+
                 }
 
                 if($rest_day_1 == 'Wednesay' || $rest_day_2 == 'Wednesay'){
                     $shift_computation_wednesday = 'Regular Shift';
                 }else{
                     $shift_computation_wednesday = 'Comp-Work';
+                    if($employee->level == 'RANK&FILE' || $employee->level == 1){
+                        $shift_computation_wednesday = 'Comp-Work RNF';
+                    }
+                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                        $shift_computation_wednesday = 'Comp-Work MGR';
+                    }
                 }
 
                 if($rest_day_1 == 'Thursday' || $rest_day_2 == 'Thursday'){
                     $shift_computation_thursday = 'Regular Shift';
                 }else{
                     $shift_computation_thursday = 'Comp-Work';
+                    if($employee->level == 'RANK&FILE' || $employee->level == 1){
+                        $shift_computation_thursday = 'Comp-Work RNF';
+                    }
+                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                        $shift_computation_thursday = 'Comp-Work MGR';
+                    }
                 }
 
                 if($rest_day_1 == 'Friday' || $rest_day_2 == 'Friday'){
                     $shift_computation_friday = 'Regular Shift';
                 }else{
                     $shift_computation_friday = 'Comp-Work';
+                    if($employee->level == 'RANK&FILE' || $employee->level == 1){
+                        $shift_computation_friday = 'Comp-Work RNF';
+                    }
+                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                        $shift_computation_friday = 'Comp-Work MGR';
+                    }
                 }
 
                 if($rest_day_1 == 'Saturday' || $rest_day_2 == 'Saturday'){
                     $shift_computation_saturday = 'Regular Shift';
                 }else{
                     $shift_computation_saturday = 'Comp-Work';
+                    if($employee->level == 'RANK&FILE' || $employee->level == 1){
+                        $shift_computation_saturday = 'Comp-Work RNF';
+                    }
+                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                        $shift_computation_saturday = 'Comp-Work MGR';
+                    }
                 }
 
                 if($rest_day_1 == 'Sunday' || $rest_day_2 == 'Sunday'){
                     $shift_computation_sunday = 'Regular Shift';
                 }else{
                     $shift_computation_sunday = 'Comp-Work';
+                    if($employee->level == 'RANK&FILE' || $employee->level == 1){
+                        $shift_computation_sunday = 'Comp-Work RNF';
+                    }
+                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                        $shift_computation_sunday = 'Comp-Work MGR';
+                    }
                 }
 
             }else{
