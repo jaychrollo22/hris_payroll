@@ -10,6 +10,30 @@
 						<p class="card-description">
 						<form method='get' onsubmit='show();' enctype="multipart/form-data">
 							<div class=row>
+
+                                <div class='col-md-2'>
+                                    <div class="form-group">
+                                        <label class="text-right">With Pay</label>
+                                        <select data-placeholder="Select Leave" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='withpay_status'>
+                                            <option value="">-- Select --</option>
+                                            <option value="1" {{$withpay_status == '1' ? 'selected' : ""}}>Yes</option>
+                                            <option value="0" {{$withpay_status == '0' ? 'selected' : ""}}>No</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class='col-md-2'>
+                                    <div class="form-group">
+                                        <label class="text-right">Leave Type</label>
+                                        <select data-placeholder="Select Leave" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='leave_type'>
+                                            <option value="">-- Select Leave --</option>
+                                            @foreach($leaves as $leave)
+                                            <option value="{{$leave->id}}" @if ($leave->id == $leave_type) selected @endif>{{$leave->leave_type}} - {{$leave->code}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
 								<div class='col-md-2 mr-2'>
 									<div class="form-group">
 										<label class="text-right">Status</label>
@@ -23,7 +47,7 @@
 									</div>
 								</div>
 								<div class='col-md-2'>
-									<button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Generate</button>
+									<button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
 								</div>
 							</div>
 							
@@ -84,9 +108,13 @@
 													<a href="{{url($form_approval->attachment)}}" target='_blank' class="text-start"><button type="button" class="btn btn-outline-info btn-sm ">View Attachment</button></a>
 												@endif
 										  </td>
-                                          <td>
-                                            <button class="btn btn-md btn-icon btn-info" title="Edit Leave"><i class="ti-pencil btn-icon-prepend"></i></button>
-                                            <button class="btn btn-md btn-icon btn-danger" title="Cancel Leave"><i class="ti-close btn-icon-prepend"></i></button>
+                                          <td align="center">
+                                            {{-- <button class="btn btn-md btn-icon btn-info" title="Edit Leave"><i class="ti-pencil btn-icon-prepend"></i></button> --}}
+                                            @if($form_approval->status == "Approved")
+                                                <button class="btn btn-md btn-icon btn-danger" title="Cancel Leave" id="{{ $form_approval->id }}" data-target="#cancel-used-leave-{{ $form_approval->id }}" data-toggle="modal"><i class="ti-close btn-icon-prepend"></i></button>
+                                            @else
+                                                {{$form_approval->status}}
+                                            @endif
                                           </td>
 										  </tr>
 										@endforeach                        
@@ -102,6 +130,12 @@
 			</div>
 		</div>
 	</div>
+
+@foreach ($employee_leaves as $leave)
+    @include('employee_leave_type_balances.cancel_used_leave')
+@endforeach
+
+
 @php
 function get_count_days($data,$date_from,$date_to,$halfday)
  {

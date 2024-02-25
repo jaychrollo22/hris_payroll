@@ -252,6 +252,9 @@ class EmployeeLeaveTypeBalanceController extends Controller
 
     public function employee_used_leaves(Request $request,$id)
     {
+
+        $leaves = Leave::all();
+
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $year = isset($request->year) ? $request->year : date('Y');
         $leave_type = isset($request->leave_type) ? $request->leave_type : "";
@@ -272,9 +275,28 @@ class EmployeeLeaveTypeBalanceController extends Controller
                 'employee_leaves'=>$employee_leaves,
                 'year'=>$year,
                 'status'=>$status,
+                'withpay_status'=>$withpay_status,
+                'leave_type'=>$leave_type,
+                'leaves'=>$leaves
             ));     
         }else{
             return "No Employee Found!";
         }
+    }
+
+    public function cancel_employee_used_leaves(Request $request, $id){
+
+        $employee_leave = EmployeeLeave::where('id',$id)->first();
+
+        if($employee_leave){
+            $employee_leave->hr_cancel_remarks = $request->hr_cancel_remarks;
+            $employee_leave->status = "Cancelled";
+            $employee_leave->save();
+
+            Alert::success('Employee Leave has been cancelled.')->persistent('Dismiss');
+            return redirect('employee-used-leaves/' . $employee_leave->user_id);
+
+        }
+
     }
 }
