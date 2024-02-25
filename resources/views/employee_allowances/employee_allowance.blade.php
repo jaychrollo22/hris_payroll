@@ -87,6 +87,8 @@
 										</td>
 										<td>
 											{{ $employeeAllowance->employee ? $employeeAllowance->employee->last_name . ', ' . $employeeAllowance->employee->first_name . ' ' . $employeeAllowance->employee->middle_name : "" }}
+											<br>
+											<small>{{$employeeAllowance->employee ? $employeeAllowance->employee->company->company_name : ""}}</small>
 										</td>
 										<td>
 											

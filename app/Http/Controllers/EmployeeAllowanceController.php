@@ -37,11 +37,20 @@ class EmployeeAllowanceController extends Controller
                                         ->where('status','Active')
                                         ->get();
 
-            $employeeAllowances = EmployeeAllowance::whereHas('employee',function($q) use($company){
-                                                        $q->where('company_id',$company);
-                                                    })
-                                                    ->where('status',$status)
-                                                    ->get();
+            $employeeAllowances = EmployeeAllowance::where('status',$status)
+                                                        ->whereHas('employee',function($q) use($allowed_companies){
+                                                            $q->whereIn('company_id',$allowed_companies);
+                                                        })
+                                                        ->with('employee.company');
+
+            if($company){
+                $employeeAllowances = $employeeAllowances->whereHas('employee',function($q) use($company){
+                    $q->where('company_id',$company);
+                });
+            }
+
+            $employeeAllowances = $employeeAllowances->get();
+
 
             $allowanceTypes = Allowance::where('status','Active')->get();
 
