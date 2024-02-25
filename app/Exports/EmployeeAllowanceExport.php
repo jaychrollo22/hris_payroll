@@ -36,15 +36,11 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'USER ID',
-            // 'EMPLOYEE ID NUMBER', // NEW
-            // 'EMPLOYEE NAME', // NEW
             'PARTICULAR',
             'DESCRIPTION',
             'APPLICATION',
             'TYPE',
             'CREDIT SCHEDULE',
-            // 'CREDIT COMPANY', // New
-            // 'CREDIT BRANCH', // New
             'AMOUNT',
             'END DATE',
         ];
