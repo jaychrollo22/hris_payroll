@@ -21,11 +21,15 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
     {
         $company = $this->company;
         $status = $this->status;
-        return EmployeeAllowance::query()->with('employee.schedule_info','employee.company')
-                            ->whereHas('employee',function($q) use($company){
-                                $q->where('company_id',$company);
-                            })
-                            ->where('status',$status);
+        $employee = EmployeeAllowance::query()->with('employee.schedule_info','employee.company')->where('status',$status);
+
+        if($company){
+            $employee = $employee->whereHas('employee',function($q) use($company){
+                $q->where('company_id',$company);
+            });
+        }
+
+        return $employee;
     }
 
     public function headings(): array
@@ -53,8 +57,9 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
         $particular = $employee_allowance->allowance ? $employee_allowance->allowance->name : "";
 
         $schedule = $employee_allowance->schedule;
-        if($employee_allowance->schedule == 'Bi-monthly' || $employee_allowance->schedule == 'bi-monthly'){
-            $schedule == 'Every Cut-Off';
+
+        if($schedule == 'Bi-monthly' || $schedule == 'bi-monthly'){
+            $schedule = 'Every Cut-Off';
         }
 
         $employee_name = $employee_allowance->employee ? $employee_allowance->employee->last_name . ', ' . $employee_allowance->employee->first_name . ' ' . $employee_allowance->employee->middle_name : "";
@@ -78,15 +83,11 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
 
         return [
             $employee_number,
-            // $user_id,
-            // $employee_name,
             $particular,
             $employee_allowance->description,
             $employee_allowance->application,
             $employee_allowance->type,
             $schedule,
-            // $company,
-            // $branch,
             $employee_allowance->allowance_amount,
             $employee_allowance->end_date
         ];

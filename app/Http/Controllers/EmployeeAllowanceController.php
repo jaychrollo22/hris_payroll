@@ -180,7 +180,10 @@ class EmployeeAllowanceController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $status = isset($request->status) ? $request->status : "";
         $company_detail = Company::where('id',$company)->first();
-        return Excel::download(new EmployeeAllowanceExport($company,$status), $company_detail->company_code. ' Employee Allowances Export.xlsx');
+
+        $company_code = $company_detail ? $company_detail->company_code : "";
+
+        return Excel::download(new EmployeeAllowanceExport($company,$status), $company_code. ' Employee Allowances Export.xlsx');
     }
 
 }
