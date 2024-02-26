@@ -356,8 +356,8 @@
                         <div class="collapse @if ($header == 'forms') show @endif" id="forms">
                             <ul class="nav flex-column sub-menu @if ($header == 'forms') show @endif">
                                 <li class="nav-item "> 
-                                    <span class="nav-link">Leave (Not Available)</span>
-                                    {{-- <a class="nav-link active" href="{{ url('/file-leave') }}">Leave</a> --}}
+                                    {{-- <span class="nav-link">Leave (Not Available)</span> --}}
+                                    <a class="nav-link active" href="{{ url('/file-leave') }}">Leave</a>
                                 </li>
                                 @php
                                     $user_allowed_overtime = auth()->user()->allowed_overtime ? auth()->user()->allowed_overtime->allowed_overtime : "";
