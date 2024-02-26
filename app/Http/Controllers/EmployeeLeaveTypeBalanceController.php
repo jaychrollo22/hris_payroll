@@ -220,6 +220,7 @@ class EmployeeLeaveTypeBalanceController extends Controller
             {
                 $leave_balance = EmployeeLeaveTypeBalance::where('user_id',$value['user_id'])
                                                                 ->where('year',$value['year'])
+                                                                ->where('leave_type',$value['leave_type'])
                                                                 ->first();
                 if($leave_balance){
                     $leave_balance->user_id = $value['user_id'];
