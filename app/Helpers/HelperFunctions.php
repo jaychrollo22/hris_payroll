@@ -590,7 +590,7 @@ function checkUsedLeave($user_id,$leave_type,$year){
                                     ->where('status','Approved')
                                     ->whereYear('date_from', '=', $year);
     if($year == 2024){
-        $date_validate = date('Y-01-03'); // Start of Leave Date Validation in 2024
+        $date_validate = date('Y-02-27'); // Start of Leave Date Validation in 2024
         $employee_leave = $employee_leave->where('date_from' , '>=', $date_validate);
     }
 
