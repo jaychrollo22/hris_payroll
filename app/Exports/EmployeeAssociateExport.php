@@ -340,7 +340,7 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
                     if($employee->level == 'RANK&FILE' || $employee->level == 1){
                         $shift_computation_monday = 'Comp-Work RNF';
                     }
-                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                    if($employee->level == 'MANAGER' || $employee->level == 3 || $employee->level == 'SUPERVISOR' || $employee->level == 2 ){
                         $shift_computation_monday = 'Comp-Work MGR';
                     }
                 }
@@ -353,7 +353,7 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
                     if($employee->level == 'RANK&FILE' || $employee->level == 1){
                         $shift_computation_tuesday = 'Comp-Work RNF';
                     }
-                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                    if($employee->level == 'MANAGER' || $employee->level == 3 || $employee->level == 'SUPERVISOR' || $employee->level == 2 ){
                         $shift_computation_tuesday = 'Comp-Work MGR';
                     }
 
@@ -366,7 +366,7 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
                     if($employee->level == 'RANK&FILE' || $employee->level == 1){
                         $shift_computation_wednesday = 'Comp-Work RNF';
                     }
-                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                    if($employee->level == 'MANAGER' || $employee->level == 3 || $employee->level == 'SUPERVISOR' || $employee->level == 2 ){
                         $shift_computation_wednesday = 'Comp-Work MGR';
                     }
                 }
@@ -378,7 +378,7 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
                     if($employee->level == 'RANK&FILE' || $employee->level == 1){
                         $shift_computation_thursday = 'Comp-Work RNF';
                     }
-                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                    if($employee->level == 'MANAGER' || $employee->level == 3 || $employee->level == 'SUPERVISOR' || $employee->level == 2 ){
                         $shift_computation_thursday = 'Comp-Work MGR';
                     }
                 }
@@ -390,7 +390,7 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
                     if($employee->level == 'RANK&FILE' || $employee->level == 1){
                         $shift_computation_friday = 'Comp-Work RNF';
                     }
-                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                    if($employee->level == 'MANAGER' || $employee->level == 3 || $employee->level == 'SUPERVISOR' || $employee->level == 2 ){
                         $shift_computation_friday = 'Comp-Work MGR';
                     }
                 }
@@ -402,7 +402,7 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
                     if($employee->level == 'RANK&FILE' || $employee->level == 1){
                         $shift_computation_saturday = 'Comp-Work RNF';
                     }
-                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                    if($employee->level == 'MANAGER' || $employee->level == 3 || $employee->level == 'SUPERVISOR' || $employee->level == 2 ){
                         $shift_computation_saturday = 'Comp-Work MGR';
                     }
                 }
@@ -414,7 +414,7 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
                     if($employee->level == 'RANK&FILE' || $employee->level == 1){
                         $shift_computation_sunday = 'Comp-Work RNF';
                     }
-                    if($employee->level == 'MANAGER' || $employee->level == 3){
+                    if($employee->level == 'MANAGER' || $employee->level == 3 || $employee->level == 'SUPERVISOR' || $employee->level == 2 ){
                         $shift_computation_sunday = 'Comp-Work MGR';
                     }
                 }
