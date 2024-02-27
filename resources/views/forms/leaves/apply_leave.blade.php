@@ -31,11 +31,11 @@
                         @foreach($employee_leave_type_balance as $leave_type)
                           @php
                             $used_leave = checkUsedLeave(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
-                            $total_balance = $leave_balance->total_balance;
-                            $remaining = $leave_balance->total_balance - $used_leave;
+                            $total_balance = $leave_type->total_balance;
+                            $remaining = $leave_type->total_balance - $used_leave;
                           @endphp
 
-                          <option value="{{$leave_type->leave_type_info->id}}" data-balance="{{$remaining}}">{{$leave_type->leave_type_info->leave_type}}</option>
+                          <option value="{{$leave_type->leave_type_info->id}}" data-balance="{{$leave_type->total_balance}}">{{$leave_type->leave_type_info->leave_type}}</option>
                         @endforeach
                       </select>
                     </div>

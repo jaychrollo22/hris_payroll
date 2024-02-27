@@ -365,7 +365,9 @@ function get_count_days($data,$date_from,$date_to,$halfday)
   <script>
     document.getElementById('leave_type').addEventListener('change', function() {
       var selectedOption = this.options[this.selectedIndex];
+      // console.log(selectedOption)
       var balanceValue = selectedOption.getAttribute('data-balance');
+      // alert(balanceValue)
       if (balanceValue !== null) {
         var checkbox = document.getElementById('withPayCheckBox');
         if(Number(balanceValue) > 0){
