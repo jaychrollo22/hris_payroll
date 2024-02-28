@@ -73,7 +73,12 @@ class EmployeeLeaveTypeBalanceExport implements FromQuery, WithHeadings, WithMap
         $department = $leave_balance->employee ? $leave_balance->employee->department->name : "";
         $date_hired = $leave_balance->employee ? $leave_balance->employee->original_date_hired : "";
 
-        $used_leave = checkUsedLeave($leave_balance->user_id,$leave_balance->leave_type_info->id,$leave_balance->year);
+        if($leave_balance->leave_type_info){
+            $used_leave = checkUsedLeave($leave_balance->user_id,$leave_balance->leave_type_info->id,$leave_balance->year);
+        }else{
+            $used_leave = 0;
+        }
+        
         $total_balance = $leave_balance->balance;
         $remaining = $leave_balance->balance - $used_leave;
 
