@@ -87,7 +87,12 @@
                         <tr>
 
                           @php
-                            $used_leave = checkUsedLeave($item->user_id,$item->leave_type_info->id,$item->year);
+                            if($item->leave_type_info){
+                              $used_leave = checkUsedLeave($item->user_id,$item->leave_type_info->id,$item->year);
+                            }else{
+                              $used_leave = 0;
+                            }
+                            
                             $balance = $item->balance;
                             $remaining = $item->balance - $used_leave;
                           @endphp
