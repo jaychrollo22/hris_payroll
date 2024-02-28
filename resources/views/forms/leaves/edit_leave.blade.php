@@ -33,7 +33,12 @@
                                   <select class="form-control" id="leave_type" style='width:100%;' name='leave_type' required>
                                     @foreach($employee_leave_type_balance as $leave_balance)
                                       @php
-                                        $used_leave = checkUsedLeave(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
+                                        if($leave_balance->leave_type_info){
+                                          $used_leave = checkUsedLeave(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
+                                        }else{
+                                          $used_leave = 0;
+                                        }
+                                        
                                         $total_balance = $leave_balance->total_balance;
                                         $remaining = $leave_balance->total_balance - $used_leave;
                                       @endphp
