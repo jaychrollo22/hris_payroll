@@ -266,8 +266,12 @@ class EmployeeLeaveTypeBalanceController extends Controller
         $employee_leaves = EmployeeLeave::where('user_id',$id)
                                     ->where('withpay',$withpay_status)
                                     ->where('status',$status)
-                                    ->whereYear('date_from', '=', $year)
-                                    ->get();
+                                    ->whereYear('date_from', '=', $year);
+        if($leave_type){
+            $employee_leaves = $employee_leaves->where('leave_type',$leave_type);
+        }
+        
+        $employee_leaves = $employee_leaves->get();
 
         if($employee_leaves){
             return view('employee_leave_type_balances.employee_used_leaves',array(

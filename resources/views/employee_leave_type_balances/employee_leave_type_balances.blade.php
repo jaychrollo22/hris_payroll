@@ -87,8 +87,10 @@
                         <tr>
 
                           @php
+                            $leave_type = '';
                             if($item->leave_type_info){
                               $used_leave = checkUsedLeave($item->user_id,$item->leave_type_info->id,$item->year);
+                              $leave_type = $item->leave_type_info->id;
                             }else{
                               $used_leave = 0;
                             }
@@ -109,7 +111,7 @@
                           <td>0</td>
                           <td>
                             @if($used_leave > 0)
-                              <a href="employee-used-leaves/{{$item->user->id}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
+                              <a href="employee-used-leaves/{{$item->user->id}}?leave_type={{$leave_type}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
                             @else
                               0
                             @endif
