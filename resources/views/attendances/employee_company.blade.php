@@ -119,6 +119,37 @@
                                             $if_has_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($date_r)));
                                             $if_has_wfh = employeeHasWFHDetails($emp->approved_wfhs,date('Y-m-d',strtotime($date_r)));
                                             $if_has_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($date_r)));
+
+                                            $if_dtr_correction = '';
+                                            $time_in_out = 0;
+                                            $time_in = ($emp->attendances)->whereBetween('time_in',[$date_r." 00:00:00", $date_r." 23:59:59"])->first();
+                                            $time_out = null;
+                                            if($time_in == null)
+                                            {
+                                                $time_out = ($emp->attendances)->whereBetween('time_out',[$date_r." 00:00:00", $date_r." 23:59:59"])->where('time_in',null)->first();
+                                            }
+                                            
+                                            $dtr_correction_time_in = "";
+                                            $dtr_correction_time_out = "";
+                                            $dtr_correction_both = "";
+                                            if($if_has_dtr){
+                                                if($if_has_dtr->time_in){
+                                                    $dtr_correction_time_in = $if_has_dtr->correction == 'Time-in' ? $if_has_dtr->time_in : "";
+                                                }
+                                                if($if_has_dtr->time_out){
+                                                    $dtr_correction_time_out = $if_has_dtr->correction == 'Time-out' ? $if_has_dtr->time_out : "";
+                                                }
+                                                
+
+                                                if($if_has_dtr->correction == 'Both'){
+                                                    $dtr_correction_time_in = $if_has_dtr->time_in ? $if_has_dtr->time_in : ""; 
+                                                    $dtr_correction_time_out = $if_has_dtr->time_out ? $if_has_dtr->time_out : "";
+                                                }
+                                                $dtr_correction_both = $if_has_dtr->correction == 'Both'  ? $if_has_dtr : "";
+
+                                                $if_dtr_correction = 'DTR Correction';
+                                            }
+
                                         @endphp
                                         @if($if_has_ob)
                                             @php
@@ -325,6 +356,7 @@
                                                                 @endphp
                                                                 {{$if_leave}}
                                                                 {{$is_absent}}
+                                                                {{$if_dtr_correction}}
                                                                 {{$if_attendance_holiday_status}}
                                                             @endif
                                                         @else
@@ -338,7 +370,9 @@
 
                                                             @endphp  
                                                             {{$if_leave}}
+                                                            {{$if_dtr_correction}}
                                                             {{$is_absent}}
+                                                            
                                                         @endif
                                                     @endif
                                                 </td>
