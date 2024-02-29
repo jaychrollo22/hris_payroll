@@ -183,7 +183,7 @@ class EmployeeAllowanceController extends Controller
 
         $company_code = $company_detail ? $company_detail->company_code : "";
 
-        return Excel::download(new EmployeeAllowanceExport($company,$status), $company_code. ' Employee Allowances Export.xlsx');
+        return Excel::download(new EmployeeAllowanceExport($company,$status), $company_code. ' Allowances Export.xlsx');
     }
 
 }
