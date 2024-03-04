@@ -357,7 +357,7 @@
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/work-from-home') }}">Work from home</a></li>
                                 <li class="nav-item "> <a class="nav-link " href="{{ url('/official-business') }}">Official Business</a>
                                 </li>
-                                <li class="nav-item "> <a class="nav-link " href="{{ url('/dtr-correction') }}">DTR Correction</a></li>
+                                {{-- <li class="nav-item "> <a class="nav-link " href="{{ url('/dtr-correction') }}">DTR Correction</a></li> --}}
                             </ul>
                         </div>
                     </li>
@@ -390,7 +390,7 @@
                                 <li class="nav-item "><a class="nav-link " href="{{ url('/for-overtime') }}">Overtime <span class="badge badge-warning">{{ session('pending_overtime_count') }}</span></a></li>
                                 <li class="nav-item "><a class="nav-link " href="{{ url('/for-work-from-home') }}">Work From Home <span class="badge badge-warning">{{ session('pending_wfh_count') }}</span></a></li>
                                 <li class="nav-item "><a class="nav-link " href="{{ url('/for-official-business') }}">Official Business <span class="badge badge-warning">{{ session('pending_ob_count') }}</span></a></li>
-                                <li class="nav-item "><a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction <span class="badge badge-warning">{{ session('pending_dtr_count') }}</span></a></li>
+                                {{-- <li class="nav-item "><a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction <span class="badge badge-warning">{{ session('pending_dtr_count') }}</span></a></li> --}}
                             </ul>
                         </div>
                     </li>
@@ -446,18 +446,18 @@
                                 @if (checkUserPrivilege('biometrics_per_location',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location') }}">Per Location</a></li>
                                 @endif
-                                @if (checkUserPrivilege('biometrics_per_location_hik',auth()->user()->id) == 'yes')
+                                {{-- @if (checkUserPrivilege('biometrics_per_location_hik',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/bio-per-location-hik') }}">Per Location (HIK)</a></li>
-                                @endif
+                                @endif --}}
                                 @if (checkUserPrivilege('biometrics_per_company',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/biometrics-per-company') }}">Per Company</a></li>
                                 @endif
-                                @if (checkUserPrivilege('biometrics_per_seabased',auth()->user()->id) == 'yes')
+                                {{-- @if (checkUserPrivilege('biometrics_per_seabased',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/seabased-attendances') }}">Per Seabased</a></li>
-                                @endif
-                                @if (checkUserPrivilege('biometrics_per_hik_vision',auth()->user()->id) == 'yes')
+                                @endif --}}
+                                {{-- @if (checkUserPrivilege('biometrics_per_hik_vision',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/hik-attendances') }}">Per HIK Vision</a></li>
-                                @endif
+                                @endif --}}
                                 @if (checkUserPrivilege('biometrics_sync',auth()->user()->id) == 'yes')
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/sync-biometrics') }}">Sync Biometrics</a></li>
                                 @endif
@@ -481,7 +481,7 @@
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/handbooks') }}">Handbook</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/leavee-settings') }}">Leave Type</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/announcements') }}">Announcements</a></li>
-                                {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/logos') }}">Logos</a></li> --}}
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/logos') }}">Logos</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/hr-approver-setting') }}">HR Approver Setting</a></li>
                             </ul>
                         </div>
