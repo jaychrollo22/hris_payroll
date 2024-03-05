@@ -78,6 +78,9 @@
                                 $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
                                 $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
                                 $check_if_early_cutoff = checkIfEarlyCutoff(date('Y-m-d',strtotime($date_r)));
+
+                                $check_if_has_leave_shift = employeeHasLeaveShift($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
+
                             @endphp
                             <tr>
                                 <td>{{$emp->employee_number}}</td>
@@ -681,23 +684,56 @@
                                             @endphp
 
                                             <td>
-                                                @if(empty($check_if_holiday))
-                                                    {{  $late_diff_hours }} hrs
-                                                    @php
-                                                        $lates = (double) $lates+$late_diff_hours;
-                                                    @endphp
+                                                @if($check_if_has_leave_shift)
+                                                    @if($check_if_has_leave_shift == 'Second Shift')
+                                                        @if(empty($check_if_holiday))
+                                                            {{  $late_diff_hours }} hrs
+                                                            @php
+                                                                $lates = (double) $lates+$late_diff_hours;
+                                                            @endphp
+                                                        @endif
+                                                    @else 
+                                                        0 hrs 
+                                                    @endif
+                                                @else
+                                                    @if(empty($check_if_holiday))
+                                                        {{  $late_diff_hours }} hrs
+                                                        @php
+                                                            $lates = (double) $lates+$late_diff_hours;
+                                                        @endphp
+                                                    @endif
                                                 @endif
+
+
+                                                
                                             </td>
                                             <td>
                                                 {{-- Undertime --}}
-                                                @if(empty($check_if_holiday))
-                                                    @if($undertime_hrs > 0) 
-                                                        {{$undertime_hrs}} hrs 
-                                                        @php 
-                                                            $undertimes=$undertimes + $undertime_hrs; 
-                                                        @endphp 
+                                                @if($check_if_has_leave_shift)
+                                                    @if($check_if_has_leave_shift == 'First Shift')
+                                                        @if(empty($check_if_holiday))
+                                                            @if($undertime_hrs > 0) 
+                                                                {{$undertime_hrs}} hrs 
+                                                                @php 
+                                                                    $undertimes=$undertimes + $undertime_hrs; 
+                                                                @endphp 
+                                                            @else 
+                                                                0 hrs 
+                                                            @endif 
+                                                        @endif 
                                                     @else 
                                                         0 hrs 
+                                                    @endif
+                                                @else
+                                                    @if(empty($check_if_holiday))
+                                                        @if($undertime_hrs > 0) 
+                                                            {{$undertime_hrs}} hrs 
+                                                            @php 
+                                                                $undertimes=$undertimes + $undertime_hrs; 
+                                                            @endphp 
+                                                        @else 
+                                                            0 hrs 
+                                                        @endif 
                                                     @endif 
                                                 @endif 
                                             </td>
@@ -799,6 +835,7 @@
                                                 {{$check_if_early_cutoff}}
                                             @endif
                                         @else
+                                        
                                             @if($time_in == null)
                                                 @if($employee_schedule)
                                                     @php 
@@ -834,8 +871,39 @@
                                                                         $if_attendance_holiday_status = 'With-Pay';
                                                                     }
                                                                 }
+                                                            }else{
+
+                                                                $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r . '-1 day')), $emp->employee_number,$emp->location);
+                                                            
+                                                                if($if_attendance_holiday){
+                                                                    $check_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)),$employee_schedule);
+                                                                    $check_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                                    $check_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                                    $check_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
+
+                                                                    if($check_leave || $check_wfh || $check_ob || $check_dtr){
+                                                                        $if_attendance_holiday_status = 'With-Pay';
+                                                                        if($check_leave){
+                                                                            if($check_leave == 'SL Without-Pay' || $check_leave == 'VL Without-Pay'){
+                                                                                $if_attendance_holiday_status = 'Without-Pay';
+                                                                            }else{
+                                                                                $if_attendance_holiday_status = 'With-Pay';
+                                                                            }
+                                                                        }
+                                                                    }else{
+                                                                        
+                                                                        $check_attendance = checkHasAttendanceHolidayStatus($emp->attendances,$if_attendance_holiday);
+
+                                                                        if(empty($check_attendance)){
+                                                                            $is_absent = 'Absent';
+                                                                        }else{
+                                                                            $if_attendance_holiday_status = 'With-Pay';
+                                                                        }
+                                                                    }
+                                                                }
                                                             }
                                                         }else{
+
                                                             $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
                                                             if(empty($if_leave)){
                                                                 if(empty($if_has_dtr)){
@@ -853,6 +921,7 @@
                                                     {{$is_absent}}
                                                     {{$if_dtr_correction}}
                                                     {{$if_attendance_holiday_status}}
+
                                                 @endif
                                             @else
                                                 @php
@@ -868,8 +937,11 @@
                                                 {{$if_leave}}
                                                 {{$if_dtr_correction}}
                                                 {{$is_absent}}
+                                                
+                                                
                                             @endif
                                         @endif
+
                                     </td>
                                 @endif
                             </tr>

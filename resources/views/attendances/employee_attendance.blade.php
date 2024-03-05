@@ -100,6 +100,9 @@
                                 $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
                                 $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
                                 $check_if_early_cutoff = checkIfEarlyCutoff(date('Y-m-d',strtotime($date_r)));
+
+                                $check_if_has_leave_shift = employeeHasLeaveShift($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
+
                             @endphp
                             <tr>
                                 <td>{{$emp->employee_number}}</td>
@@ -703,23 +706,56 @@
                                             @endphp
 
                                             <td>
-                                                @if(empty($check_if_holiday))
-                                                    {{  $late_diff_hours }} hrs
-                                                    @php
-                                                        $lates = (double) $lates+$late_diff_hours;
-                                                    @endphp
+                                                @if($check_if_has_leave_shift)
+                                                    @if($check_if_has_leave_shift == 'Second Shift')
+                                                        @if(empty($check_if_holiday))
+                                                            {{  $late_diff_hours }} hrs
+                                                            @php
+                                                                $lates = (double) $lates+$late_diff_hours;
+                                                            @endphp
+                                                        @endif
+                                                    @else 
+                                                        0 hrs 
+                                                    @endif
+                                                @else
+                                                    @if(empty($check_if_holiday))
+                                                        {{  $late_diff_hours }} hrs
+                                                        @php
+                                                            $lates = (double) $lates+$late_diff_hours;
+                                                        @endphp
+                                                    @endif
                                                 @endif
+
+
+                                                
                                             </td>
                                             <td>
                                                 {{-- Undertime --}}
-                                                @if(empty($check_if_holiday))
-                                                    @if($undertime_hrs > 0) 
-                                                        {{$undertime_hrs}} hrs 
-                                                        @php 
-                                                            $undertimes=$undertimes + $undertime_hrs; 
-                                                        @endphp 
+                                                @if($check_if_has_leave_shift)
+                                                    @if($check_if_has_leave_shift == 'First Shift')
+                                                        @if(empty($check_if_holiday))
+                                                            @if($undertime_hrs > 0) 
+                                                                {{$undertime_hrs}} hrs 
+                                                                @php 
+                                                                    $undertimes=$undertimes + $undertime_hrs; 
+                                                                @endphp 
+                                                            @else 
+                                                                0 hrs 
+                                                            @endif 
+                                                        @endif 
                                                     @else 
                                                         0 hrs 
+                                                    @endif
+                                                @else
+                                                    @if(empty($check_if_holiday))
+                                                        @if($undertime_hrs > 0) 
+                                                            {{$undertime_hrs}} hrs 
+                                                            @php 
+                                                                $undertimes=$undertimes + $undertime_hrs; 
+                                                            @endphp 
+                                                        @else 
+                                                            0 hrs 
+                                                        @endif 
                                                     @endif 
                                                 @endif 
                                             </td>
