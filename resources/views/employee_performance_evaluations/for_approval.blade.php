@@ -50,13 +50,13 @@
                     <div class='col-md-2'>
                       <div class="form-group">
                         <label class="text-right">From</label>
-                        <input type="date" value='{{$from}}' class="form-control form-control-sm" name="from" onchange='get_min(this.value);' required />
+                        <input type="date" value='{{$from}}' class="form-control form-control-sm" name="from" onchange='get_min(this.value);' />
                       </div>
                     </div>
                     <div class='col-md-2'>
                       <div class="form-group">
                         <label class="text-right">To</label>
-                        <input type="date" value='{{$to}}' class="form-control form-control-sm" id='to' name="to" required />
+                        <input type="date" value='{{$to}}' class="form-control form-control-sm" id='to' name="to" />
                       </div>
                     </div>
                     <div class='col-md-2 mr-2'>

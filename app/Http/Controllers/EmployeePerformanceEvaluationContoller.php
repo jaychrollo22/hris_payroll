@@ -462,8 +462,8 @@ class EmployeePerformanceEvaluationContoller extends Controller
     public function performance_plan_approval(Request $request){
 
         $today = date('Y-m-d');
-        $from_date = isset($request->from) ? $request->from : date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
-        $to_date = isset($request->to) ? $request->to : date('Y-m-d');
+        $from_date = isset($request->from) ? $request->from : "";
+        $to_date = isset($request->to) ? $request->to : "";
         
         $filter_status = isset($request->status) ? $request->status : 'For Review';
 
@@ -474,30 +474,56 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                     $q->where('approver_id',$approver_id);
                                 })
                                 ->where('status',$filter_status)
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
-                                ->orderBy('created_at','DESC')
-                                ->get();
+                                ->orderBy('created_at','DESC');
+
+        if(isset($request->from)){
+            $performance_plans = $performance_plans->whereDate('created_at','>=',$from_date);
+        }
+        if(isset($request->to)){
+            $performance_plans = $performance_plans->whereDate('created_at','<=',$to_date);
+        }
+
+        $performance_plans = $performance_plans->get();
+        
 
         $user_ids = EmployeeApprover::select('user_id')->where('approver_id',$approver_id)->pluck('user_id')->toArray();
 
         $for_approval = EmployeePerformanceEvaluation::whereIn('user_id',$user_ids)
-                                ->where('status','For Review')
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
-                                ->count();
-                                
+                                ->where('status','For Review');
+        
+        if(isset($request->from)){
+            $for_approval = $for_approval->whereDate('created_at','>=',$from_date);
+        }
+        if(isset($request->to)){
+            $for_approval = $for_approval->whereDate('created_at','<=',$to_date);
+        }
+
+        $for_approval = $for_approval->count();
+
+
         $approved = EmployeePerformanceEvaluation::whereIn('user_id',$user_ids)
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
-                                ->where('status','Approved')
-                                ->count();
+                                ->where('status','Approved');
+
+        if(isset($request->from)){
+            $approved = $approved->whereDate('created_at','>=',$from_date);
+        }
+        if(isset($request->to)){
+            $approved = $approved->whereDate('created_at','<=',$to_date);
+        }
+
+        $approved = $approved->count();
 
         $declined = EmployeePerformanceEvaluation::whereIn('user_id',$user_ids)
-                                ->whereDate('created_at','>=',$from_date)
-                                ->whereDate('created_at','<=',$to_date)
-                                ->where('status','Declined')
-                                ->count();
+                                ->where('status','Declined');
+        
+        if(isset($request->from)){
+            $declined = $declined->whereDate('created_at','>=',$from_date);
+        }
+        if(isset($request->to)){
+            $declined = $declined->whereDate('created_at','<=',$to_date);
+        }
+
+        $declined = $declined->count();
         
         session(['pending_performance_eval_count'=>$for_approval]);
                                 
