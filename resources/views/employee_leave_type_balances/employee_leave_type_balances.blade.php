@@ -111,7 +111,7 @@
                           <td>0</td>
                           <td>
                               <a href="employee-used-leaves/{{$item->user->id}}?leave_type={{$leave_type}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
-                            @endif
+                          
                           </td>
                           <td>{{ $remaining > 0 ? $remaining : 0 }}</td>
                           <td>
