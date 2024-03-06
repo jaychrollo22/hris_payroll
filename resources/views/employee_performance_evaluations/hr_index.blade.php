@@ -108,6 +108,7 @@
                         <th>Date Filed</th>
                         <th>Calendar Date</th>
                         <th>PPR Period</th>
+                        <th>Approver</th>
                         <th>Review Date</th>
                         <th>Status</th>
                       </tr>
@@ -125,6 +126,23 @@
                           <td>{{ date('Y-m-d h:i A',strtotime($eval->created_at))}}</td>
                           <td>{{ $eval->calendar_year}}</td>
                           <td>{{ $eval->period}}</td>
+                          <td id="tdStatus{{ $eval->id }}">
+                            @foreach($eval->approver as $approver)
+                              @if($eval->level >= $approver->level)
+                                  @if ($eval->level == 0 && $eval->status == 'Declined')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                  @else
+                                    {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                  @endif
+                              @else
+                                @if ($eval->status == 'Declined')
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @else
+                                  {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">For Review</label>
+                                @endif
+                              @endif<br> 
+                            @endforeach
+                          </td>
                           <td>{{ $eval->approved_by_date ? date('Y-m-d',strtotime($eval->approved_by_date)) : ""}}</td>
                           <td>
                             @if ($eval->status == 'Draft')
