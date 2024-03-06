@@ -110,10 +110,7 @@
                           <td>{{ $item->balance}}</td>
                           <td>0</td>
                           <td>
-                            @if($used_leave > 0)
                               <a href="employee-used-leaves/{{$item->user->id}}?leave_type={{$leave_type}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
-                            @else
-                              0
                             @endif
                           </td>
                           <td>{{ $remaining > 0 ? $remaining : 0 }}</td>
