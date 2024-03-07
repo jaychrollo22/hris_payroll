@@ -122,7 +122,7 @@
                         </td>
                         <td> {{$overtime->break_hrs}}</td>
                         <td> {{$overtime->ot_approved_hrs}}</td>
-                        <td>{{$overtime->ot_approved_hrs - $overtime->break_hrs}}</td>
+                        <td>{{$overtime->ot_approved_hrs ? $overtime->ot_approved_hrs - $overtime->break_hrs : ""}}</td>
                         <td>{{ $overtime->remarks }}</td>
                         <td id="tdStatus{{ $overtime->id }}">
                           @if ($overtime->status == 'Pending')
