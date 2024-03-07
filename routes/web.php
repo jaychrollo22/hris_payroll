@@ -371,6 +371,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('approve-ppr-all','EmployeePerformanceEvaluationContoller@approvePprAll');
     Route::post('disapprove-ppr-all','EmployeePerformanceEvaluationContoller@disapprovePprAll');
 
+    Route::get('return-to-draft/{id}','EmployeePerformanceEvaluationContoller@returnToDraft');
+
 
     //Employee Leave Type Balances
     Route::get('/employee-leave-type-balances','EmployeeLeaveTypeBalanceController@index');

@@ -659,4 +659,20 @@ class EmployeePerformanceEvaluationContoller extends Controller
             return 'error';
         }
     }
+
+    public function returnToDraft(Request $request,$id){
+
+        $employee_ppr = EmployeePerformanceEvaluation::where('id', $id)->first();
+        if($employee_ppr){
+
+            $employee_ppr->mail_1 = null;
+            $employee_ppr->mail_2 = null;
+            $employee_ppr->level = 0;
+            $employee_ppr->status = 'Draft';
+            $employee_ppr->save();
+
+            Alert::success('Performance Plan has been returned to Draft.')->persistent('Dismiss');
+            return back();
+        }
+    }
 }
