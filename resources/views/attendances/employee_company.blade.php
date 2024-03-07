@@ -156,17 +156,19 @@
                                                 $ob_start = new DateTime($if_has_ob->date_from); 
                                                 $ob_diff = $ob_start->diff(new DateTime($if_has_ob->date_to)); 
                                             @endphp
-                                            <td>{{$if_has_ob->date_from}}</td>
-                                            <td>{{$if_has_ob->date_to}}</td>
+                                            <td>{{date('h:i A',strtotime($if_has_ob->date_from))}}</td>
+                                            <td>{{date('h:i A',strtotime($if_has_ob->date_to))}}</td>
                                             <td>{{ $ob_diff->h }} hrs. {{ $ob_diff->i }} mins. </td>
-                                            <td>OB</td>
+                                            <td>
+                                                Business (WD)
+                                            </td>
                                         @elseif($if_has_wfh)
                                             @php
                                                 $wfh_start = new DateTime($if_has_wfh->date_from); 
                                                 $wfh_diff = $wfh_start->diff(new DateTime($if_has_wfh->date_to)); 
                                             @endphp
-                                            <td>{{$if_has_wfh->date_from}}</td>
-                                            <td>{{$if_has_wfh->date_to}}</td>
+                                            <td>{{date('h:i A',strtotime($if_has_wfh->date_from))}}</td>
+                                            <td>{{date('h:i A',strtotime($if_has_wfh->date_to))}}</td>
                                             <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins. </td>
                                             <td>{{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : "WFH"}}</td>
                                         @else
