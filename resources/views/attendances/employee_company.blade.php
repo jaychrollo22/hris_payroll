@@ -80,6 +80,7 @@
                                         <td>Time Out</td>
                                         <td>Work </td>
                                         <td>Remarks </td>
+                                        <td>Date Description </td>
 
                                         {{-- <td>Lates </td>
                                         <td>Undertime</td>
@@ -116,6 +117,7 @@
                                         <td class="@if($employee_schedule) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
 
                                         @php
+                                            $check_if_holiday = checkIfHoliday(date('Y-m-d',strtotime($date_r)),$emp->location);
                                             $if_has_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($date_r)));
                                             $if_has_wfh = employeeHasWFHDetails($emp->approved_wfhs,date('Y-m-d',strtotime($date_r)));
                                             $if_has_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($date_r)));
@@ -399,6 +401,20 @@
                                                         
                                                     @endif
                                                 @endif
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $date_description = '';
+                                                    if($check_if_holiday){
+                                                        if($check_if_holiday == 'Legal Holiday'){
+                                                            $date_description = 'Regular Holiday';
+                                                        }
+                                                        else {
+                                                            $date_description = $check_if_holiday;
+                                                        }
+                                                    }
+                                                @endphp
+                                                {{$date_description}}
                                             </td>
                                             
                                         @endif
