@@ -8,10 +8,10 @@
               <div class="card-body">
                 <h4 class="card-title">MY PERFORMANCE PLAN</h4>
                 <p class="card-description">
-                  <a href="/create-performance-plan-review" type="button" class="btn btn-outline-success btn-icon-text">
+                  {{-- <a href="/create-performance-plan-review" type="button" class="btn btn-outline-success btn-icon-text">
                     <i class="ti-plus btn-icon-prepend"></i>                                                    
                     Create
-                  </a>
+                  </a> --}}
                 </p>
                 
                 <form method='get' onsubmit='show();' enctype="multipart/form-data">
@@ -52,15 +52,15 @@
                         <tr>
                           <td> 
 
-                            @if($eval->status == 'Approved')
+                            {{-- @if($eval->status == 'Approved') --}}
                               <a href="/show-performance-plan-review/{{$eval->id}}" class="text-success btn-sm text-center" title="View PPR">
                                   <i class="ti-pencil btn-icon-prepend"></i>
                               </a>
-                            @else
+                            {{-- @else
                               <a href="/edit-performance-plan-review/{{$eval->id}}" class="text-success btn-sm text-center" title="Edit PPR">
                                   <i class="ti-pencil btn-icon-prepend"></i>
-                              </a>
-                            @endif
+                              </a> --}}
+                            {{-- @endif --}}
                             
                             {{ date('Y-m-d h:i A',strtotime($eval->created_at))}}</td>
                           <td>

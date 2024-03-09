@@ -76,12 +76,7 @@
                     </div>
                   </div>
                 </form>
-                {{-- @if(empty($status) || $status == 'For Review')
-                  <label>
-                    <input type="checkbox" id="selectAll">
-                    <span id="labelSelectAll">Select All</span> 
-                  </label>
-                @endif --}}
+                
 
                 <button class="btn btn-success btn-sm mb-2" id="approveAllBtn" style="display: none;">Approve</button>
                 <button class="btn btn-danger btn-sm mb-2" id="disApproveAllBtn" style="display: none;">Disapprove</button>
@@ -90,11 +85,6 @@
                   <table id="pprDataTable" class="table table-hover table-bordered tablewithSearch">
                     <thead>
                       <tr>
-                        {{-- @if(empty($status) || $status == 'For Review')
-                          <th>
-                            Select
-                          </th>
-                        @endif --}}
                         <th>Employee Name</th>
                         <th>Date Filed</th>
                         <th>Calendar Year</th>
@@ -109,17 +99,6 @@
                     <tbody> 
                         @foreach ($performance_plans as $form_approval)
                         <tr>
-                          {{-- @if(empty($status) || $status == 'For Review')
-                            <td align="center">
-                              @foreach($form_approval->approver as $k => $approver)
-                                @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'For Review')
-                                  
-                                    <input type="checkbox" class="checkbox-item" data-id="{{$form_approval->id}}">
-                                  </td>
-                                @endif
-                              @endforeach
-                            </td>
-                          @endif --}}
                           <td>
                               <strong>{{$form_approval->user->name}}</strong> <br>
                               <small>Position : {{$form_approval->user->employee->position}}</small> <br>
@@ -163,7 +142,7 @@
 
                             <a href="/show-performance-plan-review/{{$form_approval->id}}" target="_blank" class="btn btn-primary btn-sm"><i class="ti-eye btn-icon-prepend"></i></a>
 
-                            @foreach($form_approval->approver as $k => $approver)
+                            {{-- @foreach($form_approval->approver as $k => $approver)
                               @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'For Review')
                                 <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#ppr-approved-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Approve">
                                   <i class="ti-check btn-icon-prepend"></i>                                                    
@@ -172,7 +151,7 @@
                                   <i class="ti-close btn-icon-prepend"></i>                                                    
                                 </button> 
                               @endif<br> 
-                            @endforeach
+                            @endforeach --}}
                           </td>
 
                           <td>{{$form_approval->approval_remarks}}</td>
