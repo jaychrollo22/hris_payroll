@@ -144,6 +144,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
      */
     public function create()
     {
+        return redirect('/performance-plan-review');
         return view('employee_performance_evaluations.create',array(
             'header' => 'employee_performance_evaluations',
         ));
@@ -288,7 +289,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
      */
     public function edit($id)
     {
-
+        return redirect('/performance-plan-review');
         if(Auth::user()->id == '1'){
             $ppr = EmployeePerformanceEvaluation::with('approver.approver_info','user','employee')
                                                         ->where('id',$id)
