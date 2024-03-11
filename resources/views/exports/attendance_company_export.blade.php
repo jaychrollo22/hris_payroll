@@ -93,7 +93,7 @@
                     <td>{{date('h:i A',strtotime($if_has_wfh->date_from))}}</td>
                     <td>{{date('h:i A',strtotime($if_has_wfh->date_to))}}</td>
                     <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins. </td>
-                    <td>{{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : "WFH"}}</td>
+                    <td>{{ $if_has_wfh->approve_percentage ? 'WFH-' . $if_has_wfh->approve_percentage .'%' : "Work From Home"}}</td>
                 @else
                     {{-- Time In --}}
                     @if($time_in || $if_has_dtr)
