@@ -415,7 +415,7 @@ class AttendanceController extends Controller
             $attendance->datetime = $req['timestamp'];
             $attendance->type = $req['type'];
             $attendance->location = $request->location;
-            $attendance->ip_address = $request->add;
+            $attendance->ip_address = $request->ip_address;
             $attendance->save();
        }
        
