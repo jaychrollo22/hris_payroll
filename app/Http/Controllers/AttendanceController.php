@@ -410,13 +410,12 @@ class AttendanceController extends Controller
        {
            
             $attendance = new AttendanceLog;
-            $attendance->last_id = $req['id'];
-            $attendance->emp_code = $req['employee']['emp_pin'];
-            $attendance->date = date('Y-m-d',strtotime($req['punch_time']));
-            $attendance->datetime = $req['punch_time'];
-            $attendance->type = $req['workstate'];
+            $attendance->emp_code = $req['uid'];
+            $attendance->date = date('Y-m-d',strtotime($req['timestamp']));
+            $attendance->datetime = $req['timestamp'];
+            $attendance->type = $req['type'];
             $attendance->location = $request->location;
-            $attendance->ip_address = $req['terminal_info']['terminal_tcpip']."-".$req['terminal_info']['terminal_name'];
+            $attendance->ip_address = $add;
             $attendance->save();
        }
        
