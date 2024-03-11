@@ -408,7 +408,7 @@ class AttendanceController extends Controller
     {
        foreach($request->data as $req)
        {
-           
+            
             $attendance = new AttendanceLog;
             $attendance->emp_code = $req['uid'];
             $attendance->date = date('Y-m-d',strtotime($req['timestamp']));
@@ -436,11 +436,11 @@ class AttendanceController extends Controller
     }
     public function getlastId($company)
     {
-        $attendance = AttendanceLog::Where('location',$company)->orderBy('id','desc')->first();
+        $attendance = AttendanceLog::Where('location',$company)->orderBy('datetime','desc')->first();
         // $id = $attendance->last_id;
         if($attendance != null)
         {
-            return array('id' => $attendance->last_id);
+            return array('id' => $attendance->datetime);
         }
         return array('id' => 0);
     
