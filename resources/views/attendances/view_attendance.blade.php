@@ -915,6 +915,10 @@
                                                                 }
                                                             } 
                                                         }
+
+                                                        if($time_out_data == null){
+                                                            $is_absent = 'Absent';
+                                                        }
                                                             
                                                     @endphp
                                                     {{$if_leave}}
