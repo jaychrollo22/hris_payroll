@@ -384,8 +384,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/employee-used-leaves/{id}','EmployeeLeaveTypeBalanceController@employee_used_leaves');
     Route::post('/cancel-employee-used-leaves/{id}','EmployeeLeaveTypeBalanceController@cancel_employee_used_leaves');
 
-   
-
+    //Employee Loans
+    Route::get('/employee-loans','EmployeeLoansController@index');
+    Route::post('/new-employee-loan','EmployeeLoansController@store');
+    Route::get('/edit-employee-loan/{id}','EmployeeLoansController@edit');
+    Route::post('/update-employee-loan/{id}','EmployeeLoansController@update');
+    Route::get('/export-employee-loans','EmployeeLoansController@export');
+    Route::post('/import-employee-loans','EmployeeLoansController@import');
 });
 Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');
