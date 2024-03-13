@@ -64,17 +64,17 @@ class EmployeeLeaveController extends Controller
         
         $allowed_to_file = true;
         //Validate Project Based
-        if($employee_status->classification == '3' || $employee_status->classification == '5'){
-            $date_from = new DateTime($employee_status->original_date_hired);
-            $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
-            $total_months = (($date_diff->y) * 12) + ($date_diff->m);
+        // if($employee_status->classification == '3' || $employee_status->classification == '5'){
+        //     $date_from = new DateTime($employee_status->original_date_hired);
+        //     $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
+        //     $total_months = (($date_diff->y) * 12) + ($date_diff->m);
 
-            if($total_months > 5){
-                $allowed_to_file = true;
-            }else{
-                $allowed_to_file = false;
-            }
-        }
+        //     if($total_months > 5){
+        //         $allowed_to_file = true;
+        //     }else{
+        //         $allowed_to_file = false;
+        //     }
+        // }
 
 
         return view('forms.leaves.leaves',
