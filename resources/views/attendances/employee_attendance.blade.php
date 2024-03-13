@@ -935,12 +935,14 @@
                                                                         }
                                                                     }
                                                                 }
-                                                            } 
+                                                            }
+                                                            
+                                                            if($time_out_data == null && empty($if_leave)){
+                                                                $is_absent = 'Absent';
+                                                            }
                                                         }
 
-                                                        if($time_out_data == null){
-                                                            $is_absent = 'Absent';
-                                                        }
+                                                        
                                                             
                                                     @endphp
                                                     {{$if_leave}}
