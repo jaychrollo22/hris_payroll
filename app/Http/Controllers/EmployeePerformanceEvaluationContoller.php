@@ -144,7 +144,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
      */
     public function create()
     {
-        return redirect('/performance-plan-review');
+        // return redirect('/performance-plan-review');
         return view('employee_performance_evaluations.create',array(
             'header' => 'employee_performance_evaluations',
         ));

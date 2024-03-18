@@ -123,6 +123,7 @@ class EmployeeLeaveController extends Controller
                     $date_to = $request->date_from;
                 }
             }
+           
             if($request->leave_balances >= $count_days){
                 $new_leave = new EmployeeLeave;
                 $new_leave->user_id = Auth::user()->id;
@@ -193,7 +194,7 @@ class EmployeeLeaveController extends Controller
     public function edit($id){
         $year = date('Y');
 
-        $leave = EmployeeLeave::findOrFail($id);
+        $leave = EmployeeLeave::with('leave')->where('id',$id)->first();
         $get_approvers = new EmployeeApproverController;
         $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
         $employee_leave_type_balance = EmployeeLeaveTypeBalance::select('leave_type','year', DB::raw('SUM(balance) as total_balance'))
@@ -203,19 +204,36 @@ class EmployeeLeaveController extends Controller
                                                                     ->with('leave_type_info')
                                                                     ->get();
 
+        $leave_balance = EmployeeLeaveTypeBalance::select('leave_type','year', DB::raw('SUM(balance) as total_balance'))
+                                                                ->groupBy('leave_type','year')
+                                                                ->where('user_id',auth()->user()->id)
+                                                                ->where('year',$year)
+                                                                ->where('leave_type',$leave->leave->code)
+                                                                ->first();
+
+        if($leave->leave && $leave_balance){
+            $used_leave = checkUsedLeave(auth()->user()->id,$leave->leave->id,$leave->year);
+            $remaining = $leave_balance->total_balance - $used_leave;
+        }else{
+            $used_leave = 0;
+            $remaining = 0;
+        }
+       
+        
+
         return view('forms.leaves.edit_leave',array(
             'header' => 'forms',
             'leave'=>$leave,
             'all_approvers'=>$all_approvers,
             'get_approvers'=>$get_approvers,
-            'employee_leave_type_balance' => $employee_leave_type_balance
+            'employee_leave_type_balance' => $employee_leave_type_balance,
+            'remaining' => $remaining
         ));
     }
 
     public function edit_leave(Request $request, $id)
     {
         $employee = Employee::where('user_id',Auth::user()->id)->first();
-        
         $date_from = $request->date_from;
         $date_to = $request->date_to;
 
@@ -226,13 +244,11 @@ class EmployeeLeaveController extends Controller
         }
 
         $count_days = get_count_days_leave($employee->ScheduleData,$date_from,$date_to);
-
         if($count_days == 0){
             Alert::warning('Wrong Filing of Leave. Please check your application and then try again.')->persistent('Dismiss');
             return back();
         }
         if($request->withpay == 'on'){
-
             if($count_days == 1){
                 if($request->halfday == '1'){
                     $count_days = 0.5;

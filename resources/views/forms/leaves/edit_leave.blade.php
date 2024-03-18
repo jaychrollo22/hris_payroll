@@ -30,19 +30,8 @@
                             <div class="form-group row">
                               <label for="leave_type" class="col-sm-2 col-form-label">Leave Type</label>
                                 <div class="col-sm-4">
-                                  <select class="form-control" id="leave_type" style='width:100%;' name='leave_type' required>
+                                  <select class="form-control" id="leave_type" style='width:100%;' name='leave_type' required readonly>
                                     @foreach($employee_leave_type_balance as $leave_balance)
-                                      @php
-                                        if($leave_balance->leave_type_info){
-                                          $used_leave = checkUsedLeave(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
-                                        }else{
-                                          $used_leave = 0;
-                                        }
-                                        
-                                        $total_balance = $leave_balance->total_balance;
-                                        $remaining = $leave_balance->total_balance - $used_leave;
-                                      @endphp
-
                                       <option value="{{$leave_balance->leave_type_info->id}}" data-balance="{{$remaining}}" {{ $leave_balance->leave_type_info->id == $leave->leave_type ? 'selected' : ''}}>{{$leave_balance->leave_type_info->leave_type}}</option>
                                     @endforeach                
                                   </select>
@@ -54,6 +43,8 @@
                                         <input type="hidden" id="leave_balances" name="leave_balances" value="{{$remaining}}">
                                         <div>
                                           <label class="form-check-label ">
+
+                                           
                                             @if($leave->withpay == 1)
                                               <input type="checkbox" name="withpay" class="form-check-input" :disabled="isAllowedWithPay" checked>  
                                             @else
