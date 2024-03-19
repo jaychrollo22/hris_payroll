@@ -74,11 +74,11 @@
                                     <tr>
                                         <td>{{$item->employee->user_id}}</td>
                                         <td>{{$item->user->name}}</td>
-                                        <td>{{date('d/m/Y h:i A', strtotime($item->created_at))}}</td>
-                                        <td>{{ date('d/m/Y ', strtotime($item->applied_date)) }}</td>
-                                        <td>{{ date('d/m/Y h:i A', strtotime($item->date_from)) }} - {{ date('d/m/Y h:i A', strtotime($item->date_to)) }}  </td>
+                                        <td>{{date('m/d/Y h:i A', strtotime($item->created_at))}}</td>
+                                        <td>{{ date('m/d/Y ', strtotime($item->applied_date)) }}</td>
+                                        <td>{{ date('m/d/Y h:i A', strtotime($item->date_from)) }} - {{ date('m/d/Y h:i A', strtotime($item->date_to)) }}  </td>
                                         <td>{{get_count_days($item->schedule,$item->date_from,$item->date_to)}}</td>
-                                        <td>{{ $item->approved_date ? date('d/m/Y', strtotime($item->approved_date)) : ""}}</td>
+                                        <td>{{ $item->approved_date ? date('m/d/Y', strtotime($item->approved_date)) : ""}}</td>
                                         <td>{{$item->remarks}}
                                             <br>
                                             @if($item->attachment)

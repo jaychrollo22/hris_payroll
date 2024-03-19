@@ -92,14 +92,14 @@
 										  <td>{{$form_approval->user->id}}</td>
 										  <td>{{$form_approval->employee->employee_number}}</td>
 										  <td>{{$form_approval->user->name}}</td>
-										  <td>{{date('d/m/Y h:i A', strtotime($form_approval->created_at))}}</td>
-										  <td>{{date('d/m/Y', strtotime($form_approval->applied_date))}}</td>
+										  <td>{{date('m/d/Y h:i A', strtotime($form_approval->created_at))}}</td>
+										  <td>{{date('m/d/Y', strtotime($form_approval->applied_date))}}</td>
 										  <td>{{date('h:i A', strtotime($form_approval->date_from)) . '-' . date('h:i A', strtotime($form_approval->date_to))}}</td>
 										  <td>
 											{{$form_approval->status}}
 										  </td>
 										  <td>{{$form_approval->approve_percentage ? 'WFH-' . $form_approval->approve_percentage . '%' : "" }}</td>
-										  <td>{{date('d/m/Y', strtotime($form_approval->approved_date))}}</td>
+										  <td>{{date('m/d/Y', strtotime($form_approval->approved_date))}}</td>
 										 
 										  	<td>
 												{{$form_approval->remarks}}

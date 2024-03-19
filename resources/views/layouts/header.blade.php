@@ -760,6 +760,11 @@
         }
         $(document).ready(function() {
 
+
+            // $('#employee_attendance').DataTable({
+            //     "order": [[3, 'desc']] // Replace '0' with the index of the column you want to sort by
+            // });
+
             $('#my-ppr').DataTable({
                 "order": [[0, 'desc']] // Replace '0' with the index of the column you want to sort by
             });

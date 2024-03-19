@@ -82,12 +82,12 @@
 										<tr>
                                             <td>{{$form_approval->user->id}}</td>
                                             <td>{{$form_approval->user->name}}</td>
-                                            <td>{{date('d/m/Y h:i A', strtotime($form_approval->created_at))}}</td>
-                                            <td>{{date('d/m/Y', strtotime($form_approval->dtr_date))}}</td>
+                                            <td>{{date('m/d/Y h:i A', strtotime($form_approval->created_at))}}</td>
+                                            <td>{{date('m/d/Y', strtotime($form_approval->dtr_date))}}</td>
                                             <td>{{$form_approval->correction}}</td>
-                                            <td> {{(isset($form_approval->time_in)) ? date('d/m/Y h:i A', strtotime($form_approval->time_in)) : '----'}}</td>
-                                            <td> {{(isset($form_approval->time_out)) ? date('d/m/Y h:i A', strtotime($form_approval->time_out)) : '----'}}</td>
-                                            <td>{{date('d/m/Y', strtotime($form_approval->approved_date))}}</td>
+                                            <td> {{(isset($form_approval->time_in)) ? date('m/d/Y h:i A', strtotime($form_approval->time_in)) : '----'}}</td>
+                                            <td> {{(isset($form_approval->time_out)) ? date('m/d/Y h:i A', strtotime($form_approval->time_out)) : '----'}}</td>
+                                            <td>{{date('m/d/Y', strtotime($form_approval->approved_date))}}</td>
 											<td>
 												{{$form_approval->remarks}} <br>
 												@if($form_approval->attachment)

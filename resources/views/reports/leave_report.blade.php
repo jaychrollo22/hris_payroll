@@ -84,10 +84,10 @@
 										<tr>
 										  <td>{{$form_approval->user->id}}</td>
 										  <td>{{$form_approval->user->name}}</td>
-										  <td>{{date('d/m/Y h:i A', strtotime($form_approval->created_at))}}</td>
+										  <td>{{date('m/d/Y h:i A', strtotime($form_approval->created_at))}}</td>
 										  <td>{{$form_approval->leave->leave_type}}</td>
-										  <td>{{date('d/m/Y', strtotime($form_approval->date_from))}}</td>
-										  <td>{{date('d/m/Y', strtotime($form_approval->date_to))}}</td>
+										  <td>{{date('m/d/Y', strtotime($form_approval->date_from))}}</td>
+										  <td>{{date('m/d/Y', strtotime($form_approval->date_to))}}</td>
 										  @if($form_approval->withpay == 1)   
 											<td>Yes</td>
 										  @else
@@ -102,7 +102,7 @@
 										  <td>
 											{{$form_approval->status}}
 										  </td>
-										  <td>{{ $form_approval->approved_date ? date('d/m/Y', strtotime($form_approval->approved_date)) : ""}}</td>
+										  <td>{{ $form_approval->approved_date ? date('m/d/Y', strtotime($form_approval->approved_date)) : ""}}</td>
 										  <td>
 												{{$form_approval->reason}} <br>
 												@if($form_approval->attachment)
