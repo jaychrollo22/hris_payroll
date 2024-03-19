@@ -111,6 +111,10 @@ class EmployeeLeaveController extends Controller
 
         $count_days = get_count_days_leave($employee->ScheduleData,$date_from,$date_to);
 
+        $pending_leave = checkPendingLeave(Auth::user()->id,$request->leave_type,date('Y'),'');
+        
+        $available_balance = $request->leave_balances - $pending_leave;
+
         if($count_days == 0){
             Alert::warning('Wrong Filing of Leave. Please check your application and then try again.')->persistent('Dismiss');
             return back();
@@ -124,7 +128,7 @@ class EmployeeLeaveController extends Controller
                 }
             }
            
-            if($request->leave_balances >= $count_days){
+            if($available_balance >= $count_days){
                 $new_leave = new EmployeeLeave;
                 $new_leave->user_id = Auth::user()->id;
                 $emp = Employee::where('user_id',auth()->user()->id)->first();
@@ -154,8 +158,14 @@ class EmployeeLeaveController extends Controller
                 Alert::success('Successfully Store')->persistent('Dismiss');
                 return back();
             }else{
-                Alert::warning('Insufficient Balance. Please try again.')->persistent('Dismiss');
-                return back();
+                if($pending_leave > 0){
+                    Alert::warning('Insufficient Balance to proceed due to pending leave request. Please try again.')->persistent('Dismiss');
+                    return back();
+                }else{
+                    Alert::warning('Insufficient Balance. Please try again.')->persistent('Dismiss');
+                    return back();
+                }
+                
             }
         }else{
             $new_leave = new EmployeeLeave;
@@ -244,10 +254,16 @@ class EmployeeLeaveController extends Controller
         }
 
         $count_days = get_count_days_leave($employee->ScheduleData,$date_from,$date_to);
+
+        $pending_leave = checkPendingLeave(Auth::user()->id,$request->leave_type,date('Y'),$id);
+        
+        $available_balance = $request->leave_balances - $pending_leave;
+
         if($count_days == 0){
             Alert::warning('Wrong Filing of Leave. Please check your application and then try again.')->persistent('Dismiss');
             return back();
         }
+
         if($request->withpay == 'on'){
             if($count_days == 1){
                 if($request->halfday == '1'){
@@ -255,7 +271,7 @@ class EmployeeLeaveController extends Controller
                 }
             }
 
-            if($request->leave_balances >= $count_days){
+            if($available_balance >= $count_days){
                 $new_leave = EmployeeLeave::findOrFail($id);
                 $new_leave->user_id = Auth::user()->id;
                 $new_leave->leave_type = $request->leave_type;
@@ -283,8 +299,13 @@ class EmployeeLeaveController extends Controller
                 return back();
             }else{
 
-                Alert::warning('Insufficient Balance. Please try again.')->persistent('Dismiss');
-                return back();
+                if($pending_leave > 0){
+                    Alert::warning('Insufficient Balance to proceed due to pending leave request. Please try again.')->persistent('Dismiss');
+                    return back();
+                }else{
+                    Alert::warning('Insufficient Balance. Please try again.')->persistent('Dismiss');
+                    return back();
+                }
             }
         }else{
             $new_leave = EmployeeLeave::findOrFail($id);

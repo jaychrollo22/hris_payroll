@@ -673,6 +673,45 @@ function checkUsedLeave($user_id,$leave_type,$year){
     return $count;
 }
 
+function checkPendingLeave($user_id,$leave_type,$year,$leave_id){
+
+
+    $employee_leave = EmployeeLeave::where('user_id',$user_id)
+                                    ->where('leave_type',$leave_type)
+                                    ->where('status','Pending')
+                                    ->whereYear('date_from', '=', $year);
+
+    if($leave_id){
+        $employee_leave = $employee_leave->where('id','!=',$leave_id);
+    }   
+    if($year == 2024){
+        $date_validate = date('Y-02-27'); // Start of Leave Date Validation in 2024
+        $employee_leave = $employee_leave->where('date_from' , '>=', $date_validate);
+    }
+
+    $employee_leave = $employee_leave->get();
+
+    $count = 0;
+    if($employee_leave){
+        foreach($employee_leave as $leave){
+            if($leave->withpay == 1 && $leave->halfday == 1){
+                $count += 0.5;
+            }else{
+                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                if($date_range){
+                    foreach($date_range as $date_r){
+                        if($leave->withpay == 1){
+                            $count += 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return $count;
+}
+
 function checkRemainingBalance($user_id,$leave_type,$year){
 
     $leave = Leave::where('id',$leave_type)->first();
