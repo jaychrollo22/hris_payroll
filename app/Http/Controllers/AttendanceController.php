@@ -440,7 +440,7 @@ class AttendanceController extends Controller
         ini_set('memory_limit', '-1');
        foreach($request->data as $req)
        {
-            if($req->time_input != '00:00:00')
+            if($req['time_input'] != '00:00:00')
             {
 
                 $attendance = new AttendanceLog;
@@ -448,7 +448,7 @@ class AttendanceController extends Controller
                 $attendance->emp_code = $req['id_bio'];
                 $attendance->date = date('Y-m-d',strtotime($req['date_time']));
                 $attendance->datetime = $req['date_time'];
-                if($req->device_name == "HO IN")
+                if($req['device_name'] == "HO IN")
                 {
                     $attendance->type = 0;
                 }
