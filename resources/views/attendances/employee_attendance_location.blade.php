@@ -19,7 +19,7 @@
                             <select data-placeholder="Select Location" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='location' required>
                                 <option value="">-- Select Location --</option>
                                 @foreach($locations as $location)
-                                    <option value="{{$location->location}}" @if($location == $location->location) selected @endif>{{$location->location}}</option>
+                                    <option value="{{$location->location}}" @if($loc == $location->location) selected @endif>{{$location->location}}</option>
                                 @endforeach
                               </select>
                         </div>
