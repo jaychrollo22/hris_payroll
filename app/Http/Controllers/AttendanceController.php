@@ -435,6 +435,37 @@ class AttendanceController extends Controller
         );
        }
     }
+    public function store_logs_hk(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+       foreach($request->data as $req)
+       {
+            
+            $attendance = new AttendanceLog;
+            $attendance->emp_code = $req['id'];
+            $attendance->date = date('Y-m-d',strtotime($req['timestamp']));
+            $attendance->datetime = $req['timestamp'];
+            $attendance->type = $req['type'];
+            $attendance->location = $request->location;
+            $attendance->ip_address = $request->ip_address;
+            $attendance->save();
+       }
+       
+       if($attendance->id != null)
+       {
+       return array( 'code' => 200,
+        'attendance' => $attendance,
+        'message' => 'success',
+        );
+       }
+       else
+       {
+        return array( 'code' => 500,
+        'attendance' => $attendance,
+        'message' => 'error',
+        );
+       }
+    }
     public function getlastId($company)
     {
         $attendance = AttendanceLog::Where('ip_address',$company)->orderBy('datetime','desc')->first();
