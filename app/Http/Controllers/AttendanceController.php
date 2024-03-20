@@ -446,4 +446,15 @@ class AttendanceController extends Controller
         return array('id' => 0);
     
     }
+    public function getlastIdHK($company)
+    {
+        $attendance = AttendanceLog::Where('ip_address',$company)->orderBy('last_id','desc')->first();
+        // $id = $attendance->last_id;
+        if($attendance != null)
+        {
+            return array('id' => $attendance->last_id);
+        }
+        return array('id' => 0);
+    
+    }
 }
