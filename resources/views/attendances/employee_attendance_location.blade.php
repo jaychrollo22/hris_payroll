@@ -69,7 +69,7 @@
                               <td>{{$attendance->emp_code}}</td>
                               <td>{{date('Y-m-d',strtotime($attendance->datetime))}}</td>
                               <td>{{date('h:i A',strtotime($attendance->datetime))}}</td>
-                              <td>{{($attendance->punch_state == 0) ? "Time In" : "Time Out"}}</td>
+                              <td>{{($attendance->type == 0) ? "Time In" : "Time Out"}}</td>
                               <td>{{$attendance->ip_address}}</td>
                           </tr>
                         @endforeach
