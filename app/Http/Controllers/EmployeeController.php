@@ -36,7 +36,7 @@ use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
-
+use App\AttendanceLog;
 use App\Exports\EmployeesExport;
 use App\Exports\EmployeeHRExport;
 use App\Exports\AttendancePerLocationExport;
@@ -1654,61 +1654,21 @@ class EmployeeController extends Controller
     }
     public function biologs_per_location(Request $request)
     {
-
-        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
-        $allowed_locations = getUserAllowedLocations(auth()->user()->id);
-        $allowed_projects = getUserAllowedProjects(auth()->user()->id);
-
-        $employee_names = Employee::select('id','employee_number','first_name','last_name')
-                                                ->whereIn('company_id', $allowed_companies)
-                                                ->when($allowed_locations,function($q) use($allowed_locations){
-                                                    $q->whereIn('location',$allowed_locations);
-                                                })
-                                                ->when($allowed_projects,function($q) use($allowed_projects){
-                                                    $q->whereIn('project',$allowed_projects);
-                                                })
-                                                ->where('status','Active')
-                                                ->get();
-
-        $employee_numbers = Employee::whereIn('company_id', $allowed_companies)
-                                                ->when($allowed_locations,function($q) use($allowed_locations){
-                                                    $q->whereIn('location',$allowed_locations);
-                                                })
-                                                ->when($allowed_projects,function($q) use($allowed_projects){
-                                                    $q->whereIn('project',$allowed_projects);
-                                                })
-                                                ->where('status','Active')
-                                                ->pluck('employee_number')
-                                                ->toArray();
-
-        $terminals = IclockTerminal::get();
-        $location = $request->location;
-        $from_date = $request->from;
-        $to_date = $request->to;
-        $attendances = array();
-        if ($from_date != null) {
-            $attendances = IclockTransation::whereBetween('punch_time', [$from_date." 00:00:01", $to_date." 23:59:59"])
-                                ->where('terminal_id', $request->location)
-                                ->whereIn('punch_state', array(0, 1, 5))
-                                ->whereIn('emp_code', $employee_numbers)
-                                ->with('emp_data', 'location')
-                                ->orderBy('emp_code', 'desc')
-                                ->orderBy('punch_time', 'asc')
-                                ->get();
-        }
-
+        $from_date = $request->from_date;
+        $to_date = $request->to_date;
+        $locations = AttendanceLog::groupBy('location')->get(['location']);
+        $attendances = AttendanceLog::whereBetween('date',[$from_date,$to_date])->where('location',$request->location)->get();
         return view(
             'attendances.employee_attendance_location',
             array(
                 'header' => 'biometrics',
-                'location' => $location,
+                'locations' => $locations,
                 'from_date' => $from_date,
                 'to_date' => $to_date,
-                'terminals' => $terminals,
                 'attendances' => $attendances,
-                'employee_names' => $employee_names,
             )
         );
+        
     }
 
     public function biologs_per_location_export(Request $request){

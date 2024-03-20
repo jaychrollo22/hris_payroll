@@ -18,8 +18,8 @@
                         <div class="col-sm-8">
                             <select data-placeholder="Select Location" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='location' required>
                                 <option value="">-- Select Location --</option>
-                                @foreach($terminals as $terminal)
-                                    <option value="{{$terminal->id}}" @if($location == $terminal->id) selected @endif>{{$terminal->alias}}</option>
+                                @foreach($locations as $location)
+                                    <option value="{{$location->location}}" @if($location == $location->location) selected @endif>{{$location->location}}</option>
                                 @endforeach
                               </select>
                         </div>
@@ -65,12 +65,12 @@
                     <tbody>
                         @foreach($attendances as $attendance)
                           <tr>
-                              <td>@if($attendance->emp_data){{$attendance->emp_data->first_name}} {{$attendance->emp_data->last_name}}@endif</td>
+                              <td>@if($attendance->employee){{$attendance->employee->first_name}} {{$attendance->employee->last_name}}@endif</td>
                               <td>{{$attendance->emp_code}}</td>
-                              <td>{{date('Y-m-d',strtotime($attendance->punch_time))}}</td>
-                              <td>{{date('h:i A',strtotime($attendance->punch_time))}}</td>
+                              <td>{{date('Y-m-d',strtotime($attendance->datetime))}}</td>
+                              <td>{{date('h:i A',strtotime($attendance->datetime))}}</td>
                               <td>{{($attendance->punch_state == 0) ? "Time In" : "Time Out"}}</td>
-                              <td>{{$attendance->location->alias}}</td>
+                              <td>{{$attendance->ip_address}}</td>
                           </tr>
                         @endforeach
                     </tbody>

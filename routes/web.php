@@ -14,6 +14,7 @@
 use App\HikAttLog2;
 
 Auth::routes();
+Route::get('get-devices','AttendanceController@devices');
 Route::group(['middleware' => 'auth'], function () {
     //Users
     Route::get('account-setting', 'UserController@accountSetting');
