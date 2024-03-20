@@ -18,6 +18,6 @@ use Illuminate\Http\Request;
 // });
 
 Route::post('save-attendance','AttendanceController@store_logs');
-Route::post('save-attendance-hm','AttendanceController@store_logs_hk');
+Route::post('save-attendance-hk','AttendanceController@store_logs_hk');
 Route::get('get-last-id/{company}','AttendanceController@getlastId');
 Route::get('get-last-id-hk/{company}','AttendanceController@getlastIdHK');
