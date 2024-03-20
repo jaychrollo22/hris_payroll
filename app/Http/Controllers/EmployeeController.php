@@ -1654,8 +1654,9 @@ class EmployeeController extends Controller
     }
     public function biologs_per_location(Request $request)
     {
-        $from_date = $request->from_date;
-        $to_date = $request->to_date;
+        $from_date = $request->from;
+        $to_date = $request->to;
+        
         $locations = AttendanceLog::groupBy('location')->get(['location']);
         $attendances = AttendanceLog::whereBetween('date',[$from_date,$to_date])->where('location',$request->location)->get();
         return view(
@@ -1666,6 +1667,7 @@ class EmployeeController extends Controller
                 'from_date' => $from_date,
                 'to_date' => $to_date,
                 'attendances' => $attendances,
+                'loc' => $request->location,
             )
         );
         
