@@ -438,45 +438,49 @@ class AttendanceController extends Controller
     public function store_logs_hk(Request $request)
     {
         ini_set('memory_limit', '-1');
-       foreach($request->data as $req)
-       {
-            if($req['time_input'] != '00:00:00')
+        if(!empty($request->data))
+        {
+            foreach($request->data as $req)
             {
-
-                $attendance = new AttendanceLog;
-                $attendance->last_id = $req['id'];
-                $attendance->emp_code = $req['id_bio'];
-                $attendance->date = date('Y-m-d',strtotime($req['date_time']));
-                $attendance->datetime = $req['date_time'];
-                if($req['device_name'] == "HO IN")
-                {
-                    $attendance->type = 0;
-                }
-                else
-                {
-                    $attendance->type = 1;
-                }
-                $attendance->location = $request->location;
-                $attendance->ip_address = $request->ip_address;
-                $attendance->save();
+                 if($req['time_input'] != '00:00:00')
+                 {
+     
+                     $attendance = new AttendanceLog;
+                     $attendance->last_id = $req['id'];
+                     $attendance->emp_code = $req['id_bio'];
+                     $attendance->date = date('Y-m-d',strtotime($req['date_time']));
+                     $attendance->datetime = $req['date_time'];
+                     if($req['device_name'] == "HO IN")
+                     {
+                         $attendance->type = 0;
+                     }
+                     else
+                     {
+                         $attendance->type = 1;
+                     }
+                     $attendance->location = $request->location;
+                     $attendance->ip_address = $request->ip_address;
+                     $attendance->save();
+                 }
+                 
             }
             
-       }
-       
-       if($attendance->id != null)
-       {
-       return array( 'code' => 200,
-        'attendance' => $attendance,
-        'message' => 'success',
-        );
-       }
-       else
-       {
-        return array( 'code' => 500,
-        'attendance' => $attendance,
-        'message' => 'error',
-        );
-       }
+            if($attendance->id != null)
+            {
+            return array( 'code' => 200,
+             'attendance' => $attendance,
+             'message' => 'success',
+             );
+            }
+            else
+            {
+             return array( 'code' => 500,
+             'attendance' => $attendance,
+             'message' => 'error',
+             );
+            }
+        }
+      
     }
     public function getlastId($company)
     {
