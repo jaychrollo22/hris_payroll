@@ -1367,7 +1367,7 @@ class EmployeeController extends Controller
     public function generate_biometric_code( $year, $compId, $user_id)
     {
        
-        $comp_code = str_pad($compId, 2, '0', STR_PAD_LEFT);
+        $comp_code = $compId;
         $user_id = str_pad($user_id, 4, '0', STR_PAD_LEFT);
         $emp_code = $comp_code . substr($year, -2) . $user_id;
         return $emp_code;
