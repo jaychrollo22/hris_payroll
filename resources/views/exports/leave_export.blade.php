@@ -20,7 +20,18 @@
                     <td>{{$leave->employee->employee_number}}</td>
                     {{-- <td>{{$leave->employee->first_name . ' ' . $leave->employee->last_name}}</td> --}}
                     <td>{{date('d/m/Y',strtotime($date_r))}}</td>
-                    <td>{{$leave->leave->leave_type}}</td>
+                    
+                    @php
+                      $leave_type = $leave->leave->leave_type;
+                      if($leave_type == 'Bank Vacation Leave'){
+                        $leave_type = 'Vacation Leave';
+                      }
+                      else if($leave_type == 'Bank Sick Leave'){
+                        $leave_type = 'Sick Leave';
+                      }
+                    @endphp
+
+                    <td>{{$leave_type}}</td>
                     <td>
                         {{-- {{$leave->withpay == 1 ? 'With-Pay' : 'Without-Pay'}} --}}
                         @php
