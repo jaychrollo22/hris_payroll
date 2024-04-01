@@ -1348,17 +1348,17 @@ class EmployeeController extends Controller
         $data = Employee::whereYear('original_date_hired', "=", $year)->where('company_id', $compId)->orderBy('id', 'desc')->first();
         //  dd($data);
         if (empty($data)) {
-            $emp_code = $code . "-" . $year . "-00001";
+            $emp_code = $code . "-" . $year . "-0001";
         } else {
             $code_data = explode("-", $data->employee_code);
             //  dd($code_data);
             if(count($code_data) > 1){
                 $code_final = intval($code_data[2]) + 1;
             }else{
-                $code_final = "00001";
+                $code_final = "0001";
             }
             
-            $emp_code = $code . "-" . $year . "-" . str_pad($code_final, 5, '0', STR_PAD_LEFT);
+            $emp_code = $code . "-" . $year . "-" . str_pad($code_final, 4, '0', STR_PAD_LEFT);
         }
 
         return $emp_code;

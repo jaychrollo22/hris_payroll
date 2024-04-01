@@ -45,9 +45,11 @@ class UserController extends Controller
                             })
                             ->when($search,function($q) use($search){
                                 $q->whereHas('employee',function($w) use($search){
-                                    $w->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')->orWhere('employee_number', 'like' , '%' .  $search . '%');
+                                    $w->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')
+                                        ->orWhere('employee_number', 'like' , '%' .  $search . '%');
                                     $w->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"]);
                                     $w->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
+                                    $w->orWhere('user_id','=', $search);
                                 });
                             })
                             ->limit($limit)
@@ -199,6 +201,7 @@ class UserController extends Controller
                 $user_privilege->masterfiles_employee_leave_earned = $request->masterfiles_employee_leave_earned;
                 $user_privilege->masterfiles_employee_allowances = $request->masterfiles_employee_allowances;
                 $user_privilege->masterfiles_employee_loans = $request->masterfiles_employee_loans;
+                $user_privilege->masterfiles_performance_plan_periods = $request->masterfiles_performance_plan_periods;
 
                 $user_privilege->save();
                 Alert::success('Successfully Updated')->persistent('Dismiss');
@@ -246,6 +249,7 @@ class UserController extends Controller
                 $new_user_privilege->masterfiles_employee_leave_earned = $request->masterfiles_employee_leave_earned;
                 $new_user_privilege->masterfiles_employee_allowances = $request->masterfiles_employee_allowances;
                 $new_user_privilege->masterfiles_employee_loans = $request->masterfiles_employee_loans;
+                $new_user_privilege->masterfiles_performance_plan_periods = $request->masterfiles_performance_plan_periods;
                 
                 $new_user_privilege->save();
                 Alert::success('Successfully Updated')->persistent('Dismiss');

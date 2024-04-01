@@ -10,6 +10,7 @@ use App\EmployeeLeave;
 use App\EmployeeLeaveCredit;
 
 use App\EmployeeLeaveTypeBalance;
+use App\EmployeeEarnedAdditionalLeave;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,26 +58,13 @@ class EmployeeLeaveController extends Controller
                                             ->where('user_id',auth()->user()->id)
                                             ->get();
 
-        $get_leave_balances = new LeaveBalanceController;
+        // $get_leave_balances = new LeaveBalanceController;
         $get_approvers = new EmployeeApproverController;
         $leave_balances = EmployeeLeaveCredit::with('leave')->where('user_id',auth()->user()->id)->get();
         $all_approvers = $get_approvers->get_approvers(auth()->user()->id);
         
         $allowed_to_file = true;
-        //Validate Project Based
-        // if($employee_status->classification == '3' || $employee_status->classification == '5'){
-        //     $date_from = new DateTime($employee_status->original_date_hired);
-        //     $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
-        //     $total_months = (($date_diff->y) * 12) + ($date_diff->m);
-
-        //     if($total_months > 5){
-        //         $allowed_to_file = true;
-        //     }else{
-        //         $allowed_to_file = false;
-        //     }
-        // }
-
-
+        
         return view('forms.leaves.leaves',
         array(
             'header' => 'forms',
@@ -222,8 +210,10 @@ class EmployeeLeaveController extends Controller
                                                                 ->first();
 
         if($leave->leave && $leave_balance){
+            $additional_leave = checkEmployeeEarnedLeaveAdditional(auth()->user()->id,$leave->leave->id,$leave_balance->year);
             $used_leave = checkUsedLeave(auth()->user()->id,$leave->leave->id,$leave->year);
-            $remaining = $leave_balance->total_balance - $used_leave;
+            $total_balance = $leave_balance->total_balance + $additional_leave;
+            $remaining = $total_balance - $used_leave;
         }else{
             $used_leave = 0;
             $remaining = 0;

@@ -516,6 +516,18 @@
                                         Employee Loans
                                         <br>
                                         <br>
+                                        @if($user->user_privilege)
+                                            @if($user->user_privilege->masterfiles_performance_plan_periods == 'on')
+                                                <input type="checkbox" name="masterfiles_performance_plan_periods" id="masterfiles_performance_plan_periods{{$user->id}}" value="{{ $user->user_privilege->masterfiles_performance_plan_periods }}" checked>
+                                            @else
+                                                <input type="checkbox" name="masterfiles_performance_plan_periods" id="masterfiles_performance_plan_periods{{$user->id}}">
+                                            @endif
+                                        @else
+                                            <input type="checkbox" name="masterfiles_performance_plan_periods" id="masterfiles_performance_plan_periods{{$user->id}}">
+                                        @endif
+                                        Performance Plan Periods
+                                        <br>
+                                        <br>
                                     </div>
 
                                 </div>

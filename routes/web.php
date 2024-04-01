@@ -391,6 +391,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/update-employee-loan/{id}','EmployeeLoansController@update');
     Route::get('/export-employee-loans','EmployeeLoansController@export');
     Route::post('/import-employee-loans','EmployeeLoansController@import');
+
+    //Performance Plan Period
+    Route::post('store-performance-plan-period', 'PerformancePlanPeriodController@store');
+    Route::get('performance-plan-periods', 'PerformancePlanPeriodController@index');
+    Route::get('edit-performance-plan-period/{id}', 'PerformancePlanPeriodController@edit');
+    Route::post('update-performance-plan-period/{id}', 'PerformancePlanPeriodController@update');
 });
 Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');

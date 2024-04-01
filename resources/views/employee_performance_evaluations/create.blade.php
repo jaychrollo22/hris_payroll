@@ -17,9 +17,17 @@
                                     <table class="table-bordered" width="100%">
                                         <tr>
                                             <td align="center">Calendar Year</td>
-                                            <td align="center"> <input type="text" placeholder="Calendar Year" width="100%" class="responsive-input myinput" name="calendar_year" value="January 2024 - December 2024" required></td>
+                                            <td align="center"> 
+                                                <select class='form-control required form-control-sm ' name='calendar_year' required>
+                                                    <option value=''>--Select Calendar Year--</option>
+                                                    @foreach ($performance_plan_period as $calendar_year)
+                                                        <option value='{{ $calendar_year->period}}'>{{ $calendar_year->period }}</option>
+                                                    @endforeach
+                                                </select
+
+                                            </td>
                                             <td align="center">Review Date</td>
-                                            <td align="center"> <input type="date" name="review_date"></td>
+                                            <td align="center"> <input type="date" class="form-control" name="review_date"></td>
                                             <td align="center">Period</td>
                                             <td align="center" style="vertical-align: middle;">
                                                 <label class="mt-2">

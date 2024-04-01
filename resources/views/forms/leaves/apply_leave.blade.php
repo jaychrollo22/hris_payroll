@@ -29,19 +29,22 @@
                       <select class="form-control" id="leave_type" style='width:100%;' name='leave_type' required>
                         <option value="">--Select--</option>
                         @foreach($employee_leave_type_balance as $leave_type)
-                          {{-- @php
+                          @php
+                                
+                            $additional_leave = 0;
+                            $used_leave = 0;
 
-                            if($leave_balance->leave_type_info){
-                              $used_leave = checkUsedLeave(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
-                            }else{
-                              $used_leave = 0;
+                            if($leave_type->leave_type_info){
+                              $additional_leave = checkEmployeeEarnedLeaveAdditional(auth()->user()->id,$leave_type->leave_type_info->id,$leave_type->year);
+                              $used_leave = checkUsedLeave(auth()->user()->id,$leave_type->leave_type_info->id,$leave_type->year);
                             }
-
-                            $total_balance = $leave_type->total_balance;
-                            $remaining = $leave_type->total_balance - $used_leave;
-                          @endphp --}}
+                            
+                            $total_balance = $leave_type->total_balance + $additional_leave;
+                            $remaining = $total_balance - $used_leave;
+                            
+                          @endphp
                           @if($leave_type->leave_type_info)
-                            <option value="{{$leave_type->leave_type_info->id}}" data-balance="{{$leave_type->total_balance}}">{{$leave_type->leave_type_info->leave_type}}</option>
+                            <option value="{{$leave_type->leave_type_info->id}}" data-balance="{{$remaining}}">{{$leave_type->leave_type_info->leave_type}}</option>
                           @endif
                         @endforeach
                       </select>

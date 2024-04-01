@@ -76,7 +76,8 @@
                         <th>Year</th> 
                         <th>Leave Type</th> 
                         <th>Leave Balance</th> 
-                        <th>Additional Leave</th> 
+                        <th>Earned Leave</th> 
+                        <th>Total</th> 
                         <th>Used</th> 
                         <th>Remaining</th> 
                         <th>Action</th> 
@@ -88,15 +89,16 @@
 
                           @php
                             $leave_type = '';
+                            $additional_leave = 0;
+                            $used_leave = 0;
                             if($item->leave_type_info){
+                              $additional_leave = checkEmployeeEarnedLeaveAdditional($item->user_id,$item->leave_type_info->id,$item->year);
                               $used_leave = checkUsedLeave($item->user_id,$item->leave_type_info->id,$item->year);
                               $leave_type = $item->leave_type_info->id;
-                            }else{
-                              $used_leave = 0;
                             }
                             
-                            $balance = $item->balance;
-                            $remaining = $item->balance - $used_leave;
+                            $balance = $item->balance + $additional_leave;
+                            $remaining = $balance - $used_leave;
                           @endphp
                           <td>{{ $item->user->id}}</td>
                           <td>
@@ -108,10 +110,13 @@
                           <td>{{ $item->year}}</td>
                           <td>{{ $item->leave_type}}</td>
                           <td>{{ $item->balance}}</td>
-                          <td>0</td>
                           <td>
-                              <a href="employee-used-leaves/{{$item->user->id}}?leave_type={{$leave_type}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
-                          
+                            {{-- <a href="employee-additional-leaves/{{$item->user->id}}?leave_type={{$leave_type}}" target="_blank" title="View Additional Leaves">{{$additional_leave}}</a> --}}
+                            {{$additional_leave}}
+                          </td>
+                          <td>{{ $balance}}</td>
+                          <td>
+                            <a href="employee-used-leaves/{{$item->user->id}}?leave_type={{$leave_type}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
                           </td>
                           <td>{{ $remaining > 0 ? $remaining : 0 }}</td>
                           <td>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\EmployeePerformanceEvaluation;
 use App\Company;
 use App\EmployeeApprover;
+use App\PerformancePlanPeriod;
 
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -144,9 +145,15 @@ class EmployeePerformanceEvaluationContoller extends Controller
      */
     public function create()
     {
-        // return redirect('/performance-plan-review');
+
+        return redirect('/performance-plan-review');
+        
+        $performance_plan_period = PerformancePlanPeriod::where('status','Active')->orderBy('created_at','DESC')->get();
+        //  $performance_plan_period = [];
+        
         return view('employee_performance_evaluations.create',array(
             'header' => 'employee_performance_evaluations',
+            'performance_plan_period' => $performance_plan_period
         ));
     }
 
@@ -290,6 +297,9 @@ class EmployeePerformanceEvaluationContoller extends Controller
     public function edit($id)
     {
         return redirect('/performance-plan-review');
+
+        $performance_plan_period = PerformancePlanPeriod::where('status','Active')->orderBy('created_at','DESC')->get();
+
         if(Auth::user()->id == '1'){
             $ppr = EmployeePerformanceEvaluation::with('approver.approver_info','user','employee')
                                                         ->where('id',$id)
@@ -343,7 +353,8 @@ class EmployeePerformanceEvaluationContoller extends Controller
             
             return view('employee_performance_evaluations.edit',array(
                 'header' => 'employee_performance_evaluations',
-                'ppr' => $employee_performance_evaluation
+                'ppr' => $employee_performance_evaluation,
+                'performance_plan_period' => $performance_plan_period
             ));
         }else{
             Alert::warning('Not Allowed')->persistent('Dismiss');

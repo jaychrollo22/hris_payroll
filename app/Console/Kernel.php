@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
         Commands\DailyTimeRecordApproval::class,
         Commands\AutoEarnedLeave::class,
         Commands\PerformancePlanApproval::class,
+        Commands\EmployeeEarnedAdditionalLeave::class,
     ];
 
     /**
@@ -44,6 +45,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:dtr_approval')->everyFiveMinutes();
         $schedule->command('command:performance_plan_approval')->everyFiveMinutes();
         $schedule->command('command:auto_earned_leave')->dailyAt('8:00');
+
+        // $schedule->command('command:employee_earned_leave_additional')->twiceDaily(7,22);
     }
 
     /**

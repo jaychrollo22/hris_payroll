@@ -21,19 +21,23 @@
                         @foreach($employee_leave_type_balance as $leave_balance)
 
                           @php
+                            
+                            $additional_leave = 0;
+                            $used_leave = 0;
+
                             if($leave_balance->leave_type_info){
+                              $additional_leave = checkEmployeeEarnedLeaveAdditional(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
                               $used_leave = checkUsedLeave(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
-                            }else{
-                              $used_leave = 0;
                             }
                             
-                            $total_balance = $leave_balance->total_balance;
-                            $remaining = $leave_balance->total_balance - $used_leave;
+                            $total_balance = $leave_balance->total_balance + $additional_leave;
+                            $remaining = $total_balance - $used_leave;
+                            
                           @endphp
 
                           <tr>
-                            <td>{{$leave_balance->leave_type}}</td>
-                            <td>{{$leave_balance->total_balance}}</td>
+                            <td>{{$leave_balance->leave_type}} {{$leave_balance->leave_type_info ? $leave_balance->leave_type_info->leave_type : "" }}</td>
+                            <td>{{$total_balance}}</td>
                             <td>{{$used_leave}}</td>
                             <td>{{$remaining > 0 ? $remaining : 0}}</td>
                           <tr>
@@ -155,7 +159,7 @@
                       <tr>
                         <td>{{date('M. d, Y h:i A', strtotime($employee_leave->created_at))}}</td>
                         <td>{{date('M. d, Y', strtotime($employee_leave->date_from))}} to {{date('M. d, Y', strtotime($employee_leave->date_to))}} </td>
-                        <td>{{ $employee_leave->leave->leave_type }}</td>
+                        <td>{{ $employee_leave->leave ? $employee_leave->leave->leave_type : "" }}</td>
                         @if($employee_leave->withpay == 1)   
                           <td>Yes</td>
                         @else

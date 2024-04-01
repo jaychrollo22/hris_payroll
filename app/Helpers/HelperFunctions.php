@@ -17,6 +17,7 @@ use App\EmployeeWfh;
 use App\EmployeeOb;
 use App\EmployeeDtr;
 use App\EarlyCutoff;
+use App\EmployeeLeaveAdditional;
 
 function checkifAllowedPerformancePlan(){
     $employee = Employee::select('id','user_id','classification','level')
@@ -1124,6 +1125,17 @@ function checkIfEarlyCutoff($customDate){
     }else{
         return '';
     }
+}
+
+function checkEmployeeEarnedLeaveAdditional($user_id,$leave_type,$year){
+
+    $employee_leave = EmployeeLeaveAdditional::where('user_id',$user_id)
+                                    ->where('leave_type',$leave_type)
+                                    ->where('earned_year', '=', $year)
+                                    ->sum('earned_leave');
+
+    return  $employee_leave;
+
 }
 
 

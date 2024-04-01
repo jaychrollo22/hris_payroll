@@ -59,8 +59,8 @@
                             {{-- @else
                               <a href="/edit-performance-plan-review/{{$eval->id}}" class="text-success btn-sm text-center" title="Edit PPR">
                                   <i class="ti-pencil btn-icon-prepend"></i>
-                              </a> --}}
-                            {{-- @endif --}}
+                              </a>
+                            @endif --}}
                             
                             {{ date('Y-m-d h:i A',strtotime($eval->created_at))}}</td>
                           <td>

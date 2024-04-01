@@ -567,6 +567,11 @@
                         <a class="nav-link" href="{{ url('/vessel') }}">Vessels</a>
                     </li>
                     @endif
+                    @if(checkUserPrivilege('masterfiles_performance_plan_periods',auth()->user()->id) == 'yes')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/performance-plan-periods') }}">Performance Plan Periods</a>
+                    </li>
+                    @endif
                     {{-- @if(checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/loan-type') }}">Loan Types</a>
