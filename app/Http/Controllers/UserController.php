@@ -39,7 +39,7 @@ class UserController extends Controller
             $search = isset($request->search) ? $request->search : "";
             $limit = isset($request->limit) ? $request->limit : 1000;
             $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
-            $users = User::select('id','name','email','status','role')
+            $users = User::select('id','name','email','status','role','updated_at')
                             ->whereHas('employee',function($q){
                                 $q->where('status','Active');
                             })

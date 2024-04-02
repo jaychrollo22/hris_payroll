@@ -41,6 +41,7 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        <th>Last Modified At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -51,6 +52,7 @@
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
                                         <td>{{$user->role}}</td>
+                                        <td>{{ date('Y-m-d h:i A',strtotime($user->updated_at))}}</td>
                                         <td>
                                             <a href="/edit-user-role/{{$user->id}}" target="_blank" class="btn btn-outline-info btn-icon-text btn-sm">
                                                 Edit
