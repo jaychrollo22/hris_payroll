@@ -17,6 +17,8 @@ use App\EmployeeApprover;
 
 use App\Employee;
 
+use App\UserLog;
+
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
@@ -59,6 +61,12 @@ class LoginController extends Controller
                             ->first();
 
         if($employee || $user->id == 1){
+
+            $new_user_log = new UserLog;
+            $new_user_log->user_id = $user->id;
+            $new_user_log->log_date = date('Y-m-d h:i:s');
+            $new_user_log->save();
+
             if(auth()->user()->employee_under->count() != 0){
 
                 $user_ids = EmployeeApprover::select('user_id')->where('approver_id',$user->id)->pluck('user_id')->toArray();
