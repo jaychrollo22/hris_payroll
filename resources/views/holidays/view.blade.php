@@ -18,10 +18,9 @@
                   </p>
              
                 <div class="table-responsive">
-                  <table class="table table-hover table-bordered tablewithSearch">
+                  <table id="table-holiday" class="table table-hover table-bordered">
                     <thead>
                         <tr>
-                            
                             <th>Holiday Date</th>
                             <th>Holiday Name</th>
                             <th>Holiday Type</th>
