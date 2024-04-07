@@ -7,6 +7,8 @@ use App\Employee;
 use App\EmployeeLeaveTypeBalance;
 use App\EmployeeLeaveAdditional;
 
+use DateTime;
+
 class EmployeeEarnedAdditionalLeave extends Command
 {
     /**
@@ -40,9 +42,10 @@ class EmployeeEarnedAdditionalLeave extends Command
      */
     public function handle()
     {
-        $additional_leaves = $this->probationaryEarnedAdditionalLeaves();
+        $probationary_additional_leaves = $this->probationaryEarnedAdditionalLeaves();
+        $project_based_earned_leaves = $this->projectBaseEarnedLeaves();
 
-        return $this->info($additional_leaves);
+        return $this->info('probationary_additional_leaves : ' . $probationary_additional_leaves . ' | ' . 'project_based_earned_leaves : ' . $project_based_earned_leaves);
     }
 
     public function probationaryEarnedAdditionalLeaves(){
@@ -133,4 +136,78 @@ class EmployeeEarnedAdditionalLeave extends Command
         
 
     }
+
+    //Project Based for SIL Leaves
+    public function projectBaseEarnedLeaves(){
+        
+        $d = date('d');
+        $m = date('m');
+        $year = date('Y');
+        $today = date('Y-m-d');
+
+        $employees = Employee::select('id','user_id','classification','original_date_hired')
+                                ->whereNotNull('original_date_hired')
+                                // ->whereRaw("DATE_FORMAT(original_date_hired, '%d') = ?", [$d])
+                                ->whereMonth('original_date_hired', $m)
+                                ->whereDay('original_date_hired', $d)
+                                ->whereIn('classification',[3,6]) //Project Based and Project Based Old
+                                ->where('status','Active')
+                                ->get();
+        $count = 0;
+        if($employees){
+            foreach($employees as $employee){
+                $startDate = $employee->original_date_hired; // Your start date
+                
+                // $count_months = $this->countMonthsFromDate($startDate);
+
+                $is_anniversary = $this->isAnniversary($startDate);
+
+                if($is_anniversary){ //if anniversary
+
+                    $validate_leave_type_balance_sil = EmployeeLeaveTypeBalance::where('user_id',$employee->user_id)
+                                                                        ->where('year',$year)
+                                                                        ->where('leave_type','SIL')
+                                                                        ->first();
+
+                    if(empty($validate_leave_type_balance_sil)){
+                        $new_leave_type_balance_sil = new EmployeeLeaveTypeBalance;
+                        $new_leave_type_balance_sil->user_id = $employee->user_id;
+                        $new_leave_type_balance_sil->year = $year;
+                        $new_leave_type_balance_sil->leave_type = 'SIL';
+                        $new_leave_type_balance_sil->balance = 5;
+                        $new_leave_type_balance_sil->status = 'Active';
+                        $new_leave_type_balance_sil->save();
+                        $count++;
+                    }
+                }
+            }
+        }
+        return $count;
+
+    }
+
+    function isAnniversary($dateHired) {
+        $dateHired = new DateTime($dateHired);
+        $currentDate = new DateTime();
+    
+        // Check if the month and day of the date hired match today's month and day
+        if ($dateHired->format('md') === $currentDate->format('md')) {
+            return true;
+        }
+    
+        return false;
+    }
+
+    function countMonthsFromDate($startDate) {
+        $startDate = new DateTime($startDate);
+        $currentDate = new DateTime();
+    
+        $interval = $startDate->diff($currentDate);
+        $months = $interval->y * 12 + $interval->m;
+    
+        return $months;
+    }
+    
+
+
 }
