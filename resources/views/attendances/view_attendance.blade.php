@@ -844,38 +844,13 @@
                                                         $if_attendance_holiday = '';
                                                         $if_attendance_holiday_status = '';
                                                         if($check_if_holiday){
-                                                            $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
-                                                            if($if_attendance_holiday){
 
-                                                                $check_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)),$employee_schedule);
-                                                                $check_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                                                $check_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
-                                                                $check_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
-
-                                                                if($check_leave || $check_wfh || $check_ob || $check_dtr){
-                                                                    $if_attendance_holiday_status = 'With-Pay';
-                                                                    if($check_leave){
-                                                                        if($check_leave == 'SL Without-Pay' || $check_leave == 'VL Without-Pay'){
-                                                                            $if_attendance_holiday_status = 'Without-Pay';
-                                                                        }else{
-                                                                            $if_attendance_holiday_status = 'With-Pay';
-                                                                        }
-                                                                    }
-                                                                }else{
-                                                                    
-                                                                    $check_attendance = checkHasAttendanceHolidayStatus($emp->attendances,$if_attendance_holiday);
-
-                                                                    if(empty($check_attendance)){
-                                                                        $is_absent = 'Absent';
-                                                                    }else{
-                                                                        $if_attendance_holiday_status = 'With-Pay';
-                                                                    }
-                                                                }
+                                                            if($check_if_holiday == 'Special Holiday' && $emp->work_description == 'Non-Monthly'){ //Condition if Daily Rate / Non Monthly
+                                                                $if_attendance_holiday_status = 'Without-Pay';
                                                             }else{
-
-                                                                $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r . '-1 day')), $emp->employee_number,$emp->location);
-                                                            
+                                                                $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
                                                                 if($if_attendance_holiday){
+
                                                                     $check_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)),$employee_schedule);
                                                                     $check_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
                                                                     $check_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
@@ -900,8 +875,39 @@
                                                                             $if_attendance_holiday_status = 'With-Pay';
                                                                         }
                                                                     }
+                                                                }else{
+
+                                                                    $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r . '-1 day')), $emp->employee_number,$emp->location);
+                                                                
+                                                                    if($if_attendance_holiday){
+                                                                        $check_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($if_attendance_holiday)),$employee_schedule);
+                                                                        $check_wfh = employeeHasOBDetails($emp->approved_wfhs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                                        $check_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($if_attendance_holiday)));
+                                                                        $check_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($if_attendance_holiday)));
+
+                                                                        if($check_leave || $check_wfh || $check_ob || $check_dtr){
+                                                                            $if_attendance_holiday_status = 'With-Pay';
+                                                                            if($check_leave){
+                                                                                if($check_leave == 'SL Without-Pay' || $check_leave == 'VL Without-Pay'){
+                                                                                    $if_attendance_holiday_status = 'Without-Pay';
+                                                                                }else{
+                                                                                    $if_attendance_holiday_status = 'With-Pay';
+                                                                                }
+                                                                            }
+                                                                        }else{
+                                                                            
+                                                                            $check_attendance = checkHasAttendanceHolidayStatus($emp->attendances,$if_attendance_holiday);
+
+                                                                            if(empty($check_attendance)){
+                                                                                $is_absent = 'Absent';
+                                                                            }else{
+                                                                                $if_attendance_holiday_status = 'With-Pay';
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
+
                                                         }else{
 
                                                             $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
@@ -927,7 +933,6 @@
                                                     {{$is_absent}}
                                                     {{$if_dtr_correction}}
                                                     {{$if_attendance_holiday_status}}
-
                                                 @endif
                                             @else
                                                 @php
