@@ -186,7 +186,7 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
         $shift_computation_sunday = '';
 
         $compute_sss = '';
-        $schedule_computation_sss = '';
+        $schedule_computation_sss = 'Last Cut-Off';
         $override_referrence_amount_sss = '';
         $used_fix_referrence_amount_sss = '';
         $ee_share_sss_override = '';
@@ -196,8 +196,8 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
         $share_sss_advance_fsc = '';
 
         $compute_hdmf = '1';
-        $schedule_computation_hdmf = 'Last Cut-Off';
-        $override_referrence_amount_hdmf = '5000';
+        $schedule_computation_hdmf = 'First Cut-Off';
+        $override_referrence_amount_hdmf = '10000';
         $used_fix_referrence_amount_hdmf = '';
         $ee_share_hdmf_override = '';
         $er_share_hdmf_override = '';
