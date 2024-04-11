@@ -169,34 +169,26 @@
                               data-target="#edit_overtime{{ $overtime->id }}" data-toggle="modal" title='Edit'>
                               <i class="ti-pencil-alt"></i>
                             </button>
-                            <button title='Cancel' id="{{ $overtime->id }}" onclick="cancel(this.id)"
-                              class="btn btn-rounded btn-danger btn-icon">
-                              <i class="fa fa-ban"></i>
-                            </button>
                           @elseif ($overtime->status == 'Pending' && $overtime->level > 1)
                             <button type="button" id="view{{ $overtime->id }}" class="btn btn-primary btn-rounded btn-icon"
                               data-target="#view_overtime{{ $overtime->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
                             </button>            
-                              <button title='Cancel' id="{{ $overtime->id }}" onclick="cancel(this.id)"
-                                class="btn btn-rounded btn-danger btn-icon">
-                                <i class="fa fa-ban"></i>
-                              </button>
                           @elseif ($overtime->status == 'Approved')   
-                          <button type="button" id="view{{ $overtime->id }}" class="btn btn-primary btn-rounded btn-icon"
-                            data-target="#view_overtime{{ $overtime->id }}" data-toggle="modal" title='View'>
-                            <i class="ti-eye"></i>
-                          </button>                            
-                            <button title='Cancel' id="{{ $overtime->id }}" onclick="cancel(this.id)"
-                              class="btn btn-rounded btn-danger btn-icon">
-                              <i class="fa fa-ban"></i>
-                            </button>  
+                            <button type="button" id="view{{ $overtime->id }}" class="btn btn-primary btn-rounded btn-icon"
+                              data-target="#view_overtime{{ $overtime->id }}" data-toggle="modal" title='View'>
+                              <i class="ti-eye"></i>
+                            </button>                            
                           @else
                             <button type="button" id="view{{ $overtime->id }}" class="btn btn-primary btn-rounded btn-icon"
                               data-target="#view_overtime{{ $overtime->id }}" data-toggle="modal" title='View'>
                               <i class="ti-eye"></i>
-                            </button>                                                                               
+                            </button>                                                                                 
                           @endif
+                          <button title='Cancel' id="{{ $overtime->id }}" onclick="cancel(this.id)"
+                            class="btn btn-rounded btn-danger btn-icon">
+                            <i class="fa fa-ban"></i>
+                          </button>
                         </td>   
                       </tr>
                     @endforeach                                            
