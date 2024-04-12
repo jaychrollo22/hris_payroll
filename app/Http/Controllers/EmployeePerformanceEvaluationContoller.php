@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Employee;
 use App\EmployeePerformanceEvaluation;
 use App\Company;
 use App\EmployeeApprover;
@@ -11,6 +12,10 @@ use App\PerformancePlanPeriod;
 
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
+
+use Excel;
+
+use App\Exports\PprExport;
 
 class EmployeePerformanceEvaluationContoller extends Controller
 {
@@ -50,6 +55,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
         
         $search = isset($request->search) ? $request->search : "";
         $company = isset($request->company) ? $request->company : "";
+        $performance_plan_period = isset($request->performance_plan_period) ? $request->performance_plan_period : "";
 
         $status = $request->status ? $request->status : "";
         $employee_performance_evaluation = EmployeePerformanceEvaluation::with('user','employee')
@@ -69,6 +75,9 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                                                                         $w->where('company_id',$company);
                                                                                     });
                                                                                 })
+                                                                                ->when(!empty($performance_plan_period),function($q) use($performance_plan_period){
+                                                                                    $q->where('calendar_year',$performance_plan_period);
+                                                                                })
                                                                                 ->whereHas('employee',function($q) use($allowed_companies){
                                                                                     $q->whereIn('company_id',$allowed_companies);
                                                                                 })
@@ -83,6 +92,9 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                         $q->where('company_id',$company);
                                     });
                                 })
+                                ->when(!empty($performance_plan_period),function($q) use($performance_plan_period){
+                                    $q->where('calendar_year',$performance_plan_period);
+                                })
                                 ->where('status','Draft')
                                 ->count();
 
@@ -93,6 +105,9 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                     $query->whereHas('employee',function($q) use($company){
                                         $q->where('company_id',$company);
                                     });
+                                })
+                                ->when(!empty($performance_plan_period),function($q) use($performance_plan_period){
+                                    $q->where('calendar_year',$performance_plan_period);
                                 })
                                 ->where('status','For Review')
                                 ->count();
@@ -105,6 +120,9 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                         $q->where('company_id',$company);
                                     });
                                 })
+                                ->when(!empty($performance_plan_period),function($q) use($performance_plan_period){
+                                    $q->where('calendar_year',$performance_plan_period);
+                                })
                                 ->where('status','Approved')
                                 ->count();
 
@@ -116,18 +134,26 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                         $q->where('company_id',$company);
                                     });
                                 })
+                                ->when(!empty($performance_plan_period),function($q) use($performance_plan_period){
+                                    $q->where('calendar_year',$performance_plan_period);
+                                })
                                 ->where('status','Declined')
                                 ->count();
         
         $companies = Company::whereIn('id',$allowed_companies)
                                 ->orderBy('company_name','ASC')
                                 ->get();
+
+        $performance_plan_periods = PerformancePlanPeriod::orderBy('created_at','DESC')->get();
+
         return view('employee_performance_evaluations.hr_index',array(
             'header' => 'employee_performance_evaluations_report',
             'employee_performance_evaluation' => $employee_performance_evaluation,
             'status' => $status,
             'companies' => $companies,
+            'performance_plan_periods' => $performance_plan_periods,
             'search' => $search,
+            'performance_plan_period' => $performance_plan_period,
             'company' => $company,
             'draft' => $draft,
             'for_approval' => $for_approval,
@@ -686,5 +712,15 @@ class EmployeePerformanceEvaluationContoller extends Controller
             Alert::success('Performance Plan has been returned to Draft.')->persistent('Dismiss');
             return back();
         }
+    }
+
+    public function export(Request $request){
+    
+        $company = isset($request->company) ? $request->company : "";
+        $status = isset($request->status) ? $request->status : "";
+        $calendar_date = isset($request->calendar_date) ? $request->calendar_date : "";
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_companies = json_encode($allowed_companies);
+        return Excel::download(new PprExport($company,$status,$calendar_date,$allowed_companies), $company . ' ' . $status . ' ' . $calendar_date . ' PPR Export.xlsx');
     }
 }

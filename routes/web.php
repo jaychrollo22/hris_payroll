@@ -373,6 +373,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('return-to-draft/{id}','EmployeePerformanceEvaluationContoller@returnToDraft');
 
+    Route::get('export-ppr','EmployeePerformanceEvaluationContoller@export');
+
 
     //Employee Leave Type Balances
     Route::get('/employee-leave-type-balances','EmployeeLeaveTypeBalanceController@index');

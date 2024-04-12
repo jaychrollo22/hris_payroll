@@ -64,6 +64,8 @@
                     Create
                   </a>
                 </p> --}}
+
+                <a href="/export-ppr?company={{$company}}&calendar_date={{$performance_plan_period}}&status={{$status}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right mr-2" title="Export PPR"><i class="ti-arrow-down btn-icon-prepend"></i></a>
                 
                 <form method='get' onsubmit='show();' enctype="multipart/form-data">
                   <div class=row>
@@ -78,6 +80,16 @@
                             <option value="">-- Select Company --</option>
                             @foreach($companies as $comp)
                             <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
+                            @endforeach
+                        </select>
+                      </div>
+                    </div>
+                    <div class='col-md-2'>
+                      <div class="form-group">
+                        <select data-placeholder="Select Calendar" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='performance_plan_period'>
+                            <option value="">-- Select Calendar --</option>
+                            @foreach($performance_plan_periods as $period)
+                            <option value="{{$period->period}}" @if ($period->period == $performance_plan_period) selected @endif>{{$period->period}}</option>
                             @endforeach
                         </select>
                       </div>
@@ -130,15 +142,15 @@
                             @foreach($eval->approver as $approver)
                               @if($eval->level >= $approver->level)
                                   @if ($eval->level == 0 && $eval->status == 'Declined')
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                  {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-danger mt-1">Declined</label>
                                   @else
-                                    {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                  {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-success mt-1">Approved</label>
                                   @endif
                               @else
                                 @if ($eval->status == 'Declined')
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                  {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-danger mt-1">Declined</label>
                                 @else
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">For Review</label>
+                                  {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-warning mt-1">For Review</label>
                                 @endif
                               @endif<br> 
                             @endforeach
