@@ -86,7 +86,8 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                                                                 ->orderBy('review_date','DESC')
                                                                                 ->get();
                                                                                 
-        $draft = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
+        $draft = EmployeePerformanceEvaluation::select('id','user_id')
+                                ->whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies)
                                         ->where('status','Active');
                                 })
@@ -101,7 +102,8 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                 ->where('status','Draft')
                                 ->count();
 
-        $for_approval = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
+        $for_approval = EmployeePerformanceEvaluation::select('id','user_id')
+                                ->whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies)
                                     ->where('status','Active');
                                 })
@@ -116,7 +118,8 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                 ->where('status','For Review')
                                 ->count();
                                 
-        $approved = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
+        $approved = EmployeePerformanceEvaluation::select('id','user_id')
+                                ->whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies)
                                     ->where('status','Active');
                                 })
@@ -131,7 +134,8 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                 ->where('status','Approved')
                                 ->count();
 
-        $declined = EmployeePerformanceEvaluation::whereHas('employee',function($q) use($allowed_companies){
+        $declined = EmployeePerformanceEvaluation::select('id','user_id')
+                                ->whereHas('employee',function($q) use($allowed_companies){
                                     $q->whereIn('company_id',$allowed_companies)
                                     ->where('status','Active');
                                 })
