@@ -731,6 +731,9 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $calendar_date = isset($request->calendar_date) ? $request->calendar_date : "";
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $allowed_companies = json_encode($allowed_companies);
-        return Excel::download(new PprExport($company,$status,$calendar_date,$allowed_companies), $company . ' ' . $status . ' ' . $calendar_date . ' PPR Export.xlsx');
+
+        $company_detail = Company::where('id',$company)->first();
+
+        return Excel::download(new PprExport($company,$status,$calendar_date,$allowed_companies), $company_detail->company_code . ' ' . $status . ' ' . $calendar_date . ' PPR Export.xlsx');
     }
 }

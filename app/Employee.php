@@ -110,4 +110,9 @@ class Employee extends Model implements Auditable
     public function employee_performance_evaluations() {
         return $this->hasMany(EmployeePerformanceEvaluation::class,'user_id','user_id');
     }
+
+    public function approver()
+    {
+        return $this->hasMany(EmployeeApprover::class,'user_id','user_id');
+    } 
 }

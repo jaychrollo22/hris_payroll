@@ -26,8 +26,7 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
         $calendar_date = $this->calendar_date;
         $allowed_companies = json_decode($this->allowed_companies);
 
-        return Employee::with('employee_performance_evaluations.approver.approver_info')
-                                ->with(['employee_performance_evaluations'=>function($q) use($calendar_date,$status){
+        return Employee::with(['employee_performance_evaluations'=>function($q) use($calendar_date,$status){
                                     return $q->select('user_id','calendar_year','review_date','period','status','level','created_at')
                                                 ->when($status,function($w) use($status){
                                                     $w->where('status',$status);
@@ -39,8 +38,12 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
                                 'department',
                                 'company',
                                 'classification_info',
-                                'level_info'
+                                'level_info',
+                                'approver.approver_info'
                             ])
+                            ->when($company,function($q) use($company){
+                                $q->where('company_id',$company);
+                            })
                             ->whereIn('company_id',$allowed_companies)
                             ->where('status','Active');
     }
@@ -78,7 +81,7 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
         $ppr = count($employee->employee_performance_evaluations) > 0 ? $employee->employee_performance_evaluations[0] : '';
 
         
-        $date_filed = $ppr ? $ppr['created_at'] : "Not yet filed";
+        $date_filed = $ppr ? $ppr['created_at'] : "";
         $calendar_year = $ppr ? $ppr['calendar_year'] : "";
         $period = $ppr ? $ppr['period'] : "";
         $review_date = $ppr ? $ppr['review_date'] : "";
@@ -89,18 +92,20 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
         $approver1_status = '';
         $approver2 = '';
         $approver2_status = '';
-        if($ppr){
-            if(count($ppr['approver']) > 0){
-                $counter = 1;
 
-                // $approver1 = json_encode($ppr['approver'][0]['approver_info']);
+        
+        if(count($employee['approver']) > 0){
+            $counter = 1;
 
-                foreach($ppr['approver'] as $approver){
+            // $approver1 = json_encode($ppr['approver'][0]['approver_info']);
+
+            foreach($employee['approver'] as $approver){
+                
+                if($counter == 1){
+                    $approver1 = $approver['approver_info'] ? $approver['approver_info']['name'] : "";
+                    // $approver1 = $approver['approver_info'] ? $approver['approver_info']['name'] : "";
                     
-                    if($counter == 1){
-                        $approver1 = $approver['approver_info'] ? $approver['approver_info']['name'] : "";
-                        // $approver1 = $approver['approver_info'] ? $approver['approver_info']['name'] : "";
-
+                    if($level){
                         if($level >= $approver['level']){ // Level 1
                             if ($level == 0 && $status == 'Declined'){
                                 $approver1_status = 'Declined';
@@ -118,8 +123,11 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
                                 $approver1_status = 'Pending';
                             }
                         }
-                    }else{ //Level 0
-                        $approver2 = $approver['approver_info'] ? $approver['approver_info']['name'] : "";
+                    }
+                }else{ //Level 0
+                    $approver2 = $approver['approver_info'] ? $approver['approver_info']['name'] : "";
+
+                    if($level){
                         if($level >= $approver['level']){
                             if ($level == 0 && $status == 'Declined'){
                                 $approver2_status = 'Declined';
@@ -138,12 +146,13 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
                             }
                         }
                     }
-                    
-
-                    $counter++;
                 }
+                
+
+                $counter++;
             }
         }
+        
 
 
         return [

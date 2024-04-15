@@ -309,7 +309,11 @@
 
                                     </td>
                                     <td></td>
-                                    <td>OB</td>
+                                    <td>OB
+                                        @if($check_if_early_cutoff)
+                                            {{$check_if_early_cutoff}}
+                                        @endif
+                                    </td>
                                 @elseif($if_has_wfh)
                                     @php
 
@@ -464,7 +468,12 @@
 
                                     </td>
                                     <td></td>
-                                    <td>{{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : "WFH"}}</td>
+                                    <td>
+                                        {{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : "WFH"}}
+                                        @if($check_if_early_cutoff)
+                                            {{$check_if_early_cutoff}}
+                                        @endif
+                                    </td>
                                 @else
 
                                     {{-- Time In --}}
@@ -852,11 +861,7 @@
                                     
                                     {{-- Remarks --}}
                                     <td>
-                                        @if($check_if_early_cutoff)
-                                            @if($employee_schedule)
-                                                {{$check_if_early_cutoff}}
-                                            @endif
-                                        @else
+                                        
                                         
                                             @if($time_in == null)
                                                 @if($employee_schedule)
@@ -955,6 +960,11 @@
                                                     {{$is_absent}}
                                                     {{$if_dtr_correction}}
                                                     {{$if_attendance_holiday_status}}
+
+
+                                                    @if($check_if_early_cutoff)
+                                                        {{$check_if_early_cutoff}}
+                                                    @endif
                                                 @endif
                                             @else
                                                 @php
@@ -971,9 +981,14 @@
                                                 {{$if_dtr_correction}}
                                                 {{$is_absent}}
                                                 
+                                                @if($check_if_early_cutoff)
+                                                    @if($employee_schedule)
+                                                        {{$check_if_early_cutoff}}
+                                                    @endif
+                                                @endif
                                                 
                                             @endif
-                                        @endif
+                                       
 
                                     </td>
                                 @endif
