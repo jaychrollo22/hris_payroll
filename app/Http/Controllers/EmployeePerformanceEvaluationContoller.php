@@ -734,6 +734,6 @@ class EmployeePerformanceEvaluationContoller extends Controller
 
         $company_detail = Company::where('id',$company)->first();
         $company_code =  $company_detail ?  $company_detail->company_code : "";
-        return Excel::download(new PprExport($company,$status,$calendar_date,$allowed_companies), $company_detail->company_code . ' ' . $status . ' ' . $calendar_date . ' PPR Export.xlsx');
+        return Excel::download(new PprExport($company,$status,$calendar_date,$allowed_companies), $company_code . ' ' . $status . ' ' . $calendar_date . ' PPR Export.xlsx');
     }
 }
