@@ -59,6 +59,7 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
             'CLASSIFICATION',
             'LEVEL',
             'DATE FILED',
+            'DATE FILED TIME',
             'CALENDAR DATE',
             'PPR PERIOD',
             'APPROVER 1',
@@ -66,6 +67,7 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
             'APPROVER 2',
             'APPROVER 2 STATUS',
             'REVIEW DATE',
+            'REVIEW DATE TIME',
             'STATUS',
         ];
     }
@@ -80,11 +82,13 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
 
         $ppr = count($employee->employee_performance_evaluations) > 0 ? $employee->employee_performance_evaluations[0] : '';
 
-        
-        $date_filed = $ppr ? $ppr['created_at'] : "";
+        $date_filed = $ppr ? date('Y-m-d',strtotime($ppr['created_at']) ) : "";
+        $date_filed_time = $ppr ? date('H:i:s A',strtotime($ppr['created_at']) ) : "";
+
         $calendar_year = $ppr ? $ppr['calendar_year'] : "";
         $period = $ppr ? $ppr['period'] : "";
-        $review_date = $ppr ? $ppr['review_date'] : "";
+        $review_date = $ppr ? date('Y-m-d',strtotime($ppr['review_date']) ) : "";
+        $review_date_time = $ppr ? date('H:i:s A',strtotime($ppr['review_date']) ) : "";
         $status = $ppr ? $ppr['status'] : "";
         $level = $ppr ?  $ppr['level'] : "";
         
@@ -164,6 +168,7 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
             $classification_info,
             $level_info,
             $date_filed,
+            $date_filed_time,
             $calendar_year,
             $period,
             $approver1,
@@ -171,6 +176,7 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
             $approver2,
             $approver2_status,
             $review_date,
+            $review_date_time,
             $status,
         ];
 
