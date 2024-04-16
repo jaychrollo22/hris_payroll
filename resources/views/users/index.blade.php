@@ -54,10 +54,12 @@
                                         <td>{{$user->role}}</td>
                                         <td>{{ date('Y-m-d h:i A',strtotime($user->updated_at))}}</td>
                                         <td>
+                                            @if(auth()->user()->id == '353' || auth()->user()->id == '1' || auth()->user()->id == '5361')
                                             <a href="/edit-user-role/{{$user->id}}" target="_blank" class="btn btn-outline-info btn-icon-text btn-sm">
                                                 Edit
                                                 <i class="ti-file btn-icon-append"></i>
                                             </a>
+                                            @endif
                                             <a href="/change-password/{{$user->id}}" target="_blank" class="btn btn-outline-info btn-icon-text btn-sm">
                                                 Change Password
                                                 <i class="ti-key btn-icon-append"></i>
