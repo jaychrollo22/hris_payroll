@@ -39,6 +39,12 @@ class UserController extends Controller
             $search = isset($request->search) ? $request->search : "";
             $limit = isset($request->limit) ? $request->limit : 1000;
             $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
+
+
+            $rank_and_file_users = Employee::where('level','=',1)
+                                            ->pluck('user_id')
+                                            ->toArray();
+
             $users = User::select('id','name','email','status','role','updated_at')
                             ->whereHas('employee',function($q){
                                 $q->where('status','Active');
@@ -52,9 +58,11 @@ class UserController extends Controller
                                     $w->orWhere('user_id','=', $search);
                                 });
                             })
-                            ->limit($limit)
-                            ->get();
-
+                            ->when(count($rank_and_file_users) > 0,function($q) use($rank_and_file_users){
+                                $q->whereIn('id',$rank_and_file_users);
+                            })
+                            ->limit($limit)->get();
+            
             return view('users.index',
             array(
                 'header' => 'users',
