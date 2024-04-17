@@ -40,11 +40,14 @@ class UserController extends Controller
             $limit = isset($request->limit) ? $request->limit : 1000;
             $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
 
-
-            $rank_and_file_users = Employee::where('level','=',1)
+            $rank_and_file_users = [];
+            if(auth()->user()->id == '351' || auth()->user()->id == '1166'){
+                $rank_and_file_users = Employee::where('level','=',1)
                                             ->pluck('user_id')
                                             ->toArray();
 
+            }
+            
             $users = User::select('id','name','email','status','role','updated_at')
                             ->whereHas('employee',function($q){
                                 $q->where('status','Active');
