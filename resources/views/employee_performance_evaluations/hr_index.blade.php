@@ -65,7 +65,7 @@
                   </a>
                 </p> --}}
 
-                <a href="/export-ppr?company={{$company}}&calendar_date={{$performance_plan_period}}&status={{$status}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right mr-2" title="Export PPR"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+                <a href="/export-ppr?company={{$company}}&calendar_date={{$performance_plan_period}}&status={{$status}}&period_ppr={{$period_ppr}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right mr-2" title="Export PPR"><i class="ti-arrow-down btn-icon-prepend"></i></a>
                 
                 <form method='get' onsubmit='show();' enctype="multipart/form-data">
                   <div class=row>
@@ -86,11 +86,22 @@
                     </div>
                     <div class='col-md-2'>
                       <div class="form-group">
-                        <select data-placeholder="Select Calendar" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='performance_plan_period'>
-                            <option value="">-- Select Calendar --</option>
+                        <select data-placeholder="Calendar" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='performance_plan_period'>
+                            <option value="">-- Calendar --</option>
                             @foreach($performance_plan_periods as $period)
                             <option value="{{$period->period}}" @if ($period->period == $performance_plan_period) selected @endif>{{$period->period}}</option>
                             @endforeach
+                        </select>
+                      </div>
+                    </div>
+                    <div class='col-md-2 mr-2'>
+                      <div class="form-group">
+                        <select data-placeholder="Period" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='period_ppr'>
+                          <option value="">-- Period --</option>
+                          <option value="ANNUAL" @if ('ANNUAL' == $period_ppr) selected @endif>ANNUAL</option>
+                          <option value="MIDYEAR" @if ('MIDYEAR' == $period_ppr) selected @endif>MIDYEAR</option>
+                          <option value="PROBATIONARY" @if ('PROBATIONARY' == $period_ppr) selected @endif>PROBATIONARY</option>
+                          <option value="SPECIAL" @if ('SPECIAL' == $period_ppr) selected @endif>SPECIAL</option>
                         </select>
                       </div>
                     </div>
@@ -105,7 +116,7 @@
                         </select>
                       </div>
                     </div>
-                    <div class='col-md-2'>
+                    <div class='col-md-1'>
                       <button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
                     </div>
                   </div>

@@ -11,10 +11,11 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 
 class PprExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function __construct($company,$status,$calendar_date, $allowed_companies)
+    public function __construct($company,$status,$period_ppr,$calendar_date, $allowed_companies)
     {
         $this->company = $company;
         $this->status = $status;
+        $this->period_ppr = $period_ppr;
         $this->calendar_date = $calendar_date;
         $this->allowed_companies = $allowed_companies;
     }
@@ -22,12 +23,16 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
     public function query(){
         
         $company = $this->company;
+        $period_ppr = $this->period_ppr;
         $status = $this->status;
         $calendar_date = $this->calendar_date;
         $allowed_companies = json_decode($this->allowed_companies);
 
-        return Employee::with(['employee_performance_evaluations'=>function($q) use($calendar_date,$status){
+        return Employee::with(['employee_performance_evaluations'=>function($q) use($calendar_date,$status,$period_ppr){
                                     return $q->select('user_id','calendar_year','review_date','period','status','level','created_at')
+                                                ->when($period_ppr,function($w) use($period_ppr){
+                                                    $w->where('period',$period_ppr);
+                                                })
                                                 ->when($status,function($w) use($status){
                                                     $w->where('status',$status);
                                                 })
