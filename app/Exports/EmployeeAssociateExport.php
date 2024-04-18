@@ -92,6 +92,14 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
             'SHIFT COMPUTATION FRIDAY',
             'SHIFT COMPUTATION SATURDAY',
             'SHIFT COMPUTATION SUNDAY',
+
+            'SHIFT COMPUTATION MONDAY HNR',
+            'SHIFT COMPUTATION TUESDAY HNR',
+            'SHIFT COMPUTATION WEDNESDAY HNR',
+            'SHIFT COMPUTATION THURSDAY HNR',
+            'SHIFT COMPUTATION FRIDAY HNR',
+            'SHIFT COMPUTATION SATURDAY HNR',
+            'SHIFT COMPUTATION SUNDAY HNR',
            
             'COMPUTE SSS',
             'SCHEDULE COMPUTATION SSS',
@@ -177,13 +185,14 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
         $shift_description_saturday = '';
         $shift_description_sunday = '';
 
-        $shift_computation_monday = '';
-        $shift_computation_tuesday = '';
-        $shift_computation_wednesday = '';
-        $shift_computation_thursday = '';
-        $shift_computation_friday = '';
-        $shift_computation_saturday = '';
-        $shift_computation_sunday = '';
+        $shift_computation_monday_hnr = '1030';
+        $shift_computation_tuesday_hnr = '1030';
+        $shift_computation_wednesday_hnr = '1030';
+        $shift_computation_thursday_hnr = '1030';
+        $shift_computation_friday_hnr = '1030';
+        $shift_computation_saturday_hnr = '1030';
+        $shift_computation_sunday_hnr = '1030';
+
 
         $compute_sss = '';
         $schedule_computation_sss = 'Last Cut-Off';
@@ -211,9 +220,9 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
 
         if($employee->work_description == 'Monthly'){
             $override_referrence_amount_philhealth = $rate;
-        }else if($employee->work_description == 'Non-Monthly'){
-            if($rate){
-                $override_referrence_amount_philhealth = $rate / 12;
+        }elseif($employee->work_description == 'Non-Monthly'){
+            if($rate > 0){
+                $override_referrence_amount_philhealth = ($rate * 313) / 12;
             }   
         }
 
@@ -534,6 +543,14 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
             $shift_computation_friday,
             $shift_computation_saturday,
             $shift_computation_sunday,
+
+            $shift_computation_monday_hnr,
+            $shift_computation_tuesday_hnr,
+            $shift_computation_wednesday_hnr,
+            $shift_computation_thursday_hnr,
+            $shift_computation_friday_hnr,
+            $shift_computation_saturday_hnr,
+            $shift_computation_sunday_hnr,
 
             $compute_sss,
             $schedule_computation_sss,
