@@ -1041,20 +1041,21 @@ class EmployeeController extends Controller
         $employees = Employee::with('department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info', 'company','classification_info','level_info')->get();
         
         
-        $employee_approvers = Employee::where('classification','!=','1')
-                                        // whereHas('company',function($q) use($user){
-                                        //         if($user->employee->company_id){
-                                        //             $q->where('company_id',$user->employee->company_id);
-                                        //         }
-                                        // })
-                                        ->where('status','Active')
-                                        ->pluck('user_id')
-                                        ->toArray();
-        if($user->employee->level >= 2){
+        // $employee_approvers = Employee::where('classification','!=','1')
+        //                                 // whereHas('company',function($q) use($user){
+        //                                 //         if($user->employee->company_id){
+        //                                 //             $q->where('company_id',$user->employee->company_id);
+        //                                 //         }
+        //                                 // })
+        //                                 ->where('status','Active')
+        //                                 ->pluck('user_id')
+        //                                 ->toArray();
+
+        // if($user->employee->level >= 2){
             $users = User::all();
-        }else{
-            $users = User::whereIn('id',$employee_approvers)->get();
-        }
+        // }else{
+        //     $users = User::whereIn('id',$employee_approvers)->get();
+        // }
         
         $company = Company::where('id',$user->employee->company_id)->first();
 
