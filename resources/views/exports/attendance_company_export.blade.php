@@ -79,8 +79,8 @@
                         $ob_start = new DateTime($if_has_ob->date_from); 
                         $ob_diff = $ob_start->diff(new DateTime($if_has_ob->date_to)); 
                     @endphp
-                    <td>{{date('h:i A',strtotime($if_has_ob->date_from))}}</td>
-                    <td>{{date('h:i A',strtotime($if_has_ob->date_to))}}</td>
+                    <td>{{date('H:i',strtotime($if_has_ob->date_from))}}</td>
+                    <td>{{date('H:i',strtotime($if_has_ob->date_to))}}</td>
                     <td>{{ $ob_diff->h }} hrs. {{ $ob_diff->i }} mins. </td>
                     <td>
                         Business (WD)
@@ -90,8 +90,8 @@
                         $wfh_start = new DateTime($if_has_wfh->date_from); 
                         $wfh_diff = $wfh_start->diff(new DateTime($if_has_wfh->date_to)); 
                     @endphp
-                    <td>{{date('h:i A',strtotime($if_has_wfh->date_from))}}</td>
-                    <td>{{date('h:i A',strtotime($if_has_wfh->date_to))}}</td>
+                    <td>{{date('H:i',strtotime($if_has_wfh->date_from))}}</td>
+                    <td>{{date('H:i',strtotime($if_has_wfh->date_to))}}</td>
                     <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins. </td>
                     <td>{{ $if_has_wfh->approve_percentage ? 'WFH-' . $if_has_wfh->approve_percentage .'%' : "Work From Home"}}</td>
                 @else
@@ -99,20 +99,20 @@
                     @if($time_in || $if_has_dtr)
                         <td>
                             @if($dtr_correction_time_in)
-                                {{date('h:i A',strtotime($dtr_correction_time_in))}}
+                                {{date('H:i',strtotime($dtr_correction_time_in))}}
                             @else
                                 @if($time_in)
-                                    {{date('h:i A',strtotime($time_in->time_in))}}
+                                    {{date('H:i',strtotime($time_in->time_in))}}
                                 @endif  
                             @endif  
                         </td>
                         {{-- Time out --}}
                         @if($dtr_correction_time_out)
-                            <td>{{date('h:i A',strtotime($dtr_correction_time_out))}}</td>
+                            <td>{{date('H:i',strtotime($dtr_correction_time_out))}}</td>
                         @else
                             @if($time_in)
                                 @if($time_in->time_out)
-                                    <td>{{date('h:i A',strtotime($time_in->time_out))}}</td>
+                                    <td>{{date('H:i',strtotime($time_in->time_out))}}</td>
                                 @else
                                     @php
                                         $time_in_out = 1;
@@ -123,7 +123,7 @@
                                 @if ($time_out)
                                     @if ($time_out->time_out)
                                         <td>
-                                            {{date('h:i A',strtotime($time_out->time_out))}}
+                                            {{date('H:i',strtotime($time_out->time_out))}}
                                         </td>
                                     @else
                                         @php
@@ -146,7 +146,7 @@
                         @else
 
                             @if($dtr_correction_time_out)
-                                <td>{{date('h:i A',strtotime($dtr_correction_time_out))}}</td>
+                                <td>{{date('H:i',strtotime($dtr_correction_time_out))}}</td>
                             @else
                                 @php
                                 $time_in_out = 1;
@@ -155,7 +155,7 @@
                                 @if($time_in)
                                     @if($time_in->time_out)
                                     <td>
-                                        {{date('h:i A',strtotime($time_in->time_out))}}
+                                        {{date('H:i',strtotime($time_in->time_out))}}
                                     </td>
                                     @else
                                         @php
@@ -166,7 +166,7 @@
                                 @else
                                     @if ($time_out)
                                         <td>
-                                            {{date('h:i A',strtotime($time_out->time_out))}}
+                                            {{date('H:i',strtotime($time_out->time_out))}}
                                         </td>
                                     @else
                                         @php
