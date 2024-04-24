@@ -668,7 +668,18 @@
                                                 $undertime_hrs = 0;
 
                                                 if($emp->schedule_info->is_flexi == 1){ //Is Schedule is flexi time
-                                    
+                                                    
+                                                    $has_leave_shift_hrs = 0;
+                                                    if($check_if_has_leave_shift){
+                                                        if($check_if_has_leave_shift == 'First Shift' || $check_if_has_leave_shift == 'Second Shift'){
+                                                            if(str_contains($emp->schedule_info->schedule_name, "Compressed") && !str_contains($emp->schedule_info->schedule_name, "Saturday")){
+                                                                $has_leave_shift_hrs = 4.75;//Leave Shift Hrs for Compressed 5 days
+                                                            }else{
+                                                                $has_leave_shift_hrs = 4;//Leave Shift Hrs
+                                                            }   
+                                                        }
+                                                    }
+                                                    
                                                     //Overtime
                                                     if($work_diff_hours > $employee_schedule['working_hours']){
                                                         $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
@@ -676,14 +687,23 @@
 
                                                     //Undertime
                                                     if($employee_schedule['working_hours'] > $work_diff_hours){
-                                                        $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
-                                                        if($undertime > 0){
-                                                            if($late_diff_hours > 0){
-                                                                $undertime_hrs = $undertime - $late_diff_hours;
-                                                            }else{
+
+                                                        if($has_leave_shift_hrs > 0){
+                                                            $total_with_has_leave_shift_hrs = $work_diff_hours + $has_leave_shift_hrs;
+                                                            $undertime = $employee_schedule['working_hours'] - $total_with_has_leave_shift_hrs;
+                                                            if($undertime > 0){
                                                                 $undertime_hrs = $undertime;
-                                                            }
-                                                        }  
+                                                            }  
+                                                        }else{
+                                                            $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
+                                                            if($undertime > 0){
+                                                                if($late_diff_hours > 0){
+                                                                    $undertime_hrs = $undertime - $late_diff_hours;
+                                                                }else{
+                                                                    $undertime_hrs = $undertime;
+                                                                }
+                                                            }  
+                                                        }
                                                     }
                                                 
                                                 }else{
@@ -736,7 +756,7 @@
                                                 @endif
 
 
-                                                
+                                            
                                             </td>
                                             <td>
                                                 {{-- Undertime --}}

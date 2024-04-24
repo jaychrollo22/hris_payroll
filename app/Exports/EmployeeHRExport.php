@@ -29,7 +29,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
         $allowed_companies = json_decode($this->allowed_companies);
         $allowed_locations = json_decode($this->allowed_locations);
         $allowed_projects = json_decode($this->allowed_projects);
-        return Employee::query()->with('company','department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info','classification_info')
+        return Employee::query()->with('company','department', 'payment_info', 'ScheduleData', 'immediate_sup_data', 'user_info','classification_info','schedule_info')
                                 ->when($company,function($q) use($company){
                                     $q->where('company_id',$company);
                                 })
@@ -82,6 +82,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             'Immediate Superior ID',
             'Immediate Superior',
             'Schedule ID',
+            'Schedule',
             'Location',
             'Project',
             'Religion',
@@ -100,6 +101,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
         $classification_info = $employee->classification_info ? $employee->classification_info->name : "";
         $immediate_sup_data = $employee->immediate_sup_data ? $employee->immediate_sup_data->name : "";
         $company_email = $employee->user_info ? $employee->user_info->email : "";
+        $schedule_info = $employee->schedule_info ? $employee->schedule_info->schedule_name : "";
     
         return [
             $employee->employee_number,
@@ -133,6 +135,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             $employee->immediate_sup,
             $immediate_sup_data,
             $employee->schedule_id,
+            $schedule_info,
             $employee->location,
             $employee->project,
             $employee->religion,
