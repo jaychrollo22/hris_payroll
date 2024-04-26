@@ -46,7 +46,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:performance_plan_approval')->everyFiveMinutes();
         $schedule->command('command:auto_earned_leave')->dailyAt('8:00');
 
-        // $schedule->command('command:employee_earned_leave_additional')->twiceDaily(7,22);
+        $schedule->command('command:employee_earned_leave_additional')->twiceDaily(7,22);
     }
 
     /**

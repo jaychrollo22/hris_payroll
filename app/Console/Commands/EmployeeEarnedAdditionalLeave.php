@@ -43,7 +43,8 @@ class EmployeeEarnedAdditionalLeave extends Command
     public function handle()
     {
         $probationary_additional_leaves = $this->probationaryEarnedAdditionalLeaves();
-        $project_based_earned_leaves = $this->projectBaseEarnedLeaves();
+        // $project_based_earned_leaves = $this->projectBaseEarnedLeaves();
+        $project_based_earned_leaves = 0;
 
         return $this->info('probationary_additional_leaves : ' . $probationary_additional_leaves . ' | ' . 'project_based_earned_leaves : ' . $project_based_earned_leaves);
     }
@@ -186,6 +187,55 @@ class EmployeeEarnedAdditionalLeave extends Command
 
     }
 
+    //Additional Leave for Regular Employees
+    public function addExtraLeaveRegularEmployees(){
+
+        $d = date('d');
+        $m = date('m');
+        $year = date('Y');
+        $today = date('Y-m-d');
+
+        $employees = Employee::select('id','user_id','classification','original_date_hired')
+                                ->whereNotNull('original_date_hired')
+                                ->whereRaw("DATE_FORMAT(original_date_hired, '%d') = ?", [$d])
+                                ->where('classification','2') // Regular Employees
+                                ->where('status','Active')
+                                ->get();
+
+        $count = 0;
+        if($employees){
+            foreach($employees as $employee){
+                $startDate = $employee->original_date_hired; // Your start date
+                
+                // $count_months = $this->countMonthsFromDate($startDate);
+
+                $is_anniversary = $this->isAnniversary($startDate);
+
+                if($is_anniversary){ //if anniversary
+                    $vl_id = 1;
+                    $validate_vl = EmployeeLeaveAdditional::where('user_id',$employee->user_id)
+                                                                        ->where('earned_date',$today)
+                                                                        ->where('leave_type',$vl_id)
+                                                                        ->first();
+
+                    if(empty($validate_vl)){
+                        $earned_leave = new EmployeeLeaveAdditional;
+                        $earned_leave->leave_type = $vl_id;
+                        $earned_leave->user_id = $employee->user_id;
+                        $earned_leave->earned_date = $today;
+                        $earned_leave->earned_year = $year;
+                        $earned_leave->earned_leave = $this->checkAdditionalDays();
+                        $earned_leave->save();
+    
+                        $count++;
+                    }
+                }
+            }
+        }
+        return $count;
+        
+    }
+
     function isAnniversary($dateHired) {
         $dateHired = new DateTime($dateHired);
         $currentDate = new DateTime();
@@ -208,6 +258,18 @@ class EmployeeEarnedAdditionalLeave extends Command
         return $months;
     }
     
+
+    function checkAdditionalDays($tenure){
+        if($tenure >= 5 && $tenure <= 9){
+            return 2;
+        }
+        elseif($tenure >= 10 && $tenure <= 14){
+            return 3;
+        }
+        elseif($tenure >= 15 && $tenure <= 19){
+            return 2;
+        }
+    }
 
 
 }
