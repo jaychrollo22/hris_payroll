@@ -672,7 +672,9 @@
                                                     $has_leave_shift_hrs = 0;
                                                     if($check_if_has_leave_shift){
                                                         if($check_if_has_leave_shift == 'First Shift' || $check_if_has_leave_shift == 'Second Shift'){
-                                                            if(str_contains($emp->schedule_info->schedule_name, "Compressed") && !str_contains($emp->schedule_info->schedule_name, "Saturday")){
+                                                            $compressed_work_weeks = [3,4,5,6,10,17]; //Compressed Schedules
+                                                            // if(str_contains($emp->schedule_info->schedule_name, "Compressed") && !str_contains($emp->schedule_info->schedule_name, "Saturday")){
+                                                            if(in_array($emp->schedule_info->id,$compressed_work_weeks)){
                                                                 $has_leave_shift_hrs = 4.75;//Leave Shift Hrs for Compressed 5 days
                                                             }else{
                                                                 $has_leave_shift_hrs = 4;//Leave Shift Hrs
