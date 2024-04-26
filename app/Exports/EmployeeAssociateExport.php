@@ -185,13 +185,13 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
         $shift_description_saturday = '';
         $shift_description_sunday = '';
 
-        $shift_computation_monday_hnr = '1030';
-        $shift_computation_tuesday_hnr = '1030';
-        $shift_computation_wednesday_hnr = '1030';
-        $shift_computation_thursday_hnr = '1030';
-        $shift_computation_friday_hnr = '1030';
-        $shift_computation_saturday_hnr = '1030';
-        $shift_computation_sunday_hnr = '1030';
+        $shift_computation_monday_hnr = '10:30';
+        $shift_computation_tuesday_hnr = '10:30';
+        $shift_computation_wednesday_hnr = '10:30';
+        $shift_computation_thursday_hnr = '10:30';
+        $shift_computation_friday_hnr = '10:30';
+        $shift_computation_saturday_hnr = '10:30';
+        $shift_computation_sunday_hnr = '10:30';
 
 
         $compute_sss = '';
