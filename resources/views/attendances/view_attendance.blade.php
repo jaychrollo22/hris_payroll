@@ -226,8 +226,8 @@
                                         }
 
                                     @endphp
-                                    <td>{{date('h:i A',strtotime($if_has_ob->date_from))}}</td>
-                                    <td>{{date('h:i A',strtotime($if_has_ob->date_to))}}</td>
+                                    <td>{{date('H:i',strtotime($if_has_ob->date_from))}}</td>
+                                    <td>{{date('H:i',strtotime($if_has_ob->date_to))}}</td>
                                     <td>{{ $ob_diff->h }} hrs. {{ $ob_diff->i }} mins. </td>
                                     <td>
                                         {{-- Lates --}}
@@ -287,7 +287,11 @@
 
                                     </td>
                                     <td></td>
-                                    <td>OB</td>
+                                    <td>OB
+                                        @if($check_if_early_cutoff)
+                                            {{$check_if_early_cutoff}}
+                                        @endif
+                                    </td>
                                 @elseif($if_has_wfh)
                                     @php
 
@@ -380,8 +384,8 @@
                                         }
                                         
                                     @endphp
-                                    <td>{{date('h:i A',strtotime($if_has_wfh->date_from))}}</td>
-                                    <td>{{date('h:i A',strtotime($if_has_wfh->date_to))}}</td>
+                                    <td>{{date('H:i',strtotime($if_has_wfh->date_from))}}</td>
+                                    <td>{{date('H:i',strtotime($if_has_wfh->date_to))}}</td>
                                     <td>{{ $wfh_diff->h }} hrs. {{ $wfh_diff->i }} mins.</td>
                                     
                                     <td>
@@ -442,27 +446,32 @@
 
                                     </td>
                                     <td></td>
-                                    <td>{{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : "WFH"}}</td>
+                                    <td>
+                                        {{ $if_has_wfh->approve_percentage ? 'Work from Home ' . $if_has_wfh->approve_percentage .'%' : "WFH"}}
+                                        @if($check_if_early_cutoff)
+                                            {{$check_if_early_cutoff}}
+                                        @endif
+                                    </td>
                                 @else
 
                                     {{-- Time In --}}
                                     @if($time_in || $if_has_dtr)
                                         <td>
                                             @if($dtr_correction_time_in)
-                                                {{date('h:i A',strtotime($dtr_correction_time_in))}}
+                                                {{date('H:i',strtotime($dtr_correction_time_in))}}
                                             @else
                                                 @if($time_in)
-                                                    {{date('h:i A',strtotime($time_in->time_in))}}
+                                                    {{date('H:i',strtotime($time_in->time_in))}}
                                                 @endif  
                                             @endif  
                                         </td>
                                         {{-- Time out --}}
                                         @if($dtr_correction_time_out)
-                                            <td>{{date('h:i A',strtotime($dtr_correction_time_out))}}</td>
+                                            <td>{{date('H:i',strtotime($dtr_correction_time_out))}}</td>
                                         @else
                                             @if($time_in)
                                                 @if($time_in->time_out)
-                                                    <td>{{date('h:i A',strtotime($time_in->time_out))}}</td>
+                                                    <td>{{date('H:i',strtotime($time_in->time_out))}}</td>
                                                 @else
                                                     @php
                                                         $time_in_out = 1;
@@ -473,7 +482,7 @@
                                                 @if ($time_out)
                                                     @if ($time_out->time_out)
                                                         <td>
-                                                            {{date('h:i A',strtotime($time_out->time_out))}}
+                                                            {{date('H:i',strtotime($time_out->time_out))}}
                                                         </td>
                                                     @else
                                                         @php
@@ -496,7 +505,7 @@
                                         @else
 
                                             @if($dtr_correction_time_out)
-                                                <td>{{date('h:i A',strtotime($dtr_correction_time_out))}}</td>
+                                                <td>{{date('H:i',strtotime($dtr_correction_time_out))}}</td>
                                             @else
                                                 @php
                                                 $time_in_out = 1;
@@ -505,7 +514,7 @@
                                                 @if($time_in)
                                                     @if($time_in->time_out)
                                                     <td>
-                                                        {{date('h:i A',strtotime($time_in->time_out))}}
+                                                        {{date('H:i',strtotime($time_in->time_out))}}
                                                     </td>
                                                     @else
                                                         @php
@@ -516,7 +525,7 @@
                                                 @else
                                                     @if ($time_out)
                                                         <td>
-                                                            {{date('h:i A',strtotime($time_out->time_out))}}
+                                                            {{date('H:i',strtotime($time_out->time_out))}}
                                                         </td>
                                                     @else
                                                         @php
@@ -637,7 +646,18 @@
                                                 $undertime_hrs = 0;
 
                                                 if($emp->schedule_info->is_flexi == 1){ //Is Schedule is flexi time
-                                    
+                                                    
+                                                    $has_leave_shift_hrs = 0;
+                                                    if($check_if_has_leave_shift){
+                                                        if($check_if_has_leave_shift == 'First Shift' || $check_if_has_leave_shift == 'Second Shift'){
+                                                            if(str_contains($emp->schedule_info->schedule_name, "Compressed") && !str_contains($emp->schedule_info->schedule_name, "Saturday")){
+                                                                $has_leave_shift_hrs = 4.75;//Leave Shift Hrs for Compressed 5 days
+                                                            }else{
+                                                                $has_leave_shift_hrs = 4;//Leave Shift Hrs
+                                                            }   
+                                                        }
+                                                    }
+                                                    
                                                     //Overtime
                                                     if($work_diff_hours > $employee_schedule['working_hours']){
                                                         $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
@@ -645,14 +665,23 @@
 
                                                     //Undertime
                                                     if($employee_schedule['working_hours'] > $work_diff_hours){
-                                                        $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
-                                                        if($undertime > 0){
-                                                            if($late_diff_hours > 0){
-                                                                $undertime_hrs = $undertime - $late_diff_hours;
-                                                            }else{
+
+                                                        if($has_leave_shift_hrs > 0){
+                                                            $total_with_has_leave_shift_hrs = $work_diff_hours + $has_leave_shift_hrs;
+                                                            $undertime = $employee_schedule['working_hours'] - $total_with_has_leave_shift_hrs;
+                                                            if($undertime > 0){
                                                                 $undertime_hrs = $undertime;
-                                                            }
-                                                        }  
+                                                            }  
+                                                        }else{
+                                                            $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
+                                                            if($undertime > 0){
+                                                                if($late_diff_hours > 0){
+                                                                    $undertime_hrs = $undertime - $late_diff_hours;
+                                                                }else{
+                                                                    $undertime_hrs = $undertime;
+                                                                }
+                                                            }  
+                                                        }
                                                     }
                                                 
                                                 }else{
@@ -705,7 +734,7 @@
                                                 @endif
 
 
-                                                
+                                            
                                             </td>
                                             <td>
                                                 {{-- Undertime --}}
@@ -830,11 +859,7 @@
                                     
                                     {{-- Remarks --}}
                                     <td>
-                                        @if($check_if_early_cutoff)
-                                            @if($employee_schedule)
-                                                {{$check_if_early_cutoff}}
-                                            @endif
-                                        @else
+                                        
                                         
                                             @if($time_in == null)
                                                 @if($employee_schedule)
@@ -848,6 +873,7 @@
                                                             if($check_if_holiday == 'Special Holiday' && $emp->work_description == 'Non-Monthly'){ //Condition if Daily Rate / Non Monthly
                                                                 $if_attendance_holiday_status = 'Without-Pay';
                                                             }else{
+
                                                                 $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d',strtotime($date_r)), $emp->employee_number,$emp->location);
                                                                 if($if_attendance_holiday){
 
@@ -907,7 +933,6 @@
                                                                     }
                                                                 }
                                                             }
-
                                                         }else{
 
                                                             $if_leave = employeeHasLeave($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
@@ -923,16 +948,21 @@
                                                             
                                                             if($time_out_data == null && empty($if_leave)){
                                                                 $is_absent = 'Absent';
-                                                            } 
+                                                            }
                                                         }
 
-                                
+                                                        
                                                             
                                                     @endphp
                                                     {{$if_leave}}
                                                     {{$is_absent}}
                                                     {{$if_dtr_correction}}
                                                     {{$if_attendance_holiday_status}}
+
+
+                                                    @if($check_if_early_cutoff)
+                                                        {{$check_if_early_cutoff}}
+                                                    @endif
                                                 @endif
                                             @else
                                                 @php
@@ -949,9 +979,14 @@
                                                 {{$if_dtr_correction}}
                                                 {{$is_absent}}
                                                 
+                                                @if($check_if_early_cutoff)
+                                                    @if($employee_schedule)
+                                                        {{$check_if_early_cutoff}}
+                                                    @endif
+                                                @endif
                                                 
                                             @endif
-                                        @endif
+                                       
 
                                     </td>
                                 @endif
