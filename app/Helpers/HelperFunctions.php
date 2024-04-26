@@ -258,14 +258,10 @@ function employeeHasLeaveShift($employee_leaves = array(), $check_date,$schedule
             
             if($item['date_from'] == $item['date_to']){
                 if(date('Y-m-d',strtotime($check_date)) == date('Y-m-d',strtotime($item['date_from']))){
-                    
-                    $status = 'Without-Pay';
-
                     if($item['withpay'] == 1){
-                        $status = 'With-Pay';
-                    }
-                    if($item['halfday'] == '1'){
-                        return $item['halfday_status'];
+                        if($item['halfday'] == '1'){
+                            return $item['halfday_status'];
+                        }
                     }
                 }
             }else{
@@ -273,13 +269,11 @@ function employeeHasLeaveShift($employee_leaves = array(), $check_date,$schedule
                 if(count($date_range) > 0){
                     foreach($date_range as $date_r){
                         if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
-                            $status = 'Without-Pay';
                             if($item['withpay'] == 1){
                                 $status = 'With-Pay';
-                            }
-                            if($item['halfday'] == '1'){
-                                
-                                return $item['halfday_status'];
+                                if($item['halfday'] == '1'){
+                                    return $item['halfday_status'];
+                                }
                             }
                         }
                     }
