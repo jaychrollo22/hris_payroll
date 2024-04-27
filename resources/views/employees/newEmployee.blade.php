@@ -92,7 +92,7 @@
                             <div class='row mb-2'>
                               <div class='col-md-4'>
                                 Personal Email
-                                  <input type="email" name="personal_email" class='form-control form-control-sm required' placeholder="Personal Email"/>
+                                  <input type="text" name="personal_email" class='form-control form-control-sm required' placeholder="Personal Email"/>
                                 </div>
                               <div class='col-md-4'>
                                 Personal Contact Number
@@ -119,7 +119,7 @@
                             <div class='row mb-2'>
                               <div class='col-md-4'>
                                 Company
-                                <select id="company" data-placeholder="Company" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='company' required>
+                                <select id="company" data-placeholder="Company" class="form-control form-control-sm required js-example-basic-single required" style='width:100%;' name='company' required>
                                   <option value="">--Select Company--</option>
                                   @foreach($companies as $company)
                                     <option value="{{$company->id}}">{{$company->company_name}} - {{$company->company_code}}</option>
@@ -132,7 +132,7 @@
                               </div>
                               <div class='col-md-4'>
                                 Department
-                                <select data-placeholder="Department" class="form-control form-control-sm js-example-basic-single " style='width:100%;' name='department' required>
+                                <select data-placeholder="Department" class="form-control form-control-sm js-example-basic-single required" style='width:100%;' name='department' required>
                                     <option value="">--Select Department--</option>
                                     <option value="0">N/A</option>
                                     @foreach($departments as $department)
@@ -142,7 +142,7 @@
                               </div>
                               <div class='col-md-4'>
                                 Location
-                                <select data-placeholder="Location" class="form-control form-control-sm required js-example-basic-single " style='width:100%;' name='location' required>
+                                <select data-placeholder="Location" class="form-control form-control-sm required js-example-basic-single required" style='width:100%;' name='location' required>
                                     <option value="">--Select Location--</option>
                                     @foreach($locations as $location)
                                       <option value="{{$location->location}}">{{$location->location}}</option>
@@ -202,7 +202,7 @@
                               </div>
                               <div class='col-md-4'>
                                 Work Email
-                                <input type="email" name="work_email" class='form-control form-control-sm required' placeholder="Work Email" required/>
+                                <input type="text" name="work_email" class='form-control form-control-sm required' placeholder="Work Email" required/>
                               </div>
                               <div class='col-md-4'>
                                 Schedule
@@ -232,7 +232,7 @@
                                       <small class='align-items-center'>1</small>
                                     </div>
                                     <div class='col-md-10'>
-                                      <select data-placeholder="Approver" class="form-control form-control-sm js-example-basic-single" style='width:100%;' name='approver[0][approver_id]'>
+                                      <select data-placeholder="Approver" class="form-control form-control-sm js-example-basic-single required" style='width:100%;' name='approver[0][approver_id]'>
                                         <option value="">-- Approver --</option>
                                           @foreach($users as $user)
                                             <option value="{{$user->id}}">{{$user->name}}</option>
