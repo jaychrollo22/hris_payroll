@@ -196,7 +196,7 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
 
         $compute_sss = '';
         $schedule_computation_sss = 'Last Cut-Off';
-        $override_referrence_amount_sss = '';
+        $override_referrence_amount_sss = '1';
         $used_fix_referrence_amount_sss = '';
         $ee_share_sss_override = '';
         $er_share_sss_override = '';
