@@ -61,20 +61,24 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
         $employee_name = $employee_allowance->employee ? $employee_allowance->employee->last_name . ', ' . $employee_allowance->employee->first_name . ' ' . $employee_allowance->employee->middle_name : "";
 
         $branch = '';
-        if($employee_allowance->employee->schedule_info){
-            if($employee_allowance->employee->schedule_info->is_flexi == 1){
-                $branch = 'BRANCH 2';
+        if($employee_allowance->employee){
+            if($employee_allowance->employee->schedule_info){
+                if($employee_allowance->employee->schedule_info->is_flexi == 1){
+                    $branch = 'BRANCH 2';
+                }
+                else if($employee_allowance->employee->schedule_info->id == 9){
+                    $branch = 'BRANCH 3';
+                }else{
+                    $branch = 'BRANCH 1';
+                }   
             }
-            else if($employee_allowance->employee->schedule_info->id == 9){
-                $branch = 'BRANCH 3';
-            }else{
-                $branch = 'BRANCH 1';
-            }   
         }
 
         $company = '';
-        if($employee_allowance->employee->company){
-            $company = $employee_allowance->employee->company->company_name;
+        if($employee_allowance->employee){
+            if($employee_allowance->employee->company){
+                $company = $employee_allowance->employee->company->company_name;
+            }
         }
 
         return [

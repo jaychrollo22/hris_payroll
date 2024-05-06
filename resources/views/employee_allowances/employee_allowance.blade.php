@@ -13,6 +13,10 @@
 							<i class="ti-plus btn-icon-prepend"></i>
 							New Employee Allowance
 						</button>
+						<button type="button" class="btn btn-outline-primary btn-icon-text" data-toggle="modal" data-target="#importEmployeeAllowance">
+							<i class="ti-plus btn-icon-prepend"></i>                                                    
+							Import Employee Allowance
+						  </button>
 					</p>
 
 					<h4 class="card-title">Employee Allowances </h4>
@@ -73,6 +77,7 @@
 									<th>Amount</th>
 									<th>End Date</th>
 									<th>Status</th>
+									<th>Date Modified</th>
 									<th>Action</th>
 								</tr>
 							</thead>
@@ -83,7 +88,7 @@
 											<a href="/edit-employee-allowance/{{$employeeAllowance->id}}" target="_blank" class="ml-3 mr-3">
 												<i class="ti-pencil"></i>
 											</a>
-											{{ $employeeAllowance->employee ? $employeeAllowance->employee->employee_number : "" }}
+											{{ $employeeAllowance->employee ? $employeeAllowance->employee->user_id : "" }}
 										</td>
 										<td>
 											{{ $employeeAllowance->employee ? $employeeAllowance->employee->last_name . ', ' . $employeeAllowance->employee->first_name . ' ' . $employeeAllowance->employee->middle_name : "" }}
@@ -109,6 +114,7 @@
 													class="badge badge-danger">{{ $employeeAllowance->status }}</label>
 											@endif
 										</td>
+										<td>{{ $employeeAllowance->updated_at ? date('Y-m-d', strtotime($employeeAllowance->updated_at)) : "" }}</td>
 										<td id="tdActionId{{ $employeeAllowance->id }}" data-id="{{ $employeeAllowance->id }}" align="center">
 											@if ($employeeAllowance->status == 'Active')
 												<i id="{{ $employeeAllowance->id }}" class="fa fa-ban text-warning" title="Inactive" onclick="disable(this.id)" style="cursor:pointer;font-size:1.5em;"></i>
@@ -126,6 +132,7 @@
 
 	</div>
 </div>
+@include('employee_allowances.import_employee_allowance')
 @include('employee_allowances.new_emp_allowance')
 @endsection
 @section('empAllowScript')

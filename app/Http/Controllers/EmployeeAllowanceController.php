@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 use App\Exports\EmployeeAllowanceExport;
+use App\Imports\EmployeeAllowanceImport;
 use Excel;
 
 class EmployeeAllowanceController extends Controller
@@ -184,6 +185,90 @@ class EmployeeAllowanceController extends Controller
         $company_code = $company_detail ? $company_detail->company_code : "";
 
         return Excel::download(new EmployeeAllowanceExport($company,$status), $company_code. ' Allowances Export.xlsx');
+    }
+
+    public function import(Request $request){
+
+        ini_set('memory_limit', '-1');
+        
+        $path = $request->file('file')->getRealPath();
+        $data = Excel::toArray(new EmployeeAllowanceImport, $request->file('file'));
+
+        $company = isset($request->company) ?  $request->company : null;
+
+        if(count($data[0]) > 0)
+        {
+            // return $data[0];
+            $save_count = 0;
+            $not_save = [];
+            foreach($data[0] as $key => $value)
+            {
+                $employee_allowance = EmployeeAllowance::where('user_id',$value['user_id'])
+                                                                ->where('allowance_id',$value['particular'])
+                                                                ->first();
+                if($employee_allowance){
+                    if(isset($value['particular'])){
+                        $employee_allowance->allowance_id = $value['particular'];
+                    }
+                    
+                    if(isset($value['user_id'])){
+                        $employee_allowance->user_id = $value['user_id'];
+                    }
+                    if(isset($value['description'])){
+                        $employee_allowance->description = $value['description'];
+                    }
+                    if(isset($value['application'])){
+                        $employee_allowance->application = $value['application'];
+                    }
+                    if(isset($value['type'])){
+                        $employee_allowance->type = $value['type'];
+                    }
+                    if(isset($value['credit_schedule'])){
+                        $employee_allowance->schedule = $value['credit_schedule'];
+                    }
+                    if(isset($value['amount'])){
+                        $employee_allowance->allowance_amount = $value['amount'];
+                    }
+                    if(isset($value['end_date'])){
+                        $end_date = $value['end_date'];
+                        if($end_date > 0){
+                            $convert_date = ($end_date - 25569) * 86400;
+                            $employee_allowance->end_date = date('Y-m-d', $convert_date);
+                        }
+                    }
+                    $employee_allowance->save();
+                    $save_count+=1;
+                }else{
+                    $newEmployeeAllowance = new EmployeeAllowance;
+                    $newEmployeeAllowance->allowance_id = $value['particular'];
+                    $newEmployeeAllowance->user_id = $value['user_id'];
+                    $newEmployeeAllowance->description = $value['description'];
+                    $newEmployeeAllowance->application = $value['application'];
+                    $newEmployeeAllowance->type = $value['type'];
+                    $newEmployeeAllowance->schedule =$value['credit_schedule'];
+                    $newEmployeeAllowance->allowance_amount = $value['amount'];
+                
+                    if(isset($value['end_date'])){
+                        $end_date = $value['end_date'];
+                        if($end_date > 0){
+                            $convert_date = ($end_date - 25569) * 86400;
+                            $newEmployeeAllowance->end_date =date('Y-m-d', $convert_date);
+                        }
+                    }
+
+                    $newEmployeeAllowance->status = 'Active';
+                    $newEmployeeAllowance->save();
+
+                    $save_count+=1;
+                }                                         
+            }
+
+            Alert::success('Successfully Import Employee Allowances (' . $save_count. ')')->persistent('Dismiss');
+
+            return redirect('employee-allowance?search=&company='.$company);
+
+            
+        }
     }
 
 }

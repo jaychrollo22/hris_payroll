@@ -275,6 +275,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('delete-employee-allowance/{id}', 'EmployeeAllowanceController@delete');
     Route::get('disableEmp-allowance/{id}', 'EmployeeAllowanceController@disable');
     Route::get('employee-allowance-export', 'EmployeeAllowanceController@export');
+    Route::post('import-employee-allowance', 'EmployeeAllowanceController@import');
 
     // Employee Incentive
     Route::get('employee-incentive', 'EmployeeIncentiveController@index');
@@ -385,6 +386,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/import-employee-leave-type-balances','EmployeeLeaveTypeBalanceController@import');
     Route::get('/employee-used-leaves/{id}','EmployeeLeaveTypeBalanceController@employee_used_leaves');
     Route::post('/cancel-employee-used-leaves/{id}','EmployeeLeaveTypeBalanceController@cancel_employee_used_leaves');
+
+    Route::get('/additional-earned-leave-type-balance','EmployeeLeaveTypeBalanceController@manual_additional_earned_leave');
 
     //Employee Loans
     Route::get('/employee-loans','EmployeeLoansController@index');
