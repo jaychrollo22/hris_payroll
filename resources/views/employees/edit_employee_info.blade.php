@@ -222,6 +222,14 @@
                   Branch Code
                   <input type="text" class="form-control" name="branch_code" value="{{$user->employee->branch_code}}" placeholder="Branch Code">
                 </div>
+                <div class='col-md-4'>
+                  Work Computation
+                  <select id="work_computation" name="work_computation" class="form-control form-control-sm js-example-basic-single cost-center-selection" style='width:100%;'>
+                    <option value="">-- Work Computation --</option>
+                    <option value="Regular" @if ($user->employee->work_computation == "Regular") selected @endif>Regular</option>
+                    <option value="Compressed" @if ($user->employee->work_computation == "Compressed") selected @endif>Compressed</option>
+                  </select>
+                </div>
 
               </div>
               <hr>
