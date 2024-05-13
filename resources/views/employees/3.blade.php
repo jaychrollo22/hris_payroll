@@ -119,7 +119,7 @@
     </style>
 </head>
 <body style="margin: 0; padding: 0; text-align: left; ">
-    <div class="container">
+    <div class="container" style='height:100%;'>
    
         <img style='border:1px;' src="{{asset('/images/WLIFront.jpg')}}" width="100%" height="100%"/>
         <div class="bottom-left" style='font-size: 40px;'>{{$employee->employee_code}}</div>
@@ -127,7 +127,7 @@
         <div class="position" style='  font-size: 30px;color:white;text-align: right;width:75%;'>{{$employee->position}}</div>
         <div class="centered"><img   src='{{asset($employee->avatar)}}' style='width:504px; border-radius: 50%;' ></div>
     </div>
-    <div class="container">
+    <div class="container" style='height:100%;'>
    
         <img style='border:1px;' src="{{asset('/images/WLIBack.jpg')}}" width="100%" height="100%"/>
         <div class="next-bottom-left" style='font-size: 25px;'>{{$employee->permanent_address}}</div>
