@@ -131,7 +131,7 @@
 <body style="margin: 0; padding: 0; text-align: left; ">
     <div class="container">
    
-        <img style='border:1px;' src="{{asset('/images/WHIFront.jpg')}}" width="100%" height="100%"/>
+        <img src="{{asset('/images/WHIFront123.jpg')}}" width="100%" height="100%"/>
         <div class="bottom-left" style='font-size: 40px;'>{{$employee->employee_code}}</div>
         <div class="nickname" style='  font-size: 50px;text-align: center;width:100%;color:black;'>{{$employee->nick_name}}</div>
         <div class="name" style='  font-size: 50px;text-align: center;width:100%;color:black;'><b>{{$employee->last_name}}, {{$employee->first_name}}</b></div>
@@ -139,9 +139,8 @@
         <div class="centered"><img   src='{{asset($employee->avatar)}}' style='width:440px;height:440px; border-radius: 50%;' ></div>
     </div>
     <div class="container">
-   
-        <img style='border:1px;' src="{{asset('/images/WHIback.jpg')}}" width="100%" height="100%"/> 
-        <div class="qr-code" ><img src="data:image/png;base64, {!! base64_encode(QrCode::format('svg')->size(200)->errorCorrection('H')->generate('https://hris.wsystem.online/calling-card/'.$employee->employee_code)) !!}"></div>
+        <img  src="{{asset('/images/WHIback.jpg')}}" width="100%" height="100%"/> 
+        {{-- <div class="qr-code" ><img src="data:image/png;base64, {!! base64_encode(QrCode::format('svg')->size(200)->errorCorrection('H')->generate('https://hris.wsystem.online/calling-card/'.$employee->employee_code)) !!}"></div> --}}
     </div>
 </body>
 </html>

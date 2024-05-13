@@ -129,7 +129,7 @@
     </div>
     <div class="container">
    
-        <img style='border:1px;' src="{{asset('/images/WLIBack123.jpg')}}" width="100%" height="100%"/>
+        <img style='border:1px;' src="{{asset('/images/WLIBack.jpg')}}" width="100%" height="100%"/>
         <div class="next-bottom-left" style='font-size: 25px;'>{{$employee->permanent_address}}</div>
         <div class="email" style='font-size: 25px;'>{{$employee->user_info->email}}</div>
         <div class="contact_person" style='font-size: 25px;'>{{$employee->contact_person->name ?? null}}</div>
