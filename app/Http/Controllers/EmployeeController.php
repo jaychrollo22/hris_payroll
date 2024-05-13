@@ -41,6 +41,8 @@ use App\Exports\EmployeesExport;
 use App\Exports\EmployeeHRExport;
 use App\Exports\AttendancePerLocationExport;
 use App\Exports\EmployeeAssociateExport;
+use Barryvdh\DomPDF\Facade as PDF;
+
 
 class EmployeeController extends Controller
 {
@@ -2229,6 +2231,19 @@ class EmployeeController extends Controller
         }
 
         return back();
+    }
+
+    public function print(Request $request,$id)
+    {
+        $employee = Employee::findOrfail($id);
+        $customPaper = array(0,0,638,1011);
+        $pdf = Pdf::loadView('employees.'.$employee->company_id,
+            array(
+                'employee' => $employee
+            )
+        )->setPaper($customPaper);
+        
+        return $pdf->stream($employee->employee_code.'.pdf');
     }
 
 }

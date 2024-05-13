@@ -21,6 +21,9 @@
                         <button class="btn btn-info btn-sm mt-3" data-toggle="modal" data-target="#uploadSignature">
                             Upload Signature
                         </button>
+                        <a class="btn btn-warning btn-sm mt-3" href='{{url("print-id/".$user->employee->id)}}' target="_blank">
+                            Print ID
+                        </a>
                     </div>
                 </div>
                 <div class="card mt-3">

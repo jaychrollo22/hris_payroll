@@ -16,6 +16,8 @@ use App\HikAttLog2;
 Auth::routes();
 Route::get('get-devices','AttendanceController@devices');
 Route::group(['middleware' => 'auth'], function () {
+
+    
     //Users
     Route::get('account-setting', 'UserController@accountSetting');
     Route::post('upload-avatar', 'UserController@uploadAvatar');
@@ -120,6 +122,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //employees
     Route::get('employees', 'EmployeeController@view');
+    Route::get('print-id/{id}','EmployeeController@print');
     Route::get('employees-export', 'EmployeeController@export');
     Route::get('employees-export-hr', 'EmployeeController@export_hr');
     Route::post('new-employee', 'EmployeeController@new');
