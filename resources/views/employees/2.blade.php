@@ -120,6 +120,11 @@
   left: 50.5%;
   transform: translate(-50%, -50%);
 }
+.container {
+  position: relative;
+  text-align: center;
+  color: white;
+}
 
     </style>
 </head>
