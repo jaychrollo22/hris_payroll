@@ -133,7 +133,7 @@
     <div class="container" style='height:100%;'>
    
         <img src="{{asset('/images/WHIFront.jpg')}}" width="100%" height="100%"/>
-        <div class="bottom-left" style='font-size: 40px;'>{{$employee->employee_code}}</div>
+        <div class="bottom-left" style='font-size: 40px;color:black;'>{{$employee->employee_code}}</div>
         <div class="nickname" style='  font-size: 50px;text-align: center;width:100%;color:black;'>{{$employee->nick_name}}</div>
         <div class="name" style='  font-size: 50px;text-align: center;width:100%;color:black;'><b>{{$employee->last_name}}, {{$employee->first_name}}</b></div>
         <div class="position" style='  font-size: 45px;text-align: center;width:100%;color:#2789c6;'><b>{{$employee->position}}</b></div>
