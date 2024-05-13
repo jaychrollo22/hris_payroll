@@ -133,8 +133,8 @@
    
         <img style='border:1px;' src="{{asset('/images/WHIFront.jpg')}}" width="100%" height="100%"/>
         <div class="bottom-left" style='font-size: 40px;'>{{$employee->employee_code}}</div>
-        <div class="nickname" style='  font-size: 50px;text-align: center;width:100%;'>{{$employee->nick_name}}</div>
-        <div class="name" style='  font-size: 50px;text-align: center;width:100%;'><b>{{$employee->last_name}}, {{$employee->first_name}}</b></div>
+        <div class="nickname" style='  font-size: 50px;text-align: center;width:100%;color:black;'>{{$employee->nick_name}}</div>
+        <div class="name" style='  font-size: 50px;text-align: center;width:100%;color:black;'><b>{{$employee->last_name}}, {{$employee->first_name}}</b></div>
         <div class="position" style='  font-size: 45px;text-align: center;width:100%;color:#2789c6;'><b>{{$employee->position}}</b></div>
         <div class="centered"><img   src='{{asset($employee->avatar)}}' style='width:440px;height:440px; border-radius: 50%;' ></div>
     </div>
