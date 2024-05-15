@@ -139,6 +139,7 @@ class EmployeeController extends Controller
                                     $q->where(function($w) use($search){
                                         $w->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')
                                         ->orWhere('employee_number', 'like' , '%' .  $search . '%')
+                                        ->orWhere('user_id', '=' , $search)
                                         ->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"])
                                         ->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
                                     });

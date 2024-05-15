@@ -317,7 +317,8 @@ class EmployeeLeaveTypeBalanceController extends Controller
         $employees = Employee::select('id','user_id','classification','original_date_hired')
                                 ->whereNotNull('original_date_hired')
                                 ->whereRaw("DATE_FORMAT(original_date_hired, '%d') = ?", [$d])
-                                ->where('classification','1')
+                                ->whereIn('classification',['1','2'])
+                                ->whereRaw("DATEDIFF(CURDATE(), original_date_hired) < 365")
                                 ->where('status','Active')
                                 ->get();
 
