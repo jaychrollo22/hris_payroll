@@ -78,8 +78,8 @@
 }
 .qr-code {
   position: absolute;
-  top: 922px;
-  left:40;
+  top: 822px;
+  left:40px;
 }
 
 /* Top left text */
@@ -104,7 +104,7 @@
 }
 .position {
   position: absolute;
-  bottom: 235px;
+  bottom: 230px;
   left: 10px;
 }
 
@@ -124,18 +124,18 @@
         <img style='border:1px;' src="{{asset('/images/WLIFront.jpg')}}" width="100%" height="100%"/>
         <div class="bottom-left" style='font-size: 40px;'>{{$employee->employee_code}}</div>
         <div class="name" style='  font-size: 50px;color:white;text-align: right;width:75%;'>{{$employee->first_name}} <b style='text-transform: ;'>{{$employee->last_name}}</b></div>
-        <div class="position" style='  font-size: 30px;color:white;text-align: right;width:75%;'>{{$employee->position}}</div>
+        <div class="position" style='  font-size: 35px;color:white;text-align: right;width:75%;'>{{$employee->position}}</div>
         <div class="centered"><img   src='{{asset($employee->avatar)}}' style='width:504px; border-radius: 50%;' ></div>
     </div>
     <div class="container" style='height:100%;'>
    
         <img style='border:1px;' src="{{asset('/images/WLIBack.jpg')}}" width="100%" height="100%"/>
-        <div class="next-bottom-left" style='font-size: 25px;'>{{$employee->permanent_address}}</div>
-        <div class="email" style='font-size: 25px;'>{{$employee->user_info->email}}</div>
-        <div class="contact_person" style='font-size: 25px;'>{{$employee->contact_person->name ?? null}}</div>
-        <div class="contact_number" style='font-size: 25px;'>{{$employee->contact_person->contact_number ?? null}}</div>
-        <div class="website" style='font-size: 25px;'>www.wgroup.com.ph</div>
-        <div class="qr-code" ><img src="data:image/png;base64, {!! base64_encode(QrCode::format('svg')->size(200)->errorCorrection('H')->generate('https://hris.wsystem.online/calling-card/'.$employee->employee_code)) !!}"></div>
+        <div class="next-bottom-left" style='font-size: 30px;'>{{$employee->permanent_address}}</div>
+        <div class="email" style='font-size: 30px;'>{{$employee->user_info->email}}</div>
+        <div class="contact_person" style='font-size: 30px;'>{{$employee->contact_person->name ?? null}}</div>
+        <div class="contact_number" style='font-size: 30px;'>{{$employee->contact_person->contact_number ?? null}}</div>
+        <div class="website" style='font-size: 30px;'>www.wgroup.com.ph</div>
+        <div class="qr-code" ><img src="data:image/png;base64, {!! base64_encode(QrCode::format('svg')->size(250)->errorCorrection('H')->generate('https://hris.wsystem.online/calling-card/'.$employee->employee_code)) !!}"></div>
     </div>
     
     
