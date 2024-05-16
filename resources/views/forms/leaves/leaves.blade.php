@@ -37,9 +37,9 @@
 
                           <tr>
                             <td>{{$leave_balance->leave_type}} {{$leave_balance->leave_type_info ? $leave_balance->leave_type_info->leave_type : "" }}</td>
-                            <td>{{$total_balance}}</td>
-                            <td>{{$used_leave}}</td>
-                            <td>{{$remaining > 0 ? $remaining : 0}}</td>
+                            <td>{{ round($total_balance) }}</td>
+                            <td>{{ round($used_leave)}}</td>
+                            <td>{{$remaining > 0 ? round($remaining) : 0}}</td>
                           <tr>
                         @endforeach
                       @endif

@@ -109,16 +109,16 @@
                           <td>{{ $item->employee->original_date_hired}}</td>
                           <td>{{ $item->year}}</td>
                           <td>{{ $item->leave_type}}</td>
-                          <td>{{ $item->balance}}</td>
+                          <td>{{ round($item->balance) }}</td>
                           <td>
                             {{-- <a href="employee-additional-leaves/{{$item->user->id}}?leave_type={{$leave_type}}" target="_blank" title="View Additional Leaves">{{$additional_leave}}</a> --}}
-                            {{$additional_leave}}
+                            {{ round($additional_leave) }}
                           </td>
-                          <td>{{ $balance}}</td>
+                          <td>{{ round($balance)}}</td>
                           <td>
                             <a href="employee-used-leaves/{{$item->user->id}}?leave_type={{$leave_type}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
                           </td>
-                          <td>{{ $remaining > 0 ? $remaining : 0 }}</td>
+                          <td>{{ $remaining > 0 ? round($remaining) : 0 }}</td>
                           <td>
                             <a href="edit-employee-leave-type-balances/{{$item->id}}?search={{$search}}&company={{$company}}&department={{$department}}&status={{$status}}" class="btn btn-sm btn-primary">Edit</a>
                           </td>
