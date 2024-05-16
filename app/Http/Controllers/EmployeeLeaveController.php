@@ -43,6 +43,7 @@ class EmployeeLeaveController extends Controller
                                                                     ->where('user_id',auth()->user()->id)
                                                                     ->where('year',$year)
                                                                     ->with('leave_type_info')
+                                                                    ->where('status','Active')
                                                                     ->get();
         
         $leave_types = Leave::all(); //masterfile
