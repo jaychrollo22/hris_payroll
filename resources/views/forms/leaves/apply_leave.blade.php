@@ -39,7 +39,7 @@
                               $used_leave = checkUsedLeave(auth()->user()->id,$leave_type->leave_type_info->id,$leave_type->year);
                             }
                             
-                            $total_balance = $leave_type->total_balance + $additional_leave;
+                            $total_balance = $leave_type->total_balance + round($additional_leave);
                             $remaining = $total_balance - $used_leave;
                             
                           @endphp

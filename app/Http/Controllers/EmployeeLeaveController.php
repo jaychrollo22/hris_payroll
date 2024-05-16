@@ -116,7 +116,7 @@ class EmployeeLeaveController extends Controller
                 }
             }
            
-            if(round($available_balance) >= round($count_days)){
+            if($available_balance >= $count_days){
                 $new_leave = new EmployeeLeave;
                 $new_leave->user_id = Auth::user()->id;
                 $emp = Employee::where('user_id',auth()->user()->id)->first();
@@ -213,7 +213,7 @@ class EmployeeLeaveController extends Controller
 
             $additional_leave = checkEmployeeEarnedLeaveAdditional(auth()->user()->id,$leave->leave->id,$leave_balance->year);
             $used_leave = checkUsedLeave(auth()->user()->id,$leave->leave->id,$leave_balance->year);
-            $total_balance = $leave_balance->total_balance + $additional_leave;
+            $total_balance = $leave_balance->total_balance + round($additional_leave);
             $remaining = $total_balance - $used_leave;
         }else{
             $used_leave = 0;
@@ -262,7 +262,7 @@ class EmployeeLeaveController extends Controller
                 }
             }
 
-            if(round($available_balance) >= round($count_days)){
+            if($available_balance >= $count_days){
                 $new_leave = EmployeeLeave::findOrFail($id);
                 $new_leave->user_id = Auth::user()->id;
                 $new_leave->leave_type = $request->leave_type;

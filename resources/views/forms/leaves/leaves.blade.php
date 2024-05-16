@@ -30,16 +30,16 @@
                               $used_leave = checkUsedLeave(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
                             }
                             
-                            $total_balance = $leave_balance->total_balance + $additional_leave;
+                            $total_balance = $leave_balance->total_balance + round($additional_leave);
                             $remaining = $total_balance - $used_leave;
                             
                           @endphp
 
                           <tr>
                             <td>{{$leave_balance->leave_type}} {{$leave_balance->leave_type_info ? $leave_balance->leave_type_info->leave_type : "" }}</td>
-                            <td>{{ round($total_balance) }}</td>
-                            <td>{{ round($used_leave)}}</td>
-                            <td>{{$remaining > 0 ? round($remaining) : 0}}</td>
+                            <td>{{ $total_balance }}</td>
+                            <td>{{ $used_leave }}</td>
+                            <td>{{$remaining > 0 ? $remaining : 0}}</td>
                           <tr>
                         @endforeach
                       @endif

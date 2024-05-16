@@ -97,7 +97,7 @@
                               $leave_type = $item->leave_type_info->id;
                             }
                             
-                            $balance = $item->balance + $additional_leave;
+                            $balance = $item->balance + round($additional_leave);
                             $remaining = $balance - $used_leave;
                           @endphp
                           <td>{{ $item->user->id}}</td>
@@ -109,16 +109,16 @@
                           <td>{{ $item->employee->original_date_hired}}</td>
                           <td>{{ $item->year}}</td>
                           <td>{{ $item->leave_type}}</td>
-                          <td>{{ round($item->balance) }}</td>
+                          <td>{{ $item->balance }}</td>
                           <td>
                             {{-- <a href="employee-additional-leaves/{{$item->user->id}}?leave_type={{$leave_type}}" target="_blank" title="View Additional Leaves">{{$additional_leave}}</a> --}}
                             {{ round($additional_leave) }}
                           </td>
-                          <td>{{ round($balance)}}</td>
+                          <td>{{ $balance }}</td>
                           <td>
                             <a href="employee-used-leaves/{{$item->user->id}}?leave_type={{$leave_type}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
                           </td>
-                          <td>{{ $remaining > 0 ? round($remaining) : 0 }}</td>
+                          <td>{{ $remaining > 0 ? $remaining : 0 }}</td>
                           <td>
                             <a href="edit-employee-leave-type-balances/{{$item->id}}?search={{$search}}&company={{$company}}&department={{$department}}&status={{$status}}" class="btn btn-sm btn-primary">Edit</a>
                           </td>
