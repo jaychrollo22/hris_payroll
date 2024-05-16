@@ -314,13 +314,21 @@ class EmployeeLeaveTypeBalanceController extends Controller
         $year = isset($request->date) ? date('Y',strtotime($request->date)) : date('Y');
         $today = isset($request->date) ? date('Y-m-d',strtotime($request->date)) : date('Y-m-d');
 
+        $user_id = isset($request->user_id) ? $request->user_id : "";
+
         $employees = Employee::select('id','user_id','classification','original_date_hired')
                                 ->whereNotNull('original_date_hired')
                                 ->whereRaw("DATE_FORMAT(original_date_hired, '%d') = ?", [$d])
-                                ->whereIn('classification',['1','2'])
-                                ->whereRaw("DATEDIFF(CURDATE(), original_date_hired) < 365")
-                                ->where('status','Active')
-                                ->get();
+                                
+                                ->where('status','Active');
+
+        if($user_id){   
+            $employees->where('user_id',$user_id);
+        }else{
+            $employees->whereIn('classification',['1','2'])->whereRaw("DATEDIFF(CURDATE(), original_date_hired) < 365");
+        }
+
+        $employees = $employees->get();
 
         $count = 0;
         if(count($employees) > 0){
