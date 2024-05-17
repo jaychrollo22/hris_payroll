@@ -58,22 +58,22 @@
 }
 .email {
   position: absolute;
-  top: 545px;
+  top: 547px;
   left:330px;
 }
 .contact_person {
   position: absolute;
-  top: 622px;
+  top: 620px;
   left:330px;
 }
 .contact_number {
   position: absolute;
-  top: 692px;
+  top: 688px;
   left:330px;
 }
 .website {
   position: absolute;
-  top: 752px;
+  top: 750px;
   left:330px;
 }
 .qr-code {
