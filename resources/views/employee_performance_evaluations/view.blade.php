@@ -705,7 +705,7 @@
 
                                 {{-- 8 --}}
                                 <tr>
-                                    <td rowspan="3" class="text-center text-dark">8. STEWARDSHIP - Ability to be grateful and to take responsibility and accountability for every task and resource entrusted to one's care</td>
+                                    <td rowspan="3" class="text-center text-dark">8. RESPONSIBILITY  - Ability to be grateful and to take responsibility and accountability for every task and resource entrusted to one's care</td>
                                     <td class="text-center text-dark">Practice habits that keeps the work place clean, safe, and secure; preventing accidents, losses, or damages of any kind.</td>
                                     <td class="text-center text-dark">{{isset($ppr['stewardship']['self_rating_1']) ? $ppr['stewardship']['self_rating_1'] : ""}}</td>
                                     <td class="text-center text-dark">{{isset($ppr['stewardship']['self_rating_1']) ? $ppr['stewardship']['superios_rating_1'] : ""}}</td>

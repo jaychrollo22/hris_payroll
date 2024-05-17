@@ -187,7 +187,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
     public function create()
     {
 
-        return redirect('/performance-plan-review');
+        // return redirect('/performance-plan-review');
         
         $performance_plan_period = PerformancePlanPeriod::where('status','Active')->orderBy('created_at','DESC')->get();
         //  $performance_plan_period = [];
@@ -337,7 +337,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
      */
     public function edit($id)
     {
-        return redirect('/performance-plan-review');
+        // return redirect('/performance-plan-review');
 
         $performance_plan_period = PerformancePlanPeriod::where('status','Active')->orderBy('created_at','DESC')->get();
 
