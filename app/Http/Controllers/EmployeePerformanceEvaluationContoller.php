@@ -754,18 +754,68 @@ class EmployeePerformanceEvaluationContoller extends Controller
 
     public function returnToDraftAll(Request $request){
         
+        if(auth()->user()->id == '3873'){
+            $allowed_companies = Company::select('id')->pluck('id')->toArray();
+        }else{
+            $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        }
+        
+        $search = isset($request->search) ? $request->search : "";
         $company = isset($request->company) ? $request->company : "";
+        $performance_plan_period = isset($request->performance_plan_period) ? $request->performance_plan_period : "";
+        $period_ppr = isset($request->period_ppr) ? $request->period_ppr : "";
 
-        return $employee_performance_evaluation = EmployeePerformanceEvaluation::select('id','user_id','calendar_year','review_date','created_at','approved_by_date','period','status')
-                                            ->with('user','employee')
-                                            ->where('status','Approved')
-                                            ->when(!empty($company),function($q) use($company){
-                                                $q->whereHas('employee',function($w) use($company){
-                                                    $w->where('company_id',$company);
-                                                });
-                                            })
-                                            ->orderBy('review_date','DESC')
-                                            ->get();
+        $status = $request->status ? $request->status : "";
+
+        if($company){
+            $employee_performance_evaluation = EmployeePerformanceEvaluation::select('id','user_id','calendar_year','review_date','created_at','approved_by_date','period','status')
+                                                    ->with('user','employee')
+                                                    ->where('status','Approved')
+                                                    ->when(!empty($search),function($q) use($search){
+                                                        $q->whereHas('employee',function($w) use($search){
+                                                            $w->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')
+                                                            ->orWhere('employee_number', 'like' , '%' .  $search . '%')
+                                                            ->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"])
+                                                            ->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
+                                                        });
+                                                    })
+                                                    ->when(!empty($company),function($q) use($company){
+                                                        $q->whereHas('employee',function($w) use($company){
+                                                            $w->where('company_id',$company);
+                                                        });
+                                                    })
+                                                    ->when(!empty($performance_plan_period),function($q) use($performance_plan_period){
+                                                        $q->where('calendar_year',$performance_plan_period);
+                                                    })
+                                                    ->when(!empty($period_ppr),function($q) use($period_ppr){
+                                                        $q->where('period',$period_ppr);
+                                                    })
+                                                    ->whereHas('employee',function($q) use($allowed_companies){
+                                                        $q->whereIn('company_id',$allowed_companies)
+                                                            ->where('status','Active');
+                                                    })
+                                                    ->orderBy('review_date','DESC')
+                                                    ->get();
+            
+            $count = 0;
+            if($employee_performance_evaluation){
+                foreach($employee_performance_evaluation as $item){
+                    $employee_ppr = EmployeePerformanceEvaluation::where('id', $item->id)->first();
+                    if($employee_ppr){
+                        $employee_ppr->mail_1 = null;
+                        $employee_ppr->mail_2 = null;
+                        $employee_ppr->level = 0;
+                        $employee_ppr->status = 'Draft';
+                        $employee_ppr->save();
+                        $count++;
+                    }
+                }
+            }
+
+            return $count;
+
+
+        }
         
     }
 }
