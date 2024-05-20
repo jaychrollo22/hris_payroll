@@ -742,4 +742,30 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $company_code =  $company_detail ?  $company_detail->company_code : "";
         return Excel::download(new PprExport($company,$status,$period_ppr,$calendar_date,$allowed_companies), $company_code . ' ' . $status . ' ' . $calendar_date . ' PPR Export.xlsx');
     }
+
+    public function deletePPR(Request $request,$id){
+
+        $employee_ppr = EmployeePerformanceEvaluation::where('id', $id)->first();
+        if($employee_ppr){
+            $employee_ppr->delete();
+            return "Deleted";
+        }
+    }
+
+    public function returnToDraftAll(Request $request){
+        
+        $company = isset($request->company) ? $request->company : "";
+
+        return $employee_performance_evaluation = EmployeePerformanceEvaluation::select('id','user_id','calendar_year','review_date','created_at','approved_by_date','period','status')
+                                            ->with('user','employee')
+                                            ->where('status','Approved')
+                                            ->when(!empty($company),function($q) use($company){
+                                                $q->whereHas('employee',function($w) use($company){
+                                                    $w->where('company_id',$company);
+                                                });
+                                            })
+                                            ->orderBy('review_date','DESC')
+                                            ->get();
+        
+    }
 }

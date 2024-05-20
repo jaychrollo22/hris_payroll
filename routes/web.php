@@ -374,6 +374,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('return-to-draft/{id}','EmployeePerformanceEvaluationContoller@returnToDraft');
 
+    Route::get('delete-ppr/{id}','EmployeePerformanceEvaluationContoller@deletePPR');
+
+    Route::get('return-to-draft-all','EmployeePerformanceEvaluationContoller@returnToDraftAll');
+
     Route::get('export-ppr','EmployeePerformanceEvaluationContoller@export');
 
 

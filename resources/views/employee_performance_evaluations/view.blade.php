@@ -10,9 +10,13 @@
                     <h4 class="card-title" id="tdActionId{{ $ppr['id'] }}" data-id="{{ $ppr['id'] }}">VIEW PERFORMANCE PLAN REVIEW (PPR) 
                         <button class="btn btn-primary btn-sm" onclick="printDiv('contentToPrint')">Print</button>
                         @if(auth()->user()->id == '1' || auth()->user()->id == '3873')
+
+                            <button class="btn btn-warning btn-sm float-right mr-2" id="{{ $ppr['id'] }}" onclick="deletePPR(this.id)">Delete PPR</button>
+
                             @if($ppr['status'] != 'Draft')
-                                <button class="btn btn-danger btn-sm float-right" id="{{ $ppr['id'] }}" onclick="returnToDraft(this.id)">Return to Draft</button>
+                                <button class="btn btn-danger btn-sm float-right ml-2 mr-2" id="{{ $ppr['id'] }}" onclick="returnToDraft(this.id)">Return to Draft</button>
                             @endif
+
                         @endif
                     </h4>
                     <div class="table-responsive" id="contentToPrint">
@@ -857,6 +861,38 @@
 
 					} else {
                         swal({text:"You stop the returned to Draft.",icon:"success"});
+					}
+				});
+		}
+
+        function deletePPR(id) {
+			var element = document.getElementById('tdActionId'+id);
+			var dataID = element.getAttribute('data-id');
+			swal({
+					title: "Are you sure?",
+					text: "You want to delete this PPR?",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willCancel) => {
+					if (willCancel) {
+						document.getElementById("loader").style.display = "block";
+						$.ajax({
+							url: "/delete-ppr/" + id,
+							method: "GET",
+							headers: {
+								'X-CSRF-TOKEN': '{{ csrf_token() }}'
+							},
+							success: function(data) {
+								document.getElementById("loader").style.display = "none";
+								swal("PPR has been Deleted!", {
+									icon: "success",
+								}).then(function() {
+									window.location.href = '/hr-performance-plan-review';
+								});
+							}
+						})
 					}
 				});
 		}
