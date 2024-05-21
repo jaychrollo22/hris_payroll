@@ -37,6 +37,7 @@ class UserController extends Controller
 
         if(auth()->user()->id == '353' || auth()->user()->id == '1' || auth()->user()->id == '5361' || auth()->user()->id == '351' || auth()->user()->id == '1166'){
             $search = isset($request->search) ? $request->search : "";
+            $role = isset($request->role) ? $request->role : "";
             $limit = isset($request->limit) ? $request->limit : 1000;
             $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
 
@@ -49,6 +50,7 @@ class UserController extends Controller
             }
             
             $users = User::select('id','name','email','status','role','updated_at')
+                            ->with('employee.company')
                             ->whereHas('employee',function($q){
                                 $q->where('status','Active');
                             })
@@ -63,15 +65,21 @@ class UserController extends Controller
                             })
                             ->when(count($rank_and_file_users) > 0,function($q) use($rank_and_file_users){
                                 $q->whereIn('id',$rank_and_file_users);
-                            })
-                            ->limit($limit)->get();
+                            });
+
+            if($role){
+                $users->where('role','Admin');
+            }
             
+             $users = $users->limit($limit)->get();
+
             return view('users.index',
             array(
                 'header' => 'users',
                 'users' => $users,
                 'companies' => $companies,
                 'search' => $search,
+                'role' => $role,
             ));
         }else{
             return redirect('/');

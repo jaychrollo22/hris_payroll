@@ -21,15 +21,23 @@
                         <h4 class="card-title">Filter</h4>
 						<form method='get' onsubmit='show();' enctype="multipart/form-data">
 							<div class=row>
-                                <div class='col-md-6'>
+                                <div class='col-md-3'>
 									<div class="form-group">
                                         <input type="text" class="form-control" name="search" placeholder="Search Name / Biometric Code" value="{{$search}}">
                                     </div>
                                 </div>
-                                <div class='col-md-6'>
+                                <div class="col-md-2">
+                                    <select class="form-control" name="role">
+                                        <option value="">Choose Role</option>
+                                        <option value="Admin" {{ $role == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                    </select>
+                                </div>
+                                <div class='col-md-3'>
 									<button type="submit" class="btn btn-primary">Filter</button>
                                     <a href="/users" class="btn btn-warning">Reset Filter</a>
 								</div>
+
+                                
                             </div>
                         </form>
 
@@ -40,6 +48,7 @@
                                         <th>ID</th>
                                         <th>Name</th>
                                         <th>Email</th>
+                                        <th>Company</th>
                                         <th>Role</th>
                                         <th>Last Modified At</th>
                                         <th>Action</th>
@@ -51,6 +60,7 @@
                                         <td>{{$user->id}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
+                                        <td>{{$user->employee ? $user->employee->company->company_name . ' (' . $user->employee->company->company_code . ')' : "" }}</td>
                                         <td>{{$user->role}}</td>
                                         <td>{{ date('Y-m-d h:i A',strtotime($user->updated_at))}}</td>
                                         <td>
