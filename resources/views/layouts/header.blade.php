@@ -373,6 +373,12 @@
                             <span class="menu-title">Loans</span>
                         </a>
                     </li>
+                    <li class="nav-item @if ($header == 'Proof') active @endif">
+                        <a class="nav-link" href="https://docs.google.com/forms/d/e/1FAIpQLScC5Xl_2IgYLHeZNd5EwwEX3-pO9p6u1-WO7CMLomS-FZ5tZQ/viewform" target="_blank">
+                            <i class="fa fa-money menu-icon"></i>
+                            <span class="menu-title">Proof of Availment</span>
+                        </a>
+                    </li>
                     @if (auth()->user()->employee_under->count() != 0)
                     <li class="nav-item">
                         <hr>
@@ -388,7 +394,7 @@
                             <ul class="nav flex-column sub-menu @if ($header == 'for-approval') show @endif">
                                 <li class="nav-item "><a class="nav-link active" href="{{ url('/for-leave') }}">Leave <span class="badge badge-warning">{{ session('pending_leave_count') }}</span></a></li>
                                 <li class="nav-item "><a class="nav-link " href="{{ url('/for-overtime') }}">Overtime <span class="badge badge-warning">{{ session('pending_overtime_count') }}</span></a></li>
-                                <li class="nav-item "><a class="nav-link " href="{{ url('/for-work-from-home') }}">Work From Home <span class="badge badge-warning">{{ session('pending_wfh_count') }}</span></a></li>
+                                {{-- <li class="nav-item "><a class="nav-link " href="{{ url('/for-work-from-home') }}">Work From Home <span class="badge badge-warning">{{ session('pending_wfh_count') }}</span></a></li> --}}
                                 <li class="nav-item "><a class="nav-link " href="{{ url('/for-official-business') }}">Official Business <span class="badge badge-warning">{{ session('pending_ob_count') }}</span></a></li>
                                 {{-- <li class="nav-item "><a class="nav-link " href="{{ url('/for-dtr-correction') }}">DTR Correction <span class="badge badge-warning">{{ session('pending_dtr_count') }}</span></a></li> --}}
                             </ul>
@@ -488,19 +494,19 @@
                     </li>
                     @endif
 
-                    {{-- <li class="nav-item @if ($header == 'Payroll') active @endif"> --}}
-                        {{-- <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
+                    <li class="nav-item @if ($header == 'Payroll') active @endif">
+                        <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
                             <i class="icon-align-center menu-icon"></i>
                             <span class="menu-title">Payroll</span>
                             <i class="menu-arrow"></i>
-                        </a> --}}
-                        {{-- <div class="collapse" id="payroll"> --}}
-                            {{-- <ul class="nav flex-column sub-menu"> --}}
-                                {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a> --}}
-                                {{-- </li> --}}
-                                {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-reg') }}">Loan Register</a></li> --}}
-                            {{-- </ul> --}}
-                        {{-- </div> --}}
+                        </a>
+                        <div class="collapse" id="payroll">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a>
+                                </li>
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-reg') }}">Loan Register</a></li>
+                            </ul>
+                        </div>
         </li>
         @if (checkUserPrivilege('masterfiles_companies',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_departments',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes')
         <li class="nav-item @if ($header == 'masterfiles') active @endif">
@@ -598,10 +604,10 @@
                     <li class="nav-item"> <a class="nav-link" href="{{ url('/dtr-report') }}">DTR Reports</a></li>
                     @endif
                     {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/dtr-report') }}">DTR Reports</a></li> --}}
-                    {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li> --}}
-                    {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li> --}}
-                    {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li> --}}
-                    {{-- <li class="nav-item"> <a class="nav-link" href="{{ url('/payroll-report') }}">Payroll Reports</a></li> --}}
+                    <li class="nav-item"> <a class="nav-link" href="{{ url('/totalExpense-report') }}">Total Expenses</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url('/loan-report') }}">Loans Report</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url('/incentive-report') }}">Incentive Reports</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ url('/payroll-report') }}">Payroll Reports</a></li>
                 </ul>
             </div>
         </li>
