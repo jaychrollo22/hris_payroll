@@ -32,6 +32,12 @@
                                         <option value="Admin" {{ $role == 'Admin' ? 'selected' : '' }}>Admin</option>
                                     </select>
                                 </div>
+                                <div class="col-md-2">
+                                    <select class="form-control" name="access_role">
+                                        <option value="">Access Role</option>
+                                        <option value="employees_rate" {{ $access_role == 'employees_rate' ? 'selected' : '' }}>Employee Rate</option>
+                                    </select>
+                                </div>
                                 <div class='col-md-3'>
 									<button type="submit" class="btn btn-primary">Filter</button>
                                     <a href="/users" class="btn btn-warning">Reset Filter</a>

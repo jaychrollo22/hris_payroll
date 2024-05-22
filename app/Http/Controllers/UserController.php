@@ -38,6 +38,7 @@ class UserController extends Controller
         if(auth()->user()->id == '353' || auth()->user()->id == '1' || auth()->user()->id == '5361' || auth()->user()->id == '351' || auth()->user()->id == '1166'){
             $search = isset($request->search) ? $request->search : "";
             $role = isset($request->role) ? $request->role : "";
+            $access_role = isset($request->access_role) ? $request->access_role : "";
             $limit = isset($request->limit) ? $request->limit : 1000;
             $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
 
@@ -50,7 +51,7 @@ class UserController extends Controller
             }
             
             $users = User::select('id','name','email','status','role','updated_at')
-                            ->with('employee.company')
+                            ->with('employee.company','user_allowed_company')
                             ->whereHas('employee',function($q){
                                 $q->where('status','Active');
                             })
@@ -70,8 +71,14 @@ class UserController extends Controller
             if($role){
                 $users->where('role','Admin');
             }
+
+            if($access_role){
+                $users->whereHas('user_privilege',function($q) use($access_role){   
+                    $q->where($access_role,'on'); 
+                });
+            }
             
-             $users = $users->limit($limit)->get();
+            $users = $users->limit($limit)->get();
 
             return view('users.index',
             array(
@@ -80,6 +87,7 @@ class UserController extends Controller
                 'companies' => $companies,
                 'search' => $search,
                 'role' => $role,
+                'access_role' => $access_role,
             ));
         }else{
             return redirect('/');
