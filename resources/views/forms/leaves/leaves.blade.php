@@ -80,7 +80,7 @@
                                 
                                 $total_vl = $vl_beginning_balance + $earned_vl;
                               @endphp
-                              {{ ceil($total_vl) }}
+                              {{ ($total_vl) }}
                             @elseif ($leave->leave->id == '2')
                               @php
                                 $date_from = new DateTime($employee_status->original_date_hired);
@@ -124,7 +124,7 @@
                                 
                                 $total_sl = $sl_beginning_balance + $earned_sl;
                               @endphp
-                                {{ ceil($total_sl) }}
+                                {{ ($total_sl) }}
                             @elseif ($leave->leave->id == '10')
                                 {{$earned_sil + $leave->count}}
                             @elseif ($leave->leave->id == '3')
@@ -195,7 +195,7 @@
                                       $vl_beginning_balance = $leave->count;
                                   }
                                   
-                                  $count_vl = ceil($vl_beginning_balance + $earned_vl) - $used_vl;
+                                  $count_vl = ($vl_beginning_balance + $earned_vl) - $used_vl;
                                   if($count_vl > 0){
                                     if($total_months > 11){
                                         $is_allowed_to_file_vl = true;
@@ -250,7 +250,7 @@
                                     $sl_beginning_balance = $leave->count;
                                   }
                                   
-                                  $count_sl = ceil($sl_beginning_balance + $earned_sl) - $used_sl;
+                                  $count_sl = ($sl_beginning_balance + $earned_sl) - $used_sl;
                                   
                                   if($count_sl > 0){
                                     if($total_months > 11){
