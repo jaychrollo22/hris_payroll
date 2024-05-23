@@ -322,7 +322,7 @@ function checkUsedSLVLSILLeave($user_id,$leave_type,$date_hired){
         $employee_vl = EmployeeLeave::where('user_id',$user_id)
                                         ->where('leave_type',$leave_type)
                                         ->where('status','Approved')
-                                        ->where('date_from','>',$filter_date_leave)
+                                        // ->where('date_from','>',$filter_date_leave)
                                         ->get();
         
         $date_today = date('Y-m-d');
