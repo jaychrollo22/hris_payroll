@@ -66,19 +66,9 @@
                                 // }
 
                                 $vl_beginning_balance = 0;
-                                $today  = date('Y-m-d');
-                                $date_hired_md = date('m-d',strtotime($employee_status->original_date_hired));
-                                $date_hired_m = date('m',strtotime($employee_status->original_date_hired));
-                                $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-                                $this_year = date('Y');
 
-                                $date_hired_this_year = $this_year . '-'. $date_hired_md;
-
-                                if($last_year == 2022 && $today < $date_hired_this_year){
                                     $vl_beginning_balance = $leave->count;
-                                }
-                                
-                                $total_vl = $vl_beginning_balance + $earned_vl;
+                                  $total_vl = $vl_beginning_balance + $earned_vl;
                               @endphp
                               {{ ($total_vl) }}
                             @elseif ($leave->leave->id == '2')
@@ -182,18 +172,9 @@
                                   //   $vl_beginning_balance = $leave->count;
                                   // }
                                   
-                                  $vl_beginning_balance = 0;
-                                  $today  = date('Y-m-d');
-                                  $date_hired_md = date('m-d',strtotime($employee_status->original_date_hired));
-                                  $date_hired_m = date('m',strtotime($employee_status->original_date_hired));
-                                  $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-                                  $this_year = date('Y');
-
-                                  $date_hired_this_year = $this_year . '-'. $date_hired_md;
-
-                                  if($last_year == 2022 && $today < $date_hired_this_year){
+                                
                                       $vl_beginning_balance = $leave->count;
-                                  }
+                                  
                                   
                                   $count_vl = ($vl_beginning_balance + $earned_vl) - $used_vl;
                                   if($count_vl > 0){
