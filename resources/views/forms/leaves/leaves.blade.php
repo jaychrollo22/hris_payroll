@@ -66,11 +66,21 @@
                                 // }
 
                                 $vl_beginning_balance = 0;
+                                $today  = date('Y-m-d');
+                                $date_hired_md = date('m-d',strtotime($employee_status->original_date_hired));
+                                $date_hired_m = date('m',strtotime($employee_status->original_date_hired));
+                                $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+                                $this_year = date('Y');
 
+                                $date_hired_this_year = $this_year . '-'. $date_hired_md;
+
+                                if($last_year == 2022 && $today < $date_hired_this_year){
                                     $vl_beginning_balance = $leave->count;
-                                  $total_vl = $vl_beginning_balance + $earned_vl;
+                                }
+                                
+                                $total_vl = $vl_beginning_balance + $earned_vl;
                               @endphp
-                              {{ ($total_vl) }}
+                              {{ ceil($total_vl) }}
                             @elseif ($leave->leave->id == '2')
                               @php
                                 $date_from = new DateTime($employee_status->original_date_hired);
@@ -114,7 +124,7 @@
                                 
                                 $total_sl = $sl_beginning_balance + $earned_sl;
                               @endphp
-                                {{ ($total_sl) }}
+                                {{ ceil($total_sl) }}
                             @elseif ($leave->leave->id == '10')
                                 {{$earned_sil + $leave->count}}
                             @elseif ($leave->leave->id == '3')
@@ -172,11 +182,20 @@
                                   //   $vl_beginning_balance = $leave->count;
                                   // }
                                   
-                                
+                                  $vl_beginning_balance = 0;
+                                  $today  = date('Y-m-d');
+                                  $date_hired_md = date('m-d',strtotime($employee_status->original_date_hired));
+                                  $date_hired_m = date('m',strtotime($employee_status->original_date_hired));
+                                  $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+                                  $this_year = date('Y');
+
+                                  $date_hired_this_year = $this_year . '-'. $date_hired_md;
+
+                                  if($last_year == 2022 && $today < $date_hired_this_year){
                                       $vl_beginning_balance = $leave->count;
+                                  }
                                   
-                                  
-                                  $count_vl = ($vl_beginning_balance + $earned_vl) - $used_vl;
+                                  $count_vl = ceil($vl_beginning_balance + $earned_vl) - $used_vl;
                                   if($count_vl > 0){
                                     if($total_months > 11){
                                         $is_allowed_to_file_vl = true;
@@ -231,7 +250,7 @@
                                     $sl_beginning_balance = $leave->count;
                                   }
                                   
-                                  $count_sl = ($sl_beginning_balance + $earned_sl) - $used_sl;
+                                  $count_sl = ceil($sl_beginning_balance + $earned_sl) - $used_sl;
                                   
                                   if($count_sl > 0){
                                     if($total_months > 11){
