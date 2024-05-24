@@ -6,4 +6,4 @@ End Time: {{$details['details']['end_time']}} <br>
 OT Requested (Hrs): {{intval((strtotime($details['details']['end_time'])-strtotime($details['details']['start_time']))/60/60)}} <br>
 Remarks: {{$details['details']['remarks']}} <br>
 Last Update: {{appFormatFullDate($details['details']['updated_at'])}} <br>
-Link: <a href="https://hris.pivi.com.ph/for-overtime">Click Here</a> <br>
+Link: <a href="https://hris.wsystem.online/for-overtime">Click Here</a> <br>

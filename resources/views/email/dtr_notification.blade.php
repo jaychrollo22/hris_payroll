@@ -6,4 +6,4 @@ End Time: {{ date('H:i', strtotime($details['details']['time_out'])) }} <br>
 Correction: {{$details['details']['correction']}} <br>
 Remarks: {{$details['details']['remarks']}} <br>
 Last Update: {{appFormatFullDate($details['details']['updated_at'])}} <br>
-Link: <a href="https://hris.pivi.com.ph/for-dtr-correction">Click Here</a> <br>
+Link: <a href="https://hris.wsystem.online/for-dtr-correction">Click Here</a> <br>

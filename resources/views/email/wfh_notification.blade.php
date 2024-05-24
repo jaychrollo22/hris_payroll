@@ -5,4 +5,4 @@ Start Time: {{ date('H:i', strtotime($details['details']['date_from'])) }} <br>
 End Time: {{ date('H:i', strtotime($details['details']['date_to'])) }} <br>
 Remarks: {{$details['details']['remarks']}} <br>
 Last Update: {{appFormatFullDate($details['details']['updated_at'])}} <br>
-Link: <a href="https://hris.pivi.com.ph/for-work-from-home">Click Here</a> <br>
+Link: <a href="https://hris.wsystem.online/for-work-from-home">Click Here</a> <br>
