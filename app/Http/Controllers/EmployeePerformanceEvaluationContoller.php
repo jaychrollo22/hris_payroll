@@ -758,6 +758,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $employee_ppr = EmployeePerformanceEvaluation::where('id', $id)->first();
         if($employee_ppr){
             $employee_ppr->level = 0;
+            $employee_ppr->status = 'For Review';
             $employee_ppr->save();
             return "Reset";
         }
