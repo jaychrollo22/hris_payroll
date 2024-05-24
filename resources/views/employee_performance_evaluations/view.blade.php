@@ -17,8 +17,8 @@
                                 <button class="btn btn-danger btn-sm float-right ml-2 mr-2" id="{{ $ppr['id'] }}" onclick="returnToDraft(this.id)">Return to Draft</button>
                             @endif
                         
-                            @if($ppr['level'] > 0 && $ppr['status'] == 'For Review')
-                                <button class="btn btn-secondary btn-sm float-right ml-2 mr-2" id="{{ $ppr['id'] }}" onclick="resetApprover(this.id)">Reset Approver</button>
+                            @if($ppr['level'] > 0 && ($ppr['status'] == 'For Review' || $ppr['status'] == 'Approved'))
+                                <button class="btn btn-secondary btn-sm float-right ml-2 mr-2" id="{{ $ppr['id'] }}" onclick="resetApprover(this.id)">Reset Approver Level</button>
                             @endif
                         @endif
                     </h4>
