@@ -321,6 +321,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $employee_performance_evaluation['summary_ratees_comments_recommendation'] = $ppr->summary_ratees_comments_recommendation;
         
         $employee_performance_evaluation['status'] = $ppr->status;
+        $employee_performance_evaluation['level'] = $ppr->level;
 
         return view('employee_performance_evaluations.view',array(
             'header' => 'employee_performance_evaluations',
@@ -749,6 +750,16 @@ class EmployeePerformanceEvaluationContoller extends Controller
         if($employee_ppr){
             $employee_ppr->delete();
             return "Deleted";
+        }
+    }
+
+    public function resetApprover(Request $request,$id){
+
+        $employee_ppr = EmployeePerformanceEvaluation::where('id', $id)->first();
+        if($employee_ppr){
+            $employee_ppr->level = 0;
+            $employee_ppr->save();
+            return "Reset";
         }
     }
 

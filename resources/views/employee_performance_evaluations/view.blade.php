@@ -16,7 +16,10 @@
                             @if($ppr['status'] != 'Draft')
                                 <button class="btn btn-danger btn-sm float-right ml-2 mr-2" id="{{ $ppr['id'] }}" onclick="returnToDraft(this.id)">Return to Draft</button>
                             @endif
-
+                        
+                            @if($ppr['level'] > 0 && $ppr['status'] == 'For Review')
+                                <button class="btn btn-secondary btn-sm float-right ml-2 mr-2" id="{{ $ppr['id'] }}" onclick="resetApprover(this.id)">Reset Approver</button>
+                            @endif
                         @endif
                     </h4>
                     <div class="table-responsive" id="contentToPrint">
@@ -859,8 +862,39 @@
 							}
 						})
 
-					} else {
-                        swal({text:"You stop the returned to Draft.",icon:"success"});
+					}
+				});
+		}
+
+        function resetApprover(id) {
+			var element = document.getElementById('tdActionId'+id);
+			var dataID = element.getAttribute('data-id');
+			swal({
+					title: "Are you sure?",
+					text: "You want to reset this PPR Approver Level?",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willCancel) => {
+					if (willCancel) {
+						document.getElementById("loader").style.display = "block";
+						$.ajax({
+							url: "/reset-ppr-approver/" + id,
+							method: "GET",
+							headers: {
+								'X-CSRF-TOKEN': '{{ csrf_token() }}'
+							},
+							success: function(data) {
+								document.getElementById("loader").style.display = "none";
+								swal("PPR has approver has been reset!", {
+									icon: "success",
+								}).then(function() {
+									location.reload();
+								});
+							}
+						})
+
 					}
 				});
 		}
