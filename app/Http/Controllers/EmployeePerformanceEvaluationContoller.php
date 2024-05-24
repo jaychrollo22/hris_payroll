@@ -59,7 +59,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $period_ppr = isset($request->period_ppr) ? $request->period_ppr : "";
 
         $status = $request->status ? $request->status : "";
-        $employee_performance_evaluation = EmployeePerformanceEvaluation::select('id','user_id','calendar_year','review_date','created_at','approved_by_date','period','status')
+        $employee_performance_evaluation = EmployeePerformanceEvaluation::select('id','user_id','calendar_year','review_date','created_at','approved_by_date','period','status','level')
                                                                                 ->with('user','employee')
                                                                                 ->when(!empty($status),function($q) use($status){
                                                                                     $q->where('status',$status);
