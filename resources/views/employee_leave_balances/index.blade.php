@@ -80,12 +80,9 @@
                                                 $earned_sl = checkEarnedLeave($employee->user_id,2,$employee->original_date_hired);
                                                 $earned_sil = checkEarnedLeave($employee->user_id,10,$employee->original_date_hired);
 
-                                                $date_from = new DateTime($employee->original_date_hired);
-                                                $date_diff = $date_from->diff(new DateTime(date('Y-m-d')));
-                                                $total_months = (($date_diff->y) * 12) + ($date_diff->m);
+                                              
 
-                                                $vl_beginning_balance = 0;
-                                                $sl_beginning_balance = 0;
+                                              
                                                 // if($total_months > 11){ //
                                                 
                                                 //     $original_date_hired_m_d = date('m-d',strtotime($employee->original_date_hired));
@@ -100,8 +97,8 @@
                                                 //     }
                                                 // }
                                                 // else{
-                                                //     $vl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,1);
-                                                //     $sl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,2);
+                                                    $vl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,1);
+                                                    $sl_beginning_balance = checkEmployeeLeaveCredits($employee->user_id,2);
                                                 // }
 
                                                 
