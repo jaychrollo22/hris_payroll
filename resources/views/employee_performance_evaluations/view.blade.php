@@ -14,7 +14,7 @@
                             <button class="btn btn-warning btn-sm float-right mr-2" id="{{ $ppr['id'] }}" onclick="deletePPR(this.id)">Delete PPR</button>
 
                             @if($ppr['status'] != 'Draft')
-                                <button class="btn btn-danger btn-sm float-right ml-2 mr-2" id="{{ $ppr['id'] }}" onclick="returnToDraft(this.id)">Return to Draft</button>
+                                <button class="btn btn-danger btn-sm float-right mr-2" id="{{ $ppr['id'] }}" onclick="returnToDraft(this.id)">Return to Draft</button>
                             @endif
                         
                             @if($ppr['level'] > 0 && ($ppr['status'] == 'For Review' || $ppr['status'] == 'Approved'))
