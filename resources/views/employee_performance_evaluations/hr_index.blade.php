@@ -160,6 +160,8 @@
                               @else
                                 @if ($eval->status == 'Declined')
                                   {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                @elseif ($eval->status == 'Draft')
+                                  {{$approver->approver_info ? $approver->approver_info->name : ""}}
                                 @else
                                   {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-warning mt-1">For Review</label>
                                 @endif
