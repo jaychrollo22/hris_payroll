@@ -31,15 +31,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('command:auto_get_attendance')->twiceDaily(8,20);
-        $schedule->command('command:auto_get_attendance_hik')->twiceDaily(8,20);
+        // $schedule->command('command:auto_get_attendance')->twiceDaily(8,20);
+        // $schedule->command('command:auto_get_attendance_hik')->twiceDaily(8,20);
 
         $schedule->command('command:leave_approval')->everyFiveMinutes();
         $schedule->command('command:official_business_approval')->everyFiveMinutes();
         $schedule->command('command:overtime_approval')->everyFiveMinutes();
         $schedule->command('command:work_from_home_approval')->everyFiveMinutes();
         $schedule->command('command:dtr_approval')->everyFiveMinutes();
-        $schedule->command('command:auto_earned_leave')->dailyAt('8:00');
+        // $schedule->command('command:auto_earned_leave')->dailyAt('8:00');
     }
 
     /**
