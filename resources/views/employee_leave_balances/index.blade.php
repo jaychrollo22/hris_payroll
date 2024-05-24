@@ -106,8 +106,8 @@
                                                 $total_sl = $sl_beginning_balance + $earned_sl;
 
                                             @endphp
-                                            Total VL : {{ ceil($total_vl) }} Used : {{$used_vl}} Remaining Balance : {{ ceil($total_vl) - $used_vl }} <br>
-                                            Total SL : {{ ceil($total_sl) }} Used : {{$used_sl}} Remaining Balance : {{ ceil($total_sl) - $used_sl }} <br> 
+                                            Total VL : {{ ($total_vl) }} Used : {{$used_vl}} Remaining Balance : {{ ($total_vl) - $used_vl }} <br>
+                                            Total SL : {{ ($total_sl) }} Used : {{$used_sl}} Remaining Balance : {{ ($total_sl) - $used_sl }} <br> 
 
 
                                         </td>
