@@ -382,6 +382,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('export-ppr','EmployeePerformanceEvaluationContoller@export');
 
+    //Self Assessment
+    Route::get('/take-performance-plan-review/{id}','EmployeePerformanceEvaluationContoller@take');
 
     //Employee Leave Type Balances
     Route::get('/employee-leave-type-balances','EmployeeLeaveTypeBalanceController@index');

@@ -187,7 +187,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
     public function create()
     {
 
-        // return redirect('/performance-plan-review');
+        return redirect('/performance-plan-review');
         
         $performance_plan_period = PerformancePlanPeriod::where('status','Active')->orderBy('created_at','DESC')->get();
         //  $performance_plan_period = [];
@@ -338,7 +338,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
      */
     public function edit($id)
     {
-        // return redirect('/performance-plan-review');
+        return redirect('/performance-plan-review');
 
         $performance_plan_period = PerformancePlanPeriod::where('status','Active')->orderBy('created_at','DESC')->get();
 
@@ -829,5 +829,70 @@ class EmployeePerformanceEvaluationContoller extends Controller
 
         }
         
+    }
+
+    public function take($id)
+    {
+        // return redirect('/performance-plan-review');
+
+        $performance_plan_period = PerformancePlanPeriod::where('status','Active')->orderBy('created_at','DESC')->get();
+
+        
+       $ppr = EmployeePerformanceEvaluation::with('approver.approver_info','user','employee.company','employee.department')
+                                                    ->where('user_id',Auth::user()->id)
+                                                    ->where('id',$id)
+                                                    ->first();
+       
+        // return $ppr->employee->company;
+        if($ppr){                                             
+            $employee_performance_evaluation = [];
+            $employee_performance_evaluation['id'] = $ppr->id;
+            $employee_performance_evaluation['calendar_year'] = $ppr->calendar_year;
+            $employee_performance_evaluation['review_date'] = $ppr->review_date;
+            $employee_performance_evaluation['period'] = $ppr->period;
+            $employee_performance_evaluation['financial_perspective'] = $ppr->financial_perspective ? json_decode($ppr->financial_perspective,true) : "";
+            $employee_performance_evaluation['customer_focus'] = $ppr->customer_focus ? json_decode($ppr->customer_focus,true) : "";
+            $employee_performance_evaluation['operation_efficiency'] = $ppr->operation_efficiency ? json_decode($ppr->operation_efficiency,true) : "";
+            $employee_performance_evaluation['people'] = $ppr->people ? json_decode($ppr->people,true) : "";
+            $employee_performance_evaluation['integrity'] = $ppr->integrity ? json_decode($ppr->integrity,true) : "";
+            $employee_performance_evaluation['commitment'] = $ppr->commitment ? json_decode($ppr->commitment,true) : "";
+            $employee_performance_evaluation['humility'] = $ppr->humility ? json_decode($ppr->humility,true) : "";
+            $employee_performance_evaluation['genuine_concern'] = $ppr->genuine_concern ? json_decode($ppr->genuine_concern,true) : "";
+            $employee_performance_evaluation['premium_service'] = $ppr->premium_service ? json_decode($ppr->premium_service,true) : "";
+            $employee_performance_evaluation['innovation'] = $ppr->innovation ? json_decode($ppr->innovation,true) : "";
+            $employee_performance_evaluation['synergy'] = $ppr->synergy ? json_decode($ppr->synergy,true) : "";
+            $employee_performance_evaluation['stewardship'] = $ppr->stewardship ? json_decode($ppr->stewardship,true) : "";
+            $employee_performance_evaluation['areas_of_strength'] = $ppr->areas_of_strength;
+            $employee_performance_evaluation['developmental_needs'] = $ppr->developmental_needs;
+            $employee_performance_evaluation['areas_for_enhancement'] = $ppr->areas_for_enhancement;
+            $employee_performance_evaluation['training_and_development_plans'] = $ppr->training_and_development_plans;
+            $employee_performance_evaluation['bsc_weight'] = $ppr->bsc_weight;
+            $employee_performance_evaluation['bsc_actual_score'] = $ppr->bsc_actual_score;
+            $employee_performance_evaluation['bsc_description'] = $ppr->bsc_description;
+            $employee_performance_evaluation['competency_weight'] = $ppr->competency_weight;
+            $employee_performance_evaluation['competency_actual_score'] = $ppr->competency_actual_score;
+            $employee_performance_evaluation['competency_description'] = $ppr->competency_description;
+            $employee_performance_evaluation['total_weight'] = $ppr->total_weight;
+            $employee_performance_evaluation['total_actual_score'] = $ppr->total_actual_score;
+
+
+            $employee_performance_evaluation['ratees_comments'] = $ppr->ratees_comments;
+            $employee_performance_evaluation['summary_ratees_comments_recommendation'] = $ppr->summary_ratees_comments_recommendation;
+            
+            $employee_performance_evaluation['status'] = $ppr->status;
+            $employee_performance_evaluation['is_version'] = $ppr->is_version;
+
+            // return $employee_performance_evaluation;
+            
+            return view('employee_performance_evaluations.take_self_assessment',array(
+                'header' => 'employee_performance_evaluations',
+                'ppr' => $employee_performance_evaluation,
+                'ppr_details' => $ppr,
+                'performance_plan_period' => $performance_plan_period
+            ));
+        }else{
+            Alert::warning('Not Allowed')->persistent('Dismiss');
+            return redirect('/performance-plan-review');
+        }
     }
 }
