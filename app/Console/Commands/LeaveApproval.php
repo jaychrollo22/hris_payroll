@@ -69,9 +69,13 @@ class LeaveApproval extends Command
                             ];
 
                             if(empty($employee_leave->mail_1)){
-                                $send_update = Mail::to($approver->approver_info->email)->send(new LeaveNotification($details));
-                                EmployeeLeave::where('id',$employee_leave->id)->update(['mail_1'=>1]);
-                                $count++;
+                                if($approver->approver_info->email != null)
+                                {
+                                    $send_update = Mail::to($approver->approver_info->email)->send(new LeaveNotification($details));
+                                    EmployeeLeave::where('id',$employee_leave->id)->update(['mail_1'=>1]);
+                                    $count++;
+                                }
+                            
                             }
                             
                         }
@@ -83,9 +87,13 @@ class LeaveApproval extends Command
                                 'details' => $employee_leave,
                             ];
                             if(empty($employee_leave->mail_2)){
+                                if($approver->approver_info->email != null)
+                                {
                                 $send_update = Mail::to($approver->approver_info->email)->send(new LeaveNotification($details));
                                 EmployeeLeave::where('id',$employee_leave->id)->update(['mail_2'=>1]);
                                 $count++;
+                                }
+                                
                             }
                         }
                     }
