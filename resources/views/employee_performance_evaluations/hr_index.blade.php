@@ -116,6 +116,16 @@
                         </select>
                       </div>
                     </div>
+                    <div class='col-md-2 mr-2'>
+                      <div class="form-group">
+                        <input type="date" name="change_from" class="form-control" value="{{$change_from}}" title="Change From">
+                      </div>
+                    </div>
+                    <div class='col-md-2 mr-2'>
+                      <div class="form-group">
+                        <input type="date" name="change_to" class="form-control" value="{{$change_to}}" title="Change To">
+                      </div>
+                    </div>
                     <div class='col-md-1'>
                       <button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
                     </div>

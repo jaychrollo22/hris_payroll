@@ -74,6 +74,8 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
             'REVIEW DATE',
             'REVIEW DATE TIME',
             'STATUS',
+            'MODIFIED AT',
+            'MODIFIED AT TIME',
         ];
     }
 
@@ -89,6 +91,9 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
 
         $date_filed = $ppr ? date('Y-m-d',strtotime($ppr['created_at']) ) : "";
         $date_filed_time = $ppr ? date('H:i:s A',strtotime($ppr['created_at']) ) : "";
+
+        $modified_at = $ppr ? date('Y-m-d',strtotime($ppr['updated_at']) ) : "";
+        $modified_at_time = $ppr ? date('H:i:s A',strtotime($ppr['updated_at']) ) : "";
 
         $calendar_year = $ppr ? $ppr['calendar_year'] : "";
         $period = $ppr ? $ppr['period'] : "";
@@ -183,6 +188,8 @@ class PprExport implements FromQuery, WithHeadings, WithMapping
             $review_date,
             $review_date_time,
             $status,
+            $modified_at,
+            $modified_at_time
         ];
 
     }

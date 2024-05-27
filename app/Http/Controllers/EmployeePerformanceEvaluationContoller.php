@@ -58,6 +58,9 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $performance_plan_period = isset($request->performance_plan_period) ? $request->performance_plan_period : "";
         $period_ppr = isset($request->period_ppr) ? $request->period_ppr : "";
 
+        $change_from = isset($request->change_from) ? date('Y-m-d',strtotime($request->change_from)) : "";
+        $change_to = isset($request->change_to) ? date('Y-m-d',strtotime($request->change_to)) : "";
+
         $status = $request->status ? $request->status : "";
         $employee_performance_evaluation = EmployeePerformanceEvaluation::select('id','user_id','calendar_year','review_date','created_at','approved_by_date','period','status','level')
                                                                                 ->with('user','employee')
@@ -83,6 +86,12 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                                                                 ->when(!empty($period_ppr),function($q) use($period_ppr){
                                                                                     $q->where('period',$period_ppr);
                                                                                 })
+                                                                                ->when(!empty($change_from),function($q) use($change_from){
+                                                                                    $q->whereDate('updated_at','>=',$change_from);
+                                                                                })
+                                                                                ->when(!empty($change_to),function($q) use($change_to){
+                                                                                    $q->whereDate('updated_at','<=',$change_to);
+                                                                                })
                                                                                 ->whereHas('employee',function($q) use($allowed_companies){
                                                                                     $q->whereIn('company_id',$allowed_companies)
                                                                                         ->where('status','Active');
@@ -103,6 +112,12 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                 ->when(!empty($performance_plan_period),function($q) use($performance_plan_period){
                                     $q->where('calendar_year',$performance_plan_period);
                                 })
+                                ->when(!empty($change_from),function($q) use($change_from){
+                                    $q->whereDate('updated_at','>=',$change_from);
+                                })
+                                ->when(!empty($change_to),function($q) use($change_to){
+                                    $q->whereDate('updated_at','<=',$change_to);
+                                })
                                 ->where('status','Draft')
                                 ->count();
 
@@ -118,6 +133,12 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                 })
                                 ->when(!empty($performance_plan_period),function($q) use($performance_plan_period){
                                     $q->where('calendar_year',$performance_plan_period);
+                                })
+                                ->when(!empty($change_from),function($q) use($change_from){
+                                    $q->whereDate('updated_at','>=',$change_from);
+                                })
+                                ->when(!empty($change_to),function($q) use($change_to){
+                                    $q->whereDate('updated_at','<=',$change_to);
                                 })
                                 ->where('status','For Review')
                                 ->count();
@@ -135,6 +156,12 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                 ->when(!empty($performance_plan_period),function($q) use($performance_plan_period){
                                     $q->where('calendar_year',$performance_plan_period);
                                 })
+                                ->when(!empty($change_from),function($q) use($change_from){
+                                    $q->whereDate('updated_at','>=',$change_from);
+                                })
+                                ->when(!empty($change_to),function($q) use($change_to){
+                                    $q->whereDate('updated_at','<=',$change_to);
+                                })
                                 ->where('status','Approved')
                                 ->count();
 
@@ -150,6 +177,12 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                 })
                                 ->when(!empty($performance_plan_period),function($q) use($performance_plan_period){
                                     $q->where('calendar_year',$performance_plan_period);
+                                })
+                                ->when(!empty($change_from),function($q) use($change_from){
+                                    $q->whereDate('updated_at','>=',$change_from);
+                                })
+                                ->when(!empty($change_to),function($q) use($change_to){
+                                    $q->whereDate('updated_at','<=',$change_to);
                                 })
                                 ->where('status','Declined')
                                 ->count();
@@ -173,7 +206,9 @@ class EmployeePerformanceEvaluationContoller extends Controller
             'draft' => $draft,
             'for_approval' => $for_approval,
             'approved' => $approved,
-            'declined' => $declined
+            'declined' => $declined,
+            'change_from' => $change_from,
+            'change_to' => $change_to
         ));
 
 
