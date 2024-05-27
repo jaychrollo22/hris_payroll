@@ -68,9 +68,12 @@ class OfficialBusinessApproval extends Command
                                 'details' => $employee_ob,
                             ];
                             if(empty($employee_ob->mail_1)){
+                                if($approver->approver_info->email != null)
+                                {
                                 $send_update = Mail::to($approver->approver_info->email)->send(new OfficialBusinessNotification($details));
                                 EmployeeOb::where('id',$employee_ob->id)->update(['mail_1'=>1]);
                                 $count++;
+                                }
                             }
                         }
                         
@@ -81,9 +84,12 @@ class OfficialBusinessApproval extends Command
                                 'details' => $employee_ob,
                             ];
                             if(empty($employee_ob->mail_2)){
+                                if($approver->approver_info->email != null)
+                                {
                                 $send_update = Mail::to($approver->approver_info->email)->send(new OfficialBusinessNotification($details));
                                 EmployeeOb::where('id',$employee_ob->id)->update(['mail_2'=>1]);
                                 $count++;
+                                }
                             }
                         }
                     }

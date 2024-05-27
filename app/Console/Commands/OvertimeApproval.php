@@ -68,9 +68,12 @@ class OvertimeApproval extends Command
                                 'details' => $employee_overtime,
                             ];
                             if(empty($employee_overtime->mail_1)){
+                                if($approver->approver_info->email != null)
+                                {
                                 $send_update = Mail::to($approver->approver_info->email)->send(new OvertimeNotification($details));
                                 EmployeeOvertime::where('id',$employee_overtime->id)->update(['mail_1'=>1]);
                                 $count++;
+                                }
                             }
                         }
                         
@@ -81,9 +84,12 @@ class OvertimeApproval extends Command
                                 'details' => $employee_overtime,
                             ];
                             if(empty($employee_overtime->mail_2)){
+                                if($approver->approver_info->email != null)
+                                {
                                 $send_update = Mail::to($approver->approver_info->email)->send(new OvertimeNotification($details));
                                 EmployeeOvertime::where('id',$employee_overtime->id)->update(['mail_2'=>1]);
                                 $count++;
+                                }
                             }
                         }
                     }
