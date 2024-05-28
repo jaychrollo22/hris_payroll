@@ -4,7 +4,7 @@ return [
     'name' => 'WPro',
     'manifest' => [
         'name' => env('APP_NAME', 'WPro'),
-        'short_name' => 'EDMS',
+        'short_name' => 'WPro',
         'start_url' => '/',
         'background_color' => '#ffffff',
         'theme_color' => '#000000',
@@ -59,9 +59,9 @@ return [
         ],
         'shortcuts' => [
             [
-                'name' => 'EDMS',
-                'description' => 'EDMS',
-                'url' => '175.18.72.121',
+                'name' => 'WPro',
+                'description' => 'WPro',
+                'url' => 'hris.wsyste.online',
                 'icons' => [
                     "src" => "/images/icons/icon-72x72.png",
                     "purpose" => "any"
