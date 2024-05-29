@@ -131,7 +131,10 @@ class EmployeeOvertimeExport implements FromQuery, WithHeadings, WithMapping
     }
 
     public function isRH( $date ) {
-        $regular_holiday = Holiday::where('holiday_type','Legal Holiday')
+        $regular_holiday = Holiday::where(function($q){
+                                        $q->where('holiday_type','Legal Holiday')
+                                            ->orWhere('holiday_type','Regular Holiday');
+                                    })
                                     ->where('holiday_date',date('Y-m-d',strtotime($date)))
                                     ->first();
         $check = '0';
