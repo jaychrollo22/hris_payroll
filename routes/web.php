@@ -332,6 +332,8 @@ Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');
 Route::post('upload-employee-rate', 'EmployeeController@reverseRate');
 
+Route::get('leave-credit-acc','EmployeeEarnedLeaveController@addLeave');
+
 Route::get('hik-logs', function(){
     return HikAttLog2::orderBy('authDate')->get()->take(5);
 });

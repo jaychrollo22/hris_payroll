@@ -98,7 +98,61 @@ class EmployeeEarnedLeaveController extends Controller
             'earned_leaves' => $leave_earned_leaves,
         ));
     }
+    public function addLeave()
+    {
+        $employees = Employee::where('status','Active')->whereHas('employee_leave_credits')->get();
 
+      
+        $f_d = date('Y-m-01');
+        $f_t = date('Y-m-t');
+        // dd($f_t);
+
+        $datetime1_d = new DateTime($f_d);
+        $datetime2_d = new DateTime($f_t);
+        $interval_d = $datetime1_d->diff($datetime2_d);
+        $days_d = $interval_d->format('%a')+1;
+        $year = date('Y');
+        $month = date('m');
+        $day = "01";
+        foreach($employees as $employee)
+        {
+            $leave_credits = ($employee->employee_leave_credits)->where('leave_type',1)->first();
+            if($leave_credits != null)
+            {
+                $fdate = date('Y-m-01');
+                $tdate = date('Y-01-01');
+                if($employee->date_regularized != null)
+                {
+                    $tdate = $employee->date_regularized;
+                }
+                
+                $datetime1 = new DateTime($fdate);
+                $datetime2 = new DateTime($tdate);
+                $interval = $datetime1->diff($datetime2);
+                $days = $interval->format('%a');
+                $leave_c = ($leave_credits->count/$days)*$days_d;
+                $check_if_exist_vl = EmployeeEarnedLeave::where('user_id',$employee->user_id)
+                ->where(function($q) use($month,$year){
+                    $q->whereMonth('earned_date',$month)
+                    ->whereYear('earned_date',$year);
+                })
+                ->where('leave_type',1)
+                ->first();                
+               
+                if(empty($check_if_exist_vl)){
+                $earned_leave = new EmployeeEarnedLeave;
+                $earned_leave->leave_type = 1; // Vacation Leave
+                $earned_leave->user_id = $employee->user_id;
+                $earned_leave->earned_day = $day;
+                $earned_leave->earned_month = $month;
+                $earned_leave->earned_year = $year;
+                $earned_leave->earned_date = date('Y-m-d');
+                $earned_leave->earned_leave = $leave_c;
+                $earned_leave->save();
+                }
+            }
+        }
+    }
     public function manual_store(Request $request){
 
         $this->validate($request, [
