@@ -353,27 +353,27 @@ function checkUsedSLVLSILLeave($user_id,$leave_type,$date_hired){
 function checkEarnedLeave($user_id,$leave_type,$date_hired){
 
     //Get From Last Year Earned
-    if($date_hired){
-        $today  = date('Y-m-d');
-        $date_hired_md = date('m-d',strtotime($date_hired));
-        $date_hired_m = date('m',strtotime($date_hired));
-        $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
-        $this_year = date('Y');
+    // if($date_hired){
+    //     $today  = date('Y-m-d');
+    //     $date_hired_md = date('m-d',strtotime($date_hired));
+    //     $date_hired_m = date('m',strtotime($date_hired));
+    //     $last_year = date('Y', strtotime('-1 year', strtotime($today)) );
+    //     $this_year = date('Y');
 
-        $date_hired_this_year = $this_year . '-'. $date_hired_md;
-        $date_hired_last_year = $last_year . '-'. $date_hired_md;
+    //     $date_hired_this_year = $this_year . '-'. $date_hired_md;
+    //     $date_hired_last_year = $last_year . '-'. $date_hired_md;
 
-        if($today >= $date_hired_this_year){ //if Date hired meets todays date get earned leaves from last year to this year date_hired
-            $date_hired_this_minus_1_month = date('Y-m-d', strtotime('-1 month', strtotime($date_hired_this_year)) );
+    //     if($today >= $date_hired_this_year){ //if Date hired meets todays date get earned leaves from last year to this year date_hired
+    //         $date_hired_this_minus_1_month = date('Y-m-d', strtotime('-1 month', strtotime($date_hired_this_year)) );
             return $vl_earned = EmployeeEarnedLeave::where('user_id',$user_id)
                                                         ->where('leave_type',$leave_type)
                                                         ->whereNull('converted_to_cash')
-                                                        ->whereBetween('earned_date', [$date_hired_last_year, $date_hired_this_minus_1_month])
+                                                        // ->whereBetween('earned_date', [$date_hired_last_year, $date_hired_this_minus_1_month])
                                                         ->sum('earned_leave');
-        }else{
-            return 0;
-        }
-    }
+        // }else{
+        //     return 0;
+        // }
+    // }
 
     
     
