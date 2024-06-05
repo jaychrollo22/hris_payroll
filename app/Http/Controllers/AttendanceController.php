@@ -407,6 +407,7 @@ class AttendanceController extends Controller
     public function store_logs(Request $request)
     {
         ini_set('memory_limit', '-1');
+        $attendance = [];
        foreach($request->data as $req)
        {
             
