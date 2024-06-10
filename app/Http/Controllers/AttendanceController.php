@@ -505,4 +505,15 @@ class AttendanceController extends Controller
         return array('id' => 0);
     
     }
+    public function devices()
+    {
+        $devices = AttendanceLog::with('attendance')->groupBy('ip_address')->select('ip_address')->get();
+
+        return view('attendances.devices',
+        array(
+            'devices' => $devices,
+        )
+        );
+        return $devices;
+    }
 }
