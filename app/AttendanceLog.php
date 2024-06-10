@@ -13,6 +13,6 @@ class AttendanceLog extends Model
     }
     public function attendance()
     {
-        return $this->hasOne(AttendanceLog::class,'ip_address','ip_address')->orderBy('datetime','desc');
+        return $this->hasOne(AttendanceLog::class,'ip_address','ip_address')->latest();
     }
 }

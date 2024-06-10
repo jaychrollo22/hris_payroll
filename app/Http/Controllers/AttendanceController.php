@@ -507,6 +507,7 @@ class AttendanceController extends Controller
     }
     public function devices()
     {
+        ini_set('memory_limit', '-1');
         $devices = AttendanceLog::with('attendance')->groupBy('ip_address')->select('ip_address')->get();
 
         return view('attendances.devices',
@@ -514,6 +515,5 @@ class AttendanceController extends Controller
             'devices' => $devices,
         )
         );
-        return $devices;
     }
 }
