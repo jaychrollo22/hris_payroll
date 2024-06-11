@@ -29,7 +29,7 @@ class DepartmentController extends Controller
         $new_department->status = 1;
         $new_department->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
     public function disable_department($id)
@@ -61,7 +61,7 @@ class DepartmentController extends Controller
         $new_department->code = $request->code;
         $new_department->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return redirect('/department');
         
     }

@@ -36,7 +36,7 @@ class EmployeeCompanyController extends Controller
                 $newEmpGroup->emp_code = $emp_code;
                 $newEmpGroup->company_id = $request->company;
                 $newEmpGroup->save();
-                Alert::success('Successfully Store')->persistent('Dismiss');
+                Alert::success('Successfully Stored')->persistent('Dismiss');
             }
         }
 

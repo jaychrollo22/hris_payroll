@@ -44,7 +44,7 @@ class EmployeeIncentiveController extends Controller
         $employeeAllowances->status = 'Active';
         $employeeAllowances->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
     public function disable($id)

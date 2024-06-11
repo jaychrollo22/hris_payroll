@@ -41,7 +41,7 @@ class HolidayController extends Controller
         $new_holiday->location = $request->location;
         $new_holiday->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
     

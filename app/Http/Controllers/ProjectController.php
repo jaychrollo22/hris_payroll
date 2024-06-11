@@ -53,7 +53,7 @@ class ProjectController extends Controller
         $project->company_id = $request->company_id;
         $project->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
 
@@ -101,7 +101,7 @@ class ProjectController extends Controller
         $project->company_id = $request->company_id;
         $project->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return redirect('/project');
     }
 

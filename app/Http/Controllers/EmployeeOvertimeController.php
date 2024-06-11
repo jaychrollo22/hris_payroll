@@ -86,7 +86,7 @@ class EmployeeOvertimeController extends Controller
             $new_overtime->created_by = Auth::user()->id;
             $new_overtime->save();
 
-            Alert::success('Successfully Store')->persistent('Dismiss');
+            Alert::success('Successfully Stored')->persistent('Dismiss');
             return back();
         // }else{
         //     Alert::warning('Overtime Application is already exist.')->persistent('Dismiss');

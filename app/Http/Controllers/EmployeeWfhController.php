@@ -81,7 +81,7 @@ class EmployeeWfhController extends Controller
         //     $new_wfh_task->save();
         // }        
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }   
     

@@ -49,7 +49,7 @@ class LocationController extends Controller
         $location->location = $request->location;
         $location->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
 
@@ -93,7 +93,7 @@ class LocationController extends Controller
         $location->location = $request->location;
         $location->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return redirect('/location');
     }
 

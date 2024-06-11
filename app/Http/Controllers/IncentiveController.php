@@ -28,7 +28,7 @@ class IncentiveController extends Controller
         $new_Incentive->status = 'Active';
         $new_Incentive->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
     public function update(Request $request, $id)

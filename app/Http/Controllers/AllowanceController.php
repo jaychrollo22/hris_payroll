@@ -30,7 +30,7 @@ class AllowanceController extends Controller
         $new_allowance->status = 'Active';
         $new_allowance->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
     public function edit_allowance(Request $request, $id)

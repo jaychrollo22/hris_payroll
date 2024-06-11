@@ -23,7 +23,7 @@ class LoanTypeController extends Controller
         $loanTypes->loan_name = $request->loan_name;
         $loanTypes->status = 'Active';
         $loanTypes->save();
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
     public function disable_loanType($id)

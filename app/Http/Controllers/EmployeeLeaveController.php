@@ -141,7 +141,7 @@ class EmployeeLeaveController extends Controller
                 $new_leave->created_by = Auth::user()->id;
                 $new_leave->save();
 
-                Alert::success('Successfully Store')->persistent('Dismiss');
+                Alert::success('Successfully Stored')->persistent('Dismiss');
                 return back();
             }else{
                 Alert::warning('Insufficient Balance. Please try again.')->persistent('Dismiss');
@@ -174,7 +174,7 @@ class EmployeeLeaveController extends Controller
             $new_leave->created_by = Auth::user()->id;
             $new_leave->save();
 
-            Alert::success('Successfully Store')->persistent('Dismiss');
+            Alert::success('Successfully Stored')->persistent('Dismiss');
             return back();
         }
 

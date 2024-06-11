@@ -48,7 +48,7 @@ class ScheduleController extends Controller
       
 
 
-        Alert::success('Successfully Store Schedule')->persistent('Dismiss');
+        Alert::success('Successfully Stored Schedule')->persistent('Dismiss');
         return back();
 
     }

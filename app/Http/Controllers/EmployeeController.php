@@ -1753,7 +1753,7 @@ class EmployeeController extends Controller
         $new_emp->deleted = 0;
         $new_emp->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
 

@@ -73,7 +73,7 @@ class EmployeeAllowanceController extends Controller
         $employeeAllowances->status = 'Active';
         $employeeAllowances->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
     public function update(Request $request, $id)
@@ -89,7 +89,7 @@ class EmployeeAllowanceController extends Controller
         $employeeAllowances->status = 'Active';
         $employeeAllowances->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return redirect('/employee-allowance');
     }
     public function disable($id)

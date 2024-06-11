@@ -61,7 +61,7 @@ class LoanController extends Controller
         $loans->expiry_date = $request->expiry_date;
         $loans->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
     public function loan_report()

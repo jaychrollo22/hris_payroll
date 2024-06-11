@@ -49,7 +49,7 @@ class CompanyController extends Controller
 
         $new_company->save();
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
 }

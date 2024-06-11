@@ -238,7 +238,7 @@ class EmployeeEarnedLeaveController extends Controller
             }
         }
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return redirect('/manual-employee-earned-leaves?user_id=' .$request->user_id . '&date_from=' . $request->from . '&date_to=' . $request->to);
     }
 

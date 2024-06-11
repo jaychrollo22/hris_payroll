@@ -95,7 +95,7 @@ class LeaveCreditsController extends Controller
             $leave_credit->save();
         }
 
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     }
 }

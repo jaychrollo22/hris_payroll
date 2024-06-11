@@ -70,7 +70,7 @@ class EmployeeObController extends Controller
         $new_ob->created_by = Auth::user()->id;
         $new_ob->save();
     
-        Alert::success('Successfully Store')->persistent('Dismiss');
+        Alert::success('Successfully Stored')->persistent('Dismiss');
         return back();
     } 
     
