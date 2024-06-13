@@ -492,8 +492,6 @@
                             </ul>
                         </div>
                     </li>
-                    @endif
-
                     <li class="nav-item @if ($header == 'Payroll') active @endif">
                         <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
                             <i class="icon-align-center menu-icon"></i>
@@ -508,6 +506,9 @@
                             </ul>
                         </div>
         </li>
+                    @endif
+
+                    
         @if (checkUserPrivilege('masterfiles_companies',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_departments',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes')
         <li class="nav-item @if ($header == 'masterfiles') active @endif">
             <a class="nav-link" data-toggle="collapse" href="#masterfiles" aria-expanded="false" aria-controls="ui-basic">
