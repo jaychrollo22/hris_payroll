@@ -72,8 +72,8 @@
                                         <td colspan='5'>{{$emp->emp_code}} - {{$emp->first_name}} {{$emp->last_name}}</td>
                                     </tr> --}}
                                     <tr>
-                                        <td>User ID</td>
-                                        {{-- <td>Biometric ID</td> --}}
+                                        <td>Employee ID</td>
+                                        <td>Schedule</td>
                                         <td>Name</td>
                                         <td>Date</td>
                                         <td>Time In</td>
@@ -110,8 +110,11 @@
                                         $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
                                     @endphp
                                     <tr>
-                                        <td>{{$emp->employee_number}}</td>
+                                        <td>{{$emp->employee_code}}</td>
                                         <td>{{$emp->first_name . ' ' . $emp->last_name}}</td>
+                                        <td> @if($employee_schedule)
+                                            <small>{{$emp->schedule_info->schedule_name}}</small>
+                                        @endif</td>
                                         <td class="@if($employee_schedule) @else bg-danger text-white @endif">{{date('d/m/Y',strtotime($date_r))}}</td>
 
                                         @php
