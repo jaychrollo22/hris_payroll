@@ -480,7 +480,7 @@
                         </a>
                         <div class="collapse @if ($header == 'settings') show @endif" id="settings">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"> <a class="nav-link" href="{{ url('/holidays') }}">Holidays</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/holidays') }}">Holidays123</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/schedules') }}">Schedules</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/allowances') }}">Allowances</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/incentives') }}">Incentives</a></li>
