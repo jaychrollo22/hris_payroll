@@ -141,7 +141,7 @@
     </div>
     <div class="page_break"></div>
     <div class="container"  style='height:100%;'>
-        <img  src="{{asset('/images/CCCBack.jpg')}}" width="100%" height="100%"/> 
+        <img  src="{{asset('/images/MRDCBack2.jpg')}}" width="100%" height="100%"/> 
         <div class="qr-code" ><img src="data:image/png;base64, {!! base64_encode(QrCode::format('svg')->size(200)->errorCorrection('H')->generate('https://hris.wsystem.online/calling-card/'.$employee->employee_code)) !!}"></div>
     </div>
 </body>
