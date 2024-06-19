@@ -415,10 +415,17 @@
 
                     @if (checkUserPrivilege('timekeeping_dashboard',auth()->user()->id) == 'yes')
                     <li class="nav-item @if ($header == 'Timekeeping') active @endif">
-                        <a class="nav-link" href="{{ url('/timekeeping-dashboard') }}" onclick='show()'>
+                        <a class="nav-link" data-toggle="collapse" href="#Timekeeping" aria-expanded="@if ($header == 'Timekeeping') true @else false @endif" aria-controls="ui-basic">
                             <i class="icon-grid menu-icon"></i>
                             <span class="menu-title">Timekeeping</span>
+                            <i class="menu-arrow"></i>
                         </a>
+                        <div class="collapse @if ($header == 'Timekeeping') show @endif" id="Timekeeping">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/timekeeping-dashboard') }}">Timekeeping</a></li>
+                                <li class="nav-item"> <a class="nav-link" href="{{ url('/generated-timekeeping') }}">Generated Timekeeping</a></li>
+                            </ul>
+                        </div>
                     </li>
                     @endif
 

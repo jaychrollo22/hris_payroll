@@ -215,4 +215,15 @@ class PayslipController extends Controller
             
         ));
     }
+    public function generatedAttendances(Request $request)
+    {
+        $attendances =  AttSummary::orderBy('employee','asc')->get();
+        return view('payroll.timekeeping',
+        array(
+            'header' => 'Timekeeping',
+            'attendances' => $attendances,
+            'attendances' => $attendances,
+            
+        ));
+    }
 }
