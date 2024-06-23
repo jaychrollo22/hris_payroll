@@ -367,6 +367,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/show-performance-plan-review/{id}','EmployeePerformanceEvaluationContoller@show');
     Route::get('/for-performance-plan','EmployeePerformanceEvaluationContoller@performance_plan_approval');
 
+
+    Route::post('/save-ppr-score/{id}','EmployeePerformanceEvaluationContoller@save_ppr_score');
+    // Route::get('/submit-self-assessment-for-posting/{id}','EmployeePerformanceEvaluationContoller@self_assessment_for_posting');
+
     Route::post('approve-ppr/{id}','EmployeePerformanceEvaluationContoller@approvePpr');
     Route::post('decline-ppr/{id}','EmployeePerformanceEvaluationContoller@declinePpr');
     Route::post('approve-ppr-all','EmployeePerformanceEvaluationContoller@approvePprAll');
@@ -378,12 +382,17 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('return-to-draft-all','EmployeePerformanceEvaluationContoller@returnToDraftAll');
 
-    Route::get('reset-ppr-approver/{id}','EmployeePerformanceEvaluationContoller@resetApprover');
+    Route::get('reset-ppr-approver/{id}','EmployeePerformancefEvaluationContoller@resetApprover');
 
     Route::get('export-ppr','EmployeePerformanceEvaluationContoller@export');
 
     //Self Assessment
     Route::get('/take-performance-plan-review/{id}','EmployeePerformanceEvaluationContoller@take');
+
+
+    //Managers Assessment
+    Route::get('/for-performance-review','EmployeePerformanceEvaluationContoller@for_approval_review');
+    Route::get('/managers-performance-evaluation/{id}','EmployeePerformanceEvaluationContoller@managers_assessment');
 
     //Employee Leave Type Balances
     Route::get('/employee-leave-type-balances','EmployeeLeaveTypeBalanceController@index');
