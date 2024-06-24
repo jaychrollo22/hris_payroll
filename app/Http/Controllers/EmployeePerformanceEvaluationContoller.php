@@ -929,33 +929,33 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $ppr = EmployeePerformanceEvaluation::where('id',$id)->first();
 
         if($ppr){   
-            
-                $ppr->period = $request->period;
-                $ppr->financial_perspective = $request->financial_perspective ? json_encode($request->financial_perspective,true) : "";
-                $ppr->customer_focus = $request->customer_focus ? json_encode($request->customer_focus,true) : "";
-                $ppr->operation_efficiency = $request->operation_efficiency ? json_encode($request->operation_efficiency,true) : "";
-                $ppr->people = $request->people ? json_encode($request->people,true) : "";
-                $ppr->integrity = $request->integrity ? json_encode($request->integrity,true) : "";
-                $ppr->commitment = $request->commitment ? json_encode($request->commitment,true) : "";
-                $ppr->humility = $request->humility ? json_encode($request->humility,true) : "";
-                $ppr->genuine_concern = $request->genuine_concern ? json_encode($request->genuine_concern,true) : "";
-                $ppr->premium_service = $request->premium_service ? json_encode($request->premium_service,true) : "";
-                $ppr->innovation = $request->innovation ? json_encode($request->innovation,true) : "";
-                $ppr->synergy = $request->synergy ? json_encode($request->synergy,true) : "";
-                $ppr->stewardship = $request->stewardship ? json_encode($request->stewardship,true) : "";
+                if($request->method == 'Manager Assessment' || $request->method == 'Self Assessment'){
+                    $ppr->period = $request->period;
+                    $ppr->financial_perspective = $request->financial_perspective ? json_encode($request->financial_perspective,true) : "";
+                    $ppr->customer_focus = $request->customer_focus ? json_encode($request->customer_focus,true) : "";
+                    $ppr->operation_efficiency = $request->operation_efficiency ? json_encode($request->operation_efficiency,true) : "";
+                    $ppr->people = $request->people ? json_encode($request->people,true) : "";
+                    $ppr->integrity = $request->integrity ? json_encode($request->integrity,true) : "";
+                    $ppr->commitment = $request->commitment ? json_encode($request->commitment,true) : "";
+                    $ppr->humility = $request->humility ? json_encode($request->humility,true) : "";
+                    $ppr->genuine_concern = $request->genuine_concern ? json_encode($request->genuine_concern,true) : "";
+                    $ppr->premium_service = $request->premium_service ? json_encode($request->premium_service,true) : "";
+                    $ppr->innovation = $request->innovation ? json_encode($request->innovation,true) : "";
+                    $ppr->synergy = $request->synergy ? json_encode($request->synergy,true) : "";
+                    $ppr->stewardship = $request->stewardship ? json_encode($request->stewardship,true) : "";
 
-                $ppr->bsc_weight = $request->bsc_weight;
-                $ppr->bsc_actual_score = $request->bsc_actual_score;
-                $ppr->bsc_description = $request->bsc_description;
-                $ppr->competency_weight = $request->competency_weight;
-                $ppr->competency_actual_score = $request->competency_actual_score;
-                $ppr->competency_description = $request->competency_description;
-                $ppr->competency_actual_score = $request->competency_actual_score;
+                    $ppr->bsc_weight = $request->bsc_weight;
+                    $ppr->bsc_actual_score = $request->bsc_actual_score;
+                    $ppr->bsc_description = $request->bsc_description;
+                    $ppr->competency_weight = $request->competency_weight;
+                    $ppr->competency_actual_score = $request->competency_actual_score;
+                    $ppr->competency_description = $request->competency_description;
+                    $ppr->competency_actual_score = $request->competency_actual_score;
 
-
-                $ppr->total_weight = $request->total_weight;
-                $ppr->total_actual_score = $request->total_actual_score;
-                $ppr->save();
+                    $ppr->total_weight = $request->total_weight;
+                    $ppr->total_actual_score = $request->total_actual_score;
+                    $ppr->save();
+                }
 
                 //Save Assessment Score
                 $ppr_score = EmployeePerformanceEvaluationScore::where('employee_performance_evaluation_id' , $ppr->id)->first();
@@ -993,6 +993,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
                         $ppr_score->manager_assessment_bsc_wtd_rating = $request->manager_assessment_bsc_wtd_rating;
                         $ppr_score->manager_assessment_bsc_actual_score = $request->manager_assessment_bsc_actual_score;
                         $ppr_score->manager_assessment_competency_actual_score = $request->manager_assessment_competency_actual_score;
+                        $ppr_score->manager_assessment_competency_wtd_rating = $request->manager_assessment_competency_wtd_rating;
                         $ppr_score->manager_equivalent_rating_description = $request->manager_equivalent_rating_description;
 
                         if($request->post_value == '1'){
