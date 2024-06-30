@@ -1590,7 +1590,17 @@
                                             <td colspan="2" align="center" style="background-color: rgb(240, 240, 240)"><strong>RATEE'S COMMENTS</strong></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2" align="center"><textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea></td>
+                                            <td colspan="2" align="center">
+                                                @if($method == "Employee Acceptance" && $ppr_details['ppr_score'])
+                                                    @if($ppr_details['ppr_score']['user_acceptance'] == 1)
+                                                        <textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" readonly @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
+                                                    @else
+                                                        <textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
+                                                    @endif
+                                                @else
+                                                    <textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
+                                                @endif
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td colspan="2" align="center" height="100px">I hereby certify that the performance review/ evaluation as summarized above has been meaningfully discused with me, by my Immediate Superior on the date indicated herein based on our agreed set goals and job objectives.</td>
@@ -1707,6 +1717,8 @@
                                     @endif
                                 @else
                                     <button type="submit" class="btn btn-primary">Submit Changes</button>
+                                    <input type="hidden" id="postValue" name="post_value">
+                                    <span id="{{ $ppr['id'] }}" onclick="submitForPosting(this.id)" class="btn btn-success">Save and Submit</span>
                                 @endif
                                 
                             </div>
