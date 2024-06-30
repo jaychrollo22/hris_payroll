@@ -359,10 +359,28 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $employee_performance_evaluation['status'] = $ppr->status;
         $employee_performance_evaluation['level'] = $ppr->level;
 
+        $ppr_score = $ppr->ppr_score;
+
         return view('employee_performance_evaluations.view',array(
             'header' => 'employee_performance_evaluations',
             'ppr' => $employee_performance_evaluation,
             'ppr_details' => $ppr,
+            'ppr_score' => $ppr_score,
+        ));
+    }
+
+    public function summary_of_ratings($id)
+    {
+
+        $ppr = EmployeePerformanceEvaluation::with('approver.approver_info','user','employee.company','employee.department')->where('id',$id)->first();
+
+        $ppr_score = $ppr->ppr_score;
+        
+        return view('employee_performance_evaluations.summary_of_ratings',array(
+            'header' => 'employee_performance_evaluations',
+            'ppr' => $ppr,
+            'ppr_details' => $ppr,
+            'ppr_score' => $ppr_score,
         ));
     }
 

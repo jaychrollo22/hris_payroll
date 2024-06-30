@@ -394,6 +394,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/for-performance-review','EmployeePerformanceEvaluationContoller@for_approval_review');
     Route::get('/managers-performance-evaluation/{id}','EmployeePerformanceEvaluationContoller@managers_assessment');
 
+    Route::get('/summary-of-ratings/{id}','EmployeePerformanceEvaluationContoller@summary_of_ratings');
+
     //Employee Leave Type Balances
     Route::get('/employee-leave-type-balances','EmployeeLeaveTypeBalanceController@index');
     Route::post('/new-employee-leave-type-balance','EmployeeLeaveTypeBalanceController@store');

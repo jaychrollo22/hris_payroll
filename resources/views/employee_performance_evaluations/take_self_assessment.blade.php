@@ -1395,7 +1395,7 @@
                                             {{-- 4 --}}
                                             <tr>
                                                 <td rowspan="3" class="text-center text-dark">4. GENUINE CONCERN - Ability to enrich the lives of people</td>
-                                                <td class="text-center text-dark">Understand, assists and cares for the feelings and well-being (e.g. happy and safe, feel at ease and at home) of co-workers,  without hesitation or pretensions, directed by  his/ her attentiveness and sensitivety of their needs, difficulties, and changes in the mood of a room or emotions of those around.</td>
+                                                <td class="text-center text-dark">Understand, assists and cares for the feelings and well-being (e.g. happy and safe, feel at ease and at home) of co-workers, without hesitation or pretensions, directed by his/ her attentiveness and sensitivity of their needs, difficulties, and changes in the mood of a room or emotions of those around.</td>
                                                 <td class="text-center text-dark">0.42</td>
                                                 <td class="text-center text-dark"><input type="number" class="text-align-center" name="genuine_concern[self_rating_1]" id="genuine_concern[self_rating_1]" value="{{isset($ppr['genuine_concern']) ? $ppr['genuine_concern']['self_rating_1'] : ""}}" min="1" max="4" onkeyup="computeSelfRatingCompetency()" @if($enable_edit == false) readonly @endif></td>
                                                 <td class="text-center text-dark"><input type="number" class="text-align-center" name="genuine_concern[superios_rating_1]" id="genuine_concern[superios_rating_1]" value="{{isset($ppr['genuine_concern']) ? $ppr['genuine_concern']['superios_rating_1'] : ""}}" min="1" max="5" onkeyup="computeActualRatingCompetency()" @if($enable_edit_approver  == false) readonly @endif></td>
@@ -1591,6 +1591,9 @@
                                         </tr>
                                         <tr>
                                             <td colspan="2" align="center"><textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" align="center" height="100px">I hereby certify that the performance review/ evaluation as summarized above has been meaningfully discused with me, by my Immediate Superior on the date indicated herein based on our agreed set goals and job objectives.</td>
                                         </tr>
                                     </table>
                                     <table class="table-bordered mt-1" width="100%">
