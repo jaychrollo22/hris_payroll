@@ -1426,7 +1426,7 @@
 
                                             {{-- 5 --}}
                                             <tr>
-                                                <td rowspan="3" class="text-center text-dark">5. PREMIUM SERVICE - Ability to delivery quality service beyond expectation </td>
+                                                <td rowspan="3" class="text-center text-dark">5. PREMIUM SERVICE - Ability to deliver quality service beyond expectation </td>
                                                 <td class="text-center text-dark">Exceeds expectation in delivering a completed service/ task, with accurate and organized information, within the time line and standards set by the company or customer.</td>
                                                 <td class="text-center text-dark">0.42</td>
                                                 <td class="text-center text-dark"><input type="number" class="text-align-center" name="premium_service[self_rating_1]" id="premium_service[self_rating_1]" value="{{isset($ppr['premium_service']) ? $ppr['premium_service']['self_rating_1'] : ""}}" min="1" max="4" onkeyup="computeSelfRatingCompetency()" @if($enable_edit == false) readonly @endif></td>
