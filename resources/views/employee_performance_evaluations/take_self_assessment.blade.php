@@ -1248,11 +1248,11 @@
                                                     <span id="self_assessment_bsc_actual_score_label">{{ $ppr_score ? $ppr_score['self_assessment_bsc_actual_score'] : ""}}</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input id="manager_assessment_bsc_actual_score" name="manager_assessment_bsc_actual_score" type="hidden">
+                                                    <input id="manager_assessment_bsc_actual_score" name="manager_assessment_bsc_actual_score" type="hidden" value="{{ $ppr_score ? $ppr_score['manager_assessment_bsc_actual_score'] : ""}}">
                                                     <span id="manager_assessment_bsc_actual_score_label">{{ $ppr_score ? $ppr_score['manager_assessment_bsc_actual_score'] : ""}}</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input id="manager_assessment_bsc_wtd_rating" name="manager_assessment_bsc_wtd_rating" type="hidden">
+                                                    <input id="manager_assessment_bsc_wtd_rating" name="manager_assessment_bsc_wtd_rating" type="hidden" value="{{ $ppr_score ? $ppr_score['manager_assessment_bsc_wtd_rating'] : ""}}">
                                                     <span id="manager_assessment_bsc_wtd_rating_label">{{ $ppr_score ? $ppr_score['manager_assessment_bsc_wtd_rating'] : ""}}</span>
                                                 </td>
                                                 <td class="text-center"></td>
@@ -1542,11 +1542,11 @@
                                                     <span id="self_assessment_competency_actual_score_label">{{ $ppr_score ? $ppr_score['self_assessment_competency_actual_score'] : ""}}</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input id="manager_assessment_competency_actual_score" name="manager_assessment_competency_actual_score" type="hidden">
+                                                    <input id="manager_assessment_competency_actual_score" name="manager_assessment_competency_actual_score" type="hidden" value="{{ $ppr_score ? $ppr_score['manager_assessment_competency_actual_score'] : ""}}">
                                                     <span id="manager_assessment_competency_actual_score_label">{{ $ppr_score ? $ppr_score['manager_assessment_competency_actual_score'] : ""}}</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input id="manager_assessment_competency_wtd_rating" name="manager_assessment_competency_wtd_rating" type="hidden">
+                                                    <input id="manager_assessment_competency_wtd_rating" name="manager_assessment_competency_wtd_rating" type="hidden" value="{{ $ppr_score ? $ppr_score['manager_assessment_competency_wtd_rating'] : ""}}">
                                                     <span id="manager_assessment_competency_wtd_rating_label">{{ $ppr_score ? $ppr_score['manager_assessment_competency_wtd_rating'] : ""}}</span>
                                                 </td>
                                             </tr>
@@ -1625,7 +1625,7 @@
                                             <td align="center"><input type="number" class="text-align-center" class="text-align-center" id="bsc_weight" min="1" max="100" name="bsc_weight" value="{{$ppr['bsc_weight']}}" readonly></td>
                                             <td align="center"><input type="number" class="text-align-center" class="text-align-center" min="1" max="100" id="bsc_actual_score" name="bsc_actual_score" value="{{$ppr['bsc_actual_score']}}" readonly></td>
                                             <td align="center" rowspan="3">
-                                                <input id="manager_equivalent_rating_description" name="manager_equivalent_rating_description" type="hidden">
+                                                <input id="manager_equivalent_rating_description" name="manager_equivalent_rating_description" type="hidden" value="{{ $ppr_score ? $ppr_score['manager_equivalent_rating_description'] : ""}}">
                                                 <span id="manager_equivalent_rating_description_label">{{ $ppr_score ? $ppr_score['manager_equivalent_rating_description'] : ""}}</span>
                                             </td>
                                         </tr>
