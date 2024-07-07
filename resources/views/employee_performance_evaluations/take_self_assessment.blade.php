@@ -325,15 +325,17 @@
                                                     {{ isset($ppr['financial_perspective']['strat_2_target_end_completion_2']) ? $ppr['financial_perspective']['strat_2_target_end_completion_2'] : ""}}
                                                     <input type="hidden" name="financial_perspective[strat_2_target_end_completion_2]" value="{{ isset($ppr['financial_perspective']['strat_2_target_end_completion_2']) ? $ppr['financial_perspective']['strat_2_target_end_completion_2'] : ""}}" placeholder="End" ></td>
                                                 
-                                                <td style="text-align: center; width:10px!important;">
-                                                    @if($ppr['financial_perspective']['strat_2_objective_2'])
-                                                        <input type="number" class="text-align-center" min="1" max="5" name="financial_perspective[strat_2_self_rating_2]" value="{{ isset($ppr['financial_perspective']['strat_2_self_rating_2']) ? $ppr['financial_perspective']['strat_2_self_rating_2'] : ""}}" id="financial_perspective[strat_2_self_rating_2]" @if($enable_edit == false) readonly @endif>
-                                                    @endif
-                                                </td>
+                                                
 
                                                 <td style="text-align: center; width:10px!important;">
                                                     {{ isset($ppr['financial_perspective']['strat_2_weight_2']) ? $ppr['financial_perspective']['strat_2_weight_2'] : ""}}
-                                                    <input type="hidden" class="text-align-center" min="1" max="100" name="financial_perspective[strat_2_weight_2]" value="{{ isset($ppr['financial_perspective']['strat_2_weight_2']) ? $ppr['financial_perspective']['strat_2_weight_2'] : ""}}" id="financial_perspective[strat_2_weight_2]" onkeyup="updateSumTotalSummaryofSelfRatingsWeightScore()"></td>
+                                                    <input type="hidden" class="text-align-center" min="1" max="100" name="financial_perspective[strat_2_weight_2]" value="{{ isset($ppr['financial_perspective']['strat_2_weight_2']) ? $ppr['financial_perspective']['strat_2_weight_2'] : ""}}" id="financial_perspective[strat_2_weight_2]"></td>
+                                                
+                                                <td style="text-align: center; width:10px!important;">
+                                                    @if($ppr['financial_perspective']['strat_2_objective_2'])
+                                                        <input type="number" class="text-align-center" min="1" max="5" name="financial_perspective[strat_2_self_rating_2]" value="{{ isset($ppr['financial_perspective']['strat_2_self_rating_2']) ? $ppr['financial_perspective']['strat_2_self_rating_2'] : ""}}" id="financial_perspective[strat_2_self_rating_2]" onkeyup="updateSumTotalSummaryofSelfRatingsWeightScore()" @if($enable_edit == false) readonly @endif>
+                                                    @endif
+                                                </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['financial_perspective']['strat_2_objective_2'])
                                                         <input type="number" class="text-align-center" min="1" max="5" name="financial_perspective[strat_2_review_actual_2]" value="{{ isset($ppr['financial_perspective']['strat_2_review_actual_2']) ? $ppr['financial_perspective']['strat_2_review_actual_2'] : ""}}" id="financial_perspective[strat_2_review_actual_2]" onkeyup="computeActualGradeFinancialPerspective()" @if($enable_edit_approver  == false) readonly @endif>
@@ -473,7 +475,7 @@
                                                     {{ isset($ppr['customer_focus']['strat_2_weight_1']) ? $ppr['customer_focus']['strat_2_weight_1'] : ""}}
                                                     <input type="hidden" class="text-align-center" min="1" max="100" name="customer_focus[strat_2_weight_1]" value="{{ isset($ppr['customer_focus']['strat_2_weight_1']) ? $ppr['customer_focus']['strat_2_weight_1'] : ""}}" id="customer_focus[strat_2_weight_1]"></td>
                                                 
-                                                    <td style="text-align: center; width:10px!important;">
+                                                <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['customer_focus']['strat_2_objective_1'])
                                                         <input type="number" class="text-align-center" min="1" max="5" name="customer_focus[strat_2_self_rating_1]" value="{{ isset($ppr['customer_focus']['strat_2_self_rating_1']) ? $ppr['customer_focus']['strat_2_self_rating_1'] : ""}}" id="customer_focus[strat_2_self_rating_1]" onkeyup="updateSumTotalSummaryofSelfRatingsWeightScore()" @if($enable_edit == false) readonly @endif>
                                                     @endif
@@ -603,15 +605,16 @@
                                                     {{ isset($ppr['customer_focus']['strat_2_target_end_completion_2']) ? $ppr['customer_focus']['strat_2_target_end_completion_2'] : ""}}
                                                     <input type="hidden" name="customer_focus[strat_2_target_end_completion_2]" value="{{ isset($ppr['customer_focus']['strat_2_target_end_completion_2']) ? $ppr['customer_focus']['strat_2_target_end_completion_2'] : ""}}" placeholder="End" ></td>
                                                 
-                                                <td style="text-align: center; width:10px!important;">
-                                                    @if($ppr['customer_focus']['strat_2_objective_2'])
-                                                        <input type="number" class="text-align-center" min="1" max="5" name="customer_focus[strat_2_self_rating_2]" value="{{ isset($ppr['customer_focus']['strat_2_self_rating_2']) ? $ppr['customer_focus']['strat_2_self_rating_2'] : ""}}" id="customer_focus[strat_2_self_rating_2]" @if($enable_edit == false) readonly @endif>
-                                                    @endif
-                                                </td>
+                                                
 
                                                 <td style="text-align: center; width:10px!important;">
                                                     {{ isset($ppr['customer_focus']['strat_2_weight_2']) ? $ppr['customer_focus']['strat_2_weight_2'] : ""}}
-                                                    <input type="hidden" class="text-align-center" min="1" max="100" name="customer_focus[strat_2_weight_2]" value="{{ isset($ppr['customer_focus']['strat_2_weight_2']) ? $ppr['customer_focus']['strat_2_weight_2'] : ""}}" id="customer_focus[strat_2_weight_2]" onkeyup="updateSumTotalSummaryofSelfRatingsWeightScore()"></td>
+                                                    <input type="hidden" class="text-align-center" min="1" max="100" name="customer_focus[strat_2_weight_2]" value="{{ isset($ppr['customer_focus']['strat_2_weight_2']) ? $ppr['customer_focus']['strat_2_weight_2'] : ""}}" id="customer_focus[strat_2_weight_2]" ></td>
+                                                <td style="text-align: center; width:10px!important;">
+                                                        @if($ppr['customer_focus']['strat_2_objective_2'])
+                                                            <input type="number" class="text-align-center" min="1" max="5" name="customer_focus[strat_2_self_rating_2]" value="{{ isset($ppr['customer_focus']['strat_2_self_rating_2']) ? $ppr['customer_focus']['strat_2_self_rating_2'] : ""}}" id="customer_focus[strat_2_self_rating_2]" onkeyup="updateSumTotalSummaryofSelfRatingsWeightScore()" @if($enable_edit == false) readonly @endif>
+                                                        @endif
+                                                    </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['customer_focus']['strat_2_objective_2'])
                                                         <input type="number" class="text-align-center" min="1" max="5" name="customer_focus[strat_2_review_actual_2]" value="{{ isset($ppr['customer_focus']['strat_2_review_actual_2']) ? $ppr['customer_focus']['strat_2_review_actual_2'] : ""}}" id="customer_focus[strat_2_review_actual_2]" onkeyup="computeActualGradeCustomerFocus()" @if($enable_edit_approver  == false) readonly @endif>
@@ -882,15 +885,16 @@
                                                     {{ isset($ppr['operation_efficiency']['strat_2_target_end_completion_2']) ? $ppr['operation_efficiency']['strat_2_target_end_completion_2'] : ""}}
                                                     <input type="hidden" name="operation_efficiency[strat_2_target_end_completion_2]" value="{{ isset($ppr['operation_efficiency']['strat_2_target_end_completion_2']) ? $ppr['operation_efficiency']['strat_2_target_end_completion_2'] : ""}}" placeholder="End" ></td>
                                                 
-                                                <td style="text-align: center; width:10px!important;">
-                                                    @if($ppr['operation_efficiency']['strat_2_objective_2'])
-                                                        <input type="number" class="text-align-center" min="1" max="5" name="operation_efficiency[strat_2_self_rating_2]" value="{{ isset($ppr['operation_efficiency']['strat_2_self_rating_2']) ? $ppr['operation_efficiency']['strat_2_self_rating_2'] : ""}}" id="operation_efficiency[strat_2_self_rating_2]" @if($enable_edit == false) readonly @endif>
-                                                    @endif
-                                                </td>
+                                                
 
                                                 <td style="text-align: center; width:10px!important;">
                                                     {{ isset($ppr['operation_efficiency']['strat_2_weight_2']) ? $ppr['operation_efficiency']['strat_2_weight_2'] : ""}}
-                                                    <input type="hidden" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_2_weight_2]" value="{{ isset($ppr['operation_efficiency']['strat_2_weight_2']) ? $ppr['operation_efficiency']['strat_2_weight_2'] : ""}}" id="operation_efficiency[strat_2_weight_2]" onkeyup="updateSumTotalSummaryofSelfRatingsWeightScore()"></td>
+                                                    <input type="hidden" class="text-align-center" min="1" max="100" name="operation_efficiency[strat_2_weight_2]" value="{{ isset($ppr['operation_efficiency']['strat_2_weight_2']) ? $ppr['operation_efficiency']['strat_2_weight_2'] : ""}}" id="operation_efficiency[strat_2_weight_2]" ></td>
+                                                <td style="text-align: center; width:10px!important;">
+                                                    @if($ppr['operation_efficiency']['strat_2_objective_2'])
+                                                        <input type="number" class="text-align-center" min="1" max="5" name="operation_efficiency[strat_2_self_rating_2]" value="{{ isset($ppr['operation_efficiency']['strat_2_self_rating_2']) ? $ppr['operation_efficiency']['strat_2_self_rating_2'] : ""}}" id="operation_efficiency[strat_2_self_rating_2]" onkeyup="updateSumTotalSummaryofSelfRatingsWeightScore()" @if($enable_edit == false) readonly @endif>
+                                                    @endif
+                                                </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['operation_efficiency']['strat_2_objective_2'])
                                                         <input type="number" class="text-align-center" min="1" max="5" name="operation_efficiency[strat_2_review_actual_2]" value="{{ isset($ppr['operation_efficiency']['strat_2_review_actual_2']) ? $ppr['operation_efficiency']['strat_2_review_actual_2'] : ""}}" id="operation_efficiency[strat_2_review_actual_2]" onkeyup="computeActualGradeOperationEfficiency()" @if($enable_edit_approver  == false) readonly @endif>
@@ -1160,15 +1164,15 @@
                                                     {{ isset($ppr['people']['strat_2_target_end_completion_2']) ? $ppr['people']['strat_2_target_end_completion_2'] : ""}}
                                                     <input type="hidden" name="people[strat_2_target_end_completion_2]" value="{{ isset($ppr['people']['strat_2_target_end_completion_2']) ? $ppr['people']['strat_2_target_end_completion_2'] : ""}}" placeholder="End" ></td>
                                                 
-                                                <td style="text-align: center; width:10px!important;">
-                                                    @if($ppr['people']['strat_2_objective_2'])
-                                                        <input type="number" class="text-align-center" min="1" max="5" name="people[strat_2_self_rating_2]" value="{{ isset($ppr['people']['strat_2_self_rating_2']) ? $ppr['people']['strat_2_self_rating_2'] : ""}}" id="people[strat_2_self_rating_2]" @if($enable_edit == false) readonly @endif>
-                                                    @endif
-                                                </td>
-
+                                            
                                                 <td style="text-align: center; width:10px!important;">
                                                     {{ isset($ppr['people']['strat_2_weight_2']) ? $ppr['people']['strat_2_weight_2'] : ""}}
-                                                    <input type="hidden" class="text-align-center" min="1" max="100" name="people[strat_2_weight_2]" value="{{ isset($ppr['people']['strat_2_weight_2']) ? $ppr['people']['strat_2_weight_2'] : ""}}" id="people[strat_2_weight_2]" onkeyup="updateSumTotalSummaryofSelfRatingsWeightScore()"></td>
+                                                    <input type="hidden" class="text-align-center" min="1" max="100" name="people[strat_2_weight_2]" value="{{ isset($ppr['people']['strat_2_weight_2']) ? $ppr['people']['strat_2_weight_2'] : ""}}" id="people[strat_2_weight_2]" ></td>
+                                                <td style="text-align: center; width:10px!important;">
+                                                    @if($ppr['people']['strat_2_objective_2'])
+                                                        <input type="number" class="text-align-center" min="1" max="5" name="people[strat_2_self_rating_2]" value="{{ isset($ppr['people']['strat_2_self_rating_2']) ? $ppr['people']['strat_2_self_rating_2'] : ""}}" id="people[strat_2_self_rating_2]" onkeyup="updateSumTotalSummaryofSelfRatingsWeightScore()" @if($enable_edit == false) readonly @endif>
+                                                    @endif
+                                                </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['people']['strat_2_objective_2'])
                                                         <input type="number" class="text-align-center" min="1" max="5" name="people[strat_2_review_actual_2]" value="{{ isset($ppr['people']['strat_2_review_actual_2']) ? $ppr['people']['strat_2_review_actual_2'] : ""}}" id="people[strat_2_review_actual_2]" onkeyup="computeActualGradePeople()" @if($enable_edit_approver  == false) readonly @endif>
@@ -1244,11 +1248,11 @@
                                                     <span id="self_assessment_bsc_actual_score_label">{{ $ppr_score ? $ppr_score['self_assessment_bsc_actual_score'] : ""}}</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input id="manager_assessment_bsc_actual_score" name="manager_assessment_bsc_actual_score" type="hidden">
+                                                    <input id="manager_assessment_bsc_actual_score" name="manager_assessment_bsc_actual_score" type="hidden" value="{{ $ppr_score ? $ppr_score['manager_assessment_bsc_actual_score'] : ""}}">
                                                     <span id="manager_assessment_bsc_actual_score_label">{{ $ppr_score ? $ppr_score['manager_assessment_bsc_actual_score'] : ""}}</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input id="manager_assessment_bsc_wtd_rating" name="manager_assessment_bsc_wtd_rating" type="hidden">
+                                                    <input id="manager_assessment_bsc_wtd_rating" name="manager_assessment_bsc_wtd_rating" type="hidden" value="{{ $ppr_score ? $ppr_score['manager_assessment_bsc_wtd_rating'] : ""}}">
                                                     <span id="manager_assessment_bsc_wtd_rating_label">{{ $ppr_score ? $ppr_score['manager_assessment_bsc_wtd_rating'] : ""}}</span>
                                                 </td>
                                                 <td class="text-center"></td>
@@ -1422,7 +1426,7 @@
 
                                             {{-- 5 --}}
                                             <tr>
-                                                <td rowspan="3" class="text-center text-dark">5. PREMIUM SERVICE - Ability to delivery quality service beyond expectation </td>
+                                                <td rowspan="3" class="text-center text-dark">5. PREMIUM SERVICE - Ability to deliver quality service beyond expectation </td>
                                                 <td class="text-center text-dark">Exceeds expectation in delivering a completed service/ task, with accurate and organized information, within the time line and standards set by the company or customer.</td>
                                                 <td class="text-center text-dark">0.42</td>
                                                 <td class="text-center text-dark"><input type="number" class="text-align-center" name="premium_service[self_rating_1]" id="premium_service[self_rating_1]" value="{{isset($ppr['premium_service']) ? $ppr['premium_service']['self_rating_1'] : ""}}" min="1" max="4" onkeyup="computeSelfRatingCompetency()" @if($enable_edit == false) readonly @endif></td>
@@ -1538,11 +1542,11 @@
                                                     <span id="self_assessment_competency_actual_score_label">{{ $ppr_score ? $ppr_score['self_assessment_competency_actual_score'] : ""}}</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input id="manager_assessment_competency_actual_score" name="manager_assessment_competency_actual_score" type="hidden">
+                                                    <input id="manager_assessment_competency_actual_score" name="manager_assessment_competency_actual_score" type="hidden" value="{{ $ppr_score ? $ppr_score['manager_assessment_competency_actual_score'] : ""}}">
                                                     <span id="manager_assessment_competency_actual_score_label">{{ $ppr_score ? $ppr_score['manager_assessment_competency_actual_score'] : ""}}</span>
                                                 </td>
                                                 <td class="text-center">
-                                                    <input id="manager_assessment_competency_wtd_rating" name="manager_assessment_competency_wtd_rating" type="hidden">
+                                                    <input id="manager_assessment_competency_wtd_rating" name="manager_assessment_competency_wtd_rating" type="hidden" value="{{ $ppr_score ? $ppr_score['manager_assessment_competency_wtd_rating'] : ""}}">
                                                     <span id="manager_assessment_competency_wtd_rating_label">{{ $ppr_score ? $ppr_score['manager_assessment_competency_wtd_rating'] : ""}}</span>
                                                 </td>
                                             </tr>
@@ -1590,7 +1594,17 @@
                                             <td colspan="2" align="center" style="background-color: rgb(240, 240, 240)"><strong>RATEE'S COMMENTS</strong></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2" align="center"><textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea></td>
+                                            <td colspan="2" align="center">
+                                                @if($method == "Employee Acceptance" && $ppr_details['ppr_score'])
+                                                    @if($ppr_details['ppr_score']['user_acceptance'] == 1)
+                                                        <textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" readonly @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
+                                                    @else
+                                                        <textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
+                                                    @endif
+                                                @else
+                                                    <textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
+                                                @endif
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td colspan="2" align="center" height="100px">I hereby certify that the performance review/ evaluation as summarized above has been meaningfully discused with me, by my Immediate Superior on the date indicated herein based on our agreed set goals and job objectives.</td>
@@ -1611,7 +1625,7 @@
                                             <td align="center"><input type="number" class="text-align-center" class="text-align-center" id="bsc_weight" min="1" max="100" name="bsc_weight" value="{{$ppr['bsc_weight']}}" readonly></td>
                                             <td align="center"><input type="number" class="text-align-center" class="text-align-center" min="1" max="100" id="bsc_actual_score" name="bsc_actual_score" value="{{$ppr['bsc_actual_score']}}" readonly></td>
                                             <td align="center" rowspan="3">
-                                                <input id="manager_equivalent_rating_description" name="manager_equivalent_rating_description" type="hidden">
+                                                <input id="manager_equivalent_rating_description" name="manager_equivalent_rating_description" type="hidden" value="{{ $ppr_score ? $ppr_score['manager_equivalent_rating_description'] : ""}}">
                                                 <span id="manager_equivalent_rating_description_label">{{ $ppr_score ? $ppr_score['manager_equivalent_rating_description'] : ""}}</span>
                                             </td>
                                         </tr>
@@ -1707,6 +1721,8 @@
                                     @endif
                                 @else
                                     <button type="submit" class="btn btn-primary">Submit Changes</button>
+                                    <input type="hidden" id="postValue" name="post_value">
+                                    <span id="{{ $ppr['id'] }}" onclick="submitForPosting(this.id)" class="btn btn-success">Save and Submit</span>
                                 @endif
                                 
                             </div>

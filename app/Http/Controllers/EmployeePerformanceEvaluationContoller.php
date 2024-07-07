@@ -987,6 +987,13 @@ class EmployeePerformanceEvaluationContoller extends Controller
                     $new_ppr_score->self_assessment_competency_actual_score = $request->self_assessment_competency_actual_score;
                     $new_ppr_score->self_assessment_total_actual_score = $request->self_assessment_bsc_actual_score + $request->self_assessment_competency_actual_score;
                     $new_ppr_score->level = 0;
+
+                    if($request->post_value == '1'){
+                        $new_ppr_score->self_assessment_is_posted = 1;
+                        $new_ppr_score->self_assessment_is_posted_date = date('Y-m-d h:i:s');
+                        $new_ppr_score->status = "For Approval";
+                    }
+
                     $new_ppr_score->save();
 
                 }else{
