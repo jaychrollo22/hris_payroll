@@ -12,6 +12,7 @@ use App\EmployeeWfh;
 use App\EmployeeOb;
 use App\EmployeeDtr;
 use App\EmployeePerformanceEvaluation;
+use App\EmployeePerformanceEvaluationScore;
 
 use App\EmployeeApprover;
 
@@ -119,13 +120,16 @@ class LoginController extends Controller
                                             ->whereDate('created_at','<=',$to_date)
                                             ->count();
 
+                $pending_for_manager_ratings = EmployeePerformanceEvaluationScore::whereIn('user_id',$user_ids)->where('status','For Approval')->count();
+
                 session([
                     'pending_leave_count'=>$pending_leave_count + $request_to_cancel,
                     'pending_overtime_count'=>$pending_overtime_count,
                     'pending_wfh_count'=>$pending_wfh_count,
                     'pending_dtr_count'=>$pending_dtr_count,
                     'pending_ob_count'=>$pending_ob_count,
-                    'pending_performance_eval_count'=>$pending_ppr_count
+                    'pending_performance_eval_count'=>$pending_ppr_count,
+                    'pending_for_manager_ratings_count'=>$pending_for_manager_ratings,
                 ]);
             }
         }else{
