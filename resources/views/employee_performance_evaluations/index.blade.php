@@ -86,13 +86,24 @@
                                 @if($eval->ppr_score->self_assessment_is_posted == null)
                                   <a href="/take-performance-plan-review/{{$eval->id}}?user_id={{auth()->user()->id}}&method=Self Assessment" class="btn btn-primary btn-sm">Take Self Rating</a>
                                 @elseif($eval->ppr_score->status == 'For Acceptance')
-                                  <a href="/take-performance-plan-review/{{$eval->id}}?user_id={{auth()->user()->id}}&method=Employee Acceptance" class="badge badge-warning">Self Rating Acceptance</a>
+                                  <a href="/take-performance-plan-review/{{$eval->id}}?user_id={{auth()->user()->id}}&method=Employee Acceptance" class="badge badge-warning">Acceptance of IH / Actual Rating</a>
                                 @elseif($eval->ppr_score->user_acceptance == '1')
-                                  <a href="/take-performance-plan-review/{{$eval->id}}?user_id={{auth()->user()->id}}&method=Employee Acceptance" class="badge badge-success">Self Rating Accepted</a>
+                                  <a href="/take-performance-plan-review/{{$eval->id}}?user_id={{auth()->user()->id}}&method=Employee Acceptance" class="badge badge-success">Actual Rating Accepted</a>
+                                @endif 
+
+                                @if($eval->ppr_score->user_acceptance == 1)
+                                  <br>
+                                  @if($eval->ppr_score->user_acceptance_status == 'Acknowledge')
+                                    <span class="badge badge-warning mt-2">{{$eval->ppr_score->user_acceptance_status}}</span>
+                                  @elseif($form_approval->user_acceptance_status == 'Agree')
+                                    <span class="badge badge-success mt-2">{{$eval->ppr_score->user_acceptance_status}}</span>
+                                  @endif
                                 @endif
                               @else
                                 <a href="/take-performance-plan-review/{{$eval->id}}?user_id={{auth()->user()->id}}&method=Self Assessment" class="btn btn-primary btn-sm">Take Self Rating</a>
                               @endif
+
+                              
                             @endif
                           </td>
                         </tr>

@@ -127,12 +127,22 @@
                             </td>
                             <td>
                                 {{$form_approval->status == 'For Approval' ? "For Manager Ratings" : $form_approval->status}} 
+                                @if($form_approval->user_acceptance == 1)
+                                <br>
+                                  @if($form_approval->user_acceptance_status == 'Acknowledge')
+                                    <span class="badge badge-warning mt-2">{{$form_approval->user_acceptance_status}}</span>
+                                  @elseif($form_approval->user_acceptance_status == 'Agree')
+                                    <span class="badge badge-success mt-2">{{$form_approval->user_acceptance_status}}</span>
+                                  @endif
+                                @endif
+                                
                             </td>
                             <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
                               @if($status == 'Summary of Ratings')
                                 <a href="/take-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Summary Assessment" target="_blank" class="btn btn-primary btn-sm">Summary Ratings</a>
                               @elseif($status == 'Accepted')
                                 <a href="/show-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Summary Assessment" target="_blank" class="btn btn-primary btn-sm">Show Assessment</a>
+                                
                               @else
                                 <a href="/take-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Manager Assessment" target="_blank" class="btn btn-primary btn-sm">Manager Ratings</a>
                               @endif
