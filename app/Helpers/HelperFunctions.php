@@ -636,13 +636,14 @@ function checkUsedServiceIncentiveLeave($user_id){
 function checkUsedLeave($user_id,$leave_type,$year){
 
 
-    $employee_leave = EmployeeLeave::where('user_id',$user_id)
+    $employee_leave = EmployeeLeave::with('schedule')
+                                    ->where('user_id',$user_id)
                                     ->where('leave_type',$leave_type)
                                     ->where('status','Approved')
                                     ->whereYear('date_from', '=', $year);
     if($year == 2024){
         $date_validate = date('Y-02-27'); // Start of Leave Date Validation in 2024
-        $employee_leave = $employee_leave->where('date_from' , '>=', $date_validate);
+        $employee_leave = $employee_leave->where('date_from' , '>', $date_validate);
     }
 
     $employee_leave = $employee_leave->get();
@@ -650,22 +651,57 @@ function checkUsedLeave($user_id,$leave_type,$year){
     $count = 0;
     if($employee_leave){
         foreach($employee_leave as $leave){
-            if($leave->withpay == 1 && $leave->halfday == 1){
-                $count += 0.5;
-            }else{
-                $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
-                if($date_range){
-                    foreach($date_range as $date_r){
-                        if($leave->withpay == 1){
-                            $count += 1;
-                        }
-                    }
-                }
+
+            if($leave->withpay == 1){
+                $count += get_count_days_leave_count($leave->schedule,$leave->date_from,$leave->date_to,$leave->halfday);
             }
+
+            // if($leave->withpay == 1 && $leave->halfday == 1){
+            //     $count += 0.5;
+            // }else{
+            
+                // return get_count_days($leave->schedule,$leave->date_from,$leave->date_to,$leave->halfday)
+                // $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
+                // if($date_range){
+                //     foreach($date_range as $date_r){
+                //         if($leave->withpay == 1){
+                //             $count += 1;
+                //         }
+                //     }
+                // }
+            // }
         }
     }
 
     return $count;
+}
+
+function get_count_days_leave_count($data,$date_from,$date_to,$halfday)
+{
+    if($halfday == 1){
+        return '0.5';
+    }else{
+        if($date_from == $date_to && $halfday != 1){
+            $count = 1;
+        }else{
+          $data = ($data->pluck('name'))->toArray();
+          $count = 0;
+          $startTime = strtotime($date_from);
+          $endTime = strtotime($date_to);
+    
+          for ( $i = $startTime; $i <= $endTime; $i = $i + 86400 ) {
+            $thisDate = date( 'l', $i ); // 2010-05-01, 2010-05-02, etc
+            if(in_array($thisDate,$data)){
+                $count= $count+1;
+            }
+          }
+        }
+        return $count;
+    }
+    
+
+    
+    
 }
 
 function checkPendingLeave($user_id,$leave_type,$year,$leave_id){
