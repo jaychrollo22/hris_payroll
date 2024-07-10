@@ -95,7 +95,7 @@
                                   <br>
                                   @if($eval->ppr_score->user_acceptance_status == 'Acknowledge')
                                     <span class="badge badge-warning mt-2">{{$eval->ppr_score->user_acceptance_status}}</span>
-                                  @elseif($form_approval->user_acceptance_status == 'Agree')
+                                  @elseif($eval->ppr_score->user_acceptance_status == 'Agree')
                                     <span class="badge badge-success mt-2">{{$eval->ppr_score->user_acceptance_status}}</span>
                                   @endif
                                 @endif
