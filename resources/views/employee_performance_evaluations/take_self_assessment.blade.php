@@ -1834,7 +1834,7 @@
 
         function submitSummaryAssessment(id) {
             swal({
-                title: "Are you sure you want to submit summary of ratings?",
+                title: "Are you sure you want to submit the Summary of Ratings and Performance & Development Summary Report?",
                 icon: "warning",
                 buttons: true,
                 successMode: true

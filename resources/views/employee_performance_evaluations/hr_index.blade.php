@@ -113,6 +113,13 @@
                           <option value="For Review" @if ('For Review' == $status) selected @endif>For Review</option>
                           <option value="Approved" @if ('Approved' == $status) selected @endif>Approved</option>
                           <option value="Declined" @if ('Declined' == $status) selected @endif>Declined / Rejected</option>
+                          {{-- For Self Ratings --}}
+                          <option value="Pending Self Ratings" @if ('Pending Self Ratings' == $status) selected @endif>Pending Self Ratings</option>
+                          <option value="Ongoing Self Ratings" @if ('Ongoing Self Ratings' == $status) selected @endif>Ongoing Self Ratings</option>
+                          <option value="For Approval" @if ('For Approval' == $status) selected @endif>For Manager Ratings</option>
+                          <option value="For Acceptance" @if ('For Acceptance' == $status) selected @endif>For Acceptance</option>
+                          <option value="Summary of Ratings" @if ('Summary of Ratings' == $status) selected @endif>For Summary of Ratings</option>
+                          <option value="Completed" @if ('Completed' == $status) selected @endif>Completed</option>
                         </select>
                       </div>
                     </div>
@@ -126,8 +133,9 @@
                         <input type="date" name="change_to" class="form-control" value="{{$change_to}}" title="Change To">
                       </div>
                     </div>
-                    <div class='col-md-1'>
-                      <button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
+                    <div class='col-md-2'>
+                      <button type="submit" class="btn btn-primary">Filter</button>
+                      <a href="/hr-performance-plan-review" class="btn btn-warning">Clear Filter</a>
                     </div>
                   </div>
                 </form>
@@ -143,7 +151,8 @@
                         <th>PPR Period</th>
                         <th>Approver</th>
                         <th>Review Date</th>
-                        <th>Status</th>
+                        <th>PPR Status</th>
+                        <th>Performance Ratings Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -189,6 +198,38 @@
                             @elseif($eval->status == 'Declined' || $eval->status == 'Cancelled')
                               <label class="badge badge-danger" title="{{$eval->approval_remarks}}">{{ $eval->status }}</label>
                             @endif
+                          </td>
+                          <td>
+
+                            @php
+                                $performance_rating_status = '';
+                                if($eval->ppr_score){
+                                  $ppr_status = $eval->ppr_score->status;
+                                  if($ppr_status == 'For Approval'){
+                                    $performance_rating_status = 'For Managers Ratings';
+                                  }
+                                  else{
+                                    if($eval->ppr_score->self_assessment_is_posted == null){
+                                      $performance_rating_status = "Ongoing Self Ratings";
+                                    }
+                                    elseif($eval->ppr_score->status == "Accepted" && $eval->ppr_score->summary_of_ratings_is_posted == null){
+                                      $performance_rating_status = "For Summary of Ratings";
+                                    }
+                                    elseif($eval->ppr_score->status == "Accepted" && $eval->ppr_score->summary_of_ratings_is_posted == "1"){
+                                      $performance_rating_status = "Completed";
+                                    }
+                                    else{
+                                      $performance_rating_status = $ppr_status;
+                                    }
+                                  }
+                                }else{
+                                  if($eval->status == 'Approved'){
+                                    $performance_rating_status = 'Pending Self Ratings';
+                                  }
+                                }
+                            @endphp
+                           
+                            <label class="badge badge-success" title="{{ $performance_rating_status }}">{{ $performance_rating_status }}</label>
                           </td>
                         </tr>
                       @endforeach

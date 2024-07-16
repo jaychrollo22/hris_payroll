@@ -25,6 +25,48 @@
                                 @endif
                             @endif
                         </h4>
+
+                        
+                        @php
+                            $performance_rating_status = '';
+                            if($ppr_details->ppr_score){
+                                $ppr_status = $ppr_details->ppr_score->status;
+                                if($ppr_status == 'For Approval'){
+                                    $performance_rating_status = 'For Managers Ratings';
+                                }
+                                else{
+                                    if($ppr_details->ppr_score->self_assessment_is_posted == null){
+                                        $performance_rating_status = "Ongoing Self Ratings";
+                                    }
+                                    elseif($ppr_details->ppr_score->status == "Accepted" && $ppr_details->ppr_score->summary_of_ratings_is_posted == null){
+                                        $performance_rating_status = "For Summary of Ratings";
+                                    }
+                                    elseif($ppr_details->ppr_score->status == "Accepted" && $ppr_details->ppr_score->summary_of_ratings_is_posted == "1"){
+                                        $performance_rating_status = "Completed";
+                                        }
+                                    else{
+                                        $performance_rating_status = $ppr_status;
+                                    }
+                                }
+                            }else{
+                                if($ppr_details->status == 'Approved'){
+                                    $performance_rating_status = 'Pending Self Ratings';
+                                }
+                            }
+                        @endphp
+
+                        @if($performance_rating_status)
+                            <label class="badge badge-success" title="{{ $performance_rating_status }}">{{ $performance_rating_status }}</label>
+                        @endif
+                        
+                        @if(auth()->user()->id == '1' || auth()->user()->id == '3873')
+                            @if($ppr_details->ppr_score)
+                                <button class="btn btn-danger btn-sm float-right mr-2" id="{{ $ppr_details->ppr_score->id }}" onclick="resetPerformanceRatings(this.id)" class="mb-2">Reset Performance Ratings</button>
+                                <br>
+                                <br>
+                            @endif
+                        @endif
+
                         <div class="table-responsive" id="contentToPrint">
                             <table class="table-bordered" width="100%">
                                 <tr>
@@ -1005,6 +1047,38 @@
 							success: function(data) {
 								document.getElementById("loader").style.display = "none";
 								swal("PPR has been returned to Draft!", {
+									icon: "success",
+								}).then(function() {
+									location.reload();
+								});
+							}
+						})
+
+					}
+				});
+		}
+
+        function resetPerformanceRatings(id) {
+
+			swal({
+					title: "Are you sure?",
+					text: "You want to reset this Performance Ratings?",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				})
+				.then((willCancel) => {
+					if (willCancel) {
+						document.getElementById("loader").style.display = "block";
+						$.ajax({
+							url: "/reset-performance-ratings/" + id,
+							method: "GET",
+							headers: {
+								'X-CSRF-TOKEN': '{{ csrf_token() }}'
+							},
+							success: function(data) {
+								document.getElementById("loader").style.display = "none";
+								swal("Performance Ratings has been reset!", {
 									icon: "success",
 								}).then(function() {
 									location.reload();

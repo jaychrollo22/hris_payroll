@@ -396,6 +396,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/summary-of-ratings/{id}','EmployeePerformanceEvaluationContoller@summary_of_ratings');
 
+    Route::get('/reset-performance-ratings/{id}','EmployeePerformanceEvaluationContoller@reset_performance_ratings');
+
     //Employee Leave Type Balances
     Route::get('/employee-leave-type-balances','EmployeeLeaveTypeBalanceController@index');
     Route::post('/new-employee-leave-type-balance','EmployeeLeaveTypeBalanceController@store');

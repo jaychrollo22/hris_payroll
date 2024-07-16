@@ -65,40 +65,75 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $status = $request->status ? $request->status : "";
         $employee_performance_evaluation = EmployeePerformanceEvaluation::select('id','user_id','calendar_year','review_date','created_at','approved_by_date','period','status','level')
                                                                                 ->with('user','employee','ppr_score')
-                                                                                ->when(!empty($status),function($q) use($status){
-                                                                                    $q->where('status',$status);
-                                                                                })
-                                                                                ->when(!empty($search),function($q) use($search){
-                                                                                    $q->whereHas('employee',function($w) use($search){
-                                                                                        $w->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')
-                                                                                        ->orWhere('employee_number', 'like' , '%' .  $search . '%')
-                                                                                        ->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"])
-                                                                                        ->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
-                                                                                    });
-                                                                                })
-                                                                                ->when(!empty($company),function($q) use($company){
-                                                                                    $q->whereHas('employee',function($w) use($company){
-                                                                                        $w->where('company_id',$company);
-                                                                                    });
-                                                                                })
-                                                                                ->when(!empty($performance_plan_period),function($q) use($performance_plan_period){
-                                                                                    $q->where('calendar_year',$performance_plan_period);
-                                                                                })
-                                                                                ->when(!empty($period_ppr),function($q) use($period_ppr){
-                                                                                    $q->where('period',$period_ppr);
-                                                                                })
-                                                                                ->when(!empty($change_from),function($q) use($change_from){
-                                                                                    $q->whereDate('updated_at','>=',$change_from);
-                                                                                })
-                                                                                ->when(!empty($change_to),function($q) use($change_to){
-                                                                                    $q->whereDate('updated_at','<=',$change_to);
-                                                                                })
+                                                                                ->orderBy('review_date','DESC')
                                                                                 ->whereHas('employee',function($q) use($allowed_companies){
                                                                                     $q->whereIn('company_id',$allowed_companies)
                                                                                         ->where('status','Active');
-                                                                                })
-                                                                                ->orderBy('review_date','DESC')
-                                                                                ->get();
+                                                                                });
+        if($status){
+            if($status == 'Pending Self Ratings' || $status == 'Ongoing Self Ratings' || $status == 'For Approval' || $status == 'For Acceptance' || $status == 'Accepted' || $status == 'Summary of Ratings' || $status == 'Completed'){
+                
+                if($status == 'Pending Self Ratings'){
+                    $employee_performance_evaluation = $employee_performance_evaluation->whereDoesntHave('ppr_score')->where('status','Approved');
+                }elseif($status == 'Ongoing Self Ratings'){
+                    $employee_performance_evaluation = $employee_performance_evaluation->whereHas('ppr_score',function($q){
+                        $q->whereNull('self_assessment_is_posted');
+                    });
+                }
+                elseif($status == 'Summary of Ratings'){
+                    $employee_performance_evaluation = $employee_performance_evaluation->whereHas('ppr_score',function($q){
+                        $q->where('status','Accepted')->whereNull('summary_of_ratings_is_posted');
+                    });
+                }
+                elseif($status == 'Completed'){
+                    $employee_performance_evaluation = $employee_performance_evaluation->whereHas('ppr_score',function($q){
+                        $q->where('status','Accepted')->where('summary_of_ratings_is_posted','1');
+                    });
+                }
+                else{
+                    $employee_performance_evaluation = $employee_performance_evaluation->whereHas('ppr_score',function($q) use($status){
+                        $q->where('status',$status);
+                    });
+                }
+            }else{
+                $employee_performance_evaluation->where('status',$status);
+            }
+            
+        }   
+
+        if($search){
+            $employee_performance_evaluation->whereHas('employee',function($w) use($search){
+                        $w->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')
+                        ->orWhere('employee_number', 'like' , '%' .  $search . '%')
+                        ->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"])
+                        ->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
+                    });
+        }   
+
+        if($company){
+            $employee_performance_evaluation->whereHas('employee',function($w) use($company){
+                $w->where('company_id',$company);
+            });
+        }
+
+        if($performance_plan_period){
+            $employee_performance_evaluation->where('calendar_year',$performance_plan_period);
+        }
+        
+        if($period_ppr){
+            $employee_performance_evaluation->where('period',$period_ppr);
+        }
+
+        if($change_from){
+            $employee_performance_evaluation->whereDate('updated_at','>=',$change_from);
+        }
+
+        if($change_to){
+            $employee_performance_evaluation->whereDate('updated_at','<=',$change_to);
+        }
+
+
+        $employee_performance_evaluation = $employee_performance_evaluation->get();
                                                                                 
         $draft = EmployeePerformanceEvaluation::select('id','user_id')
                                 ->whereHas('employee',function($q) use($allowed_companies){
@@ -1274,4 +1309,9 @@ class EmployeePerformanceEvaluationContoller extends Controller
         }
     }
 
+
+    public function reset_performance_ratings($id){
+        $ppr_score = EmployeePerformanceEvaluationScore::where('id',$id)->delete();
+        return "deleted";
+    }
 }
