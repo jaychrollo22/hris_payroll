@@ -36,6 +36,7 @@
                                     <select class="form-control" name="access_role">
                                         <option value="">Access Role</option>
                                         <option value="employees_rate" {{ $access_role == 'employees_rate' ? 'selected' : '' }}>Employee Rate</option>
+                                        <option value="reports_ppr" {{ $access_role == 'reports_ppr' ? 'selected' : '' }}>PPR Report</option>
                                     </select>
                                 </div>
                                 <div class='col-md-3'>
