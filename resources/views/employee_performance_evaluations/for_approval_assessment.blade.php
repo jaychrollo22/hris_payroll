@@ -110,7 +110,7 @@
                           @foreach ($performance_evaluations as $form_approval)
                           <tr>
                             <td>
-                                <strong>{{$form_approval->user->name}}</strong> <br>
+                                <strong>{{ $form_approval->employee->first_name . ' ' . $form_approval->employee->last_name}}</strong> <br>
                                 <small>Position : {{$form_approval->user->employee->position}}</small> <br>
                                 <small>Company : {{$form_approval->user->employee->company->company_name}}</small> <br>
                                 <small>Department : {{ $form_approval->user->employee->department ? $form_approval->user->employee->department->name : ""}}</small>
