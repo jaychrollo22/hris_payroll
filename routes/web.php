@@ -382,7 +382,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('return-to-draft-all','EmployeePerformanceEvaluationContoller@returnToDraftAll');
 
-    Route::get('reset-ppr-approver/{id}','EmployeePerformancefEvaluationContoller@resetApprover');
+    Route::get('reset-ppr-approver/{id}','EmployeePerformanceEvaluationContoller@resetApprover');
 
     Route::get('export-ppr','EmployeePerformanceEvaluationContoller@export');
 
