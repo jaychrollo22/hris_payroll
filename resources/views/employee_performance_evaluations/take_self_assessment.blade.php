@@ -660,12 +660,12 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['customer_focus']['strat_3_objective_2'])
-                                                        <input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_3_review_actual_2]" value="{{ isset($ppr['customer_focus']['strat_3_review_actual_2']) ? $ppr['customer_focus']['strat_3_review_actual_2'] : ""}}" id="customer_focus[strat_3_review_actual_2]" onkeyup="computeActualGradeCustomerFocus()" @if($enable_edit_approver  == false) readonly @endif>
+                                                        <input type="number" class="text-align-center" min="1" max="5" step="1" name="customer_focus[strat_3_review_actual_2]" value="{{ isset($ppr['customer_focus']['strat_3_review_actual_2']) ? $ppr['customer_focus']['strat_3_review_actual_2'] : ""}}" id="customer_focus[strat_3_review_actual_2]" onkeyup="computeActualGradeCustomerFocus()" @if($enable_edit_approver  == false) readonly @endif>
                                                     @endif
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['customer_focus']['strat_3_objective_2'])
-                                                        <input type="number" class="text-align-center" min="1" max="5" step="1" name="customer_focus[strat_3_review_actual_2_actual_grade]" value="{{ isset($ppr['customer_focus']['strat_3_review_actual_2_actual_grade']) ? $ppr['customer_focus']['strat_3_review_actual_2_actual_grade'] : ""}}" id="customer_focus[strat_3_review_actual_2_actual_grade]" readonly>
+                                                        <input type="number" class="text-align-center" min="1" max="100" name="customer_focus[strat_3_review_actual_2_actual_grade]" value="{{ isset($ppr['customer_focus']['strat_3_review_actual_2_actual_grade']) ? $ppr['customer_focus']['strat_3_review_actual_2_actual_grade'] : ""}}" id="customer_focus[strat_3_review_actual_2_actual_grade]" readonly>
                                                     @endif
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
@@ -678,7 +678,7 @@
 
 
                                             <tr>
-                                                <td colspan="10">&nbsp;</td>
+                                                <td colspan="12">&nbsp;</td>
                                             </tr>
 
                                             {{-- 3. Operational Efficiency --}}
@@ -688,7 +688,7 @@
 
                                             <tr>
                                                 <td colspan="2" class="text-center">Objective 1</td>
-                                                <td colspan="7"></td>
+                                                <td colspan="9"></td>
                                             </tr>
                                             <tr>
                                                 <td style="width:200px!important;">Strat 1</td>
@@ -957,7 +957,7 @@
                                             </tr>
 
                                             <tr>
-                                                <td colspan="10">&nbsp;</td>
+                                                <td colspan="12">&nbsp;</td>
                                             </tr>
 
                                             {{-- 4. People --}}
@@ -966,7 +966,7 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="2" class="text-center">Objective 1</td>
-                                                <td colspan="7"></td>
+                                                <td colspan="9"></td>
                                             </tr>
                                             
                                             <tr>
@@ -1597,12 +1597,12 @@
                                             <td colspan="2" align="center">
                                                 @if($method == "Employee Acceptance" && $ppr_details['ppr_score'])
                                                     @if($ppr_details['ppr_score']['user_acceptance'] == 1)
-                                                        <textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" readonly @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
+                                                        <textarea id="ratees_comments" style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" readonly @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
                                                     @else
-                                                        <textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
+                                                        <textarea id="ratees_comments" required style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
                                                     @endif
                                                 @else
-                                                    <textarea style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
+                                                    <textarea id="ratees_comments" style="max-width:2000px!important;" class="responsive-input myinput" name="ratees_comments" cols="30" rows="7" placeholder="Ratees Comments (Employee Acceptance)" @if($enable_edit_acceptance  == false) readonly @endif>{{$ppr_details['ppr_score'] ? $ppr_details['ppr_score']['ratees_comments'] : ""}}</textarea>
                                                 @endif
                                             </td>
                                         </tr>
@@ -1649,14 +1649,14 @@
                                           
                                         </tr>
                                         <tr>
-                                            <td align="center"><textarea style="max-width:2000px!important;" class="responsive-input myinput" name="areas_of_strength" cols="100" rows="4" placeholder="For Immediate Head Comments" @if($enable_edit_approver_final  == false) readonly @endif>{{isset($ppr_details['ppr_score']) ? $ppr_details['ppr_score']['areas_of_strength'] : ""}}</textarea></td>
+                                            <td align="center"><textarea id="areas_of_strength" style="max-width:2000px!important;" class="responsive-input myinput" name="areas_of_strength" cols="100" rows="4" placeholder="For Immediate Head Comments" @if($enable_edit_approver_final  == false) readonly @endif>{{isset($ppr_details['ppr_score']) ? $ppr_details['ppr_score']['areas_of_strength'] : ""}}</textarea></td>
                                         </tr>
                                         <tr>
                                             <td width="100%" align="center" style="background-color: rgb(240, 240, 240)"><strong>DEVELOPMENTAL NEEDS</strong></td>
                                         </tr>
                                         <tr>
                                             
-                                            <td align="center"><textarea style="max-width:2000px!important;" class="responsive-input myinput" name="developmental_needs" cols="30" rows="4" placeholder="For Immediate Head Comments" @if($enable_edit_approver_final  == false) readonly @endif>{{isset($ppr_details['ppr_score']) ? $ppr_details['ppr_score']['developmental_needs'] : ""}}</textarea></td>
+                                            <td align="center"><textarea id="developmental_needs" style="max-width:2000px!important;" class="responsive-input myinput" name="developmental_needs" cols="30" rows="4" placeholder="For Immediate Head Comments" @if($enable_edit_approver_final  == false) readonly @endif>{{isset($ppr_details['ppr_score']) ? $ppr_details['ppr_score']['developmental_needs'] : ""}}</textarea></td>
                                         </tr>
                                    
                                         <tr>
@@ -1664,19 +1664,19 @@
                                             
                                         </tr>
                                         <tr>
-                                            <td align="center"><textarea style="max-width:2000px!important;" class="responsive-input myinput" name="areas_for_enhancements" cols="30" rows="4" placeholder="For Immediate Head Comments" @if($enable_edit_approver_final  == false) readonly @endif>{{isset($ppr_details['ppr_score']) ? $ppr_details['ppr_score']['areas_for_enhancements'] : ""}}</textarea></td>
+                                            <td align="center"><textarea id="areas_for_enhancements" style="max-width:2000px!important;" class="responsive-input myinput" name="areas_for_enhancements" cols="30" rows="4" placeholder="For Immediate Head Comments" @if($enable_edit_approver_final  == false) readonly @endif>{{isset($ppr_details['ppr_score']) ? $ppr_details['ppr_score']['areas_for_enhancements'] : ""}}</textarea></td>
                                         </tr>
                                         <tr>
                                             <td width="100%" align="center" style="background-color: rgb(240, 240, 240)"><strong>TRAINING & DEVELOPMENTAL PLANS</strong></td>
                                         </tr>
                                         <tr>
-                                            <td align="center"><textarea style="max-width:2000px!important;" class="responsive-input myinput" name="training_and_development_plans" cols="30" rows="4" placeholder="For Immediate Head Comments" @if($enable_edit_approver_final  == false) readonly @endif>{{ isset($ppr_details['ppr_score']) ? $ppr_details['ppr_score']['training_and_development_plans'] : ""}}</textarea></td>
+                                            <td align="center"><textarea id="training_and_development_plans" style="max-width:2000px!important;" class="responsive-input myinput" name="training_and_development_plans" cols="30" rows="4" placeholder="For Immediate Head Comments" @if($enable_edit_approver_final  == false) readonly @endif>{{ isset($ppr_details['ppr_score']) ? $ppr_details['ppr_score']['training_and_development_plans'] : ""}}</textarea></td>
                                         </tr>
                                         <tr>
                                             <td colspan="2" align="center" style="background-color: rgb(240, 240, 240)"><strong>SUMMARY OF RATER'S COMMENTS/RECOMMENDATIONS</strong></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2" align="center"><textarea style="max-width:2000px!important;" class="responsive-input myinput" name="summary_of_ratee_comments_recommendations" cols="30" rows="4" placeholder="For Immediate Head Comments" @if($enable_edit_approver_final  == false) readonly @endif>{{isset($ppr_details['ppr_score']) ? $ppr_details['ppr_score']['summary_of_ratee_comments_recommendations'] : ""}}</textarea></td>
+                                            <td colspan="2" align="center"><textarea id="summary_of_ratee_comments_recommendations" style="max-width:2000px!important;" class="responsive-input myinput" name="summary_of_ratee_comments_recommendations" cols="30" rows="4" placeholder="For Immediate Head Comments" @if($enable_edit_approver_final  == false) readonly @endif>{{isset($ppr_details['ppr_score']) ? $ppr_details['ppr_score']['summary_of_ratee_comments_recommendations'] : ""}}</textarea></td>
                                         </tr>
                                     </table>
 
@@ -1799,54 +1799,102 @@
 		}
 
 		function submitAgree(id) {
-            swal({
-                title: "Are you sure you want to Agree?",
-                icon: "warning",
-                buttons: true,
-                successMode: true,
-            })
-            .then((willDisable) => {
-                if (willDisable) {
-                    document.getElementById("loader").style.display = "block";
-                    const user_acceptance_status = document.getElementById('acceptanceValue');
-                    user_acceptance_status.value = 'Agree'; 
-                    document.getElementById('takeSelfAssessment').submit();
-                }
-            });
+            const ratees_comments = document.getElementById('ratees_comments').value;
+            if(ratees_comments == null || ratees_comments == ''){
+                swal({
+                    title: "Please input Ratees Comments (Employee Acceptance). Thank you.",
+                    icon: "warning",
+                });
+            }else{
+                swal({
+                    title: "Are you sure you want to Agree?",
+                    icon: "warning",
+                    buttons: true,
+                    successMode: true,
+                })
+                .then((willDisable) => {
+                    if (willDisable) {
+                        document.getElementById("loader").style.display = "block";
+                        const user_acceptance_status = document.getElementById('acceptanceValue');
+                        user_acceptance_status.value = 'Agree'; 
+                        document.getElementById('takeSelfAssessment').submit();
+                    }
+                });
+            }
+
 		}
 
 		function submitAcknowledge(id) {
-            swal({
-                title: "Are you sure you want to Acknowledge?",
-                icon: "warning",
-                buttons: true,
-                successMode: true
-            })
-            .then((willDisable) => {
-                if (willDisable) {
-                    document.getElementById("loader").style.display = "block";
-                    const user_acceptance_status = document.getElementById('acceptanceValue');
-                    user_acceptance_status.value = 'Acknowledge'; 
-                    document.getElementById('takeSelfAssessment').submit();
-                }
-            });
+            const ratees_comments = document.getElementById('ratees_comments').value;
+            if(ratees_comments == null || ratees_comments == ''){
+                swal({
+                    title: "Please input Ratees Comments (Employee Acceptance). Thank you.",
+                    icon: "warning",
+                });
+            }else{
+                swal({
+                    title: "Are you sure you want to Acknowledge?",
+                    icon: "warning",
+                    buttons: true,
+                    successMode: true
+                })
+                .then((willDisable) => {
+                    if (willDisable) {
+                        document.getElementById("loader").style.display = "block";
+                        const user_acceptance_status = document.getElementById('acceptanceValue');
+                        user_acceptance_status.value = 'Acknowledge'; 
+                        document.getElementById('takeSelfAssessment').submit();
+                    }
+                });
+            }
 		}
 
         function submitSummaryAssessment(id) {
-            swal({
-                title: "Are you sure you want to submit the Summary of Ratings and Performance & Development Summary Report?",
-                icon: "warning",
-                buttons: true,
-                successMode: true
-            })
-            .then((willDisable) => {
-                if (willDisable) {
-                    document.getElementById("loader").style.display = "block";
-                    const postValue = document.getElementById('postValue');
-                    postValue.value = '1'; 
-                    document.getElementById('takeSelfAssessment').submit();
+
+            const areas_of_strength = document.getElementById('areas_of_strength').value;
+            const developmental_needs = document.getElementById('developmental_needs').value;
+            const areas_for_enhancements = document.getElementById('areas_for_enhancements').value;
+            const training_and_development_plans = document.getElementById('training_and_development_plans').value;
+            const summary_of_ratee_comments_recommendations = document.getElementById('summary_of_ratee_comments_recommendations').value;
+
+            if(areas_of_strength && developmental_needs && areas_for_enhancements && training_and_development_plans && summary_of_ratee_comments_recommendations){
+                
+                swal({
+                    title: "Are you sure you want to submit the Summary of Ratings and Performance & Development Summary Report?",
+                    icon: "warning",
+                    buttons: true,
+                    successMode: true
+                })
+                .then((willDisable) => {
+                    if (willDisable) {
+                        document.getElementById("loader").style.display = "block";
+                        const postValue = document.getElementById('postValue');
+                        postValue.value = '1'; 
+                        document.getElementById('takeSelfAssessment').submit();
+                    }
+                });
+
+            }else{
+                
+                let status = "";
+                
+                if(areas_of_strength == null || areas_of_strength == ''){
+                    status = "Areas of Strength";
+                }else if(developmental_needs == null || developmental_needs == ''){
+                    status = "Developmental Needs";
+                }else if(areas_for_enhancements == null || areas_for_enhancements == ''){
+                    status = "Areas for Enhancements";
+                }else if(training_and_development_plans == null || training_and_development_plans == ''){
+                    status = "Training and Development Plans";
+                }else if(summary_of_ratee_comments_recommendations == null || summary_of_ratee_comments_recommendations == ''){
+                    status = "Summary of Ratee Comments Recommentations";
                 }
-            });
+
+                swal({
+                    title: "Please input Immediate Head Comments " + status + ". Thank you.",
+                    icon: "info",
+                });
+            }
 		}
 
       
