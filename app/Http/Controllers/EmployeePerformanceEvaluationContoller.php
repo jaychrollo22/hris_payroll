@@ -1085,6 +1085,8 @@ class EmployeePerformanceEvaluationContoller extends Controller
 
                             $ppr_score->summary_of_ratings_is_posted = 1;
                             $ppr_score->summary_of_ratings_is_posted_date = date('Y-m-d h:i:s');
+                            $ppr_score->approved_by = auth()->user()->id;
+                            $ppr_score->approved_by_date = date('Y-m-d h:i:s');
                         }
                     }
 
