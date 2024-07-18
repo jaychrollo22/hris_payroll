@@ -142,7 +142,7 @@
 
                             <a href="/show-performance-plan-review/{{$form_approval->id}}" target="_blank" class="btn btn-primary btn-sm"><i class="ti-eye btn-icon-prepend"></i></a>
 
-                            @foreach($form_approval->approver as $k => $approver)
+                            <!-- @foreach($form_approval->approver as $k => $approver)
                               @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'For Review')
                                 <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#ppr-approved-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Approve">
                                   <i class="ti-check btn-icon-prepend"></i>                                                    
@@ -151,7 +151,7 @@
                                   <i class="ti-close btn-icon-prepend"></i>                                                    
                                 </button> 
                               @endif<br> 
-                            @endforeach
+                            @endforeach -->
                           </td>
 
                           <td>{{$form_approval->approval_remarks}}</td>
