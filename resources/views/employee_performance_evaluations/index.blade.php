@@ -53,15 +53,15 @@
                         <tr>
                           <td> 
 
-                            <!-- @if($eval->status == 'Approved') -->
+                            @if($eval->status == 'Approved')
                               <a href="/show-performance-plan-review/{{$eval->id}}" class="text-success btn-sm text-center" title="View PPR">
                                   <i class="ti-pencil btn-icon-prepend"></i>
                               </a>
-                            <!-- @else
+                            @else
                               <a href="/edit-performance-plan-review/{{$eval->id}}" class="text-success btn-sm text-center" title="Edit PPR">
                                   <i class="ti-pencil btn-icon-prepend"></i>
                               </a>
-                            @endif -->
+                            @endif
                             
                             {{ date('Y-m-d h:i A',strtotime($eval->created_at))}}</td>
                           <td>
