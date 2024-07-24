@@ -233,7 +233,7 @@
                             @endif
                           </td>
                           <td id="tdStatus{{ $eval->id }}">
-                            @if ($eval->approver)
+                            @if (count($eval->approver) > 0)
                               {{$eval->approver[0]->approver_info ? $eval->approver[0]->approver_info->name : ""}}
                             @endif
                           </td>
