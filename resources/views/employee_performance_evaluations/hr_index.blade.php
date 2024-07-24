@@ -199,6 +199,9 @@
                                   @endif
                                 @endif
 
+                                <br>
+                                <i>Custom Approver</i>
+
                             @else
                               @foreach($eval->approver as $approver)
                                 @if($eval->level >= $approver->level)
