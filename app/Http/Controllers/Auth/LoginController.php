@@ -14,6 +14,7 @@ use App\EmployeeDtr;
 use App\EmployeePerformanceEvaluation;
 use App\EmployeePerformanceEvaluationScore;
 
+use App\EmployeeCustomizedPprApprover;
 use App\EmployeeApprover;
 
 use App\Employee;
@@ -71,6 +72,11 @@ class LoginController extends Controller
             if(auth()->user()->employee_under->count() != 0){
 
                 $user_ids = EmployeeApprover::select('user_id')->where('approver_id',$user->id)->pluck('user_id')->toArray();
+                $custom_user_ids = EmployeeCustomizedPprApprover::select('user_id')
+                                                ->where('first_approver_id',$user->id)
+                                                ->orWhere('second_approver_id',$user->id)
+                                                ->pluck('user_id')
+                                                ->toArray();
 
                 $today = date('Y-m-d');
                 $from_date = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
@@ -114,7 +120,9 @@ class LoginController extends Controller
                                             ->whereDate('created_at','<=',$to_date)
                                             ->count();
 
-                $pending_ppr_count = EmployeePerformanceEvaluation::whereIn('user_id',$user_ids)
+                $pending_ppr_count = EmployeePerformanceEvaluation::where(function($q) use($user_ids,$custom_user_ids){
+                                                $q->whereIn('user_id',$user_ids)->orWhereIn('user_id',$custom_user_ids);
+                                            })
                                             ->where('status','For Review')
                                             ->whereDate('created_at','>=',$from_date)
                                             ->whereDate('created_at','<=',$to_date)

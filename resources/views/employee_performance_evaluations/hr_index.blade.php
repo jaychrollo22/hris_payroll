@@ -149,9 +149,10 @@
                         <th>Date Filed</th>
                         <th>Calendar Date</th>
                         <th>PPR Period</th>
-                        <th>Approver</th>
+                        <th>PPR Approver</th>
                         <th>Review Date</th>
                         <th>PPR Status</th>
+                        <th>Immediate Head</th>
                         <th>Performance Ratings Status</th>
                       </tr>
                     </thead>
@@ -169,23 +170,55 @@
                           <td>{{ $eval->calendar_year}}</td>
                           <td>{{ $eval->period}}</td>
                           <td id="tdStatus{{ $eval->id }}">
-                            @foreach($eval->approver as $approver)
-                              @if($eval->level >= $approver->level)
-                                  @if ($eval->level == 0 && $eval->status == 'Declined')
-                                  {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-danger mt-1">Declined</label>
+
+                            @if($eval->customized_ppr_approver)
+
+                                @if($eval->customized_ppr_approver->first_approver_info)
+                                  {{$eval->customized_ppr_approver->first_approver_info->name}} -  
+                                  @if($eval->level == 0)
+                                    @if ($eval->status == 'Declined')
+                                      <label class="badge badge-danger mt-1">Declined</label>
+                                    @else
+                                      <label class="badge badge-warning mt-1">For Review</label>
+                                    @endif
                                   @else
-                                  {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-success mt-1">Approved</label>
+                                      <label class="badge badge-success mt-1">Approved</label>
                                   @endif
-                              @else
-                                @if ($eval->status == 'Declined')
-                                  {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-danger mt-1">Declined</label>
-                                @elseif ($eval->status == 'Draft')
-                                  {{$approver->approver_info ? $approver->approver_info->name : ""}}
-                                @else
-                                  {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-warning mt-1">For Review</label>
                                 @endif
-                              @endif<br> 
-                            @endforeach
+                                <br>
+                                @if($eval->customized_ppr_approver->second_approver_info)
+                                  {{$eval->customized_ppr_approver->second_approver_info->name}} -  
+                                  @if($eval->level <= 1)
+                                    @if ($eval->status == 'Declined')
+                                      <label class="badge badge-danger mt-1">Declined</label>
+                                    @else
+                                      <label class="badge badge-warning mt-1">For Review</label>
+                                    @endif
+                                  @else
+                                      <label class="badge badge-success mt-1">Approved</label>
+                                  @endif
+                                @endif
+
+                            @else
+                              @foreach($eval->approver as $approver)
+                                @if($eval->level >= $approver->level)
+                                    @if ($eval->level == 0 && $eval->status == 'Declined')
+                                    {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                    @else
+                                    {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-success mt-1">Approved</label>
+                                    @endif
+                                @else
+                                  @if ($eval->status == 'Declined')
+                                    {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                  @elseif ($eval->status == 'Draft')
+                                    {{$approver->approver_info ? $approver->approver_info->name : ""}}
+                                  @else
+                                    {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-warning mt-1">For Review</label>
+                                  @endif
+                                @endif<br> 
+                              @endforeach
+
+                            @endif
                           </td>
                           <td>{{ $eval->approved_by_date ? date('Y-m-d',strtotime($eval->approved_by_date)) : ""}}</td>
                           <td>
@@ -197,6 +230,11 @@
                               <label class="badge badge-success" title="{{$eval->approval_remarks}}">{{ $eval->status }}</label>
                             @elseif($eval->status == 'Declined' || $eval->status == 'Cancelled')
                               <label class="badge badge-danger" title="{{$eval->approval_remarks}}">{{ $eval->status }}</label>
+                            @endif
+                          </td>
+                          <td id="tdStatus{{ $eval->id }}">
+                            @if ($eval->approver)
+                              {{$eval->approver[0]->approver_info ? $eval->approver[0]->approver_info->name : ""}}
                             @endif
                           </td>
                           <td>

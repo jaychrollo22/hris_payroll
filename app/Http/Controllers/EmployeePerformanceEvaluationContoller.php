@@ -8,6 +8,7 @@ use App\Employee;
 use App\EmployeePerformanceEvaluation;
 use App\Company;
 use App\EmployeeApprover;
+use App\EmployeeCustomizedPprApprover;
 use App\PerformancePlanPeriod;
 use App\EmployeePerformanceEvaluationScore;
 
@@ -64,7 +65,7 @@ class EmployeePerformanceEvaluationContoller extends Controller
 
         $status = $request->status ? $request->status : "";
         $employee_performance_evaluation = EmployeePerformanceEvaluation::select('id','user_id','calendar_year','review_date','created_at','approved_by_date','period','status','level')
-                                                                                ->with('user','employee','ppr_score')
+                                                                                ->with('user','employee','ppr_score','customized_ppr_approver.first_approver_info','customized_ppr_approver.second_approver_info')
                                                                                 ->orderBy('review_date','DESC')
                                                                                 ->whereHas('employee',function($q) use($allowed_companies){
                                                                                     $q->whereIn('company_id',$allowed_companies)
@@ -561,9 +562,15 @@ class EmployeePerformanceEvaluationContoller extends Controller
 
         $approver_id = auth()->user()->id;
 
-        $performance_plans = EmployeePerformanceEvaluation::with('approver.approver_info','user')
-                                ->whereHas('approver',function($q) use($approver_id) {
-                                    $q->where('approver_id',$approver_id);
+        $performance_plans = EmployeePerformanceEvaluation::with('approver.approver_info','user','customized_ppr_approver.first_approver_info','customized_ppr_approver.second_approver_info')
+                                ->where(function($q) use($approver_id){
+                                    $q->whereHas('approver',function($w) use($approver_id) {
+                                        $w->where('approver_id',$approver_id);
+                                    })
+                                    ->orWhereHas('customized_ppr_approver',function($w) use($approver_id) {
+                                        $w->where('first_approver_id',$approver_id)
+                                            ->orWhere('second_approver_id',$approver_id);
+                                    });
                                 })
                                 ->where('status',$filter_status)
                                 ->orderBy('created_at','DESC');
@@ -579,9 +586,16 @@ class EmployeePerformanceEvaluationContoller extends Controller
         
 
         $user_ids = EmployeeApprover::select('user_id')->where('approver_id',$approver_id)->pluck('user_id')->toArray();
+        $custom_user_ids = EmployeeCustomizedPprApprover::select('user_id')
+                                                ->where('first_approver_id',$approver_id)
+                                                ->orWhere('second_approver_id',$approver_id)
+                                                ->pluck('user_id')
+                                                ->toArray();
 
-        $for_approval = EmployeePerformanceEvaluation::whereIn('user_id',$user_ids)
-                                ->where('status','For Review');
+        $for_approval = EmployeePerformanceEvaluation::where(function($q) use($user_ids,$custom_user_ids){
+                                                            $q->whereIn('user_id',$user_ids)->orWhereIn('user_id',$custom_user_ids);
+                                                        })
+                                                        ->where('status','For Review');
         
         if(isset($request->from)){
             $for_approval = $for_approval->whereDate('created_at','>=',$from_date);
@@ -633,24 +647,43 @@ class EmployeePerformanceEvaluationContoller extends Controller
     }
 
     public function approvePpr(Request $request,$id){
-        $employee_ppr = EmployeePerformanceEvaluation::where('id', $id)->first();
+
+        $employee_ppr = EmployeePerformanceEvaluation::with('customized_ppr_approver')->where('id', $id)->first();
+        
         if($employee_ppr){
             $level = '';
             if($employee_ppr->level == 0){
-                $employee_approver = EmployeeApprover::where('user_id', $employee_ppr->user_id)->where('approver_id', auth()->user()->id)->first();
-                if($employee_approver->as_final == 'on'){
-                    EmployeePerformanceEvaluation::Where('id', $id)->update([
-                        'approved_by' =>auth()->user()->id,
-                        'approved_by_date' => date('Y-m-d'),
-                        'status' => 'Approved',
-                        'approval_remarks' => $request->approval_remarks,
-                        'level' => 1,
-                    ]);
+                if($employee_ppr->customized_ppr_approver){
+                    if($employee_ppr->customized_ppr_approver->second_approver_id){
+                        EmployeePerformanceEvaluation::Where('id', $id)->update([
+                            'approval_remarks' => $request->approval_remarks,
+                            'level' => 1
+                        ]);
+                    }else{
+                        EmployeePerformanceEvaluation::Where('id', $id)->update([
+                            'approved_by' =>auth()->user()->id,
+                            'approved_by_date' => date('Y-m-d'),
+                            'status' => 'Approved',
+                            'approval_remarks' => $request->approval_remarks,
+                            'level' => 1,
+                        ]);
+                    }
                 }else{
-                    EmployeePerformanceEvaluation::Where('id', $id)->update([
-                        'approval_remarks' => $request->approval_remarks,
-                        'level' => 1
-                    ]);
+                    $employee_approver = EmployeeApprover::where('user_id', $employee_ppr->user_id)->where('approver_id', auth()->user()->id)->first();
+                    if($employee_approver->as_final == 'on'){
+                        EmployeePerformanceEvaluation::Where('id', $id)->update([
+                            'approved_by' =>auth()->user()->id,
+                            'approved_by_date' => date('Y-m-d'),
+                            'status' => 'Approved',
+                            'approval_remarks' => $request->approval_remarks,
+                            'level' => 1,
+                        ]);
+                    }else{
+                        EmployeePerformanceEvaluation::Where('id', $id)->update([
+                            'approval_remarks' => $request->approval_remarks,
+                            'level' => 1
+                        ]);
+                    }
                 }
             }
             else if($employee_ppr->level == 1){

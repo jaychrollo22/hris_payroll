@@ -109,21 +109,51 @@
                           <td>{{$form_approval->calendar_year}}</td>
                           <td>{{$form_approval->period}}</td>
                           <td id="tdStatus{{ $form_approval->id }}">
-                            @foreach($form_approval->approver as $approver)
-                              @if($form_approval->level >= $approver->level)
-                                  @if ($form_approval->level == 0 && $form_approval->status == 'Declined')
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                            @if($form_approval->customized_ppr_approver)
+
+                                @if($form_approval->customized_ppr_approver->first_approver_info)
+                                  {{$form_approval->customized_ppr_approver->first_approver_info->name}} -  
+                                  @if($form_approval->level == 0)
+                                    @if ($form_approval->status == 'Declined')
+                                      <label class="badge badge-danger mt-1">Declined</label>
+                                    @else
+                                      <label class="badge badge-warning mt-1">For Review</label>
+                                    @endif
                                   @else
-                                    {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                      <label class="badge badge-success mt-1">Approved</label>
                                   @endif
-                              @else
-                                @if ($form_approval->status == 'Declined')
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
-                                @else
-                                  {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">For Review</label>
                                 @endif
-                              @endif<br> 
-                            @endforeach
+                                <br>
+                                @if($form_approval->customized_ppr_approver->second_approver_info)
+                                  {{$form_approval->customized_ppr_approver->second_approver_info->name}} -  
+                                  @if($form_approval->level <= 1)
+                                    @if ($form_approval->status == 'Declined')
+                                      <label class="badge badge-danger mt-1">Declined</label>
+                                    @else
+                                      <label class="badge badge-warning mt-1">For Review</label>
+                                    @endif
+                                  @else
+                                      <label class="badge badge-success mt-1">Approved</label>
+                                  @endif
+                                @endif
+
+                            @else
+                                @foreach($form_approval->approver as $approver)
+                                  @if($form_approval->level >= $approver->level)
+                                      @if ($form_approval->level == 0 && $form_approval->status == 'Declined')
+                                      {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                      @else
+                                        {{$approver->approver_info->name}} -  <label class="badge badge-success mt-1">Approved</label>
+                                      @endif
+                                  @else
+                                    @if ($form_approval->status == 'Declined')
+                                      {{$approver->approver_info->name}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                    @else
+                                      {{$approver->approver_info->name}} -  <label class="badge badge-warning mt-1">For Review</label>
+                                    @endif
+                                  @endif<br> 
+                                @endforeach
+                            @endif
                           </td>
                           <td>{{ $form_approval->approved_by_date ? date('Y-m-d',strtotime($form_approval->approved_by_date)) : ""}}</td>
                           <td>
@@ -142,16 +172,35 @@
 
                             <a href="/show-performance-plan-review/{{$form_approval->id}}" target="_blank" class="btn btn-primary btn-sm"><i class="ti-eye btn-icon-prepend"></i></a>
 
-                            @foreach($form_approval->approver as $k => $approver)
-                              @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'For Review')
-                                <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#ppr-approved-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Approve">
-                                  <i class="ti-check btn-icon-prepend"></i>                                                    
-                                </button>
-                                <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" data-target="#ppr-declined-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Decline">
-                                  <i class="ti-close btn-icon-prepend"></i>                                                    
-                                </button> 
-                              @endif<br> 
-                            @endforeach
+                            @if($form_approval->customized_ppr_approver)
+                              @if($form_approval->customized_ppr_approver->first_approver_id == $approver_id && $form_approval->level == 0 && $form_approval->status == 'For Review')
+                                  <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#ppr-approved-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Approve">
+                                    <i class="ti-check btn-icon-prepend"></i>                                                    
+                                  </button>
+                                  <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" data-target="#ppr-declined-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Decline">
+                                    <i class="ti-close btn-icon-prepend"></i>                                                    
+                                  </button>
+                              @elseif($form_approval->customized_ppr_approver->second_approver_id == $approver_id && $form_approval->level == 1 && $form_approval->status == 'For Review')
+                                  <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#ppr-approved-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Approve">
+                                    <i class="ti-check btn-icon-prepend"></i>                                                    
+                                  </button>
+                                  <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" data-target="#ppr-declined-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Decline">
+                                    <i class="ti-close btn-icon-prepend"></i>                                                    
+                                  </button>
+                              @endif
+                            @else
+                              @foreach($form_approval->approver as $k => $approver)
+                                @if($approver->approver_id == $approver_id && $form_approval->level == $k && $form_approval->status == 'For Review')
+                                  <button type="button" class="btn btn-success btn-sm" id="{{ $form_approval->id }}" data-target="#ppr-approved-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Approve">
+                                    <i class="ti-check btn-icon-prepend"></i>                                                    
+                                  </button>
+                                  <button type="button" class="btn btn-danger btn-sm" id="{{ $form_approval->id }}" data-target="#ppr-declined-remarks-{{ $form_approval->id }}" data-toggle="modal" title="Decline">
+                                    <i class="ti-close btn-icon-prepend"></i>                                                    
+                                  </button> 
+                                @endif<br> 
+                              @endforeach
+                            @endif
+
                           </td>
 
                           <td>{{$form_approval->approval_remarks}}</td>

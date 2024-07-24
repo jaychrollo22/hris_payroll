@@ -25,6 +25,10 @@ class EmployeePerformanceEvaluation extends Model implements Auditable
     {
         return $this->hasMany(EmployeeApprover::class,'user_id','user_id');
     } 
+    public function customized_ppr_approver()
+    {
+        return $this->hasOne(EmployeeCustomizedPprApprover::class,'user_id','user_id');
+    } 
 
     public function ppr_score()
     {
