@@ -118,7 +118,7 @@
                           <option value="Ongoing Self Ratings" @if ('Ongoing Self Ratings' == $status) selected @endif>Ongoing Self Ratings</option>
                           <option value="For Approval" @if ('For Approval' == $status) selected @endif>For Manager Ratings</option>
                           <option value="For Acceptance" @if ('For Acceptance' == $status) selected @endif>For Acceptance</option>
-                          <option value="Summary of Ratings" @if ('Summary of Ratings' == $status) selected @endif>For Summary of Ratings</option>
+                          <option value="Summary of Ratings" @if ('Summary of Ratings' == $status) selected @endif>For Performance and Development Summary</option>
                           <option value="Completed" @if ('Completed' == $status) selected @endif>Completed</option>
                         </select>
                       </div>
@@ -254,7 +254,7 @@
                                       $performance_rating_status = "Ongoing Self Ratings";
                                     }
                                     elseif($eval->ppr_score->status == "Accepted" && $eval->ppr_score->summary_of_ratings_is_posted == null){
-                                      $performance_rating_status = "For Summary of Ratings";
+                                      $performance_rating_status = "For Performance and Development Summary";
                                     }
                                     elseif($eval->ppr_score->status == "Accepted" && $eval->ppr_score->summary_of_ratings_is_posted == "1"){
                                       $performance_rating_status = "Completed";

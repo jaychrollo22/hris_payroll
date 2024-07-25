@@ -39,12 +39,12 @@
                 </div>
               </div>
             </div>            
-            <div class='col-lg-2 mt-2'>
+            <div class='col-lg-4 mt-2'>
               <div class="card card-success">
                 <div class="card-body">
                   <div class="media">                
                     <div class="media-body">
-                      <h4 class="mb-4">Summary of Ratings</h4>
+                      <h4 class="mb-4">For Performance and Development Summary</h4>
                       <a href="/for-performance-review?status=Summary of Ratings" class="h2 card-text text-dark">{{$summary_of_ratings}}</a>
                     </div>
                   </div>
@@ -79,7 +79,7 @@
                             <option value="For Approval" @if ('For Approval' == $status) selected @endif>For Manager Ratings</option>
                             <option value="For Acceptance" @if ('For Acceptance' == $status) selected @endif>For Acceptance</option>
                             <option value="Accepted" @if ('Accepted' == $status) selected @endif>Accepted</option>
-                            <option value="Summary of Ratings" @if ('Summary of Ratings' == $status) selected @endif>Summary of Ratings</option>
+                            <option value="Summary of Ratings" @if ('Summary of Ratings' == $status) selected @endif>For Performance and Development Summary</option>
                           </select>
                         </div>
                       </div>
@@ -139,7 +139,7 @@
                             </td>
                             <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
                               @if($status == 'Summary of Ratings')
-                                <a href="/take-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Summary Assessment" target="_blank" class="btn btn-primary btn-sm">Summary Ratings</a>
+                                <a href="/take-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Summary Assessment" target="_blank" class="btn btn-primary btn-sm">Performance and Development Summary</a>
                               @elseif($status == 'Accepted')
                                 <a href="/show-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Summary Assessment" target="_blank" class="btn btn-primary btn-sm">Show Assessment</a>
                                 
