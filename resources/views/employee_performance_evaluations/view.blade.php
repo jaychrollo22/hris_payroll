@@ -39,7 +39,7 @@
                                         $performance_rating_status = "Ongoing Self Ratings";
                                     }
                                     elseif($ppr_details->ppr_score->status == "Accepted" && $ppr_details->ppr_score->summary_of_ratings_is_posted == null){
-                                        $performance_rating_status = "For Summary of Ratings";
+                                        $performance_rating_status = "For Performance and Development Summary";
                                     }
                                     elseif($ppr_details->ppr_score->status == "Accepted" && $ppr_details->ppr_score->summary_of_ratings_is_posted == "1"){
                                         $performance_rating_status = "Completed";
