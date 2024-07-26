@@ -170,7 +170,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['financial_perspective']['strat_1_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="financial_perspective[strat_1_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_1_remarks_1']) ? $ppr['financial_perspective']['strat_1_remarks_1'] : ""}}</textarea>
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="financial_perspective[strat_1_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_1_remarks_1']) ? $ppr['financial_perspective']['strat_1_remarks_1'] : ""}}</textarea>
                                                     @endif
                                                 </td>   
                                             </tr>
@@ -212,7 +212,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['financial_perspective']['strat_2_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="financial_perspective[strat_2_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_2_remarks_1']) ? $ppr['financial_perspective']['strat_2_remarks_1'] : ""}}</textarea>
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="financial_perspective[strat_2_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_2_remarks_1']) ? $ppr['financial_perspective']['strat_2_remarks_1'] : ""}}</textarea>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -254,7 +254,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['financial_perspective']['strat_3_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="financial_perspective[strat_3_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_3_remarks_1']) ? $ppr['financial_perspective']['strat_3_remarks_1'] : ""}}</textarea>                                                    
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="financial_perspective[strat_3_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_3_remarks_1']) ? $ppr['financial_perspective']['strat_3_remarks_1'] : ""}}</textarea>                                                    
                                                     @endif
                                                 </td>
                                             </tr>
@@ -302,7 +302,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['financial_perspective']['strat_1_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="financial_perspective[strat_1_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_1_remarks_2']) ? $ppr['financial_perspective']['strat_1_remarks_2'] : ""}}</textarea>                                                                            
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="financial_perspective[strat_1_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_1_remarks_2']) ? $ppr['financial_perspective']['strat_1_remarks_2'] : ""}}</textarea>                                                                            
                                                     @endif
                                                 </td>
 
@@ -348,7 +348,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['financial_perspective']['strat_2_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="financial_perspective[strat_2_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_2_remarks_2']) ? $ppr['financial_perspective']['strat_2_remarks_2'] : ""}}</textarea>                                                                            
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="financial_perspective[strat_2_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_2_remarks_2']) ? $ppr['financial_perspective']['strat_2_remarks_2'] : ""}}</textarea>                                                                            
                                                     @endif
                                                 </td>
 
@@ -391,7 +391,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['financial_perspective']['strat_3_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="financial_perspective[strat_3_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_3_remarks_2']) ? $ppr['financial_perspective']['strat_3_remarks_2'] : ""}}</textarea>                                                                            
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="financial_perspective[strat_3_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['financial_perspective']['strat_3_remarks_2']) ? $ppr['financial_perspective']['strat_3_remarks_2'] : ""}}</textarea>                                                                            
                                                     @endif
                                                 </td>
                                 
@@ -450,7 +450,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['customer_focus']['strat_1_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="customer_focus[strat_1_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_1_remarks_1']) ? $ppr['customer_focus']['strat_1_remarks_1'] : ""}}</textarea>                                                                                                    
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="customer_focus[strat_1_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_1_remarks_1']) ? $ppr['customer_focus']['strat_1_remarks_1'] : ""}}</textarea>                                                                                                    
                                                     @endif
                                                 </td>   
                                             </tr>
@@ -492,7 +492,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['customer_focus']['strat_2_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="customer_focus[strat_2_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_2_remarks_1']) ? $ppr['customer_focus']['strat_2_remarks_1'] : ""}}</textarea>                                                                                                                                                       
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="customer_focus[strat_2_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_2_remarks_1']) ? $ppr['customer_focus']['strat_2_remarks_1'] : ""}}</textarea>                                                                                                                                                       
                                                     @endif
                                                 </td>
                                             </tr>
@@ -534,7 +534,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['customer_focus']['strat_3_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="customer_focus[strat_3_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_3_remarks_1']) ? $ppr['customer_focus']['strat_3_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                       
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="customer_focus[strat_3_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_3_remarks_1']) ? $ppr['customer_focus']['strat_3_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                       
                                                     @endif
                                                 </td>
                                             </tr>
@@ -582,7 +582,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['customer_focus']['strat_1_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="customer_focus[strat_1_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_1_remarks_2']) ? $ppr['customer_focus']['strat_1_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                       
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="customer_focus[strat_1_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_1_remarks_2']) ? $ppr['customer_focus']['strat_1_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                       
                                                     @endif
                                                 </td>
 
@@ -627,7 +627,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['customer_focus']['strat_2_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="customer_focus[strat_2_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_2_remarks_2']) ? $ppr['customer_focus']['strat_2_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                           
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="customer_focus[strat_2_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_2_remarks_2']) ? $ppr['customer_focus']['strat_2_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                           
                                                     @endif
                                                 </td>
 
@@ -670,7 +670,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['customer_focus']['strat_3_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="customer_focus[strat_3_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_3_remarks_2']) ? $ppr['customer_focus']['strat_3_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                           
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="customer_focus[strat_3_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['customer_focus']['strat_3_remarks_2']) ? $ppr['customer_focus']['strat_3_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                           
                                                     @endif
                                                 </td>
                                 
@@ -730,7 +730,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['operation_efficiency']['strat_1_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="operation_efficiency[strat_1_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_1_remarks_1']) ? $ppr['operation_efficiency']['strat_1_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="operation_efficiency[strat_1_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_1_remarks_1']) ? $ppr['operation_efficiency']['strat_1_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>   
                                             </tr>
@@ -772,7 +772,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['operation_efficiency']['strat_2_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="operation_efficiency[strat_2_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_2_remarks_1']) ? $ppr['operation_efficiency']['strat_2_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="operation_efficiency[strat_2_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_2_remarks_1']) ? $ppr['operation_efficiency']['strat_2_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>
                                             </tr>
@@ -814,7 +814,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['operation_efficiency']['strat_3_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="operation_efficiency[strat_3_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_3_remarks_1']) ? $ppr['operation_efficiency']['strat_3_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="operation_efficiency[strat_3_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_3_remarks_1']) ? $ppr['operation_efficiency']['strat_3_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>
                                             </tr>
@@ -862,7 +862,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['operation_efficiency']['strat_1_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="operation_efficiency[strat_1_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_1_remarks_2']) ? $ppr['operation_efficiency']['strat_1_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="operation_efficiency[strat_1_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_1_remarks_2']) ? $ppr['operation_efficiency']['strat_1_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>
 
@@ -907,7 +907,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['operation_efficiency']['strat_2_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="operation_efficiency[strat_2_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_2_remarks_2']) ? $ppr['operation_efficiency']['strat_2_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="operation_efficiency[strat_2_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_2_remarks_2']) ? $ppr['operation_efficiency']['strat_2_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>
 
@@ -950,7 +950,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['operation_efficiency']['strat_3_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="operation_efficiency[strat_3_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_3_remarks_2']) ? $ppr['operation_efficiency']['strat_3_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="operation_efficiency[strat_3_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['operation_efficiency']['strat_3_remarks_2']) ? $ppr['operation_efficiency']['strat_3_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>
                                 
@@ -1009,7 +1009,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['people']['strat_1_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="people[strat_1_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_1_remarks_1']) ? $ppr['people']['strat_1_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="people[strat_1_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_1_remarks_1']) ? $ppr['people']['strat_1_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>   
                                             </tr>
@@ -1051,7 +1051,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['people']['strat_2_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="people[strat_2_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_2_remarks_1']) ? $ppr['people']['strat_2_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="people[strat_2_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_2_remarks_1']) ? $ppr['people']['strat_2_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>
                                             </tr>
@@ -1093,7 +1093,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['people']['strat_3_objective_1'])
-                                                        <textarea style="max-width:100px!important;" name="people[strat_3_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_3_remarks_1']) ? $ppr['people']['strat_3_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="people[strat_3_remarks_1]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_3_remarks_1']) ? $ppr['people']['strat_3_remarks_1'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>
                                             </tr>
@@ -1141,7 +1141,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['people']['strat_1_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="people[strat_1_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_1_remarks_2']) ? $ppr['people']['strat_1_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="people[strat_1_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_1_remarks_2']) ? $ppr['people']['strat_1_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>
 
@@ -1185,7 +1185,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['people']['strat_2_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="people[strat_2_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_2_remarks_2']) ? $ppr['people']['strat_2_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="people[strat_2_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_2_remarks_2']) ? $ppr['people']['strat_2_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>
 
@@ -1228,7 +1228,7 @@
                                                 </td>
                                                 <td style="text-align: center; width:10px!important;">
                                                     @if($ppr['people']['strat_3_objective_2'])
-                                                        <textarea style="max-width:100px!important;" name="people[strat_3_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_3_remarks_2']) ? $ppr['people']['strat_3_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
+                                                        <textarea style="max-width:100px!important;" class="txt-required" name="people[strat_3_remarks_2]" cols="100" rows="1" placeholder="" @if($enable_edit_approver  == false) readonly @endif>{{ isset($ppr['people']['strat_3_remarks_2']) ? $ppr['people']['strat_3_remarks_2'] : ""}}</textarea>                                                                                                                                                                                                                                                                                                               
                                                     @endif
                                                 </td>
                                             </tr>
@@ -1781,21 +1781,28 @@
 		}
 
 		function submitForAcceptance(id) {
-            swal({
-                title: "Are you sure you want to submit For Employee Acceptance?",
-                text: "You may not be able to edit it afterwards. Would you like to proceed?",
-                icon: "warning",
-                buttons: true,
-                successMode: true,
-            })
-            .then((willDisable) => {
-                if (willDisable) {
-                    document.getElementById("loader").style.display = "block";
-                    const postValue = document.getElementById('postValue');
-                    postValue.value = '1'; 
-                    document.getElementById('takeSelfAssessment').submit();
-                }
-            });
+            if(validateFormwithStarRemarks()){
+                swal({
+                    title: "Are you sure you want to submit For Employee Acceptance?",
+                    text: "You may not be able to edit it afterwards. Would you like to proceed?",
+                    icon: "warning",
+                    buttons: true,
+                    successMode: true,
+                })
+                .then((willDisable) => {
+                    if (willDisable) {
+                        document.getElementById("loader").style.display = "block";
+                        const postValue = document.getElementById('postValue');
+                        postValue.value = '1'; 
+                        document.getElementById('takeSelfAssessment').submit();
+                    }
+                });
+            }else{
+                swal({
+                    title: "Please input Stars/Remarks in BSC. Thank you.",
+                    icon: "info",
+                });
+            }
 		}
 
 		function submitAgree(id) {
@@ -1897,6 +1904,22 @@
             }
 		}
 
+
+        function validateFormwithStarRemarks() {
+            // Select the input with the class 'txt-required'
+            const requiredFields = document.querySelectorAll('.txt-required');
+            let isValid = true;
+            
+            // Loop through each required field
+            requiredFields.forEach(function(field) {
+                // Check if the input value is empty
+                if (field.value.trim() === "") {
+                    isValid = false;
+                }
+            });
+            
+            return isValid; // Allow form submission
+        }
       
 	</script>
 @endsection
