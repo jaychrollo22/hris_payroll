@@ -385,6 +385,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('reset-ppr-approver/{id}','EmployeePerformanceEvaluationContoller@resetApprover');
 
     Route::get('export-ppr','EmployeePerformanceEvaluationContoller@export');
+    Route::get('export-ppr-score','EmployeePerformanceEvaluationContoller@export_ppr_score');
 
     //Self Assessment
     Route::get('/take-performance-plan-review/{id}','EmployeePerformanceEvaluationContoller@take');

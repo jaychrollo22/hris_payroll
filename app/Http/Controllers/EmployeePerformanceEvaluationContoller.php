@@ -19,6 +19,8 @@ use Excel;
 
 use App\Exports\PprExport;
 
+use App\Exports\EmployeePerformanceEvaluationScoreExport;
+
 class EmployeePerformanceEvaluationContoller extends Controller
 {
     /**
@@ -1353,5 +1355,10 @@ class EmployeePerformanceEvaluationContoller extends Controller
     public function reset_performance_ratings($id){
         $ppr_score = EmployeePerformanceEvaluationScore::where('id',$id)->delete();
         return "deleted";
+    }
+
+    public function export_ppr_score()
+    {
+        return Excel::download(new EmployeePerformanceEvaluationScoreExport, 'Expot PPR Report.xlsx');
     }
 }
