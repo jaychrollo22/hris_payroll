@@ -77,6 +77,10 @@ class LoginController extends Controller
                                                 ->orWhere('second_approver_id',$user->id)
                                                 ->pluck('user_id')
                                                 ->toArray();
+                $custom_user_ids_ratings = EmployeeCustomizedPprApprover::select('user_id')
+                                                ->where('first_approver_id',$user->id)
+                                                ->pluck('user_id')
+                                                ->toArray();
 
                 $today = date('Y-m-d');
                 $from_date = date('Y-m-d',(strtotime ( '-1 month' , strtotime ( $today) ) ));
@@ -128,7 +132,10 @@ class LoginController extends Controller
                                             ->whereDate('created_at','<=',$to_date)
                                             ->count();
 
-                $pending_for_manager_ratings = EmployeePerformanceEvaluationScore::whereIn('user_id',$user_ids)->where('status','For Approval')->count();
+                $pending_for_manager_ratings = EmployeePerformanceEvaluationScore::where(function($q) use($user_ids,$custom_user_ids_ratings){
+                                                $q->whereIn('user_id',$user_ids)->orWhereIn('user_id',$custom_user_ids_ratings);
+                                            })->where('status','For Approval')
+                                            ->count();
 
                 session([
                     'pending_leave_count'=>$pending_leave_count + $request_to_cancel,
