@@ -119,11 +119,19 @@
                             <td>{{$form_approval->ppr ? $form_approval->ppr->calendar_year : ""}}</td>
                             <td>{{$form_approval->ppr ? $form_approval->ppr->period : ""}}</td>
                             <td id="tdStatus{{ $form_approval->id }}">
-                              @foreach($form_approval->approver as $approver)
-                                @if($approver->level == 1)
-                                  {{$approver->approver_info->name}}
+                                @if($form_approval->customized_ppr_approver)
+                                  @if($form_approval->customized_ppr_approver->first_approver_info)
+                                    {{$form_approval->customized_ppr_approver->first_approver_info->name}}
+                                  @endif
+                                  <br>
+                                  <small>Custom Approver</small>
+                                @else
+                                  @foreach($form_approval->approver as $approver)
+                                    @if($approver->level == 1)
+                                      {{$approver->approver_info->name}}
+                                    @endif
+                                  @endforeach
                                 @endif
-                              @endforeach
                             </td>
                             <td>
                                 {{$form_approval->status == 'For Approval' ? "For Manager Ratings" : $form_approval->status}} 
@@ -135,7 +143,6 @@
                                     <span class="badge badge-success mt-2">{{$form_approval->user_acceptance_status}}</span>
                                   @endif
                                 @endif
-                                
                             </td>
                             <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
                               @if($status == 'Summary of Ratings')

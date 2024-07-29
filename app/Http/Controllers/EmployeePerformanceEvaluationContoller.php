@@ -1170,8 +1170,13 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $approver_id = auth()->user()->id;
 
         $performance_evaluations = EmployeePerformanceEvaluationScore::with('approver.approver_info','user','ppr')
-                                ->whereHas('approver',function($q) use($approver_id) {
-                                    $q->where('approver_id',$approver_id);
+                                ->where(function($q) use($approver_id){
+                                    $q->whereHas('approver',function($w) use($approver_id) {
+                                        $w->where('approver_id',$approver_id);
+                                    })
+                                    ->orWhereHas('customized_ppr_approver',function($w) use($approver_id) {
+                                        $w->where('first_approver_id',$approver_id);
+                                    });
                                 })
                                 ->orderBy('created_at','DESC');
 
