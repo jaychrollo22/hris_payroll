@@ -66,6 +66,7 @@
                 </p> --}}
 
                 <a href="/export-ppr?company={{$company}}&calendar_date={{$performance_plan_period}}&status={{$status}}&period_ppr={{$period_ppr}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right mr-2" title="Export PPR"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+                <a href="/export-ppr-score?company={{$company}}&calendar_date={{$performance_plan_period}}&status={{$status}}&period_ppr={{$period_ppr}}" class="btn btn-outline-success btn-icon-text btn-sm text-center float-right mr-2" title="Export PPR ratings"><i class="ti-arrow-down btn-icon-prepend"></i></a>
                 
                 <form method='get' onsubmit='show();' enctype="multipart/form-data">
                   <div class=row>
