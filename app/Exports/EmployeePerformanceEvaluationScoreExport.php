@@ -19,9 +19,45 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
 
     use Exportable;
 
+    public function __construct($company,$status,$period_ppr,$calendar_date, $allowed_companies)
+    {
+        $this->company = $company;
+        $this->status = $status;
+        $this->period_ppr = $period_ppr;
+        $this->calendar_date = $calendar_date;
+        $this->allowed_companies = $allowed_companies;
+    }
+
+
     public function query()
     {
-        return EmployeePerformanceEvaluation::with('employee.company','employee.department','approver','customized_ppr_approver','ppr_score');
+
+        $company = $this->company;
+        $period_ppr = $this->period_ppr;
+        $status = $this->status;
+        $calendar_date = $this->calendar_date;
+        $allowed_companies = json_decode($this->allowed_companies);
+
+        return EmployeePerformanceEvaluation::with('employee.company','employee.department','approver','customized_ppr_approver','ppr_score')
+                                                ->when($company,function($q) use($company){
+                                                    $q->whereHas('employee',function($w) use($company){
+                                                        $w->where('company_id',$company);
+                                                    });
+                                                })
+                                                ->where(function($q) use($allowed_companies){
+                                                    $q->whereHas('employee',function($w) use($allowed_companies){
+                                                        $w->whereIn('company_id',$allowed_companies);
+                                                    });
+                                                })
+                                                ->when($period_ppr,function($q) use($period_ppr){
+                                                    $q->where('period',$period_ppr);
+                                                })
+                                                ->when($status,function($q) use($status){
+                                                    $q->where('status',$status);
+                                                })
+                                                ->when($calendar_date,function($q) use($calendar_date){
+                                                    $q->where('calendar_year',$calendar_date);
+                                                });
     }
 
     public function headings(): array

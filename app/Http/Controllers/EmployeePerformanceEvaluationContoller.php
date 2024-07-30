@@ -1357,8 +1357,18 @@ class EmployeePerformanceEvaluationContoller extends Controller
         return "deleted";
     }
 
-    public function export_ppr_score()
+    public function export_ppr_score(Request $request)
     {
-        return Excel::download(new EmployeePerformanceEvaluationScoreExport, 'Expot PPR Report.xlsx');
+        $company = isset($request->company) ? $request->company : "";
+        $status = isset($request->status) ? $request->status : "";
+        $calendar_date = isset($request->calendar_date) ? $request->calendar_date : "";
+        $period_ppr = isset($request->period_ppr) ? $request->period_ppr : "";
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_companies = json_encode($allowed_companies);
+
+        $company_detail = Company::where('id',$company)->first();
+        $company_code =  $company_detail ?  $company_detail->company_code : "";
+
+        return Excel::download(new EmployeePerformanceEvaluationScoreExport($company,$status,$period_ppr,$calendar_date,$allowed_companies), $company_code . ' ' . $status . ' ' . $calendar_date . ' PPR Ratings Export.xlsx');
     }
 }
