@@ -119,9 +119,15 @@
                             <td>{{$form_approval->ppr ? $form_approval->ppr->calendar_year : ""}}</td>
                             <td>{{$form_approval->ppr ? $form_approval->ppr->period : ""}}</td>
                             <td id="tdStatus{{ $form_approval->id }}">
+                                @php
+                                    $approver_id = '';
+                                @endphp
                                 @if($form_approval->customized_ppr_approver)
                                   @if($form_approval->customized_ppr_approver->first_approver_info)
-                                    {{$form_approval->customized_ppr_approver->first_approver_info->name}}
+                                      {{$form_approval->customized_ppr_approver->first_approver_info->name}}
+                                      @php
+                                        $approver_id = $form_approval->customized_ppr_approver->first_approver_info->id;
+                                      @endphp
                                   @endif
                                   <br>
                                   <small>Custom Approver</small>
@@ -129,6 +135,10 @@
                                   @foreach($form_approval->approver as $approver)
                                     @if($approver->level == 1)
                                       {{$approver->approver_info->name}}
+
+                                      @php
+                                        $approver_id = $approver->approver_info->id;
+                                      @endphp
                                     @endif
                                   @endforeach
                                 @endif
@@ -145,14 +155,20 @@
                                 @endif
                             </td>
                             <td align="center" id="tdActionId{{ $form_approval->id }}" data-id="{{ $form_approval->id }}">
-                              @if($status == 'Summary of Ratings')
-                                <a href="/take-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Summary Assessment" target="_blank" class="btn btn-primary btn-sm">Performance and Development Summary</a>
-                              @elseif($status == 'Accepted')
-                                <a href="/show-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Summary Assessment" target="_blank" class="btn btn-primary btn-sm">Show Assessment</a>
-                                
-                              @else
-                                <a href="/take-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Manager Assessment" target="_blank" class="btn btn-primary btn-sm">Manager Ratings</a>
-                              @endif
+                              
+                                @if($status == 'Summary of Ratings')
+                                  @if($approver_id == auth()->user()->id)
+                                    <a href="/take-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Summary Assessment" target="_blank" class="btn btn-primary btn-sm">Performance and Development Summary</a>
+                                  @endif
+                                @elseif($status == 'Accepted')
+                                  <a href="/show-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Summary Assessment" target="_blank" class="btn btn-primary btn-sm">Show Assessment</a>
+                                  
+                                @else
+                                  @if($approver_id == auth()->user()->id)
+                                    <a href="/take-performance-plan-review/{{$form_approval->ppr->id}}?user_id={{$form_approval->user_id}}&method=Manager Assessment" target="_blank" class="btn btn-primary btn-sm">Manager Ratings</a>
+                                  @endif
+                                @endif
+                              
                             </td>
                           </tr>
                             
