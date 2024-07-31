@@ -960,7 +960,9 @@
                                     <td align="center">{{$ppr['bsc_weight']}}</td>
                                     <td align="center">{{$ppr['bsc_actual_score']}}</td>
                                     <td align="center" rowspan="3">
-                                        <span id="manager_equivalent_rating_description_label">{{ $ppr_score ? $ppr_score['manager_equivalent_rating_description'] : ""}}</span>
+                                        {{-- <span id="manager_equivalent_rating_description_label">{{ $ppr_score ? $ppr_score['manager_equivalent_rating_description'] : ""}}</span> --}}
+
+                                        {{ summarOfRatingScale($ppr['total_actual_score']) }}
                                     </td>
                                 </tr>
                                 <tr>
