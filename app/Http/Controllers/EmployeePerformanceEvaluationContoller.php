@@ -280,11 +280,11 @@ class EmployeePerformanceEvaluationContoller extends Controller
      */
     public function store(Request $request)
     {
-        $validate_ppr = EmployeePerformanceEvaluation::where('user_id',Auth::user()->id)
-                                                        ->where('period',$request->period)
-                                                        ->where('calendar_year',$request->calendar_year)
-                                                        ->first();
-        if(empty($validate_ppr)){
+        // $validate_ppr = EmployeePerformanceEvaluation::where('user_id',Auth::user()->id)
+        //                                                 ->where('period',$request->period)
+        //                                                 ->where('calendar_year',$request->calendar_year)
+        //                                                 ->first();
+        // if(empty($validate_ppr)){
 
             $new_eval = new EmployeePerformanceEvaluation;
             $new_eval->user_id = Auth::user()->id;
@@ -326,10 +326,10 @@ class EmployeePerformanceEvaluationContoller extends Controller
 
             Alert::success('Successfully Store')->persistent('Dismiss');
             return redirect('edit-performance-plan-review/' . $new_eval->id);
-        }else{
-            Alert::warning('PPR Exists')->persistent('Dismiss');
-            return back();
-        }
+        // }else{
+        //     Alert::warning('PPR Exists')->persistent('Dismiss');
+        //     return back();
+        // }
 
     }
 
