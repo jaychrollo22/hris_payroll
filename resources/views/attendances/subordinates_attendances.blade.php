@@ -18,8 +18,8 @@
                         <div class="col-sm-8">
                             <select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='employee[]' multiple required>
                                 <option value="">-- Select Employee --</option>
-                                 @foreach(auth()->user()->subbordinates as $emp)
-                                    <option value="{{$emp->employee_number}}" @if($emp_code) @if (in_array($emp->employee_number,$emp_code)) selected @endif @endif >{{$emp->employee_number}} - {{$emp->first_name}} {{$emp->last_name}}</option>
+                                 @foreach(auth()->user()->employee_under as $emp)
+                                    <option value="{{$emp->employee_info->employee_number}}" @if($emp_code) @if (in_array($emp->employee_info->employee_number,$emp_code)) selected @endif @endif >{{$emp->employee_info->employee_number}} - {{$emp->employee_info->first_name}} {{$emp->employee_info->last_name}}</option>
                                  @endforeach
                               </select>
                         </div>
