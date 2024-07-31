@@ -1181,6 +1181,8 @@ function summarOfRatingScale($total_rating){
         return "EXCEED EXPECTATIONS";
     }else if($total_rating >= 111){
         return "OUTSTANDING";
+    }else{
+        return "";
     }
 }
 
