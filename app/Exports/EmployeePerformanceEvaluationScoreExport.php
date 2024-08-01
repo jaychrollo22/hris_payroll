@@ -38,7 +38,7 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
         $calendar_date = $this->calendar_date;
         $allowed_companies = json_decode($this->allowed_companies);
 
-        return EmployeePerformanceEvaluation::with('employee.company','employee.department','approver','customized_ppr_approver','ppr_score')
+        $ppr_ratings = EmployeePerformanceEvaluation::with('employee.company','employee.department','approver','customized_ppr_approver','ppr_score')
                                                 ->when($company,function($q) use($company){
                                                     $q->whereHas('employee',function($w) use($company){
                                                         $w->where('company_id',$company);
@@ -52,12 +52,45 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
                                                 ->when($period_ppr,function($q) use($period_ppr){
                                                     $q->where('period',$period_ppr);
                                                 })
-                                                ->when($status,function($q) use($status){
-                                                    $q->where('status',$status);
-                                                })
+                                                // ->when($status,function($q) use($status){
+                                                //     $q->where('status',$status);
+                                                // })
                                                 ->when($calendar_date,function($q) use($calendar_date){
                                                     $q->where('calendar_year',$calendar_date);
                                                 });
+
+        if($status){
+            if($status == 'Pending Self Ratings' || $status == 'Ongoing Self Ratings' || $status == 'For Approval' || $status == 'For Acceptance' || $status == 'Accepted' || $status == 'Summary of Ratings' || $status == 'Completed'){
+                
+                if($status == 'Pending Self Ratings'){
+                    $ppr_ratings = $ppr_ratings->whereDoesntHave('ppr_score')->where('status','Approved');
+                }elseif($status == 'Ongoing Self Ratings'){
+                    $ppr_ratings = $ppr_ratings->whereHas('ppr_score',function($q){
+                        $q->whereNull('self_assessment_is_posted');
+                    });
+                }
+                elseif($status == 'Summary of Ratings'){
+                    $ppr_ratings = $ppr_ratings->whereHas('ppr_score',function($q){
+                        $q->where('status','Accepted')->whereNull('summary_of_ratings_is_posted');
+                    });
+                }
+                elseif($status == 'Completed'){
+                    $ppr_ratings = $ppr_ratings->whereHas('ppr_score',function($q){
+                        $q->where('status','Accepted')->where('summary_of_ratings_is_posted','1');
+                    });
+                }
+                else{
+                    $ppr_ratings = $ppr_ratings->whereHas('ppr_score',function($q) use($status){
+                        $q->where('status',$status);
+                    });
+                }
+            }else{
+                $ppr_ratings->where('status',$status);
+            }
+
+            return $ppr_ratings;
+            
+        }
     }
 
     public function headings(): array
