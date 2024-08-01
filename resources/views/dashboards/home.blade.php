@@ -68,8 +68,9 @@
                                         <td>@if($time_in){{date('h:i a',strtotime($time_in->time_in))}}@endif</td>
                                         <td>@if($time_in) @if($time_in->time_out){{date('h:i a',strtotime($time_in->time_out))}} @endif @endif</td>
                                       </tr>
-                                      @endforeach
-                                    @endif
+                                      @endif
+                                    @endforeach
+                                    
                     
                                   </tbody>
                               </table>
