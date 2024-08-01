@@ -60,7 +60,7 @@ class User extends Authenticatable implements Auditable
     }
     public function employee_under()
     {
-        return $this->hasMany(EmployeeApprover::class,'approver_id','id');
+        return $this->hasMany(EmployeeApprover::class,'approver_id','id')->where('status','Active');
     }
 
     public function emp_leave()
