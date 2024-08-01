@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\EmployeePerformanceEvaluationScore;
 use App\EmployeePerformanceEvaluation;
 use App\Employee;
+use App\Company;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -38,6 +39,12 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
         $calendar_date = $this->calendar_date;
         $allowed_companies = json_decode($this->allowed_companies);
 
+        if(auth()->user()->id == '3873'){
+            $allowed_companies = Company::select('id')->pluck('id')->toArray();
+        }else{
+            $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        }
+
         $ppr_ratings = EmployeePerformanceEvaluation::with('employee.company','employee.department','approver','customized_ppr_approver','ppr_score')
                                                 ->when($company,function($q) use($company){
                                                     $q->whereHas('employee',function($w) use($company){
@@ -46,15 +53,13 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
                                                 })
                                                 ->where(function($q) use($allowed_companies){
                                                     $q->whereHas('employee',function($w) use($allowed_companies){
-                                                        $w->whereIn('company_id',$allowed_companies);
+                                                        $w->whereIn('company_id',$allowed_companies)
+                                                        ->where('status','Active');
                                                     });
                                                 })
                                                 ->when($period_ppr,function($q) use($period_ppr){
                                                     $q->where('period',$period_ppr);
                                                 })
-                                                // ->when($status,function($q) use($status){
-                                                //     $q->where('status',$status);
-                                                // })
                                                 ->when($calendar_date,function($q) use($calendar_date){
                                                     $q->where('calendar_year',$calendar_date);
                                                 });
