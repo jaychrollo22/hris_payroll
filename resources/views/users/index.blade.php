@@ -67,7 +67,7 @@
                                         <td>{{$user->id}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->email}}</td>
-                                        <td>{{$user->employee ? $user->employee->company->company_name . ' (' . $user->employee->company->company_code . ')' : "" }}</td>
+                                        <td>{{$user->employee->company ? $user->employee->company->company_name . ' (' . $user->employee->company->company_code . ')' : "" }}</td>
                                         <td>{{$user->role}}</td>
                                         <td>{{ date('Y-m-d h:i A',strtotime($user->updated_at))}}</td>
                                         <td>

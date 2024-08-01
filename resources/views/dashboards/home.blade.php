@@ -42,7 +42,7 @@
                               </div>
                           </div>
                         </div>
-                        @if(count(auth()->user()->subbordinates) > 0)
+                        @if(count(auth()->user()->employee_under) > 0)
                         <div class="card">
                           <div class="card-body">
                             <p class="card-title ">Subordinates <small>({{date('M d, Y')}})</small></p>
@@ -57,12 +57,12 @@
                                   </thead>
                                   <tbody>
                                       
-                                    @foreach(auth()->user()->subbordinates as $emp)
+                                    @foreach(auth()->user()->employee_under as $emp)
                                     <tr>
-                                      <td>{{$emp->first_name}} {{$emp->last_name}} </td>
+                                      <td>{{$emp->employee_info->first_name}} {{$emp->employee_info->last_name}} </td>
                                       @php
                                           // dd($attendance_employees);
-                                          $time_in = $attendance_employees->where('employee_code',$emp->employee_number)->first();
+                                          $time_in = $attendance_employees->where('employee_code',$emp->employee_info->employee_number)->first();
                                       @endphp
                                       <td>@if($time_in){{date('h:i a',strtotime($time_in->time_in))}}@endif</td>
                                       <td>@if($time_in) @if($time_in->time_out){{date('h:i a',strtotime($time_in->time_out))}} @endif @endif</td>

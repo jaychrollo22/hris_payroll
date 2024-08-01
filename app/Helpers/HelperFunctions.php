@@ -1169,3 +1169,20 @@ function checkEmployeeEarnedLeaveAdditional($user_id,$leave_type,$year){
 }
 
 
+function summarOfRatingScale($total_rating){
+    // return $total_rating;
+    if($total_rating <= 50){
+        return "UNSATISFACTORY";
+    }else if($total_rating >= 51 && $total_rating <= 75){
+        return "NEEDS IMPROVEMENT";
+    }else if($total_rating >= 76 && $total_rating <= 100){
+        return "MEETS EXPECTATION";
+    }else if($total_rating >= 101 && $total_rating <= 110){
+        return "EXCEED EXPECTATIONS";
+    }else if($total_rating >= 111){
+        return "OUTSTANDING";
+    }else{
+        return "";
+    }
+}
+

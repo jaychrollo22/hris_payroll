@@ -71,7 +71,7 @@
                             </table>
                             <table class="table-bordered mt-1" width="100%">
                                 <tr>
-                                    <td colspan="4" align="center" style="background-color: rgb(240, 240, 240)"><strong>SUMMARY OF RATINGS</strong></td>
+                                    <td colspan="5" align="center" style="background-color: rgb(240, 240, 240)"><strong>SUMMARY OF RATINGS</strong></td>
                                 </tr>
                                 <tr>
                                     <td align="center">RATING COMPONENTS</td>
@@ -87,7 +87,20 @@
                                     <td align="center">{{ $ppr_score ? $ppr_score['manager_assessment_bsc_wtd_rating'] : ""}}</td>
                        
                                     <td align="center" rowspan="3">
-                                        <span id="manager_equivalent_rating_description_label">{{ $ppr_score ? $ppr_score['manager_equivalent_rating_description'] : ""}}</span>
+
+                                        @php
+                                            $bsc_actual_score = $ppr_score ? $ppr_score['manager_assessment_bsc_actual_score'] : 0;
+                                            $competency_actual_score = $ppr_score ? $ppr_score['manager_assessment_competency_actual_score'] : 0;
+                                            $total_ave_score = $bsc_actual_score + $competency_actual_score;
+
+                                            $bsc_wtd_score = $ppr_score ? $ppr_score['manager_assessment_bsc_wtd_rating'] : 0;
+                                            $competency_wtd_score = $ppr_score ? $ppr_score['manager_assessment_competency_wtd_rating'] : 0;
+                                            $total_wtd_score = $bsc_wtd_score + $competency_wtd_score;
+                                        @endphp
+
+                                        {{-- <span id="manager_equivalent_rating_description_label">{{ $ppr_score ? $ppr_score['manager_equivalent_rating_description'] : ""}}</span> --}}
+                                        
+                                        {{summarOfRatingScale($total_wtd_score)}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -98,15 +111,6 @@
                                     
                                 </tr>
                                 <tr>
-                                    @php
-                                        $bsc_actual_score = $ppr_score ? $ppr_score['manager_assessment_bsc_actual_score'] : 0;
-                                        $competency_actual_score = $ppr_score ? $ppr_score['manager_assessment_competency_actual_score'] : 0;
-                                        $total_ave_score = $bsc_actual_score + $competency_actual_score;
-
-                                        $bsc_wtd_score = $ppr_score ? $ppr_score['manager_assessment_bsc_wtd_rating'] : 0;
-                                        $competency_wtd_score = $ppr_score ? $ppr_score['manager_assessment_competency_wtd_rating'] : 0;
-                                        $total_wtd_score = $bsc_wtd_score + $competency_wtd_score;
-                                    @endphp
                                     <td align="center">TOTAL</td>
                                     <td align="center">{{$ppr['total_weight']}}</td>
                                     <td align="center">{{ number_format($total_ave_score,3) }}</td>

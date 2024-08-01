@@ -57,7 +57,7 @@ class HomeController extends Controller
         // dd($attendances->unique('time_in','Y-m-d'));
         $date_ranges = $attendance_controller->dateRange($sevendays,date('Y-m-d',strtotime("-1 day")));
         $handbook = Handbook::orderBy('id','desc')->first();
-        $employees_under = auth()->user()->subbordinates;
+        $employees_under = auth()->user()->employee_under;
         // dd(auth()->user()->employee);
         $attendance_employees = $attendance_controller->get_attendances_employees(date('Y-m-d'),date('Y-m-d'),$employees_under->pluck('employee_number')->toArray());
         // dd($attendance_employees);

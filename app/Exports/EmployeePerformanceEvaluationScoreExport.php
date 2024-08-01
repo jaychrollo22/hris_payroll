@@ -106,6 +106,7 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
         $competency_actual_avg_rating = '';
         $competency_total_wtd_rating = '';
         $rating_description = '';
+        $total_wtd_score = '';
 
         $ratees_comments = '';
         $acceptance_status = '';
@@ -121,8 +122,11 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
             $bsc_actual_avg_rating = $ppr->ppr_score->manager_assessment_bsc_actual_score;
             $bsc_total_wtd_rating = $ppr->ppr_score->manager_assessment_bsc_wtd_rating;
             $competency_actual_avg_rating = $ppr->ppr_score->manager_assessment_competency_actual_score;
-            $competency_total_wtd_rating = $ppr->ppr_score->competency_actual_avg_rating;
-            $rating_description = $ppr->ppr_score->manager_equivalent_rating_description;
+            $competency_total_wtd_rating = $ppr->ppr_score->manager_assessment_competency_wtd_rating;
+            $total_wtd_score = $bsc_total_wtd_rating + $competency_total_wtd_rating;
+            $rating_description = summarOfRatingScale($total_wtd_score);
+
+
 
             $ratees_comments = $ppr->ppr_score->ratees_comments;
             $acceptance_status = $ppr->ppr_score->user_acceptance_status;
@@ -210,6 +214,7 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
                 
             }
         }
+
 
         return [
             $company,
