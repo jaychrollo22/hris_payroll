@@ -961,20 +961,28 @@
                                     <td align="center">{{$ppr['bsc_actual_score']}}</td>
                                     <td align="center" rowspan="3">
                                         {{-- <span id="manager_equivalent_rating_description_label">{{ $ppr_score ? $ppr_score['manager_equivalent_rating_description'] : ""}}</span> --}}
+                                        @php
+                                            $bsc_wtd_score = $ppr_score ? number_format($ppr_score['manager_assessment_bsc_wtd_rating']) : 0;
+                                            $competency_wtd_score = $ppr_score ? number_format($ppr_score['manager_assessment_competency_wtd_rating']) : 0;
+                                            $total_wtd_score = $bsc_wtd_score + $competency_wtd_score;
+                                        @endphp
 
-                                        {{ summarOfRatingScale($ppr['total_actual_score']) }}
+                                        {{ summarOfRatingScale($total_wtd_score) }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td align="center">COMPETENCY</td>
                                     <td align="center">{{$ppr['competency_weight']}}</td>
-                                    <td align="center">{{ $ppr_score ? $ppr_score['manager_assessment_competency_wtd_rating'] : ""}}</td>
+                                    <td align="center">{{ $ppr_score ? number_format($ppr_score['manager_assessment_competency_wtd_rating']) : ""}}</td>
                                     
                                 </tr>
                                 <tr>
+
+                                   
+
                                     <td align="center">TOTAL</td>
-                                    <td align="center">{{$ppr['total_weight']}}</td>
-                                    <td align="center">{{$ppr['total_actual_score']}}</td>
+                                    <td align="center">{{ number_format($ppr['total_weight']) }}</td>
+                                    <td align="center">{{ $total_wtd_score > 120 ? 120 : number_format($total_wtd_score) }}</td>
                                     
                                 </tr>
                             </table>
