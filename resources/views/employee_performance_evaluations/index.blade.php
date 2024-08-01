@@ -8,10 +8,10 @@
               <div class="card-body">
                 <h4 class="card-title">MY PERFORMANCE PLAN</h4>
                 <p class="card-description">
-                  {{-- <a href="/create-performance-plan-review" type="button" class="btn btn-outline-success btn-icon-text">
+                  <a href="/create-performance-plan-review" type="button" class="btn btn-outline-success btn-icon-text">
                     <i class="ti-plus btn-icon-prepend"></i>                                                    
                     Create
-                  </a> --}}
+                  </a>
                 </p>
                 
                 <form method='get' onsubmit='show();' enctype="multipart/form-data">
