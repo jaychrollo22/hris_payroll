@@ -982,7 +982,7 @@
 
                                     <td align="center">TOTAL</td>
                                     <td align="center">{{ number_format($ppr['total_weight']) }}</td>
-                                    <td align="center">{{ $total_wtd_score > 120 ? 120 : number_format($total_wtd_score) }}</td>
+                                    <td align="center">{{ number_format($total_wtd_score) }}</td>
                                     
                                 </tr>
                             </table>
