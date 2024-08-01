@@ -1370,6 +1370,14 @@ class EmployeePerformanceEvaluationContoller extends Controller
         $company_detail = Company::where('id',$company)->first();
         $company_code =  $company_detail ?  $company_detail->company_code : "";
 
-        return Excel::download(new EmployeePerformanceEvaluationScoreExport($company,$status,$period_ppr,$calendar_date,$allowed_companies), $company_code . ' ' . $status . ' ' . $calendar_date . ' PPR Ratings Export.xlsx');
+        if('For Approval' == $status){
+            $status_name = 'For Manager Ratings';
+        }elseif('Summary of Ratings' == $status){
+            $status_name = 'For Performance and Development Summary';
+        }else{
+            $status_name = $status;
+        }
+
+        return Excel::download(new EmployeePerformanceEvaluationScoreExport($company,$status,$period_ppr,$calendar_date,$allowed_companies), $company_code . ' ' . $status_name . ' ' . $calendar_date . ' PPR Ratings Export.xlsx');
     }
 }
