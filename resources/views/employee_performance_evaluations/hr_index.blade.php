@@ -175,7 +175,7 @@
                             @if($eval->customized_ppr_approver)
 
                                 @if($eval->customized_ppr_approver->first_approver_info)
-                                  {{$eval->customized_ppr_approver->first_approver_info->name}} -  
+                                  {{$eval->customized_ppr_approver->first_approver_info->employee->first_name . ' ' . $eval->customized_ppr_approver->first_approver_info->employee->last_name}} -  
                                   @if($eval->level == 0)
                                     @if ($eval->status == 'Declined')
                                       <label class="badge badge-danger mt-1">Declined</label>
@@ -188,7 +188,7 @@
                                 @endif
                                 <br>
                                 @if($eval->customized_ppr_approver->second_approver_info)
-                                  {{$eval->customized_ppr_approver->second_approver_info->name}} -  
+                                  {{$eval->customized_ppr_approver->second_approver_info->employee->first_name . ' ' . $eval->customized_ppr_approver->second_approver_info->employee->last_name}} -  
                                   @if($eval->level <= 1)
                                     @if ($eval->status == 'Declined')
                                       <label class="badge badge-danger mt-1">Declined</label>
@@ -207,17 +207,17 @@
                               @foreach($eval->approver as $approver)
                                 @if($eval->level >= $approver->level)
                                     @if ($eval->level == 0 && $eval->status == 'Declined')
-                                    {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                    {{$approver->approver_info ? $approver->approver_info->employee->first_name . ' ' . $approver->approver_info->employee->last_name : ""}} -  <label class="badge badge-danger mt-1">Declined</label>
                                     @else
-                                    {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-success mt-1">Approved</label>
+                                    {{$approver->approver_info ? $approver->approver_info->employee->first_name . ' ' . $approver->approver_info->employee->last_name : ""}} -  <label class="badge badge-success mt-1">Approved</label>
                                     @endif
                                 @else
                                   @if ($eval->status == 'Declined')
-                                    {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-danger mt-1">Declined</label>
+                                    {{$approver->approver_info ? $approver->approver_info->employee->first_name . ' ' . $approver->approver_info->employee->last_name : ""}} -  <label class="badge badge-danger mt-1">Declined</label>
                                   @elseif ($eval->status == 'Draft')
-                                    {{$approver->approver_info ? $approver->approver_info->name : ""}}
+                                    {{$approver->approver_info ? $approver->approver_info->employee->first_name . ' ' . $approver->approver_info->employee->last_name : ""}}
                                   @else
-                                    {{$approver->approver_info ? $approver->approver_info->name : ""}} -  <label class="badge badge-warning mt-1">For Review</label>
+                                    {{$approver->approver_info ? $approver->approver_info->employee->first_name . ' ' . $approver->approver_info->employee->last_name : ""}} -  <label class="badge badge-warning mt-1">For Review</label>
                                   @endif
                                 @endif<br> 
                               @endforeach
@@ -239,11 +239,11 @@
                           <td id="tdStatus{{ $eval->id }}">
                             @if($eval->customized_ppr_approver)
                                 @if($eval->customized_ppr_approver->first_approver_info)
-                                  {{$eval->customized_ppr_approver->first_approver_info->name}}
+                                  {{$eval->customized_ppr_approver->first_approver_info->employee->first_name . ' ' . $eval->customized_ppr_approver->first_approver_info->employee->last_name}}
                                 @endif
                             @else
                               @if (count($eval->approver) > 0)
-                                {{$eval->approver[0]->approver_info ? $eval->approver[0]->approver_info->name : ""}}
+                                {{$eval->approver[0]->approver_info ? $eval->approver[0]->approver_info->employee->first_name . ' ' . $eval->approver[0]->approver_info->employee->last_name : ""}}
                               @endif
                             @endif
                           </td>

@@ -20,13 +20,13 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
 
     use Exportable;
 
-    public function __construct($company,$status,$period_ppr,$calendar_date, $allowed_companies)
+    public function __construct($company,$status,$period_ppr,$calendar_date)
     {
         $this->company = $company;
         $this->status = $status;
         $this->period_ppr = $period_ppr;
         $this->calendar_date = $calendar_date;
-        $this->allowed_companies = $allowed_companies;
+       
     }
 
 
@@ -37,7 +37,7 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
         $period_ppr = $this->period_ppr;
         $status = $this->status;
         $calendar_date = $this->calendar_date;
-        $allowed_companies = json_decode($this->allowed_companies);
+        // $allowed_companies = json_decode($this->allowed_companies);
 
         if(auth()->user()->id == '3873'){
             $allowed_companies = Company::select('id')->pluck('id')->toArray();
@@ -45,7 +45,7 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
             $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         }
 
-        $ppr_ratings = EmployeePerformanceEvaluation::with('employee.company','employee.department','approver','customized_ppr_approver','ppr_score')
+        $ppr_ratings = EmployeePerformanceEvaluation::with('employee.company','employee.department','approver.approver_info.employee','customized_ppr_approver.first_approver_info.employee','customized_ppr_approver.second_approver_info.employee','ppr_score')
                                                 ->when($company,function($q) use($company){
                                                     $q->whereHas('employee',function($w) use($company){
                                                         $w->where('company_id',$company);
@@ -95,6 +95,8 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
 
             return $ppr_ratings;
             
+        }else{
+            return $ppr_ratings;
         }
     }
 
@@ -185,7 +187,7 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
 
         if($ppr->customized_ppr_approver){
             if($ppr->customized_ppr_approver->first_approver_info){
-                $approver1_name = $ppr->customized_ppr_approver->first_approver_info->name;
+                $approver1_name = $ppr->customized_ppr_approver->first_approver_info->employee ? $ppr->customized_ppr_approver->first_approver_info->employee->first_name . ' ' . $ppr->customized_ppr_approver->first_approver_info->employee->last_name : "";
                 if($ppr->level == 0){
                     if ($ppr->status == 'Declined'){
                         $approver1_status = 'Declined';
@@ -197,8 +199,8 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
                 }
             }
 
-            if($ppr->customized_ppr_approver->first_approver_info){
-                $approver2_name = $ppr->customized_ppr_approver->first_approver_info->name;
+            if($ppr->customized_ppr_approver->second_approver_info){
+                $approver2_name = $ppr->customized_ppr_approver->second_approver_info->employee ? $ppr->customized_ppr_approver->second_approver_info->employee->first_name . ' ' . $ppr->customized_ppr_approver->first_approver_info->employee->last_name : "";
                 if($ppr->level <= 1){
                     if ($ppr->status == 'Declined'){
                         $approver2_status = 'Declined';
@@ -212,42 +214,46 @@ class EmployeePerformanceEvaluationScoreExport implements FromQuery, WithHeading
         }else{
             $x = 1;
             foreach($ppr->approver as $approver){
-                if($x == 1){
-                    $approver1_name = $approver->approver_info ? $approver->approver_info->name : "";
-                    if($ppr->level >= $approver->level){
-                        if ($ppr->level == 0 && $ppr->status == 'Declined'){
-                            $approver1_status = "Declined";
+                if($approver->approver_info){
+
+                    
+                    if($x == 1){
+                        $approver1_name = $approver->approver_info->employee ? $approver->approver_info->employee->first_name . ' ' . $approver->approver_info->employee->last_name : "";
+                        if($ppr->level >= $approver->level){
+                            if ($ppr->level == 0 && $ppr->status == 'Declined'){
+                                $approver1_status = "Declined";
+                            }else{
+                                $approver1_status = "Approved";
+                            }
                         }else{
-                            $approver1_status = "Approved";
+                            if ($ppr->status == 'Declined'){
+                                $approver1_status = "Declined";
+                            }elseif ($ppr->status == 'Draft'){
+                                $approver1_status = "Draft";
+                            }else{
+                                $approver1_status = "For Review";
+                            }
                         }
+                        $x++;
                     }else{
-                        if ($ppr->status == 'Declined'){
-                            $approver1_status = "Declined";
-                        }elseif ($ppr->status == 'Draft'){
-                            $approver1_status = "Draft";
+                        $approver2_name = $approver->approver_info->employee ? $approver->approver_info->employee->first_name . ' ' . $approver->approver_info->employee->last_name : "";
+                        if($ppr->level >= $approver->level){
+                            if ($ppr->level == 0 && $ppr->status == 'Declined'){
+                                $approver2_status = "Declined";
+                            }else{
+                                $approver2_status = "Approved";
+                            }
                         }else{
-                            $approver1_status = "For Review";
+                            if ($ppr->status == 'Declined'){
+                                $approver2_status = "Declined";
+                            }elseif ($ppr->status == 'Draft'){
+                                $approver2_status = "Draft";
+                            }else{
+                                $approver2_status = "For Review";
+                            }
                         }
+                        $x++;
                     }
-                    $x++;
-                }else{
-                    $approver2_name = $approver->approver_info ? $approver->approver_info->name : "";
-                    if($ppr->level >= $approver->level){
-                        if ($ppr->level == 0 && $ppr->status == 'Declined'){
-                            $approver2_status = "Declined";
-                        }else{
-                            $approver2_status = "Approved";
-                        }
-                    }else{
-                        if ($ppr->status == 'Declined'){
-                            $approver2_status = "Declined";
-                        }elseif ($ppr->status == 'Draft'){
-                            $approver2_status = "Draft";
-                        }else{
-                            $approver2_status = "For Review";
-                        }
-                    }
-                    $x++;
                 }
                 
             }
