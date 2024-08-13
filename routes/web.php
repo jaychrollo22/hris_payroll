@@ -339,6 +339,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
     Route::get('users-export', 'UserController@export');
+    Route::get('users-roles-export', 'UserController@export_with_roles');
 
     //HR Approver Setting
     Route::get('/hr-approver-setting','HrApproverSettingController@index');

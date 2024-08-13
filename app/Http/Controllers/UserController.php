@@ -28,6 +28,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Psy\Command\ListCommand\FunctionEnumerator;
 
 use App\Exports\UsersExport;
+use App\Exports\UserExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
@@ -98,6 +99,11 @@ class UserController extends Controller
     public function export() 
     {
         return Excel::download(new UsersExport, 'Users.xlsx');
+    }
+
+    public function export_with_roles() 
+    {
+        return Excel::download(new UserExport, 'Users with Roles.xlsx');
     }
 
     public function editUserRole(User $user){
