@@ -9,7 +9,7 @@
                         <h4 class="card-title">Users 
                             @if (count($users) > 0)
                             <a href='/users-export' class='btn btn-info'>Export</a>
-                            <a href='/users-roles-export' class='btn btn-info'>Export with Roles</a>
+                            <a href='/users-roles-export' class='btn btn-warning mr-1 ml-2'>Export with Roles</a>
                             @endif
                             
                         </h4>
