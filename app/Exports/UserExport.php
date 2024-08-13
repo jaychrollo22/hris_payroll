@@ -24,7 +24,7 @@ class UserExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'User ID',
-            // 'Name',
+            'Employee Name',
             'Email',
             'Role',
             'Companies',
@@ -72,7 +72,7 @@ class UserExport implements FromQuery, WithHeadings, WithMapping
 
     public function map($user): array
     {
-        $employee = $user->employee_info ? $user->employee_info->first_name . ' ' . $user->employee_info->last_name : "";
+        $employee_name = $user->employee_info ? $user->employee_info->first_name . ' ' . $user->employee_info->last_name : "";
         $user_allowed_company = '';
         $user_allowed_location = '';
         $user_allowed_project = '';
@@ -109,7 +109,7 @@ class UserExport implements FromQuery, WithHeadings, WithMapping
 
         return [
             $user->id,
-            // $employee,
+            $employee_name,
             $user->email,
             $user->role,
             $user_allowed_company,
