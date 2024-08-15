@@ -325,6 +325,7 @@ class EmployeeController extends Controller
         $validate_employee = Employee::where('first_name',$request->first_name)
                                         ->where('last_name',$request->last_name)
                                         ->where('company_id',$request->company)
+                                        ->where('status','Active')
                                         ->first();
 
         $validate_user = User::where('email',$request->work_email)->first();
