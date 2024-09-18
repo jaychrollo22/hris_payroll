@@ -84,6 +84,8 @@ class EmployeeAllowanceController extends Controller
             'allowance_type' => 'required',
             'user_id' => 'required',
             'amount' => 'required', 'min:1',
+            'effective_date' => 'required',
+            'is_taxable' => 'required'
         ]);
 
         $employeeAllowances = new EmployeeAllowance;
@@ -96,6 +98,10 @@ class EmployeeAllowanceController extends Controller
         $employeeAllowances->allowance_amount = $request->amount;
         $employeeAllowances->end_date = $request->end_date;
         $employeeAllowances->status = 'Active';
+        $employeeAllowances->percentage = $request->percentage;
+        $employeeAllowances->effective_date = $request->effective_date;
+        $employeeAllowances->frequency = $request->frequency;
+        $employeeAllowances->is_taxable = $request->is_taxable;
         $employeeAllowances->save();
 
         Alert::success('Successfully Store')->persistent('Dismiss');
@@ -119,6 +125,10 @@ class EmployeeAllowanceController extends Controller
         $employeeAllowances->allowance_amount = $request->amount;
         $employeeAllowances->end_date = $request->end_date;
         $employeeAllowances->status = 'Active';
+        $employeeAllowances->percentage = $request->percentage;
+        $employeeAllowances->effective_date = $request->effective_date;
+        $employeeAllowances->frequency = $request->frequency;
+        $employeeAllowances->is_taxable = $request->is_taxable;
         $employeeAllowances->save();
 
         Alert::success('Successfully Updated')->persistent('Dismiss');

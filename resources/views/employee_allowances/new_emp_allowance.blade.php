@@ -54,7 +54,7 @@
 						</div>
 						<div class="col-lg-6 form-group">
 							<label for="type">Type</label>
-							<select name="type" id="type" class="form-control form-control-sm">
+							<select id="type" class="form-control form-control-sm" name="type">
 								<option value="">Choose Type</option>
 								<option value="Basic Allowance">Basic Allowance</option>
 								<option value="Grade Allowance">Grade Allowance</option>
@@ -75,10 +75,42 @@
 							<input type="number" class="form-control form-control-sm" name="amount" id="amount" required min="1"
 								value="{{ old('amount') }}" placeholder="0.00">
 						</div>
+
+						<div class="col-lg-6 form-group">
+							<label for="percentage">Percentage</label>
+							<input type="number" class="form-control form-control-sm" name="percentage" id="percentage" step="0.01" placeholder="0.00"
+								value="{{ old('percentage') }}" placeholder="0">
+						</div>
+
+						<div class="col-lg-6 form-group">
+							<label for="effective_date">Effective Date</label>
+							<input type="date" class="form-control form-control-sm" name="effective_date" id="effective_date"
+								value="{{ old('effective_date') }}">
+						</div>
+
 						<div class="col-lg-6 form-group">
 							<label for="end_date">End Date</label>
 							<input type="date" class="form-control form-control-sm" name="end_date" id="end_date"
 								value="{{ old('schend_dateedule') }}">
+						</div>
+
+						<div class="col-lg-6 form-group">
+							<label for="frequency">Frequency</label>
+							<select id="frequency" class="form-control form-control-sm" name="frequency">
+								<option value="">Choose Frequency</option>
+								<option value="monthly">Monthly</option>
+								<option value="quarterly">Quarterly</option>
+								<option value="annually">Annually</option>
+							</select>
+						</div>
+
+						<div class="col-lg-6 form-group">
+							<label for="is_taxable">Taxable</label>
+							<select id="is_taxable" class="form-control form-control-sm" name="is_taxable">
+								<option value="" disabled>Choose Type</option>
+								<option value="1">Yes</option>
+								<option value="0">No</option>
+							</select>
 						</div>
 					</div>
 				</div>
