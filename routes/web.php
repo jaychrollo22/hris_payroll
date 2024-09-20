@@ -13,6 +13,7 @@
 */
 use App\HikAttLog2;
 
+
 // Route::get('qr/{employee_id}', 'QrCodeController@viewQrCode');
 Route::get('qr/{employee_id}', 'QrCodeController@viewDecyptQrCode');
 
@@ -425,6 +426,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('performance-plan-periods', 'PerformancePlanPeriodController@index');
     Route::get('edit-performance-plan-period/{id}', 'PerformancePlanPeriodController@edit');
     Route::post('update-performance-plan-period/{id}', 'PerformancePlanPeriodController@update');
+
+
+    //Payroll Period Period
+    Route::post('store-payroll-period', 'Payroll\PayrollPeriodController@store');
+    Route::get('payroll-periods', 'Payroll\PayrollPeriodController@index');
+    Route::get('edit-payroll-period/{id}', 'Payroll\PayrollPeriodController@edit');
+    Route::post('update-payroll-period/{id}', 'Payroll\PayrollPeriodController@update');
+    Route::get('delete-payroll-period/{id}', 'Payroll\PayrollPeriodController@destroy');
+
+    //Pay Reg
+    Route::get('pay-reg', 'Payroll\PayRegController@index');
 });
 Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');
