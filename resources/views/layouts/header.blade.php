@@ -670,6 +670,27 @@
                 </a>
             </li>
         @endif
+
+
+        {{-- @if (checkUserPrivilege('masterfiles_early_cutoffs',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_cost_centers',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_companies',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_locations',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_departments',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes') --}}
+        <li class="nav-item @if ($header == 'payroll') active @endif">
+            <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
+                <i class="icon-align-center menu-icon"></i>
+                <span class="menu-title">Payroll</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="payroll">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/payroll-periods') }}">Payroll Period</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
         </ul>
         </nav>
         <!-- partial -->
