@@ -50,7 +50,8 @@
         ],
         "files": [
             "app/Helpers/HelperFunctions.php",
-             "app/Helpers/AllowanceHelpers.php"
+             "app/Helpers/AllowanceHelper.php",
+             "app/Helpers/PayrollHelper.php"
         ]
     },
     "autoload-dev": {
