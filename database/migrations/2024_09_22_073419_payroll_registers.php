@@ -13,7 +13,7 @@ class PayrollRegisters extends Migration
      */
     public function up()
     {
-        Schema::create('payroll_register', function (Blueprint $table) {
+        Schema::create('payroll_registers', function (Blueprint $table) {
 
             $table->increments('id');  // Auto-incrementing ID
             
