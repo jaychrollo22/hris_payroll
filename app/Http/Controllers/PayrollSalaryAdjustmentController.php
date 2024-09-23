@@ -94,7 +94,16 @@ class PayrollSalaryAdjustmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $adjustment = PayrollSalaryAdjustment::findOrfail($id);
+        $adjustment->user_id = $request->employee;
+        $adjustment->effectivity_date = $request->effectivity_date;
+        $adjustment->amount = $request->amount;
+        $adjustment->type = $request->type;
+        $adjustment->reason = $request->reason;
+        $adjustment->save();
+
+        Alert::success('Successfully updated')->persistent('Dismiss');
+        return back();
     }
 
     /**
