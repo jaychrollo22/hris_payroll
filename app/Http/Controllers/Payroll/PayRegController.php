@@ -127,9 +127,9 @@ class PayRegController extends Controller
 
                         //IF Monthly
                         $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
-                        $payroll_register->monthly_basic_pay = $rate;
-                        $payroll_register->daily_rate = ((($rate*12)/313)/8)*9.5; //Daily Rate Computation
-                        $payroll_register->basic_pay = $rate / 2; //Basic Pay Computation
+                        $payroll_register->monthly_basic_pay = $rate ?? 0;
+                        $payroll_register->daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0; //Daily Rate Computation
+                        $payroll_register->basic_pay =  $rate ? $rate / 2 : 0; //Basic Pay Computation
 
                         $payroll_register->save();
                         $count++;

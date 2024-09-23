@@ -48,7 +48,8 @@
             "database/factories"
         ],
         "files": [
-            "app/Helpers/HelperFunctions.php"
+            "app/Helpers/HelperFunctions.php",
+            "app/Helpers/PayrollHelperFunctions.php"
         ]
     },
     "autoload-dev": {

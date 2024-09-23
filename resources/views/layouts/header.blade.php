@@ -687,6 +687,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/payroll-employee-contributions') }}">Payroll Contributions</a>
+                    </li>
                 </ul>
             </div>
         </li>
