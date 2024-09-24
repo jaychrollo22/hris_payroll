@@ -10,7 +10,7 @@
                 <h4 class="card-title">Payroll Employee Contributions</h4>
                 <p class="card-description">
                     {{-- @if (checkUserPrivilege('settings_add',auth()->user()->id) == 'yes') --}}
-                    <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#newPayrollPeriod">
+                    <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#newPayrollEmployeeContribution">
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
                       New
                     </button>
@@ -32,6 +32,7 @@
                             <th>PHIC ER</th>
                             <th>HDMF ER</th>
                             <th>Payment Schedule</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -48,6 +49,11 @@
                           <td>{{ number_format($contribution->phic_er, 2) }}</td>
                           <td>{{ number_format($contribution->hdmf_er, 2) }}</td>
                           <td>{{ $contribution->payment_schedule }}</td>
+                          <td>
+                            <button type="button" class="btn btn-info btn-rounded btn-icon" href="#edit_payroll_employee_contribution{{$contribution->id}}" data-toggle="modal" title='EDIT'>
+                                <i class="ti-pencil-alt"></i>
+                            </button>
+                          </td>
                       </tr>
                       @endforeach
                     </tbody>
@@ -61,7 +67,7 @@
     </div>
 </div>
 @include('payroll_employee_contributions.create')
-{{-- @foreach($payroll_periods as $payrollPeriod)
-@include('payroll_periods.edit')
-@endforeach --}}
+@foreach($contributions as $contribution)
+@include('payroll_employee_contributions.edit')
+@endforeach
 @endsection
