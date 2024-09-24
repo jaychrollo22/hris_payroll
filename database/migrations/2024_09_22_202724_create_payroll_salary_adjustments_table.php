@@ -18,7 +18,8 @@ class CreatePayrollSalaryAdjustmentsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->date('effectivity_date');
             $table->decimal('amount', 15, 2); // Adjustment amount
-            $table->string('type'); // e.g., 'bonus', 'deduction','addition'
+            $table->enum('type', ['Bonus', 'Deduction', 'Addition'])->nullable();// e.g., 'bonus', 'deduction','addition'
+            $table->enum('status', ['Active', 'Inactive'])->nullable();
             $table->string('reason')->nullable(); // Reason for the adjustment
             $table->timestamps();
             $table->softDeletes();
