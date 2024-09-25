@@ -77,12 +77,41 @@
 												value="{{ $employee_allowance->allowance_amount }}" placeholder="0.00">
 										</div>
 
-										
-										
+										<div class="col-lg-6 form-group">
+											<label for="percentage">Percentage</label>
+											<input type="number" class="form-control form-control-sm" name="percentage" id="percentage" step="0.01" placeholder="0.00"
+												value="{{ $employee_allowance->percentage }}" placeholder="0">
+										</div>
+
+										<div class="col-lg-6 form-group">
+											<label for="end_date">Effective Date</label>
+											<input type="date" class="form-control form-control-sm" name="effective_date" id="effective_date"
+												value="{{ $employee_allowance->effective_date }}">
+										</div>
+
 										<div class="col-lg-6 form-group">
 											<label for="end_date">End Date</label>
 											<input type="date" class="form-control form-control-sm" name="end_date" id="end_date"
 												value="{{ $employee_allowance->end_date }}">
+										</div>
+
+										<div class="col-lg-6 form-group">
+											<label for="frequency">Frequency</label>
+											<select id="frequency" class="form-control form-control-sm" name="frequency">
+												<option value="">Choose Frequency</option>
+												<option value="monthly" {{ $employee_allowance->frequency == 'monthly' ? 'selected' : '' }}>Monthly</option>
+												<option value="quarterly" {{ $employee_allowance->frequency == 'quarterly' ? 'selected' : '' }}>Quarterly</option>
+												<option value="annually" {{ $employee_allowance->frequency == 'annually' ? 'selected' : '' }}>Annually</option>
+											</select>
+										</div>
+				
+										<div class="col-lg-6 form-group">
+											<label for="is_taxable">Taxable</label>
+											<select id="is_taxable" class="form-control form-control-sm" name="is_taxable">
+												<option value="" disabled>Choose Type</option>
+												<option value="1" {{ $employee_allowance->is_taxable == '1' ? 'selected' : '' }}>Yes</option>
+												<option value="0" {{ $employee_allowance->is_taxable == '0' ? 'selected' : '' }}>No</option>
+											</select>
 										</div>
 									</div>
 								</div>

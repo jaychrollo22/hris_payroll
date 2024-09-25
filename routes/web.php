@@ -447,6 +447,12 @@ Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');
 Route::post('upload-employee-rate', 'EmployeeController@reverseRate');
 
+Route::get('payroll-salary-adjusments', 'PayrollSalaryAdjustmentController@index');
+Route::post('new-payroll-salary-adjustment', 'PayrollSalaryAdjustmentController@store');
+Route::post('edit-payroll-salary-adjustment/{id}', 'PayrollSalaryAdjustmentController@update');
+Route::get('delete-payroll-salary-adjustment/{id}', 'PayrollSalaryAdjustmentController@destroy');
+Route::post('import-payroll-salary-adjusments', 'PayrollSalaryAdjustmentController@import');
+
 Route::get('hik-logs', function(){
     return HikAttLog2::orderBy('authDate')->get()->take(5);
 });
