@@ -131,6 +131,16 @@ class PayRegController extends Controller
                         $payroll_register->daily_rate = ((($rate*12)/313)/8)*9.5; //Daily Rate Computation
                         $payroll_register->basic_pay = $rate / 2; //Basic Pay Computation
 
+                        // Allowances
+                        $payroll_register->meal_allowance = getUserAllowanceAmount($employee->user_id,3);
+                        $payroll_register->salary_allowance = getUserAllowanceAmount($employee->user_id,4);
+                        $payroll_register->out_of_town_allowance = getUserAllowanceAmount($employee->user_id,2);
+                        $payroll_register->incentives_allowance = getUserAllowanceAmount($employee->user_id,5);
+                        $payroll_register->relocation_allowance = getUserAllowanceAmount($employee->user_id,6);
+                        $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7);
+                        $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8);
+                        $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9);
+
                         $payroll_register->save();
                         $count++;
                     }

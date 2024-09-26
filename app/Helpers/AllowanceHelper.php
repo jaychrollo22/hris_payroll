@@ -1,6 +1,17 @@
 <?php
 use App\EmployeeAllowance;
 
+function getUserAllowanceAmount($user_id,$allowance_id,$cut_off = null){
+    return EmployeeAllowance::select('id','allowance_amount')
+        ->where('user_id',$user_id)
+        ->where('allowance_id',$allowance_id)
+        ->where('status','Active')
+        ->when($cut_off, 'First Cut-Off',function($q){
+            $q->where('schedule','First Cut-Off');
+        })
+        ->sum('allowance_amount');
+}
+
 function getUserAllowances($user_id,$allowance_id = null,$date = null){
     return EmployeeAllowance::select('id','allowance_id','allowance_amount')
         ->with(['allowance' => function ($query) {
@@ -19,7 +30,8 @@ function getUserAllowances($user_id,$allowance_id = null,$date = null){
                 'allowance_amount' => $employee_allowance->allowance_amount,
                 'allowance_type' => $employee_allowance->allowance->name
             ];
-        });
+        })
+        ->toArray();
 }
 
 
