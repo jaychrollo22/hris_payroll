@@ -453,6 +453,7 @@ Route::get('payroll-salary-adjusments', 'PayrollSalaryAdjustmentController@index
 Route::post('new-payroll-salary-adjustment', 'PayrollSalaryAdjustmentController@store');
 Route::post('edit-payroll-salary-adjustment/{id}', 'PayrollSalaryAdjustmentController@update');
 Route::get('delete-payroll-salary-adjustment/{id}', 'PayrollSalaryAdjustmentController@destroy');
+Route::get('payroll-salary-adjusments-export', 'PayrollSalaryAdjustmentController@export');
 Route::post('import-payroll-salary-adjusments', 'PayrollSalaryAdjustmentController@import');
 
 Route::get('hik-logs', function(){

@@ -8,6 +8,7 @@ use App\Company;
 use App\PayrollSalaryAdjustment;
 use RealRashid\SweetAlert\Facades\Alert;
 use Excel;
+use App\Exports\PayrollSalaryAdjustmentExport;
 use App\Imports\PayrollSalaryAdjustmentImport;
 
 class PayrollSalaryAdjustmentController extends Controller
@@ -152,6 +153,20 @@ class PayrollSalaryAdjustmentController extends Controller
         PayrollSalaryAdjustment::find($id)->delete();
         Alert::success('Successfully Deleted')->persistent('Dismiss');
         return back();
+    }
+
+    /**
+     * Export to excel
+     *
+     */
+    public function export(Request $request){
+        $company = isset($request->company) ? $request->company : "";
+        $status = isset($request->status) ? $request->status : "";
+        $company_detail = Company::where('id',$company)->first();
+
+        $company_code = $company_detail ? $company_detail->company_code : "";
+
+        return Excel::download(new PayrollSalaryAdjustmentExport($company,$status), $company_code. ' Payroll Salary Adjustment Export.xlsx');
     }
 
     /**
