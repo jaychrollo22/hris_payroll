@@ -2,7 +2,8 @@
 use App\Employee;
 use App\PayrollSalaryAdjustment;
 
-function getUserWitholdingTax($user_id){
+function getUserWitholdingTaxAmount($user_id,$basic_pay,$lates,$under_time,$salary_adjustment,$overtime_pay,
+    $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction){
     $user = Employee::where('user_id',$user_id)
         ->first();
     
@@ -12,7 +13,6 @@ function getUserWitholdingTax($user_id){
     $under_time  = 8;
     $salary_adjustment  = 15;
     $overtime_pay  = 7;
-    $sss_reg_ee = 12;
     $sss_reg_ee = 12;
     $sss_mpf_ee = 4;
     $phic_ee = 9;
