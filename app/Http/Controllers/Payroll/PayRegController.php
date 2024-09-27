@@ -140,6 +140,8 @@ class PayRegController extends Controller
                         $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7);
                         $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8);
                         $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9);
+                        //Salary Adjustment
+                        $payroll_register->salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id);
 
                         $payroll_register->save();
                         $count++;

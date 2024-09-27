@@ -1,5 +1,6 @@
 <?php
 use App\Employee;
+use App\PayrollSalaryAdjustment;
 
 function getUserWitholdingTax($user_id){
     $user = Employee::where('user_id',$user_id)
@@ -38,6 +39,12 @@ function getUserWitholdingTax($user_id){
     }
 
     return $witholding_tax;
+}
+
+function getUserSalaryAdjustmentAmount($user_id){
+    return PayrollSalaryAdjustment::where('user_id',$user_id)
+        ->where('status','Active')
+        ->sum('amount');
 }
 
 
