@@ -14,7 +14,7 @@
 
                     <button type="button" class="btn btn-outline-primary btn-icon-text" data-toggle="modal" data-target="#importPayrollSalaryAdjustment">
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
-                      Import Employee Allowance
+                      Import Salary Adjustment
                     </button>
                 </p>
 
@@ -58,7 +58,8 @@
                       <tr>
                         <th>User ID</th>
                         <th>Name</th> 
-                        <th>Effectivity Date</th> 
+                        <th>Effectivity Date</th>
+                        <th>Payroll Period</th>
                         <th>Amount</th> 
                         <th>Type</th>
                         <th>Status</th>
@@ -76,6 +77,7 @@
 											        <small>{{$salary_adjustment->employee ? $salary_adjustment->employee->company->company_name : ""}}</small>
                             </td>
                             <td>{{$salary_adjustment->effectivity_date}}</td>
+                            <td>{{$salary_adjustment->payrollPeriod ? $salary_adjustment->payrollPeriod->payroll_name. " (".$salary_adjustment->payrollPeriod->start_date .'-'. $salary_adjustment->payrollPeriod->end_date.")" : ""}}</td>
                             <td>{{$salary_adjustment->amount}}</td>
                             <td>{{$salary_adjustment->type}}</td>
                             <td>{{$salary_adjustment->status}}</td>

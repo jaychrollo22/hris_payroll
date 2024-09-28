@@ -130,6 +130,20 @@ class PayRegController extends Controller
                         $payroll_register->monthly_basic_pay = $rate ?? 0;
                         $payroll_register->daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0; //Daily Rate Computation
                         $payroll_register->basic_pay =  $rate ? $rate / 2 : 0; //Basic Pay Computation
+                        $basic_pay = $rate / 2; //Basic Pay Computation
+                        $lates = 0;
+                        $under_time = 0;
+                        $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
+                        $overtime_pay = 0;
+                        $sss_reg_ee = 0;
+                        $sss_mpf_ee = 0;
+                        $phic_ee = 0;
+                        $hdmf_ee = 0;
+                        $salary_deduction = 0;
+
+                        $payroll_register->monthly_basic_pay = $rate;
+                        $payroll_register->daily_rate = ((($rate*12)/313)/8)*9.5; //Daily Rate Computation
+                        $payroll_register->basic_pay = $basic_pay;
 
                         // Allowances
                         $payroll_register->meal_allowance = getUserAllowanceAmount($employee->user_id,3);
@@ -140,7 +154,11 @@ class PayRegController extends Controller
                         $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7);
                         $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8);
                         $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9);
-
+                        //Salary Adjustment
+                        $payroll_register->salary_adjustment = $salary_adjustment;
+                        //Witholding tax
+                        $payroll_register->withholding_tax = getUserWitholdingTaxAmount($employee->user_id,$basic_pay,$lates,$under_time,$salary_adjustment,$overtime_pay,
+                            $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction);
                         $payroll_register->save();
                         $count++;
                     }

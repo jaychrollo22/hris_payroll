@@ -19,7 +19,7 @@
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
                       Generate Payroll Attendances
                     </a>
-                    <a type="button" class="btn btn-outline-danger btn-icon-text" data-toggle="modal">
+                    <a type="button" class="btn btn-outline-danger btn-icon-text" href="{{ url('/payroll-salary-adjusments') }}">
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
                       Salary Adjustments
                     </a>

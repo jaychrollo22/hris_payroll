@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Employee;
 use App\Company;
+use App\PayrollPeriod;
 use App\PayrollSalaryAdjustment;
 use RealRashid\SweetAlert\Facades\Alert;
 use Excel;
@@ -53,6 +54,8 @@ class PayrollSalaryAdjustmentController extends Controller
             return view('salary_adjustments.index', array(
                 'header' => 'salary_adjustments',
                 'salary_adjustments' => $salary_adjustments,
+                'payroll_periods' => PayrollPeriod::all(),
+                'payroll_period' => '',
                 'employees' => $employees,
                 'companies' => $companies,
                 'company' => $company,
@@ -82,6 +85,7 @@ class PayrollSalaryAdjustmentController extends Controller
         $request->validate([
             'employee' => 'required',
             'effectivity_date' => 'required',
+            'payroll_period' => 'required',
             'amount' => 'required',
             'reason' => 'required'
         ]);
@@ -89,9 +93,10 @@ class PayrollSalaryAdjustmentController extends Controller
         $adjustment = new PayrollSalaryAdjustment;
         $adjustment->user_id = $request->employee;
         $adjustment->effectivity_date = $request->effectivity_date;
+        $adjustment->payroll_period_id = $request->payroll_period;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
-        $user->status = "Active";
+        $adjustment->status = "Active";
         $adjustment->reason = $request->reason;
         $adjustment->save();
 
@@ -133,6 +138,7 @@ class PayrollSalaryAdjustmentController extends Controller
         $adjustment = PayrollSalaryAdjustment::findOrfail($id);
         $adjustment->user_id = $request->employee;
         $adjustment->effectivity_date = $request->effectivity_date;
+        $adjustment->payroll_period_id = $request->payroll_period;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
         $adjustment->reason = $request->reason;
@@ -188,6 +194,7 @@ class PayrollSalaryAdjustmentController extends Controller
                 if($salary_adjustment){
                     // if(isset($value['effectivity_date'])) $salary_adjustment->effectivity_date = $value['effectivity_date'];
                     if(isset($value['effectivity_date'])) $salary_adjustment->effectivity_date = '2024-09-23';
+                    if(isset($value['payroll_period_id'])) $salary_adjustment->payroll_period_id = $value['payroll_period_id'];
                     if(isset($value['amount'])) $salary_adjustment->amount = $value['amount'];
                     if(isset($value['type'])) $salary_adjustment->type = $value['type'];
                     if(isset($value['status'])) $salary_adjustment->status = $value['status'];
@@ -200,6 +207,7 @@ class PayrollSalaryAdjustmentController extends Controller
                     $salary_adjustment->user_id = $value['user_id'];
                     // $salary_adjustment->effectivity_date = $value['effectivity_date'];
                     $salary_adjustment->effectivity_date = '2024-09-23';
+                    $salary_adjustment->payroll_period_id = $value['payroll_period_id'];
                     $salary_adjustment->amount = $value['amount'];
                     $salary_adjustment->type = $value['type'];
                     $salary_adjustment->status = $value['status'];
