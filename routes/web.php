@@ -442,6 +442,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('payroll-employee-contributions', 'Payroll\PayrollEmployeeContributionController@index');
     Route::post('store-payroll-employee-contribution', 'Payroll\PayrollEmployeeContributionController@store');
     Route::post('update-payroll-employee-contribution/{id}', 'Payroll\PayrollEmployeeContributionController@update');
+    Route::post('import-payroll-employee-contribution', 'Payroll\PayrollEmployeeContributionController@import');
 
     
 });
