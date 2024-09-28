@@ -25,6 +25,7 @@ class PayrollPeriodController extends Controller
             array(
                 'header' => 'payroll_periods',
                 'payroll_periods' => $payroll_periods,
+                'payroll_cutoff' => '',
 
             )
         );
@@ -60,6 +61,7 @@ class PayrollPeriodController extends Controller
         $payrollPeriod->total_days = $request->input('total_days');
         $payrollPeriod->status = $request->input('status');
         $payrollPeriod->notes = $request->input('notes', null);
+        $payrollPeriod->payroll_cutoff = $request->input('payroll_cutoff');
 
         // Save the payroll period to the database
         $payrollPeriod->save();
@@ -113,6 +115,7 @@ class PayrollPeriodController extends Controller
         $payrollPeriod->total_days = $request->input('total_days');
         $payrollPeriod->status = $request->input('status');
         $payrollPeriod->notes = $request->input('notes', null);
+        $payrollPeriod->payroll_cutoff = $request->input('payroll_cutoff');
 
         // Save the changes to the database
         $payrollPeriod->save();

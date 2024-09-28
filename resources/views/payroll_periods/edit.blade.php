@@ -54,6 +54,15 @@
                     </div>
                     <div class="row">
                         <div class='col-md-6 form-group'>
+                          Payroll Cut Off
+                          <select data-placeholder="Select Payroll Cut Off" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payroll_cutoff' id="type"  required>
+                            <option value="">-- Select Payroll Cut Off --</option>
+                            <option value="First Cut-Off" {{$payrollPeriod->payroll_cutoff == 'First Cut-Off' ? 'selected' : ""}}>First Cut-Off</option>
+                            <option value="Second Cut-Off" {{$payrollPeriod->payroll_cutoff == 'Second Cut-Off' ? 'selected' : ""}}>Second Cut-Off</option>
+                          </select>
+                        </div>
+
+                        <div class='col-md-6 form-group'>
                           Status
                           <select name="status" id="status" class="form-control" required>
                                 <option value="open" {{ $payrollPeriod->status == 'open' ? 'selected' : '' }}>Open</option>

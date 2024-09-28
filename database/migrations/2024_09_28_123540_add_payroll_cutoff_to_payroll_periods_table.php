@@ -14,7 +14,7 @@ class AddPayrollCutoffToPayrollPeriodsTable extends Migration
     public function up()
     {
         Schema::table('payroll_periods', function (Blueprint $table) {
-            $table->enum('payroll_cutoff', ['First Cut-Off', 'Second Cut-Off', 'Every Cut-Off'])->after('notes');
+            $table->enum('payroll_cutoff', ['First Cut-Off', 'Second Cut-Off'])->after('notes');
         });
     }
 

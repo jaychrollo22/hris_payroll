@@ -30,6 +30,7 @@
                             <th>Total Days</th>
                             <th>Status</th>
                             <th>Notes</th>
+                            <th>Payroll Cut-Off</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -46,6 +47,7 @@
                             <td>{{$payroll_period->total_days}}</td>
                             <td>{{$payroll_period->status}}</td>
                             <td>{{$payroll_period->notes}}</td>
+                            <td>{{$payroll_period->payroll_cutoff}}</td>
                             <td>
                                 {{-- @if (checkUserPrivilege('settings_edit',auth()->user()->id) == 'yes') --}}
                                 <button type="button" class="btn btn-info btn-rounded btn-icon" href="#edit_payroll_period{{$payroll_period->id}}" data-toggle="modal" title='EDIT'>
