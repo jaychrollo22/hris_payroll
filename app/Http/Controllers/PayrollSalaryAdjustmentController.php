@@ -30,6 +30,7 @@ class PayrollSalaryAdjustmentController extends Controller
 
             $company = isset($request->company) ? $request->company : "";
             $status = isset($request->status) ? $request->status : "Active";
+            $payroll_period = isset($request->payroll_period) ? $request->payroll_period : "";
 
             $employees = Employee::select('id','user_id','first_name','last_name','middle_name')
                 ->whereIn('company_id',$allowed_companies)
@@ -48,6 +49,8 @@ class PayrollSalaryAdjustmentController extends Controller
                     $q->where('company_id',$company);
                 });
             }
+
+            if($payroll_period) $salary_adjustments = $salary_adjustments->where('payroll_period_id',$payroll_period);
             
             $salary_adjustments = $salary_adjustments->get();
 
@@ -55,7 +58,8 @@ class PayrollSalaryAdjustmentController extends Controller
                 'header' => 'salary_adjustments',
                 'salary_adjustments' => $salary_adjustments,
                 'payroll_periods' => PayrollPeriod::all(),
-                'payroll_period' => '',
+                'payroll_period' => $payroll_period,
+                'payroll_cutoff' => '',
                 'employees' => $employees,
                 'companies' => $companies,
                 'company' => $company,
@@ -84,7 +88,7 @@ class PayrollSalaryAdjustmentController extends Controller
     {
         $request->validate([
             'employee' => 'required',
-            'effectivity_date' => 'required',
+            // 'effectivity_date' => 'required',
             'payroll_period' => 'required',
             'amount' => 'required',
             'reason' => 'required'
@@ -92,8 +96,9 @@ class PayrollSalaryAdjustmentController extends Controller
 
         $adjustment = new PayrollSalaryAdjustment;
         $adjustment->user_id = $request->employee;
-        $adjustment->effectivity_date = $request->effectivity_date;
+        // $adjustment->effectivity_date = $request->effectivity_date;
         $adjustment->payroll_period_id = $request->payroll_period;
+        $adjustment->payroll_cutoff = $request->payroll_cutoff;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
         $adjustment->status = "Active";
@@ -137,8 +142,9 @@ class PayrollSalaryAdjustmentController extends Controller
     {
         $adjustment = PayrollSalaryAdjustment::findOrfail($id);
         $adjustment->user_id = $request->employee;
-        $adjustment->effectivity_date = $request->effectivity_date;
+        // $adjustment->effectivity_date = $request->effectivity_date;
         $adjustment->payroll_period_id = $request->payroll_period;
+        $adjustment->payroll_cutoff = $request->payroll_cutoff;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
         $adjustment->reason = $request->reason;
@@ -168,11 +174,12 @@ class PayrollSalaryAdjustmentController extends Controller
     public function export(Request $request){
         $company = isset($request->company) ? $request->company : "";
         $status = isset($request->status) ? $request->status : "";
+        $payroll_period = isset($request->payroll_period) ? $request->payroll_period : "";
         $company_detail = Company::where('id',$company)->first();
 
         $company_code = $company_detail ? $company_detail->company_code : "";
 
-        return Excel::download(new PayrollSalaryAdjustmentExport($company,$status), $company_code. ' Payroll Salary Adjustment Export.xlsx');
+        return Excel::download(new PayrollSalaryAdjustmentExport($company,$status,$payroll_period), $company_code. ' Payroll Salary Adjustment Export.xlsx');
     }
 
     /**
@@ -190,11 +197,15 @@ class PayrollSalaryAdjustmentController extends Controller
             $not_save = [];
             foreach($data[0] as $key => $value){
                 $salary_adjustment = PayrollSalaryAdjustment::where('user_id',$value['user_id'])
+                    ->where('payroll_period_id',$value['payroll_period_id'])
+                    ->where('payroll_cutoff',$value['payroll_cutoff'])
+                    ->where('type',$value['type'])
                     ->first();
+
                 if($salary_adjustment){
                     // if(isset($value['effectivity_date'])) $salary_adjustment->effectivity_date = $value['effectivity_date'];
-                    if(isset($value['effectivity_date'])) $salary_adjustment->effectivity_date = '2024-09-23';
                     if(isset($value['payroll_period_id'])) $salary_adjustment->payroll_period_id = $value['payroll_period_id'];
+                    if(isset($value['payroll_cutoff'])) $salary_adjustment->payroll_cutoff = $value['payroll_cutoff'];
                     if(isset($value['amount'])) $salary_adjustment->amount = $value['amount'];
                     if(isset($value['type'])) $salary_adjustment->type = $value['type'];
                     if(isset($value['status'])) $salary_adjustment->status = $value['status'];
@@ -205,9 +216,8 @@ class PayrollSalaryAdjustmentController extends Controller
                 }else{
                     $salary_adjustment = new PayrollSalaryAdjustment;
                     $salary_adjustment->user_id = $value['user_id'];
-                    // $salary_adjustment->effectivity_date = $value['effectivity_date'];
-                    $salary_adjustment->effectivity_date = '2024-09-23';
                     $salary_adjustment->payroll_period_id = $value['payroll_period_id'];
+                    $salary_adjustment->payroll_cutoff = $value['payroll_cutoff'];
                     $salary_adjustment->amount = $value['amount'];
                     $salary_adjustment->type = $value['type'];
                     $salary_adjustment->status = $value['status'];

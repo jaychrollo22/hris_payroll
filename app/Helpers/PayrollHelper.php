@@ -41,10 +41,11 @@ function getUserWitholdingTaxAmount($user_id,$basic_pay,$lates,$under_time,$sala
     return $witholding_tax;
 }
 
-function getUserSalaryAdjustmentAmount($user_id,$payroll_period_id){
+function getUserSalaryAdjustmentAmount($user_id,$payroll_period_id,$payroll_cutoff){
     return PayrollSalaryAdjustment::where('payroll_period_id',$payroll_period_id)
         ->where('user_id',$user_id)
         ->where('status','Active')
+        ->whereIn('payroll_cutoff',[$payroll_cutoff,'Every Cut-Off'])
         ->sum('amount');
 }
 

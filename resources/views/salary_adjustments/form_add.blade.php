@@ -21,12 +21,12 @@
                 </select>
               </div>
             </div>
-            <div class="row">
+            {{-- <div class="row">
               <div class='col-md-12 form-group'>
                 Effectivity Date  
                 <input type="date" name='effectivity_date' class="form-control" required>
               </div>
-            </div>
+            </div> --}}
             <div class="row">
               <div class='col-md-12 form-group'>
                 Payroll Period
@@ -36,6 +36,20 @@
                     <option value="{{$payroll_period_item->id}}" @if ($payroll_period_item->id == $payroll_period) selected @endif>{{$payroll_period_item->payroll_name}} ({{$payroll_period_item->start_date .'-'. $payroll_period_item->end_date}})</option>
                     @endforeach
                 </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class='col-md-12 form-group'>
+                Payroll Cut-Off
+                <div class="form-group">
+                  <select data-placeholder="Select Payroll Cutoff" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payroll_cutoff' id="payroll_cutoff"  required>
+                      <option value="">-- Select Payroll Cutoff --</option>
+                      <option value="First Cut-Off" {{$payroll_cutoff == 'First Cut-Off' ? 'selected' : ""}}>First Cut-Off</option>
+                      <option value="Second Cut-Off" {{$payroll_cutoff == 'Second Cut-Off' ? 'selected' : ""}}>Second Cut-Off</option>
+                      <option value="Every Cut-Off" {{$payroll_cutoff == 'Every Cut-Off' ? 'selected' : ""}}>Every Cut-Off</option>
+                  </select>
+                </div>
               </div>
             </div>
             

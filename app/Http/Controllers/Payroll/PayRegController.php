@@ -106,7 +106,7 @@ class PayRegController extends Controller
         if($employees && $payroll_period){ 
             if($employees){
                 foreach($employees as $employee){
-
+                    
                     $validate_payroll_register = PayrollRegister::where('payroll_period_id',$payroll_period->id)->first();
 
                     if(empty($validate_payroll_register)){
@@ -130,7 +130,7 @@ class PayRegController extends Controller
                         $basic_pay = $rate / 2; //Basic Pay Computation
                         $lates = 0;
                         $under_time = 0;
-                        $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
+                        $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id,$payroll_period->payroll_cutoff);
                         $overtime_pay = 0;
                         $sss_reg_ee = 0;
                         $sss_mpf_ee = 0;

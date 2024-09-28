@@ -13,10 +13,11 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 
 class PayrollSalaryAdjustmentExport implements FromQuery, WithHeadings, WithMapping
 {
-    public function __construct($company,$status)
+    public function __construct($company,$status,$payroll_period)
     {
         $this->company = $company;
         $this->status = $status;
+        $this->payroll_period = $payroll_period;
     }
 
     public function query()
@@ -29,6 +30,7 @@ class PayrollSalaryAdjustmentExport implements FromQuery, WithHeadings, WithMapp
 
         $company = $this->company ? $this->company : "";
         $status = $this->status ? $this->status : "Active";
+        $payroll_period = $this->payroll_period ? $this->payroll_period : "";
 
         $employees = Employee::select('id','user_id','first_name','last_name','middle_name')
             ->whereIn('company_id',$allowed_companies)
@@ -48,6 +50,8 @@ class PayrollSalaryAdjustmentExport implements FromQuery, WithHeadings, WithMapp
             });
         }
 
+        if($payroll_period) $salary_adjustments = $salary_adjustments->where('payroll_period_id',$payroll_period);
+
         return $salary_adjustments;
     }
 
@@ -57,11 +61,12 @@ class PayrollSalaryAdjustmentExport implements FromQuery, WithHeadings, WithMapp
             'USER ID',
             'NAME',
             'COMPANY',
-            'EFFECTIVITY DATE',
+            // 'EFFECTIVITY DATE',
             'AMOUNT',
             'TYPE',
             'STATUS',
-            'REASON'
+            'REASON',
+            'PAYROLL CUT-OFF'
         ];
     }
 
@@ -78,11 +83,12 @@ class PayrollSalaryAdjustmentExport implements FromQuery, WithHeadings, WithMapp
             $employee_number,
             $employee_name,
             $company,
-            $salary_adjustment->effectivity_date,
+            // $salary_adjustment->effectivity_date,
             $salary_adjustment->amount,
             $salary_adjustment->type,
             $salary_adjustment->status,
             $salary_adjustment->reason,
+            $salary_adjustment->payroll_cutoff,
         ];
     }
 }

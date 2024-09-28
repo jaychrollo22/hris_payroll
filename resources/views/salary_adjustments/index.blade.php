@@ -18,7 +18,7 @@
                     </button>
                 </p>
 
-                <h4 class="card-title">Salary Adjustment <a href="/payroll-salary-adjusments-export?company={{$company}}&status={{$status}}" title="Export" class="btn btn-outline-primary btn-icon-text btn-sm text-center"><i class="ti-arrow-down btn-icon-prepend"></i></a></h4>
+                <h4 class="card-title">Salary Adjustment <a href="/payroll-salary-adjusments-export?company={{$company}}&payroll_period={{$payroll_period}}&status={{$status}}" title="Export" class="btn btn-outline-primary btn-icon-text btn-sm text-center"><i class="ti-arrow-down btn-icon-prepend"></i></a></h4>
                 <h4 class="card-title">Filter</h4>
                 <p class="card-description">
                 <form method='get' onsubmit='show();' enctype="multipart/form-data">
@@ -34,6 +34,19 @@
                         </select>
                       </div>
                     </div>
+
+                    <div class='col-md-2 mr-2'>
+                      <div class="form-group">
+                        <label class="text-right">Payroll Period</label>
+                        <select data-placeholder="Select Payroll Period" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payroll_period' required>
+                          <option value="">-- Select Payroll Period --</option>
+                          @foreach($payroll_periods as $payroll_period_item)
+                          <option value="{{$payroll_period_item->id}}" @if ($payroll_period_item->id == $payroll_period) selected @endif>{{$payroll_period_item->payroll_name}} ({{$payroll_period_item->start_date .'-'. $payroll_period_item->end_date}})</option>
+                          @endforeach
+                        </select>
+                      </div>
+                    </div>
+
                     <div class='col-md-2 mr-2'>
                       <div class="form-group">
                         <label class="text-right">Status</label>
@@ -58,8 +71,9 @@
                       <tr>
                         <th>User ID</th>
                         <th>Name</th> 
-                        <th>Effectivity Date</th>
+                        {{-- <th>Effectivity Date</th> --}}
                         <th>Payroll Period</th>
+                        <th>Payroll Cut-Off</th>
                         <th>Amount</th> 
                         <th>Type</th>
                         <th>Status</th>
@@ -76,8 +90,9 @@
                               <br>
 											        <small>{{$salary_adjustment->employee ? $salary_adjustment->employee->company->company_name : ""}}</small>
                             </td>
-                            <td>{{$salary_adjustment->effectivity_date}}</td>
+                            {{-- <td>{{$salary_adjustment->effectivity_date}}</td> --}}
                             <td>{{$salary_adjustment->payrollPeriod ? $salary_adjustment->payrollPeriod->payroll_name. " (".$salary_adjustment->payrollPeriod->start_date .'-'. $salary_adjustment->payrollPeriod->end_date.")" : ""}}</td>
+                            <td>{{$salary_adjustment->payroll_cutoff}}</td>
                             <td>{{$salary_adjustment->amount}}</td>
                             <td>{{$salary_adjustment->type}}</td>
                             <td>{{$salary_adjustment->status}}</td>
