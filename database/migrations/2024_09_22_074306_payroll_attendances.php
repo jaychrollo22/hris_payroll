@@ -15,8 +15,8 @@ class PayrollAttendances extends Migration
     {
         Schema::create('payroll_attendances', function (Blueprint $table) {
             $table->increments('id');  // Auto-incrementing ID
-
             // Employee Information
+            $table->integer('payroll_period_id')->nullable();
             $table->integer('user_id')->nullable();
             $table->string('full_name')->nullable();
             $table->string('department')->nullable();

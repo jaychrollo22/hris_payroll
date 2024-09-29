@@ -30,7 +30,7 @@
               <div class='col-md-6 form-group'>
                 Payroll Frequency
                 <select name="payroll_frequency" id="payroll_frequency" class="form-control" required>
-                    <option value="weekly">Weekly</option>
+                    <option value="Cutoff ">Weekly</option>
                     <option value="bi-weekly">Bi-Weekly</option>
                     <option value="semi-monthly">Semi-Monthly</option>
                     <option value="monthly">Monthly</option>

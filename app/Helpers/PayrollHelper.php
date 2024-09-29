@@ -48,6 +48,8 @@ function getUserSalaryAdjustmentAmount($user_id,$payroll_period_id){
         ->sum('amount');
 }
 
+?>
+
 
 
 

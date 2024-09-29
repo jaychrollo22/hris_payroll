@@ -25,7 +25,7 @@ class CreatePayrollContributionsTable extends Migration
             $table->decimal('sss_ec', 10, 2)->default(0); // SSS EC amount
             $table->decimal('phic_er', 10, 2)->default(0); // PHIC ER amount
             $table->decimal('hdmf_er', 10, 2)->default(0); // HDMF ER amount
-            $table->enum('payment_schedule', ['15th', '30th']); // Payment schedule
+            $table->enum('payment_schedule', ['First Cut-Off', 'Second Cut-Off']); // Payment schedule
             $table->timestamps(); // Created at and updated at timestamps
         });
     }

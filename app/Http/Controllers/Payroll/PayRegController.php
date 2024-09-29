@@ -107,67 +107,69 @@ class PayRegController extends Controller
             if($employees){
                 foreach($employees as $employee){
 
-                    $validate_payroll_register = PayrollRegister::where('payroll_period_id',$payroll_period->id)->first();
+                    $payroll_register = PayrollRegister::where('payroll_period_id',$payroll_period->id)
+                                                            ->where('user_id',$employee->user_id)
+                                                            ->first();
 
-                    if(empty($validate_payroll_register)){
-
+                    if(empty($payroll_register)){
                         $payroll_register = new PayrollRegister;
-                        $payroll_register->payroll_period_id = $payroll_period->id;
-                        $payroll_register->user_id = $employee->user_id;
-                        $payroll_register->bank_account = $employee->bank_account_number;
-                        $payroll_register->name = $employee->first_name . ' ' . $employee->last_name;
-                        $payroll_register->position = $employee->position;
-                        $payroll_register->employment_status = $employee->status;
-                        $payroll_register->company = $employee->company->company_name ?? null;
-                        $payroll_register->department = $employee->department->name ?? null;
-                        $payroll_register->project = $employee->project;
-                        $payroll_register->date_hired = $employee->original_date_hired;
-                        $payroll_register->cut_from = $payroll_period->start_date;
-                        $payroll_register->cut_to = $payroll_period->end_date;
+                    }  
 
-                        //IF Monthly
-                        $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
-                        $payroll_register->monthly_basic_pay = $rate ?? 0;
-                        $payroll_register->daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0; //Daily Rate Computation
-                        $payroll_register->basic_pay =  $rate ? $rate / 2 : 0; //Basic Pay Computation
-                        $basic_pay = $rate / 2; //Basic Pay Computation
-                        $lates = 0;
-                        $under_time = 0;
-                        $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
-                        $overtime_pay = 0;
-                        $sss_reg_ee = 0;
-                        $sss_mpf_ee = 0;
-                        $phic_ee = 0;
-                        $hdmf_ee = 0;
-                        $salary_deduction = 0;
+                    $payroll_register->payroll_period_id = $payroll_period->id;
+                    $payroll_register->user_id = $employee->user_id;
+                    $payroll_register->bank_account = $employee->bank_account_number;
+                    $payroll_register->name = $employee->first_name . ' ' . $employee->last_name;
+                    $payroll_register->position = $employee->position;
+                    $payroll_register->employment_status = $employee->status;
+                    $payroll_register->company = $employee->company->company_name ?? null;
+                    $payroll_register->department = $employee->department->name ?? null;
+                    $payroll_register->project = $employee->project;
+                    $payroll_register->date_hired = $employee->original_date_hired;
+                    $payroll_register->cut_from = $payroll_period->start_date;
+                    $payroll_register->cut_to = $payroll_period->end_date;
 
-                        $payroll_register->monthly_basic_pay = $rate;
-                        $payroll_register->daily_rate = ((($rate*12)/313)/8)*9.5; //Daily Rate Computation
-                        $payroll_register->basic_pay = $basic_pay;
+                    //IF Monthly
+                    $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
+                    $payroll_register->monthly_basic_pay = $rate ?? 0;
+                    $payroll_register->daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0; //Daily Rate Computation
+                    $payroll_register->basic_pay =  $rate ? $rate / 2 : 0; //Basic Pay Computation
+                    $basic_pay = $rate / 2; //Basic Pay Computation
+                    $lates = 0;
+                    $under_time = 0;
+                    $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
+                    $overtime_pay = 0;
+                    $sss_reg_ee = 0;
+                    $sss_mpf_ee = 0;
+                    $phic_ee = 0;
+                    $hdmf_ee = 0;
+                    $salary_deduction = 0;
 
-                        // Allowances
-                        $payroll_register->meal_allowance = getUserAllowanceAmount($employee->user_id,3);
-                        $payroll_register->salary_allowance = getUserAllowanceAmount($employee->user_id,4);
-                        $payroll_register->out_of_town_allowance = getUserAllowanceAmount($employee->user_id,2);
-                        $payroll_register->incentives_allowance = getUserAllowanceAmount($employee->user_id,5);
-                        $payroll_register->relocation_allowance = getUserAllowanceAmount($employee->user_id,6);
-                        $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7);
-                        $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8);
-                        $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9);
-                        //Salary Adjustment
-                        $payroll_register->salary_adjustment = $salary_adjustment;
-                        //Witholding tax
-                        $payroll_register->withholding_tax = getUserWitholdingTaxAmount($employee->user_id,$basic_pay,$lates,$under_time,$salary_adjustment,$overtime_pay,
-                            $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction);
-                        $payroll_register->save();
-                        $count++;
-                    }
+                    $payroll_register->monthly_basic_pay = $rate;
+                    $payroll_register->daily_rate = ((($rate*12)/313)/8)*9.5; //Daily Rate Computation
+                    $payroll_register->basic_pay = $basic_pay;
+
+                    // Allowances
+                    $payroll_register->meal_allowance = getUserAllowanceAmount($employee->user_id,3);
+                    $payroll_register->salary_allowance = getUserAllowanceAmount($employee->user_id,4);
+                    $payroll_register->out_of_town_allowance = getUserAllowanceAmount($employee->user_id,2);
+                    $payroll_register->incentives_allowance = getUserAllowanceAmount($employee->user_id,5);
+                    $payroll_register->relocation_allowance = getUserAllowanceAmount($employee->user_id,6);
+                    $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7);
+                    $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8);
+                    $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9);
+                    //Salary Adjustment
+                    $payroll_register->salary_adjustment = $salary_adjustment;
+                    //Witholding tax
+                    $payroll_register->withholding_tax = getUserWitholdingTaxAmount($employee->user_id,$basic_pay,$lates,$under_time,$salary_adjustment,$overtime_pay,
+                        $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction);
+                    $payroll_register->save();
+                    $count++;
                 }
             }
         }
 
         Alert::success('Successfully Generated (' . $count. ')')->persistent('Dismiss');
-        return redirect('/pay-reg');
+        return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company );
 
     }
 
