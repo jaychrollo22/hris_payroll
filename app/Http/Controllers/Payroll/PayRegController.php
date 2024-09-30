@@ -145,9 +145,10 @@ class PayRegController extends Controller
                         $salary_allowances = 0;
                         $out_allowances = 0;
                         $incentives_allowances = 0;
+                        $reallocation_allowances = 0;
                         $discretionary_allowances = 0;
                         $transpo_allowances = 0;
-                        $$load_allowances = 0;
+                        $load_allowances = 0;
 
                         $payroll_register->monthly_basic_pay = $rate;
                         $payroll_register->daily_rate = ((($rate*12)/313)/8)*9.5; //Daily Rate Computation
@@ -165,11 +166,11 @@ class PayRegController extends Controller
                         //Salary Adjustment
                         $payroll_register->salary_adjustment = $salary_adjustment;
                         //Witholding tax
-                        $payroll_register->withholding_tax = getUserWitholdingTaxAmount($employee->user_id,$basic_pay,$lates,$under_time,$salary_adjustment,$ot_amount,
-                            $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable);
+                        $payroll_register->withholding_tax = getUserWitholdingTaxAmount($employee->user_id,$basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,
+                            $ot_amount,$sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable);
                         //Gross Pay
                         $payroll_register->grosspay = getUserGrossPayAmount($basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
-                            $meal_allowances,$salary_allowances,$out_allowances,$incentives_allowances,$discretionary_allowances,$transpo_allowances,$load_allowances);
+                            $meal_allowances,$salary_allowances,$out_allowances,$incentives_allowances,$reallocation_allowances,$discretionary_allowances,$transpo_allowances,$load_allowances);
                         //Total Taxable
                         $payroll_register->total_taxable = getUserTotalTaxableAmount($basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
                             $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable);

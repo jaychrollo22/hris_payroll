@@ -2,7 +2,7 @@
 use App\Employee;
 use App\PayrollSalaryAdjustment;
 
-function getUserWitholdingTaxAmount($user_id,$basic_pay,$lates,$under_time,$salary_adjustment,$overtime_pay,
+function getUserWitholdingTaxAmount($user_id,$basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
     $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable){
     $user = Employee::where('user_id',$user_id)
         ->first();
@@ -19,7 +19,7 @@ function getUserWitholdingTaxAmount($user_id,$basic_pay,$lates,$under_time,$sala
     // $hdmf_ee = 6;
     // $salary_deduction_taxable = 3;
 
-    $total_taxable = ($basic_pay - $absences - $lates - $under_time + $salary_adjustment + $overtime_pay - $sss_reg_ee - $sss_mpf_ee - $phic_ee - $hdmf_ee - $salary_deduction_taxable);
+    $total_taxable = ($basic_pay - $absences_amount - $lates_amount - $undertime_amount + $salary_adjustment + $ot_amount - $sss_reg_ee - $sss_mpf_ee - $phic_ee - $hdmf_ee - $salary_deduction_taxable);
     $witholding_tax = 0;
 
     if ($user->tax_application === "Non-Minimum") {
@@ -50,7 +50,7 @@ function getUserSalaryAdjustmentAmount($user_id,$payroll_period_id,$payroll_cuto
 }
 
 function getUserGrossPayAmount($basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
-    $meal_allowances,$salary_allowances,$out_allowances,$incentives_allowances,$discretionary_allowances,$transpo_allowances,$load_allowances){
+    $meal_allowances,$salary_allowances,$out_allowances,$incentives_allowances,$reallocation_allowances,$discretionary_allowances,$transpo_allowances,$load_allowances){
 
     return $basic_pay - $absences_amount - $lates_amount - $undertime_amount + $salary_adjustment + $ot_amount + $meal_allowances + $salary_allowances + $out_allowances + $incentives_allowances + $reallocation_allowances + $discretionary_allowances + $transpo_allowances + $load_allowances;
 }
