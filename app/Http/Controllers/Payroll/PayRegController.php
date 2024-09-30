@@ -106,11 +106,12 @@ class PayRegController extends Controller
         if($employees && $payroll_period){ 
             if($employees){
                 foreach($employees as $employee){
-                    
-                    $validate_payroll_register = PayrollRegister::where('payroll_period_id',$payroll_period->id)->first();
 
-                    if(empty($validate_payroll_register)){
+                    $payroll_register = PayrollRegister::where('payroll_period_id',$payroll_period->id)
+                                                            ->where('user_id',$employee->user_id)
+                                                            ->first();
 
+                    if(empty($payroll_register)){
                         $payroll_register = new PayrollRegister;
                         $payroll_register->payroll_period_id = $payroll_period->id;
                         $payroll_register->user_id = $employee->user_id;
@@ -181,7 +182,7 @@ class PayRegController extends Controller
         }
 
         Alert::success('Successfully Generated (' . $count. ')')->persistent('Dismiss');
-        return redirect('/pay-reg');
+        return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company );
 
     }
 

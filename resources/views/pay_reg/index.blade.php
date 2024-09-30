@@ -15,11 +15,11 @@
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
                       Upload Payroll Register
                     </a>
-                    <a type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal">
+                    <a type="button" class="btn btn-outline-success btn-icon-text" href="{{ url('/payroll-attendances?payroll_period=' . $payroll_period . '&company=' . $company) }}"  target="_blank">
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
                       Generate Payroll Attendances
                     </a>
-                    <a type="button" class="btn btn-outline-danger btn-icon-text" href="{{ url('/payroll-salary-adjusments') }}">
+                    <a type="button" class="btn btn-outline-danger btn-icon-text" href="{{ url('/payroll-salary-adjusments') }}" target="_blank">
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
                       Salary Adjustments
                     </a>

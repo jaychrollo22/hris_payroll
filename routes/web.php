@@ -439,6 +439,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pay-reg', 'Payroll\PayRegController@index');
     Route::post('generate-payroll-register', 'Payroll\PayRegController@generate');
 
+    Route::get('payroll-employee-contributions', 'Payroll\PayrollEmployeeContributionController@index');
+    Route::post('store-payroll-employee-contribution', 'Payroll\PayrollEmployeeContributionController@store');
+    Route::post('update-payroll-employee-contribution/{id}', 'Payroll\PayrollEmployeeContributionController@update');
+    Route::post('import-payroll-employee-contribution', 'Payroll\PayrollEmployeeContributionController@import');
+
+    Route::get('payroll-attendances', 'Payroll\PayrollAttendanceController@index');
+    Route::post('generate-payroll-attendance', 'Payroll\PayrollAttendanceController@generate');
+    Route::post('update-payroll-attendance/{id}', 'Payroll\PayrollAttendanceController@update');
+    Route::post('import-payroll-attendance', 'Payroll\PayrollAttendanceController@import');
+
     
 });
 Route::post('new-employee', 'EmployeeController@new');
