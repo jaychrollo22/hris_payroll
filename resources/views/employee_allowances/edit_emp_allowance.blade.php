@@ -66,7 +66,7 @@
 											<select name="schedule" id="schedule" class="form-control form-control-sm">
 												<option value="">Choose Credit Schedule</option>
 												<option value="First Cut-Off" {{ $employee_allowance->schedule == 'First Cut-Off' ? 'selected' : '' }}>First Cut-Off</option>
-												<option value="Last Cut-Off" {{ $employee_allowance->schedule == 'Last Cut-Off' ? 'selected' : '' }}>Last Cut-Off</option>
+												<option value="Second Cut-Off" {{ $employee_allowance->schedule == 'Second Cut-Off' ? 'selected' : '' }}>Second Cut-Off</option>
 												<option value="Every Cut-Off" {{ $employee_allowance->schedule == 'Every Cut-Off' ? 'selected' : '' }}>Every Cut-Off</option>
 											</select>
 										</div>

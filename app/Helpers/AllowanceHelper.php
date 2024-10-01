@@ -6,7 +6,7 @@ function getUserAllowanceAmount($user_id,$allowance_id,$cut_off = null){
         ->where('user_id',$user_id)
         ->where('allowance_id',$allowance_id)
         ->where('status','Active')
-        ->when($cut_off, 'First Cut-Off',function($q){
+        ->when($cut_off == 'First Cut-Off',function($q){
             $q->where('schedule','First Cut-Off');
         })
         ->sum('allowance_amount');

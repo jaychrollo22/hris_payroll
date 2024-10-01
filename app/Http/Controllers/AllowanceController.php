@@ -10,15 +10,20 @@ use RealRashid\SweetAlert\Facades\Alert;
 class AllowanceController extends Controller
 {
     //
-    public function viewAllowances()
+    public function viewAllowances(Request $request)
     {
-        $allowances = Allowance::with('user')->get();
+        $status = isset($request->status) ? $request->status : "Active";
+
+        $allowances = Allowance::with('user')
+            ->where('status',$status)
+            ->get();
+            
         return view(
             'allowances.allowances',
             array(
                 'header' => 'settings',
                 'allowances' => $allowances,
-
+                'status' => 'Active'
             )
         );
     }

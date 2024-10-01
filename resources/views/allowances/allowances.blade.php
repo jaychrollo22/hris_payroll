@@ -15,6 +15,28 @@
 							</button>
 						</p>
 
+						<h4 class="card-title">Filter</h4>
+						<p class="card-description">
+							<form method='get' onsubmit='show();' enctype="multipart/form-data">
+								<div class=row>
+									<div class='col-md-2 mr-2'>
+										<div class="form-group">
+											<label class="text-right">Status</label>
+											<select data-placeholder="Select Status" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='status' required>
+												<option value="">-- Select Status --</option>
+												<option value="Active" @if ('Active' == $status) selected @endif>Active</option>
+												<option value="Inactive" @if ('Inactive' == $status) selected @endif>Inactive</option>
+											</select>
+										</div>
+									</div>
+									<div class='col-md-2'>
+										<button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Generate</button>
+									</div>
+								</div>
+								
+							</form>
+						</p>
+
 						<div class="table-responsive">
 							<table class="table table-hover table-bordered tablewithSearch">
 								<thead>

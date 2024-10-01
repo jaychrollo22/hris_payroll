@@ -66,7 +66,7 @@
 							<select name="schedule" id="schedule" class="form-control form-control-sm">
 								<option value="">Choose Credit Schedule</option>
 								<option value="First Cut-Off">First Cut-Off</option>
-								<option value="Last Cut-Off">Last Cut-Off</option>
+								<option value="Second Cut-Off">Second Cut-Off</option>
 								<option value="Every Cut-Off">Every Cut-Off</option>
 							</select>
 						</div>
