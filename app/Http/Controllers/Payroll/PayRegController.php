@@ -174,6 +174,8 @@ class PayRegController extends Controller
                         //Total Taxable
                         $payroll_register->total_taxable = getUserTotalTaxableAmount($basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
                             $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable);
+
+                        $payroll_register->minimum_wage = $employee->tax_application === "Non-Minimum" ? 'NO' : 'YES';
                         
                         $payroll_register->save();
                         $count++;

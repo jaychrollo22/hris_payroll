@@ -52,7 +52,7 @@ class PayrollRegisters extends Migration
 
             // Taxable and Non-Taxable fields
             $table->decimal('total_taxable', 10, 2)->nullable();
-            $table->decimal('minimum_wage', 10, 2)->nullable();
+            $table->char('minimum_wage',3)->nullable();
             $table->decimal('withholding_tax', 10, 2)->nullable();
             
             // SSS, PHIC, HDMF Contributions
