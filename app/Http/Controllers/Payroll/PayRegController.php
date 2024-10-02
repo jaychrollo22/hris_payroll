@@ -127,7 +127,8 @@ class PayRegController extends Controller
                         $payroll_register->cut_to = $payroll_period->end_date;
 
                         //IF Monthly
-                        $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
+                        // $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
+                        $rate = 610;
                         $basic_pay = $rate / 2; //Basic Pay Computation
                         $lates = 0;
                         $under_time = 0;
@@ -155,14 +156,14 @@ class PayRegController extends Controller
                         $payroll_register->basic_pay = $basic_pay;
 
                         // Allowances
-                        $payroll_register->meal_allowance = getUserAllowanceAmount($employee->user_id,3);
-                        $payroll_register->salary_allowance = getUserAllowanceAmount($employee->user_id,4);
-                        $payroll_register->out_of_town_allowance = getUserAllowanceAmount($employee->user_id,2);
-                        $payroll_register->incentives_allowance = getUserAllowanceAmount($employee->user_id,5);
-                        $payroll_register->relocation_allowance = getUserAllowanceAmount($employee->user_id,6);
-                        $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7);
-                        $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8);
-                        $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9);
+                        $payroll_register->meal_allowance = getUserAllowanceAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
+                        $payroll_register->salary_allowance = getUserAllowanceAmount($employee->user_id,4,$payroll_period->payroll_cutoff);
+                        $payroll_register->out_of_town_allowance = getUserAllowanceAmount($employee->user_id,2,$payroll_period->payroll_cutoff);
+                        $payroll_register->incentives_allowance = getUserAllowanceAmount($employee->user_id,5,$payroll_period->payroll_cutoff);
+                        $payroll_register->relocation_allowance = getUserAllowanceAmount($employee->user_id,6,$payroll_period->payroll_cutoff);
+                        $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7,$payroll_period->payroll_cutoff);
+                        $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8,$payroll_period->payroll_cutoff);
+                        $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9,$payroll_period->payroll_cutoff);
                         //Salary Adjustment
                         $payroll_register->salary_adjustment = $salary_adjustment;
                         //Witholding tax

@@ -1,14 +1,12 @@
 <?php
 use App\EmployeeAllowance;
 
-function getUserAllowanceAmount($user_id,$allowance_id,$cut_off = null){
+function getUserAllowanceAmount($user_id,$allowance_id,$cut_off){
     return EmployeeAllowance::select('id','allowance_amount')
         ->where('user_id',$user_id)
         ->where('allowance_id',$allowance_id)
         ->where('status','Active')
-        ->when($cut_off == 'First Cut-Off',function($q){
-            $q->where('schedule','First Cut-Off');
-        })
+        ->whereIn('schedule',[$cut_off,'Every Cut-Off'])
         ->sum('allowance_amount');
 }
 
