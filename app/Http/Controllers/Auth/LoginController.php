@@ -123,19 +123,20 @@ class LoginController extends Controller
                                             ->whereDate('created_at','>=',$from_date)
                                             ->whereDate('created_at','<=',$to_date)
                                             ->count();
+                $pending_ppr_count = "";
+                // $pending_ppr_count = EmployeePerformanceEvaluation::select('user_id')->where(function($q) use($user_ids,$custom_user_ids){
+                //                                 $q->whereIn('user_id',$user_ids)->orWhereIn('user_id',$custom_user_ids);
+                //                             })
+                //                             ->where('status','For Review')
+                //                             ->whereDate('created_at','>=',$from_date)
+                //                             ->whereDate('created_at','<=',$to_date)
+                //                             ->count();
 
-                $pending_ppr_count = EmployeePerformanceEvaluation::select('user_id')->where(function($q) use($user_ids,$custom_user_ids){
-                                                $q->whereIn('user_id',$user_ids)->orWhereIn('user_id',$custom_user_ids);
-                                            })
-                                            ->where('status','For Review')
-                                            ->whereDate('created_at','>=',$from_date)
-                                            ->whereDate('created_at','<=',$to_date)
-                                            ->count();
-
-                $pending_for_manager_ratings = EmployeePerformanceEvaluationScore::select('user_id')->where(function($q) use($user_ids,$custom_user_ids_ratings){
-                                                $q->whereIn('user_id',$user_ids)->orWhereIn('user_id',$custom_user_ids_ratings);
-                                            })->where('status','For Approval')
-                                            ->count();
+                $pending_for_manager_ratings = "";
+                // $pending_for_manager_ratings = EmployeePerformanceEvaluationScore::select('user_id')->where(function($q) use($user_ids,$custom_user_ids_ratings){
+                //                                 $q->whereIn('user_id',$user_ids)->orWhereIn('user_id',$custom_user_ids_ratings);
+                //                             })->where('status','For Approval')
+                //                             ->count();
 
                 session([
                     'pending_leave_count'=>$pending_leave_count + $request_to_cancel,

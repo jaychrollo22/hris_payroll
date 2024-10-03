@@ -597,8 +597,20 @@
                                                         }
                                                     }
                                                 @endphp
+
+                                                {{-- DTR CORRECTION --}}
+                                                @php
+                                                    if($dtr_correction_time_in && $dtr_correction_time_out){
+                                                        $time_in_data = $dtr_correction_time_in;
+                                                        $time_out_data = $dtr_correction_time_out;
+                                                        $start_dtr_correction_time_in = new DateTime($dtr_correction_time_in); 
+                                                        if($dtr_correction_time_out){
+                                                            $diff = $start_dtr_correction_time_in->diff(new DateTime($dtr_correction_time_out)); 
+                                                        }
+                                                    }
+                                                @endphp
+
                                                 @if($time_in_data && $time_out_data)
-                                                    
                                                     @php
                                                         $work_diff_hours = round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);
                                                         $work = (double) $work+$work_diff_hours;
