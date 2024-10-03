@@ -124,7 +124,7 @@ class LoginController extends Controller
                                             ->whereDate('created_at','<=',$to_date)
                                             ->count();
 
-                $pending_ppr_count = EmployeePerformanceEvaluation::where(function($q) use($user_ids,$custom_user_ids){
+                $pending_ppr_count = EmployeePerformanceEvaluation::select('user_id')->where(function($q) use($user_ids,$custom_user_ids){
                                                 $q->whereIn('user_id',$user_ids)->orWhereIn('user_id',$custom_user_ids);
                                             })
                                             ->where('status','For Review')
@@ -132,7 +132,7 @@ class LoginController extends Controller
                                             ->whereDate('created_at','<=',$to_date)
                                             ->count();
 
-                $pending_for_manager_ratings = EmployeePerformanceEvaluationScore::where(function($q) use($user_ids,$custom_user_ids_ratings){
+                $pending_for_manager_ratings = EmployeePerformanceEvaluationScore::select('user_id')->where(function($q) use($user_ids,$custom_user_ids_ratings){
                                                 $q->whereIn('user_id',$user_ids)->orWhereIn('user_id',$custom_user_ids_ratings);
                                             })->where('status','For Approval')
                                             ->count();
