@@ -132,7 +132,7 @@ class PayrollAttendanceController extends Controller
                     $payroll_attendance->special_holiday_amount = $hourly_rate * $employee_attendance['special_holiday_hours'] * 1.3;
                     
                     $payroll_attendance->shrd_hours = $employee_attendance['shrd_hours'];
-                    $payroll_attendance->shrd_hours_amount = $hourly_rate * $employee_attendance['shrd_hours'] * 1.5;
+                    $payroll_attendance->shrd_amount = $hourly_rate * $employee_attendance['shrd_hours'] * 1.5;
                     
                     $payroll_attendance->sh_rd_ot_hours = $employee_attendance['sh_rd_ot_hours'];
                     $payroll_attendance->sh_rd_ot_amount = $hourly_rate * $employee_attendance['sh_rd_ot_hours'] * 1.95;
