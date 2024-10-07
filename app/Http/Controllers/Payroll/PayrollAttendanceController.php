@@ -149,7 +149,7 @@ class PayrollAttendanceController extends Controller
                     $payroll_attendance->night_diff_hours = $employee_attendance['night_diff_hours'];
                     $payroll_attendance->night_diff_amount = $hourly_rate * $employee_attendance['night_diff_hours'] * .1;
                     
-                    $payroll_attendance->overtime_adjustment = "";
+                    $payroll_attendance->overtime_adjustment = null;
 
                     $total_overtime_payroll = $payroll_attendance->reg_ot_amount + 
                             $payroll_attendance->rest_day_amount + 
