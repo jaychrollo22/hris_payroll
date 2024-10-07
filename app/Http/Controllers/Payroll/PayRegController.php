@@ -119,8 +119,8 @@ class PayRegController extends Controller
                         $payroll_register->name = $employee->first_name . ' ' . $employee->last_name;
                         $payroll_register->position = $employee->position;
                         $payroll_register->employment_status = $employee->status;
-                        $payroll_register->company = $employee->company->company_name ?? null;
-                        $payroll_register->department = $employee->department->name ?? null;
+                        $payroll_register->company =  $employee->company ? $employee->company->company_name : null;
+                        $payroll_register->department = $employee->department ? $employee->department->name : null;
                         $payroll_register->project = $employee->project;
                         $payroll_register->date_hired = $employee->original_date_hired;
                         $payroll_register->cut_from = $payroll_period->start_date;

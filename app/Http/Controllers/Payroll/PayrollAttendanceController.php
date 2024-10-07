@@ -94,8 +94,8 @@ class PayrollAttendanceController extends Controller
                     $payroll_attendance->payroll_period_id = $payroll_period->id;
                     $payroll_attendance->user_id = $employee->user_id;
                     $payroll_register->full_name = $employee->first_name . ' ' . $employee->last_name;
-                    $payroll_register->department = $employee->department->name ?? null;
-                    $payroll_register->company = $employee->company->company_name ?? null;
+                    $payroll_register->department = $employee->department ? $employee->department->name : null;
+                    $payroll_register->company = $employee->company ? $employee->company->company_name : null;
                     $payroll_register->location = $employee->location;
                     $payroll_register->location = $employee->location;
 
