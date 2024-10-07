@@ -13,6 +13,7 @@ use App\ScheduleData;
 
 use DateTime;
 
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
