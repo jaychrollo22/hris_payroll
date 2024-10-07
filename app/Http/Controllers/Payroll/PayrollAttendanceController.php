@@ -113,7 +113,7 @@ class PayrollAttendanceController extends Controller
                     $payroll_attendance->absences_days = $employee_attendance['absent']; // Total Absent
                     $payroll_attendance->absences_amount = $daily_rate * $employee_attendance['absent']; // Amount of Total Absent
 
-                    $payroll_attendance->late_hours = $employee_attendance['late']; // Late Hours
+                    $payroll_attendance->lates_hours = $employee_attendance['late']; // Late Hours
                     $payroll_attendance->lates_amount = $hourly_rate * $employee_attendance['late']; // Amount of Late
                     
                     $payroll_attendance->undertime_hours = $employee_attendance['undertime']; // Undertime Hours
