@@ -72,7 +72,7 @@ class PayrollAttendanceController extends Controller
                                         ->whereIn('company_id',$allowed_companies)
                                         ->where('company_id',$request->company)
                                         ->where('status','Active')
-                                        ->where('id','1') // My Id
+                                        // ->where('id','1') // My Id
                                         ->get();
 
         $count = 0;
