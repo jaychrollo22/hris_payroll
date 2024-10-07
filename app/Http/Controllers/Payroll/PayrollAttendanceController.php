@@ -163,9 +163,14 @@ class PayrollAttendanceController extends Controller
                             $payroll_attendance->night_diff_amount;
 
                     $payroll_attendance->total_overtime_pay = $total_overtime_payroll;
+                    $payroll_attendance->save();
+                    $count = 0;
                 }
             }
         }
+
+        Alert::success('Successfully Generated (' . $count. ')')->persistent('Dismiss');
+        return redirect('/payroll-attendances?payroll_period=' . $request->payroll_period . '&company=' .$request->company );
     }
 
 
