@@ -100,7 +100,6 @@ class PayrollAttendanceController extends Controller
                     $payroll_attendance->location = $employee->location;
 
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
-                    $payroll_attendance->monthly_basic_pay = $rate ?? 0;
                     $daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0;
                     $hourly_rate = $daily_rate / 8; //Basic Pay Computation
 
@@ -164,7 +163,7 @@ class PayrollAttendanceController extends Controller
 
                     $payroll_attendance->total_overtime_pay = $total_overtime_payroll;
                     $payroll_attendance->save();
-                    $count = 0;
+                    $count++;
                 }
             }
         }
