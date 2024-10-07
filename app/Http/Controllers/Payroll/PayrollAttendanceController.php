@@ -110,9 +110,6 @@ class PayrollAttendanceController extends Controller
                     $payroll_register->no_of_days_worked = $employee_attendance['total_work_day']; // Total Worked Days
                     $payroll_register->days_worked_amount = $daily_rate * $employee_attendance['total_work_day']; // Amount of Total Work Days
 
-                    //Leaves
-
-
                     $payroll_register->absences_days = $employee_attendance['absent']; // Total Absent
                     $payroll_register->absences_amount = $daily_rate * $employee_attendance['absent']; // Amount of Total Absent
 
@@ -122,16 +119,50 @@ class PayrollAttendanceController extends Controller
                     $payroll_register->undertime_hours = $employee_attendance['undertime']; // Undertime Hours
                     $payroll_register->undertime_amount = $hourly_rate * $employee_attendance['undertime']; // Amount of Undertime
 
-                    $payroll_register->reg_ot_hours = $employee_attendance['reg_ot']; // OT Hours
-                    $payroll_register->reg_ot_amount = $hourly_rate * $employee_attendance['reg_ot']; // Amount of Total Absent
+                    $payroll_register->reg_ot_hours = $employee_attendance['reg_ot_hours']; // OT Hours
+                    $payroll_register->reg_ot_amount = $hourly_rate * $employee_attendance['reg_ot_hours']; // Amount of Total Absent
 
-                    $payroll_register->rdot_shot_hours = $employee_attendance['reg_ot']; // OT Hours
-                    $payroll_register->rdot_shot_hours = $hourly_rate * $employee_attendance['reg_ot']; // Amount of Total Absent
+                    $payroll_register->rest_day_hours = $employee_attendance['rest_day_hours']; // OT Hours
+                    $payroll_register->rest_day_amount = $hourly_rate * $employee_attendance['rest_day_hours'] * 1.3; // Amount of Total Absent
                     
-
-
+                    $payroll_register->rdot_shot_hours = $employee_attendance['rdot_shot_hours'];
+                    $payroll_register->rdot_shot_amount = $hourly_rate * $employee_attendance['rdot_shot_hours'] * 1.69;
                     
+                    $payroll_register->special_holiday_hours = $employee_attendance['special_holiday_hours'];
+                    $payroll_register->special_holiday_amount = $hourly_rate * $employee_attendance['special_holiday_hours'] * 1.3;
+                    
+                    $payroll_register->shrd_hours = $employee_attendance['shrd_hours'];
+                    $payroll_register->shrd_hours_amount = $hourly_rate * $employee_attendance['shrd_hours'] * 1.5;
+                    
+                    $payroll_register->sh_rd_ot_hours = $employee_attendance['sh_rd_ot_hours'];
+                    $payroll_register->sh_rd_ot_amount = $hourly_rate * $employee_attendance['sh_rd_ot_hours'] * 1.95;
+                    
+                    $payroll_register->regular_holiday_hours = $employee_attendance['regular_holiday_hours'];
+                    $payroll_register->regular_holiday_amount = $hourly_rate * $employee_attendance['regular_holiday_hours'] * 1;
+                    
+                    $payroll_register->rh_rd_or_lh_ot_hours = $employee_attendance['rh_rd_or_lh_ot_hours'];
+                    $payroll_register->rh_rd_or_lh_ot_amount = $hourly_rate * $employee_attendance['rh_rd_or_lh_ot_hours'] * 2.6;
+                    
+                    $payroll_register->lhrd_ot_hours = $employee_attendance['lhrd_ot_hours'];
+                    $payroll_register->lhrd_ot_amount = $hourly_rate * $employee_attendance['lhrd_ot_hours'] * 3.38;
+                    
+                    $payroll_register->night_diff_hours = $employee_attendance['night_diff_hours'];
+                    $payroll_register->night_diff_amount = $hourly_rate * $employee_attendance['night_diff_hours'] * .1;
+                    
+                    $payroll_register->overtime_adjustment = "";
 
+                    $total_overtime_payroll = $payroll_register->reg_ot_amount + 
+                            $payroll_register->rest_day_amount + 
+                            $payroll_register->rdot_shot_amount + 
+                            $payroll_register->special_holiday_amount +
+                            $payroll_register->shrd_hours_amount +
+                            $payroll_register->sh_rd_ot_amount +
+                            $payroll_register->regular_holiday_amount +
+                            $payroll_register->rh_rd_or_lh_ot_amount +
+                            $payroll_register->lhrd_ot_amount +
+                            $payroll_register->night_diff_amount;
+
+                    $payroll_register->total_overtime_pay = $total_overtime_payroll;
                 }
             }
         }
