@@ -21,6 +21,10 @@
                         Import Payroll Attendance
                       </button>
 
+                      <a type="button" class="btn btn-outline-danger btn-icon-text" href="{{ url('/payroll-overtime-adjustments') }}" target="_blank">
+                        <i class="ti-plus btn-icon-prepend"></i>                                                    
+                        Overtime Adjustments
+                      </a>
                   </p>
                 
                   <h4 class="card-title">Filter</h4>

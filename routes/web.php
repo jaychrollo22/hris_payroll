@@ -462,6 +462,13 @@ Route::get('delete-payroll-salary-adjustment/{id}', 'PayrollSalaryAdjustmentCont
 Route::get('payroll-salary-adjusments-export', 'PayrollSalaryAdjustmentController@export');
 Route::post('import-payroll-salary-adjusments', 'PayrollSalaryAdjustmentController@import');
 
+Route::get('payroll-overtime-adjustments', 'PayrollOvertimeAdjustmentController@index');
+Route::post('new-payroll-overtime-adjustment', 'PayrollOvertimeAdjustmentController@store');
+Route::post('edit-payroll-overtime-adjustment/{id}', 'PayrollOvertimeAdjustmentController@update');
+Route::get('delete-payroll-overtime-adjustment/{id}', 'PayrollOvertimeAdjustmentController@destroy');
+Route::get('payroll-overtime-adjustments-export', 'PayrollOvertimeAdjustmentController@export');
+Route::post('import-payroll-overtime-adjusments', 'PayrollOvertimeAdjustmentController@import');
+
 Route::get('hik-logs', function(){
     return HikAttLog2::orderBy('authDate')->get()->take(5);
 });
