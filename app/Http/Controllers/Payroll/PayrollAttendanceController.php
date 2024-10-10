@@ -13,6 +13,7 @@ use App\ScheduleData;
 
 use DateTime;
 
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
@@ -72,7 +73,7 @@ class PayrollAttendanceController extends Controller
                                         ->whereIn('company_id',$allowed_companies)
                                         ->where('company_id',$request->company)
                                         ->where('status','Active')
-                                        ->where('id','1') // My Id
+                                        // ->where('id','1') // My Id
                                         ->get();
 
         $count = 0;
@@ -93,44 +94,84 @@ class PayrollAttendanceController extends Controller
 
                     $payroll_attendance->payroll_period_id = $payroll_period->id;
                     $payroll_attendance->user_id = $employee->user_id;
-                    $payroll_register->full_name = $employee->first_name . ' ' . $employee->last_name;
-                    $payroll_register->department = $employee->department->name ?? null;
-                    $payroll_register->company = $employee->company->company_name ?? null;
-                    $payroll_register->location = $employee->location;
-                    $payroll_register->location = $employee->location;
+                    $payroll_attendance->full_name = $employee->first_name . ' ' . $employee->last_name;
+                    $payroll_attendance->department = $employee->department ? $employee->department->name : null;
+                    $payroll_attendance->company = $employee->company ? $employee->company->company_name : null;
+                    $payroll_attendance->location = $employee->location;
+                    $payroll_attendance->location = $employee->location;
 
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
-                    $payroll_register->monthly_basic_pay = $rate ?? 0;
                     $daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0;
                     $hourly_rate = $daily_rate / 8; //Basic Pay Computation
 
-                    $payroll_register->basic_pay =  $rate ? $rate / 2 : 0; //Basic Pay Computation
-                    $payroll_register->daily_rate = $daily_rate; //Daily Rate Computation
-                    $payroll_register->hourly_rate = $hourly_rate; //Hourly Rate Computation
-                    $payroll_register->no_of_days_worked = $employee_attendance['total_work_day']; // Total Worked Days
-                    $payroll_register->days_worked_amount = $daily_rate * $employee_attendance['total_work_day']; // Amount of Total Work Days
+                    $payroll_attendance->basic_pay =  $rate ? $rate / 2 : 0; //Basic Pay Computation
+                    $payroll_attendance->daily_rate = $daily_rate; //Daily Rate Computation
+                    $payroll_attendance->hourly_rate = $hourly_rate; //Hourly Rate Computation
+                    $payroll_attendance->no_of_days_worked = $employee_attendance['total_work_day']; // Total Worked Days
+                    $payroll_attendance->days_worked_amount = $daily_rate * $employee_attendance['total_work_day']; // Amount of Total Work Days
 
-                    //Leaves
+                    $payroll_attendance->absences_days = $employee_attendance['absent']; // Total Absent
+                    $payroll_attendance->absences_amount = $daily_rate * $employee_attendance['absent']; // Amount of Total Absent
 
-
-                    $payroll_register->absences_days = $employee_attendance['absent']; // Total Absent
-                    $payroll_register->absences_amount = $daily_rate * $employee_attendance['absent']; // Amount of Total Absent
-
-                    $payroll_register->late_hours = $employee_attendance['late']; // Late Hours
-                    $payroll_register->lates_amount = $hourly_rate * $employee_attendance['late']; // Amount of Late
+                    $payroll_attendance->lates_hours = $employee_attendance['late']; // Late Hours
+                    $payroll_attendance->lates_amount = $hourly_rate * $employee_attendance['late']; // Amount of Late
                     
-                    $payroll_register->undertime_hours = $employee_attendance['undertime']; // Undertime Hours
-                    $payroll_register->undertime_amount = $hourly_rate * $employee_attendance['undertime']; // Amount of Undertime
+                    $payroll_attendance->undertime_hours = $employee_attendance['undertime']; // Undertime Hours
+                    $payroll_attendance->undertime_amount = $hourly_rate * $employee_attendance['undertime']; // Amount of Undertime
 
-                    $payroll_register->reg_ot_hours = $employee_attendance['reg_ot']; // OT Hours
-                    $payroll_register->reg_ot_amount = $hourly_rate * $employee_attendance['reg_ot']; // Amount of Total Absent
+                    $payroll_attendance->reg_ot_hours = $employee_attendance['reg_ot_hours']; // OT Hours
+                    $payroll_attendance->reg_ot_amount = $hourly_rate * $employee_attendance['reg_ot_hours']; // Amount of Total Absent
 
-                    $payroll_register->rdot_shot_hours = $employee_attendance['reg_ot']; // OT Hours
-                    $payroll_register->rdot_shot_hours = $hourly_rate * $employee_attendance['reg_ot']; // Amount of Total Absent
-                    $payroll_register->overtime_adjustment = getUserOvertimeAdjustmentAmount($employee->user_id,$payroll_period->id,$payroll_period->payroll_cutoff); // Overtime adjustments
+                    $payroll_attendance->rest_day_hours = $employee_attendance['rest_day_hours']; // OT Hours
+                    $payroll_attendance->rest_day_amount = $hourly_rate * $employee_attendance['rest_day_hours'] * 1.3; // Amount of Total Absent
+                    
+                    $payroll_attendance->rdot_shot_hours = $employee_attendance['rdot_shot_hours'];
+                    $payroll_attendance->rdot_shot_amount = $hourly_rate * $employee_attendance['rdot_shot_hours'] * 1.69;
+                    $payroll_attendance->overtime_adjustment = getUserOvertimeAdjustmentAmount($employee->user_id,$payroll_period->id,$payroll_period->payroll_cutoff); // Overtime adjustments
+                    
+                    $payroll_attendance->special_holiday_hours = $employee_attendance['special_holiday_hours'];
+                    $payroll_attendance->special_holiday_amount = $hourly_rate * $employee_attendance['special_holiday_hours'] * 1.3;
+                    
+                    $payroll_attendance->shrd_hours = $employee_attendance['shrd_hours'];
+                    $payroll_attendance->shrd_amount = $hourly_rate * $employee_attendance['shrd_hours'] * 1.5;
+                    
+                    $payroll_attendance->sh_rd_ot_hours = $employee_attendance['sh_rd_ot_hours'];
+                    $payroll_attendance->sh_rd_ot_amount = $hourly_rate * $employee_attendance['sh_rd_ot_hours'] * 1.95;
+                    
+                    $payroll_attendance->regular_holiday_hours = $employee_attendance['regular_holiday_hours'];
+                    $payroll_attendance->regular_holiday_amount = $hourly_rate * $employee_attendance['regular_holiday_hours'] * 1;
+                    
+                    $payroll_attendance->rh_rd_or_lh_ot_hours = $employee_attendance['rh_rd_or_lh_ot_hours'];
+                    $payroll_attendance->rh_rd_or_lh_ot_amount = $hourly_rate * $employee_attendance['rh_rd_or_lh_ot_hours'] * 2.6;
+                    
+                    $payroll_attendance->lhrd_ot_hours = $employee_attendance['lhrd_ot_hours'];
+                    $payroll_attendance->lhrd_ot_amount = $hourly_rate * $employee_attendance['lhrd_ot_hours'] * 3.38;
+                    
+                    $payroll_attendance->night_diff_hours = $employee_attendance['night_diff_hours'];
+                    $payroll_attendance->night_diff_amount = $hourly_rate * $employee_attendance['night_diff_hours'] * .1;
+                    
+                    $payroll_attendance->overtime_adjustment = null;
+
+                    $total_overtime_payroll = $payroll_attendance->reg_ot_amount + 
+                            $payroll_attendance->rest_day_amount + 
+                            $payroll_attendance->rdot_shot_amount + 
+                            $payroll_attendance->special_holiday_amount +
+                            $payroll_attendance->shrd_hours_amount +
+                            $payroll_attendance->sh_rd_ot_amount +
+                            $payroll_attendance->regular_holiday_amount +
+                            $payroll_attendance->rh_rd_or_lh_ot_amount +
+                            $payroll_attendance->lhrd_ot_amount +
+                            $payroll_attendance->night_diff_amount;
+
+                    $payroll_attendance->total_overtime_pay = $total_overtime_payroll;
+                    $payroll_attendance->save();
+                    $count++;
                 }
             }
         }
+
+        Alert::success('Successfully Generated (' . $count. ')')->persistent('Dismiss');
+        return redirect('/payroll-attendances?payroll_period=' . $request->payroll_period . '&company=' .$request->company );
     }
 
 

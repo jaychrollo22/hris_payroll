@@ -15,4 +15,8 @@ class PayrollRegister extends Model implements Auditable
 
     protected $guareded = [];
     
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class,'user_id','user_id');
+    }
 }
