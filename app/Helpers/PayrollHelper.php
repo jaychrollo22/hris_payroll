@@ -1,23 +1,13 @@
 <?php
 use App\Employee;
 use App\PayrollSalaryAdjustment;
+use App\PayrollOvertimeAdjustment;
 
 function getUserWitholdingTaxAmount($user_id,$basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
     $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable){
     $user = Employee::where('user_id',$user_id)
         ->first();
     
-    // $basic_pay  = 100000;  
-    // $absences  = 10;
-    // $lates  = 5;
-    // $under_time  = 8;
-    // $salary_adjustment  = 15;
-    // $overtime_pay  = 7;
-    // $sss_reg_ee = 12;
-    // $sss_mpf_ee = 4;
-    // $phic_ee = 9;
-    // $hdmf_ee = 6;
-    // $salary_deduction_taxable = 3;
 
     $total_taxable = ($basic_pay - $absences_amount - $lates_amount - $undertime_amount + $salary_adjustment + $ot_amount - $sss_reg_ee - $sss_mpf_ee - $phic_ee - $hdmf_ee - $salary_deduction_taxable);
     $witholding_tax = 0;
@@ -59,6 +49,14 @@ function getUserTotalTaxableAmount($basic_pay,$absences_amount,$lates_amount,$un
     $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable){
 
     return $basic_pay - $absences_amount - $lates_amount - $undertime_amount + $salary_adjustment + $ot_amount - $sss_reg_ee - $sss_mpf_ee - $phic_ee - $hdmf_ee - $salary_deduction_taxable;
+}
+
+function getUserOvertimeAdjustmentAmount($user_id,$payroll_period_id,$payroll_cutoff){
+    return PayrollOvertimeAdjustment::where('payroll_period_id',$payroll_period_id)
+        ->where('user_id',$user_id)
+        ->where('status','Active')
+        ->whereIn('payroll_cutoff',[$payroll_cutoff,'Every Cut-Off'])
+        ->sum('amount');
 }
 
 

@@ -127,11 +127,7 @@ class PayrollAttendanceController extends Controller
 
                     $payroll_register->rdot_shot_hours = $employee_attendance['reg_ot']; // OT Hours
                     $payroll_register->rdot_shot_hours = $hourly_rate * $employee_attendance['reg_ot']; // Amount of Total Absent
-                    
-
-
-                    
-
+                    $payroll_register->overtime_adjustment = getUserOvertimeAdjustmentAmount($employee->user_id,$payroll_period->id,$payroll_period->payroll_cutoff); // Overtime adjustments
                 }
             }
         }
