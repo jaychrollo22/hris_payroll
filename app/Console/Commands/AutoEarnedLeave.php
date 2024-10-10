@@ -55,7 +55,7 @@ class AutoEarnedLeave extends Command
         $today = date('Y-m-d');
         $classifications = [1,2,3,5];
 
-        $companies = [14,11,7,2,1,4,16]; //PLC, OBN , PIVI, MAC, PMI, MBI, PIMI
+        $companies = [14,11,7,2,1,4,16,6]; //PLC, OBN , PIVI, MAC, PMI, MBI, PIMI, IMC
 
         $employees = Employee::select('id','user_id','classification','original_date_hired')
                                 ->whereIn('classification',$classifications)
@@ -130,7 +130,7 @@ class AutoEarnedLeave extends Command
         $today = date('Y-m-d');
         
         $classifications = [1,2,3];
-        $companies = [14,11,7,2,1,4,16]; //PLC, OBN , PIVI, MAC, PMI, MBI, PIMI
+        $companies = [14,11,7,2,1,4,16,6]; //PLC, OBN , PIVI, MAC, PMI, MBI, PIMI, IMC
 
         $employees = Employee::select('id','user_id','classification','original_date_hired')
                                 ->whereIn('classification',$classifications)
