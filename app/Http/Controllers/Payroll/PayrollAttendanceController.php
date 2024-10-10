@@ -91,7 +91,6 @@ class PayrollAttendanceController extends Controller
                         $payroll_attendance = new PayrollAttendance;
                     }
 
-
                     $payroll_attendance->payroll_period_id = $payroll_period->id;
                     $payroll_attendance->user_id = $employee->user_id;
                     $payroll_attendance->full_name = $employee->first_name . ' ' . $employee->last_name;
@@ -149,8 +148,6 @@ class PayrollAttendanceController extends Controller
                     
                     $payroll_attendance->night_diff_hours = $employee_attendance['night_diff_hours'];
                     $payroll_attendance->night_diff_amount = $hourly_rate * $employee_attendance['night_diff_hours'] * .1;
-                    
-                    $payroll_attendance->overtime_adjustment = null;
 
                     $total_overtime_payroll = $payroll_attendance->reg_ot_amount + 
                             $payroll_attendance->rest_day_amount + 
@@ -161,7 +158,8 @@ class PayrollAttendanceController extends Controller
                             $payroll_attendance->regular_holiday_amount +
                             $payroll_attendance->rh_rd_or_lh_ot_amount +
                             $payroll_attendance->lhrd_ot_amount +
-                            $payroll_attendance->night_diff_amount;
+                            $payroll_attendance->night_diff_amount + 
+                            $payroll_attendance->overtime_adjustment;
 
                     $payroll_attendance->total_overtime_pay = $total_overtime_payroll;
                     $payroll_attendance->save();

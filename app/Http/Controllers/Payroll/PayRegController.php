@@ -157,7 +157,9 @@ class PayRegController extends Controller
                     $payroll_register->monthly_basic_pay = $rate ? $rate : 0;
                     $payroll_register->daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0; //Daily Rate Computation
                     $payroll_register->basic_pay = $basic_pay;
-
+                    
+                    $payroll_register->salary_adjustment = $salary_adjustment; //Salary Adjustment
+                    $payroll_register->overtime_pay = getUserOvertime($employee->user_id,$payroll_period->id); // Overtime
                     // Allowances
                     $payroll_register->meal_allowance = getUserAllowanceAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
                     $payroll_register->salary_allowance = getUserAllowanceAmount($employee->user_id,4,$payroll_period->payroll_cutoff);
@@ -167,8 +169,6 @@ class PayRegController extends Controller
                     $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7,$payroll_period->payroll_cutoff);
                     $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8,$payroll_period->payroll_cutoff);
                     $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9,$payroll_period->payroll_cutoff);
-                    //Salary Adjustment
-                    $payroll_register->salary_adjustment = $salary_adjustment;
                     //Witholding tax
                     $payroll_register->withholding_tax = getUserWitholdingTaxAmount($employee->user_id,$basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,
                         $ot_amount,$sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable);
