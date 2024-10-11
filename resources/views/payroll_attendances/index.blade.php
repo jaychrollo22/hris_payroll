@@ -33,7 +33,7 @@
                     <div class=row>
                       <div class='col-md-3'>
                         <div class="form-group">
-                          <select data-placeholder="Select Payroll Period" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
+                          <select data-placeholder="Select Payroll Period" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payroll_period' required>
                             <option value="">-- Select Payroll Period --</option>
                             @foreach($payroll_periods as $period)
                             <option value="{{$period->id}}" @if ($period->id == $payroll_period) selected @endif>{{$period->payroll_name}} - ({{$period->start_date . '-' . $period->end_date}})</option>

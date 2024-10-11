@@ -41,10 +41,9 @@ class PayrollAttendanceController extends Controller
                 $q->where('company_id',$company);
             });
         }
+
         if($payroll_period){
-            $payroll_attendances = $payroll_attendances->whereHas('employee',function($q) use($payroll_period){
-                $q->where('payroll_period_id',$payroll_period);
-            });
+            $payroll_attendances = $payroll_attendances->where('payroll_period_id',$payroll_period);
         }
 
         $payroll_attendances = $payroll_attendances->get();
@@ -61,6 +60,7 @@ class PayrollAttendanceController extends Controller
                 'payroll_periods' => $payroll_periods,
             )
         );
+
     }
 
     public function generate(Request $request){
@@ -161,9 +161,11 @@ class PayrollAttendanceController extends Controller
                             $payroll_attendance->night_diff_amount + 
                             $payroll_attendance->overtime_adjustment;
 
+
                     $payroll_attendance->total_overtime_pay = $total_overtime_payroll;
                     $payroll_attendance->save();
                     $count++;
+                    
                 }
             }
         }
