@@ -38,7 +38,7 @@
                 </select>
               </div>
             </div>
-            <div class="row">
+            {{-- <div class="row">
               <div class='col-md-12 form-group'>
                 Payroll Cut Off
                 <select data-placeholder="Select Payroll Cut Off" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payroll_cutoff' id="type"  required>
@@ -48,7 +48,7 @@
                   <option value="Every Cut-Off" {{$salary_adjustment->payroll_cutoff == 'Every Cut-Off' ? 'selected' : ""}}>Every Cut-Off</option>
                 </select>
               </div>
-            </div>
+            </div> --}}
             <div class="row">
               <div class='col-md-12 form-group'>
                 Amount
