@@ -126,7 +126,7 @@ class PayrollAttendanceController extends Controller
                     
                     $payroll_attendance->rdot_shot_hours = $employee_attendance['rdot_shot_hours'];
                     $payroll_attendance->rdot_shot_amount = $hourly_rate * $employee_attendance['rdot_shot_hours'] * 1.69;
-                    $payroll_attendance->overtime_adjustment = getUserOvertimeAdjustmentAmount($employee->user_id,$payroll_period->id,$payroll_period->payroll_cutoff); // Overtime adjustments
+                    $payroll_attendance->overtime_adjustment = getUserOvertimeAdjustmentAmount($employee->user_id,$payroll_period->id); // Overtime adjustments
                     
                     $payroll_attendance->special_holiday_hours = $employee_attendance['special_holiday_hours'];
                     $payroll_attendance->special_holiday_amount = $hourly_rate * $employee_attendance['special_holiday_hours'] * 1.3;

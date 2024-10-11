@@ -33,7 +33,7 @@
               </div>
             </div>
 
-            <div class="row">
+            {{-- <div class="row">
               <div class='col-md-12 form-group'>
                 Payroll Cut-Off
                 <div class="form-group">
@@ -45,7 +45,7 @@
                   </select>
                 </div>
               </div>
-            </div>
+            </div> --}}
             
             <div class="row">
               <div class='col-md-12 form-group'>

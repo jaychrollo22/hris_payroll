@@ -52,11 +52,11 @@ function getUserTotalTaxableAmount($basic_pay,$absences_amount,$lates_amount,$un
     return $basic_pay - $absences_amount - $lates_amount - $undertime_amount + $salary_adjustment + $ot_amount - $sss_reg_ee - $sss_mpf_ee - $phic_ee - $hdmf_ee - $salary_deduction_taxable;
 }
 
-function getUserOvertimeAdjustmentAmount($user_id,$payroll_period_id,$payroll_cutoff){
+function getUserOvertimeAdjustmentAmount($user_id,$payroll_period_id){
     return PayrollOvertimeAdjustment::where('payroll_period_id',$payroll_period_id)
         ->where('user_id',$user_id)
         ->where('status','Active')
-        ->whereIn('payroll_cutoff',[$payroll_cutoff,'Every Cut-Off'])
+        // ->whereIn('payroll_cutoff',[$payroll_cutoff,'Every Cut-Off'])
         ->sum('amount');
 }
 

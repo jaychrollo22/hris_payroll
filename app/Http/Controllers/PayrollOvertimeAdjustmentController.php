@@ -96,7 +96,7 @@ class PayrollOvertimeAdjustmentController extends Controller
         $adjustment = new PayrollOvertimeAdjustment;
         $adjustment->user_id = $request->employee;
         $adjustment->payroll_period_id = $request->payroll_period;
-        $adjustment->payroll_cutoff = $request->payroll_cutoff;
+        // $adjustment->payroll_cutoff = $request->payroll_cutoff;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
         $adjustment->status = "Active";
@@ -141,7 +141,7 @@ class PayrollOvertimeAdjustmentController extends Controller
         $adjustment = PayrollOvertimeAdjustment::findOrfail($id);
         $adjustment->user_id = $request->employee;
         $adjustment->payroll_period_id = $request->payroll_period;
-        $adjustment->payroll_cutoff = $request->payroll_cutoff;
+        // $adjustment->payroll_cutoff = $request->payroll_cutoff;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
         $adjustment->reason = $request->reason;

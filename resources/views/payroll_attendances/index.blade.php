@@ -85,6 +85,7 @@
                             <th>Undertime Amount</th>
                             <th>Regular OT Hours</th>
                             <th>Regular OT Amount</th>
+                            <th>Overtime Adjustment</th>
                             <th>Total Overtime Pay</th>
                             <th>Status</th>
                             <th>Remarks</th>
@@ -116,6 +117,7 @@
                             <td>{{ $payroll_attendance->undertime_amount }}</td>
                             <td>{{ $payroll_attendance->reg_ot_hours }}</td>
                             <td>{{ $payroll_attendance->reg_ot_amount }}</td>
+                            <td>{{ $payroll_attendance->overtime_adjustment }}</td>
                             <td>{{ $payroll_attendance->total_overtime_pay }}</td>
                             <td>{{ $payroll_attendance->status }}</td>
                             <td>{{ $payroll_attendance->remarks }}</td>
