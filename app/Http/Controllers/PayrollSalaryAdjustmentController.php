@@ -59,7 +59,7 @@ class PayrollSalaryAdjustmentController extends Controller
                 'salary_adjustments' => $salary_adjustments,
                 'payroll_periods' => PayrollPeriod::all(),
                 'payroll_period' => $payroll_period,
-                'payroll_cutoff' => '',
+                // 'payroll_cutoff' => '',
                 'employees' => $employees,
                 'companies' => $companies,
                 'company' => $company,
@@ -98,7 +98,7 @@ class PayrollSalaryAdjustmentController extends Controller
         $adjustment->user_id = $request->employee;
         // $adjustment->effectivity_date = $request->effectivity_date;
         $adjustment->payroll_period_id = $request->payroll_period;
-        $adjustment->payroll_cutoff = $request->payroll_cutoff;
+        // $adjustment->payroll_cutoff = $request->payroll_cutoff;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
         $adjustment->status = "Active";
@@ -144,7 +144,7 @@ class PayrollSalaryAdjustmentController extends Controller
         $adjustment->user_id = $request->employee;
         // $adjustment->effectivity_date = $request->effectivity_date;
         $adjustment->payroll_period_id = $request->payroll_period;
-        $adjustment->payroll_cutoff = $request->payroll_cutoff;
+        // $adjustment->payroll_cutoff = $request->payroll_cutoff;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
         $adjustment->reason = $request->reason;

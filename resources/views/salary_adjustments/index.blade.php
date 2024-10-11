@@ -73,7 +73,7 @@
                         <th>Name</th> 
                         {{-- <th>Effectivity Date</th> --}}
                         <th>Payroll Period</th>
-                        <th>Payroll Cut-Off</th>
+                        {{-- <th>Payroll Cut-Off</th> --}}
                         <th>Amount</th> 
                         <th>Type</th>
                         <th>Status</th>
@@ -92,7 +92,7 @@
                             </td>
                             {{-- <td>{{$salary_adjustment->effectivity_date}}</td> --}}
                             <td>{{$salary_adjustment->payrollPeriod ? $salary_adjustment->payrollPeriod->payroll_name. " (".$salary_adjustment->payrollPeriod->start_date .'-'. $salary_adjustment->payrollPeriod->end_date.")" : ""}}</td>
-                            <td>{{$salary_adjustment->payroll_cutoff}}</td>
+                            {{-- <td>{{$salary_adjustment->payroll_cutoff}}</td> --}}
                             <td>{{$salary_adjustment->amount}}</td>
                             <td>{{$salary_adjustment->type}}</td>
                             <td>{{$salary_adjustment->status}}</td>

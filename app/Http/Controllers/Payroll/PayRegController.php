@@ -135,7 +135,7 @@ class PayRegController extends Controller
                     $basic_pay = $rate ? $rate / 2 : 0; //Basic Pay Computation
                     $lates = 0;
                     $under_time = 0;
-                    $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id,$payroll_period->payroll_cutoff);
+                    $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
                     $sss_reg_ee = 0;
                     $sss_mpf_ee = 0;
                     $phic_ee = 0;
