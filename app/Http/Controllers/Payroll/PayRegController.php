@@ -44,6 +44,12 @@ class PayRegController extends Controller
         
         $payroll_registers = PayrollRegister::where('payroll_period_id',$payroll_period);
         
+        if($department){
+            $payroll_registers->whereHas('employee',function($q) use($department){
+                $q->where('department_id',$department);
+            });
+        }
+
         if($company){
             $department_companies = Employee::when($company,function($q) use($company){
                             $q->where('company_id',$company);
@@ -100,6 +106,9 @@ class PayRegController extends Controller
         $employees = Employee::with('company','department')
                                         ->whereIn('company_id',$allowed_companies)
                                         ->where('company_id',$request->company)
+                                        ->when($request->department,function($q) use($request){
+                                            $q->where('department_id',$request->department);
+                                        })
                                         ->where('status','Active')
                                         // ->where('id','1') // My Id
                                         ->get();
@@ -136,14 +145,16 @@ class PayRegController extends Controller
                     $lates = 0;
                     $under_time = 0;
                     $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
-                    $sss_reg_ee = 0;
-                    $sss_mpf_ee = 0;
-                    $phic_ee = 0;
-                    $hdmf_ee = 0;
+                    $sss_reg_ee = getSSSRegEE($employee->user_id,$payroll_period->payroll_cutoff);
+                    $sss_mpf_ee = getSSSMPFEE($employee->user_id,$payroll_period->payroll_cutoff);
+                    $phic_ee = getPHICEE($employee->user_id,$payroll_period->payroll_cutoff);
+                    $hdmf_ee = getHDFMEE($employee->user_id,$payroll_period->payroll_cutoff);
+
                     $salary_deduction_taxable = 0;
                     $absences_amount = 0;
                     $lates_amount = 0;
                     $undertime_amount = 0;
+
                     $ot_amount = 0;
                     $meal_allowances = 0;
                     $salary_allowances = 0;
@@ -158,8 +169,13 @@ class PayRegController extends Controller
                     $payroll_register->daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0; //Daily Rate Computation
                     $payroll_register->basic_pay = $basic_pay;
                     
+                    $payroll_register->absences_amount = getUserAbsencesAmount($employee->user_id,$payroll_period->id);
+                    $payroll_register->lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
+                    $payroll_register->undertime_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
+
                     $payroll_register->salary_adjustment = $salary_adjustment; //Salary Adjustment
                     $payroll_register->overtime_pay = getUserOvertime($employee->user_id,$payroll_period->id); // Overtime
+
                     // Allowances
                     $payroll_register->meal_allowance = getUserAllowanceAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
                     $payroll_register->salary_allowance = getUserAllowanceAmount($employee->user_id,4,$payroll_period->payroll_cutoff);
@@ -169,15 +185,61 @@ class PayRegController extends Controller
                     $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7,$payroll_period->payroll_cutoff);
                     $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8,$payroll_period->payroll_cutoff);
                     $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9,$payroll_period->payroll_cutoff);
+
                     //Witholding tax
-                    $payroll_register->withholding_tax = getUserWitholdingTaxAmount($employee->user_id,$basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,
-                        $ot_amount,$sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable);
+                    $payroll_register->withholding_tax = getUserWitholdingTaxAmount(
+                        $employee->user_id,
+                        $basic_pay,
+                        $payroll_register->absences_amount,
+                        $payroll_register->lates_amount,
+                        $payroll_register->undertime_amount,
+                        $payroll_register->salary_adjustment,
+                        $payroll_register->overtime_pay,
+                        $sss_reg_ee,
+                        $sss_mpf_ee,
+                        $phic_ee,
+                        $hdmf_ee,
+                        $salary_deduction_taxable
+                    );
+
+                    //Payroll Contributions
+                    $payroll_register->sss_reg_ee_15 = $sss_reg_ee;
+                    $payroll_register->sss_mpf_ee_15 = $sss_mpf_ee;
+                    $payroll_register->phic_ee_15 = $phic_ee;
+                    $payroll_register->hmdf_ee_15 = $hdmf_ee;
+
                     //Gross Pay
-                    $payroll_register->grosspay = getUserGrossPayAmount($basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
-                        $meal_allowances,$salary_allowances,$out_allowances,$incentives_allowances,$reallocation_allowances,$discretionary_allowances,$transpo_allowances,$load_allowances);
+                    $payroll_register->grosspay = getUserGrossPayAmount(
+                        $basic_pay,
+                        $payroll_register->absences_amount,
+                        $payroll_register->lates_amount,
+                        $payroll_register->undertime_amount,
+                        $payroll_register->salary_adjustment,
+                        $payroll_register->overtime_pay,
+                        $payroll_register->meal_allowance,
+                        $payroll_register->salary_allowance,
+                        $payroll_register->out_of_town_allowance,
+                        $payroll_register->incentives_allowance,
+                        $payroll_register->relocation_allowance,
+                        $payroll_register->discretionary_allowance,
+                        $payroll_register->transport_allowance,
+                        $payroll_register->load_allowance
+                    );
+
                     //Total Taxable
-                    $payroll_register->total_taxable = getUserTotalTaxableAmount($basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
-                        $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable);
+                    $payroll_register->total_taxable = getUserTotalTaxableAmount(
+                        $basic_pay,
+                        $payroll_register->absences_amount,
+                        $payroll_register->lates_amount,
+                        $payroll_register->undertime_amount,
+                        $payroll_register->salary_adjustment,
+                        $payroll_register->overtime_pay,
+                        $sss_reg_ee,
+                        $sss_mpf_ee,
+                        $phic_ee,
+                        $hdmf_ee,
+                        $salary_deduction_taxable
+                    );
 
                     $payroll_register->minimum_wage = $employee->tax_application === "Non-Minimum" ? 0 : 1;
                     
@@ -189,7 +251,7 @@ class PayRegController extends Controller
         }
 
         Alert::success('Successfully Generated (' . $count. ')')->persistent('Dismiss');
-        return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company );
+        return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company . '&department=' .$request->department);
 
     }
 

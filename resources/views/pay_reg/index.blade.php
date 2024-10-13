@@ -178,10 +178,10 @@
                           <td>{{ $payroll->total_taxable }}</td>
                           <td>{{ $payroll->minimum_wage }}</td>
                           <td>{{ $payroll->withholding_tax }}</td>
-                          <td>{{ $payroll->sss_reg_ee_sept_15 }}</td>
-                          <td>{{ $payroll->sss_mpf_ee_sept_15 }}</td>
-                          <td>{{ $payroll->phic_ee_sept_15 }}</td>
-                          <td>{{ $payroll->hmdf_ee_sept_15 }}</td>
+                          <td>{{ $payroll->sss_reg_ee_15 }}</td>
+                          <td>{{ $payroll->sss_mpf_ee_15 }}</td>
+                          <td>{{ $payroll->phic_ee_15 }}</td>
+                          <td>{{ $payroll->hmdf_ee_15 }}</td>
                           <td>{{ $payroll->hdmf_salary_loan }}</td>
                           <td>{{ $payroll->hdmf_calamity_loan }}</td>
                           <td>{{ $payroll->sss_salary_loan }}</td>
