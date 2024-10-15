@@ -124,7 +124,35 @@ function getHDFMEE($user_id,$cutoff){
     ->sum('hdmf_ee');
 }
 
+function getSSSRegER($user_id,$cutoff){
+    return PayrollEmployeeContribution::where('payment_schedule',$cutoff)
+    ->where('user_id',$user_id)
+    ->sum('sss_reg_er');
+}
 
+function getSSSMpfER($user_id,$cutoff){
+    return PayrollEmployeeContribution::where('payment_schedule',$cutoff)
+    ->where('user_id',$user_id)
+    ->sum('sss_mpf_er');
+}
+
+function getSSSEc($user_id,$cutoff){
+    return PayrollEmployeeContribution::where('payment_schedule',$cutoff)
+    ->where('user_id',$user_id)
+    ->sum('sss_ec');
+}
+
+function getPHICEr($user_id,$cutoff){
+    return PayrollEmployeeContribution::where('payment_schedule',$cutoff)
+    ->where('user_id',$user_id)
+    ->sum('phic_er');
+}
+
+function getHDMFEr($user_id,$cutoff){
+    return PayrollEmployeeContribution::where('payment_schedule',$cutoff)
+    ->where('user_id',$user_id)
+    ->sum('hdmf_er');
+}
 
 
 

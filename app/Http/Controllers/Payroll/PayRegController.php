@@ -250,6 +250,12 @@ class PayRegController extends Controller
                     $payroll_register->tin_no = $employee->tax_number;
                     // $payroll_register->bir_tagging = $employee->tax_application ;
 
+                    $payroll_register->sss_reg_er_15 = getSSSRegER($employee->user_id,$payroll_period->payroll_cutoff);
+                    $payroll_register->sss_mpf_er_15 = getSSSMpfER($employee->user_id,$payroll_period->payroll_cutoff);
+                    $payroll_register->sss_ec_15 = getSSSEc($employee->user_id,$payroll_period->payroll_cutoff);
+                    $payroll_register->phic_er_15 = getPHICEr($employee->user_id,$payroll_period->payroll_cutoff);
+                    $payroll_register->hdmf_er_15 = getHDMFEr($employee->user_id,$payroll_period->payroll_cutoff);
+
                     $payroll_register->save();
                     $count++;
                     
