@@ -242,7 +242,14 @@ class PayRegController extends Controller
                     );
 
                     $payroll_register->minimum_wage = $employee->tax_application === "Non-Minimum" ? 0 : 1;
-                    
+
+                    //Government contributions number
+                    $payroll_register->sss_no = $employee->sss_number;
+                    $payroll_register->philhealth_no = $employee->phil_number;
+                    $payroll_register->pagibig_no = $employee->hdmf_number;
+                    $payroll_register->tin_no = $employee->tax_number;
+                    // $payroll_register->bir_tagging = $employee->tax_application ;
+
                     $payroll_register->save();
                     $count++;
                     
