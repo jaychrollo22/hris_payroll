@@ -67,7 +67,6 @@
                       <option value="">-- Select Status --</option>
                       <option value="Addition" {{$status == 'Addition' ? 'selected' : ""}}>Addition</option>
                       <option value="Deduction" {{$status == 'Deduction' ? 'selected' : ""}}>Deduction</option>
-                      <option value="Bonus" {{$status == 'Bonus' ? 'selected' : ""}}>Bonus</option>
                   </select>
                 </div>
               </div>
