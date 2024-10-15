@@ -34,11 +34,12 @@ function getUserWitholdingTaxAmount($user_id,$basic_pay,$absences_amount,$lates_
 }
 
 function getUserSalaryAdjustmentAmount($user_id,$payroll_period_id){
-    return PayrollSalaryAdjustment::where('payroll_period_id',$payroll_period_id)
+    $adjustment = PayrollSalaryAdjustment::where('payroll_period_id',$payroll_period_id)
         ->where('user_id',$user_id)
         ->where('status','Active')
-        // ->whereIn('payroll_cutoff',[$payroll_cutoff,'Every Cut-Off'])
-        ->sum('amount');
+        ->first();
+
+    return $adjustment ? ($adjustment->type == "Addition" ? $adjustment->amount : $adjustment->amount * -1) : 0;
 }
 
 function getUserGrossPayAmount($basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
@@ -67,11 +68,12 @@ function getUserTotalTaxableAmount($basic_pay,$absences_amount,$lates_amount,$un
 }
 
 function getUserOvertimeAdjustmentAmount($user_id,$payroll_period_id){
-    return PayrollOvertimeAdjustment::where('payroll_period_id',$payroll_period_id)
+    $adjustment = PayrollOvertimeAdjustment::where('payroll_period_id',$payroll_period_id)
         ->where('user_id',$user_id)
         ->where('status','Active')
-        // ->whereIn('payroll_cutoff',[$payroll_cutoff,'Every Cut-Off'])
-        ->sum('amount');
+        ->first();
+    
+    return $adjustment ? ($adjustment->type == "Addition" ? $adjustment->amount : $adjustment->amount * -1) : 0;
 }
 
 function getUserOvertime($user_id,$payroll_period_id){

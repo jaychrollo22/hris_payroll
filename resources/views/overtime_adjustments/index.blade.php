@@ -71,9 +71,7 @@
                       <tr>
                         <th>User ID</th>
                         <th>Name</th> 
-                        {{-- <th>Effectivity Date</th> --}}
                         <th>Payroll Period</th>
-                        <th>Payroll Cut-Off</th>
                         <th>Amount</th> 
                         <th>Type</th>
                         <th>Status</th>
@@ -90,9 +88,7 @@
                               <br>
 											        <small>{{$overtime_adjustment->employee ? $overtime_adjustment->employee->company->company_name : ""}}</small>
                             </td>
-                            {{-- <td>{{$overtime_adjustment->effectivity_date}}</td> --}}
                             <td>{{$overtime_adjustment->payrollPeriod ? $overtime_adjustment->payrollPeriod->payroll_name. " (".$overtime_adjustment->payrollPeriod->start_date .'-'. $overtime_adjustment->payrollPeriod->end_date.")" : ""}}</td>
-                            <td>{{$overtime_adjustment->payroll_cutoff}}</td>
                             <td>{{$overtime_adjustment->amount}}</td>
                             <td>{{$overtime_adjustment->type}}</td>
                             <td>{{$overtime_adjustment->status}}</td>

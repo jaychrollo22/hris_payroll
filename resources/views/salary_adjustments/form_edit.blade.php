@@ -63,7 +63,6 @@
                       <option value="">-- Select Status --</option>
                       <option value="Addition" {{$salary_adjustment->type == 'Addition' ? 'selected' : ""}}>Addition</option>
                       <option value="Deduction" {{$salary_adjustment->type == 'Deduction' ? 'selected' : ""}}>Deduction</option>
-                      <option value="Bonus" {{$salary_adjustment->type == 'Bonus' ? 'selected' : ""}}>Bonus</option>
                   </select>
                 </div>
               </div>

@@ -88,17 +88,23 @@ class PayrollSalaryAdjustmentController extends Controller
     {
         $request->validate([
             'employee' => 'required',
-            // 'effectivity_date' => 'required',
             'payroll_period' => 'required',
             'amount' => 'required',
             'reason' => 'required'
         ]);
 
+        $validate_adjustment = PayrollSalaryAdjustment::where('user_id',$request->employee)
+            ->where('payroll_period_id',$request->payroll_period)
+            ->first();
+
+        if($validate_adjustment){
+            Alert::warning('Warning : Adjustment Already Exist!')->persistent('Dismiss');
+            return back();
+        }
+
         $adjustment = new PayrollSalaryAdjustment;
         $adjustment->user_id = $request->employee;
-        // $adjustment->effectivity_date = $request->effectivity_date;
         $adjustment->payroll_period_id = $request->payroll_period;
-        // $adjustment->payroll_cutoff = $request->payroll_cutoff;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
         $adjustment->status = "Active";
@@ -140,11 +146,19 @@ class PayrollSalaryAdjustmentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validate_adjustment = PayrollSalaryAdjustment::where('user_id',$request->employee)
+            ->where('payroll_period_id',$request->payroll_period)
+            ->where('id','!=',$id)
+            ->first();
+
+        if($validate_adjustment){
+            Alert::warning('Warning : Adjustment Already Exist!')->persistent('Dismiss');
+            return back();
+        }
+
         $adjustment = PayrollSalaryAdjustment::findOrfail($id);
         $adjustment->user_id = $request->employee;
-        // $adjustment->effectivity_date = $request->effectivity_date;
         $adjustment->payroll_period_id = $request->payroll_period;
-        // $adjustment->payroll_cutoff = $request->payroll_cutoff;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
         $adjustment->reason = $request->reason;
@@ -198,14 +212,10 @@ class PayrollSalaryAdjustmentController extends Controller
             foreach($data[0] as $key => $value){
                 $salary_adjustment = PayrollSalaryAdjustment::where('user_id',$value['user_id'])
                     ->where('payroll_period_id',$value['payroll_period_id'])
-                    ->where('payroll_cutoff',$value['payroll_cutoff'])
-                    ->where('type',$value['type'])
                     ->first();
 
                 if($salary_adjustment){
-                    // if(isset($value['effectivity_date'])) $salary_adjustment->effectivity_date = $value['effectivity_date'];
                     if(isset($value['payroll_period_id'])) $salary_adjustment->payroll_period_id = $value['payroll_period_id'];
-                    if(isset($value['payroll_cutoff'])) $salary_adjustment->payroll_cutoff = $value['payroll_cutoff'];
                     if(isset($value['amount'])) $salary_adjustment->amount = $value['amount'];
                     if(isset($value['type'])) $salary_adjustment->type = $value['type'];
                     if(isset($value['status'])) $salary_adjustment->status = $value['status'];
@@ -217,7 +227,6 @@ class PayrollSalaryAdjustmentController extends Controller
                     $salary_adjustment = new PayrollSalaryAdjustment;
                     $salary_adjustment->user_id = $value['user_id'];
                     $salary_adjustment->payroll_period_id = $value['payroll_period_id'];
-                    $salary_adjustment->payroll_cutoff = $value['payroll_cutoff'];
                     $salary_adjustment->amount = $value['amount'];
                     $salary_adjustment->type = $value['type'];
                     $salary_adjustment->status = $value['status'];

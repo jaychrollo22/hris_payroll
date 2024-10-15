@@ -93,10 +93,19 @@ class PayrollOvertimeAdjustmentController extends Controller
             'reason' => 'required'
         ]);
 
+        $validate_adjustment = PayrollOvertimeAdjustment::where('user_id',$request->employee)
+            ->where('payroll_period_id',$request->payroll_period)
+            ->first();
+
+        if($validate_adjustment){
+            Alert::warning('Warning : Adjustment Already Exist!')->persistent('Dismiss');
+            return back();
+        }
+
+
         $adjustment = new PayrollOvertimeAdjustment;
         $adjustment->user_id = $request->employee;
         $adjustment->payroll_period_id = $request->payroll_period;
-        // $adjustment->payroll_cutoff = $request->payroll_cutoff;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
         $adjustment->status = "Active";
@@ -138,6 +147,16 @@ class PayrollOvertimeAdjustmentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validate_adjustment = PayrollOvertimeAdjustment::where('user_id',$request->employee)
+            ->where('payroll_period_id',$request->payroll_period)
+            ->where('id','!=',$id)
+            ->first();
+
+        if($validate_adjustment){
+            Alert::warning('Warning : Adjustment Already Exist!')->persistent('Dismiss');
+            return back();
+        }
+
         $adjustment = PayrollOvertimeAdjustment::findOrfail($id);
         $adjustment->user_id = $request->employee;
         $adjustment->payroll_period_id = $request->payroll_period;
@@ -197,13 +216,10 @@ class PayrollOvertimeAdjustmentController extends Controller
             foreach($data[0] as $key => $value){
                 $overtime_adjustment = PayrollOvertimeAdjustment::where('user_id',$value['user_id'])
                     ->where('payroll_period_id',$value['payroll_period_id'])
-                    ->where('payroll_cutoff',$value['payroll_cutoff'])
-                    ->where('type',$value['type'])
                     ->first();
 
                 if($overtime_adjustment){
                     if(isset($value['payroll_period_id'])) $overtime_adjustment->payroll_period_id = $value['payroll_period_id'];
-                    if(isset($value['payroll_cutoff'])) $overtime_adjustment->payroll_cutoff = $value['payroll_cutoff'];
                     if(isset($value['amount'])) $overtime_adjustment->amount = $value['amount'];
                     if(isset($value['type'])) $overtime_adjustment->type = $value['type'];
                     if(isset($value['status'])) $overtime_adjustment->status = $value['status'];
@@ -215,7 +231,6 @@ class PayrollOvertimeAdjustmentController extends Controller
                     $overtime_adjustment = new PayrollOvertimeAdjustment;
                     $overtime_adjustment->user_id = $value['user_id'];
                     $overtime_adjustment->payroll_period_id = $value['payroll_period_id'];
-                    $overtime_adjustment->payroll_cutoff = $value['payroll_cutoff'];
                     $overtime_adjustment->amount = $value['amount'];
                     $overtime_adjustment->type = $value['type'];
                     $overtime_adjustment->status = $value['status'];
