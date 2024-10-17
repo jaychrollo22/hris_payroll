@@ -21,6 +21,10 @@
                         Import
                       </button>
 
+                      <a type="button" class="btn btn-outline-warning btn-icon-text" href="{{ url('/sss-matrix-contributions') }}" target="_blank">
+                        <i class="ti-plus btn-icon-prepend"></i>                                                    
+                        SSS Matrix Contributions
+                      </a>
                   </p>
                 
                   <h4 class="card-title">Filter</h4>

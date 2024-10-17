@@ -469,6 +469,13 @@ Route::get('delete-payroll-overtime-adjustment/{id}', 'PayrollOvertimeAdjustment
 Route::get('payroll-overtime-adjustments-export', 'PayrollOvertimeAdjustmentController@export');
 Route::post('import-payroll-overtime-adjusments', 'PayrollOvertimeAdjustmentController@import');
 
+Route::get('sss-matrix-contributions', 'SssMatrixContributionController@index');
+Route::post('new-sss-matrix-contribution', 'SssMatrixContributionController@store');
+Route::post('edit-sss-matrix-contribution/{id}', 'SssMatrixContributionController@update');
+Route::get('delete-sss-matrix-contribution/{id}', 'SssMatrixContributionController@destroy');
+Route::get('sss-matrix-contributions-export', 'SssMatrixContributionController@export');
+Route::post('import-sss-matrix-contributions', 'SssMatrixContributionController@import');
+
 Route::get('hik-logs', function(){
     return HikAttLog2::orderBy('authDate')->get()->take(5);
 });
