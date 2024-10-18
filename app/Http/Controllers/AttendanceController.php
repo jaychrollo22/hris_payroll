@@ -20,6 +20,7 @@ use App\Imports\EmployeeSeabasedAttendanceImport;
 use App\Imports\HikAttLogAttendanceImport;
 
 use Excel;
+use App\Exports\AttendanceExport;
 
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -391,5 +392,16 @@ class AttendanceController extends Controller
             return redirect('/hik-attendances?from='.$start_date.'&to='.$end_date);
            
         }
+    }
+
+    /**
+     * Export to excel
+     *
+     */
+    public function export(Request $request){
+        $from = isset($request->company) ? $request->company : "";
+        $to = isset($request->department) ? $request->department : "";
+       
+        return Excel::download(new AttendanceExport($from,$to), $from.' - '.$to . ' Attendance Export.xlsx');
     }
 }
