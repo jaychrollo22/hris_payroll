@@ -399,8 +399,8 @@ class AttendanceController extends Controller
      *
      */
     public function export(Request $request){
-        $from = isset($request->company) ? $request->company : "";
-        $to = isset($request->department) ? $request->department : "";
+        $from = isset($request->from) ? $request->from : "";
+        $to = isset($request->to) ? $request->to : "";
        
         return Excel::download(new AttendanceExport($from,$to), $from.' - '.$to . ' Attendance Export.xlsx');
     }
