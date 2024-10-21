@@ -14,7 +14,8 @@ use App\Department;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
-
+use Excel;
+use App\Exports\PayrollRegisterExport;
 
 class PayRegController extends Controller
 {
@@ -322,5 +323,20 @@ class PayRegController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Export to excel
+     *
+     */
+    public function export(Request $request){
+        $company = isset($request->company) ? $request->company : "";
+        $department = isset($request->department) ? $request->department : "";
+        $payroll_period = isset($request->payroll_period) ? $request->payroll_period : "";
+        $company_detail = Company::where('id',$company)->first();
+
+        $company_code = $company_detail ? $company_detail->company_code : "";
+
+        return Excel::download(new PayrollRegisterExport($company,$department,$payroll_period), $company_code. ' Payroll Register Export.xlsx');
     }
 }
