@@ -449,6 +449,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('update-payroll-attendance/{id}', 'Payroll\PayrollAttendanceController@update');
     Route::post('import-payroll-attendance', 'Payroll\PayrollAttendanceController@import');
 
+    //Payslip
+    Route::get('generate-payslip', 'Payroll\PayrollPayslipController@generatePayslip');
+
     
 });
 Route::post('new-employee', 'EmployeeController@new');
