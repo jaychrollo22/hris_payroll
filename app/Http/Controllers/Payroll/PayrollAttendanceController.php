@@ -16,7 +16,8 @@ use DateTime;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
-
+use Excel;
+use App\Exports\PayrollAttendanceExport;
 class PayrollAttendanceController extends Controller
 {
     public function index(Request $request){
@@ -912,5 +913,20 @@ class PayrollAttendanceController extends Controller
         }
     
         return $dates;
+    }
+
+
+    /**
+     * Export to excel
+     *
+     */
+    public function export(Request $request){
+        $company = isset($request->company) ? $request->company : "";
+        $payroll_period = isset($request->payroll_period) ? $request->payroll_period : "";
+        $company_detail = Company::where('id',$company)->first();
+
+        $company_code = $company_detail ? $company_detail->company_code : "";
+
+        return Excel::download(new PayrollAttendanceExport($company,$payroll_period), $company_code. ' Payroll Attendance Export.xlsx');
     }
 }
