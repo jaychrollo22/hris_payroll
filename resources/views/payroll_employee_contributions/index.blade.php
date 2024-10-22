@@ -25,6 +25,16 @@
                         <i class="ti-plus btn-icon-prepend"></i>                                                    
                         SSS Matrix Contributions
                       </a>
+
+                      <a type="button" class="btn btn-outline-secondary btn-icon-text" href="{{ url('/phic-matrix-contributions') }}" target="_blank">
+                        <i class="ti-plus btn-icon-prepend"></i>                                                    
+                        PHIC Matrix Contributions
+                      </a>
+
+                      <a type="button" class="btn btn-outline-info btn-icon-text" href="{{ url('/pagibig-matrix-contributions') }}" target="_blank">
+                        <i class="ti-plus btn-icon-prepend"></i>                                                    
+                        Pagibig Matrix Contributions
+                      </a>
                   </p>
                 
                   <h4 class="card-title">Filter</h4>
