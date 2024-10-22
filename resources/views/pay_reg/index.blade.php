@@ -2,10 +2,9 @@
 @section('content')
 <div class="main-panel">
     <div class="content-wrapper">
-          <div class="col-lg-12 grid-margin stretch-card">
+        <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Payroll Register</h4>
                 <p class="card-description">
                     <button type="button" class="btn btn-outline-primary btn-icon-text" data-toggle="modal" data-target="#generate_payroll_register">
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
@@ -24,7 +23,7 @@
                       Salary Adjustments
                     </a>
                   </p>
-
+                  <h4 class="card-title">Payroll Register <a href="/payreg-export?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}" title="Export" class="btn btn-outline-primary btn-icon-text btn-sm text-center"><i class="ti-arrow-down btn-icon-prepend"></i></a></h4>
                   <h4 class="card-title">Filter</h4>
                     <p class="card-description">
                     <form method='get' onsubmit='show();' enctype="multipart/form-data">

@@ -42,7 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
     //admin
 
     Route::get('attendances', 'AttendanceController@index');
-
+    Route::get('attendances-export', 'AttendanceController@export');
 
     Route::get('get-attendance-bio', 'AttendanceController@get_attendances');
 
@@ -437,7 +437,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Pay Reg
     Route::get('pay-reg', 'Payroll\PayRegController@index');
+    Route::get('payreg-export', 'Payroll\PayRegController@export');
     Route::post('generate-payroll-register', 'Payroll\PayRegController@generate');
+    
 
     Route::get('payroll-employee-contributions', 'Payroll\PayrollEmployeeContributionController@index');
     Route::post('store-payroll-employee-contribution', 'Payroll\PayrollEmployeeContributionController@store');
@@ -447,6 +449,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('payroll-attendances', 'Payroll\PayrollAttendanceController@index');
     Route::post('generate-payroll-attendance', 'Payroll\PayrollAttendanceController@generate');
     Route::post('update-payroll-attendance/{id}', 'Payroll\PayrollAttendanceController@update');
+    Route::get('payroll-attendances-export', 'Payroll\PayrollAttendanceController@export');
     Route::post('import-payroll-attendance', 'Payroll\PayrollAttendanceController@import');
 
     //Payslip
