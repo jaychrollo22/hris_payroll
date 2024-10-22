@@ -484,6 +484,13 @@ Route::get('delete-phic-matrix-contribution/{id}', 'PhicMatrixContributionContro
 Route::get('phic-matrix-contributions-export', 'PhicMatrixContributionController@export');
 Route::post('import-phic-matrix-contributions', 'PhicMatrixContributionController@import');
 
+Route::get('pagibig-matrix-contributions', 'PagibigMatrixContributionController@index');
+Route::post('new-pagibig-matrix-contribution', 'PagibigMatrixContributionController@store');
+Route::post('edit-pagibig-matrix-contribution/{id}', 'PagibigMatrixContributionController@update');
+Route::get('delete-pagibig-matrix-contribution/{id}', 'PagibigMatrixContributionController@destroy');
+Route::get('pagibig-matrix-contributions-export', 'PagibigMatrixContributionController@export');
+Route::post('import-pagibig-matrix-contributions', 'PagibigMatrixContributionController@import');
+
 Route::get('hik-logs', function(){
     return HikAttLog2::orderBy('authDate')->get()->take(5);
 });
