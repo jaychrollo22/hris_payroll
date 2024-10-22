@@ -187,6 +187,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('activate-allowance/{id}', 'AllowanceController@activate_allowance');
     Route::post('edit-allowance/{id}', 'AllowanceController@edit_allowance');
 
+    //Deductions
+    Route::get('deductions', 'DeductionController@index');
+    Route::post('new-deduction', 'DeductionController@store');
+    Route::get('disable-deduction/{id}', 'DeductionController@destroy');
+    Route::post('edit-deduction/{id}', 'DeductionController@update');
+
     // Incentives
     Route::get('incentives', 'IncentiveController@index');
     Route::post('new-incentive', 'IncentiveController@store');
