@@ -477,6 +477,13 @@ Route::get('delete-sss-matrix-contribution/{id}', 'SssMatrixContributionControll
 Route::get('sss-matrix-contributions-export', 'SssMatrixContributionController@export');
 Route::post('import-sss-matrix-contributions', 'SssMatrixContributionController@import');
 
+Route::get('phic-matrix-contributions', 'PhicMatrixContributionController@index');
+Route::post('new-phic-matrix-contribution', 'PhicMatrixContributionController@store');
+Route::post('edit-phic-matrix-contribution/{id}', 'PhicMatrixContributionController@update');
+Route::get('delete-phic-matrix-contribution/{id}', 'PhicMatrixContributionController@destroy');
+Route::get('phic-matrix-contributions-export', 'PhicMatrixContributionController@export');
+Route::post('import-phic-matrix-contributions', 'PhicMatrixContributionController@import');
+
 Route::get('hik-logs', function(){
     return HikAttLog2::orderBy('authDate')->get()->take(5);
 });
