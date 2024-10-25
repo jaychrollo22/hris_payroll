@@ -154,7 +154,7 @@ class PayRegController extends Controller
                     $sss_reg_ee = computeSSSContribution($accumulated_amount,$cut_off,'employee_share_ee',0);
                     $sss_mpf_ee = computeSSSContribution($accumulated_amount,$cut_off,'mpf_ee',0);
                     $phic_ee = getPHICEE($employee->user_id,$payroll_period->payroll_cutoff);
-                    $hdmf_ee = getHDFMEE($employee->user_id,$payroll_period->payroll_cutoff);
+                    $hdmf_ee = computePHICContribution($rate,'employee_share_ee');
 
                     $salary_deduction_taxable = 0;
                     $ot_amount = 0;
@@ -256,7 +256,7 @@ class PayRegController extends Controller
                     $payroll_register->sss_mpf_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'mpf_er',0);
                     $payroll_register->sss_ec_15 = computeSSSecContribution($accumulated_amount,$cut_off,'sss_ec',0);
                     $payroll_register->phic_er_15 = getPHICEr($employee->user_id,$payroll_period->payroll_cutoff);
-                    $payroll_register->hdmf_er_15 = getHDMFEr($employee->user_id,$payroll_period->payroll_cutoff);
+                    $payroll_register->hdmf_er_15 = $hdmf_ee;
 
                     $payroll_register->save();
                     $count++;
