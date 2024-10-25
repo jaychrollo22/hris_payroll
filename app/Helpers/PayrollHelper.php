@@ -4,6 +4,7 @@ use App\PayrollSalaryAdjustment;
 use App\PayrollOvertimeAdjustment;
 use App\PayrollAttendance;
 use App\PayrollEmployeeContribution;
+use App\SssMatrixContribution;
 
 function getUserWitholdingTaxAmount($user_id,$basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
     $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable){
@@ -155,6 +156,32 @@ function getHDMFEr($user_id,$cutoff){
 }
 
 
+function computeSSSContribution($accumulated_amount,$cutoff,$field,$firstcutoff_amount ){
+    $highest_contribution = SssMatrixContribution::orderBy('min_salary')->first();
+
+    if($accumulated_amount >= $highest_contribution->min_salary){
+        return $highest_contribution->$field;
+    }
+
+    $sss_contribution = SssMatrixContribution::where('min_salary','>=',$accumulated_amount)
+        ->where('max_salary','<=',$accumulated_amount)
+        ->first()
+        ->sum($field);
+
+    if ($cutoff == 'Second Cut-Off') return $sss_contribution - $firstcutoff_amount;
+    
+    return  $sss_contribution;
+}
+
+
+function computeSSSecContribution($accumulated_amount,$cutoff,$field,$firstcutoff_amount ){
+    $sss_ec = 0;
+
+    $sss_ec += ($accumulated_amount > 0 && $accumulated_amount <= 14749.99) ? 10 : 0;
+    $sss_ec += ($accumulated_amount >= 14750) ? 30 : 0;
+    
+    return  $sss_ec;
+}
 
 
 

@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use App\PayrollEmployeeContribution;
 use App\Employee;
 use App\Company;
-
 use App\Imports\PayrollEmployeeContributionImport;
 use Excel;
 
@@ -56,8 +55,7 @@ class PayrollEmployeeContributionController extends Controller
                 'contributions' => $contributions,
                 'employees' => $employees,
                 'companies' => $companies,
-                'company' => $company,
-
+                'company' => $company
             )
         );
     }
@@ -236,4 +234,65 @@ class PayrollEmployeeContributionController extends Controller
 
             }
         }
+    
+    public function generate(){
+        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        
+        $employees = Employee::with('company','department')
+                ->whereIn('company_id',$allowed_companies)
+                ->where('company_id',$request->company)
+                ->when($request->department,function($q) use($request){
+                    $q->where('department_id',$request->department);
+                })
+                ->where('status','Active')
+                ->get();
+
+        $count = 0;
+        foreach($employees as $employee){
+
+            $employee_contribution = PayrollEmployeeContribution::where('payment_schedule',$request->payment_schedule)
+                ->where('user_id',$employee->user_id)
+                ->first();
+
+
+            $absences_amount = 0;
+            $lates_amount = 0;
+            $undertime_amount = 0;
+            $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
+            $ot_amount = getUserOvertime($employee->user_id,$payroll_period->id);
+            //IF Monthly
+            $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
+            $basic_pay = $rate ? $rate / 2 : 0; //Basic Pay Computation
+
+            // N3 = Basic pay halfmonth
+            // O3 = Absences amount 
+            // P3 = Late amount 
+            // Q3 = Undertime amount
+            // R3 = salary adjustment
+            // S3 = overtime amount
+
+            // N3-O3-P3-Q3+R3+S3
+
+            if(empty($employee_contribution)) $employee_contribution = new PayrollEmployeeContribution;
+            
+            $employee_contribution->sss_reg_ee = computeSSRegEe('ACTIVE',$basic_pay,$cutoff,$firstcutoff_amount, $user_id);
+            // $employee_contribution->sss_mpf_ee = $payroll_period->id;
+            // $employee_contribution->phic_ee = $payroll_period->id;
+            // $employee_contribution->hdmf_ee = $payroll_period->id;
+            // $employee_contribution->sss_reg_er = $payroll_period->id;
+            // $employee_contribution->sss_mpf_er = $payroll_period->id;
+            // $employee_contribution->sss_ec = $payroll_period->id;
+            // $employee_contribution->phic_er = $payroll_period->id;
+            // $employee_contribution->hdmf_er = $payroll_period->id;
+            $employee_contribution->payment_schedule = $request->payment_schedule;
+        
+
+            $employee_contribution->save();
+            $count++;
+            
+        }
+
+        Alert::success('Successfully Generated (' . $count. ')')->persistent('Dismiss');
+        return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company . '&department=' .$request->department);
+    }
 }

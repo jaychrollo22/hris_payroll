@@ -111,7 +111,7 @@ class PayRegController extends Controller
                                             $q->where('department_id',$request->department);
                                         })
                                         ->where('status','Active')
-                                        // ->where('id','1') // My Id
+                                        ->where('id','1') // My Id
                                         ->get();
         $count = 0;
         if($employees && $payroll_period){ 
@@ -143,19 +143,20 @@ class PayRegController extends Controller
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
                     // $rate = 610;
                     $basic_pay = $rate ? $rate / 2 : 0; //Basic Pay Computation
-                    $lates = 0;
-                    $under_time = 0;
+                    $absences_amount = getUserAbsencesAmount($employee->user_id,$payroll_period->id);
+                    $lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
+                    $undertime_amount = getUserUndertimeAmount($employee->user_id,$payroll_period->id);
                     $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
-                    $sss_reg_ee = getSSSRegEE($employee->user_id,$payroll_period->payroll_cutoff);
-                    $sss_mpf_ee = getSSSMPFEE($employee->user_id,$payroll_period->payroll_cutoff);
+                    $overtime_amount = getUserOvertime($employee->user_id,$payroll_period->id);
+                    $accumulated_amount =  ($basic_pay-$absences_amount-$lates_amount-$undertime_amount+$salary_adjustment+$overtime_amount);
+                    $cut_off = $payroll_period->payroll_cutoff;
+                  
+                    $sss_reg_ee = computeSSSContribution($accumulated_amount,$cut_off,'employee_share_ee',0);
+                    $sss_mpf_ee = computeSSSContribution($accumulated_amount,$cut_off,'mpf_ee',0);
                     $phic_ee = getPHICEE($employee->user_id,$payroll_period->payroll_cutoff);
                     $hdmf_ee = getHDFMEE($employee->user_id,$payroll_period->payroll_cutoff);
 
                     $salary_deduction_taxable = 0;
-                    $absences_amount = 0;
-                    $lates_amount = 0;
-                    $undertime_amount = 0;
-
                     $ot_amount = 0;
                     $meal_allowances = 0;
                     $salary_allowances = 0;
@@ -170,12 +171,12 @@ class PayRegController extends Controller
                     $payroll_register->daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0; //Daily Rate Computation
                     $payroll_register->basic_pay = $basic_pay;
                     
-                    $payroll_register->absences_amount = getUserAbsencesAmount($employee->user_id,$payroll_period->id);
-                    $payroll_register->lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
-                    $payroll_register->undertime_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
+                    $payroll_register->absences_amount = $absences_amount;
+                    $payroll_register->lates_amount = $lates_amount;
+                    $payroll_register->undertime_amount = $undertime_amount;
 
                     $payroll_register->salary_adjustment = $salary_adjustment; //Salary Adjustment
-                    $payroll_register->overtime_pay = getUserOvertime($employee->user_id,$payroll_period->id); // Overtime
+                    $payroll_register->overtime_pay = $overtime_amount; // Overtime
 
                     // Allowances
                     $payroll_register->meal_allowance = getUserAllowanceAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
@@ -251,9 +252,9 @@ class PayRegController extends Controller
                     $payroll_register->tin_no = $employee->tax_number;
                     // $payroll_register->bir_tagging = $employee->tax_application ;
 
-                    $payroll_register->sss_reg_er_15 = getSSSRegER($employee->user_id,$payroll_period->payroll_cutoff);
-                    $payroll_register->sss_mpf_er_15 = getSSSMpfER($employee->user_id,$payroll_period->payroll_cutoff);
-                    $payroll_register->sss_ec_15 = getSSSEc($employee->user_id,$payroll_period->payroll_cutoff);
+                    $payroll_register->sss_reg_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'employer_share_er',0);
+                    $payroll_register->sss_mpf_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'mpf_er',0);
+                    $payroll_register->sss_ec_15 = computeSSSecContribution($accumulated_amount,$cut_off,'sss_ec',0);
                     $payroll_register->phic_er_15 = getPHICEr($employee->user_id,$payroll_period->payroll_cutoff);
                     $payroll_register->hdmf_er_15 = getHDMFEr($employee->user_id,$payroll_period->payroll_cutoff);
 
