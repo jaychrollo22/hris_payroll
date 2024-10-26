@@ -4,6 +4,9 @@ use App\PayrollSalaryAdjustment;
 use App\PayrollOvertimeAdjustment;
 use App\PayrollAttendance;
 use App\PayrollEmployeeContribution;
+use App\SssMatrixContribution;
+use App\PagibigMatrixContribution;
+use App\PhicMatrixContribution;
 
 function getUserWitholdingTaxAmount($user_id,$basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
     $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable){
@@ -155,6 +158,64 @@ function getHDMFEr($user_id,$cutoff){
 }
 
 
+function computeSSSContribution($accumulated_amount,$cutoff,$field,$firstcutoff_amount ){
+    $highest_contribution = SssMatrixContribution::orderBy('min_salary','desc')->first();
+
+    if($accumulated_amount >= $highest_contribution->min_salary) return $highest_contribution->$field;
+
+    $sss_contribution = SssMatrixContribution::where('max_salary','>=',$accumulated_amount)
+        ->where('min_salary','<=',$accumulated_amount)
+        ->first();
+
+    if ($cutoff == 'Second Cut-Off') return $sss_contribution->$field - $firstcutoff_amount;
+
+    return  $sss_contribution->$field;
+}
+
+
+function computeSSSecContribution($accumulated_amount,$cutoff,$field,$firstcutoff_amount){
+    $sss_ec = 0;
+
+    $sss_ec += ($accumulated_amount > 0 && $accumulated_amount <= 14749.99) ? 10 : 0;
+    $sss_ec += ($accumulated_amount >= 14750) ? 30 : 0;
+    
+    return  $sss_ec;
+}
+
+function computePagibigContribution($monthly_basicpay,$field){
+    $highest_contribution = PagibigMatrixContribution::orderBy('min_salary','desc')->first();
+    
+    if($monthly_basicpay >= $highest_contribution->min_salary) return $highest_contribution->min_salary * $highest_contribution->$field;
+
+    $contribution = PagibigMatrixContribution::where('max_salary','>=',$monthly_basicpay)
+        ->where('min_salary','<=',$monthly_basicpay)
+        ->first();
+
+    return $monthly_basicpay * $contribution->$field;
+}
+
+function computePHICContribution($monthly_basicpay,$field){
+    $lowest_contribution = PhicMatrixContribution::orderBy('min_salary','asc')->first();
+    $highest_contribution = PhicMatrixContribution::orderBy('min_salary','desc')->first();
+    $contribution = 0;
+
+    if($monthly_basicpay > 0){
+        if($monthly_basicpay <= $lowest_contribution->max_salary) $contribution += $lowest_contribution->total_contribution;
+        
+        if($contribution == 0){
+            if($monthly_basicpay >= $highest_contribution->min_salary){
+                $contribution += $highest_contribution->total_contribution;
+            }else{
+                $phic = PhicMatrixContribution::where('max_salary','>=',$monthly_basicpay)
+                    ->where('min_salary','<=',$monthly_basicpay)
+                    ->first();  
+    
+                $contribution += ($monthly_basicpay * $phic->field);
+            }
+        }
+    }
+    return $contribution / 2;
+}
 
 
 

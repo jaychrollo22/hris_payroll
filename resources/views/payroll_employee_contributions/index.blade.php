@@ -7,19 +7,22 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Payroll Employee Contributions</h4>
                   <p class="card-description">
+                    {{-- <button type="button" class="btn btn-outline-primary btn-icon-text" data-toggle="modal" data-target="#generatePayrollEmployeeContribution">
+                      <i class="ti-plus btn-icon-prepend"></i>                                                    
+                      Generate Employee Contributions
+                    </button> --}}
                     {{-- @if (checkUserPrivilege('settings_add',auth()->user()->id) == 'yes') --}}
-                      <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#newPayrollEmployeeContribution">
+                      {{-- <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#newPayrollEmployeeContribution">
                         <i class="ti-plus btn-icon-prepend"></i>                                                    
                         New
-                      </button>
+                      </button> --}}
                     {{-- @endif --}}
 
-                      <button type="button" class="btn btn-outline-primary btn-icon-text" data-toggle="modal" data-target="#importPayrollEmployeeContribution">
+                      {{-- <button type="button" class="btn btn-outline-primary btn-icon-text" data-toggle="modal" data-target="#importPayrollEmployeeContribution">
                         <i class="ti-plus btn-icon-prepend"></i>                                                    
                         Import
-                      </button>
+                      </button> --}}
 
                       <a type="button" class="btn btn-outline-warning btn-icon-text" href="{{ url('/sss-matrix-contributions') }}" target="_blank">
                         <i class="ti-plus btn-icon-prepend"></i>                                                    
@@ -36,7 +39,7 @@
                         Pagibig Matrix Contributions
                       </a>
                   </p>
-                
+                  <h4 class="card-title">Payroll Employee Contributions</h4>
                   <h4 class="card-title">Filter</h4>
                   <p class="card-description">
                   <form method='get' onsubmit='show();' enctype="multipart/form-data">
@@ -114,6 +117,7 @@
 </div>
 @include('payroll_employee_contributions.import')
 @include('payroll_employee_contributions.create')
+@include('payroll_employee_contributions.generate')
 @foreach($contributions as $contribution)
 @include('payroll_employee_contributions.edit')
 @endforeach
