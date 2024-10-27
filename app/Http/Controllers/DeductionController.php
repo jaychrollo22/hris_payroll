@@ -17,7 +17,7 @@ class DeductionController extends Controller
      */
     public function index()
     {
-        $status = isset($request->status) ? $request->status : "Active";
+        $status = isset($request->status) ? $request->status : "1";
 
         $deductions = Deduction::where('status',$status)
             ->get();
@@ -27,7 +27,7 @@ class DeductionController extends Controller
             array(
                 'header' => 'settings',
                 'deductions' => $deductions,
-                'status' => 'Active'
+                'status' => $status
             )
         );
     }

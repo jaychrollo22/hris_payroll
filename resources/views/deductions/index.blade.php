@@ -24,8 +24,8 @@
 											<label class="text-right">Status</label>
 											<select data-placeholder="Select Status" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='status' required>
 												<option value="">-- Select Status --</option>
-												<option value="Active" @if ('Active' == $status) selected @endif>Active</option>
-												<option value="Inactive" @if ('Inactive' == $status) selected @endif>Inactive</option>
+												<option value="1" @if ('Active' == $status) selected @endif>Active</option>
+												<option value="2" @if ('Inactive' == $status) selected @endif>Inactive</option>
 											</select>
 										</div>
 									</div>
@@ -53,14 +53,14 @@
 											<td>{{ $deduction->name }}</td>
 											<td> {{ date('M d Y ', strtotime($deduction->created_at)) }}</td>
 											<td id="tdId{{ $deduction->id }}">
-												@if ($deduction->status == 'Active')
-													<label id="status{{ $deduction->id }}" class="badge badge-success">{{ $deduction->status }}</label>
+												@if ($deduction->status == '1')
+													<label id="status{{ $deduction->id }}" class="badge badge-success">Active</label>
 												@else
-													<label id="status{{ $deduction->id }}" class="badge badge-danger">{{ $deduction->status }}</label>
+													<label id="status{{ $deduction->id }}" class="badge badge-danger">Inactive</label>
 												@endif
 											</td>
 											<td id="tdActionId{{ $deduction->id }}" data-id="{{ $deduction->id }}">
-												@if ($deduction->status == 'Active')
+												@if ($deduction->status == '1')
 													<button type="button" id="edit{{ $deduction->id }}" class="btn btn-info btn-rounded btn-icon"
 														data-target="#edit_deduction{{ $deduction->id }}" data-toggle="modal" title='Edit'>
 														<i class="ti-pencil-alt"></i>
@@ -87,14 +87,14 @@
 	@endforeach
 	@include('deductions.new_deduction')
 @endsection
-@section('deductionScript')
+@section('empAllowScript')
 	<script>
 		function disable(id) {
 			var element = document.getElementById('tdActionId' + id);
 			var dataID = element.getAttribute('data-id');
 			swal({
 					title: "Are you sure?",
-					text: "Once disabled, you will not be able to recover this imaginary file!",
+					text: "Once disabled, you will not be able to recover this.",
 					icon: "warning",
 					buttons: true,
 					dangerMode: true,
