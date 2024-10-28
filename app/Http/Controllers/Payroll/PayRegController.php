@@ -111,7 +111,7 @@ class PayRegController extends Controller
                                             $q->where('department_id',$request->department);
                                         })
                                         ->where('status','Active')
-                                        ->where('id','1') // My Id
+                                        // ->where('id','1') // My Id
                                         ->get();
         $count = 0;
         if($employees && $payroll_period){ 
