@@ -10,6 +10,7 @@ use App\PayrollRegister;
 use App\Employee;
 use App\Company;
 use App\Department;
+use App\PayrollEmployeeContribution;
 
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Crypt;
@@ -261,6 +262,7 @@ class PayRegController extends Controller
                     $payroll_register->save();
                     $count++;
                     
+                    $this->generateEmployeeContribution($payroll_register,$cut_off);
                 }
             }
         }
@@ -339,5 +341,29 @@ class PayRegController extends Controller
         $company_code = $company_detail ? $company_detail->company_code : "";
 
         return Excel::download(new PayrollRegisterExport($company,$department,$payroll_period), $company_code. ' Payroll Register Export.xlsx');
+    }
+
+    public function generateEmployeeContribution($payroll_register,$payment_schedule){
+        PayrollEmployeeContribution::updateOrCreate(
+            [
+                'user_id' => $payroll_register->user_id,
+                'payroll_period_id' => $payroll_register->payroll_period_id
+            ],
+            [
+                'user_id' => $payroll_register->user_id,
+                'payroll_period_id' => $payroll_register->payroll_period_id,
+                'company' => $payroll_register->company,
+                'sss_reg_ee' => $payroll_register->sss_reg_ee_15,
+                'sss_mpf_ee' => $payroll_register->sss_mpf_ee_15,
+                'phic_ee' => $payroll_register->phic_ee_15,
+                'hdmf_ee' => $payroll_register->hmdf_ee_15,
+                'sss_reg_er' => $payroll_register->sss_reg_er_15,
+                'sss_mpf_er' => $payroll_register->sss_mpf_er_15,
+                'sss_ec' => $payroll_register->sss_ec_15,
+                'phic_er' => $payroll_register->phic_er_15,
+                'hdmf_er' => $payroll_register->hdmf_er_15,
+                'payment_schedule' => $payment_schedule
+            ]
+        );
     }
 }
