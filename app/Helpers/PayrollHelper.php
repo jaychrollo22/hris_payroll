@@ -85,6 +85,12 @@ function getUserOvertime($user_id,$payroll_period_id){
         ->sum('total_overtime_pay');
 }
 
+function getUserAbsencesAmount($user_id,$payroll_period_id){
+    return PayrollAttendance::where('payroll_period_id',$payroll_period_id)
+    ->where('user_id',$user_id)
+    ->sum('absences_amount');
+}
+
 function getUserNoOfDaysWorked($user_id,$payroll_period_id){
     $payroll_attendance = PayrollAttendance::select('no_of_days_worked')->where('payroll_period_id',$payroll_period_id)
                                                 ->where('user_id',$user_id)->first();
@@ -92,6 +98,7 @@ function getUserNoOfDaysWorked($user_id,$payroll_period_id){
         return $payroll_attendance->no_of_days_worked;
     }
 }
+
 
 function getUserLatesAmount($user_id,$payroll_period_id){
     return PayrollAttendance::where('payroll_period_id',$payroll_period_id)
