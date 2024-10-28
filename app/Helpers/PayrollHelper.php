@@ -199,7 +199,7 @@ function computePHICContribution($monthly_basicpay,$field){
     $lowest_contribution = PhicMatrixContribution::orderBy('min_salary','asc')->first();
     $highest_contribution = PhicMatrixContribution::orderBy('min_salary','desc')->first();
     $contribution = 0;
-
+    
     if($monthly_basicpay > 0){
         if($monthly_basicpay <= $lowest_contribution->max_salary) $contribution += $lowest_contribution->total_contribution;
         
@@ -209,9 +209,9 @@ function computePHICContribution($monthly_basicpay,$field){
             }else{
                 $phic = PhicMatrixContribution::where('max_salary','>=',$monthly_basicpay)
                     ->where('min_salary','<=',$monthly_basicpay)
-                    ->first();  
+                    ->first();
     
-                $contribution += ($monthly_basicpay * $phic->field);
+                $contribution += ($monthly_basicpay * $phic->$field);
             }
         }
     }
