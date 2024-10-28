@@ -147,7 +147,7 @@ class PayRegController extends Controller
                     $no_of_days_worked = getUserNoOfDaysWorked($employee->user_id,$payroll_period->id);
 
                     if($no_of_days_worked > 5){
-                        
+
                         $lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
                         $undertime_amount = getUserUndertimeAmount($employee->user_id,$payroll_period->id);
                         $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
@@ -261,6 +261,7 @@ class PayRegController extends Controller
                         $payroll_register->sss_ec_15 = computeSSSecContribution($accumulated_amount,$cut_off,'sss_ec',0);
                         $payroll_register->phic_er_15 = $phic_ee;
                         $payroll_register->hdmf_er_15 = $hdmf_ee;
+                        $payroll_register->accumulated = $accumulated_amount;
 
                         $payroll_register->save();
                         $count++;
