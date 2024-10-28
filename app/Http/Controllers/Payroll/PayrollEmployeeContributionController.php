@@ -11,6 +11,7 @@ use App\PayrollEmployeeContribution;
 use App\Employee;
 use App\Company;
 use App\Imports\PayrollEmployeeContributionImport;
+use App\Exports\PayrollEmployeeContributionExport;
 use Excel;
 
 use RealRashid\SweetAlert\Facades\Alert;
@@ -294,5 +295,19 @@ class PayrollEmployeeContributionController extends Controller
 
         Alert::success('Successfully Generated (' . $count. ')')->persistent('Dismiss');
         return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company . '&department=' .$request->department);
+    }
+
+    
+    /**
+     * Export to excel
+     *
+     */
+    public function export(Request $request){
+        $company = isset($request->company) ? $request->company : "";
+        $company_detail = Company::where('id',$company)->first();
+
+        $company_code = $company_detail ? $company_detail->company_code : "";
+
+        return Excel::download(new PayrollEmployeeContributionExport($company), $company_code. ' Payroll Employee Contribution Export.xlsx');
     }
 }

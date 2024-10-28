@@ -31,7 +31,8 @@ class PayrollEmployeeContributionExport implements FromQuery, WithHeadings, With
     public function headings(): array
     {
         return [
-            'USER ID',
+            'EMPLOYEE',
+            'COMPANY',
             'SSS REG EE',
             'SSS MPF EE',
             'PHIC EE',
@@ -41,11 +42,11 @@ class PayrollEmployeeContributionExport implements FromQuery, WithHeadings, With
             'SSS EC',
             'PHIC ER',
             'HDMF ER',
-            'Payment Schedule',
+            'PAYMENT SCHEDULE',
         ];
     }
 
-    public function map($contribution): array
+    public function map($employee_allowance): array
     {
         $employee_name = $employee_allowance->employee ? $employee_allowance->employee->last_name . ', ' . $employee_allowance->employee->first_name . ' ' . $employee_allowance->employee->middle_name : "";
 
@@ -57,14 +58,18 @@ class PayrollEmployeeContributionExport implements FromQuery, WithHeadings, With
         }
 
         return [
-            $employee_number,
-            $particular,
-            $employee_allowance->description,
-            $employee_allowance->application,
-            $employee_allowance->type,
-            $schedule,
-            $employee_allowance->allowance_amount,
-            $employee_allowance->end_date
+            $employee_name,
+            $company,
+            $employee_allowance->sss_reg_ee,
+            $employee_allowance->sss_mpf_ee,
+            $employee_allowance->phic_ee,
+            $employee_allowance->hdmf_ee,
+            $employee_allowance->sss_reg_er,
+            $employee_allowance->sss_mpf_er,
+            $employee_allowance->sss_ec,
+            $employee_allowance->phic_er,
+            $employee_allowance->hdmf_er,
+            $employee_allowance->payment_schedule
         ];
     }
 
