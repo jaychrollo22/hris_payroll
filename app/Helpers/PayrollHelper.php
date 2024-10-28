@@ -167,6 +167,7 @@ function computeSSSContribution($accumulated_amount,$cutoff,$field,$firstcutoff_
         ->where('min_salary','<=',$accumulated_amount)
         ->first();
 
+    if(!$sss_contribution) return 0;
     if ($cutoff == 'Second Cut-Off') return $sss_contribution->$field - $firstcutoff_amount;
 
     return  $sss_contribution->$field;
