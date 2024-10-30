@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Excel;
 use App\Exports\PayrollRegisterExport;
+use Carbon\Carbon;
 
 class PayRegController extends Controller
 {
@@ -151,9 +152,32 @@ class PayRegController extends Controller
                     $overtime_amount = getUserOvertime($employee->user_id,$payroll_period->id);
                     $accumulated_amount =  ($basic_pay-$absences_amount-$lates_amount-$undertime_amount+$salary_adjustment+$overtime_amount);
                     $cut_off = $payroll_period->payroll_cutoff;
-                  
-                    $sss_reg_ee = computeSSSContribution($accumulated_amount,$cut_off,'employee_share_ee',0);
-                    $sss_mpf_ee = computeSSSContribution($accumulated_amount,$cut_off,'mpf_ee',0);
+                    $reg_ee = 0;
+                    $mpf_ee = 0;
+                    $reg_er = 0;
+                    $mpf_er = 0;
+
+                    //Get first cut off contribution
+                    if($cut_off == 'Second Cut-Off'){
+                        $payment_date = Carbon::parse($payroll_period->payment_date);
+                        $payroll_contribution = PayrollEmployeeContribution::whereHas('payrollPeriod',function($q) use($payment_date){
+                                $q->whereYear('payment_date',$payment_date->year)
+                                ->whereMonth('payment_date',$payment_date->month);
+                            })
+                            ->where('payment_schedule','First Cut-Off')
+                            ->orderBy('id','desc')   
+                            ->first();
+
+                        if($payroll_contribution){
+                            $reg_ee = $payroll_contribution->sss_reg_ee;
+                            $mpf_ee = $payroll_contribution->sss_mpf_ee;
+                            $reg_er = $payroll_contribution->sss_reg_er;
+                            $mpf_er = $payroll_contribution->sss_mpf_er;
+                        }
+                    }
+                    
+                    $sss_reg_ee = computeSSSContribution($accumulated_amount,$cut_off,'employee_share_ee',$reg_ee);
+                    $sss_mpf_ee = computeSSSContribution($accumulated_amount,$cut_off,'mpf_ee',$mpf_ee);
                     $phic_ee = computePHICContribution($rate,'employee_share_ee');
                     $hdmf_ee = computePagibigContribution($rate,'employee_share_ee');
 
@@ -253,8 +277,8 @@ class PayRegController extends Controller
                     $payroll_register->tin_no = $employee->tax_number;
                     // $payroll_register->bir_tagging = $employee->tax_application ;
 
-                    $payroll_register->sss_reg_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'employer_share_er',0);
-                    $payroll_register->sss_mpf_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'mpf_er',0);
+                    $payroll_register->sss_reg_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'employer_share_er',$reg_er);
+                    $payroll_register->sss_mpf_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'mpf_er',$mpf_er);
                     $payroll_register->sss_ec_15 = computeSSSecContribution($accumulated_amount,$cut_off,'sss_ec',0);
                     $payroll_register->phic_er_15 = $phic_ee;
                     $payroll_register->hdmf_er_15 = $hdmf_ee;
