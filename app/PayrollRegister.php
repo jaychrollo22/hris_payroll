@@ -19,4 +19,9 @@ class PayrollRegister extends Model implements Auditable
     {
         return $this->belongsTo(Employee::class,'user_id','user_id');
     }
+
+    public function payrollPeriod()
+    {
+        return $this->belongsTo(PayrollPeriod::class);
+    }
 }
