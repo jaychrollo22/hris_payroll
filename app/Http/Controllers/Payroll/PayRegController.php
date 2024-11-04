@@ -119,11 +119,9 @@ class PayRegController extends Controller
         if($employees && $payroll_period){ 
             if($employees){
                 foreach($employees as $employee){
-
                     $payroll_register = PayrollRegister::where('payroll_period_id',$payroll_period->id)
                                                             ->where('user_id',$employee->user_id)
                                                             ->first();
-
                     if(empty($payroll_register)){
                         $payroll_register = new PayrollRegister;
                     }
@@ -146,147 +144,153 @@ class PayRegController extends Controller
                     // $rate = 610;
                     $basic_pay = $rate ? $rate / 2 : 0; //Basic Pay Computation
                     $absences_amount = getUserAbsencesAmount($employee->user_id,$payroll_period->id);
-                    $lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
-                    $undertime_amount = getUserUndertimeAmount($employee->user_id,$payroll_period->id);
-                    $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
-                    $overtime_amount = getUserOvertime($employee->user_id,$payroll_period->id);
-                    $accumulated_amount =  ($basic_pay-$absences_amount-$lates_amount-$undertime_amount+$salary_adjustment+$overtime_amount);
-                    $cut_off = $payroll_period->payroll_cutoff;
-                    $reg_ee = 0;
-                    $mpf_ee = 0;
-                    $reg_er = 0;
-                    $mpf_er = 0;
 
-                    //Get first cut off contribution
-                    if($cut_off == 'Second Cut-Off'){
-                        $payment_date = Carbon::parse($payroll_period->payment_date);
-                        $payroll_contribution = PayrollEmployeeContribution::whereHas('payrollPeriod',function($q) use($payment_date){
-                                $q->whereYear('payment_date',$payment_date->year)
-                                ->whereMonth('payment_date',$payment_date->month);
-                            })
-                            ->where('payment_schedule','First Cut-Off')
-                            ->orderBy('id','desc')   
-                            ->first();
+                    $no_of_days_worked = getUserNoOfDaysWorked($employee->user_id,$payroll_period->id);
+                    if($no_of_days_worked > 5){
+                        $lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
+                        $undertime_amount = getUserUndertimeAmount($employee->user_id,$payroll_period->id);
+                        $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
+                        $overtime_amount = getUserOvertime($employee->user_id,$payroll_period->id);
+                        $accumulated_amount =  ($basic_pay-$absences_amount-$lates_amount-$undertime_amount+$salary_adjustment+$overtime_amount);
+                        $cut_off = $payroll_period->payroll_cutoff;
+                        $reg_ee = 0;
+                        $mpf_ee = 0;
+                        $reg_er = 0;
+                        $mpf_er = 0;
 
-                        if($payroll_contribution){
-                            $reg_ee = $payroll_contribution->sss_reg_ee;
-                            $mpf_ee = $payroll_contribution->sss_mpf_ee;
-                            $reg_er = $payroll_contribution->sss_reg_er;
-                            $mpf_er = $payroll_contribution->sss_mpf_er;
+                        //Get first cut off contribution
+                        if($cut_off == 'Second Cut-Off'){
+                            $payment_date = Carbon::parse($payroll_period->payment_date);
+
+                            $payroll_contribution = PayrollEmployeeContribution::whereHas('payrollPeriod',function($q) use($payment_date){
+                                    $q->whereYear('payment_date',$payment_date->year)
+                                    ->whereMonth('payment_date',$payment_date->month);
+                                })
+                                ->where('payment_schedule','First Cut-Off')
+                                ->orderBy('id','desc')   
+                                ->first();
+
+                            if($payroll_contribution){
+                                $reg_ee = $payroll_contribution->sss_reg_ee;
+                                $mpf_ee = $payroll_contribution->sss_mpf_ee;
+                                $reg_er = $payroll_contribution->sss_reg_er;
+                                $mpf_er = $payroll_contribution->sss_mpf_er;
+                            }
                         }
+                    
+                        $sss_reg_ee = computeSSSContribution($accumulated_amount,$cut_off,'employee_share_ee',$reg_ee);
+                        $sss_mpf_ee = computeSSSContribution($accumulated_amount,$cut_off,'mpf_ee',$mpf_ee);
+                        $phic_ee = computePHICContribution($rate,'employee_share_ee');
+                        $hdmf_ee = computePagibigContribution($rate,'employee_share_ee');
+
+                        $salary_deduction_taxable = 0;
+                        $ot_amount = 0;
+                        $meal_allowances = 0;
+                        $salary_allowances = 0;
+                        $out_allowances = 0;
+                        $incentives_allowances = 0;
+                        $reallocation_allowances = 0;
+                        $discretionary_allowances = 0;
+                        $transpo_allowances = 0;
+                        $load_allowances = 0;
+
+                        $payroll_register->monthly_basic_pay = $rate ? $rate : 0;
+                        $payroll_register->daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0; //Daily Rate Computation
+                        $payroll_register->basic_pay = $basic_pay;
+                        
+                        $payroll_register->absences_amount = $absences_amount;
+                        $payroll_register->lates_amount = $lates_amount;
+                        $payroll_register->undertime_amount = $undertime_amount;
+
+                        $payroll_register->salary_adjustment = $salary_adjustment; //Salary Adjustment
+                        $payroll_register->overtime_pay = $overtime_amount; // Overtime
+
+                        // Allowances
+                        $payroll_register->meal_allowance = getUserAllowanceAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
+                        $payroll_register->salary_allowance = getUserAllowanceAmount($employee->user_id,4,$payroll_period->payroll_cutoff);
+                        $payroll_register->out_of_town_allowance = getUserAllowanceAmount($employee->user_id,2,$payroll_period->payroll_cutoff);
+                        $payroll_register->incentives_allowance = getUserAllowanceAmount($employee->user_id,5,$payroll_period->payroll_cutoff);
+                        $payroll_register->relocation_allowance = getUserAllowanceAmount($employee->user_id,6,$payroll_period->payroll_cutoff);
+                        $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7,$payroll_period->payroll_cutoff);
+                        $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8,$payroll_period->payroll_cutoff);
+                        $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9,$payroll_period->payroll_cutoff);
+
+                        //Witholding tax
+                        $payroll_register->withholding_tax = getUserWitholdingTaxAmount(
+                            $employee->user_id,
+                            $basic_pay,
+                            $payroll_register->absences_amount,
+                            $payroll_register->lates_amount,
+                            $payroll_register->undertime_amount,
+                            $payroll_register->salary_adjustment,
+                            $payroll_register->overtime_pay,
+                            $sss_reg_ee,
+                            $sss_mpf_ee,
+                            $phic_ee,
+                            $hdmf_ee,
+                            $salary_deduction_taxable
+                        );
+
+                        //Payroll Contributions
+                        $payroll_register->sss_reg_ee_15 = $sss_reg_ee;
+                        $payroll_register->sss_mpf_ee_15 = $sss_mpf_ee;
+                        $payroll_register->phic_ee_15 = $phic_ee;
+                        $payroll_register->hmdf_ee_15 = $hdmf_ee;
+
+                        //Gross Pay
+                        $payroll_register->grosspay = getUserGrossPayAmount(
+                            $basic_pay,
+                            $payroll_register->absences_amount,
+                            $payroll_register->lates_amount,
+                            $payroll_register->undertime_amount,
+                            $payroll_register->salary_adjustment,
+                            $payroll_register->overtime_pay,
+                            $payroll_register->meal_allowance,
+                            $payroll_register->salary_allowance,
+                            $payroll_register->out_of_town_allowance,
+                            $payroll_register->incentives_allowance,
+                            $payroll_register->relocation_allowance,
+                            $payroll_register->discretionary_allowance,
+                            $payroll_register->transport_allowance,
+                            $payroll_register->load_allowance
+                        );
+
+                        //Total Taxable
+                        $payroll_register->total_taxable = getUserTotalTaxableAmount(
+                            $basic_pay,
+                            $payroll_register->absences_amount,
+                            $payroll_register->lates_amount,
+                            $payroll_register->undertime_amount,
+                            $payroll_register->salary_adjustment,
+                            $payroll_register->overtime_pay,
+                            $sss_reg_ee,
+                            $sss_mpf_ee,
+                            $phic_ee,
+                            $hdmf_ee,
+                            $salary_deduction_taxable
+                        );
+
+                        $payroll_register->minimum_wage = $employee->tax_application === "Non-Minimum" ? 0 : 1;
+
+                        //Government contributions number
+                        $payroll_register->sss_no = $employee->sss_number;
+                        $payroll_register->philhealth_no = $employee->phil_number;
+                        $payroll_register->pagibig_no = $employee->hdmf_number;
+                        $payroll_register->tin_no = $employee->tax_number;
+                        // $payroll_register->bir_tagging = $employee->tax_application ;
+
+                        $payroll_register->sss_reg_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'employer_share_er',$reg_er);
+                        $payroll_register->sss_mpf_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'mpf_er',$mpf_er);
+                        $payroll_register->sss_ec_15 = computeSSSecContribution($accumulated_amount,$cut_off,'sss_ec',0);
+                        $payroll_register->phic_er_15 = $phic_ee;
+                        $payroll_register->hdmf_er_15 = $hdmf_ee;
+                        $payroll_register->accumulated = $accumulated_amount;
+
+                        $payroll_register->save();
+                        $count++;
+
+                        $this->generateEmployeeContribution($payroll_register,$cut_off);
                     }
-                    
-                    $sss_reg_ee = computeSSSContribution($accumulated_amount,$cut_off,'employee_share_ee',$reg_ee);
-                    $sss_mpf_ee = computeSSSContribution($accumulated_amount,$cut_off,'mpf_ee',$mpf_ee);
-                    $phic_ee = computePHICContribution($rate,'employee_share_ee');
-                    $hdmf_ee = computePagibigContribution($rate,'employee_share_ee');
-
-                    $salary_deduction_taxable = 0;
-                    $ot_amount = 0;
-                    $meal_allowances = 0;
-                    $salary_allowances = 0;
-                    $out_allowances = 0;
-                    $incentives_allowances = 0;
-                    $reallocation_allowances = 0;
-                    $discretionary_allowances = 0;
-                    $transpo_allowances = 0;
-                    $load_allowances = 0;
-
-                    $payroll_register->monthly_basic_pay = $rate ? $rate : 0;
-                    $payroll_register->daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0; //Daily Rate Computation
-                    $payroll_register->basic_pay = $basic_pay;
-                    
-                    $payroll_register->absences_amount = $absences_amount;
-                    $payroll_register->lates_amount = $lates_amount;
-                    $payroll_register->undertime_amount = $undertime_amount;
-
-                    $payroll_register->salary_adjustment = $salary_adjustment; //Salary Adjustment
-                    $payroll_register->overtime_pay = $overtime_amount; // Overtime
-
-                    // Allowances
-                    $payroll_register->meal_allowance = getUserAllowanceAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
-                    $payroll_register->salary_allowance = getUserAllowanceAmount($employee->user_id,4,$payroll_period->payroll_cutoff);
-                    $payroll_register->out_of_town_allowance = getUserAllowanceAmount($employee->user_id,2,$payroll_period->payroll_cutoff);
-                    $payroll_register->incentives_allowance = getUserAllowanceAmount($employee->user_id,5,$payroll_period->payroll_cutoff);
-                    $payroll_register->relocation_allowance = getUserAllowanceAmount($employee->user_id,6,$payroll_period->payroll_cutoff);
-                    $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7,$payroll_period->payroll_cutoff);
-                    $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8,$payroll_period->payroll_cutoff);
-                    $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9,$payroll_period->payroll_cutoff);
-
-                    //Witholding tax
-                    $payroll_register->withholding_tax = getUserWitholdingTaxAmount(
-                        $employee->user_id,
-                        $basic_pay,
-                        $payroll_register->absences_amount,
-                        $payroll_register->lates_amount,
-                        $payroll_register->undertime_amount,
-                        $payroll_register->salary_adjustment,
-                        $payroll_register->overtime_pay,
-                        $sss_reg_ee,
-                        $sss_mpf_ee,
-                        $phic_ee,
-                        $hdmf_ee,
-                        $salary_deduction_taxable
-                    );
-
-                    //Payroll Contributions
-                    $payroll_register->sss_reg_ee_15 = $sss_reg_ee;
-                    $payroll_register->sss_mpf_ee_15 = $sss_mpf_ee;
-                    $payroll_register->phic_ee_15 = $phic_ee;
-                    $payroll_register->hmdf_ee_15 = $hdmf_ee;
-
-                    //Gross Pay
-                    $payroll_register->grosspay = getUserGrossPayAmount(
-                        $basic_pay,
-                        $payroll_register->absences_amount,
-                        $payroll_register->lates_amount,
-                        $payroll_register->undertime_amount,
-                        $payroll_register->salary_adjustment,
-                        $payroll_register->overtime_pay,
-                        $payroll_register->meal_allowance,
-                        $payroll_register->salary_allowance,
-                        $payroll_register->out_of_town_allowance,
-                        $payroll_register->incentives_allowance,
-                        $payroll_register->relocation_allowance,
-                        $payroll_register->discretionary_allowance,
-                        $payroll_register->transport_allowance,
-                        $payroll_register->load_allowance
-                    );
-
-                    //Total Taxable
-                    $payroll_register->total_taxable = getUserTotalTaxableAmount(
-                        $basic_pay,
-                        $payroll_register->absences_amount,
-                        $payroll_register->lates_amount,
-                        $payroll_register->undertime_amount,
-                        $payroll_register->salary_adjustment,
-                        $payroll_register->overtime_pay,
-                        $sss_reg_ee,
-                        $sss_mpf_ee,
-                        $phic_ee,
-                        $hdmf_ee,
-                        $salary_deduction_taxable
-                    );
-
-                    $payroll_register->minimum_wage = $employee->tax_application === "Non-Minimum" ? 0 : 1;
-
-                    //Government contributions number
-                    $payroll_register->sss_no = $employee->sss_number;
-                    $payroll_register->philhealth_no = $employee->phil_number;
-                    $payroll_register->pagibig_no = $employee->hdmf_number;
-                    $payroll_register->tin_no = $employee->tax_number;
-                    // $payroll_register->bir_tagging = $employee->tax_application ;
-
-                    $payroll_register->sss_reg_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'employer_share_er',$reg_er);
-                    $payroll_register->sss_mpf_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'mpf_er',$mpf_er);
-                    $payroll_register->sss_ec_15 = computeSSSecContribution($accumulated_amount,$cut_off,'sss_ec',0);
-                    $payroll_register->phic_er_15 = $phic_ee;
-                    $payroll_register->hdmf_er_15 = $hdmf_ee;
-
-                    $payroll_register->save();
-                    $count++;
-                    
-                    $this->generateEmployeeContribution($payroll_register,$cut_off);
                 }
             }
         }
