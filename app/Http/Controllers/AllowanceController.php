@@ -41,7 +41,6 @@ class AllowanceController extends Controller
     public function edit_allowance(Request $request, $id)
     {
         $allowance = Allowance::findOrFail($id);
-        // dd($allowance)->all();
         $allowance->name = $request->allowance_name;
         $allowance->add_by = Auth::user()->id;
         $allowance->save();

@@ -284,6 +284,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('employee-allowance-export', 'EmployeeAllowanceController@export');
     Route::post('import-employee-allowance', 'EmployeeAllowanceController@import');
 
+    // Employee Deduction
+    Route::get('employee-deduction', 'EmployeeDeductionController@index');
+    Route::post('new-employee-deduction', 'EmployeeDeductionController@store');
+    Route::post('update-employee-deduction/{id}', 'EmployeeDeductionController@update');
+    Route::get('edit-employee-deduction/{id}', 'EmployeeDeductionController@edit');
+    Route::get('delete-employee-deduction/{id}', 'EmployeeDeductionController@delete');
+    Route::get('disableEmp-deduction/{id}', 'EmployeeDeductionController@disable');
+    Route::get('employee-deduction-export', 'EmployeeDeductionController@export');
+    Route::post('import-employee-deduction', 'EmployeeDeductionController@import');
+
     // Employee Incentive
     Route::get('employee-incentive', 'EmployeeIncentiveController@index');
     Route::post('new-employee-incentive', 'EmployeeIncentiveController@store');
