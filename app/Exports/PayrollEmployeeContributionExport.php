@@ -18,7 +18,7 @@ class PayrollEmployeeContributionExport implements FromQuery, WithHeadings, With
     public function query()
     {
         $company = $this->company;
-        $employee = PayrollEmployeeContribution::query()->with('employee.company');
+        $employee = PayrollEmployeeContribution::query()->with('employee.company','payrollPeriod');
 
         if($company){
             $employee = $employee->whereHas('employee',function($q) use($company){
@@ -32,6 +32,7 @@ class PayrollEmployeeContributionExport implements FromQuery, WithHeadings, With
     {
         return [
             'EMPLOYEE',
+            'PAYROLL PERIOD',
             'COMPANY',
             'SSS REG EE',
             'SSS MPF EE',
@@ -49,6 +50,7 @@ class PayrollEmployeeContributionExport implements FromQuery, WithHeadings, With
     public function map($employee_allowance): array
     {
         $employee_name = $employee_allowance->employee ? $employee_allowance->employee->last_name . ', ' . $employee_allowance->employee->first_name . ' ' . $employee_allowance->employee->middle_name : "";
+        $payroll_period = $employee_allowance->payrollPeriod ? $employee_allowance->payrollPeriod->payroll_name  : "";
 
         $company = '';
         if($employee_allowance->employee){
@@ -59,6 +61,7 @@ class PayrollEmployeeContributionExport implements FromQuery, WithHeadings, With
 
         return [
             $employee_name,
+            $payroll_period,
             $company,
             $employee_allowance->sss_reg_ee,
             $employee_allowance->sss_mpf_ee,

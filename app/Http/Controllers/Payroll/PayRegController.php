@@ -10,12 +10,14 @@ use App\PayrollRegister;
 use App\Employee;
 use App\Company;
 use App\Department;
+use App\PayrollEmployeeContribution;
 
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Excel;
 use App\Exports\PayrollRegisterExport;
+use Carbon\Carbon;
 
 class PayRegController extends Controller
 {
@@ -117,11 +119,9 @@ class PayRegController extends Controller
         if($employees && $payroll_period){ 
             if($employees){
                 foreach($employees as $employee){
-
                     $payroll_register = PayrollRegister::where('payroll_period_id',$payroll_period->id)
                                                             ->where('user_id',$employee->user_id)
                                                             ->first();
-
                     if(empty($payroll_register)){
                         $payroll_register = new PayrollRegister;
                     }
@@ -144,19 +144,37 @@ class PayRegController extends Controller
                     // $rate = 610;
                     $basic_pay = $rate ? $rate / 2 : 0; //Basic Pay Computation
                     $absences_amount = getUserAbsencesAmount($employee->user_id,$payroll_period->id);
+
                     $no_of_days_worked = getUserNoOfDaysWorked($employee->user_id,$payroll_period->id);
-
                     if($no_of_days_worked > 5){
-
                         $lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
                         $undertime_amount = getUserUndertimeAmount($employee->user_id,$payroll_period->id);
                         $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
                         $overtime_amount = getUserOvertime($employee->user_id,$payroll_period->id);
-                        $accumulated_amount =  ($basic_pay-$absences_amount-$lates_amount-$undertime_amount+$salary_adjustment+$overtime_amount);
+                        $accumulated_amount = ($basic_pay-$absences_amount-$lates_amount-$undertime_amount+$salary_adjustment+$overtime_amount);
+                        $total_accumulated = $accumulated_amount;
                         $cut_off = $payroll_period->payroll_cutoff;
+                        $reg_ee = 0;
+                        $mpf_ee = 0;
+                        $reg_er = 0;
+                        $mpf_er = 0;
+
+                        //Get first cut off contribution
+                        if($cut_off == 'Second Cut-Off'){
+                            $payment_date = Carbon::parse($payroll_period->payment_date);
+                            //Get previous payroll accumulated amount
+                            if($previous_payreg = getPreviousPayrollPeriod($payment_date)) $total_accumulated += $previous_payreg->accumulated;
+                            //Get previous contributions
+                            if($previous_contribution = getPreviousPayrollContribution($payment_date)){
+                                $reg_ee = $previous_contribution->sss_reg_ee;
+                                $mpf_ee = $previous_contribution->sss_mpf_ee;
+                                $reg_er = $previous_contribution->sss_reg_er;
+                                $mpf_er = $previous_contribution->sss_mpf_er;
+                            }
+                        }
                     
-                        $sss_reg_ee = computeSSSContribution($accumulated_amount,$cut_off,'employee_share_ee',0);
-                        $sss_mpf_ee = computeSSSContribution($accumulated_amount,$cut_off,'mpf_ee',0);
+                        $sss_reg_ee = computeSSSContribution($total_accumulated,$cut_off,'employee_share_ee',$reg_ee);
+                        $sss_mpf_ee = computeSSSContribution($total_accumulated,$cut_off,'mpf_ee',$mpf_ee);
                         $phic_ee = computePHICContribution($rate,'employee_share_ee');
                         $hdmf_ee = computePagibigContribution($rate,'employee_share_ee');
 
@@ -256,17 +274,18 @@ class PayRegController extends Controller
                         $payroll_register->tin_no = $employee->tax_number;
                         // $payroll_register->bir_tagging = $employee->tax_application ;
 
-                        $payroll_register->sss_reg_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'employer_share_er',0);
-                        $payroll_register->sss_mpf_er_15 = computeSSSContribution($accumulated_amount,$cut_off,'mpf_er',0);
-                        $payroll_register->sss_ec_15 = computeSSSecContribution($accumulated_amount,$cut_off,'sss_ec',0);
+                        $payroll_register->sss_reg_er_15 = computeSSSContribution($total_accumulated,$cut_off,'employer_share_er',$reg_er);
+                        $payroll_register->sss_mpf_er_15 = computeSSSContribution($total_accumulated,$cut_off,'mpf_er',$mpf_er);
+                        $payroll_register->sss_ec_15 = computeSSSecContribution($total_accumulated,$cut_off,'sss_ec',0);
                         $payroll_register->phic_er_15 = $phic_ee;
                         $payroll_register->hdmf_er_15 = $hdmf_ee;
                         $payroll_register->accumulated = $accumulated_amount;
 
                         $payroll_register->save();
                         $count++;
+
+                        $this->generateEmployeeContribution($payroll_register,$cut_off);
                     }
-                    
                 }
             }
         }
@@ -345,5 +364,29 @@ class PayRegController extends Controller
         $company_code = $company_detail ? $company_detail->company_code : "";
 
         return Excel::download(new PayrollRegisterExport($company,$department,$payroll_period), $company_code. ' Payroll Register Export.xlsx');
+    }
+
+    public function generateEmployeeContribution($payroll_register,$payment_schedule){
+        PayrollEmployeeContribution::updateOrCreate(
+            [
+                'user_id' => $payroll_register->user_id,
+                'payroll_period_id' => $payroll_register->payroll_period_id
+            ],
+            [
+                'user_id' => $payroll_register->user_id,
+                'payroll_period_id' => $payroll_register->payroll_period_id,
+                'company' => $payroll_register->company,
+                'sss_reg_ee' => $payroll_register->sss_reg_ee_15,
+                'sss_mpf_ee' => $payroll_register->sss_mpf_ee_15,
+                'phic_ee' => $payroll_register->phic_ee_15,
+                'hdmf_ee' => $payroll_register->hmdf_ee_15,
+                'sss_reg_er' => $payroll_register->sss_reg_er_15,
+                'sss_mpf_er' => $payroll_register->sss_mpf_er_15,
+                'sss_ec' => $payroll_register->sss_ec_15,
+                'phic_er' => $payroll_register->phic_er_15,
+                'hdmf_er' => $payroll_register->hdmf_er_15,
+                'payment_schedule' => $payment_schedule
+            ]
+        );
     }
 }

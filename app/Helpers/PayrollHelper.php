@@ -7,6 +7,7 @@ use App\PayrollEmployeeContribution;
 use App\SssMatrixContribution;
 use App\PagibigMatrixContribution;
 use App\PhicMatrixContribution;
+use App\PayrollRegister;
 
 function getUserWitholdingTaxAmount($user_id,$basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
     $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable){
@@ -166,8 +167,7 @@ function getHDMFEr($user_id,$cutoff){
     ->sum('hdmf_er');
 }
 
-
-function computeSSSContribution($accumulated_amount,$cutoff,$field,$firstcutoff_amount ){
+function computeSSSContribution($accumulated_amount,$cutoff,$field,$firstcutoff_contribution ){
     $highest_contribution = SssMatrixContribution::orderBy('min_salary','desc')->first();
 
     if($accumulated_amount >= $highest_contribution->min_salary) return $highest_contribution->$field;
@@ -177,11 +177,10 @@ function computeSSSContribution($accumulated_amount,$cutoff,$field,$firstcutoff_
         ->first();
 
     if(!$sss_contribution) return 0;
-    if ($cutoff == 'Second Cut-Off') return $sss_contribution->$field - $firstcutoff_amount;
+    if ($cutoff == 'Second Cut-Off') return $sss_contribution->$field - $firstcutoff_contribution;
 
     return  $sss_contribution->$field;
 }
-
 
 function computeSSSecContribution($accumulated_amount,$cutoff,$field,$firstcutoff_amount){
     $sss_ec = 0;
@@ -227,6 +226,24 @@ function computePHICContribution($monthly_basicpay,$field){
     return $contribution / 2;
 }
 
+function getPreviousPayrollPeriod($payment_date){
+    return PayrollRegister::whereHas('payrollPeriod',function($q) use($payment_date){
+            $q->whereYear('payment_date',$payment_date->year)
+            ->whereMonth('payment_date',$payment_date->month)
+            ->where('payroll_cutoff','First Cut-Off');
+        })
+        ->first();
+}
+
+function getPreviousPayrollContribution($payment_date){
+    return PayrollEmployeeContribution::whereHas('payrollPeriod',function($q) use($payment_date){
+            $q->whereYear('payment_date',$payment_date->year)
+            ->whereMonth('payment_date',$payment_date->month);
+        })
+        ->where('payment_schedule','First Cut-Off')
+        ->orderBy('id','desc')   
+        ->first();
+}
 
 
 
