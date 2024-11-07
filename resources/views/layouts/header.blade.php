@@ -690,6 +690,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/payroll-employee-contributions') }}">Payroll Contributions</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/employee-deduction') }}">Payroll Deductions</a>
+                    </li>
                 </ul>
             </div>
         </li>
