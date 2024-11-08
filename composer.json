@@ -53,6 +53,7 @@
             "app/Helpers/HelperFunctions.php",
             "app/Helpers/PayrollHelperFunctions.php",
              "app/Helpers/AllowanceHelper.php",
+             "app/Helpers/DeductionHelper.php",
              "app/Helpers/PayrollHelper.php"
         ]
     },
