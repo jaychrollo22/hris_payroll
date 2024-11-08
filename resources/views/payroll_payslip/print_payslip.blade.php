@@ -26,25 +26,25 @@
     <table>
         <tr>
             <td><strong>Name:</strong></td>
-            <td>{{ $name }}</td>
+            <td>{{ $payrollRegister->name }}</td>
             <td><strong>Payroll Period:</strong></td>
-            <td>{{ $payroll_period }}</td>
+            <td>{{ $payrollRegister->payrollPeriod->payroll_name }}</td>
         </tr>
         <tr>
             <td><strong>Employment Status:</strong></td>
-            <td>{{ $employment_status }}</td>
+            <td>{{ $payrollRegister->employment_status }}</td>
             <td><strong>Cut off Covered:</strong></td>
-            <td>{{ $cut_off }}</td>
+            <td>{{ $payrollRegister->cut_from .' - '. $payrollRegister->cut_to }}</td>
         </tr>
         <tr>
             <td><strong>Daily Rate:</strong></td>
-            <td>{{ $daily_rate }}</td>
+            <td>{{ $payrollRegister->daily_rate }}</td>
             <td><strong>Location:</strong></td>
-            <td>{{ $location }}</td>
+            <td>{{ $payrollRegister->employee->location }}</td>
         </tr>
         <tr>
             <td><strong>Bank:</strong></td>
-            <td colspan="3">{{ $bank }}</td>
+            <td colspan="3">{{ $payrollRegister->bank }}</td>
         </tr>
     </table>
 
@@ -61,147 +61,147 @@
             <!-- Income Section -->
             <tr>
                 <td>Basic Pay</td>
-                <td>{{ $basic_pay }}</td>
+                <td>{{ $payrollRegister->basic_pay }}</td>
                 <td>Withholding Tax</td>
-                <td>{{ $withholding_tax }}</td>
+                <td>{{ $payrollRegister->withholding_tax }}</td>
             </tr>
             <tr>
                 <td>Absences</td>
-                <td>{{ $absences }}</td>
+                <td>{{ $payrollRegister->absences_amount }}</td>
                 <td>SSS Regular Contribution – EE</td>
-                <td>{{ $sss_regular_ee }}</td>
+                <td>{{ $payrollRegister->sss_reg_ee_15 }}</td>
             </tr>
             <tr>
                 <td>Late</td>
-                <td>{{ $late }}</td>
+                <td>{{ $payrollRegister->lates_amount }}</td>
                 <td>SSS MPF Contribution – EE</td>
-                <td>{{ $sss_mpf_ee }}</td>
+                <td>{{ $payrollRegister->sss_mpf_ee_15 }}</td>
             </tr>
             <tr>
                 <td>Undertime</td>
-                <td>{{ $undertime }}</td>
+                <td>{{ $payrollRegister->undertime_amount }}</td>
                 <td>PhilHealth Contribution – EE</td>
-                <td>{{ $philhealth_ee }}</td>
+                <td>{{ $payrollRegister->phic_ee_15 }}</td>
             </tr>
             <tr>
                 <td>Salary Adjustment</td>
-                <td>{{ $salary_adjustment }}</td>
+                <td>{{ $payrollRegister->salary_adjustment }}</td>
                 <td>Pag-IBIG Contribution – EE</td>
-                <td>{{ $pagibig_ee }}</td>
+                <td>{{ $payrollRegister->hmdf_ee_15 }}</td>
             </tr>
             <tr>
                 <td>Regular Overtime Pay</td>
-                <td>{{ $regular_overtime }}</td>
+                <td>{{ $payrollRegister->overtime_pay }}</td>
                 <td>Pag-IBIG Salary Loan</td>
-                <td>{{ $pagibig_salary_loan }}</td>
+                <td>{{ $payrollRegister->hdmf_salary_loan }}</td>
             </tr>
             <tr>
                 <td>Rest Day Pay</td>
-                <td>{{ $rest_day_pay }}</td>
+                <td>{{ $payrollRegister->hdmf_salary_loan }}</td>
                 <td>Pag-IBIG Calamity Loan</td>
-                <td>{{ $pagibig_calamity_loan }}</td>
+                <td>{{ $payrollRegister->hdmf_calamity_loan }}</td>
             </tr>
             <tr>
                 <td>SH/RD Overtime Pay</td>
-                <td>{{ $sh_rd_overtime_pay }}</td>
+                <td></td>
                 <td>SSS Salary Loan</td>
-                <td>{{ $sss_salary_loan }}</td>
+                <td>{{ $payrollRegister->sss_salary_loan }}</td>
             </tr>
             <tr>
                 <td>Special Holiday Pay</td>
-                <td>{{ $special_holiday_pay }}</td>
+                <td></td>
                 <td>SSS Calamity Loan</td>
-                <td>{{ $sss_calamity_loan }}</td>
+                <td>{{ $payrollRegister->sss_calamity_loan }}</td>
             </tr>
             <tr>
                 <td>SH on RD Pay</td>
-                <td>{{ $sh_on_rd_pay }}</td>
+                <td></td>
                 <td>Salary Deduction (Taxable)</td>
-                <td>{{ $salary_deduction_taxable }}</td>
+                <td>{{ $payrollRegister->salary_deduction_taxable }}</td>
             </tr>
             <tr>
                 <td>Regular Holiday Pay</td>
-                <td>{{ $regular_holiday_pay }}</td>
+                <td></td>
                 <td>Salary Deduction (Non Taxable)</td>
-                <td>{{ $salary_deduction_non_taxable }}</td>
+                <td>{{ $payrollRegister->salary_deduction_nontaxable }}</td>
             </tr>
             <tr>
                 <td>Night Differential Pay</td>
-                <td>{{ $night_differential_pay }}</td>
+                <td></td>
                 <td>Company Loan</td>
-                <td>{{ $company_loan }}</td>
+                <td>{{ $payrollRegister->company_loan }}</td>
             </tr>
             <tr>
                 <td>Overtime Adjustment</td>
-                <td>{{ $overtime_adjustment }}</td>
+                <td></td>
                 <td>OMHAS (Advances from MAC)</td>
-                <td>{{ $omhas }}</td>
+                <td>{{ $payrollRegister->omhas_loan }}</td>
             </tr>
             <tr>
                 <td>Meal Allowance</td>
-                <td>{{ $meal_allowance }}</td>
+                <td>{{ $payrollRegister->meal_allowance }}</td>
                 <td>COOP CBU</td>
-                <td>{{ $coop_cbu }}</td>
+                <td>{{ $payrollRegister->coop_cbu }}</td>
             </tr>
             <tr>
                 <td>Salary Allowance</td>
-                <td>{{ $salary_allowance }}</td>
+                <td>{{ $payrollRegister->salary_allowance }}</td>
                 <td>COOP Regular Loan</td>
-                <td>{{ $coop_regular_loan }}</td>
+                <td>{{ $payrollRegister->coop_regular_loan }}</td>
             </tr>
             <tr>
                 <td>Out of Town Allowance</td>
-                <td>{{ $out_of_town_allowance }}</td>
+                <td>{{ $payrollRegister->out_of_town_allowance }}</td>
                 <td>COOP MESCCO</td>
-                <td>{{ $coop_mescco }}</td>
+                <td>{{ $payrollRegister->coop_mescco }}</td>
             </tr>
             <tr>
                 <td>Relocation Allowance</td>
-                <td>{{ $relocation_allowance }}</td>
+                <td>{{ $payrollRegister->relocation_allowance }}</td>
                 <td>Uploan</td>
-                <td>{{ $uploan }}</td>
+                <td></td>
             </tr>
             <tr>
                 <td>Discretionary Allowance</td>
-                <td>{{ $discretionary_allowance }}</td>
+                <td>{{ $payrollRegister->discretionary_allowance }}</td>
                 <td>Tax Refund / Payable</td>
-                <td>{{ $tax_refund }}</td>
+                <td></td>
             </tr>
 
             <!-- More Income Rows -->
             <tr>
                 <td>Transpo Allowance</td>
-                <td>{{ $transpo_allowance }}</td>
+                <td>{{ $payrollRegister->transport_allowance }}</td>
                 <td>SSS Regular – Employer Share</td>
-                <td>{{ $sss_regular_er }}</td>
+                <td>{{ $payrollRegister->sss_reg_er_15 }}</td>
             </tr>
             <tr>
                 <td>Load Allowance</td>
-                <td>{{ $load_allowance }}</td>
+                <td>{{ $payrollRegister->load_allowance }}</td>
                 <td>SSS MPF – Employer Share</td>
-                <td>{{ $sss_mpf_er }}</td>
+                <td>{{ $payrollRegister->sss_mpf_ee_15 }}</td>
             </tr>
             <tr>
                 <td>13th Month Pay</td>
-                <td>{{ $thirteenth_month_pay }}</td>
+                <td></td>
                 <td>SSS – EC</td>
-                <td>{{ $sss_ec }}</td>
+                <td>{{ $payrollRegister->sss_ec_15 }}</td>
             </tr>
             <tr>
                 <td>Total Gross Pay</td>
-                <td>{{ $total_gross_pay }}</td>
+                <td>{{ $payrollRegister->grosspay }}</td>
                 <td>PhilHealth – Employer Share</td>
-                <td>{{ $philhealth_er }}</td>
+                <td>{{ $payrollRegister->phic_er_15 }}</td>
             </tr>
             <tr>
                 <td></td>
                 <td></td>
                 <td>Pag-IBIG – Employer Share</td>
-                <td>{{ $pagibig_er }}</td>
+                <td>{{ $payrollRegister->hdmf_er_15 }}</td>
             </tr>
             <tr>
                 <td><strong>NET PAY:</strong></td>
-                <td>{{ $net_pay }}</td>
+                <td>{{ $payrollRegister->netpay }}</td>
                 <td></td>
                 <td></td>
             </tr>

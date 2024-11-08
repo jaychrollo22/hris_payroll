@@ -178,7 +178,6 @@ class PayRegController extends Controller
                         $phic_ee = computePHICContribution($rate,'employee_share_ee');
                         $hdmf_ee = computePagibigContribution($rate,'employee_share_ee');
 
-                        $salary_deduction_taxable = 0;
                         $ot_amount = 0;
                         $meal_allowances = 0;
                         $salary_allowances = 0;
@@ -188,6 +187,56 @@ class PayRegController extends Controller
                         $discretionary_allowances = 0;
                         $transpo_allowances = 0;
                         $load_allowances = 0;
+
+                        //Loans&deductions
+                        $hdmf_salary_loan = 0;
+                        $hdmf_calamity_loan = 0;
+                        $sss_salary_loan = 0;
+                        $sss_calamity_loan = 0;
+                        $salary_deduction_taxable = 0;
+                        $salary_deduction_nontaxable = 0;
+                        $company_loan = 0;
+                        $omhas_loan = 0;
+                        $coop_cbu = 0;
+                        $coop_mescco = 0;
+                        $petty_cash_mescco = 0;
+                        $others = 0;
+                        //Witholding tax
+                        $withholding_tax = getUserWitholdingTaxAmount(
+                            $employee->user_id,
+                            $basic_pay,
+                            $payroll_register->absences_amount,
+                            $payroll_register->lates_amount,
+                            $payroll_register->undertime_amount,
+                            $payroll_register->salary_adjustment,
+                            $payroll_register->overtime_pay,
+                            $sss_reg_ee,
+                            $sss_mpf_ee,
+                            $phic_ee,
+                            $hdmf_ee,
+                            $salary_deduction_taxable
+                        );
+
+                        $total_deduction = (
+                            $withholding_tax +
+                            $sss_reg_ee +
+                            $sss_mpf_ee +
+                            $phic_ee +
+                            $hdmf_ee +
+                            $hdmf_salary_loan +
+                            $hdmf_calamity_loan +
+                            $sss_salary_loan +
+                            $sss_calamity_loan +
+                            $salary_deduction_taxable +
+                            $salary_deduction_nontaxable +
+                            $company_loan +
+                            $omhas_loan +
+                            $coop_cbu +
+                            $coop_mescco +
+                            $petty_cash_mescco +
+                            $others
+                        );
+
 
                         $payroll_register->monthly_basic_pay = $rate ? $rate : 0;
                         $payroll_register->daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0; //Daily Rate Computation
@@ -209,22 +258,7 @@ class PayRegController extends Controller
                         $payroll_register->discretionary_allowance = getUserAllowanceAmount($employee->user_id,7,$payroll_period->payroll_cutoff);
                         $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8,$payroll_period->payroll_cutoff);
                         $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9,$payroll_period->payroll_cutoff);
-
-                        //Witholding tax
-                        $payroll_register->withholding_tax = getUserWitholdingTaxAmount(
-                            $employee->user_id,
-                            $basic_pay,
-                            $payroll_register->absences_amount,
-                            $payroll_register->lates_amount,
-                            $payroll_register->undertime_amount,
-                            $payroll_register->salary_adjustment,
-                            $payroll_register->overtime_pay,
-                            $sss_reg_ee,
-                            $sss_mpf_ee,
-                            $phic_ee,
-                            $hdmf_ee,
-                            $salary_deduction_taxable
-                        );
+                        $payroll_register->withholding_tax = $withholding_tax;
 
                         //Payroll Contributions
                         $payroll_register->sss_reg_ee_15 = $sss_reg_ee;
@@ -233,7 +267,7 @@ class PayRegController extends Controller
                         $payroll_register->hmdf_ee_15 = $hdmf_ee;
 
                         //Gross Pay
-                        $payroll_register->grosspay = getUserGrossPayAmount(
+                        $grosspay = getUserGrossPayAmount(
                             $basic_pay,
                             $payroll_register->absences_amount,
                             $payroll_register->lates_amount,
@@ -249,6 +283,9 @@ class PayRegController extends Controller
                             $payroll_register->transport_allowance,
                             $payroll_register->load_allowance
                         );
+                        $payroll_register->grosspay = $grosspay;
+                        $payroll_register->total_deduction = $total_deduction;
+                        $payroll_register->netpay = ($grosspay - $total_deduction);
 
                         //Total Taxable
                         $payroll_register->total_taxable = getUserTotalTaxableAmount(
@@ -272,13 +309,14 @@ class PayRegController extends Controller
                         $payroll_register->philhealth_no = $employee->phil_number;
                         $payroll_register->pagibig_no = $employee->hdmf_number;
                         $payroll_register->tin_no = $employee->tax_number;
-                        // $payroll_register->bir_tagging = $employee->tax_application ;
+                        $payroll_register->bir_tagging = $employee->level_info->name ;
 
                         $payroll_register->sss_reg_er_15 = computeSSSContribution($total_accumulated,$cut_off,'employer_share_er',$reg_er);
                         $payroll_register->sss_mpf_er_15 = computeSSSContribution($total_accumulated,$cut_off,'mpf_er',$mpf_er);
                         $payroll_register->sss_ec_15 = computeSSSecContribution($total_accumulated,$cut_off,'sss_ec',0);
                         $payroll_register->phic_er_15 = $phic_ee;
                         $payroll_register->hdmf_er_15 = $hdmf_ee;
+                        $payroll_register->bank = $employee->bank;
                         $payroll_register->accumulated = $accumulated_amount;
 
                         $payroll_register->save();
