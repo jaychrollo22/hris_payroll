@@ -206,6 +206,8 @@ class PayRegController extends Controller
                         $coop_mescco = 0;
                         $petty_cash_mescco = 0;
                         $others = 0;
+
+
                         //Witholding tax
                         $withholding_tax = getUserWitholdingTaxAmount(
                             $employee->user_id,
@@ -221,6 +223,20 @@ class PayRegController extends Controller
                             $hdmf_ee,
                             $salary_deduction_taxable
                         );
+
+                        $sss_salary_loan = getUserDeductionAmount($employee->user_id,1,$payroll_period->payroll_cutoff);
+                        $sss_calamity_loan = getUserDeductionAmount($employee->user_id,2,$payroll_period->payroll_cutoff);
+                        $hdmf_salary_loan = getUserDeductionAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
+                        $hdmf_calamity_loan = getUserDeductionAmount($employee->user_id,4,$payroll_period->payroll_cutoff);
+                        $salary_deduction_taxable = getUserDeductionAmount($employee->user_id,6,$payroll_period->payroll_cutoff);
+                        $salary_deduction_nontaxable = getUserDeductionAmount($employee->user_id,7,$payroll_period->payroll_cutoff);
+                        $company_loan = getUserDeductionAmount($employee->user_id,5,$payroll_period->payroll_cutoff);
+                        $omhas_loan = getUserDeductionAmount($employee->user_id,8,$payroll_period->payroll_cutoff);
+                        $coop_cbu = getUserDeductionAmount($employee->user_id,9,$payroll_period->payroll_cutoff);
+                        $coop_regular_loan = getUserDeductionAmount($employee->user_id,10,$payroll_period->payroll_cutoff);
+                        $coop_mescco = getUserDeductionAmount($employee->user_id,11,$payroll_period->payroll_cutoff);
+                        $petty_cash_mescco = getUserDeductionAmount($employee->user_id,12,$payroll_period->payroll_cutoff);
+                        $others = getUserDeductionAmount($employee->user_id,13,$payroll_period->payroll_cutoff);
 
                         $total_deduction = (
                             $withholding_tax +
@@ -264,7 +280,6 @@ class PayRegController extends Controller
                         $payroll_register->transport_allowance = getUserAllowanceAmount($employee->user_id,8,$payroll_period->payroll_cutoff);
                         $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9,$payroll_period->payroll_cutoff);
 
-                    
                         //Witholding tax
                         $payroll_register->withholding_tax = getUserWitholdingTaxAmount(
                             $employee->user_id,
@@ -280,7 +295,23 @@ class PayRegController extends Controller
                             $hdmf_ee,
                             $salary_deduction_taxable
                         );
+
                         $payroll_register->withholding_tax = $withholding_tax;
+
+                        // Loans Deductions
+                        $payroll_register->sss_salary_loan = $sss_salary_loan;
+                        $payroll_register->sss_calamity_loan = $sss_calamity_loan;
+                        $payroll_register->hdmf_salary_loan = $hdmf_salary_loan;
+                        $payroll_register->hdmf_calamity_loan = $hdmf_calamity_loan;
+                        $payroll_register->salary_deduction_taxable = $salary_deduction_taxable;
+                        $payroll_register->salary_deduction_nontaxable = $salary_deduction_nontaxable;
+                        $payroll_register->company_loan = $company_loan;
+                        $payroll_register->omhas_loan = $omhas_loan;
+                        $payroll_register->coop_cbu = $coop_cbu;
+                        $payroll_register->coop_regular_loan = $coop_regular_loan;
+                        $payroll_register->coop_mescco = $coop_mescco;
+                        $payroll_register->petty_cash_mescco = $petty_cash_mescco;
+                        $payroll_register->others = $others;
 
                         //Payroll Contributions
                         $payroll_register->sss_reg_ee_15 = $sss_reg_ee;
@@ -289,35 +320,7 @@ class PayRegController extends Controller
                         $payroll_register->hmdf_ee_15 = $hdmf_ee;
 
                         
-                        // Loans Deductions
-
-                        // SSS Salary loan 1
-                        // SSS Calamity loan 2
-                        // HDMF Salary loan 3
-                        // HDMF Calamity loan 4
-                        // Company loan 5
-                        // Salary deduction (taxable) 6 
-                        // Salary deduction (non taxable) 7 
-                        // OMHAS 8 
-                        // COOP BCU 9
-                        // COOP Regular Loan 10
-                        // COOP Mesco 11
-                        // Petty cash MESCO 12
-                        // Others 13
-
-                        $payroll_register->hdmf_salary_loan = getUserDeductionAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
-                        $payroll_register->hdmf_calamity_loan = getUserDeductionAmount($employee->user_id,4,$payroll_period->payroll_cutoff);
-                        $payroll_register->sss_salary_loan = getUserDeductionAmount($employee->user_id,1,$payroll_period->payroll_cutoff);
-                        $payroll_register->sss_calamity_loan = getUserDeductionAmount($employee->user_id,2,$payroll_period->payroll_cutoff);
-                        $payroll_register->salary_deduction_taxable = getUserDeductionAmount($employee->user_id,6,$payroll_period->payroll_cutoff);
-                        $payroll_register->salary_deduction_nontaxable = getUserDeductionAmount($employee->user_id,7,$payroll_period->payroll_cutoff);
-                        $payroll_register->company_loan = getUserDeductionAmount($employee->user_id,5,$payroll_period->payroll_cutoff);
-                        $payroll_register->omhas_loan = getUserDeductionAmount($employee->user_id,8,$payroll_period->payroll_cutoff);
-                        $payroll_register->coop_cbu = getUserDeductionAmount($employee->user_id,9,$payroll_period->payroll_cutoff);
-                        $payroll_register->coop_regular_loan = getUserDeductionAmount($employee->user_id,10,$payroll_period->payroll_cutoff);
-                        $payroll_register->coop_mescco = getUserDeductionAmount($employee->user_id,11,$payroll_period->payroll_cutoff);
-                        $payroll_register->petty_cash_mescco = getUserDeductionAmount($employee->user_id,12,$payroll_period->payroll_cutoff);
-                        $payroll_register->others = getUserDeductionAmount($employee->user_id,13,$payroll_period->payroll_cutoff);
+                        
 
 
                         //Gross Pay
