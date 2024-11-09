@@ -319,10 +319,6 @@ class PayRegController extends Controller
                         $payroll_register->phic_ee_15 = $phic_ee;
                         $payroll_register->hmdf_ee_15 = $hdmf_ee;
 
-                        
-                        
-
-
                         //Gross Pay
                         $grosspay = getUserGrossPayAmount(
                             $basic_pay,
