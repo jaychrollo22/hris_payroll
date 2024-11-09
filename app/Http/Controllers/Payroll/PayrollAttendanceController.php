@@ -197,11 +197,11 @@ class PayrollAttendanceController extends Controller
         $undertimes =0;
         $overtimes =0;
         
-        $reg_ot_hours = 0;
-        $rest_day_hours = 0;
-        $rdot_shot_hours = 0;
-        $special_holiday_hours = 0;
-        $shrd_hours = 0;
+        $reg_ot_hours = 0; //Regular Holiday OT
+        $rest_day_hours = 0;  //Rest Day OT
+        $rdot_shot_hours = 0; //Rest Day OT Special Holiday OT
+        $special_holiday_hours = 0; //Special Holiday OT
+        $shrd_hours = 0; //Special Holiday Re
         $sh_rd_ot_hours = 0;
         $regular_holiday_hours = 0;
         $rh_rd_or_lh_ot_hours = 0;
@@ -708,15 +708,38 @@ class PayrollAttendanceController extends Controller
                         }
                     }
 
+                    //IF Has Schedule OT
                     //Approved OT
                     $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots, date('Y-m-d', strtotime($date_r))) : "";
                     if ($approved_overtime_hrs) {
                         $approved_overtimes = (double)$approved_overtimes + $approved_overtime_hrs;
+
+                        if ($check_if_holiday) {
+                            if ($check_if_holiday == 'Special Holiday') { //Special Holiday
+                                if($approved_overtime_hrs > 8){
+                                    $special_holiday_hours = 8;
+                                    $rdot_shot_hours = $approved_overtime_hrs - 8; 
+                                }else{
+                                    $special_holiday_hours += $approved_overtime_hrs;
+                                }
+                            }else{ //Regular Holiday
+                                if($approved_overtime_hrs > 8){
+                                    $regular_holiday_hours = 8;
+                                    $rhrd_ot = $approved_overtime_hrs - 8; 
+                                }else{
+                                    $regular_holiday_hours += $approved_overtime_hrs;
+                                }
+                            }
+                        }else{
+                            $reg_ot_hours += $approved_overtime_hrs;
+                        }
                     }
                 }
                 else{
+
+                    //IF No Schedule OT
                     if ($time_in || $if_has_dtr) {
-                    
+                        
                         if (empty($check_if_holiday)) {
                             if ($overtime > 0.5) {
                                 
@@ -728,6 +751,37 @@ class PayrollAttendanceController extends Controller
                         if ($approved_overtime_hrs) {
                             $approved_overtimes = (double)$approved_overtimes + $approved_overtime_hrs;
                         }
+
+                        if ($check_if_holiday) {
+                            if ($check_if_holiday == 'Special Holiday') { //Special Holiday and Rest Day
+
+                                if($approved_overtime_hrs > 8){
+                                    $sh_rd_ot_hours = 8;
+                                    $rdot_shot_hours = $approved_overtime_hrs - 8; 
+                                }else{
+                                    $sh_rd_ot_hours += $approved_overtime_hrs;
+                                }
+
+                            }else{ //Regular Holiday and Rest Day
+
+                                if($approved_overtime_hrs > 8){
+                                    $rh_rd_or_rh_ot = 8;
+                                    $rhrd_ot = $approved_overtime_hrs - 8; 
+                                }else{
+                                    $rh_rd_or_rh_ot += $approved_overtime_hrs;
+                                }
+
+                            }
+                        }else{ //Rest Day
+                            if($approved_overtime_hrs > 8){
+                                $rest_day_hours = 8;
+                                $rdot_shot_hours = $approved_overtime_hrs - 8; 
+                            }else{
+                                $rest_day_hours += $approved_overtime_hrs;
+                            }
+                        }
+                    
+                        
                     } 
                 }
 
@@ -814,11 +868,6 @@ class PayrollAttendanceController extends Controller
                             }
                         }
                 
-                        // echo $if_leave;
-                        // echo $is_absent;
-                        // echo $if_dtr_correction;
-                        // echo $if_attendance_holiday_status;
-                
                         if ($check_if_early_cutoff) {
                             // echo $check_if_early_cutoff;
                         }
@@ -845,39 +894,15 @@ class PayrollAttendanceController extends Controller
                             $total_work_day++;
                         }
                     }
-                
-                    // echo $if_leave;
-                    // echo $if_dtr_correction;
-                    // echo $is_absent;
-                
                     if ($check_if_early_cutoff) {
                         if ($employee_schedule) {
                             // echo $check_if_early_cutoff;
                         }
-                    }
-
-
-                    
-                }
-                
-            }
-
-
-            
-            
+                    }   
+                } 
+            }  
         }  
 
-
-        $reg_ot_hours = 0;
-        $rest_day_hours = 0;
-        $rdot_shot_hours = 0;
-        $special_holiday_hours = 0;
-        $shrd_hours = 0;
-        $sh_rd_ot_hours = 0;
-        $regular_holiday_hours = 0;
-        $rh_rd_or_lh_ot_hours = 0;
-        $lhrd_ot_hours = 0;
-        $night_diff_hours = 0;
 
         return $response = [
             'work'=>$work,
