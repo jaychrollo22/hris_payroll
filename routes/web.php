@@ -470,7 +470,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('import-payroll-attendance', 'Payroll\PayrollAttendanceController@import');
 
     //Payslip
-    Route::get('generate-payslip', 'Payroll\PayrollPayslipController@generatePayslip');
+    Route::get('generate-payslip/{payrollRegister}', 'Payroll\PayrollPayslipController@generatePayslip');
 
     
 });
