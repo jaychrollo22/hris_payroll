@@ -192,74 +192,57 @@ class EmployeeDeductionController extends Controller
 
         if(count($data[0]) > 0)
         {
-            // return $data[0];
+            
             $save_count = 0;
             $not_save = [];
+            
             foreach($data[0] as $key => $value)
             {
-                $employee_allowance = EmployeeDeduction::where('user_id',$value['user_id'])
-                                                                ->where('allowance_id',$value['particular'])
+
+                $employee_deduction = EmployeeDeduction::where('user_id',$value['user_id'])
+                                                                ->where('deduction_id',$value['deduction_id'])
                                                                 ->first();
-                if($employee_allowance){
-                    if(isset($value['particular'])){
-                        $employee_allowance->allowance_id = $value['particular'];
+                if($employee_deduction){
+                    if(isset($value['deduction_id'])){
+                        $employee_deduction->deduction_id = $value['deduction_id'];
                     }
-                    
                     if(isset($value['user_id'])){
-                        $employee_allowance->user_id = $value['user_id'];
-                    }
-                    if(isset($value['description'])){
-                        $employee_allowance->description = $value['description'];
-                    }
-                    if(isset($value['application'])){
-                        $employee_allowance->application = $value['application'];
-                    }
-                    if(isset($value['type'])){
-                        $employee_allowance->type = $value['type'];
-                    }
-                    if(isset($value['credit_schedule'])){
-                        $employee_allowance->schedule = $value['credit_schedule'];
+                        $employee_deduction->deduction_id = $value['user_id'];
                     }
                     if(isset($value['amount'])){
-                        $employee_allowance->allowance_amount = $value['amount'];
+                        $employee_deduction->amount = $value['amount'];
                     }
-                    if(isset($value['end_date'])){
-                        $end_date = $value['end_date'];
-                        if($end_date > 0){
-                            $convert_date = ($end_date - 25569) * 86400;
-                            $employee_allowance->end_date = date('Y-m-d', $convert_date);
-                        }
+                    if(isset($value['no_of_years_deduction'])){
+                        $employee_deduction->no_of_years_deduction = $value['no_of_years_deduction'];
                     }
-                    $employee_allowance->save();
+                    if(isset($value['amortization'])){
+                        $employee_deduction->no_of_years_deduction = $value['amortization'];
+                    }
+                    if(isset($value['type_of_deduction'])){
+                        $employee_deduction->no_of_years_deduction = $value['type_of_deduction'];
+                    }
+                    
+                    $employee_deduction->save();
                     $save_count+=1;
                 }else{
-                    $newEmployeeDeduction = new EmployeeDeduction;
-                    $newEmployeeDeduction->allowance_id = $value['particular'];
-                    $newEmployeeDeduction->user_id = $value['user_id'];
-                    $newEmployeeDeduction->description = $value['description'];
-                    $newEmployeeDeduction->application = $value['application'];
-                    $newEmployeeDeduction->type = $value['type'];
-                    $newEmployeeDeduction->schedule =$value['credit_schedule'];
-                    $newEmployeeDeduction->allowance_amount = $value['amount'];
-                
-                    if(isset($value['end_date'])){
-                        $end_date = $value['end_date'];
-                        if($end_date > 0){
-                            $convert_date = ($end_date - 25569) * 86400;
-                            $newEmployeeDeduction->end_date =date('Y-m-d', $convert_date);
-                        }
-                    }
 
-                    $newEmployeeDeduction->status = 'Active';
-                    $newEmployeeDeduction->save();
+                    $employeeDeduction = new EmployeeDeduction;
+                    $employeeDeduction->deduction_id = $value['deduction_id'];
+                    $employeeDeduction->user_id = $value['user_id'];
+                    $employeeDeduction->amount = $value['amount'];
+                    $employeeDeduction->no_of_years_deduction = $value['no_of_years_deduction'];
+                    $employeeDeduction->amortization = $value['amortization'];
+                    $employeeDeduction->type_of_deduction = $value['type_of_deduction'];
+                    $employeeDeduction->status = 'Active';
+                    $employeeDeduction->save();
 
                     $save_count+=1;
                 }                                         
             }
 
-            Alert::success('Successfully Import Employee Allowances (' . $save_count. ')')->persistent('Dismiss');
+            Alert::success('Successfully Import Employee Deduction (' . $save_count. ')')->persistent('Dismiss');
 
-            return redirect('employee-allowance?search=&company='.$company);
+            return redirect('employee-deduction?search=&company='.$company);
 
             
         }
