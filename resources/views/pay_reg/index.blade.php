@@ -60,9 +60,16 @@
                             </select>
                           </div>
                         </div>
-                        <div class='col-md-3'>
+                        <div class='col-md-4'>
                           <button type="submit" class="btn btn-primary">Filter</button>
                           <a href="/pay-reg" class="btn btn-warning">Reset Filter</a>
+                          @if($payreg_for_postings->isNotEmpty())
+                            <a href="/payreg-post?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}&posting_status=Posted"" title="Post" class="btn btn-primary">Post All</a>
+                          @endif
+
+                          @if($payreg_for_unpostings->isNotEmpty())
+                            <a href="/payreg-post?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}&posting_status=Unposted"" title="Unpost" class="btn btn-danger">Unpost All</a>
+                          @endif
                         </div>
                       </div>
                       
@@ -73,6 +80,8 @@
                   <table id="table-payroll" class="table table-hover table-bordered">
                     <thead>
                         <tr>
+                          <th>ACTION</th>
+                          <th>POSTING STATUS</th>
                           <th>USER ID</th>
                           <th>BANK ACCOUNT #</th>
                           <th>NAME</th>
@@ -146,6 +155,14 @@
                     <tbody>
                       @foreach ($payroll_registers as $payroll)
                       <tr>
+                          <td>
+                              @if ($payroll->posting_status == 'Unposted')
+                                <a href="/payreg-post?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}&payreg_id={{$payroll->id}}&posting_status=Posted" title="Post" class="btn btn-sm btn-success">Post </a>
+                              @else
+                                <a href="/payreg-post?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}&payreg_id={{$payroll->id}}&posting_status=Unposted" title="Unposted" class="btn btn-sm btn-danger">Unpost</a>
+                              @endif
+                          </td>
+                          <td>{{ $payroll->posting_status }}</td>
                           <td>{{ $payroll->user_id }}</td>
                           <td>{{ $payroll->bank_account }}</td>
                           <td>{{ $payroll->name }}</td>

@@ -74,9 +74,8 @@ class PayRegController extends Controller
         }
 
         $payroll_periods = PayrollPeriod::all();
-
         $payroll_registers = $payroll_registers->get();
-        
+
         return view(
             'pay_reg.index',
             array(
@@ -89,7 +88,8 @@ class PayRegController extends Controller
                 'department' => $department,
                 'search' => $search,
                 'payroll_registers' => $payroll_registers,
-
+                'payreg_for_postings' => $payroll_registers->where('posting_status','Unposted'),
+                'payreg_for_unpostings' => $payroll_registers->where('posting_status','Posted'),
             )
         );
 
@@ -479,5 +479,28 @@ class PayRegController extends Controller
                 'payment_schedule' => $payment_schedule
             ]
         );
+    }
+
+    public function post(Request $request){
+
+       $count = PayrollRegister::whereHas('employee',function($q) use($request){
+                $q->where('company_id',$request->company);
+            })
+            ->where('payroll_period_id',$request->payroll_period)
+            ->when(isset($request->department),function($q) use($request){
+                $q->whereHas('employee',function($q) use($request){
+                    $q->where('department_id',$request->department);
+                });
+            })
+            ->when(isset($request->payreg_id),function($q) use($request){
+                $q->where('id',$request->payreg_id);
+            })
+            ->update([
+                'posting_status' => $request->posting_status,
+                'posting_date' => Carbon::now()
+            ]);
+
+            Alert::success('Payroll Register Successfully '. $request->posting_status. ' (' . $count. ')')->persistent('Dismiss');
+            return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company . '&department=' .$request->department);
     }
 }
