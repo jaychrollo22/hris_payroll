@@ -203,11 +203,12 @@ class PayrollAttendanceController extends Controller
         $rest_day_hours = 0;  //Rest Day OT
         $rdot_shot_hours = 0; //Rest Day OT Special Holiday OT
         $special_holiday_hours = 0; //Special Holiday OT
-        $shrd_hours = 0; //Special Holiday Re
-        $sh_rd_ot_hours = 0;
-        $regular_holiday_hours = 0;
-        $rh_rd_or_lh_ot_hours = 0;
-        $lhrd_ot_hours = 0;
+        $shrd_hours = 0; //Special Holiday Rest Day 1st 8 Hours
+        $sh_rd_ot_hours = 0; // Special Holiday Rest Day OT after 8 Hours
+        $regular_holiday_hours = 0; // Regular Holiday
+        $rh_rd_or_lh_ot_hours = 0; // Regular Holiday Rest Day and Legal Holiday OT 1st 8 Hours
+        $lhrd_ot_hours = 0;  // Regular Holiday Rest Day after 8 hours 
+        
         $night_diff_hours = 0;
 
         $approved_overtimes =0;
@@ -755,35 +756,36 @@ class PayrollAttendanceController extends Controller
                         }
 
                         if ($check_if_holiday) {
-                            if ($check_if_holiday == 'Special Holiday') { //Special Holiday and Rest Day
 
+                            if ($check_if_holiday == 'Special Holiday') { 
+                                
+                                //Special Holiday and Rest Day
                                 if($approved_overtime_hrs > 8){
-                                    $sh_rd_ot_hours = 8;
-                                    $rdot_shot_hours = $approved_overtime_hrs - 8; 
+                                    $shrd_hours = 8; // Special Holiday Rest Day 1st 8 hours 
+                                    $sh_rd_ot_hours = $approved_overtime_hrs - 8;  // Special Holiday Rest Day after 8 hours 
                                 }else{
-                                    $sh_rd_ot_hours += $approved_overtime_hrs;
+                                    $shrd_hours += $approved_overtime_hrs; // Special Holiday Rest Day Within 8 hours 
                                 }
-
-                            }else{ //Regular Holiday and Rest Day
-
+                            }else{ 
+                                //Regular Holiday and Rest Day
                                 if($approved_overtime_hrs > 8){
-                                    $rh_rd_or_rh_ot = 8;
-                                    $rhrd_ot = $approved_overtime_hrs - 8; 
+                                    $rh_rd_or_lh_ot_hours = 8; // Regular Holiday Rest Day 1st 8 hours 
+                                    $lhrd_ot_hours = $approved_overtime_hrs - 8; // Regular Holiday Rest Day after 8 hours 
                                 }else{
-                                    $rh_rd_or_rh_ot += $approved_overtime_hrs;
+                                    $rh_rd_or_lh_ot_hours += $approved_overtime_hrs; // Regular Holiday Rest Day Within 8 hours 
                                 }
-
                             }
-                        }else{ //Rest Day
+
+                        }else{ 
+                            //Rest Day
                             if($approved_overtime_hrs > 8){
-                                $rest_day_hours = 8;
-                                $rdot_shot_hours = $approved_overtime_hrs - 8; 
+                                $rest_day_hours = 8; // Rest Day 1st 8 hours 
+                                $rdot_shot_hours = $approved_overtime_hrs - 8; //Rest Day after 8 hours 
                             }else{
-                                $rest_day_hours += $approved_overtime_hrs;
+                                $rest_day_hours += $approved_overtime_hrs; //Rest Day Within 8 hours
                             }
                         }
-                    
-                        
+
                     } 
                 }
 
