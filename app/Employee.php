@@ -114,6 +114,11 @@ class Employee extends Model implements Auditable
     public function approver()
     {
         return $this->hasMany(EmployeeApprover::class,'user_id','user_id');
+    }
+
+    public function level2Approver()
+    {
+        return $this->hasMany(EmployeeApprover::class,'user_id','user_id')->where('level',2);
     } 
 
     public function customized_ppr_approver()

@@ -33,10 +33,11 @@ class PayrollAttendanceController extends Controller
 
         $payroll_periods = PayrollPeriod::orderBy('created_at','DESC')->get();
 
-        $payroll_attendances = PayrollAttendance::whereHas('employee',function($q) use($allowed_companies){
-                                                            $q->whereIn('company_id',$allowed_companies);
-                                                        })
-                                                        ->with('employee.company');
+        $payroll_attendances = PayrollAttendance::with('timeKeeper','overtimeApprover')
+            ->whereHas('employee',function($q) use($allowed_companies){
+                $q->whereIn('company_id',$allowed_companies);
+            })
+            ->with('employee.company');
         if($company){
             $payroll_attendances = $payroll_attendances->whereHas('employee',function($q) use($company){
                 $q->where('company_id',$company);
@@ -65,8 +66,8 @@ class PayrollAttendanceController extends Controller
     }
 
     public function generate(Request $request){
-
-        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $user_id = auth()->user()->id;
+        $allowed_companies = getUserAllowedCompanies($user_id);
 
         $payroll_period = PayrollPeriod::where('id',$request->payroll_period)->first();
 
@@ -98,8 +99,9 @@ class PayrollAttendanceController extends Controller
                     $payroll_attendance->department = $employee->department ? $employee->department->name : null;
                     $payroll_attendance->company = $employee->company ? $employee->company->company_name : null;
                     $payroll_attendance->location = $employee->location;
-                    $payroll_attendance->location = $employee->location;
-
+                    $payroll_attendance->timekeeper = $user_id;
+                    $payroll_attendance->overtime_approver = $employee->level2Approver->isNotEmpty() ? $employee->level2Approver[0]['approver_id'] : null;
+                    
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
                     $daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0;
                     $hourly_rate = $daily_rate / 8; //Basic Pay Computation

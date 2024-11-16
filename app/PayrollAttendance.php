@@ -13,4 +13,14 @@ class PayrollAttendance extends Model implements Auditable
     {
         return $this->belongsTo(Employee::class,'user_id','user_id');
     }
+
+    public function timeKeeper()
+    {
+        return $this->belongsTo(Employee::class,'timekeeper','user_id');
+    }
+
+    public function overtimeApprover()
+    {
+        return $this->belongsTo(Employee::class,'overtime_approver','user_id');
+    }
 }
