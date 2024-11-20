@@ -6,6 +6,6 @@ function getUserDeductionAmount($user_id,$deduction_id,$cut_off){
         ->where('user_id',$user_id)
         ->where('deduction_id',$deduction_id)
         ->where('status','Active')
-        ->whereIn('schedule',[$cut_off,'Every Cut-Off'])
+        ->whereIn('type_of_deduction',[$cut_off,'Every Cut-Off'])
         ->sum('amount');
 }

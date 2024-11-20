@@ -250,6 +250,7 @@ class PayrollAttendanceController extends Controller
             $dtr_correction_time_out = "";
             $dtr_correction_both = "";
 
+            
             if($if_has_dtr){
                 if($if_has_dtr->time_in){
                     $dtr_correction_time_in = $if_has_dtr->correction == 'Time-in' ? $if_has_dtr->time_in : "";
@@ -373,7 +374,7 @@ class PayrollAttendanceController extends Controller
 
             }
             // If has WFH----------------------------------------------------------------------------------------------------------
-            else if($if_has_wfh){
+            if($if_has_wfh){
                 $late_diff_hours = 0;
                 $overtime = 0;
                 $undertime_hrs = 0;
@@ -474,342 +475,367 @@ class PayrollAttendanceController extends Controller
                     $approved_overtimes = (double) $approved_overtimes + $approved_overtime_hrs;
                 }
             }
-            //Else
-            else{
-                //Time In
-                if ($time_in || $if_has_dtr) {
-                    // Time out
-                    if ($dtr_correction_time_out) {
-                      
+           
+            //Time In
+            if ($time_in || $if_has_dtr) {
+                // Time out
+                if ($dtr_correction_time_out) {
+                    
+                } else {
+                    if ($time_in) {
+                        if ($time_in->time_out) {
+                            
+                        } else {
+                            $time_in_out = 1;
+                            
+                        }
                     } else {
+                        if ($time_out) {
+                            if ($time_out->time_out) {
+                                
+                            } else {
+                                $time_in_out = 1;
+                            
+                            }
+                        } else {
+                            $time_in_out = 1;
+                            
+                        }
+                    }
+                }
+            } else {
+                if ((date('l', strtotime($date_r)) == "Saturday") || (date('l', strtotime($date_r)) == "Sunday")) {
+                
+                } else {
+                    if ($dtr_correction_time_out) {
+                        
+                    } else {
+                        $time_in_out = 1;
+                
+            
                         if ($time_in) {
                             if ($time_in->time_out) {
                                 
                             } else {
                                 $time_in_out = 1;
-                               
+
                             }
                         } else {
                             if ($time_out) {
-                                if ($time_out->time_out) {
-                                   
-                                } else {
-                                    $time_in_out = 1;
-                             
-                                }
+                        
                             } else {
                                 $time_in_out = 1;
-                             
-                            }
-                        }
-                    }
-                } else {
-                    if ((date('l', strtotime($date_r)) == "Saturday") || (date('l', strtotime($date_r)) == "Sunday")) {
-                    
-                    } else {
-                        if ($dtr_correction_time_out) {
-                          
-                        } else {
-                            $time_in_out = 1;
-                    
-                
-                            if ($time_in) {
-                                if ($time_in->time_out) {
-                                   
-                                } else {
-                                    $time_in_out = 1;
-
-                                }
-                            } else {
-                                if ($time_out) {
-                            
-                                } else {
-                                    $time_in_out = 1;
-                                }
                             }
                         }
                     }
                 }
+            }
 
-                if($time_in || $if_has_dtr){
+            if($time_in || $if_has_dtr){
 
-                    $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
-                    $time_in_from = $employee_schedule ? $employee_schedule['time_in_from'] : "08:00";
+                $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
+                $time_in_from = $employee_schedule ? $employee_schedule['time_in_from'] : "08:00";
 
-                    $employee_time_in = '';
-                    if($dtr_correction_time_in){
-                        $employee_time_in = $dtr_correction_time_in;
-                    }else{
-                        $employee_time_in = $time_in ? $time_in->time_in : "";
-                    }
+                $employee_time_in = '';
+                if($dtr_correction_time_in){
+                    $employee_time_in = $dtr_correction_time_in;
+                }else{
+                    $employee_time_in = $time_in ? $time_in->time_in : "";
+                }
 
-                    if($dtr_correction_time_out){
-                        $time_out_data = $dtr_correction_time_out;
-                    }else{
-                        if($time_in == null)
-                        {
-                            if($time_out){
-                                $time_out_data = $time_out->time_out ? $time_out->time_out : "";
-                            }
-                        }else{
-                            $time_out_data = $time_in->time_out ? $time_in->time_out : "";
-                        }
-                    }
-                    if($employee_time_in){
-                        if(strtotime(date('H:i:00',strtotime($employee_time_in))) >= strtotime($time_in_from))
-                        {
-                            $time_in_data = $employee_time_in;
-                        }
-                        else
-                        {
-                            $time_in_data = date('Y-m-d ' . $time_in_from,strtotime($employee_time_in));
-                        }
-                    }
-
-                    if($time_in_data){
-                        $start_datetime = new DateTime($time_in_data); 
-                        if($time_out_data){
-                            $diff = $start_datetime->diff(new DateTime($time_out_data)); 
-                        }
-                    }
-
-                    if($time_in_data && $time_out_data)
+                if($dtr_correction_time_out){
+                    $time_out_data = $dtr_correction_time_out;
+                }else{
+                    if($time_in == null)
                     {
-                        $work_diff_hours = round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);
-                        $work = (double) $work+$work_diff_hours;
-                        $overtime = (double) number_format($work_diff_hours,2);
-                    }                       
+                        if($time_out){
+                            $time_out_data = $time_out->time_out ? $time_out->time_out : "";
+                        }
+                    }else{
+                        $time_out_data = $time_in->time_out ? $time_in->time_out : "";
+                    }
+                }
+                if($employee_time_in){
+                    if(strtotime(date('H:i:00',strtotime($employee_time_in))) >= strtotime($time_in_from))
+                    {
+                        $time_in_data = $employee_time_in;
+                    }
+                    else
+                    {
+                        $time_in_data = date('Y-m-d ' . $time_in_from,strtotime($employee_time_in));
+                    }
                 }
 
-                if($employee_schedule && $time_in_data && $time_out_data){
-                    //Lates
-                    $time_in_data_full =  date('Y-m-d H:i:s',strtotime($time_in_data));
-                    $time_in_data_date =  date('Y-m-d',strtotime($time_in_data));
-                    $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
-                    $schedule_time_out =  $time_in_data_date . ' ' . $employee_schedule['time_out_to'];
-                    $schedule_time_in_with_grace =  date('Y-m-d H:15:s',strtotime($schedule_time_in));
-                    $schedule_time_in =  date('Y-m-d H:i:s',strtotime($schedule_time_in));
-                    $schedule_time_in_final =  new DateTime($schedule_time_in);
-                    $late_diff_hours = 0;
+                if($time_in_data){
+                    $start_datetime = new DateTime($time_in_data); 
+                    if($time_out_data){
+                        $diff = $start_datetime->diff(new DateTime($time_out_data)); 
+                    }
+                }
 
-                    if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
-                        if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
-                            //IF Attendance Exceed in Grace Period
-                            $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
-                            $new_time_in_within_grace = date('Y-m-d H:i:s',strtotime($new_schedule_time_in));
-                            $new_time_in_within_grace = new DateTime($new_time_in_within_grace);
-                            $late_diff = $new_time_in_within_grace->diff(new DateTime($time_in_data_full));
+                if($time_in_data && $time_out_data)
+                {
+                    $work_diff_hours = round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);
+                    $work = (double) $work+$work_diff_hours;
+                    $overtime = (double) number_format($work_diff_hours,2);
+                }                       
+            }
+
+            if($employee_schedule && $time_in_data && $time_out_data){
+                //Lates
+                $time_in_data_full =  date('Y-m-d H:i:s',strtotime($time_in_data));
+                $time_in_data_date =  date('Y-m-d',strtotime($time_in_data));
+                $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
+                $schedule_time_out =  $time_in_data_date . ' ' . $employee_schedule['time_out_to'];
+                $schedule_time_in_with_grace =  date('Y-m-d H:15:s',strtotime($schedule_time_in));
+                $schedule_time_in =  date('Y-m-d H:i:s',strtotime($schedule_time_in));
+                $schedule_time_in_final =  new DateTime($schedule_time_in);
+                $late_diff_hours = 0;
+
+                if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
+                    if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
+                        //IF Attendance Exceed in Grace Period
+                        $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
+                        $new_time_in_within_grace = date('Y-m-d H:i:s',strtotime($new_schedule_time_in));
+                        $new_time_in_within_grace = new DateTime($new_time_in_within_grace);
+                        $late_diff = $new_time_in_within_grace->diff(new DateTime($time_in_data_full));
+                        $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
+                    }
+                }else{ // Flexi Time Schedule
+                    if($time_in_data && $schedule_time_in){
+                        $time_in_data_full =  date('Y-m-d H:i:s',strtotime($time_in_data));
+                        $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
+                        $schedule_time_in_final =  new DateTime($schedule_time_in);
+                        if(date('Y-m-d H:i',strtotime($time_in_data_full)) > date('Y-m-d H:i',strtotime($schedule_time_in))){
+                            $late_diff = $schedule_time_in_final->diff(new DateTime($time_in_data_full));
                             $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
                         }
-                    }else{ // Flexi Time Schedule
-                        if($time_in_data && $schedule_time_in){
-                            $time_in_data_full =  date('Y-m-d H:i:s',strtotime($time_in_data));
-                            $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
-                            $schedule_time_in_final =  new DateTime($schedule_time_in);
-                            if(date('Y-m-d H:i',strtotime($time_in_data_full)) > date('Y-m-d H:i',strtotime($schedule_time_in))){
-                                $late_diff = $schedule_time_in_final->diff(new DateTime($time_in_data_full));
-                                $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
-                            }
-                        }
                     }
+                }
+                
+                $overtime = 0;
+                $undertime_hrs = 0;
+
+                if($emp->schedule_info->is_flexi == 1){ //Is Schedule is flexi time
                     
-                    $overtime = 0;
-                    $undertime_hrs = 0;
-
-                    if($emp->schedule_info->is_flexi == 1){ //Is Schedule is flexi time
-                        
-                        $has_leave_shift_hrs = 0;
-                        if($check_if_has_leave_shift){
-                            if($check_if_has_leave_shift == 'First Shift' || $check_if_has_leave_shift == 'Second Shift'){
-                                $compressed_work_weeks = [3,4,5,6,10,17]; //Compressed Schedules
-                                // if(str_contains($emp->schedule_info->schedule_name, "Compressed") && !str_contains($emp->schedule_info->schedule_name, "Saturday")){
-                                if(in_array($emp->schedule_info->id,$compressed_work_weeks)){
-                                    $has_leave_shift_hrs = 4.75;//Leave Shift Hrs for Compressed 5 days
-                                }else{
-                                    $has_leave_shift_hrs = 4;//Leave Shift Hrs
-                                }   
-                            }
-                        }
-                        
-                        //Overtime
-                        if($work_diff_hours > $employee_schedule['working_hours']){
-                            $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
-                        }
-
-                        //Undertime
-                        if($employee_schedule['working_hours'] > $work_diff_hours){
-
-                            if($has_leave_shift_hrs > 0){
-                                $total_with_has_leave_shift_hrs = $work_diff_hours + $has_leave_shift_hrs;
-                                $undertime = $employee_schedule['working_hours'] - $total_with_has_leave_shift_hrs;
-                                if($undertime > 0){
-                                    $undertime_hrs = $undertime;
-                                }  
+                    $has_leave_shift_hrs = 0;
+                    if($check_if_has_leave_shift){
+                        if($check_if_has_leave_shift == 'First Shift' || $check_if_has_leave_shift == 'Second Shift'){
+                            $compressed_work_weeks = [3,4,5,6,10,17]; //Compressed Schedules
+                            // if(str_contains($emp->schedule_info->schedule_name, "Compressed") && !str_contains($emp->schedule_info->schedule_name, "Saturday")){
+                            if(in_array($emp->schedule_info->id,$compressed_work_weeks)){
+                                $has_leave_shift_hrs = 4.75;//Leave Shift Hrs for Compressed 5 days
                             }else{
-                                $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
-                                if($undertime > 0){
-                                    if($late_diff_hours > 0){
-                                        $undertime_hrs = $undertime - $late_diff_hours;
-                                    }else{
-                                        $undertime_hrs = $undertime;
-                                    }
-                                }  
-                            }
-                        }
-                    
-                    }else{
-                        //Not Flexi
-                        if($time_in_data){
-                            $start_datetime = new DateTime($schedule_time_out);
-                            
-                            //Overtime 
-                            if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) < date('Y-m-d H:i:s',strtotime($time_out_data))){
-                                $new_diff = $start_datetime->diff(new DateTime($time_out_data));
-                                $work_ot_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
-                                $overtime = (double) number_format($work_ot_diff_hours,2); 
-                            }
-
-                            //Undertime
-                            if($time_out_data && $schedule_time_out){
-                                if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) > date('Y-m-d H:i:s',strtotime($time_out_data))){
-                                    $time_out_datetime = new DateTime($time_out_data);
-                                    $new_diff = $time_out_datetime->diff(new DateTime($schedule_time_out));
-                                    $work_ut_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
-                                    $undertime_hrs = (double) number_format($work_ut_diff_hours,2); 
-                                }
-                            }
+                                $has_leave_shift_hrs = 4;//Leave Shift Hrs
+                            }   
                         }
                     }
-
-                    //Late
-                    if ($check_if_has_leave_shift) {
-                        if ($check_if_has_leave_shift == 'Second Shift') {
-                            if (empty($check_if_holiday)) {
-                                $lates = (double)$lates + $late_diff_hours;
-                            }
-                        } 
-                    } else {
-                        if (empty($check_if_holiday)) {
-                            $lates = (double)$lates + $late_diff_hours;
-                        }
+                    
+                    //Overtime
+                    if($work_diff_hours > $employee_schedule['working_hours']){
+                        $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
                     }
 
                     //Undertime
-                    if ($check_if_has_leave_shift) {
-                        if ($check_if_has_leave_shift == 'First Shift') {
-                            if (empty($check_if_holiday)) {
-                                if ($undertime_hrs > 0) {
-                                    $undertimes = $undertimes + $undertime_hrs;
+                    if($employee_schedule['working_hours'] > $work_diff_hours){
+
+                        if($has_leave_shift_hrs > 0){
+                            $total_with_has_leave_shift_hrs = $work_diff_hours + $has_leave_shift_hrs;
+                            $undertime = $employee_schedule['working_hours'] - $total_with_has_leave_shift_hrs;
+                            if($undertime > 0){
+                                $undertime_hrs = $undertime;
+                            }  
+                        }else{
+                            $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
+                            if($undertime > 0){
+                                if($late_diff_hours > 0){
+                                    $undertime_hrs = $undertime - $late_diff_hours;
+                                }else{
+                                    $undertime_hrs = $undertime;
                                 }
+                            }  
+                        }
+                    }
+                
+                }else{
+                    //Not Flexi
+                    if($time_in_data){
+                        $start_datetime = new DateTime($schedule_time_out);
+                        
+                        //Overtime 
+                        if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) < date('Y-m-d H:i:s',strtotime($time_out_data))){
+                            $new_diff = $start_datetime->diff(new DateTime($time_out_data));
+                            $work_ot_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
+                            $overtime = (double) number_format($work_ot_diff_hours,2); 
+                        }
+
+                        //Undertime
+                        if($time_out_data && $schedule_time_out){
+                            if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) > date('Y-m-d H:i:s',strtotime($time_out_data))){
+                                $time_out_datetime = new DateTime($time_out_data);
+                                $new_diff = $time_out_datetime->diff(new DateTime($schedule_time_out));
+                                $work_ut_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
+                                $undertime_hrs = (double) number_format($work_ut_diff_hours,2); 
                             }
                         }
-                    } else {
+                    }
+                }
+
+                //Late
+                if ($check_if_has_leave_shift) {
+                    if ($check_if_has_leave_shift == 'Second Shift') {
+                        if (empty($check_if_holiday)) {
+                            $lates = (double)$lates + $late_diff_hours;
+                        }
+                    } 
+                } else {
+                    if (empty($check_if_holiday)) {
+                        $lates = (double)$lates + $late_diff_hours;
+                    }
+                }
+
+                //Undertime
+                if ($check_if_has_leave_shift) {
+                    if ($check_if_has_leave_shift == 'First Shift') {
                         if (empty($check_if_holiday)) {
                             if ($undertime_hrs > 0) {
                                 $undertimes = $undertimes + $undertime_hrs;
                             }
                         }
                     }
-
-                    //IF Has Schedule OT
-                    //Approved OT
-                    $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots, date('Y-m-d', strtotime($date_r))) : "";
-                    if ($approved_overtime_hrs) {
-                        $approved_overtimes = (double)$approved_overtimes + $approved_overtime_hrs;
-
-                        if ($check_if_holiday) {
-                            if ($check_if_holiday == 'Special Holiday') { //Special Holiday
-                                if($approved_overtime_hrs > 8){
-                                    $special_holiday_hours = 8;
-                                    $rdot_shot_hours = $approved_overtime_hrs - 8; 
-                                }else{
-                                    $special_holiday_hours += $approved_overtime_hrs;
-                                }
-                            }else{ //Regular Holiday
-                                if($approved_overtime_hrs > 8){
-                                    $regular_holiday_hours = 8;
-                                    $rhrd_ot = $approved_overtime_hrs - 8; 
-                                }else{
-                                    $regular_holiday_hours += $approved_overtime_hrs;
-                                }
-                            }
-                        }else{
-                            $reg_ot_hours += $approved_overtime_hrs;
+                } else {
+                    if (empty($check_if_holiday)) {
+                        if ($undertime_hrs > 0) {
+                            $undertimes = $undertimes + $undertime_hrs;
                         }
                     }
                 }
-                else{
 
-                    //IF No Schedule OT
-                    if ($time_in || $if_has_dtr) {
-                        
-                        if (empty($check_if_holiday)) {
-                            if ($overtime > 0.5) {
-                                
-                                $overtimes = (double)$overtimes + round($overtime, 2);
-                            }
-                        }
-                        $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots, date('Y-m-d', strtotime($date_r))) : "";
+                //IF Has Schedule OT
+                //Approved OT
+                $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots, date('Y-m-d', strtotime($date_r))) : "";
+                if ($approved_overtime_hrs) {
+                    $approved_overtimes = (double)$approved_overtimes + $approved_overtime_hrs;
 
-                        if ($approved_overtime_hrs) {
-                            $approved_overtimes = (double)$approved_overtimes + $approved_overtime_hrs;
-                        }
-
-                        if ($check_if_holiday) {
-
-                            if ($check_if_holiday == 'Special Holiday') { 
-                                
-                                //Special Holiday and Rest Day
-                                if($approved_overtime_hrs > 8){
-                                    $shrd_hours = 8; // Special Holiday Rest Day 1st 8 hours 
-                                    $sh_rd_ot_hours = $approved_overtime_hrs - 8;  // Special Holiday Rest Day after 8 hours 
-                                }else{
-                                    $shrd_hours += $approved_overtime_hrs; // Special Holiday Rest Day Within 8 hours 
-                                }
-                            }else{ 
-                                //Regular Holiday and Rest Day
-                                if($approved_overtime_hrs > 8){
-                                    $rh_rd_or_lh_ot_hours = 8; // Regular Holiday Rest Day 1st 8 hours 
-                                    $lhrd_ot_hours = $approved_overtime_hrs - 8; // Regular Holiday Rest Day after 8 hours 
-                                }else{
-                                    $rh_rd_or_lh_ot_hours += $approved_overtime_hrs; // Regular Holiday Rest Day Within 8 hours 
-                                }
-                            }
-
-                        }else{ 
-                            //Rest Day
+                    if ($check_if_holiday) {
+                        if ($check_if_holiday == 'Special Holiday') { //Special Holiday
                             if($approved_overtime_hrs > 8){
-                                $rest_day_hours = 8; // Rest Day 1st 8 hours 
-                                $rdot_shot_hours = $approved_overtime_hrs - 8; //Rest Day after 8 hours 
+                                $special_holiday_hours = 8;
+                                $rdot_shot_hours = $approved_overtime_hrs - 8; 
                             }else{
-                                $rest_day_hours += $approved_overtime_hrs; //Rest Day Within 8 hours
+                                $special_holiday_hours += $approved_overtime_hrs;
+                            }
+                        }else{ //Regular Holiday
+                            if($approved_overtime_hrs > 8){
+                                $regular_holiday_hours = 8;
+                                $rhrd_ot = $approved_overtime_hrs - 8; 
+                            }else{
+                                $regular_holiday_hours += $approved_overtime_hrs;
+                            }
+                        }
+                    }else{
+                        $reg_ot_hours += $approved_overtime_hrs;
+                    }
+                }
+            }
+            else{
+
+                //IF No Schedule OT
+                if ($time_in || $if_has_dtr) {
+                    
+                    if (empty($check_if_holiday)) {
+                        if ($overtime > 0.5) {
+                            
+                            $overtimes = (double)$overtimes + round($overtime, 2);
+                        }
+                    }
+                    $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots, date('Y-m-d', strtotime($date_r))) : "";
+
+                    if ($approved_overtime_hrs) {
+                        $approved_overtimes = (double)$approved_overtimes + $approved_overtime_hrs;
+                    }
+
+                    if ($check_if_holiday) {
+
+                        if ($check_if_holiday == 'Special Holiday') { 
+                            
+                            //Special Holiday and Rest Day
+                            if($approved_overtime_hrs > 8){
+                                $shrd_hours = 8; // Special Holiday Rest Day 1st 8 hours 
+                                $sh_rd_ot_hours = $approved_overtime_hrs - 8;  // Special Holiday Rest Day after 8 hours 
+                            }else{
+                                $shrd_hours += $approved_overtime_hrs; // Special Holiday Rest Day Within 8 hours 
+                            }
+                        }else{ 
+                            //Regular Holiday and Rest Day
+                            if($approved_overtime_hrs > 8){
+                                $rh_rd_or_lh_ot_hours = 8; // Regular Holiday Rest Day 1st 8 hours 
+                                $lhrd_ot_hours = $approved_overtime_hrs - 8; // Regular Holiday Rest Day after 8 hours 
+                            }else{
+                                $rh_rd_or_lh_ot_hours += $approved_overtime_hrs; // Regular Holiday Rest Day Within 8 hours 
                             }
                         }
 
-                    } 
-                }
+                    }else{ 
+                        //Rest Day
+                        if($approved_overtime_hrs > 8){
+                            $rest_day_hours = 8; // Rest Day 1st 8 hours 
+                            $rdot_shot_hours = $approved_overtime_hrs - 8; //Rest Day after 8 hours 
+                        }else{
+                            $rest_day_hours += $approved_overtime_hrs; //Rest Day Within 8 hours
+                        }
+                    }
+
+                } 
+            }
 
 
-                if ($time_in == null) {
-                    if ($employee_schedule) {
-                        $is_absent = '';
-                        $if_leave = '';
-                        $if_attendance_holiday = '';
-                        $if_attendance_holiday_status = '';
-                
-                        if ($check_if_holiday) {
-                            if ($check_if_holiday == 'Special Holiday' && $emp->work_description == 'Non-Monthly') {
-                                // Condition for Daily Rate / Non Monthly
-                                $if_attendance_holiday_status = 'Without-Pay';
+            if ($time_in == null) {
+                if ($employee_schedule) {
+                    $is_absent = '';
+                    $if_leave = '';
+                    $if_attendance_holiday = '';
+                    $if_attendance_holiday_status = '';
+            
+                    if ($check_if_holiday) {
+                        if ($check_if_holiday == 'Special Holiday' && $emp->work_description == 'Non-Monthly') {
+                            // Condition for Daily Rate / Non Monthly
+                            $if_attendance_holiday_status = 'Without-Pay';
+                        } else {
+                            $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d', strtotime($date_r)), $emp->employee_number, $emp->location);
+            
+                            if ($if_attendance_holiday) {
+                                $check_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($if_attendance_holiday)), $employee_schedule);
+                                $check_wfh = employeeHasOBDetails($emp->approved_wfhs, date('Y-m-d', strtotime($if_attendance_holiday)));
+                                $check_ob = employeeHasOBDetails($emp->approved_obs, date('Y-m-d', strtotime($if_attendance_holiday)));
+                                $check_dtr = employeeHasDTRDetails($emp->approved_dtrs, date('Y-m-d', strtotime($if_attendance_holiday)));
+            
+                                if ($check_leave || $check_wfh || $check_ob || $check_dtr) {
+                                    $if_attendance_holiday_status = 'With-Pay';
+                                    if ($check_leave) {
+                                        if ($check_leave == 'SL Without-Pay' || $check_leave == 'VL Without-Pay') {
+                                            $if_attendance_holiday_status = 'Without-Pay';
+                                        } else {
+                                            $if_attendance_holiday_status = 'With-Pay';
+                                        }
+                                    }
+                                } else {
+                                    $check_attendance = checkHasAttendanceHolidayStatus($emp->attendances, $if_attendance_holiday);
+                                    if (empty($check_attendance)) {
+                                        $is_absent = 'Absent';
+                                    } else {
+                                        $if_attendance_holiday_status = 'With-Pay';
+                                    }
+                                }
                             } else {
-                                $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d', strtotime($date_r)), $emp->employee_number, $emp->location);
-                
+                                $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d', strtotime($date_r . '-1 day')), $emp->employee_number, $emp->location);
+            
                                 if ($if_attendance_holiday) {
                                     $check_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($if_attendance_holiday)), $employee_schedule);
                                     $check_wfh = employeeHasOBDetails($emp->approved_wfhs, date('Y-m-d', strtotime($if_attendance_holiday)));
                                     $check_ob = employeeHasOBDetails($emp->approved_obs, date('Y-m-d', strtotime($if_attendance_holiday)));
                                     $check_dtr = employeeHasDTRDetails($emp->approved_dtrs, date('Y-m-d', strtotime($if_attendance_holiday)));
-                
+            
                                     if ($check_leave || $check_wfh || $check_ob || $check_dtr) {
                                         $if_attendance_holiday_status = 'With-Pay';
                                         if ($check_leave) {
@@ -827,84 +853,58 @@ class PayrollAttendanceController extends Controller
                                             $if_attendance_holiday_status = 'With-Pay';
                                         }
                                     }
-                                } else {
-                                    $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d', strtotime($date_r . '-1 day')), $emp->employee_number, $emp->location);
-                
-                                    if ($if_attendance_holiday) {
-                                        $check_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($if_attendance_holiday)), $employee_schedule);
-                                        $check_wfh = employeeHasOBDetails($emp->approved_wfhs, date('Y-m-d', strtotime($if_attendance_holiday)));
-                                        $check_ob = employeeHasOBDetails($emp->approved_obs, date('Y-m-d', strtotime($if_attendance_holiday)));
-                                        $check_dtr = employeeHasDTRDetails($emp->approved_dtrs, date('Y-m-d', strtotime($if_attendance_holiday)));
-                
-                                        if ($check_leave || $check_wfh || $check_ob || $check_dtr) {
-                                            $if_attendance_holiday_status = 'With-Pay';
-                                            if ($check_leave) {
-                                                if ($check_leave == 'SL Without-Pay' || $check_leave == 'VL Without-Pay') {
-                                                    $if_attendance_holiday_status = 'Without-Pay';
-                                                } else {
-                                                    $if_attendance_holiday_status = 'With-Pay';
-                                                }
-                                            }
-                                        } else {
-                                            $check_attendance = checkHasAttendanceHolidayStatus($emp->attendances, $if_attendance_holiday);
-                                            if (empty($check_attendance)) {
-                                                $is_absent = 'Absent';
-                                            } else {
-                                                $if_attendance_holiday_status = 'With-Pay';
-                                            }
-                                        }
+                                }
+                            }
+                        }
+                    } else {
+                        $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
+                        if (empty($if_leave)) {
+                            if (empty($if_has_dtr)) {
+                                if ($dtr_correction_time_out == null) {
+                                    if ($time_out == null) {
+                                        $is_absent = 'Absent';
                                     }
                                 }
                             }
-                        } else {
-                            $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
-                            if (empty($if_leave)) {
-                                if (empty($if_has_dtr)) {
-                                    if ($dtr_correction_time_out == null) {
-                                        if ($time_out == null) {
-                                            $is_absent = 'Absent';
-                                        }
-                                    }
-                                }
-                            }
-                            if ($time_out_data == null && empty($if_leave)) {
-                                $is_absent = 'Absent';
-                            }
                         }
-                
-                        if ($check_if_early_cutoff) {
-                            // echo $check_if_early_cutoff;
-                        }
-
-                        if($is_absent == 'Absent'){
-                            $total_absent++;
-                        }else{
-                            $total_work_day++;
-                        }
-                    }
-                } else {
-                    $is_absent = '';
-                    $if_leave = '';
-                
-                    if ($employee_schedule) {
-                        if ($time_out_data == null) {
+                        if ($time_out_data == null && empty($if_leave)) {
                             $is_absent = 'Absent';
                         }
-                        $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
-
-                        if($is_absent == 'Absent' && empty($if_leave)){
-                            $total_absent++;
-                        }else{
-                            $total_work_day++;
-                        }
                     }
+            
                     if ($check_if_early_cutoff) {
-                        if ($employee_schedule) {
-                            // echo $check_if_early_cutoff;
-                        }
-                    }   
-                } 
-            }  
+                        // echo $check_if_early_cutoff;
+                    }
+
+                    if($is_absent == 'Absent'){
+                        $total_absent++;
+                    }else{
+                        $total_work_day++;
+                    }
+                }
+            } else {
+                $is_absent = '';
+                $if_leave = '';
+            
+                if ($employee_schedule) {
+                    if ($time_out_data == null) {
+                        $is_absent = 'Absent';
+                    }
+                    $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
+
+                    if($is_absent == 'Absent' && empty($if_leave)){
+                        $total_absent++;
+                    }else{
+                        $total_work_day++;
+                    }
+                }
+                if ($check_if_early_cutoff) {
+                    if ($employee_schedule) {
+                        // echo $check_if_early_cutoff;
+                    }
+                }   
+            } 
+              
         }  
 
 
