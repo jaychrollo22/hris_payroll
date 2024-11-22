@@ -213,11 +213,11 @@
                           <td>{{ $payroll->others }}</td>
                           <td>{{ $payroll->total_deduction }}</td>
                           <td>{{ $payroll->netpay }}</td>
-                          <td>{{ $payroll->sss_reg_er_sept_15 }}</td>
-                          <td>{{ $payroll->sss_mpf_er_sept_15 }}</td>
-                          <td>{{ $payroll->sss_ec_sept_15 }}</td>
-                          <td>{{ $payroll->phic_er_sept_15 }}</td>
-                          <td>{{ $payroll->hdmf_er_sept_15 }}</td>
+                          <td>{{ $payroll->sss_reg_er_15 }}</td>
+                          <td>{{ $payroll->sss_mpf_er_15 }}</td>
+                          <td>{{ $payroll->sss_ec_15 }}</td>
+                          <td>{{ $payroll->phic_er_15 }}</td>
+                          <td>{{ $payroll->hdmf_er_15 }}</td>
                           <td>{{ $payroll->bank }}</td>
                           <td>{{ $payroll->status }}</td>
                           <td>{{ $payroll->remarks }}</td>

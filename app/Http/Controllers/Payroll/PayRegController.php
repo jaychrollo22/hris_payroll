@@ -113,7 +113,7 @@ class PayRegController extends Controller
                                             $q->where('department_id',$request->department);
                                         })
                                         ->where('status','Active')
-                                        // ->where('id','1') // My Id
+                                        //->where('id','1') // My Id
                                         ->get();
         $count = 0;
         if($employees && $payroll_period){ 
@@ -127,7 +127,7 @@ class PayRegController extends Controller
                     if(empty($payroll_register)){
                         $payroll_register = new PayrollRegister;
                     }
-                   
+                    
                     $payroll_register->payroll_period_id = $payroll_period->id;
                     $payroll_register->user_id = $employee->user_id;
                     $payroll_register->bank_account = $employee->bank_account_number;
@@ -369,13 +369,18 @@ class PayRegController extends Controller
                         $payroll_register->sss_ec_15 = computeSSSecContribution($total_accumulated,$cut_off,'sss_ec',0);
                         $payroll_register->phic_er_15 = $phic_ee;
                         $payroll_register->hdmf_er_15 = $hdmf_ee;
-                        $payroll_register->bank = $employee->bank;
+                        $payroll_register->bank = $employee->bank_account_number;
+                        $payroll_register->status = $employee->status;
                         $payroll_register->accumulated = $accumulated_amount;
 
-                        $payroll_register->save();
-                        $count++;
+                        if($payroll_register->posting_status == 'Unposted'){
+                            $payroll_register->save();
+                            $count++;
 
-                        $this->generateEmployeeContribution($payroll_register,$cut_off);
+                            $this->generateEmployeeContribution($payroll_register,$cut_off);
+                        }
+                        
+                       
                     }
                 }
             }

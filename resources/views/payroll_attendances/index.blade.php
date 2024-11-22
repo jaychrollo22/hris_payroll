@@ -87,6 +87,7 @@
                             <th>Regular OT Amount</th>
                             <th>Overtime Adjustment</th>
                             <th>Total Overtime Pay</th>
+                            <th>Time Keeper</th>
                             <th>Status</th>
                             <th>Remarks</th>
                             
@@ -119,9 +120,10 @@
                             <td>{{ $payroll_attendance->reg_ot_amount }}</td>
                             <td>{{ $payroll_attendance->overtime_adjustment }}</td>
                             <td>{{ $payroll_attendance->total_overtime_pay }}</td>
+                            <td>{{ $payroll_attendance->timeKeeper ? $payroll_attendance->timeKeeper->first_name . ' ' . $payroll_attendance->timeKeeper->last_name : '' }}</td>
+                            <td>{{ $payroll_attendance->overtimeApprover ? $payroll_attendance->overtimeApprover->first_name . ' ' . $payroll_attendance->overtimeApprover->last_name : '' }}</td>
                             <td>{{ $payroll_attendance->status }}</td>
                             <td>{{ $payroll_attendance->remarks }}</td>
-                            
                         </tr>
                         @endforeach
                     </tbody>
