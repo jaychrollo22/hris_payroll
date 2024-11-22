@@ -210,8 +210,6 @@ class PayrollAttendanceController extends Controller
         $night_diff_hours = 0;
 
         $approved_overtimes =0;
-        $night_diffs =0;
-        $night_diff_ot =0;
 
         $date_range =  $this->dateRange( $from_date, $to_date);
         
@@ -219,6 +217,10 @@ class PayrollAttendanceController extends Controller
         $total_absent = 0;
         $total_late = 0;
         $total_undertime = 0;
+
+        $vl = 0;
+        $sl = 0;
+        
 
         foreach($date_range as $k => $date_r){
 
@@ -369,6 +371,8 @@ class PayrollAttendanceController extends Controller
                 }
 
 
+                $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_ob->date_from),strtotime($if_has_ob->date_to)),2);
+
             }
             // If has WFH----------------------------------------------------------------------------------------------------------
             else if($if_has_wfh){
@@ -471,6 +475,8 @@ class PayrollAttendanceController extends Controller
                 if($approved_overtime_hrs){
                     $approved_overtimes = (double) $approved_overtimes + $approved_overtime_hrs;
                 }
+
+                $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_wfh->date_from),strtotime($if_has_wfh->date_to)),2);
             }
             //Else
             else{
@@ -735,6 +741,10 @@ class PayrollAttendanceController extends Controller
                             $reg_ot_hours += $approved_overtime_hrs;
                         }
                     }
+
+                    if(empty($check_if_holiday)){
+                        $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
+                    }
                 }
                 else{
 
@@ -782,6 +792,10 @@ class PayrollAttendanceController extends Controller
                             }else{
                                 $rest_day_hours += $approved_overtime_hrs; //Rest Day Within 8 hours
                             }
+                        }
+
+                        if(empty($check_if_holiday)){
+                            $night_diff_hours = $night_diff_hours + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
                         }
 
                     } 
@@ -940,6 +954,43 @@ class PayrollAttendanceController extends Controller
         }
     
         return $dates;
+    }
+
+    public function night_difference($start_work,$end_work)
+    {
+        $start_night = mktime('22','00','00',date('m',$start_work),date('d',$start_work),date('Y',$start_work));
+        $end_night   = mktime('06','00','00',date('m',$start_work),date('d',$start_work) + 1,date('Y',$start_work));
+    
+        if($start_work >= $start_night && $start_work <= $end_night)
+        {
+            if($end_work >= $end_night)
+            {
+                return ($end_night - $start_work) / 3600;
+            }
+            else
+            {
+                return ($end_work - $start_work) / 3600;
+            }
+        }
+        elseif($end_work >= $start_night && $end_work <= $end_night)
+        {
+            if($start_work <= $start_night)
+            {
+                return ($end_work - $start_night) / 3600;
+            }
+            else
+            {
+                return ($end_work - $start_work) / 3600;
+            }
+        }
+        else
+        {
+            if($start_work < $start_night && $end_work > $end_night)
+            {
+                return ($end_night - $start_night) / 3600;
+            }
+            return 0;
+        }
     }
 
 
