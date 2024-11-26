@@ -30,7 +30,8 @@ class PayrollPayslipController extends Controller
         
         $departments = [];
         
-        $payroll_registers = PayrollRegister::where('payroll_period_id',$payroll_period);
+        $payroll_registers = PayrollRegister::where('payroll_period_id',$payroll_period)
+            ->where('posting_status','Posted');
         
         if($department){
             $payroll_registers->whereHas('employee',function($q) use($department){
