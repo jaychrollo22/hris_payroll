@@ -246,6 +246,9 @@ class EmployeeAllowanceController extends Controller
                             $employee_allowance->end_date = date('Y-m-d', $convert_date);
                         }
                     }
+                    if(isset($value['is_taxable'])){
+                        $employee_allowance->is_taxable = $value['is_taxable'];
+                    }
                     $employee_allowance->save();
                     $save_count+=1;
                 }else{
@@ -257,6 +260,7 @@ class EmployeeAllowanceController extends Controller
                     $newEmployeeAllowance->type = $value['type'];
                     $newEmployeeAllowance->schedule =$value['credit_schedule'];
                     $newEmployeeAllowance->allowance_amount = $value['amount'];
+                    $newEmployeeAllowance->is_taxable = $value['is_taxable'];
                 
                     if(isset($value['end_date'])){
                         $end_date = $value['end_date'];

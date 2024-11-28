@@ -456,6 +456,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('payreg-export', 'Payroll\PayRegController@export');
     Route::get('payreg-post', 'Payroll\PayRegController@post');
     Route::post('generate-payroll-register', 'Payroll\PayRegController@generate');
+
+    Route::post('add-payroll-remarks/{id}', 'Payroll\PayRegController@addPayrollRemarks');
     
 
     Route::get('payroll-employee-contributions', 'Payroll\PayrollEmployeeContributionController@index');

@@ -158,6 +158,7 @@
                           <td>
                               @if ($payroll->posting_status == 'Unposted')
                                 <a href="/payreg-post?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}&payreg_id={{$payroll->id}}&posting_status=Posted" title="Post" class="btn btn-sm btn-success">Post </a>
+                                <button class="btn btn-sm btn-primary">Remarks</a>
                               @else
                                 <a href="/payreg-post?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}&payreg_id={{$payroll->id}}&posting_status=Unposted" title="Unposted" class="btn btn-sm btn-danger">Unpost</a>
                               @endif
@@ -246,4 +247,7 @@
 
 @include('pay_reg.generate_payroll_register') 
 
+@foreach ($payroll_registers as $payroll)
+  @include('pay_reg.add_remarks') 
+@endforeach
 @endsection

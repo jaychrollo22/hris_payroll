@@ -250,6 +250,44 @@ function employeeHasLeave($employee_leaves = array(), $check_date,$schedule = ar
     }
 }
 
+function employeeHasLeaveCount($employee_leaves = array(), $check_date,$schedule = array(), $leave_code){
+   
+    if(count($employee_leaves) > 0 && $schedule){
+        foreach($employee_leaves as $item){
+            if($item['leave']['code'] == $leave_code){
+                if($item['date_from'] == $item['date_to']){
+                    if(date('Y-m-d',strtotime($check_date)) == date('Y-m-d',strtotime($item['date_from']))){
+                        if($item['withpay'] == 1){
+                            if($item['halfday'] == '1'){
+                                return 0.5;
+                            }else{
+                                return 1;
+                            }
+                        }
+                    }
+                }else{
+                    $date_range = dateRangeHelperLeave($item['date_from'],$item['date_to']);
+                    if(count($date_range) > 0){
+                        foreach($date_range as $date_r){
+                            if(date('Y-m-d',strtotime($date_r)) == date('Y-m-d',strtotime($check_date))){
+                                if($item['withpay'] == 1){
+                                    if($item['halfday'] == '1'){
+                                        return 0.5;
+                                    }else{
+                                        return 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
 function employeeHasLeaveShift($employee_leaves = array(), $check_date,$schedule = array()){
    
     if(count($employee_leaves) > 0 && $schedule){

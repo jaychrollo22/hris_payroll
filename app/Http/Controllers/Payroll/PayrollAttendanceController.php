@@ -222,6 +222,7 @@ class PayrollAttendanceController extends Controller
 
         $vl = 0;
         $sl = 0;
+        $wfh = 0;
         
 
         foreach($date_range as $k => $date_r){
@@ -389,6 +390,9 @@ class PayrollAttendanceController extends Controller
                 $work = (double) $work+$work_diff_hours;
 
                 if($if_has_wfh->date_from && $if_has_wfh->date_to && $employee_schedule){
+
+                    $wfh+=1;
+
                     //Lates
                     $time_in_data_full =  date('Y-m-d H:i:s',strtotime($if_has_wfh->date_from));
                     $time_in_data_date =  date('Y-m-d',strtotime($if_has_wfh->date_from));
@@ -818,6 +822,8 @@ class PayrollAttendanceController extends Controller
             
                             if ($if_attendance_holiday) {
                                 $check_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($if_attendance_holiday)), $employee_schedule);
+                                $check_leave_count_vl = employeeHasLeaveCount($emp->approved_leaves, date('Y-m-d', strtotime($if_attendance_holiday)), $employee_schedule, 'VL');
+                                $check_leave_count_sl = employeeHasLeaveCount($emp->approved_leaves, date('Y-m-d', strtotime($if_attendance_holiday)), $employee_schedule, 'SL');
                                 $check_wfh = employeeHasOBDetails($emp->approved_wfhs, date('Y-m-d', strtotime($if_attendance_holiday)));
                                 $check_ob = employeeHasOBDetails($emp->approved_obs, date('Y-m-d', strtotime($if_attendance_holiday)));
                                 $check_dtr = employeeHasDTRDetails($emp->approved_dtrs, date('Y-m-d', strtotime($if_attendance_holiday)));
@@ -829,6 +835,11 @@ class PayrollAttendanceController extends Controller
                                             $if_attendance_holiday_status = 'Without-Pay';
                                         } else {
                                             $if_attendance_holiday_status = 'With-Pay';
+
+                                            
+                                            $vl += $check_leave_count_vl;
+                                            $sl += $check_leave_count_sl;
+                                            
                                         }
                                     }
                                 } else {
@@ -844,6 +855,8 @@ class PayrollAttendanceController extends Controller
             
                                 if ($if_attendance_holiday) {
                                     $check_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($if_attendance_holiday)), $employee_schedule);
+                                    $check_leave_count_vl = employeeHasLeaveCount($emp->approved_leaves, date('Y-m-d', strtotime($if_attendance_holiday)), $employee_schedule, 'VL');
+                                    $check_leave_count_sl = employeeHasLeaveCount($emp->approved_leaves, date('Y-m-d', strtotime($if_attendance_holiday)), $employee_schedule, 'SL');
                                     $check_wfh = employeeHasOBDetails($emp->approved_wfhs, date('Y-m-d', strtotime($if_attendance_holiday)));
                                     $check_ob = employeeHasOBDetails($emp->approved_obs, date('Y-m-d', strtotime($if_attendance_holiday)));
                                     $check_dtr = employeeHasDTRDetails($emp->approved_dtrs, date('Y-m-d', strtotime($if_attendance_holiday)));
@@ -855,6 +868,9 @@ class PayrollAttendanceController extends Controller
                                                 $if_attendance_holiday_status = 'Without-Pay';
                                             } else {
                                                 $if_attendance_holiday_status = 'With-Pay';
+
+                                                $vl += $check_leave_count_vl;
+                                            $sl += $check_leave_count_sl;
                                             }
                                         }
                                     } else {
@@ -904,6 +920,13 @@ class PayrollAttendanceController extends Controller
                     }
                     $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
 
+                    if($if_leave == 'VL With-Pay'){
+                        $vl += 1;
+                    }
+                    if($if_leave == 'SL With-Pay'){
+                        $sl += 1;
+                    }
+
                     if($is_absent == 'Absent' && empty($if_leave)){
                         $total_absent++;
                     }else{
@@ -937,6 +960,9 @@ class PayrollAttendanceController extends Controller
             'night_diff_hours' => $night_diff_hours,
             'absent'=>$total_absent,
             'total_work_day'=>$total_work_day,
+            'vl' => $vl,
+            'sl' => $sl,
+            'wfh' => $wfh
         ];
             
 

@@ -408,9 +408,18 @@ class PayRegController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function addPayrollRemarks(Request $request, $id)
     {
-        //
+        $payroll_register = PayrollRegister::where('id',$id)->first();
+
+        if($payroll_register){
+            
+            $payroll_register->remarks = $request->remarks;
+            $payroll_register->save();
+
+            Alert::success('Successfully Generated (' . $count. ')')->persistent('Dismiss');
+            return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company . '&department=' .$request->department);
+        }
     }
 
     /**
