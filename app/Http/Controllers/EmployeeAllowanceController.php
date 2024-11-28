@@ -239,6 +239,19 @@ class EmployeeAllowanceController extends Controller
                     if(isset($value['amount'])){
                         $employee_allowance->allowance_amount = $value['amount'];
                     }
+                    if(isset($value['frequency'])){
+                        $employee_allowance->frequency = $value['frequency'];
+                    }
+                    if(isset($value['is_taxable'])){
+                        $employee_allowance->is_taxable = $value['is_taxable'];
+                    }
+                    if(isset($value['effective_date'])){
+                        $effective_date = $value['effective_date'];
+                        if($effective_date > 0){
+                            $convert_date = ($effective_date - 25569) * 86400;
+                            $employee_allowance->effective_date = date('Y-m-d', $convert_date);
+                        }
+                    }
                     if(isset($value['end_date'])){
                         $end_date = $value['end_date'];
                         if($end_date > 0){
@@ -260,8 +273,16 @@ class EmployeeAllowanceController extends Controller
                     $newEmployeeAllowance->type = $value['type'];
                     $newEmployeeAllowance->schedule =$value['credit_schedule'];
                     $newEmployeeAllowance->allowance_amount = $value['amount'];
+                    $newEmployeeAllowance->frequency = $value['frequency'];
                     $newEmployeeAllowance->is_taxable = $value['is_taxable'];
-                
+
+                    if(isset($value['effective_date'])){
+                        $effective_date = $value['effective_date'];
+                        if($effective_date > 0){
+                            $convert_date = ($effective_date - 25569) * 86400;
+                            $newEmployeeAllowance->effective_date =date('Y-m-d', $convert_date);
+                        }
+                    }
                     if(isset($value['end_date'])){
                         $end_date = $value['end_date'];
                         if($end_date > 0){

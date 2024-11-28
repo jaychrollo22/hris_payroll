@@ -698,6 +698,9 @@
                     <li class="nav-item"> 
                         <a class="nav-link" href="{{ url('/deductions') }}">Deduction Settings</a>
                     </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link" href="{{ url('/payslip') }}">Payslip</a>
+                    </li>
                 </ul>
             </div>
         </li>

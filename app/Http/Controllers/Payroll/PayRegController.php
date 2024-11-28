@@ -163,12 +163,20 @@ class PayRegController extends Controller
                         $mpf_ee = 0;
                         $reg_er = 0;
                         $mpf_er = 0;
+                        $month_15 = $accumulated_amount;
+                        $month_30 = 0;
 
                         //Get first cut off contribution
                         if($cut_off == 'Second Cut-Off'){
                             $payment_date = Carbon::parse($payroll_period->payment_date);
+                            $month_30 = $accumulated_amount;
                             //Get previous payroll accumulated amount
-                            if($previous_payreg = getPreviousPayrollPeriod($payment_date)) $total_accumulated += $previous_payreg->accumulated;
+                            if($previous_payreg = getPreviousPayrollPeriod($payment_date)){
+                                $month_15 = $previous_payreg->accumulated;
+                                $total_accumulated += $previous_payreg->accumulated;
+                            }else{
+                                $month_15 = 0;
+                            }
                             //Get previous contributions
                             if($previous_contribution = getPreviousPayrollContribution($payment_date)){
                                 $reg_ee = $previous_contribution->sss_reg_ee;
@@ -371,7 +379,9 @@ class PayRegController extends Controller
                         $payroll_register->hdmf_er_15 = $hdmf_ee;
                         $payroll_register->bank = $employee->bank_account_number;
                         $payroll_register->status = $employee->status;
-                        $payroll_register->accumulated = $accumulated_amount;
+                        $payroll_register->month_15 = $month_15;
+                        $payroll_register->month_30 = $month_30;
+                        $payroll_register->accumulated = $total_accumulated;
 
                         if($payroll_register->posting_status == 'Unposted'){
                             $payroll_register->save();
