@@ -1,23 +1,28 @@
-<div class="modal fade" id="addPayrollRegisterRemarks" tabindex="-1" role="dialog" aria-labelledby="addPayrollRegisterRemarks"
+<div class="modal fade" id="addPayrollRegisterRemarks{{$payroll->id}}" tabindex="-1" role="dialog" aria-labelledby="addPayrollRegisterRemarks"
 	aria-hidden="true">
 	<div class="modal-dialog modal-md" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="addPayrollRegisterRemarkslabel">Add Payroll Remarks</h5>
+				<h5 class="modal-title" id="addPayrollRegisterRemarkslabel">
+					Add Payroll Remarks for {{ $payroll->name }} <br>
+					<small>{{ $payroll_period_detail ? $payroll_period_detail->payroll_name : "" }}</small>
+				</h5>
+				
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<form method='POST' action='{{url('add-payroll-remarks/') . $payroll->id}}' onsubmit='show()' enctype="multipart/form-data" onsubmit="btnaddPayrollRegisterRemarks.disabled = true; return true;">
+			<form method='POST' action='add-payroll-remarks/{{$payroll->id}}' onsubmit='show()' enctype="multipart/form-data" onsubmit="btnaddPayrollRegisterRemarks.disabled = true; return true;">
 				@csrf
 				<div class="modal-body">
+					
 					<input type="hidden" name="payroll_period" value="{{$payroll_period}}">
 					<input type="hidden" name="company" value="{{$company}}">
 					<input type="hidden" name="department" value="{{$department}}">
 					<div class="row">
                         <div class="col-lg-12 form-group">
 							<label>Remarks</label>
-                            <textarea name="remarks" cols="30" rows="10" class="form-control"></textarea>
+                            <textarea name="remarks" cols="30" rows="5" class="form-control" placeholder="Input Remarks"></textarea>
 						</div>
 					</div>
 				</div>

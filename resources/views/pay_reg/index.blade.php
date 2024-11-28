@@ -155,12 +155,16 @@
                     <tbody>
                       @foreach ($payroll_registers as $payroll)
                       <tr>
-                          <td>
+                          <td align="center">
                               @if ($payroll->posting_status == 'Unposted')
-                                <a href="/payreg-post?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}&payreg_id={{$payroll->id}}&posting_status=Posted" title="Post" class="btn btn-sm btn-success">Post </a>
-                                <button class="btn btn-sm btn-primary">Remarks</a>
+                                <a href="/payreg-post?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}&payreg_id={{$payroll->id}}&posting_status=Posted" title="Post">
+                                  <i class="ti-unlock btn-icon-prepend text-warning" style="cursor:pointer;" title="Post"></i>
+                                </a>
+                                <i class="ti-notepad btn-icon-prepend text-primary" href="#addPayrollRegisterRemarks{{$payroll->id}}" data-toggle="modal" style="cursor:pointer;" title="Remarks"></i>
                               @else
-                                <a href="/payreg-post?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}&payreg_id={{$payroll->id}}&posting_status=Unposted" title="Unposted" class="btn btn-sm btn-danger">Unpost</a>
+                                <a href="/payreg-post?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}&payreg_id={{$payroll->id}}&posting_status=Unposted" title="Unposted">
+                                  <i class="ti-lock btn-icon-prepend text-success" style="cursor:pointer;" title="Post"></i>
+                                </a>
                               @endif
                           </td>
                           <td>{{ $payroll->posting_status }}</td>

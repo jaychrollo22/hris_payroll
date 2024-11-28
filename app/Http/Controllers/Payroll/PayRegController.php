@@ -74,6 +74,7 @@ class PayRegController extends Controller
         }
 
         $payroll_periods = PayrollPeriod::all();
+        $payroll_period_detail = PayrollPeriod::where('id',$payroll_period)->first();
         $payroll_registers = $payroll_registers->get();
 
         return view(
@@ -82,6 +83,7 @@ class PayRegController extends Controller
                 'header' => 'pay_reg',
                 'payroll_periods' => $payroll_periods,
                 'payroll_period' => $payroll_period,
+                'payroll_period_detail' => $payroll_period_detail,
                 'companies' => $companies,
                 'company' => $company,
                 'departments' => $departments,
@@ -121,11 +123,14 @@ class PayRegController extends Controller
             if($employees){
 
                 foreach($employees as $employee){
+                    $is_payroll_register_exist = 0;
                     $payroll_register = PayrollRegister::where('payroll_period_id',$payroll_period->id)
                                                             ->where('user_id',$employee->user_id)
                                                             ->first();
                     if(empty($payroll_register)){
                         $payroll_register = new PayrollRegister;
+                    }else{
+                        $is_payroll_register_exist = 1;
                     }
                     
                     $payroll_register->payroll_period_id = $payroll_period->id;
@@ -383,12 +388,19 @@ class PayRegController extends Controller
                         $payroll_register->month_30 = $month_30;
                         $payroll_register->accumulated = $total_accumulated;
 
-                        if($payroll_register->posting_status == 'Unposted'){
+
+                        if($is_payroll_register_exist == 1){
+                            if($payroll_register->posting_status == 'Unposted'){
+                                $payroll_register->save();
+                                $count++;
+                                $this->generateEmployeeContribution($payroll_register,$cut_off);
+                            }
+                        }else{
                             $payroll_register->save();
                             $count++;
-
-                            $this->generateEmployeeContribution($payroll_register,$cut_off);
+                            $this->generateEmployeeContribution($payroll_register,$cut_off);   
                         }
+                        
                         
                        
                     }
@@ -427,7 +439,7 @@ class PayRegController extends Controller
             $payroll_register->remarks = $request->remarks;
             $payroll_register->save();
 
-            Alert::success('Successfully Generated (' . $count. ')')->persistent('Dismiss');
+            Alert::success('Remarks has been successfully saved')->persistent('Dismiss');
             return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company . '&department=' .$request->department);
         }
     }
@@ -477,8 +489,8 @@ class PayRegController extends Controller
         $company_detail = Company::where('id',$company)->first();
 
         $company_code = $company_detail ? $company_detail->company_code : "";
-
-        return Excel::download(new PayrollRegisterExport($company,$department,$payroll_period), $company_code. ' Payroll Register Export.xlsx');
+        $payroll_period_detail = PayrollPeriod::where('id',$payroll_period)->first();
+        return Excel::download(new PayrollRegisterExport($company,$department,$payroll_period), $company_code. ' Payroll Register Export '.$payroll_period_detail->payroll_name.'.xlsx');
     }
 
     public function generateEmployeeContribution($payroll_register,$payment_schedule){

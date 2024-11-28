@@ -13,7 +13,7 @@ class PayrollRegister extends Model implements Auditable
 
     use SoftDeletes;
 
-    protected $guareded = [];
+    protected $guarded = [];
     
     public function employee()
     {
