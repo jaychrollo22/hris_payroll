@@ -103,13 +103,12 @@
                             <th>Lhrd OT Amount</th>
                             <th>Night Diff Hours</th>
                             <th>Night Diff Amount</th>
-
                             <th>Overtime Adjustment</th>
                             <th>Total Overtime Pay</th>
                             <th>Time Keeper</th>
+                            <th>OT approver</th>
                             <th>Status</th>
                             <th>Remarks</th>
-                            
                         </tr>
                     </thead>
                     <tbody>

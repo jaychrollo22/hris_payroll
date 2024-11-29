@@ -29,19 +29,20 @@ class PayrollAttendanceExport implements FromQuery, WithHeadings, WithMapping
                                 ->whereIn('id',$allowed_companies)
                                 ->get();
 
-        $payroll_attendances = PayrollAttendance::whereHas('employee',function($q) use($allowed_companies){
-                                                            $q->whereIn('company_id',$allowed_companies);
-                                                        })
-                                                        ->with('employee.company');
+        $payroll_registers = PayrollAttendance::with('timeKeeper','overtimeApprover')
+            ->whereHas('employee',function($q) use($allowed_companies){
+                $q->whereIn('company_id',$allowed_companies);
+            })
+            ->with('employee.company');
         if($company){
-            $payroll_attendances = $payroll_attendances->whereHas('employee',function($q) use($company){
+            $payroll_registers = $payroll_registers->whereHas('employee',function($q) use($company){
                 $q->where('company_id',$company);
             });
         }
 
-        if($payroll_period) $payroll_attendances = $payroll_attendances->where('payroll_period_id',$payroll_period);
+        if($payroll_period) $payroll_registers = $payroll_registers->where('payroll_period_id',$payroll_period);
 
-        return $payroll_attendances;
+        return $payroll_registers;
     }
 
     /**
@@ -55,12 +56,19 @@ class PayrollAttendanceExport implements FromQuery, WithHeadings, WithMapping
             'USER ID', 'NAME','COMPANY','DEPARTMENT', 'LOCATION', 'BASIC PAY', 'DAILY RATE', 'HOURLY RATE',
             'DAYS WORKED', 'DAYS WORK AMOUNT', 'SICK LEAVE DAYS', 'SICK LEAVE AMOUNT', 'VACATION LEAVE DAYS','VACATION LEAVE AMOUNT',
             'ABSENCES DAYS', 'ABSENCES AMOUNT','LATE HOURS', 'LATES AMOUNT', 'UNDERTIME HOURS', 'UNDERTIME AMOUNT', 
-            'REGULAR OT HOURS', 'REGULAR OT AMOUNT', 'OVERTIME ADJUSTMENT', 'TOTAL OVERTIME PAY', 'STATUS','REMARKS'
+            'REGULAR OT HOURS', 'REGULAR OT AMOUNT', 'REST DAY HOURS','REST DAY HOURS AMOUNT','RDOD/SHOT HOURS','RDOT/SHOT AMOUNT',
+            'SPECIAL HOLIDAY HOURS','SPECIAL HOLIDAY AMOUNT','SHRD HOURS','SHRD AMOUNT','SH AND RD OT HOURS','SH AND RD OT AMOUNT',
+            'REGULAR HOLIDAY HOURS','REGULAR HOLIDAY AMOUNT','SH AND RD OR RH OT HOURS','SH AND RD OR RH OT AMOUNT',
+            'LHRD OT HOURS','LHRD OT AMOUNT','NIGHT DIFF HOURS','NIGHT DIFF AMOUNT','OVERTIME ADJUSTMENT','TOTAL OVERTIME PAY',
+            'TIME KEEPER','OT APPROVER','STATUS','REMARKS'
         ];
     }
 
     public function map($payroll_register): array
     {
+        $timeKeeper =  $payroll_register->timeKeeper ? ($payroll_register->timeKeeper->first_name . ' ' . $payroll_register->timeKeeper->last_name) : '';
+        $overtimeApprover = $payroll_register->overtimeApprover ? ($payroll_register->overtimeApprover->first_name . ' ' . $payroll_register->overtimeApprover->last_name) : '';
+
         return [
             $payroll_register->user_id,
             $payroll_register->full_name,
@@ -84,8 +92,28 @@ class PayrollAttendanceExport implements FromQuery, WithHeadings, WithMapping
             $payroll_register->undertime_amount,
             $payroll_register->reg_ot_hours,
             $payroll_register->reg_ot_amount,
+            $payroll_register->rest_day_hours,
+            $payroll_register->rest_day_amount,
+            $payroll_register->rdot_shot_hours,
+            $payroll_register->rdot_shot_amount,
+            $payroll_register->special_holiday_hours,
+            $payroll_register->special_holiday_amount,
+            $payroll_register->shrd_hours,
+            $payroll_register->shrd_amount,
+            $payroll_register->sh_rd_ot_hours,
+            $payroll_register->sh_rd_ot_amount,
+            $payroll_register->regular_holiday_hours,
+            $payroll_register->regular_holiday_amount,
+            $payroll_register->rh_rd_or_lh_ot_hours,
+            $payroll_register->rh_rd_or_lh_ot_amount,
+            $payroll_register->lhrd_ot_hours,
+            $payroll_register->lhrd_ot_amount,
+            $payroll_register->night_diff_hours,
+            $payroll_register->night_diff_amount,
             $payroll_register->overtime_adjustment,
             $payroll_register->total_overtime_pay,
+            $timeKeeper,
+            $overtimeApprover,
             $payroll_register->status,
             $payroll_register->remarks
         ];
