@@ -22,7 +22,18 @@
     </style>
 </head>
 <body>
-
+    <p style="
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 20px;">{{ $payrollRegister->employee->company->company_name }}</p>
+    <div style="
+        margin-bottom: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 30%;">
+        <img  src="{{ url('company_images/'.$payrollRegister->employee->company->company_code.'.png') }}" width="200px" height="auto" alt="">
+    </div>
     <table>
         <tr>
             <td><strong>Name:</strong></td>
