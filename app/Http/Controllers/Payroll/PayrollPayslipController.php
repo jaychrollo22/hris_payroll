@@ -32,31 +32,35 @@ class PayrollPayslipController extends Controller
         
         $payroll_registers = PayrollRegister::where('payroll_period_id',$payroll_period)
             ->where('posting_status','Posted');
-        
-        if($department){
-            $payroll_registers->whereHas('employee',function($q) use($department){
-                $q->where('department_id',$department);
-            });
-        }
 
-        if($company){
-            $department_companies = Employee::when($company,function($q) use($company){
-                            $q->where('company_id',$company);
-                        })
-                        ->groupBy('department_id')
-                        ->pluck('department_id')
-                        ->toArray();
-
-            $departments = Department::whereIn('id',$department_companies)->where('status','1')
-                    ->orderBy('name')
-                    ->get();
-
-            $payroll_registers->whereHas('employee',function($q) use($company){
-                $q->where('company_id',$company);
-            });
-
+        if(checkUserPrivilege('payslip_filter_per_company',auth()->user()->id) == 'yes'){
+            if($department){
+                $payroll_registers->whereHas('employee',function($q) use($department){
+                    $q->where('department_id',$department);
+                });
+            }
+    
+            if($company){
+                $department_companies = Employee::when($company,function($q) use($company){
+                                $q->where('company_id',$company);
+                            })
+                            ->groupBy('department_id')
+                            ->pluck('department_id')
+                            ->toArray();
+    
+                $departments = Department::whereIn('id',$department_companies)->where('status','1')
+                        ->orderBy('name')
+                        ->get();
+    
+                $payroll_registers->whereHas('employee',function($q) use($company){
+                    $q->where('company_id',$company);
+                });
+    
+            }else{
+                $departments = Department::where('status','1')->orderBy('name')->get();
+            }
         }else{
-            $departments = Department::where('status','1')->orderBy('name')->get();
+            $payroll_registers->where('user_id',auth()->user()->id);
         }
 
         $payroll_periods = PayrollPeriod::all();

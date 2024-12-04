@@ -530,6 +530,129 @@
                                             <br>
                                             <br>
                                         </div>
+                                        
+                                        {{-- Payslip --}}
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-12 form-group">
+                                                    <h5>Payroll</h5>
+                                                    @if($user->payroll_period)
+                                                        @if($user->user_privilege->payroll_period == 'on')
+                                                            <input type="checkbox" name="payroll_period" id="payroll_period{{$user->id}}" value="{{ $user->user_privilege->payroll_period }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="payroll_period" id="payroll_period{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="payroll_period" id="payroll_period{{$user->id}}">
+                                                    @endif
+                                                    Payroll Period
+                                                    <br>
+                                                    <br>
+
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->payroll_payreg == 'on')
+                                                            <input type="checkbox" name="payroll_payreg" id="payroll_payreg{{$user->id}}" value="{{ $user->user_privilege->payroll_payreg }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="payroll_payreg" id="payroll_payreg{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="payroll_payreg" id="payroll_payreg{{$user->id}}">
+                                                    @endif
+                                                    Payroll Register
+                                                    <br>
+                                                    <br>
+                                                    
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->payroll_payreg_post == 'on')
+                                                            <input type="checkbox" name="payroll_payreg_post" id="payroll_payreg_post{{$user->id}}" value="{{ $user->user_privilege->payroll_payreg_post }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="payroll_payreg_post" id="payroll_payreg_post{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="payroll_payreg_post" id="payroll_payreg_post{{$user->id}}">
+                                                    @endif
+                                                    Payroll Register Post
+                                                    <br>
+                                                    <br>
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->payroll_payreg_unpost == 'on')
+                                                            <input type="checkbox" name="payroll_payreg_unpost" id="payroll_payreg_unpost{{$user->id}}" value="{{ $user->user_privilege->payroll_payreg_unpost }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="payroll_payreg_unpost" id="payroll_payreg_unpost{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="payroll_payreg_unpost" id="payroll_payreg_unpost{{$user->id}}">
+                                                    @endif
+                                                    Payroll Register Unpost
+                                                    <br>
+                                                    <br>
+
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->payroll_contribution == 'on')
+                                                            <input type="checkbox" name="payroll_contribution" id="payroll_contribution{{$user->id}}" value="{{ $user->user_privilege->payroll_contribution }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="payroll_contribution" id="payroll_contribution{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="payroll_contribution" id="payroll_contribution{{$user->id}}">
+                                                    @endif
+                                                    Payroll Contribution
+                                                    <br>
+                                                    <br>
+
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->payroll_deduction == 'on')
+                                                            <input type="checkbox" name="payroll_deduction" id="payroll_deduction{{$user->id}}" value="{{ $user->user_privilege->payroll_deduction }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="payroll_deduction" id="payroll_deduction{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="payroll_deduction" id="payroll_deduction{{$user->id}}">
+                                                    @endif
+                                                    Payroll Deduction
+                                                    <br>
+                                                    <br>
+
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->allowance_setting == 'on')
+                                                            <input type="checkbox" name="allowance_setting" id="allowance_setting{{$user->id}}" value="{{ $user->user_privilege->allowance_setting }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="allowance_setting" id="allowance_setting{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="allowance_setting" id="allowance_setting{{$user->id}}">
+                                                    @endif
+                                                    Allowance Setting
+                                                    <br>
+                                                    <br>
+
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->deduction_setting == 'on')
+                                                            <input type="checkbox" name="deduction_setting" id="deduction_setting{{$user->id}}" value="{{ $user->user_privilege->deduction_setting }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="deduction_setting" id="deduction_setting{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="deduction_setting" id="deduction_setting{{$user->id}}">
+                                                    @endif
+                                                    Deduction Setting
+
+                                                </div>
+                                                <div class="col-md-12 form-group">
+                                                    <h5>Payslip</h5>
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->payslip_filter_per_company == 'on')
+                                                            <input type="checkbox" name="payslip_filter_per_company" id="payslip_filter_per_company{{$user->id}}" value="{{ $user->user_privilege->masterfiles_early_cutoffs }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="payslip_filter_per_company" id="payslip_filter_per_company{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="payslip_filter_per_company" id="payslip_filter_per_company{{$user->id}}">
+                                                    @endif
+                                                    Filter per Company
+                                                </div>
+                                            </div>
+                                        </div>
                                     @endif
                                     
                                     {{-- Timekeeper Role --}}

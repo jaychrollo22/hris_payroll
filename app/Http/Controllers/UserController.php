@@ -235,6 +235,16 @@ class UserController extends Controller
                 $user_privilege->masterfiles_employee_allowances = $request->masterfiles_employee_allowances;
                 $user_privilege->masterfiles_employee_loans = $request->masterfiles_employee_loans;
                 $user_privilege->masterfiles_performance_plan_periods = $request->masterfiles_performance_plan_periods;
+                
+                $user_privilege->payroll_period = $request->payroll_period;
+                $user_privilege->payroll_payreg = $request->payroll_payreg;
+                $user_privilege->payroll_payreg_post = $request->payroll_payreg_post;
+                $user_privilege->payroll_payreg_unpost = $request->payroll_payreg_unpost;
+                $user_privilege->payslip_filter_per_company = $request->payslip_filter_per_company;
+                $user_privilege->payroll_contribution = $request->payroll_contribution;
+                $user_privilege->payroll_deduction = $request->payroll_deduction;
+                $user_privilege->allowance_setting = $request->allowance_setting;
+                $user_privilege->deduction_setting = $request->deduction_setting;
 
                 $user_privilege->save();
                 Alert::success('Successfully Updated')->persistent('Dismiss');
@@ -283,7 +293,17 @@ class UserController extends Controller
                 $new_user_privilege->masterfiles_employee_allowances = $request->masterfiles_employee_allowances;
                 $new_user_privilege->masterfiles_employee_loans = $request->masterfiles_employee_loans;
                 $new_user_privilege->masterfiles_performance_plan_periods = $request->masterfiles_performance_plan_periods;
-                
+
+                $user_privilege->payroll_period = $request->payroll_period;
+                $user_privilege->payroll_payreg = $request->payroll_payreg;
+                $user_privilege->payroll_payreg_post = $request->payroll_payreg_post;
+                $user_privilege->payroll_payreg_unpost = $request->payroll_payreg_unpost;
+                $user_privilege->payslip_filter_per_company = $request->payslip_filter_per_company;
+                $user_privilege->payroll_contribution = $request->payroll_contribution;
+                $user_privilege->payroll_deduction = $request->payroll_deduction;
+                $user_privilege->allowance_setting = $request->allowance_setting;
+                $user_privilege->deduction_setting = $request->deduction_setting;
+
                 $new_user_privilege->save();
                 Alert::success('Successfully Updated')->persistent('Dismiss');
                 return back();
