@@ -10,7 +10,7 @@
                     <p class="card-description">
                     <form method='get' onsubmit='show();' enctype="multipart/form-data">
                       <div class=row>
-                        <div class='col-md-4'>
+                        <div class='col-md-3'>
                           <div class="form-group">
                             <select data-placeholder="Select Payroll Period" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payroll_period' required>
                               <option value="">-- Select Payroll Period --</option>
@@ -20,34 +20,33 @@
                             </select>
                           </div>
                         </div>
-                      </div>
-                      <div class=row>
-                        <div class='col-md-4'>
-                          <div class="form-group">
-                            <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
-                              <option value="">-- Select Company --</option>
-                              @foreach($companies as $comp)
-                              <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
-                              @endforeach
-                            </select>
-                          </div>
-                        </div>
-                        <div class='col-md-3'>
-                          <div class="form-group">
-                            <select data-placeholder="Select Department" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='department'>
-                                <option value="">-- Select Department --</option>
-                                @foreach($departments as $dep)
-                                <option value="{{$dep->id}}" @if ($dep->id == $department) selected @endif>{{$dep->name}} - {{$dep->code}}</option>
+                        @if (checkUserPrivilege('payslip_filter_per_company',auth()->user()->id) == 'yes' )
+                          <div class='col-md-3'>
+                            <div class="form-group">
+                              <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
+                                <option value="">-- Select Company --</option>
+                                @foreach($companies as $comp)
+                                <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
                                 @endforeach
-                            </select>
+                              </select>
+                            </div>
                           </div>
-                        </div>
-                        <div class='col-md-4'>
+                          <div class='col-md-3'>
+                            <div class="form-group">
+                              <select data-placeholder="Select Department" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='department'>
+                                  <option value="">-- Select Department --</option>
+                                  @foreach($departments as $dep)
+                                  <option value="{{$dep->id}}" @if ($dep->id == $department) selected @endif>{{$dep->name}} - {{$dep->code}}</option>
+                                  @endforeach
+                              </select>
+                            </div>
+                          </div>
+                        @endif
+                        <div class='col-md-3'>
                           <button type="submit" class="btn btn-primary">Filter</button>
                           <a href="/pay-reg" class="btn btn-warning">Reset Filter</a>
                         </div>
                       </div>
-                      
                     </form>
                   </p>
                     

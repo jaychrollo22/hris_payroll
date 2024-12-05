@@ -686,24 +686,43 @@
             </a>
             <div class="collapse" id="payroll">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/payroll-periods') }}">Payroll Period</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/payroll-employee-contributions') }}">Payroll Contributions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('/employee-deduction') }}">Payroll Deductions</a>
-                    </li>
-                    <li class="nav-item"> 
-                        <a class="nav-link" href="{{ url('/allowances') }}">Allowance Settings</a>
-                    </li>
-                    <li class="nav-item"> 
-                        <a class="nav-link" href="{{ url('/deductions') }}">Deduction Settings</a>
-                    </li>
+                    @if (checkUserPrivilege('payroll_period',auth()->user()->id) == 'yes')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/payroll-periods') }}">Payroll Period</a>
+                        </li>
+                    @endif
+
+                    @if (checkUserPrivilege('payroll_payreg',auth()->user()->id) == 'yes' || 
+                        checkUserPrivilege('payroll_payreg_post',auth()->user()->id) == 'yes' || 
+                        checkUserPrivilege('payroll_payreg_unpost',auth()->user()->id) == 'yes')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a>
+                        </li>
+                    @endif
+
+                    @if (checkUserPrivilege('payroll_contribution',auth()->user()->id) == 'yes')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/payroll-employee-contributions') }}">Payroll Contributions</a>
+                        </li>
+                    @endif
+
+                    @if (checkUserPrivilege('payroll_deduction',auth()->user()->id) == 'yes')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/employee-deduction') }}">Payroll Deductions</a>
+                        </li>
+                    @endif
+
+                    @if (checkUserPrivilege('allowance_setting',auth()->user()->id) == 'yes')
+                        <li class="nav-item"> 
+                            <a class="nav-link" href="{{ url('/allowances') }}">Allowance Settings</a>
+                        </li>
+                    @endif
+
+                    @if (checkUserPrivilege('deduction_setting',auth()->user()->id) == 'yes')
+                        <li class="nav-item"> 
+                            <a class="nav-link" href="{{ url('/deductions') }}">Deduction Settings</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </li>
