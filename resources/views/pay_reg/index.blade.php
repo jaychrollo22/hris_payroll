@@ -14,14 +14,21 @@
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
                       Upload Payroll Register
                     </a>
-                    <a type="button" class="btn btn-outline-success btn-icon-text" href="{{ url('/payroll-attendances?payroll_period=' . $payroll_period . '&company=' . $company) }}"  target="_blank">
-                      <i class="ti-plus btn-icon-prepend"></i>                                                    
-                      Generate Payroll Attendances
-                    </a>
-                    <a type="button" class="btn btn-outline-danger btn-icon-text" href="{{ url('/payroll-salary-adjusments') }}" target="_blank">
-                      <i class="ti-plus btn-icon-prepend"></i>                                                    
-                      Salary Adjustments
-                    </a>
+
+                    @if (checkUserPrivilege('payroll_attendance',auth()->user()->id) == 'yes')
+                      <a type="button" class="btn btn-outline-success btn-icon-text" href="{{ url('/payroll-attendances?payroll_period=' . $payroll_period . '&company=' . $company) }}"  target="_blank">
+                        <i class="ti-plus btn-icon-prepend"></i>                                                    
+                        Generate Payroll Attendances
+                      </a>
+                    @endif
+
+                    @if (checkUserPrivilege('payroll_salary_adjustment',auth()->user()->id) == 'yes')
+                      <a type="button" class="btn btn-outline-danger btn-icon-text" href="{{ url('/payroll-salary-adjusments') }}" target="_blank">
+                        <i class="ti-plus btn-icon-prepend"></i>                                                    
+                        Salary Adjustments
+                      </a>
+                    @endif
+
                   </p>
                   <h4 class="card-title">Payroll Register <a href="/payreg-export?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}" title="Export" class="btn btn-outline-primary btn-icon-text btn-sm text-center"><i class="ti-arrow-down btn-icon-prepend"></i></a></h4>
                   <h4 class="card-title">Filter</h4>

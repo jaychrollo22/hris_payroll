@@ -240,6 +240,8 @@ class UserController extends Controller
                 $user_privilege->payroll_payreg = $request->payroll_payreg;
                 $user_privilege->payroll_payreg_post = $request->payroll_payreg_post;
                 $user_privilege->payroll_payreg_unpost = $request->payroll_payreg_unpost;
+                $user_privilege->payroll_attendance = $request->payroll_attendance;
+                $user_privilege->payroll_salary_adjustment = $request->payroll_salary_adjustment;
                 $user_privilege->payslip_filter_per_company = $request->payslip_filter_per_company;
                 $user_privilege->payroll_contribution = $request->payroll_contribution;
                 $user_privilege->payroll_deduction = $request->payroll_deduction;
@@ -298,6 +300,8 @@ class UserController extends Controller
                 $user_privilege->payroll_payreg = $request->payroll_payreg;
                 $user_privilege->payroll_payreg_post = $request->payroll_payreg_post;
                 $user_privilege->payroll_payreg_unpost = $request->payroll_payreg_unpost;
+                $user_privilege->payroll_attendance = $request->payroll_attendance;
+                $user_privilege->payroll_salary_adjustment = $request->payroll_salary_adjustment;
                 $user_privilege->payslip_filter_per_company = $request->payslip_filter_per_company;
                 $user_privilege->payroll_contribution = $request->payroll_contribution;
                 $user_privilege->payroll_deduction = $request->payroll_deduction;
