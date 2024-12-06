@@ -19,6 +19,8 @@ class AddPayrollPrivilegesToUserPrivilegesTable extends Migration
             $table->string('payroll_deduction',20)->nullable()->after('masterfiles_performance_plan_periods');
             $table->string('payroll_contribution',20)->nullable()->after('masterfiles_performance_plan_periods');
             $table->string('payslip_filter_per_company',20)->nullable()->after('masterfiles_performance_plan_periods');
+            $table->string('salary_adjustment',20)->nullable()->after('masterfiles_performance_plan_periods');
+            $table->string('payroll_salary_adjustment',20)->nullable()->after('masterfiles_performance_plan_periods');
             $table->string('payroll_payreg_unpost',20)->nullable()->after('masterfiles_performance_plan_periods');
             $table->string('payroll_payreg_post',20)->nullable()->after('masterfiles_performance_plan_periods');
             $table->string('payroll_payreg',20)->nullable()->after('masterfiles_performance_plan_periods');
@@ -39,6 +41,8 @@ class AddPayrollPrivilegesToUserPrivilegesTable extends Migration
             $table->dropColumn('payroll_deduction');
             $table->dropColumn('payroll_contribution');
             $table->dropColumn('payslip_filter_per_company');
+            $table->dropColumn('salary_adjustment');
+            $table->dropColumn('payroll_salary_adjustment');
             $table->dropColumn('payroll_payreg_unpost');
             $table->dropColumn('payroll_payreg_post');
             $table->dropColumn('payroll_payreg');

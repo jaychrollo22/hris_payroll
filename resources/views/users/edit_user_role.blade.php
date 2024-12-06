@@ -574,6 +574,7 @@
                                                     Payroll Register Post
                                                     <br>
                                                     <br>
+
                                                     @if($user->user_privilege)
                                                         @if($user->user_privilege->payroll_payreg_unpost == 'on')
                                                             <input type="checkbox" name="payroll_payreg_unpost" id="payroll_payreg_unpost{{$user->id}}" value="{{ $user->user_privilege->payroll_payreg_unpost }}" checked>
@@ -584,6 +585,32 @@
                                                         <input type="checkbox" name="payroll_payreg_unpost" id="payroll_payreg_unpost{{$user->id}}">
                                                     @endif
                                                     Payroll Register Unpost
+                                                    <br>
+                                                    <br>
+
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->payroll_attendance == 'on')
+                                                            <input type="checkbox" name="payroll_attendance" id="payroll_attendance{{$user->id}}" value="{{ $user->user_privilege->payroll_attendance }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="payroll_attendance" id="payroll_attendance{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="payroll_attendance" id="payroll_attendance{{$user->id}}">
+                                                    @endif
+                                                    Payroll Attendance
+                                                    <br>
+                                                    <br>
+
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->payroll_salary_adjustment == 'on')
+                                                            <input type="checkbox" name="payroll_salary_adjustment" id="payroll_salary_adjustment{{$user->id}}" value="{{ $user->user_privilege->payroll_salary_adjustment }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="payroll_salary_adjustment" id="payroll_salary_adjustment{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="payroll_salary_adjustment" id="payroll_salary_adjustment{{$user->id}}">
+                                                    @endif
+                                                    Payroll Salary Adjustment
                                                     <br>
                                                     <br>
 
