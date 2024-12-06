@@ -10,6 +10,7 @@ use App\Employee;
 use App\Company;
 use App\Department;
 use PDF;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PayrollPayslipController extends Controller
 {
@@ -84,8 +85,17 @@ class PayrollPayslipController extends Controller
 
     public function generate(PayrollRegister $payrollRegister)
     {
+        $authorize = true;
+        if(checkUserPrivilege('payslip_filter_per_company',auth()->user()->id) != 'yes'){
+            $authorize = auth()->user()->id == $payrollRegister->user_id ? true : false;
+        }
+
+        if(!$authorize){
+            Alert::warning('Warning : Permission Denied!')->persistent('Dismiss');
+            return back();
+        }
+
         $pdf = PDF::loadView('payroll_payslip.print', compact('payrollRegister'));
         return $pdf->stream('payroll_payslip.print');
-        // return $pdf->download('payroll_payslip.print_payslip');
     }    
 }
