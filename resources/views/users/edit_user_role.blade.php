@@ -588,6 +588,21 @@
                                                     <br>
                                                     <br>
 
+                                                    <div class="col-md-12 form-group">
+                                                        Payroll Register Company
+                                                        @php
+                                                            $user_allowed_payroll_companies = $user->user_allowed_payroll_company ? json_decode($user->user_allowed_payroll_company->company_ids) : [];
+                                                        @endphp
+                                                        <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payroll_company[]' multiple>
+                                                            <option value="">-- Select Payroll Register Company --</option>
+                                                                @foreach($companies as $company)
+                                                                <option value="{{$company->id}}" @if (in_array($company->id,$user_allowed_payroll_companies)) selected @endif>{{$company->company_name}}</option>
+                                                                @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <br>
+                                                    <br>
+
                                                     @if($user->user_privilege)
                                                         @if($user->user_privilege->payroll_attendance == 'on')
                                                             <input type="checkbox" name="payroll_attendance" id="payroll_attendance{{$user->id}}" value="{{ $user->user_privilege->payroll_attendance }}" checked>

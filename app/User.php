@@ -108,4 +108,9 @@ class User extends Authenticatable implements Auditable
     public function allowed_overtime() {
         return $this->hasOne(UserAllowedOvertime::class);
     }
+
+    public function user_allowed_payroll_company()
+    {
+        return $this->hasOne(UserAllowedPayrollCompany::class);
+    }    
 }
