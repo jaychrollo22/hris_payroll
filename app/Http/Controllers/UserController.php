@@ -5,6 +5,7 @@ use App\Bank;
 use App\User;
 use App\UserPrivilege;
 use App\UserAllowedCompany;
+use App\UserAllowedPayrollCompany;
 use App\UserAllowedProject;
 use App\UserAllowedLocation;
 
@@ -52,7 +53,7 @@ class UserController extends Controller
             }
             
             $users = User::select('id','name','email','status','role','updated_at')
-                            ->with('employee.company','user_allowed_company')
+                            ->with('employee.company','user_allowed_company','user_allowed_company')
                             ->whereHas('employee',function($q){
                                 $q->where('status','Active');
                             })
@@ -111,7 +112,7 @@ class UserController extends Controller
         $companies = Company::orderBy('company_name','ASC')->get();
         $projects = Project::orderBy('project_id','ASC')->get();
         $locations = Location::orderBy('location','ASC')->get();
-        $user = User::with('user_allowed_company','user_privilege')
+        $user = User::with('user_allowed_company','user_privilege','user_allowed_payroll_company')
                         ->where('id',$user->id)
                         ->first();
 
@@ -162,6 +163,22 @@ class UserController extends Controller
             }else{
                 $user_allowed_company = UserAllowedCompany::where('user_id',$user->id)->delete();
             }
+
+            if($request->payroll_company){
+                $user_allowed_payroll_company = UserAllowedPayrollCompany::where('user_id',$user->id)->first(); 
+                if($user_allowed_payroll_company){
+                    $user_allowed_payroll_company->company_ids = json_encode($request->payroll_company,true);
+                    $user_allowed_payroll_company->save();
+                }else{
+                    $new_user_allowed_payroll_company = new UserAllowedPayrollCompany;
+                    $new_user_allowed_payroll_company->user_id = $user->id;
+                    $new_user_allowed_payroll_company->company_ids = json_encode($request->payroll_company,true);
+                    $new_user_allowed_payroll_company->save();
+                }
+            }else{
+                $user_allowed_payroll_company = UserAllowedPayrollCompany::where('user_id',$user->id)->delete();
+            }
+
             if($request->location){
                 $user_allowed_location = UserAllowedLocation::where('user_id',$user->id)->first(); 
                 if($user_allowed_location){

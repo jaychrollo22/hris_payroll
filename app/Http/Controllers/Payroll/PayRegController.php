@@ -29,7 +29,7 @@ class PayRegController extends Controller
     public function index(Request $request)
     {
 
-        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
 
         $companies = Company::whereHas('employee_has_company')
                                 ->whereIn('id',$allowed_companies)
@@ -40,8 +40,6 @@ class PayRegController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $payroll_period = isset($request->payroll_period) ? $request->payroll_period : "";
-
-        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         
         $departments = [];
         
@@ -106,7 +104,7 @@ class PayRegController extends Controller
     public function generate(Request $request)
     {
         $payroll_period = PayrollPeriod::where('id',$request->payroll_period)->first();
-        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
         
         $employees = Employee::with('company','department')
                                         ->whereIn('company_id',$allowed_companies)

@@ -1,6 +1,7 @@
 <?php
 use App\ApplicantSystemNotification;
 use App\UserAllowedCompany;
+use App\UserAllowedPayrollCompany;
 use App\UserAllowedLocation;
 use App\UserAllowedProject;
 use App\UserPrivilege;
@@ -395,6 +396,17 @@ function getUserAllowedCompanies($user_id){
         return [];
     }
 }
+
+function getUserAllowedPayrollCompanies($user_id){
+    $user_allowed_payroll_companies = UserAllowedPayrollCompany::where('user_id',$user_id)->first();
+
+    if($user_allowed_payroll_companies){
+        return json_decode($user_allowed_payroll_companies->company_ids);
+    }else{
+        return [];
+    }
+}
+
 function getUserAllowedLocations($user_id){
     $user_allowed_locations = UserAllowedLocation::where('user_id',$user_id)->first();
 
