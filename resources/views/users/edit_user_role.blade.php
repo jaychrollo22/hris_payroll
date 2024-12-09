@@ -536,7 +536,7 @@
                                             <div class="row">
                                                 <div class="col-md-12 form-group">
                                                     <h5>Payroll</h5>
-                                                    @if($user->payroll_period)
+                                                    @if($user->user_privilege)
                                                         @if($user->user_privilege->payroll_period == 'on')
                                                             <input type="checkbox" name="payroll_period" id="payroll_period{{$user->id}}" value="{{ $user->user_privilege->payroll_period }}" checked>
                                                         @else
