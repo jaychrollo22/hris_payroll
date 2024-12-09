@@ -56,8 +56,14 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
 
         $schedule = $employee_allowance->schedule;
 
-        if($schedule == 'Bi-monthly' || $schedule == 'bi-monthly'){
-            $schedule = 'Every Cut-Off';
+        if($schedule == 'First Cut-Off'){
+            $schedule = '15';
+        }
+        else if($schedule == 'Second Cut-Off'){
+            $schedule = '30';
+        }
+        else if($schedule == 'Every Cut-Off'){
+            $schedule = 'Both';
         }
 
         $employee_name = $employee_allowance->employee ? $employee_allowance->employee->last_name . ', ' . $employee_allowance->employee->first_name . ' ' . $employee_allowance->employee->middle_name : "";
