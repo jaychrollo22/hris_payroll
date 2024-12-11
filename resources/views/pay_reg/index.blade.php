@@ -10,9 +10,9 @@
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
                       Generate Payroll Register
                     </button>
-                    <a type="button" class="btn btn-outline-warning btn-icon-text" data-toggle="modal">
+                    <a type="button" class="btn btn-outline-warning btn-icon-text" data-toggle="modal" data-target="#importPayrollRegister">
                       <i class="ti-plus btn-icon-prepend"></i>                                                    
-                      Upload Payroll Register
+                      Import Payroll Register
                     </a>
 
                     @if (checkUserPrivilege('payroll_attendance',auth()->user()->id) == 'yes')
@@ -250,7 +250,7 @@
         </div>
     </div>
 </div>
-
+@include('pay_reg.import')
 @include('pay_reg.generate_payroll_register') 
 
 @endsection
