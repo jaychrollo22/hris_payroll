@@ -136,7 +136,7 @@ class PayRegController extends Controller
                     $payroll_register->payroll_period_id = $payroll_period->id;
                     $payroll_register->user_id = $employee->user_id;
                     $payroll_register->bank_account = $employee->bank_account_number;
-                    $payroll_register->name = $employee->first_name . ' ' . $employee->last_name;
+                    $payroll_register->name = $employee->last_name . ', ' . $employee->first_name;
                     $payroll_register->position = $employee->position;
                     $payroll_register->employment_status = $employee->status;
                     $payroll_register->company =  $employee->company ? $employee->company->company_name : null;

@@ -901,14 +901,26 @@ class PayrollAttendanceController extends Controller
                     }
             
                     if ($check_if_early_cutoff) {
-                        // echo $check_if_early_cutoff;
+
+                        if($emp->work_description == 'Monthly'){ // If Monthly Employee Only
+                            $total_work_day++;
+                        }else{
+                            if($is_absent == 'Absent'){
+                                $total_absent++;
+                            }else{
+                                $total_work_day++;
+                            }
+                        }
+                        
+                    }else{
+                        if($is_absent == 'Absent'){
+                            $total_absent++;
+                        }else{
+                            $total_work_day++;
+                        }
                     }
 
-                    if($is_absent == 'Absent'){
-                        $total_absent++;
-                    }else{
-                        $total_work_day++;
-                    }
+                    
                 }
             } else {
                 $is_absent = '';
@@ -927,17 +939,24 @@ class PayrollAttendanceController extends Controller
                         $sl += 1;
                     }
 
-                    if($is_absent == 'Absent' && empty($if_leave)){
-                        $total_absent++;
+                    if ($check_if_early_cutoff) {
+                        if($emp->work_description == 'Monthly'){ // If Monthly Employee Only
+                            $total_work_day++;
+                        }else{
+                            if($is_absent == 'Absent'){
+                                $total_absent++;
+                            }else{
+                                $total_work_day++;
+                            }
+                        }
                     }else{
-                        $total_work_day++;
-                    }
+                        if($is_absent == 'Absent' && empty($if_leave)){
+                            $total_absent++;
+                        }else{
+                            $total_work_day++;
+                        }
+                    }   
                 }
-                if ($check_if_early_cutoff) {
-                    if ($employee_schedule) {
-                        // echo $check_if_early_cutoff;
-                    }
-                }   
             } 
               
         }  
