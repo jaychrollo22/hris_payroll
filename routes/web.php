@@ -443,7 +443,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('edit-performance-plan-period/{id}', 'PerformancePlanPeriodController@edit');
     Route::post('update-performance-plan-period/{id}', 'PerformancePlanPeriodController@update');
 
-
     //Payroll Period Period
     Route::post('store-payroll-period', 'Payroll\PayrollPeriodController@store');
     Route::get('payroll-periods', 'Payroll\PayrollPeriodController@index');
@@ -458,6 +457,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('generate-payroll-register', 'Payroll\PayRegController@generate');
 
     Route::post('add-payroll-remarks/{id}', 'Payroll\PayRegController@addPayrollRemarks');
+    Route::post('import-payroll-registers', 'Payroll\PayRegController@import');
     
 
     Route::get('payroll-employee-contributions', 'Payroll\PayrollEmployeeContributionController@index');

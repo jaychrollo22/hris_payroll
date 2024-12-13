@@ -19,6 +19,8 @@ use Excel;
 use App\Exports\PayrollRegisterExport;
 use Carbon\Carbon;
 
+use App\Imports\PayrollRegisterImport;
+
 class PayRegController extends Controller
 {
     /**
@@ -491,6 +493,130 @@ class PayRegController extends Controller
         return Excel::download(new PayrollRegisterExport($company,$department,$payroll_period), $company_code. ' Payroll Register Export '.$payroll_period_detail->payroll_name.'.xlsx');
     }
 
+
+
+    public function import(Request $request){
+        ini_set('memory_limit', '-1');
+        
+        $path = $request->file('file')->getRealPath();
+        $data = Excel::toArray(new PayrollRegisterImport, $request->file('file'));
+
+        if(count($data[0]) > 0)
+        {
+            $save_count = 0;
+            $not_save = [];
+            foreach($data[0] as $key => $value)
+            {
+                $payroll_period = PayrollPeriod::where('id',$value['payroll_period_id'])->first();
+
+                $payroll_register = PayrollRegister::where('user_id',$value['user_id'])
+                    ->where('payroll_period_id',$payroll_period->id)
+                    ->first();
+
+                if(!$payroll_register) $payroll_register = new PayrollRegister();
+
+                    if (isset($value['bank_account'])) $payroll_register->bank_account = $value['bank_account'];
+                    if (isset($value['name'])) $payroll_register->name = $value['name'];
+                    if (isset($value['position'])) $payroll_register->position = $value['position'];
+                    if (isset($value['employment_status'])) $payroll_register->employment_status = $value['employment_status'];
+                    if (isset($value['company'])) $payroll_register->company = $value['company'];
+                    if (isset($value['department'])) $payroll_register->department = $value['department'];
+                    if (isset($value['project'])) $payroll_register->project = $value['project'];
+                    
+                    if(isset($value['date_hired'])){
+                        $date_hired = $value['date_hired'];
+                        if($date_hired > 0){
+                            $convert_date = ($date_hired - 25569) * 86400;
+                            $payroll_register->date_hired = date('Y-m-d', $date_hired);
+                        }
+                    }
+
+                    if (isset($value['payroll_period_id'])) $payroll_register->payroll_period_id = $value['payroll_period_id'];
+                    if(isset($value['cut_from'])){
+                        $cut_from = $value['cut_from'];
+                        if($cut_from > 0){
+                            $convert_date = ($cut_from - 25569) * 86400;
+                            $payroll_register->cut_from = date('Y-m-d', $cut_from);
+                        }
+                    }
+
+                    if(isset($value['cut_to'])){
+                        $cut_to = $value['cut_to'];
+                        if($cut_to > 0){
+                            $convert_date = ($cut_to - 25569) * 86400;
+                            $payroll_register->cut_to = date('Y-m-d', $cut_to);
+                        }
+                    }
+
+                    if (isset($value['monthly_basic_pay'])) $payroll_register->monthly_basic_pay = $value['monthly_basic_pay'];
+                    if (isset($value['daily_rate'])) $payroll_register->daily_rate = $value['daily_rate'];
+                    if (isset($value['basic_pay'])) $payroll_register->basic_pay = $value['basic_pay'];
+                    if (isset($value['absences_amount'])) $payroll_register->absences_amount = $value['absences_amount'];
+                    if (isset($value['lates_amount'])) $payroll_register->lates_amount = $value['lates_amount'];
+                    if (isset($value['undertime_amount'])) $payroll_register->undertime_amount = $value['undertime_amount'];
+                    if (isset($value['salary_adjustment'])) $payroll_register->salary_adjustment = $value['salary_adjustment'];
+                    if (isset($value['overtime_pay'])) $payroll_register->overtime_pay = $value['overtime_pay'];
+                    if (isset($value['meal_allowance'])) $payroll_register->meal_allowance = $value['meal_allowance'];
+                    if (isset($value['salary_allowance'])) $payroll_register->salary_allowance = $value['salary_allowance'];
+                    if (isset($value['out_of_town_allowance'])) $payroll_register->out_of_town_allowance = $value['out_of_town_allowance'];
+                    if (isset($value['incentives_allowance'])) $payroll_register->incentives_allowance = $value['incentives_allowance'];
+                    if (isset($value['relocation_allowance'])) $payroll_register->relocation_allowance = $value['relocation_allowance'];
+                    if (isset($value['discretionary_allowance'])) $payroll_register->discretionary_allowance = $value['discretionary_allowance'];
+                    if (isset($value['transport_allowance'])) $payroll_register->transport_allowance = $value['transport_allowance'];
+                    if (isset($value['load_allowance'])) $payroll_register->load_allowance = $value['load_allowance'];
+                    if (isset($value['grosspay'])) $payroll_register->grosspay = $value['grosspay'];
+                    if (isset($value['total_taxable'])) $payroll_register->total_taxable = $value['total_taxable'];
+                    if (isset($value['minimum_wage'])) $payroll_register->minimum_wage = $value['minimum_wage'];
+                    if (isset($value['withholding_tax'])) $payroll_register->withholding_tax = $value['withholding_tax'];
+                    if (isset($value['sss_reg_ee_15'])) $payroll_register->sss_reg_ee_15 = $value['sss_reg_ee_15'];
+                    if (isset($value['sss_mpf_ee_15'])) $payroll_register->sss_mpf_ee_15 = $value['sss_mpf_ee_15'];
+                    if (isset($value['phic_ee_15'])) $payroll_register->phic_ee_15 = $value['phic_ee_15'];
+                    if (isset($value['hmdf_ee_15'])) $payroll_register->hmdf_ee_15 = $value['hmdf_ee_15'];
+                    if (isset($value['hdmf_salary_loan'])) $payroll_register->hdmf_salary_loan = $value['hdmf_salary_loan'];
+                    if (isset($value['hdmf_calamity_loan'])) $payroll_register->hdmf_calamity_loan = $value['hdmf_calamity_loan'];
+                    if (isset($value['sss_salary_loan'])) $payroll_register->sss_salary_loan = $value['sss_salary_loan'];
+                    if (isset($value['sss_calamity_loan'])) $payroll_register->sss_calamity_loan = $value['sss_calamity_loan'];
+                    if (isset($value['salary_deduction_taxable'])) $payroll_register->salary_deduction_taxable = $value['salary_deduction_taxable'];
+                    if (isset($value['salary_deduction_nontaxable'])) $payroll_register->salary_deduction_nontaxable = $value['salary_deduction_nontaxable'];
+                    if (isset($value['company_loan'])) $payroll_register->company_loan = $value['company_loan'];
+                    if (isset($value['omhas_loan'])) $payroll_register->omhas_loan = $value['omhas_loan'];
+                    if (isset($value['coop_regular_loan'])) $payroll_register->coop_regular_loan = $value['coop_regular_loan'];
+                    if (isset($value['coop_mescco'])) $payroll_register->coop_mescco = $value['coop_mescco'];
+                    if (isset($value['petty_cash_mescco'])) $payroll_register->petty_cash_mescco = $value['petty_cash_mescco'];
+                    if (isset($value['others'])) $payroll_register->others = $value['others'];
+                    if (isset($value['total_deduction'])) $payroll_register->total_deduction = $value['total_deduction'];
+                    if (isset($value['netpay'])) $payroll_register->netpay = $value['netpay'];
+                    if (isset($value['sss_reg_er_15'])) $payroll_register->sss_reg_er_15 = $value['sss_reg_er_15'];
+                    if (isset($value['sss_mpf_er_15'])) $payroll_register->sss_mpf_er_15 = $value['sss_mpf_er_15'];
+                    if (isset($value['sss_ec_15'])) $payroll_register->sss_ec_15 = $value['sss_ec_15'];
+                    if (isset($value['phic_er_15'])) $payroll_register->phic_er_15 = $value['phic_er_15'];
+                    if (isset($value['hdmf_er_15'])) $payroll_register->hdmf_er_15 = $value['hdmf_er_15'];
+                    if (isset($value['bank'])) $payroll_register->bank = $value['bank'];
+                    if (isset($value['status'])) $payroll_register->status = $value['status'];
+                    if (isset($value['remarks'])) $payroll_register->remarks = $value['remarks'];
+                    if (isset($value['status_last_payroll'])) $payroll_register->status_last_payroll = $value['status_last_payroll'];
+                    if (isset($value['sss_no'])) $payroll_register->sss_no = $value['sss_no'];
+                    if (isset($value['philhealth_no'])) $payroll_register->philhealth_no = $value['philhealth_no'];
+                    if (isset($value['pagibig_no'])) $payroll_register->pagibig_no = $value['pagibig_no'];
+                    if (isset($value['tin_no'])) $payroll_register->tin_no = $value['tin_no'];
+                    if (isset($value['bir_tagging'])) $payroll_register->bir_tagging = $value['bir_tagging'];
+                    if (isset($value['month_15'])) $payroll_register->month_15 = $value['month_15'];
+                    if (isset($value['month_30'])) $payroll_register->month_30 = $value['month_30'];
+                    if (isset($value['accumulated'])) $payroll_register->accumulated = $value['accumulated'];
+                    if (isset($value['number'])) $payroll_register->number = $value['number'];
+                    if (isset($value['posting_status'])) $payroll_register->posting_status = $value['posting_status'];
+                    if (isset($value['created_by'])) $payroll_register->created_by = $value['created_by'];
+
+                    $payroll_register->save();
+                    $save_count+=1;                                        
+            }
+
+            Alert::success('Successfully Import Payroll Registers (' . $save_count. ')')->persistent('Dismiss');
+
+            return redirect('pay-reg');
+        }
+    }
+    
     public function generateEmployeeContribution($payroll_register,$payment_schedule){
         PayrollEmployeeContribution::updateOrCreate(
             [
