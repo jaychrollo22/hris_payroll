@@ -114,6 +114,10 @@ class PayrollAttendanceController extends Controller
                             $payroll_attendance->daily_rate = $daily_rate; //Daily Rate Computation
                             $payroll_attendance->hourly_rate = $hourly_rate; //Hourly Rate Computation
                         }else{
+
+                            $daily_rate = $rate;
+                            $hourly_rate = $rate / 8; //Hourly Rate
+
                             $payroll_attendance->basic_pay =  ($rate * 313) / 12; //Basic Pay Computation
                             $payroll_attendance->daily_rate = $rate; //Daily Rate Computation
                             $payroll_attendance->hourly_rate = $rate / 8; //Hourly Rate Computation
