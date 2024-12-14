@@ -28,19 +28,19 @@
                                     <div class="row">
                                         <div class="col-lg-6 form-group">
                                             <label for="amount">Amount</label>
-                                            <input type="number" class="form-control form-control-sm" name="amount" id="amount" required min="1"
+                                            <input type="number" class="form-control form-control-sm" name="amount" id="amount" step="0.01" required min="1"
                                                 value="{{ $employee_deduction->amount }}" placeholder="0.00">
                                         </div>
                                         <div class="col-lg-6 form-group">
                                             <label for="amount">No. of years Deduction</label>
-                                            <input type="number" class="form-control form-control-sm" name="no_of_years_deduction" id="no_of_years_deduction" required min="1"
+                                            <input type="number" class="form-control form-control-sm" name="no_of_years_deduction" id="no_of_years_deduction" step="0.01" required min="1"
                                                 value="{{ $employee_deduction->no_of_years_deduction }}" placeholder="0.00">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-6 form-group">
                                             <label for="amortization">Amortization</label>
-                                            <input type="number" class="form-control form-control-sm" name="amortization" id="amortization" required min="1"
+                                            <input type="number" class="form-control form-control-sm" name="amortization" id="amortization" required step="0.01" min="1"
                                                 value="{{ $employee_deduction->amortization }}" placeholder="0.00">
                                         </div>
                                         <div class="col-lg-6 form-group">
