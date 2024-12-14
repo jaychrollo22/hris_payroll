@@ -103,14 +103,24 @@ class PayrollAttendanceController extends Controller
                     $payroll_attendance->overtime_approver = $employee->level2Approver->isNotEmpty() ? $employee->level2Approver[0]['approver_id'] : null;
                     
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
-                    $daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0;
 
-                    // $hourly_rate = $daily_rate / 8; //Basic Pay Computation
+
+                    $daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0;
                     $hourly_rate = $rate ? (($rate*12)/313)/8 : 0; //Hourly Rate
 
-                    $payroll_attendance->basic_pay =  $rate ? $rate / 2 : 0; //Basic Pay Computation
-                    $payroll_attendance->daily_rate = $daily_rate; //Daily Rate Computation
-                    $payroll_attendance->hourly_rate = $hourly_rate; //Hourly Rate Computation
+                    if($rate){
+                        if($employee->work_description == 'Monthly'){
+                            $payroll_attendance->basic_pay =  $rate ? $rate / 2 : 0; //Basic Pay Computation
+                            $payroll_attendance->daily_rate = $daily_rate; //Daily Rate Computation
+                            $payroll_attendance->hourly_rate = $hourly_rate; //Hourly Rate Computation
+                        }else{
+                            $payroll_attendance->basic_pay =  ($rate * 313) / 12; //Basic Pay Computation
+                            $payroll_attendance->daily_rate = $rate; //Daily Rate Computation
+                            $payroll_attendance->hourly_rate = $rate / 8; //Hourly Rate Computation
+                        }
+                    }
+
+
                     $payroll_attendance->no_of_days_worked = $employee_attendance['total_work_day']; // Total Worked Days
                     $payroll_attendance->days_worked_amount = $daily_rate * $employee_attendance['total_work_day']; // Amount of Total Work Days
 
