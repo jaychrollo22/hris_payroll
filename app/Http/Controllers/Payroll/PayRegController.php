@@ -145,16 +145,24 @@ class PayRegController extends Controller
                     $payroll_register->date_hired = $employee->original_date_hired;
                     $payroll_register->cut_from = $payroll_period->start_date;
                     $payroll_register->cut_to = $payroll_period->end_date;
-
-                    //IF Monthly
-                    $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
-                    // $rate = 610;
-                    $basic_pay = $rate ? $rate / 2 : 0; //Basic Pay Computation
                     
                     $absences_amount = getUserAbsencesAmount($employee->user_id,$payroll_period->id);
-
                     $no_of_days_worked = getUserNoOfDaysWorked($employee->user_id,$payroll_period->id);
 
+                    $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
+                    $basic_pay = 0;
+                    $daily_rate = 0;
+
+                    if($rate){
+                        if($employee->work_description == 'Monthly'){
+                            $basic_pay = $rate / 2;
+                            $daily_rate = ((($rate*12)/313)/8)*9.5;
+                        }else{
+                            $basic_pay = $rate * $no_of_days_worked;
+                            $daily_rate = $rate;
+                        }
+                    }
+                    
                     if($no_of_days_worked > 5){
 
                         $lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
@@ -273,7 +281,7 @@ class PayRegController extends Controller
 
 
                         $payroll_register->monthly_basic_pay = $rate ? $rate : 0;
-                        $payroll_register->daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0; //Daily Rate Computation
+                        $payroll_register->daily_rate = $daily_rate;
                         $payroll_register->basic_pay = $basic_pay;
                         
                         $payroll_register->absences_amount = $absences_amount;
