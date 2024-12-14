@@ -104,7 +104,9 @@ class PayrollAttendanceController extends Controller
                     
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
                     $daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0;
-                    $hourly_rate = $daily_rate / 8; //Basic Pay Computation
+
+                    // $hourly_rate = $daily_rate / 8; //Basic Pay Computation
+                    $hourly_rate = $rate ? (($rate*12)/313)/8 : 0; //Hourly Rate
 
                     $payroll_attendance->basic_pay =  $rate ? $rate / 2 : 0; //Basic Pay Computation
                     $payroll_attendance->daily_rate = $daily_rate; //Daily Rate Computation
