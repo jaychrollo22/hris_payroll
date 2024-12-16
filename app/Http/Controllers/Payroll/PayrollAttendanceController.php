@@ -309,24 +309,25 @@ class PayrollAttendanceController extends Controller
                     $schedule_time_in =  date('Y-m-d H:i:s',strtotime($schedule_time_in));
                     $schedule_time_in_final =  new DateTime($schedule_time_in);
                     
-
-                    if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
-                        if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
-                            //IF Attendance Exceed in Grace Period
-                            $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
-                            $new_time_in_within_grace = date('Y-m-d H:i:s',strtotime($new_schedule_time_in));
-                            $new_time_in_within_grace = new DateTime($new_time_in_within_grace);
-                            $late_diff = $new_time_in_within_grace->diff(new DateTime($time_in_data_full));
-                            $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
-                        }
-                    }else{ // Flexi Time Schedule
-                        if($time_in_data && $schedule_time_in){
-                            $time_in_data_full =  date('Y-m-d H:i:s',strtotime($time_in_data));
-                            $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
-                            $schedule_time_in_final =  new DateTime($schedule_time_in);
-                            if(date('Y-m-d H:i',strtotime($time_in_data_full)) > date('Y-m-d H:i',strtotime($schedule_time_in))){
-                                $late_diff = $schedule_time_in_final->diff(new DateTime($time_in_data_full));
+                    if($employee->level == '1' || $employee->level == '2'){ // Lates Only for Rank and File and Supervisor
+                        if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
+                            if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
+                                //IF Attendance Exceed in Grace Period
+                                $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
+                                $new_time_in_within_grace = date('Y-m-d H:i:s',strtotime($new_schedule_time_in));
+                                $new_time_in_within_grace = new DateTime($new_time_in_within_grace);
+                                $late_diff = $new_time_in_within_grace->diff(new DateTime($time_in_data_full));
                                 $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
+                            }
+                        }else{ // Flexi Time Schedule
+                            if($time_in_data && $schedule_time_in){
+                                $time_in_data_full =  date('Y-m-d H:i:s',strtotime($time_in_data));
+                                $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
+                                $schedule_time_in_final =  new DateTime($schedule_time_in);
+                                if(date('Y-m-d H:i',strtotime($time_in_data_full)) > date('Y-m-d H:i',strtotime($schedule_time_in))){
+                                    $late_diff = $schedule_time_in_final->diff(new DateTime($time_in_data_full));
+                                    $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
+                                }
                             }
                         }
                     }
@@ -617,26 +618,28 @@ class PayrollAttendanceController extends Controller
                 $schedule_time_in =  date('Y-m-d H:i:s',strtotime($schedule_time_in));
                 $schedule_time_in_final =  new DateTime($schedule_time_in);
                 $late_diff_hours = 0;
-
-                if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
-                    if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
-                        //IF Attendance Exceed in Grace Period
-                        $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
-                        $new_time_in_within_grace = date('Y-m-d H:i:s',strtotime($new_schedule_time_in));
-                        $new_time_in_within_grace = new DateTime($new_time_in_within_grace);
-                        $late_diff = $new_time_in_within_grace->diff(new DateTime($time_in_data_full));
-                        $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
-                    }
-                }else{ // Flexi Time Schedule
-                    if($time_in_data && $schedule_time_in){
-                        $time_in_data_full =  date('Y-m-d H:i:s',strtotime($time_in_data));
-                        $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
-                        $schedule_time_in_final =  new DateTime($schedule_time_in);
-                        if(date('Y-m-d H:i',strtotime($time_in_data_full)) > date('Y-m-d H:i',strtotime($schedule_time_in))){
-                            $late_diff = $schedule_time_in_final->diff(new DateTime($time_in_data_full));
+                
+                if($employee->level == '1' || $employee->level == '2'){ // Lates Only for Rank and File and Supervisor
+                    if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
+                        if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
+                            //IF Attendance Exceed in Grace Period
+                            $new_schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_from'];
+                            $new_time_in_within_grace = date('Y-m-d H:i:s',strtotime($new_schedule_time_in));
+                            $new_time_in_within_grace = new DateTime($new_time_in_within_grace);
+                            $late_diff = $new_time_in_within_grace->diff(new DateTime($time_in_data_full));
                             $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
                         }
-                    }
+                    }else{ // Flexi Time Schedule
+                        if($time_in_data && $schedule_time_in){
+                            $time_in_data_full =  date('Y-m-d H:i:s',strtotime($time_in_data));
+                            $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
+                            $schedule_time_in_final =  new DateTime($schedule_time_in);
+                            if(date('Y-m-d H:i',strtotime($time_in_data_full)) > date('Y-m-d H:i',strtotime($schedule_time_in))){
+                                $late_diff = $schedule_time_in_final->diff(new DateTime($time_in_data_full));
+                                $late_diff_hours = round($late_diff->s / 3600 + $late_diff->i / 60 + $late_diff->h + $late_diff->days * 24, 2);
+                            }
+                        }
+                    } 
                 }
                 
                 $overtime = 0;
