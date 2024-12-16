@@ -919,7 +919,19 @@ class PayrollAttendanceController extends Controller
                     if ($check_if_early_cutoff) {
 
                         if($emp->work_description == 'Monthly'){ // If Monthly Employee Only
-                            $total_work_day++;
+
+                            if($if_leave){
+                                if($if_leave == 'VL Without-Pay'){
+                                    $total_absent += 1;
+                                }
+                                else if($if_leave == 'SL Without-Pay'){
+                                    $total_absent += 1;
+                                }
+                            }else{
+                                $total_work_day++;
+                            }
+
+                           
                         }else{
                             if($is_absent == 'Absent'){
                                 $total_absent++;
@@ -957,7 +969,16 @@ class PayrollAttendanceController extends Controller
 
                     if ($check_if_early_cutoff) {
                         if($emp->work_description == 'Monthly'){ // If Monthly Employee Only
-                            $total_work_day++;
+                            if($if_leave){
+                                if($if_leave == 'VL Without-Pay'){
+                                    $total_absent += 1;
+                                }
+                                else if($if_leave == 'SL Without-Pay'){
+                                    $total_absent += 1;
+                                }
+                            }else{
+                                $total_work_day++;
+                            }
                         }else{
                             if($is_absent == 'Absent'){
                                 $total_absent++;
