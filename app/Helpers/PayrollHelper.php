@@ -9,28 +9,29 @@ use App\PagibigMatrixContribution;
 use App\PhicMatrixContribution;
 use App\PayrollRegister;
 
-function getUserWitholdingTaxAmount($user_id,$basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,
-    $sss_reg_ee,$sss_mpf_ee,$phic_ee,$hdmf_ee,$salary_deduction_taxable){
+function getUserWitholdingTaxAmount($user_id,$total_taxable){
     $user = Employee::where('user_id',$user_id)
         ->first();
-    
-
-    $total_taxable = ($basic_pay - $absences_amount - $lates_amount - $undertime_amount + $salary_adjustment + $ot_amount - $sss_reg_ee - $sss_mpf_ee - $phic_ee - $hdmf_ee - $salary_deduction_taxable);
     $witholding_tax = 0;
 
     if ($user->tax_application === "Non-Minimum") {
         if ($total_taxable <= 10417) {
-            $witholding_tax = 0;
-        } elseif ($total_taxable > 10417 && $total_taxable <= 16666.67) {
-            $witholding_tax = ($total_taxable - 10417) * 0.15;
-        } elseif ($total_taxable > 16666.67 && $total_taxable <= 33333.33) {
-            $witholding_tax = ($total_taxable - 16667) * 0.2 + 937.5;
-        } elseif ($total_taxable > 33333.33 && $total_taxable <= 83333.33) {
-            $witholding_tax = ($total_taxable - 33333.33) * 0.25 + 4270.7;
-        } elseif ($total_taxable > 83333.33 && $total_taxable <= 333333.33) {
-            $witholding_tax = ($total_taxable - 83333.33) * 0.3 + 16770.7;
-        } elseif ($total_taxable > 333333.33) {
-            $witholding_tax = ($total_taxable - 333333.33) * 0.35 + 91770.7;
+            $witholding_tax += 0;
+        } 
+        if ($total_taxable > 10417 && $total_taxable <= 16666.67) {
+            $witholding_tax += (($total_taxable - 10417) * 0.15 + 0);
+        } 
+        if ($total_taxable > 16666.67 && $total_taxable <= 33333.33) {
+            $witholding_tax += (($total_taxable - 16667) * 0.2 + 937.5);
+        } 
+        if ($total_taxable > 33333.33 && $total_taxable <= 83333.33) {
+            $witholding_tax += (($total_taxable - 33333.33) * 0.25 + 4270.7);
+        } 
+        if ($total_taxable > 83333.33 && $total_taxable <= 333333.33) {
+            $witholding_tax += (($total_taxable - 83333.33) * 0.3 + 16770.7);
+        } 
+        if ($total_taxable > 333333.33) {
+            $witholding_tax += (($total_taxable - 333333.33) * 0.35 + 91770.7);
         }
     }
 
