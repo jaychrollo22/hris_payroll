@@ -309,7 +309,7 @@ class PayrollAttendanceController extends Controller
                     $schedule_time_in =  date('Y-m-d H:i:s',strtotime($schedule_time_in));
                     $schedule_time_in_final =  new DateTime($schedule_time_in);
                     
-                    if($employee->level == '1' || $employee->level == '2'){ // Lates Only for Rank and File and Supervisor
+                    if($emp->level == '1' || $emp->level == '2'){ // Lates Only for Rank and File and Supervisor
                         if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
                             if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
                                 //IF Attendance Exceed in Grace Period
@@ -619,7 +619,7 @@ class PayrollAttendanceController extends Controller
                 $schedule_time_in_final =  new DateTime($schedule_time_in);
                 $late_diff_hours = 0;
                 
-                if($employee->level == '1' || $employee->level == '2'){ // Lates Only for Rank and File and Supervisor
+                if($emp->level == '1' || $emp->level == '2'){ // Lates Only for Rank and File and Supervisor
                     if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
                         if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
                             //IF Attendance Exceed in Grace Period
