@@ -36,6 +36,7 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'USER ID',
+            'NAME',
             'PARTICULAR',
             'DESCRIPTION',
             'APPLICATION',
@@ -43,6 +44,7 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
             'CREDIT SCHEDULE',
             'AMOUNT',
             'END DATE',
+            'IS TAXABLE',
         ];
     }
 
@@ -50,12 +52,18 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
     {
         $employee_number = $employee_allowance->employee ? $employee_allowance->employee->employee_number : "";
         $user_id = $employee_allowance->employee ? $employee_allowance->employee->user_id : "";
-        $particular = $employee_allowance->allowance ? $employee_allowance->allowance->name : "";
+        $particular = $employee_allowance->allowance ? $employee_allowance->allowance->id : "";
 
         $schedule = $employee_allowance->schedule;
 
-        if($schedule == 'Bi-monthly' || $schedule == 'bi-monthly'){
-            $schedule = 'Every Cut-Off';
+        if($schedule == 'First Cut-Off'){
+            $schedule = '15';
+        }
+        else if($schedule == 'Second Cut-Off'){
+            $schedule = '30';
+        }
+        else if($schedule == 'Every Cut-Off'){
+            $schedule = 'Both';
         }
 
         $employee_name = $employee_allowance->employee ? $employee_allowance->employee->last_name . ', ' . $employee_allowance->employee->first_name . ' ' . $employee_allowance->employee->middle_name : "";
@@ -82,14 +90,16 @@ class EmployeeAllowanceExport implements FromQuery, WithHeadings, WithMapping
         }
 
         return [
-            $employee_number,
+            $user_id,
+            $employee_name,
             $particular,
             $employee_allowance->description,
             $employee_allowance->application,
             $employee_allowance->type,
             $schedule,
             $employee_allowance->allowance_amount,
-            $employee_allowance->end_date
+            $employee_allowance->end_date,
+            $employee_allowance->is_taxable
         ];
     }
 

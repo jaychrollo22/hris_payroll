@@ -498,7 +498,6 @@
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/holidays') }}">Holidays</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/schedules') }}">Schedules</a></li>
-                                <li class="nav-item"> <a class="nav-link" href="{{ url('/allowances') }}">Allowances</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/incentives') }}">Incentives</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/handbooks') }}">Handbook</a></li>
                                 <li class="nav-item"> <a class="nav-link" href="{{ url('/leave-settings') }}">Leave Type</a></li>
@@ -670,6 +669,64 @@
                 </a>
             </li>
         @endif
+
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url('/payslip') }}" onclick='show()'>
+                <i class="ti-calendar menu-icon"></i>
+                <span class="menu-title">Payslip</span>
+            </a>
+        </li>
+
+        {{-- @if (checkUserPrivilege('masterfiles_early_cutoffs',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_cost_centers',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_companies',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_locations',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_departments',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes') --}}
+        <li class="nav-item @if ($header == 'payroll') active @endif">
+            <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
+                <i class="icon-align-center menu-icon"></i>
+                <span class="menu-title">Payroll</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="payroll">
+                <ul class="nav flex-column sub-menu">
+                    @if (checkUserPrivilege('payroll_period',auth()->user()->id) == 'yes')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/payroll-periods') }}">Payroll Period</a>
+                        </li>
+                    @endif
+
+                    @if (checkUserPrivilege('payroll_payreg',auth()->user()->id) == 'yes' || 
+                        checkUserPrivilege('payroll_payreg_post',auth()->user()->id) == 'yes' || 
+                        checkUserPrivilege('payroll_payreg_unpost',auth()->user()->id) == 'yes')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/pay-reg') }}">Payroll Register</a>
+                        </li>
+                    @endif
+
+                    @if (checkUserPrivilege('payroll_contribution',auth()->user()->id) == 'yes')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/payroll-employee-contributions') }}">Payroll Contributions</a>
+                        </li>
+                    @endif
+
+                    @if (checkUserPrivilege('payroll_deduction',auth()->user()->id) == 'yes')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/employee-deduction') }}">Payroll Deductions</a>
+                        </li>
+                    @endif
+
+                    @if (checkUserPrivilege('allowance_setting',auth()->user()->id) == 'yes')
+                        <li class="nav-item"> 
+                            <a class="nav-link" href="{{ url('/allowances') }}">Allowance Settings</a>
+                        </li>
+                    @endif
+
+                    @if (checkUserPrivilege('deduction_setting',auth()->user()->id) == 'yes')
+                        <li class="nav-item"> 
+                            <a class="nav-link" href="{{ url('/deductions') }}">Deduction Settings</a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+        </li>
+
         </ul>
         </nav>
         <!-- partial -->
@@ -777,6 +834,14 @@
 
             $('#table-holiday').DataTable({
                 "order": [[0, 'desc']] // Replace '0' with the index of the column you want to sort by
+            });
+
+            $('#table-payroll').DataTable({
+                "order": [[0, 'desc']] // Replace '0' with the index of the column you want to sort by
+            });
+
+            $('#table-payroll-attendance').DataTable({
+                "order": [[1, 'desc']] // Replace '0' with the index of the column you want to sort by
             });
 
             $('.tablewithSearch').DataTable({

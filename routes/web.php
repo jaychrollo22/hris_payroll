@@ -13,6 +13,7 @@
 */
 use App\HikAttLog2;
 
+
 // Route::get('qr/{employee_id}', 'QrCodeController@viewQrCode');
 Route::get('qr/{employee_id}', 'QrCodeController@viewDecyptQrCode');
 
@@ -41,7 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
     //admin
 
     Route::get('attendances', 'AttendanceController@index');
-
+    Route::get('attendances-export', 'AttendanceController@export');
 
     Route::get('get-attendance-bio', 'AttendanceController@get_attendances');
 
@@ -186,6 +187,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('activate-allowance/{id}', 'AllowanceController@activate_allowance');
     Route::post('edit-allowance/{id}', 'AllowanceController@edit_allowance');
 
+    //Deductions
+    Route::get('deductions', 'DeductionController@index');
+    Route::post('new-deduction', 'DeductionController@store');
+    Route::get('disable-deduction/{id}', 'DeductionController@destroy');
+    Route::post('edit-deduction/{id}', 'DeductionController@update');
+
     // Incentives
     Route::get('incentives', 'IncentiveController@index');
     Route::post('new-incentive', 'IncentiveController@store');
@@ -276,6 +283,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('disableEmp-allowance/{id}', 'EmployeeAllowanceController@disable');
     Route::get('employee-allowance-export', 'EmployeeAllowanceController@export');
     Route::post('import-employee-allowance', 'EmployeeAllowanceController@import');
+
+    // Employee Deduction
+    Route::get('employee-deduction', 'EmployeeDeductionController@index');
+    Route::post('new-employee-deduction', 'EmployeeDeductionController@store');
+    Route::post('update-employee-deduction/{id}', 'EmployeeDeductionController@update');
+    Route::get('edit-employee-deduction/{id}', 'EmployeeDeductionController@edit');
+    Route::get('delete-employee-deduction/{id}', 'EmployeeDeductionController@delete');
+    Route::get('disableEmp-deduction/{id}', 'EmployeeDeductionController@disable');
+    Route::get('employee-deduction-export', 'EmployeeDeductionController@export');
+    Route::post('import-employee-deduction', 'EmployeeDeductionController@import');
 
     // Employee Incentive
     Route::get('employee-incentive', 'EmployeeIncentiveController@index');
@@ -425,10 +442,79 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('performance-plan-periods', 'PerformancePlanPeriodController@index');
     Route::get('edit-performance-plan-period/{id}', 'PerformancePlanPeriodController@edit');
     Route::post('update-performance-plan-period/{id}', 'PerformancePlanPeriodController@update');
+
+    //Payroll Period Period
+    Route::post('store-payroll-period', 'Payroll\PayrollPeriodController@store');
+    Route::get('payroll-periods', 'Payroll\PayrollPeriodController@index');
+    Route::get('edit-payroll-period/{id}', 'Payroll\PayrollPeriodController@edit');
+    Route::post('update-payroll-period/{id}', 'Payroll\PayrollPeriodController@update');
+    Route::get('delete-payroll-period/{id}', 'Payroll\PayrollPeriodController@destroy');
+
+    //Pay Reg
+    Route::get('pay-reg', 'Payroll\PayRegController@index');
+    Route::get('payreg-export', 'Payroll\PayRegController@export');
+    Route::get('payreg-post', 'Payroll\PayRegController@post');
+    Route::post('generate-payroll-register', 'Payroll\PayRegController@generate');
+
+    Route::post('add-payroll-remarks/{id}', 'Payroll\PayRegController@addPayrollRemarks');
+    Route::post('import-payroll-registers', 'Payroll\PayRegController@import');
+    
+
+    Route::get('payroll-employee-contributions', 'Payroll\PayrollEmployeeContributionController@index');
+    Route::post('store-payroll-employee-contribution', 'Payroll\PayrollEmployeeContributionController@store');
+    Route::post('update-payroll-employee-contribution/{id}', 'Payroll\PayrollEmployeeContributionController@update');
+    Route::post('import-payroll-employee-contribution', 'Payroll\PayrollEmployeeContributionController@import');
+    Route::get('payroll-employee-contributions-export', 'Payroll\PayrollEmployeeContributionController@export');
+
+    Route::get('payroll-attendances', 'Payroll\PayrollAttendanceController@index');
+    Route::post('generate-payroll-attendance', 'Payroll\PayrollAttendanceController@generate');
+    Route::post('update-payroll-attendance/{id}', 'Payroll\PayrollAttendanceController@update');
+    Route::get('payroll-attendances-export', 'Payroll\PayrollAttendanceController@export');
+    Route::post('import-payroll-attendance', 'Payroll\PayrollAttendanceController@import');
+
+    //Payslip
+    Route::get('payslip', 'Payroll\PayrollPayslipController@index');
+    Route::get('payslip-print/{payrollRegister}', 'Payroll\PayrollPayslipController@generate');
+    
 });
 Route::post('new-employee', 'EmployeeController@new');
 Route::post('upload-employee', 'EmployeeController@upload');
 Route::post('upload-employee-rate', 'EmployeeController@reverseRate');
+
+Route::get('payroll-salary-adjusments', 'PayrollSalaryAdjustmentController@index');
+Route::post('new-payroll-salary-adjustment', 'PayrollSalaryAdjustmentController@store');
+Route::post('edit-payroll-salary-adjustment/{id}', 'PayrollSalaryAdjustmentController@update');
+Route::get('delete-payroll-salary-adjustment/{id}', 'PayrollSalaryAdjustmentController@destroy');
+Route::get('payroll-salary-adjusments-export', 'PayrollSalaryAdjustmentController@export');
+Route::post('import-payroll-salary-adjusments', 'PayrollSalaryAdjustmentController@import');
+
+Route::get('payroll-overtime-adjustments', 'PayrollOvertimeAdjustmentController@index');
+Route::post('new-payroll-overtime-adjustment', 'PayrollOvertimeAdjustmentController@store');
+Route::post('edit-payroll-overtime-adjustment/{id}', 'PayrollOvertimeAdjustmentController@update');
+Route::get('delete-payroll-overtime-adjustment/{id}', 'PayrollOvertimeAdjustmentController@destroy');
+Route::get('payroll-overtime-adjustments-export', 'PayrollOvertimeAdjustmentController@export');
+Route::post('import-payroll-overtime-adjusments', 'PayrollOvertimeAdjustmentController@import');
+
+Route::get('sss-matrix-contributions', 'SssMatrixContributionController@index');
+Route::post('new-sss-matrix-contribution', 'SssMatrixContributionController@store');
+Route::post('edit-sss-matrix-contribution/{id}', 'SssMatrixContributionController@update');
+Route::get('delete-sss-matrix-contribution/{id}', 'SssMatrixContributionController@destroy');
+Route::get('sss-matrix-contributions-export', 'SssMatrixContributionController@export');
+Route::post('import-sss-matrix-contributions', 'SssMatrixContributionController@import');
+
+Route::get('phic-matrix-contributions', 'PhicMatrixContributionController@index');
+Route::post('new-phic-matrix-contribution', 'PhicMatrixContributionController@store');
+Route::post('edit-phic-matrix-contribution/{id}', 'PhicMatrixContributionController@update');
+Route::get('delete-phic-matrix-contribution/{id}', 'PhicMatrixContributionController@destroy');
+Route::get('phic-matrix-contributions-export', 'PhicMatrixContributionController@export');
+Route::post('import-phic-matrix-contributions', 'PhicMatrixContributionController@import');
+
+Route::get('pagibig-matrix-contributions', 'PagibigMatrixContributionController@index');
+Route::post('new-pagibig-matrix-contribution', 'PagibigMatrixContributionController@store');
+Route::post('edit-pagibig-matrix-contribution/{id}', 'PagibigMatrixContributionController@update');
+Route::get('delete-pagibig-matrix-contribution/{id}', 'PagibigMatrixContributionController@destroy');
+Route::get('pagibig-matrix-contributions-export', 'PagibigMatrixContributionController@export');
+Route::post('import-pagibig-matrix-contributions', 'PagibigMatrixContributionController@import');
 
 Route::get('hik-logs', function(){
     return HikAttLog2::orderBy('authDate')->get()->take(5);

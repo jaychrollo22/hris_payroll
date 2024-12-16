@@ -8,7 +8,7 @@
           <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Attendances</h4>
+                <h4 class="card-title">Attendances <a href="/attendances-export?from={{$from_date}}&to={{$to_date}}" title="Export" class="btn btn-outline-primary btn-icon-text btn-sm text-center"><i class="ti-arrow-down btn-icon-prepend"></i></a></h4>
                 <p class="card-description">
                   <form method='get' onsubmit='show();'  enctype="multipart/form-data">
                   <div class=row>

@@ -24,7 +24,7 @@
 											</select>
 				
 										</div>
-										<div class="col-lg-6 form-group">
+										{{-- <div class="col-lg-6 form-group">
 											<label for="employee">Employee</label>
 											<select data-placeholder="Select Employee" class="form-control form-control-sm required js-example-basic-single "
 												style='width:100%;' name='user_id' disabled>
@@ -34,7 +34,7 @@
 														{{ $employee->last_name . ', ' . $employee->first_name . ' ' . $employee->middle_name }}</option>
 												@endforeach
 											</select>
-										</div>
+										</div> --}}
 									</div>
 									<div class="row">
 										<div class="col-lg-6 form-group">
@@ -66,7 +66,7 @@
 											<select name="schedule" id="schedule" class="form-control form-control-sm">
 												<option value="">Choose Credit Schedule</option>
 												<option value="First Cut-Off" {{ $employee_allowance->schedule == 'First Cut-Off' ? 'selected' : '' }}>First Cut-Off</option>
-												<option value="Last Cut-Off" {{ $employee_allowance->schedule == 'Last Cut-Off' ? 'selected' : '' }}>Last Cut-Off</option>
+												<option value="Second Cut-Off" {{ $employee_allowance->schedule == 'Second Cut-Off' ? 'selected' : '' }}>Second Cut-Off</option>
 												<option value="Every Cut-Off" {{ $employee_allowance->schedule == 'Every Cut-Off' ? 'selected' : '' }}>Every Cut-Off</option>
 											</select>
 										</div>
@@ -77,12 +77,41 @@
 												value="{{ $employee_allowance->allowance_amount }}" placeholder="0.00">
 										</div>
 
-										
-										
+										{{-- <div class="col-lg-6 form-group">
+											<label for="percentage">Percentage</label>
+											<input type="number" class="form-control form-control-sm" name="percentage" id="percentage" step="0.01" placeholder="0.00"
+												value="{{ $employee_allowance->percentage }}" placeholder="0">
+										</div> --}}
+
+										{{-- <div class="col-lg-6 form-group">
+											<label for="end_date">Effective Date</label>
+											<input type="date" class="form-control form-control-sm" name="effective_date" id="effective_date"
+												value="{{ $employee_allowance->effective_date }}">
+										</div> --}}
+
 										<div class="col-lg-6 form-group">
 											<label for="end_date">End Date</label>
 											<input type="date" class="form-control form-control-sm" name="end_date" id="end_date"
 												value="{{ $employee_allowance->end_date }}">
+										</div>
+{{-- 
+										<div class="col-lg-6 form-group">
+											<label for="frequency">Frequency</label>
+											<select id="frequency" class="form-control form-control-sm" name="frequency">
+												<option value="">Choose Frequency</option>
+												<option value="monthly" {{ $employee_allowance->frequency == 'monthly' ? 'selected' : '' }}>Monthly</option>
+												<option value="quarterly" {{ $employee_allowance->frequency == 'quarterly' ? 'selected' : '' }}>Quarterly</option>
+												<option value="annually" {{ $employee_allowance->frequency == 'annually' ? 'selected' : '' }}>Annually</option>
+											</select>
+										</div> --}}
+				
+										<div class="col-lg-6 form-group">
+											<label for="is_taxable">Taxable</label>
+											<select id="is_taxable" class="form-control form-control-sm" name="is_taxable">
+												<option value="" disabled>Choose Type</option>
+												<option value="1" {{ $employee_allowance->is_taxable == '1' ? 'selected' : '' }}>Yes</option>
+												<option value="0" {{ $employee_allowance->is_taxable == '0' ? 'selected' : '' }}>No</option>
+											</select>
 										</div>
 									</div>
 								</div>

@@ -84,6 +84,8 @@ class EmployeeAllowanceController extends Controller
             'allowance_type' => 'required',
             'user_id' => 'required',
             'amount' => 'required', 'min:1',
+            'effective_date' => 'required',
+            'is_taxable' => 'required'
         ]);
 
         $employeeAllowances = new EmployeeAllowance;
@@ -96,6 +98,10 @@ class EmployeeAllowanceController extends Controller
         $employeeAllowances->allowance_amount = $request->amount;
         $employeeAllowances->end_date = $request->end_date;
         $employeeAllowances->status = 'Active';
+        // $employeeAllowances->percentage = $request->percentage;
+        // $employeeAllowances->effective_date = $request->effective_date;
+        // $employeeAllowances->frequency = $request->frequency;
+        $employeeAllowances->is_taxable = $request->is_taxable;
         $employeeAllowances->save();
 
         Alert::success('Successfully Store')->persistent('Dismiss');
@@ -119,6 +125,10 @@ class EmployeeAllowanceController extends Controller
         $employeeAllowances->allowance_amount = $request->amount;
         $employeeAllowances->end_date = $request->end_date;
         $employeeAllowances->status = 'Active';
+        // $employeeAllowances->percentage = $request->percentage;
+        // $employeeAllowances->effective_date = $request->effective_date;
+        // $employeeAllowances->frequency = $request->frequency;
+        $employeeAllowances->is_taxable = $request->is_taxable;
         $employeeAllowances->save();
 
         Alert::success('Successfully Updated')->persistent('Dismiss');
@@ -224,10 +234,37 @@ class EmployeeAllowanceController extends Controller
                         $employee_allowance->type = $value['type'];
                     }
                     if(isset($value['credit_schedule'])){
-                        $employee_allowance->schedule = $value['credit_schedule'];
+
+                        $credit_schedule = '';
+                      
+                        if($value['credit_schedule'] == '15'){
+                            $credit_schedule = 'First Cut-Off';
+                        }
+                        if($value['credit_schedule'] == '30'){
+                            $credit_schedule = 'Second Cut-Off';
+                        }
+                        if($value['credit_schedule'] == 'Both'){
+                            $credit_schedule = 'Every Cut-Off';
+                        }
+                        
+
+                        $employee_allowance->schedule = $credit_schedule;
                     }
                     if(isset($value['amount'])){
                         $employee_allowance->allowance_amount = $value['amount'];
+                    }
+                    // if(isset($value['frequency'])){
+                    //     $employee_allowance->frequency = $value['frequency'];
+                    // }
+                    if(isset($value['is_taxable'])){
+                        $employee_allowance->is_taxable = $value['is_taxable'];
+                    }
+                    if(isset($value['effective_date'])){
+                        $effective_date = $value['effective_date'];
+                        if($effective_date > 0){
+                            $convert_date = ($effective_date - 25569) * 86400;
+                            $employee_allowance->effective_date = date('Y-m-d', $convert_date);
+                        }
                     }
                     if(isset($value['end_date'])){
                         $end_date = $value['end_date'];
@@ -235,6 +272,9 @@ class EmployeeAllowanceController extends Controller
                             $convert_date = ($end_date - 25569) * 86400;
                             $employee_allowance->end_date = date('Y-m-d', $convert_date);
                         }
+                    }
+                    if(isset($value['is_taxable'])){
+                        $employee_allowance->is_taxable = $value['is_taxable'];
                     }
                     $employee_allowance->save();
                     $save_count+=1;
@@ -245,9 +285,32 @@ class EmployeeAllowanceController extends Controller
                     $newEmployeeAllowance->description = $value['description'];
                     $newEmployeeAllowance->application = $value['application'];
                     $newEmployeeAllowance->type = $value['type'];
-                    $newEmployeeAllowance->schedule =$value['credit_schedule'];
+
+                    $credit_schedule = '';
+                    if(isset($value['credit_schedule'])){
+                        if($value['credit_schedule'] == '15'){
+                            $credit_schedule = 'First Cut-Off';
+                        }
+                        if($value['credit_schedule'] == '30'){
+                            $credit_schedule = 'Second Cut-Off';
+                        }
+                        if($value['credit_schedule'] == 'Both'){
+                            $credit_schedule = 'Every Cut-Off';
+                        }
+                    }
+
+                    $newEmployeeAllowance->schedule = $credit_schedule;
                     $newEmployeeAllowance->allowance_amount = $value['amount'];
-                
+                    // $newEmployeeAllowance->frequency = $value['frequency'];
+                    $newEmployeeAllowance->is_taxable = $value['is_taxable'];
+
+                    if(isset($value['effective_date'])){
+                        $effective_date = $value['effective_date'];
+                        if($effective_date > 0){
+                            $convert_date = ($effective_date - 25569) * 86400;
+                            $newEmployeeAllowance->effective_date =date('Y-m-d', $convert_date);
+                        }
+                    }
                     if(isset($value['end_date'])){
                         $end_date = $value['end_date'];
                         if($end_date > 0){
