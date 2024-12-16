@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Employee;
 use App\Attendance;
+use App\FixedAttendance;
 use App\iclockterminal_mysql;
 use App\iclocktransactions_mysql;
 
@@ -75,6 +76,16 @@ class AutoGetAttendance extends Command
                         $attendance->save();
                         $count++; 
                     }
+
+                    $fixed_attend = FixedAttendance::where('employee_code',$att->emp_code)->whereDate('time_in',date('Y-m-d', strtotime($att->punch_time)))->first();
+                    if($fixed_attend == null)
+                    {
+                        $fixed_attendance = new FixedAttendance;
+                        $fixed_attendance->employee_code  = $att->emp_code;   
+                        $fixed_attendance->time_in = date('Y-m-d H:i:s',strtotime($att->punch_time));
+                        $fixed_attendance->device_in = $att->terminal_alias;
+                        $fixed_attendance->save();
+                    }
                 }
                 else if($att->punch_state == 1 || $att->punch_state == 5)
                 {
@@ -100,6 +111,23 @@ class AutoGetAttendance extends Command
                         $attendance->time_out = date('Y-m-d H:i:s', strtotime($att->punch_time));
                         $attendance->device_out = $att->terminal_alias;
                         $attendance->save(); 
+
+                    }
+
+                    $fixed_attendance_in = FixedAttendance::where('employee_code',$att->emp_code)
+                                            ->whereBetween('time_in',[$time_in_before,$time_in_after])->first();
+
+                    FixedAttendance::where('employee_code',$att->emp_code)
+                                            ->whereBetween('time_in',[$time_in_before,$time_in_after])
+                                            ->update($update);
+
+                    if($fixed_attendance_in ==  null)
+                    {
+                        $fixed_attendance = new FixedAttendance;
+                        $fixed_attendance->employee_code  = $att->emp_code;   
+                        $fixed_attendance->time_out = date('Y-m-d H:i:s', strtotime($att->punch_time));
+                        $fixed_attendance->device_out = $att->terminal_alias;
+                        $fixed_attendance->save(); 
                     }
 
                     $count++;
