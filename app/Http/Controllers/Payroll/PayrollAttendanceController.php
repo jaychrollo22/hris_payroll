@@ -332,46 +332,47 @@ class PayrollAttendanceController extends Controller
                         }
                     }
                     
-                    
-                    //Undertime and Overtime
-                    if($emp->schedule_info->is_flexi == 1){ //Is Schedule is flexi time
-                        //Overtime
-                        if($work_diff_hours > $employee_schedule['working_hours']){
-                            $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
-                        }
-                        //Undertime
-                        if($employee_schedule['working_hours'] > $work_diff_hours){
-                            $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
-                            if($undertime > 0){
-                                if($late_diff_hours > 0){
-                                    $undertime_hrs = $undertime - $late_diff_hours;
-                                }else{
-                                    $undertime_hrs = $undertime;
-                                }
-                            }  
-                        }
-                    }else{
-                        if($if_has_ob->date_from && $if_has_ob->date_to){
-                            $time_out_data = $if_has_ob->date_to;
-                            $time_in_data_date =  date('Y-m-d',strtotime($if_has_ob->date_from));
-                            $schedule_time_out =  $time_in_data_date . ' ' . $employee_schedule['time_out_to'];
-
-                            $start_datetime = new DateTime($schedule_time_out);
-                            
-                            //Overtime 
-                            if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) < date('Y-m-d H:i:s',strtotime($time_out_data))){
-                                $new_diff = $start_datetime->diff(new DateTime($time_out_data));
-                                $work_ot_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
-                                $overtime = (double) number_format($work_ot_diff_hours,2); 
+                    if($emp->level == '1' || $emp->level == '2'){ // For Level Rank and File and Supervisor Only
+                        //Undertime and Overtime
+                        if($emp->schedule_info->is_flexi == 1){ //Is Schedule is flexi time
+                            //Overtime
+                            if($work_diff_hours > $employee_schedule['working_hours']){
+                                $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
                             }
-
                             //Undertime
-                            if($time_out_data && $schedule_time_out){
-                                if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) > date('Y-m-d H:i:s',strtotime($time_out_data))){
-                                    $time_out_datetime = new DateTime($time_out_data);
-                                    $new_diff = $time_out_datetime->diff(new DateTime($schedule_time_out));
-                                    $work_ut_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
-                                    $undertime_hrs = (double) number_format($work_ut_diff_hours,2); 
+                            if($employee_schedule['working_hours'] > $work_diff_hours){
+                                $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
+                                if($undertime > 0){
+                                    if($late_diff_hours > 0){
+                                        $undertime_hrs = $undertime - $late_diff_hours;
+                                    }else{
+                                        $undertime_hrs = $undertime;
+                                    }
+                                }  
+                            }
+                        }else{
+                            if($if_has_ob->date_from && $if_has_ob->date_to){
+                                $time_out_data = $if_has_ob->date_to;
+                                $time_in_data_date =  date('Y-m-d',strtotime($if_has_ob->date_from));
+                                $schedule_time_out =  $time_in_data_date . ' ' . $employee_schedule['time_out_to'];
+
+                                $start_datetime = new DateTime($schedule_time_out);
+                                
+                                //Overtime 
+                                if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) < date('Y-m-d H:i:s',strtotime($time_out_data))){
+                                    $new_diff = $start_datetime->diff(new DateTime($time_out_data));
+                                    $work_ot_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
+                                    $overtime = (double) number_format($work_ot_diff_hours,2); 
+                                }
+
+                                //Undertime
+                                if($time_out_data && $schedule_time_out){
+                                    if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) > date('Y-m-d H:i:s',strtotime($time_out_data))){
+                                        $time_out_datetime = new DateTime($time_out_data);
+                                        $new_diff = $time_out_datetime->diff(new DateTime($schedule_time_out));
+                                        $work_ut_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
+                                        $undertime_hrs = (double) number_format($work_ut_diff_hours,2); 
+                                    }
                                 }
                             }
                         }
@@ -645,66 +646,68 @@ class PayrollAttendanceController extends Controller
                 $overtime = 0;
                 $undertime_hrs = 0;
 
-                if($emp->schedule_info->is_flexi == 1){ //Is Schedule is flexi time
-                    
-                    $has_leave_shift_hrs = 0;
-                    if($check_if_has_leave_shift){
-                        if($check_if_has_leave_shift == 'First Shift' || $check_if_has_leave_shift == 'Second Shift'){
-                            $compressed_work_weeks = [3,4,5,6,10,17]; //Compressed Schedules
-                            // if(str_contains($emp->schedule_info->schedule_name, "Compressed") && !str_contains($emp->schedule_info->schedule_name, "Saturday")){
-                            if(in_array($emp->schedule_info->id,$compressed_work_weeks)){
-                                $has_leave_shift_hrs = 4.75;//Leave Shift Hrs for Compressed 5 days
-                            }else{
-                                $has_leave_shift_hrs = 4;//Leave Shift Hrs
-                            }   
-                        }
-                    }
-                    
-                    //Overtime
-                    if($work_diff_hours > $employee_schedule['working_hours']){
-                        $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
-                    }
-
-                    //Undertime
-                    if($employee_schedule['working_hours'] > $work_diff_hours){
-
-                        if($has_leave_shift_hrs > 0){
-                            $total_with_has_leave_shift_hrs = $work_diff_hours + $has_leave_shift_hrs;
-                            $undertime = $employee_schedule['working_hours'] - $total_with_has_leave_shift_hrs;
-                            if($undertime > 0){
-                                $undertime_hrs = $undertime;
-                            }  
-                        }else{
-                            $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
-                            if($undertime > 0){
-                                if($late_diff_hours > 0){
-                                    $undertime_hrs = $undertime - $late_diff_hours;
-                                }else{
-                                    $undertime_hrs = $undertime;
-                                }
-                            }  
-                        }
-                    }
-                
-                }else{
-                    //Not Flexi
-                    if($time_in_data){
-                        $start_datetime = new DateTime($schedule_time_out);
+                if($emp->level == '1' || $emp->level == '2'){ // For Level Rank and File and Supervisor Only
+                    if($emp->schedule_info->is_flexi == 1){ //Is Schedule is flexi time
                         
-                        //Overtime 
-                        if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) < date('Y-m-d H:i:s',strtotime($time_out_data))){
-                            $new_diff = $start_datetime->diff(new DateTime($time_out_data));
-                            $work_ot_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
-                            $overtime = (double) number_format($work_ot_diff_hours,2); 
+                        $has_leave_shift_hrs = 0;
+                        if($check_if_has_leave_shift){
+                            if($check_if_has_leave_shift == 'First Shift' || $check_if_has_leave_shift == 'Second Shift'){
+                                $compressed_work_weeks = [3,4,5,6,10,17]; //Compressed Schedules
+                                // if(str_contains($emp->schedule_info->schedule_name, "Compressed") && !str_contains($emp->schedule_info->schedule_name, "Saturday")){
+                                if(in_array($emp->schedule_info->id,$compressed_work_weeks)){
+                                    $has_leave_shift_hrs = 4.75;//Leave Shift Hrs for Compressed 5 days
+                                }else{
+                                    $has_leave_shift_hrs = 4;//Leave Shift Hrs
+                                }   
+                            }
+                        }
+                        
+                        //Overtime
+                        if($work_diff_hours > $employee_schedule['working_hours']){
+                            $overtime = (double) number_format($work_diff_hours - $employee_schedule['working_hours'],2);
                         }
 
                         //Undertime
-                        if($time_out_data && $schedule_time_out){
-                            if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) > date('Y-m-d H:i:s',strtotime($time_out_data))){
-                                $time_out_datetime = new DateTime($time_out_data);
-                                $new_diff = $time_out_datetime->diff(new DateTime($schedule_time_out));
-                                $work_ut_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
-                                $undertime_hrs = (double) number_format($work_ut_diff_hours,2); 
+                        if($employee_schedule['working_hours'] > $work_diff_hours){
+
+                            if($has_leave_shift_hrs > 0){
+                                $total_with_has_leave_shift_hrs = $work_diff_hours + $has_leave_shift_hrs;
+                                $undertime = $employee_schedule['working_hours'] - $total_with_has_leave_shift_hrs;
+                                if($undertime > 0){
+                                    $undertime_hrs = $undertime;
+                                }  
+                            }else{
+                                $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
+                                if($undertime > 0){
+                                    if($late_diff_hours > 0){
+                                        $undertime_hrs = $undertime - $late_diff_hours;
+                                    }else{
+                                        $undertime_hrs = $undertime;
+                                    }
+                                }  
+                            }
+                        }
+                    
+                    }else{
+                        //Not Flexi
+                        if($time_in_data){
+                            $start_datetime = new DateTime($schedule_time_out);
+                            
+                            //Overtime 
+                            if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) < date('Y-m-d H:i:s',strtotime($time_out_data))){
+                                $new_diff = $start_datetime->diff(new DateTime($time_out_data));
+                                $work_ot_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
+                                $overtime = (double) number_format($work_ot_diff_hours,2); 
+                            }
+
+                            //Undertime
+                            if($time_out_data && $schedule_time_out){
+                                if(date('Y-m-d H:i:s',strtotime($schedule_time_out)) > date('Y-m-d H:i:s',strtotime($time_out_data))){
+                                    $time_out_datetime = new DateTime($time_out_data);
+                                    $new_diff = $time_out_datetime->diff(new DateTime($schedule_time_out));
+                                    $work_ut_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
+                                    $undertime_hrs = (double) number_format($work_ut_diff_hours,2); 
+                                }
                             }
                         }
                     }
