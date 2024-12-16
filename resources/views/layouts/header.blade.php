@@ -670,14 +670,20 @@
             </li>
         @endif
 
-        {{-- <li class="nav-item">
+        @if(checkUserPrivilege('payroll_payreg',auth()->user()->id) == 'yes' || 
+        checkUserPrivilege('payroll_payreg_post',auth()->user()->id) == 'yes' || 
+        checkUserPrivilege('payroll_payreg_unpost',auth()->user()->id) == 'yes')
+        <li class="nav-item">
             <a class="nav-link" href="{{ url('/payslip') }}" onclick='show()'>
                 <i class="ti-calendar menu-icon"></i>
                 <span class="menu-title">Payslip</span>
             </a>
-        </li> --}}
+        </li>
+        @endif
 
-        {{-- @if (checkUserPrivilege('masterfiles_early_cutoffs',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_cost_centers',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_companies',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_locations',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_departments',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_loan_types',auth()->user()->id) == 'yes' || checkUserPrivilege('masterfiles_employee_leave_credits',auth()->user()->id) == 'yes') --}}
+        @if (checkUserPrivilege('payroll_payreg',auth()->user()->id) == 'yes' || 
+        checkUserPrivilege('payroll_payreg_post',auth()->user()->id) == 'yes' || 
+        checkUserPrivilege('payroll_payreg_unpost',auth()->user()->id) == 'yes')
         <li class="nav-item @if ($header == 'payroll') active @endif">
             <a class="nav-link" data-toggle="collapse" href="#payroll" aria-expanded="false" aria-controls="ui-basic">
                 <i class="icon-align-center menu-icon"></i>
@@ -726,6 +732,7 @@
                 </ul>
             </div>
         </li>
+        @endif
 
         </ul>
         </nav>
