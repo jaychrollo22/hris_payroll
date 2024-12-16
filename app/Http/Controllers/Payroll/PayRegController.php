@@ -228,23 +228,6 @@ class PayRegController extends Controller
                         $petty_cash_mescco = 0;
                         $others = 0;
 
-
-                        //Witholding tax
-                        $withholding_tax = getUserWitholdingTaxAmount(
-                            $employee->user_id,
-                            $basic_pay,
-                            $payroll_register->absences_amount,
-                            $payroll_register->lates_amount,
-                            $payroll_register->undertime_amount,
-                            $payroll_register->salary_adjustment,
-                            $payroll_register->overtime_pay,
-                            $sss_reg_ee,
-                            $sss_mpf_ee,
-                            $phic_ee,
-                            $hdmf_ee,
-                            $salary_deduction_taxable
-                        );
-
                         $sss_salary_loan = getUserDeductionAmount($employee->user_id,1,$payroll_period->payroll_cutoff);
                         $sss_calamity_loan = getUserDeductionAmount($employee->user_id,2,$payroll_period->payroll_cutoff);
                         $hdmf_salary_loan = getUserDeductionAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
@@ -258,6 +241,25 @@ class PayRegController extends Controller
                         $coop_mescco = getUserDeductionAmount($employee->user_id,11,$payroll_period->payroll_cutoff);
                         $petty_cash_mescco = getUserDeductionAmount($employee->user_id,12,$payroll_period->payroll_cutoff);
                         $others = getUserDeductionAmount($employee->user_id,13,$payroll_period->payroll_cutoff);
+                        $total_taxable = getUserTotalTaxableAmount(
+                            $basic_pay,
+                            $payroll_register->absences_amount,
+                            $payroll_register->lates_amount,
+                            $payroll_register->undertime_amount,
+                            $payroll_register->salary_adjustment,
+                            $payroll_register->overtime_pay,
+                            $sss_reg_ee,
+                            $sss_mpf_ee,
+                            $phic_ee,
+                            $hdmf_ee,
+                            $salary_deduction_taxable
+                        );
+
+                        //Witholding tax
+                        $withholding_tax = getUserWitholdingTaxAmount(
+                            $employee->user_id,
+                            $total_taxable
+                        );
 
                         $total_deduction = (
                             $withholding_tax +
@@ -302,23 +304,7 @@ class PayRegController extends Controller
                         $payroll_register->load_allowance = getUserAllowanceAmount($employee->user_id,9,$payroll_period->payroll_cutoff);
 
                         //Witholding tax
-                        $payroll_register->withholding_tax = getUserWitholdingTaxAmount(
-                            $employee->user_id,
-                            $basic_pay,
-                            $payroll_register->absences_amount,
-                            $payroll_register->lates_amount,
-                            $payroll_register->undertime_amount,
-                            $payroll_register->salary_adjustment,
-                            $payroll_register->overtime_pay,
-                            $sss_reg_ee,
-                            $sss_mpf_ee,
-                            $phic_ee,
-                            $hdmf_ee,
-                            $salary_deduction_taxable
-                        );
-
                         $payroll_register->withholding_tax = $withholding_tax;
-
                         // Loans Deductions
                         $payroll_register->sss_salary_loan = $sss_salary_loan;
                         $payroll_register->sss_calamity_loan = $sss_calamity_loan;
@@ -362,20 +348,7 @@ class PayRegController extends Controller
                         $payroll_register->netpay = ($grosspay - $total_deduction);
 
                         //Total Taxable
-                        $payroll_register->total_taxable = getUserTotalTaxableAmount(
-                            $basic_pay,
-                            $payroll_register->absences_amount,
-                            $payroll_register->lates_amount,
-                            $payroll_register->undertime_amount,
-                            $payroll_register->salary_adjustment,
-                            $payroll_register->overtime_pay,
-                            $sss_reg_ee,
-                            $sss_mpf_ee,
-                            $phic_ee,
-                            $hdmf_ee,
-                            $salary_deduction_taxable
-                        );
-
+                        $payroll_register->total_taxable = $total_taxable;
                         $payroll_register->minimum_wage = $employee->tax_application === "Non-Minimum" ? 0 : 1;
 
                         //Government contributions number
