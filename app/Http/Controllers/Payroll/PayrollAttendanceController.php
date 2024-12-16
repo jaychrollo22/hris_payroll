@@ -392,8 +392,9 @@ class PayrollAttendanceController extends Controller
                     $approved_overtimes = (double) $approved_overtimes + $approved_overtime_hrs;
                 }
 
-
-                $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_ob->date_from),strtotime($if_has_ob->date_to)),2);
+                if($emp->level == '1' || $emp->level == '2'){ // Lates Only for Rank and File and Supervisor
+                    $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_ob->date_from),strtotime($if_has_ob->date_to)),2);
+                }
 
             }
             // If has WFH----------------------------------------------------------------------------------------------------------
@@ -743,7 +744,9 @@ class PayrollAttendanceController extends Controller
                     }
 
                     if(empty($check_if_holiday)){
-                        $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
+                        if($emp->level == '1' || $emp->level == '2'){ // Lates Only for Rank and File and Supervisor
+                            $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
+                        }
                     }
                 }
 
@@ -812,7 +815,9 @@ class PayrollAttendanceController extends Controller
                         }
 
                         if(empty($check_if_holiday)){
-                            $night_diff_hours = $night_diff_hours + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
+                            if($emp->level == '1' || $emp->level == '2'){ // Lates Only for Rank and File and Supervisor
+                                $night_diff_hours = $night_diff_hours + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
+                            }
                         }
 
                     }else{ 
