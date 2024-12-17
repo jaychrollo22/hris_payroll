@@ -33,7 +33,7 @@ class PayrollRegisterExport implements FromQuery, WithHeadings, WithMapping
         $payroll_period = $this->payroll_period ? $this->payroll_period : "";
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
-        $payroll_registers = PayrollRegister::with('payrollPeriod')->where('payroll_period_id',$payroll_period);
+        $payroll_registers = PayrollRegister::with('payrollPeriod')->where('payroll_period_id',$payroll_period)->orderBy('name','ASC');
         
         if($department){
             $payroll_registers->whereHas('employee',function($q) use($department){
