@@ -309,7 +309,7 @@ class PayrollAttendanceController extends Controller
                     $schedule_time_in =  date('Y-m-d H:i:s',strtotime($schedule_time_in));
                     $schedule_time_in_final =  new DateTime($schedule_time_in);
                     
-                    if($emp->level == '1' || $emp->level == '2'){ // Lates Only for Rank and File and Supervisor
+                    if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
                         if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
                             if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
                                 //IF Attendance Exceed in Grace Period
@@ -332,7 +332,7 @@ class PayrollAttendanceController extends Controller
                         }
                     }
                     
-                    if($emp->level == '1' || $emp->level == '2'){ // For Level Rank and File and Supervisor Only
+                    if($emp->level == '1'){ // For Level Rank and File
                         //Undertime and Overtime
                         if($emp->schedule_info->is_flexi == 1){ //Is Schedule is flexi time
                             //Overtime
@@ -392,7 +392,7 @@ class PayrollAttendanceController extends Controller
                     $approved_overtimes = (double) $approved_overtimes + $approved_overtime_hrs;
                 }
 
-                if($emp->level == '1' || $emp->level == '2'){ // Lates Only for Rank and File and Supervisor
+                if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
                     $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_ob->date_from),strtotime($if_has_ob->date_to)),2);
                 }
 
@@ -628,7 +628,7 @@ class PayrollAttendanceController extends Controller
                 $schedule_time_in_final =  new DateTime($schedule_time_in);
                 $late_diff_hours = 0;
                 
-                if($emp->level == '1' || $emp->level == '2'){ // Lates Only for Rank and File and Supervisor
+                if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
                     if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
                         if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
                             //IF Attendance Exceed in Grace Period
@@ -654,7 +654,7 @@ class PayrollAttendanceController extends Controller
                 $overtime = 0;
                 $undertime_hrs = 0;
 
-                if($emp->level == '1' || $emp->level == '2'){ // For Level Rank and File and Supervisor Only
+                if($emp->level == '1'){ // For Level Rank and File
                     if($emp->schedule_info->is_flexi == 1){ //Is Schedule is flexi time
                         
                         $has_leave_shift_hrs = 0;
@@ -751,7 +751,7 @@ class PayrollAttendanceController extends Controller
                     }
 
                     if(empty($check_if_holiday)){
-                        if($emp->level == '1' || $emp->level == '2'){ // Lates Only for Rank and File and Supervisor
+                        if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
                             $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
                         }
                     }
@@ -822,7 +822,7 @@ class PayrollAttendanceController extends Controller
                         }
 
                         if(empty($check_if_holiday)){
-                            if($emp->level == '1' || $emp->level == '2'){ // Lates Only for Rank and File and Supervisor
+                            if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
                                 $night_diff_hours = $night_diff_hours + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
                             }
                         }
