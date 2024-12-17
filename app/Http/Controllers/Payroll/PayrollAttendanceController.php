@@ -396,7 +396,9 @@ class PayrollAttendanceController extends Controller
                     $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_ob->date_from),strtotime($if_has_ob->date_to)),2);
                 }
 
-                $total_work_day++;
+                if ($employee_schedule) {
+                    $total_work_day++;
+                }
 
             }
             // If has WFH----------------------------------------------------------------------------------------------------------
@@ -505,8 +507,9 @@ class PayrollAttendanceController extends Controller
                 }
 
                 $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_wfh->date_from),strtotime($if_has_wfh->date_to)),2);
-
-                $total_work_day++;
+                if ($employee_schedule) {
+                    $total_work_day++;
+                }
             }
            
             //Time In
