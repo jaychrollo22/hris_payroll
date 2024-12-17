@@ -390,11 +390,13 @@ class PayrollAttendanceController extends Controller
                 $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r))) : "";
                 if($approved_overtime_hrs){
                     $approved_overtimes = (double) $approved_overtimes + $approved_overtime_hrs;
+
+                    if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
+                        $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_ob->date_from),strtotime($if_has_ob->date_to)),2);
+                    }
                 }
 
-                if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
-                    $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_ob->date_from),strtotime($if_has_ob->date_to)),2);
-                }
+                
 
                 // if ($employee_schedule) {
                 //     $total_work_day++;
@@ -504,9 +506,11 @@ class PayrollAttendanceController extends Controller
                 $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r))) : "";
                 if($approved_overtime_hrs){
                     $approved_overtimes = (double) $approved_overtimes + $approved_overtime_hrs;
+
+                    $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_wfh->date_from),strtotime($if_has_wfh->date_to)),2);
                 }
 
-                $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_wfh->date_from),strtotime($if_has_wfh->date_to)),2);
+                
                 // if ($employee_schedule) {
                 //     $total_work_day++;
                 // }
@@ -750,17 +754,19 @@ class PayrollAttendanceController extends Controller
                         }
                     }
 
-                    if(empty($check_if_holiday)){
-                        if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
-                            $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
-                        }
-                    }
                 }
 
                 //IF Has Schedule OT
                 //Approved OT
                 $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots, date('Y-m-d', strtotime($date_r))) : "";
                 if ($approved_overtime_hrs) {
+
+                    if(empty($check_if_holiday)){
+                        if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
+                            $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
+                        }
+                    }
+
                     $approved_overtimes = (double)$approved_overtimes + $approved_overtime_hrs;
 
                     if ($check_if_holiday) {
@@ -799,6 +805,12 @@ class PayrollAttendanceController extends Controller
 
                     if ($approved_overtime_hrs) {
                         $approved_overtimes = (double)$approved_overtimes + $approved_overtime_hrs;
+
+                        if(empty($check_if_holiday)){
+                            if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
+                                $night_diff_hours = $night_diff_hours + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
+                            }
+                        }
                     }
 
                     if ($check_if_holiday) { //If Holiday OT
@@ -821,11 +833,7 @@ class PayrollAttendanceController extends Controller
                             }
                         }
 
-                        if(empty($check_if_holiday)){
-                            if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
-                                $night_diff_hours = $night_diff_hours + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
-                            }
-                        }
+                        
 
                     }else{ 
                         //Rest Day
