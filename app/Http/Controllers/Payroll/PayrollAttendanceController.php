@@ -973,9 +973,7 @@ class PayrollAttendanceController extends Controller
                 $if_leave = '';
             
                 if ($employee_schedule) {
-                    if ($time_out_data == null) {
-                        $is_absent = 'Absent';
-                    }
+                    
                     $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
 
                     if($if_leave == 'VL With-Pay'){
@@ -983,6 +981,17 @@ class PayrollAttendanceController extends Controller
                     }
                     if($if_leave == 'SL With-Pay'){
                         $sl += 1;
+                    }
+
+                    if ($time_out_data == null && empty($if_leave)) {
+                        $is_absent = 'Absent';
+                    }else{
+                        if($if_leave == 'VL Without-Pay'){
+                            $is_absent = 'Absent';
+                        }
+                        else if($if_leave == 'SL Without-Pay'){
+                            $is_absent = 'Absent';
+                        }
                     }
 
                     if ($check_if_early_cutoff) {
@@ -1005,7 +1014,7 @@ class PayrollAttendanceController extends Controller
                             }
                         }
                     }else{
-                        if($is_absent == 'Absent' && empty($if_leave)){
+                        if($is_absent == 'Absent'){
                             $total_absent++;
                         }else{
                             $total_work_day++;
