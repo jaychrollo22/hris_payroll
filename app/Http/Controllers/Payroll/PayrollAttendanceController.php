@@ -1014,7 +1014,7 @@ class PayrollAttendanceController extends Controller
                         $sl += 1;
                     }
 
-                    if ($time_out_data == null && empty($if_leave)) {
+                    if ($time_out_data == null && empty($if_leave) && empty($if_has_ob) && empty($if_has_wfh)) {
                         $is_absent = 'Absent';
                     }else{
                         if($if_leave == 'VL Without-Pay'){
