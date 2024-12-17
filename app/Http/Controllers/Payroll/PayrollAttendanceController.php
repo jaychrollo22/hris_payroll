@@ -396,6 +396,8 @@ class PayrollAttendanceController extends Controller
                     $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_ob->date_from),strtotime($if_has_ob->date_to)),2);
                 }
 
+                $total_work_day++;
+
             }
             // If has WFH----------------------------------------------------------------------------------------------------------
             if($if_has_wfh){
@@ -503,6 +505,8 @@ class PayrollAttendanceController extends Controller
                 }
 
                 $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($if_has_wfh->date_from),strtotime($if_has_wfh->date_to)),2);
+
+                $total_work_day++;
             }
            
             //Time In
@@ -913,16 +917,16 @@ class PayrollAttendanceController extends Controller
                         }
                     } else {
                         $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
-                        if (empty($if_leave)) {
-                            if (empty($if_has_dtr)) {
-                                if ($dtr_correction_time_out == null) {
-                                    if ($time_out == null) {
-                                        $is_absent = 'Absent';
-                                    }
+                        
+                        if (empty($if_leave) && empty($if_has_dtr) && empty($if_has_wfh) && empty($if_has_ob)) {
+                            if ($dtr_correction_time_out == null) {
+                                if ($time_out == null) {
+                                    $is_absent = 'Absent';
                                 }
                             }
                         }
-                        if ($time_out_data == null && empty($if_leave)) {
+                        
+                        if ($time_out_data == null && empty($if_leave) && empty($if_has_dtr) && empty($if_has_wfh) && empty($if_has_ob)) {
                             $is_absent = 'Absent';
                         }
                     }
