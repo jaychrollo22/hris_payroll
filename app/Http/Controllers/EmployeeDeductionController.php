@@ -198,7 +198,7 @@ class EmployeeDeductionController extends Controller
             
             foreach($data[0] as $key => $value)
             {
-
+                // return $value;
                 $employee_deduction = EmployeeDeduction::where('user_id',$value['user_id'])
                                                                 ->where('deduction_id',$value['deduction_id'])
                                                                 ->first();
@@ -212,9 +212,9 @@ class EmployeeDeductionController extends Controller
                     if(isset($value['amount'])){
                         $employee_deduction->amount = $value['amount'];
                     }
-                    if(isset($value['no_of_years_deduction'])){
-                        $employee_deduction->no_of_years_deduction = $value['no_of_years_deduction'];
-                    }
+                    // if(isset($value['no_of_years_deduction'])){
+                    //     $employee_deduction->no_of_years_deduction = $value['no_of_years_deduction'];
+                    // }
                     if(isset($value['no_of_months_deduction'])){
                         $employee_deduction->no_of_years_deduction = $value['no_of_months_deduction'];
                     }
@@ -259,11 +259,11 @@ class EmployeeDeductionController extends Controller
                     $employeeDeduction->user_id = $value['user_id'];
                     $employeeDeduction->amount = $value['amount'];
 
-                    if(isset($value['no_of_years_deduction'])){
-                        $employee_deduction->no_of_years_deduction = $value['no_of_years_deduction'];
-                    }
+                    // if(isset($value['no_of_years_deduction'])){
+                    //     $employee_deduction->no_of_years_deduction = $value['no_of_years_deduction'];
+                    // }
                     if(isset($value['no_of_months_deduction'])){
-                        $employee_deduction->no_of_years_deduction = $value['no_of_months_deduction'];
+                        $employeeDeduction->no_of_years_deduction = $value['no_of_months_deduction'];
                     }
 
                     $employeeDeduction->amortization = $value['amortization'];
@@ -279,7 +279,7 @@ class EmployeeDeductionController extends Controller
                         if($value['type_of_deduction'] == 'Both' || $value['type_of_deduction'] == 'both' || $value['type_of_deduction'] == 'BOTH'){
                             $credit_schedule = 'Every Cut-Off';
                         }
-                        $employee_deduction->type_of_deduction = $credit_schedule;
+                        $employeeDeduction->type_of_deduction = $credit_schedule;
                     }
                     
                     if(isset($value['type_of_deduction_15_30_or_both'])){
@@ -293,7 +293,7 @@ class EmployeeDeductionController extends Controller
                         if($value['type_of_deduction_15_30_or_both'] == 'Both' || $value['type_of_deduction_15_30_or_both'] == 'both' || $value['type_of_deduction_15_30_or_both'] == 'BOTH'){
                             $credit_schedule = 'Every Cut-Off';
                         }
-                        $employee_deduction->type_of_deduction = $credit_schedule;
+                        $employeeDeduction->type_of_deduction = $credit_schedule;
                     }
 
                     $employeeDeduction->status = 'Active';

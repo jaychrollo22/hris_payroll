@@ -939,6 +939,14 @@ class PayrollAttendanceController extends Controller
                             else if($if_leave == 'SL Without-Pay'){
                                 $is_absent = 'Absent';
                             }
+                            else if($if_leave == 'VL With-Pay'){
+                                $check_leave_count_vl = employeeHasLeaveCount($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule, 'VL');
+                                $vl += $check_leave_count_vl;
+                            }
+                            else if($if_leave == 'SL With-Pay'){
+                                $check_leave_count_sl = employeeHasLeaveCount($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule, 'SL');
+                                $sl += $check_leave_count_sl;
+                            }
                         }
                         
                         if(empty($if_leave)){
@@ -1014,12 +1022,16 @@ class PayrollAttendanceController extends Controller
                 if ($employee_schedule) {
                     
                     $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
-
-                    if($if_leave == 'VL With-Pay'){
-                        $vl += 1;
-                    }
-                    if($if_leave == 'SL With-Pay'){
-                        $sl += 1;
+                    
+                    if($if_leave){
+                        if($if_leave == 'VL With-Pay'){
+                            $check_leave_count_vl = employeeHasLeaveCount($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule, 'VL');
+                            $vl += $check_leave_count_vl;
+                        }
+                        else if($if_leave == 'SL With-Pay'){
+                            $check_leave_count_sl = employeeHasLeaveCount($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule, 'SL');
+                            $sl += $check_leave_count_sl;
+                        }
                     }
 
                     if ($time_out_data == null && empty($if_leave) && empty($if_has_ob) && empty($if_has_wfh)) {
