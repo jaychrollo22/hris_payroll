@@ -235,6 +235,20 @@ class EmployeeDeductionController extends Controller
                         }
                         $employee_deduction->type_of_deduction = $credit_schedule;
                     }
+
+                    if(isset($value['type_of_deduction_15_30_or_both'])){
+                        $credit_schedule = '';
+                        if($value['type_of_deduction_15_30_or_both'] == '15'){
+                            $credit_schedule = 'First Cut-Off';
+                        }
+                        if($value['type_of_deduction_15_30_or_both'] == '30'){
+                            $credit_schedule = 'Second Cut-Off';
+                        }
+                        if($value['type_of_deduction_15_30_or_both'] == 'Both' || $value['type_of_deduction_15_30_or_both'] == 'both' || $value['type_of_deduction_15_30_or_both'] == 'BOTH'){
+                            $credit_schedule = 'Every Cut-Off';
+                        }
+                        $employee_deduction->type_of_deduction = $credit_schedule;
+                    }
                     
                     $employee_deduction->save();
                     $save_count+=1;
@@ -244,7 +258,7 @@ class EmployeeDeductionController extends Controller
                     $employeeDeduction->deduction_id = $value['deduction_id'];
                     $employeeDeduction->user_id = $value['user_id'];
                     $employeeDeduction->amount = $value['amount'];
-                    
+
                     if(isset($value['no_of_years_deduction'])){
                         $employee_deduction->no_of_years_deduction = $value['no_of_years_deduction'];
                     }
@@ -263,6 +277,20 @@ class EmployeeDeductionController extends Controller
                             $credit_schedule = 'Second Cut-Off';
                         }
                         if($value['type_of_deduction'] == 'Both' || $value['type_of_deduction'] == 'both' || $value['type_of_deduction'] == 'BOTH'){
+                            $credit_schedule = 'Every Cut-Off';
+                        }
+                        $employee_deduction->type_of_deduction = $credit_schedule;
+                    }
+                    
+                    if(isset($value['type_of_deduction_15_30_or_both'])){
+                        $credit_schedule = '';
+                        if($value['type_of_deduction_15_30_or_both'] == '15'){
+                            $credit_schedule = 'First Cut-Off';
+                        }
+                        if($value['type_of_deduction_15_30_or_both'] == '30'){
+                            $credit_schedule = 'Second Cut-Off';
+                        }
+                        if($value['type_of_deduction_15_30_or_both'] == 'Both' || $value['type_of_deduction_15_30_or_both'] == 'both' || $value['type_of_deduction_15_30_or_both'] == 'BOTH'){
                             $credit_schedule = 'Every Cut-Off';
                         }
                         $employee_deduction->type_of_deduction = $credit_schedule;
