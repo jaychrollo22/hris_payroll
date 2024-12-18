@@ -215,8 +215,11 @@ class EmployeeDeductionController extends Controller
                     if(isset($value['no_of_years_deduction'])){
                         $employee_deduction->no_of_years_deduction = $value['no_of_years_deduction'];
                     }
+                    if(isset($value['no_of_months_deduction'])){
+                        $employee_deduction->no_of_years_deduction = $value['no_of_months_deduction'];
+                    }
                     if(isset($value['amortization'])){
-                        $employee_deduction->no_of_years_deduction = $value['amortization'];
+                        $employee_deduction->amortization = $value['amortization'];
                     }
                     
                     if(isset($value['type_of_deduction'])){
@@ -241,7 +244,14 @@ class EmployeeDeductionController extends Controller
                     $employeeDeduction->deduction_id = $value['deduction_id'];
                     $employeeDeduction->user_id = $value['user_id'];
                     $employeeDeduction->amount = $value['amount'];
-                    $employeeDeduction->no_of_years_deduction = $value['no_of_years_deduction'];
+                    
+                    if(isset($value['no_of_years_deduction'])){
+                        $employee_deduction->no_of_years_deduction = $value['no_of_years_deduction'];
+                    }
+                    if(isset($value['no_of_months_deduction'])){
+                        $employee_deduction->no_of_years_deduction = $value['no_of_months_deduction'];
+                    }
+
                     $employeeDeduction->amortization = $value['amortization'];
 
                     if(isset($value['type_of_deduction'])){
