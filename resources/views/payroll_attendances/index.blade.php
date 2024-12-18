@@ -173,9 +173,9 @@
     </div>
 </div>
 @include('payroll_attendances.generate_payroll_attendance') 
+@include('payroll_attendances.import')
 
-{{-- @include('payroll_employee_contributions.import')
-@include('payroll_employee_contributions.create')
+{{-- @include('payroll_employee_contributions.create')
 @foreach($contributions as $contribution)
 @include('payroll_employee_contributions.edit')
 @endforeach --}}
