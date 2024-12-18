@@ -294,7 +294,7 @@ class EmployeeAllowanceController extends Controller
                         if($value['credit_schedule'] == '30'){
                             $credit_schedule = 'Second Cut-Off';
                         }
-                        if($value['credit_schedule'] == 'Both'){
+                        if($value['credit_schedule'] == 'Both' || $value['credit_schedule'] == 'both' || $value['credit_schedule'] == 'BOTH'){
                             $credit_schedule = 'Every Cut-Off';
                         }
                     }

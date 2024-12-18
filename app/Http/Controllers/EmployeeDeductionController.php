@@ -218,8 +218,19 @@ class EmployeeDeductionController extends Controller
                     if(isset($value['amortization'])){
                         $employee_deduction->no_of_years_deduction = $value['amortization'];
                     }
+                    
                     if(isset($value['type_of_deduction'])){
-                        $employee_deduction->no_of_years_deduction = $value['type_of_deduction'];
+                        $credit_schedule = '';
+                        if($value['type_of_deduction'] == '15'){
+                            $credit_schedule = 'First Cut-Off';
+                        }
+                        if($value['type_of_deduction'] == '30'){
+                            $credit_schedule = 'Second Cut-Off';
+                        }
+                        if($value['type_of_deduction'] == 'Both' || $value['type_of_deduction'] == 'both' || $value['type_of_deduction'] == 'BOTH'){
+                            $credit_schedule = 'Every Cut-Off';
+                        }
+                        $employee_deduction->type_of_deduction = $credit_schedule;
                     }
                     
                     $employee_deduction->save();
@@ -232,7 +243,21 @@ class EmployeeDeductionController extends Controller
                     $employeeDeduction->amount = $value['amount'];
                     $employeeDeduction->no_of_years_deduction = $value['no_of_years_deduction'];
                     $employeeDeduction->amortization = $value['amortization'];
-                    $employeeDeduction->type_of_deduction = $value['type_of_deduction'];
+
+                    if(isset($value['type_of_deduction'])){
+                        $credit_schedule = '';
+                        if($value['type_of_deduction'] == '15'){
+                            $credit_schedule = 'First Cut-Off';
+                        }
+                        if($value['type_of_deduction'] == '30'){
+                            $credit_schedule = 'Second Cut-Off';
+                        }
+                        if($value['type_of_deduction'] == 'Both' || $value['type_of_deduction'] == 'both' || $value['type_of_deduction'] == 'BOTH'){
+                            $credit_schedule = 'Every Cut-Off';
+                        }
+                        $employee_deduction->type_of_deduction = $credit_schedule;
+                    }
+
                     $employeeDeduction->status = 'Active';
                     $employeeDeduction->save();
 

@@ -585,11 +585,16 @@
                         <a class="nav-link" href="{{ url('/employee-allowance') }}">Employee Allowances</a>
                     </li>
                     @endif
-                    @if(checkUserPrivilege('masterfiles_employee_loans',auth()->user()->id) == 'yes')
+                    @if(checkUserPrivilege('masterfiles_employee_allowances',auth()->user()->id) == 'yes')
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url('/employee-deduction') }}">Employee Deductions</a>
+                    </li>
+                    @endif
+                    {{-- @if(checkUserPrivilege('masterfiles_employee_loans',auth()->user()->id) == 'yes')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('/employee-loans') }}">Employee Loans</a>
                     </li>
-                    @endif
+                    @endif --}}
                     {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ url('/salary-management') }}">Salary Management</a>
                     </li>
