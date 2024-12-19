@@ -34,6 +34,17 @@
                     </select>
                     </div>
                 </div>
+                <div class='col-md-12'>
+                    <div class="form-group">
+                    <label for="payroll_register">Department:</label>
+                    <select data-placeholder="Select Department" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='department'>
+                        <option value="">-- Select Department --</option>
+                        @foreach($departments as $dept)
+                        <option value="{{$dept->id}}" @if ($dept->id == $department) selected @endif>{{$dept->name}}</option>
+                        @endforeach
+                    </select>
+                    </div>
+                </div>
             </div>
         </div>
   

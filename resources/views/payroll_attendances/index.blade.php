@@ -52,6 +52,17 @@
                         </div>
                       </div>
 
+                      <div class='col-md-3'>
+                        <div class="form-group">
+                          <select data-placeholder="Select Department" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='department'>
+                            <option value="">-- Select Department --</option>
+                            @foreach($departments as $dept)
+                            <option value="{{$dept->id}}" @if ($dept->id == $department) selected @endif>{{$dept->name}}</option>
+                            @endforeach
+                          </select>
+                        </div>
+                      </div>
+
                       <div class='col-md-2'>
                         <button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
                       </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use App\Company;
+use App\Department;
 use App\Employee;
 use App\PayrollPeriod;
 use App\PayrollAttendance;
@@ -27,11 +28,14 @@ class PayrollAttendanceController extends Controller
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
 
         $company = isset($request->company) ? $request->company : "";
+        $department = isset($request->department) ? $request->department : "";
         $payroll_period = isset($request->payroll_period) ? $request->payroll_period : "";
 
         $companies = Company::whereHas('employee_has_company')
                                 ->whereIn('id',$allowed_companies)
                                 ->get();
+
+        
 
         $payroll_periods = PayrollPeriod::orderBy('created_at','DESC')->get();
 
@@ -45,12 +49,33 @@ class PayrollAttendanceController extends Controller
                 $q->where('company_id',$company);
             });
         }
+        if($department){
+            $payroll_attendances = $payroll_attendances->whereHas('employee',function($q) use($department){
+                $q->where('department_id',$department);
+            });
+        }
 
         if($payroll_period){
             $payroll_attendances = $payroll_attendances->where('payroll_period_id',$payroll_period);
         }
 
         $payroll_attendances = $payroll_attendances->get();
+
+        if($company){
+            $department_companies = Employee::when($company,function($q) use($company){
+                            $q->where('company_id',$company);
+                        })
+                        ->groupBy('department_id')
+                        ->pluck('department_id')
+                        ->toArray();
+
+            $departments = Department::whereIn('id',$department_companies)->where('status','1')
+                    ->orderBy('name')
+                    ->get();
+
+        }else{
+            $departments = Department::orderBy('name')->get();
+        }
 
 
         return view(
@@ -59,7 +84,9 @@ class PayrollAttendanceController extends Controller
                 'header' => 'payroll_attendances',
                 'payroll_attendances' => $payroll_attendances,
                 'company' => $company,
+                'department' => $department,
                 'companies' => $companies,
+                'departments' => $departments,
                 'payroll_period' => $payroll_period,
                 'payroll_periods' => $payroll_periods,
             )
@@ -76,6 +103,9 @@ class PayrollAttendanceController extends Controller
         $employees = Employee::with('company','department')
                                         ->whereIn('company_id',$allowed_companies)
                                         ->where('company_id',$request->company)
+                                        ->when($request->department,function($q) use($request){
+                                            $q->where('department_id',$request->department);
+                                        })
                                         ->where('status','Active')
                                         // ->where('id','1') // My Id
                                         ->get();
