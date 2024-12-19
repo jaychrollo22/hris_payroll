@@ -52,7 +52,7 @@
             <div class="row">
               <div class='col-md-12 form-group'>
                 Amount
-                <input type="number" class="form-control form-control-sm" name="amount" id="amount"  required min="1" placeholder="0.00" value="{{$salary_adjustment->amount}}">
+                <input type="number" class="form-control form-control-sm" name="amount" id="amount"  required min="1" step="0.01" placeholder="0.00" value="{{$salary_adjustment->amount}}">
               </div>
             </div>
             <div class="row">
