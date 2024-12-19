@@ -62,6 +62,9 @@ class Employee extends Model implements Auditable
     public function attendances() {
         return $this->hasMany(Attendance::class,'employee_code','employee_number');
     }
+    public function fix_attendances() {
+        return $this->hasMany(FixedAttendance::class,'employee_code','employee_number');
+    }
 
     public function leaves() {
         return $this->hasMany(EmployeeLeave::class,'user_id','user_id');

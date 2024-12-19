@@ -231,7 +231,7 @@ class PayrollAttendanceController extends Controller
         $schedules = ScheduleData::all();
 
         $emp = Employee::select('id','user_id','employee_number','first_name','last_name','schedule_id','work_description','level')
-                                ->with(['schedule_info','attendances' => function ($query) use ($from_date, $to_date) {
+                                ->with(['schedule_info','fix_attendances' => function ($query) use ($from_date, $to_date) {
                                         $query->whereBetween('time_in', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                         ->orWhereBetween('time_out', [$from_date." 00:00:01", $to_date." 23:59:59"])
                                         ->orderBy('time_in','asc')
@@ -290,11 +290,11 @@ class PayrollAttendanceController extends Controller
             $if_has_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($date_r)));
             $if_dtr_correction = '';
             $time_in_out = 0;
-            $time_in = ($emp->attendances)->whereBetween('time_in',[$date_r." 00:00:00", $date_r." 23:59:59"])->first();
+            $time_in = ($emp->fix_attendances)->whereBetween('time_in',[$date_r." 00:00:00", $date_r." 23:59:59"])->first();
             $time_out = null;
             if($time_in == null)
             {
-                $time_out = ($emp->attendances)->whereBetween('time_out',[$date_r." 00:00:00", $date_r." 23:59:59"])->where('time_in',null)->first();
+                $time_out = ($emp->fix_attendances)->whereBetween('time_out',[$date_r." 00:00:00", $date_r." 23:59:59"])->where('time_in',null)->first();
             }
             
             $dtr_correction_time_in = "";
@@ -919,7 +919,7 @@ class PayrollAttendanceController extends Controller
                                         }
                                     }
                                 } else {
-                                    $check_attendance = checkHasAttendanceHolidayStatus($emp->attendances, $if_attendance_holiday);
+                                    $check_attendance = checkHasAttendanceHolidayStatus($emp->fix_attendances, $if_attendance_holiday);
                                     if (empty($check_attendance)) {
                                         $is_absent = 'Absent';
                                     } else {
@@ -951,7 +951,7 @@ class PayrollAttendanceController extends Controller
                                             }
                                         }
                                     } else {
-                                        $check_attendance = checkHasAttendanceHolidayStatus($emp->attendances, $if_attendance_holiday);
+                                        $check_attendance = checkHasAttendanceHolidayStatus($emp->fix_attendances, $if_attendance_holiday);
                                         if (empty($check_attendance)) {
                                             $is_absent = 'Absent';
                                         } else {
