@@ -53,24 +53,39 @@ class PayrollAttendanceExport implements FromQuery, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'USER ID', 'NAME','COMPANY','DEPARTMENT', 'LOCATION', 'BASIC PAY', 'DAILY RATE', 'HOURLY RATE',
-            'DAYS WORKED', 'DAYS WORK AMOUNT', 'SICK LEAVE DAYS', 'SICK LEAVE AMOUNT', 'VACATION LEAVE DAYS','VACATION LEAVE AMOUNT',
-            'ABSENCES DAYS', 'ABSENCES AMOUNT','LATE HOURS', 'LATES AMOUNT', 'UNDERTIME HOURS', 'UNDERTIME AMOUNT', 
-            'REGULAR OT HOURS', 'REGULAR OT AMOUNT', 'REST DAY HOURS','REST DAY HOURS AMOUNT','RDOD/SHOT HOURS','RDOT/SHOT AMOUNT',
-            'SPECIAL HOLIDAY HOURS','SPECIAL HOLIDAY AMOUNT','SHRD HOURS','SHRD AMOUNT','SH AND RD OT HOURS','SH AND RD OT AMOUNT',
-            'REGULAR HOLIDAY HOURS','REGULAR HOLIDAY AMOUNT','SH AND RD OR RH OT HOURS','SH AND RD OR RH OT AMOUNT',
-            'LHRD OT HOURS','LHRD OT AMOUNT','NIGHT DIFF HOURS','NIGHT DIFF AMOUNT','OVERTIME ADJUSTMENT','TOTAL OVERTIME PAY',
-            'TIME KEEPER','OT APPROVER','STATUS','REMARKS'
+            'ID','USER_ID','PAYROLL_PERIOD_ID','FULL_NAME','COMPANY','DEPARTMENT', 'LOCATION', 'BASIC_PAY', 'DAILY_RATE', 'HOURLY_RATE',
+            'DAYS_WORKED', 'DAYS_WORK_AMOUNT', 'SICK_LEAVE_DAYS', 'SICK_LEAVE_AMOUNT', 'VACATION_LEAVE_DAYS','VACATION_LEAVE_AMOUNT',
+            'ABSENCES_DAYS', 'ABSENCES_AMOUNT','LATE_HOURS', 'LATES_AMOUNT', 'UNDERTIME_HOURS', 'UNDERTIME_AMOUNT', 
+            'REGULAR_OT_HOURS', 'REGULAR_OT_AMOUNT', 'REST_DAY_HOURS','REST_DAY_HOURS_AMOUNT','RDOD_SHOT_HOURS','RDOT_SHOT_AMOUNT',
+            'SPECIAL_HOLIDAY_HOURS','SPECIAL_HOLIDAY_AMOUNT','SHRD_HOURS','SHRD_AMOUNT','SH_AND_RD_OT_HOURS','SH_AND_RD_OT_AMOUNT',
+            'REGULAR_HOLIDAY_HOURS','REGULAR_HOLIDAY_AMOUNT','SH_AND_RD_OR_RH_OT_HOURS','SH_AND_RD_OR_RH_OT_AMOUNT',
+            'LHRD_OT_HOURS','LHRD_OT_AMOUNT','NIGHT_DIFF_HOURS','NIGHT_DIFF_AMOUNT','OVERTIME_ADJUSTMENT','TOTAL_OVERTIME_PAY',
+            'TIME_KEEPER_ID','TIME_KEEPER','OT_APPROVER_ID','OT_APPROVER','STATUS','REMARKS'
         ];
     }
 
     public function map($payroll_register): array
-    {
-        $timeKeeper =  $payroll_register->timeKeeper ? ($payroll_register->timeKeeper->first_name . ' ' . $payroll_register->timeKeeper->last_name) : '';
-        $overtimeApprover = $payroll_register->overtimeApprover ? ($payroll_register->overtimeApprover->first_name . ' ' . $payroll_register->overtimeApprover->last_name) : '';
+    {   
+
+        $timeKeeperId = '';
+        $timeKeeper = '';
+        $overtimeApproverId = ''; 
+        $overtimeApprover = '';
+
+        if($payroll_register->timeKeeper){
+            $timeKeeperId = $payroll_register->timeKeeper->id;
+            $timeKeeper = ($payroll_register->timeKeeper->first_name . ' ' . $payroll_register->timeKeeper->last_name);
+        }
+
+        if($payroll_register->overtimeApprover){
+            $overtimeApproverId = $payroll_register->overtimeApprover->id; 
+            $overtimeApprover = ($payroll_register->overtimeApprover->first_name . ' ' . $payroll_register->overtimeApprover->last_name);
+        }
 
         return [
+            '',
             $payroll_register->user_id,
+            $payroll_register->payroll_period_id,
             $payroll_register->full_name,
             $payroll_register->company,
             $payroll_register->department,
@@ -112,7 +127,9 @@ class PayrollAttendanceExport implements FromQuery, WithHeadings, WithMapping
             $payroll_register->night_diff_amount,
             $payroll_register->overtime_adjustment,
             $payroll_register->total_overtime_pay,
+            $timeKeeperId,
             $timeKeeper,
+            $overtimeApproverId,
             $overtimeApprover,
             $payroll_register->status,
             $payroll_register->remarks
