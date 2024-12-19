@@ -810,7 +810,7 @@ class PayrollAttendanceController extends Controller
 
                         if(empty($check_if_holiday)){
                             if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
-                                $night_diff_hours = $night_diff_hours + round(night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
+                                $night_diff_hours = $night_diff_hours + round($this->night_difference(strtotime($time_in_data),strtotime($time_out_data)),2);
                             }
                         }
                     }
