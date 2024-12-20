@@ -1218,45 +1218,22 @@ class PayrollAttendanceController extends Controller
             $not_save = [];
             foreach($data[0] as $key => $value)
             {
-                $payroll_period = PayrollPeriod::where('id',$value['payroll_period_id'])->first();
-                $employee_attendance = $this->getEmployeeAttendance($value['user_id'],$payroll_period->start_date,$payroll_period->end_date);
-
-                $payroll_attendance = PayrollAttendance::where('payroll_period_id',$payroll_period->id)
+                $payroll_attendance = PayrollAttendance::where('payroll_period_id',$value['payroll_period_id'])
                                                         ->where('user_id',$value['user_id'])
                                                         ->first();
                 
                 if(!$payroll_attendance) $payroll_attendance = new PayrollAttendance();
 
-                if (isset($value['payroll_period_id'])) $payroll_attendance->payroll_period_id = $payroll_period->id;
+                if (isset($value['payroll_period_id'])) $payroll_attendance->payroll_period_id = $value['payroll_period_id'];
                 if (isset($value['user_id'])) $payroll_attendance->user_id = $value['user_id'];
                 if (isset($value['full_name'])) $payroll_attendance->full_name = $value['full_name'];
                 if (isset($value['department'])) $payroll_attendance->department = $value['department'];
                 if (isset($value['company'])) $payroll_attendance->company = $value['company'];
                 if (isset($value['location'])) $payroll_attendance->location = $value['location'];
-                $payroll_attendance->timekeeper = $user_id;
                 if (isset($value['overtime_approver_id'])) $payroll_attendance->overtime_approver = $value['overtime_approver_id'];
-             
-                if(isset($value['rate'])){
-                    $rate = $value['rate'];
-                    if($value['work_description'] == 'Monthly'){
-
-                        $daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0;
-                        $hourly_rate = $rate ? (($rate*12)/313)/8 : 0; //Hourly Rate
-
-                        $payroll_attendance->basic_pay =  $rate ? $rate / 2 : 0; //Basic Pay Computation
-                        $payroll_attendance->daily_rate = $daily_rate; //Daily Rate Computation
-                        $payroll_attendance->hourly_rate = $hourly_rate; //Hourly Rate Computation
-                    }else{
-
-                        $daily_rate = $rate;
-                        $hourly_rate = $rate / 8; //Hourly Rate
-
-                        $payroll_attendance->basic_pay =  ($rate * 313) / 12; //Basic Pay Computation
-                        $payroll_attendance->daily_rate = $rate; //Daily Rate Computation
-                        $payroll_attendance->hourly_rate = $rate / 8; //Hourly Rate Computation
-                    }
-                }
-
+                if (isset($value['basic_pay'])) $payroll_attendance->basic_pay = $value['basic_pay'];
+                if (isset($value['daily_rate'])) $payroll_attendance->daily_rate = $value['daily_rate'];
+                if (isset($value['hourly_rate'])) $payroll_attendance->hourly_rate = $value['hourly_rate'];
                 if (isset($value['no_of_days_worked'])) $payroll_attendance->no_of_days_worked = $value['no_of_days_worked'];
                 if (isset($value['days_worked_amount'])) $payroll_attendance->days_worked_amount = $value['days_worked_amount'];
                 if (isset($value['absences_days'])) $payroll_attendance->absences_days = $value['absences_days'];
@@ -1265,43 +1242,29 @@ class PayrollAttendanceController extends Controller
                 if (isset($value['lates_amount'])) $payroll_attendance->lates_amount = $value['lates_amount'];
                 if (isset($value['undertime_hours'])) $payroll_attendance->undertime_hours = $value['undertime_hours'];
                 if (isset($value['undertime_amount'])) $payroll_attendance->undertime_amount = $value['undertime_amount'];
-                if (isset($value['reg_ot_hours'])) $payroll_attendance->reg_ot_hours = $value['reg_ot_hours'];
-                if (isset($value['reg_ot_amount'])) $payroll_attendance->reg_ot_amount = $value['reg_ot_amount'];
+                if (isset($value['regular_ot_hours'])) $payroll_attendance->reg_ot_hours = $value['regular_ot_hours'];
+                if (isset($value['regular_ot_amount'])) $payroll_attendance->reg_ot_amount = $value['regular_ot_amount'];
                 if (isset($value['rest_day_hours'])) $payroll_attendance->rest_day_hours = $value['rest_day_hours'];
-                if (isset($value['rest_day_amount'])) $payroll_attendance->rest_day_amount = $hourly_rate * $value['rest_day_hours'] * 1.3;
-                if (isset($value['rdot_shot_hours'])) $payroll_attendance->rdot_shot_hours = $value['rdot_shot_hours'];
-                if (isset($value['rdot_shot_amount'])) $payroll_attendance->rdot_shot_amount = $hourly_rate * $value['rdot_shot_amount'] * 1.69;
-                if (isset($value['overtime_adjustment'])) $payroll_attendance->overtime_adjustment = getUserOvertimeAdjustmentAmount($value['user_id'],$value['payroll_period_id']);
+                if (isset($value['rest_day_hours_amount'])) $payroll_attendance->rest_day_amount = $value['rest_day_hours_amount'];
+                if (isset($value['rdod_shot_hours'])) $payroll_attendance->rdot_shot_hours = $value['rdod_shot_hours'];
+                if (isset($value['rdot_shot_amount'])) $payroll_attendance->rdot_shot_amount = $value['rdot_shot_amount'];
                 if (isset($value['special_holiday_hours'])) $payroll_attendance->special_holiday_hours = $value['special_holiday_hours'];
-                if (isset($value['special_holiday_amount'])) $payroll_attendance->special_holiday_amount = $hourly_rate * $value['special_holiday_hours'] * 1.3;
+                if (isset($value['special_holiday_amount'])) $payroll_attendance->special_holiday_amount = $value['special_holiday_amount'];
                 if (isset($value['shrd_hours'])) $payroll_attendance->shrd_hours = $value['shrd_hours'];
-                if (isset($value['shrd_amount'])) $payroll_attendance->shrd_amount = $hourly_rate * $value['shrd_hours'] * 1.5;
-                if (isset($value['sh_rd_ot_hours'])) $payroll_attendance->sh_rd_ot_hours = $value['sh_rd_ot_hours'];
-                if (isset($value['sh_rd_ot_amount'])) $payroll_attendance->sh_rd_ot_amount = $hourly_rate * $value['sh_rd_ot_hours'] * 1.95;
+                if (isset($value['shrd_amount'])) $payroll_attendance->shrd_amount = $value['shrd_amount'];
+                if (isset($value['sh_and_rd_ot_hours'])) $payroll_attendance->sh_rd_ot_hours = $value['sh_and_rd_ot_hours'];
+                if (isset($value['sh_and_rd_ot_amount'])) $payroll_attendance->sh_rd_ot_amount = $value['sh_and_rd_ot_amount'];
                 if (isset($value['regular_holiday_hours'])) $payroll_attendance->regular_holiday_hours = $value['regular_holiday_hours'];
-                if (isset($value['regular_holiday_amount'])) $payroll_attendance->regular_holiday_amount = $hourly_rate * $value['regular_holiday_amount'] * 1;
-                if (isset($value['rh_rd_or_lh_ot_hours'])) $payroll_attendance->rh_rd_or_lh_ot_hours = $value['rh_rd_or_lh_ot_hours'];
-                if (isset($value['rh_rd_or_lh_ot_amount'])) $payroll_attendance->rh_rd_or_lh_ot_amount = $hourly_rate * $value['rh_rd_or_lh_ot_hours'] * 2.6;
+                if (isset($value['regular_holiday_amount'])) $payroll_attendance->regular_holiday_amount = $value['regular_holiday_amount'];
+                if (isset($value['sh_and_rd_or_rh_ot_hours'])) $payroll_attendance->rh_rd_or_lh_ot_hours = $value['sh_and_rd_or_rh_ot_hours'];
+                if (isset($value['sh_and_rd_or_rh_ot_amount'])) $payroll_attendance->rh_rd_or_lh_ot_amount = $value['sh_and_rd_or_rh_ot_amount'];
                 if (isset($value['lhrd_ot_hours'])) $payroll_attendance->lhrd_ot_hours = $value['lhrd_ot_hours'];
-                if (isset($value['lhrd_ot_amount'])) $payroll_attendance->lhrd_ot_amount = $hourly_rate * $value['lhrd_ot_amount'] * 3.38;
+                if (isset($value['lhrd_ot_amount'])) $payroll_attendance->lhrd_ot_amount = $value['lhrd_ot_amount'];
                 if (isset($value['night_diff_hours'])) $payroll_attendance->night_diff_hours = $value['night_diff_hours'];
-                if (isset($value['night_diff_amount'])) $payroll_attendance->night_diff_amount = $hourly_rate * $value['night_diff_hours'] * .1;
-                
-
-                $total_overtime_payroll = $payroll_attendance->reg_ot_amount + 
-                        $payroll_attendance->rest_day_amount + 
-                        $payroll_attendance->rdot_shot_amount + 
-                        $payroll_attendance->special_holiday_amount +
-                        $payroll_attendance->shrd_hours_amount +
-                        $payroll_attendance->sh_rd_ot_amount +
-                        $payroll_attendance->regular_holiday_amount +
-                        $payroll_attendance->rh_rd_or_lh_ot_amount +
-                        $payroll_attendance->lhrd_ot_amount +
-                        $payroll_attendance->night_diff_amount + 
-                        $payroll_attendance->overtime_adjustment;
-
-
-                $payroll_attendance->total_overtime_pay = $total_overtime_payroll;
+                if (isset($value['night_diff_amount'])) $payroll_attendance->night_diff_amount = $value['night_diff_amount'];
+                if (isset($value['overtime_adjustment'])) $payroll_attendance->overtime_adjustment = $value['overtime_adjustment'];
+                if (isset($value['total_overtime_pay'])) $payroll_attendance->total_overtime_pay = $value['total_overtime_pay'];
+                if (isset($value['time_keeper_id'])) $payroll_attendance->timekeeper = $value['time_keeper_id'];
                 $payroll_attendance->save();
                 $save_count+=1;                                 
             }
