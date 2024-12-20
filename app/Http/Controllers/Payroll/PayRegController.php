@@ -178,6 +178,11 @@ class PayRegController extends Controller
                         $mpf_er = 0;
                         $month_15 = $accumulated_amount;
                         $month_30 = 0;
+                        $sss_reg_ee = 0;
+                        $sss_mpf_ee = 0;
+                        $sss_ec = 0;
+                        $phic_ee = 0;
+                        $hdmf_ee = 0;
 
                         //Get first cut off contribution
                         if($cut_off == 'Second Cut-Off'){
@@ -197,12 +202,13 @@ class PayRegController extends Controller
                                 $reg_er = $previous_contribution->sss_reg_er;
                                 $mpf_er = $previous_contribution->sss_mpf_er;
                             }
+                        }else{
+                            $sss_reg_ee = computeSSSContribution($total_accumulated,$cut_off,'employee_share_ee',$reg_ee);
+                            $sss_mpf_ee = computeSSSContribution($total_accumulated,$cut_off,'mpf_ee',$mpf_ee);
+                            $sss_ec = computeSSSecContribution($total_accumulated,$cut_off,'sss_ec',0);
+                            $phic_ee = computePHICContribution($rate,'employee_share_ee');
+                            $hdmf_ee = computePagibigContribution($rate,'employee_share_ee');
                         }
-                    
-                        $sss_reg_ee = computeSSSContribution($total_accumulated,$cut_off,'employee_share_ee',$reg_ee);
-                        $sss_mpf_ee = computeSSSContribution($total_accumulated,$cut_off,'mpf_ee',$mpf_ee);
-                        $phic_ee = computePHICContribution($rate,'employee_share_ee');
-                        $hdmf_ee = computePagibigContribution($rate,'employee_share_ee');
 
                         $ot_amount = 0;
                         $meal_allowances = 0;
@@ -358,9 +364,9 @@ class PayRegController extends Controller
                         $payroll_register->tin_no = $employee->tax_number;
                         $payroll_register->bir_tagging = $employee->level_info->name ;
 
-                        $payroll_register->sss_reg_er_15 = computeSSSContribution($total_accumulated,$cut_off,'employer_share_er',$reg_er);
-                        $payroll_register->sss_mpf_er_15 = computeSSSContribution($total_accumulated,$cut_off,'mpf_er',$mpf_er);
-                        $payroll_register->sss_ec_15 = computeSSSecContribution($total_accumulated,$cut_off,'sss_ec',0);
+                        $payroll_register->sss_reg_er_15 = $sss_reg_ee;
+                        $payroll_register->sss_mpf_er_15 = $sss_mpf_ee;
+                        $payroll_register->sss_ec_15 = $sss_ec;
                         $payroll_register->phic_er_15 = $phic_ee;
                         $payroll_register->hdmf_er_15 = $hdmf_ee;
                         $payroll_register->bank = $employee->bank_account_number;
