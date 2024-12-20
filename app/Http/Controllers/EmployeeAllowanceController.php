@@ -235,15 +235,16 @@ class EmployeeAllowanceController extends Controller
                     }
                     if(isset($value['credit_schedule'])){
 
+                        $value_credit_schedule = str_replace(' ', '', $value['credit_schedule']);
                         $credit_schedule = '';
                       
-                        if($value['credit_schedule'] == '15'){
+                        if($value_credit_schedule == '15'){
                             $credit_schedule = 'First Cut-Off';
                         }
-                        if($value['credit_schedule'] == '30'){
+                        else if($value_credit_schedule == '30'){
                             $credit_schedule = 'Second Cut-Off';
                         }
-                        if($value['credit_schedule'] == 'Both' || $value['credit_schedule'] == 'both' || $value['credit_schedule'] == 'BOTH'){
+                        else if($value_credit_schedule == 'Both' || $value_credit_schedule == 'both' || $value_credit_schedule == 'BOTH'){
                             $credit_schedule = 'Every Cut-Off';
                         }
                         
@@ -288,13 +289,16 @@ class EmployeeAllowanceController extends Controller
 
                     $credit_schedule = '';
                     if(isset($value['credit_schedule'])){
-                        if($value['credit_schedule'] == '15'){
+
+                        $value_credit_schedule = str_replace(' ', '', $value['credit_schedule']);
+
+                        if($value_credit_schedule == '15'){
                             $credit_schedule = 'First Cut-Off';
                         }
-                        if($value['credit_schedule'] == '30'){
+                        else if($value_credit_schedule == '30'){
                             $credit_schedule = 'Second Cut-Off';
                         }
-                        if($value['credit_schedule'] == 'Both' || $value['credit_schedule'] == 'both' || $value['credit_schedule'] == 'BOTH'){
+                        else if($value_credit_schedule == 'Both' || $value_credit_schedule == 'both' || $value_credit_schedule == 'BOTH'){
                             $credit_schedule = 'Every Cut-Off';
                         }
                     }
