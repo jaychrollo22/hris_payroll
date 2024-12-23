@@ -54,8 +54,11 @@ class PayRegController extends Controller
         }
 
         if($company){
-            $department_companies = Employee::when($company,function($q) use($company){
+            $department_companies = Employee::when($company != "All",function($q) use($company){
                             $q->where('company_id',$company);
+                        })
+                        ->when($company == "All",function($q) use($allowed_companies){
+                            $q->whereIn('company_id',$allowed_companies);
                         })
                         ->groupBy('department_id')
                         ->pluck('department_id')
@@ -64,9 +67,14 @@ class PayRegController extends Controller
             $departments = Department::whereIn('id',$department_companies)->where('status','1')
                     ->orderBy('name')
                     ->get();
-
-            $payroll_registers->whereHas('employee',function($q) use($company){
-                $q->where('company_id',$company);
+            
+            $payroll_registers->whereHas('employee',function($q) use($company,$allowed_companies){
+                $q->when($company != "All", function($q2) use($company){
+                    $q2->where('company_id',$company);
+                })
+                ->when($company == "All", function($q2) use($allowed_companies){
+                    $q2->whereIn('company_id',$allowed_companies);
+                });
             });
 
         }else{

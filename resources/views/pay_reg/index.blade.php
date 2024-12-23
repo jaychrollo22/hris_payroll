@@ -51,6 +51,7 @@
                           <div class="form-group">
                             <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
                               <option value="">-- Select Company --</option>
+                              <option value="All" @if ($company == "All") selected @endif>All</option>
                               @foreach($companies as $comp)
                               <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
                               @endforeach

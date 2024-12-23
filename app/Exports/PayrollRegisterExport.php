@@ -24,15 +24,10 @@ class PayrollRegisterExport implements FromQuery, WithHeadings, WithMapping
     {
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
 
-        $companies = Company::whereHas('employee_has_company')
-                                ->whereIn('id',$allowed_companies)
-                                ->get();
-
         $company = $this->company ? $this->company : "";
         $department = $this->department ? $this->department : "";
         $payroll_period = $this->payroll_period ? $this->payroll_period : "";
 
-        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         $payroll_registers = PayrollRegister::with('payrollPeriod')->where('payroll_period_id',$payroll_period)->orderBy('name','ASC');
         
         if($department){
@@ -42,8 +37,13 @@ class PayrollRegisterExport implements FromQuery, WithHeadings, WithMapping
         }
 
         if($company){
-            $payroll_registers->whereHas('employee',function($q) use($company){
-                $q->where('company_id',$company);
+            $payroll_registers->whereHas('employee',function($q) use($company,$allowed_companies){
+                $q->when($company != "All", function($q2) use($company){
+                    $q2->where('company_id',$company);
+                })
+                ->when($company == "All", function($q2) use($allowed_companies){
+                    $q2->whereIn('company_id',$allowed_companies);
+                });
             });
 
         }
