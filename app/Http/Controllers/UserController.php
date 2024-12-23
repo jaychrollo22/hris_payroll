@@ -313,17 +313,17 @@ class UserController extends Controller
                 $new_user_privilege->masterfiles_employee_loans = $request->masterfiles_employee_loans;
                 $new_user_privilege->masterfiles_performance_plan_periods = $request->masterfiles_performance_plan_periods;
 
-                $user_privilege->payroll_period = $request->payroll_period;
-                $user_privilege->payroll_payreg = $request->payroll_payreg;
-                $user_privilege->payroll_payreg_post = $request->payroll_payreg_post;
-                $user_privilege->payroll_payreg_unpost = $request->payroll_payreg_unpost;
-                $user_privilege->payroll_attendance = $request->payroll_attendance;
-                $user_privilege->payroll_salary_adjustment = $request->payroll_salary_adjustment;
-                $user_privilege->payslip_filter_per_company = $request->payslip_filter_per_company;
-                $user_privilege->payroll_contribution = $request->payroll_contribution;
-                $user_privilege->payroll_deduction = $request->payroll_deduction;
-                $user_privilege->allowance_setting = $request->allowance_setting;
-                $user_privilege->deduction_setting = $request->deduction_setting;
+                $user_privilege->payroll_period = isset($request->payroll_period) ? $request->payroll_period : null;
+                $user_privilege->payroll_payreg = isset($request->payroll_payreg) ? $request->payroll_payreg : null;
+                $user_privilege->payroll_payreg_post = isset($request->payroll_payreg_post) ? $request->payroll_payreg_post : null;
+                $user_privilege->payroll_payreg_unpost = isset($request->payroll_payreg_unpost) ? $request->payroll_payreg_unpost : null;
+                $user_privilege->payroll_attendance = isset($request->payroll_attendance) ? $request->payroll_attendance : null;
+                $user_privilege->payroll_salary_adjustment = isset($request->payroll_salary_adjustment) ? $request->payroll_salary_adjustment : null;
+                $user_privilege->payslip_filter_per_company = isset($request->payslip_filter_per_company) ? $request->payslip_filter_per_company : null;
+                $user_privilege->payroll_contribution = isset($request->payroll_contribution) ? $request->payroll_contribution : null;
+                $user_privilege->payroll_deduction = isset($request->payroll_deduction) ? $request->payroll_deduction : null;
+                $user_privilege->allowance_setting = isset($request->allowance_setting) ? $request->payroll_deduction : null;
+                $user_privilege->deduction_setting = isset($request->deduction_setting) ? $request->deduction_setting : null;
 
                 $new_user_privilege->save();
                 Alert::success('Successfully Updated')->persistent('Dismiss');
