@@ -356,6 +356,7 @@ class PayRegController extends Controller
                         //Total Taxable
                         $payroll_register->total_taxable = $total_taxable;
                         $payroll_register->minimum_wage = $employee->tax_application === "Non-Minimum" ? 0 : 1;
+                        $payroll_register->tax_application = $employee->tax_application;
 
                         //Government contributions number
                         $payroll_register->sss_no = $employee->sss_number;
@@ -554,6 +555,7 @@ class PayRegController extends Controller
                     if (isset($value['grosspay'])) $payroll_register->grosspay = $value['grosspay'];
                     if (isset($value['total_taxable'])) $payroll_register->total_taxable = $value['total_taxable'];
                     if (isset($value['minimum_wage'])) $payroll_register->minimum_wage = $value['minimum_wage'];
+                    if (isset($value['tax_application'])) $payroll_register->tax_application = $value['tax_application'];
                     if (isset($value['withholding_tax'])) $payroll_register->withholding_tax = $value['withholding_tax'];
                     if (isset($value['sss_reg_ee_15'])) $payroll_register->sss_reg_ee_15 = $value['sss_reg_ee_15'];
                     if (isset($value['sss_mpf_ee_15'])) $payroll_register->sss_mpf_ee_15 = $value['sss_mpf_ee_15'];
