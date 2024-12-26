@@ -283,6 +283,7 @@ class PayrollAttendanceController extends Controller
             $check_if_early_cutoff = checkIfEarlyCutoff(date('Y-m-d',strtotime($date_r)));
 
             $check_if_has_leave_shift = employeeHasLeaveShift($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
+            $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
 
             $overtime = '';
             $time_in_data = '';
@@ -761,12 +762,13 @@ class PayrollAttendanceController extends Controller
                 }
 
                 //Late
-                if ($check_if_has_leave_shift) {
-                    if ($check_if_has_leave_shift == 'Second Shift') {
+                if ($if_leave) {
+
+                    if($if_leave == 'VL Second Shift Without-Pay' || $if_leave == 'SL Second Shift Without-Pay' || $if_leave == 'SL Second Shift With-Pay' || $if_leave == 'SL Second Shift With-Pay'){
                         if (empty($check_if_holiday)) {
                             $lates = (double)$lates + $late_diff_hours;
                         }
-                    } 
+                    }
                 } else {
                     if (empty($check_if_holiday)) {
                         $lates = (double)$lates + $late_diff_hours;
@@ -774,8 +776,8 @@ class PayrollAttendanceController extends Controller
                 }
 
                 //Undertime
-                if ($check_if_has_leave_shift) {
-                    if ($check_if_has_leave_shift == 'First Shift') {
+                if ($if_leave) {
+                    if($if_leave == 'VL First Shift Without-Pay' || $if_leave == 'SL First Shift Without-Pay' || $if_leave == 'SL First Shift With-Pay' || $if_leave == 'SL First Shift With-Pay'){
                         if (empty($check_if_holiday)) {
                             if ($undertime_hrs > 0) {
                                 $undertimes = $undertimes + $undertime_hrs;
