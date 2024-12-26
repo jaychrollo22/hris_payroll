@@ -639,9 +639,16 @@ class PayRegController extends Controller
     }
 
     public function post(Request $request){
+        $company = $request->company;
+        $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
 
-       $count = PayrollRegister::whereHas('employee',function($q) use($request){
-                $q->where('company_id',$request->company);
+        $count = PayrollRegister::whereHas('employee',function($q) use($company,$allowed_companies){
+                $q->when($company != "All",function($q) use($company){
+                    $q->where('company_id',$company);
+                })
+                ->when($company == "All",function($q) use($allowed_companies){
+                    $q->whereIn('company_id',$allowed_companies);
+                });
             })
             ->where('payroll_period_id',$request->payroll_period)
             ->when(isset($request->department),function($q) use($request){
