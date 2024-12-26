@@ -54,8 +54,11 @@ class PayRegController extends Controller
         }
 
         if($company){
-            $department_companies = Employee::when($company,function($q) use($company){
+            $department_companies = Employee::when($company != "All",function($q) use($company){
                             $q->where('company_id',$company);
+                        })
+                        ->when($company == "All",function($q) use($allowed_companies){
+                            $q->whereIn('company_id',$allowed_companies);
                         })
                         ->groupBy('department_id')
                         ->pluck('department_id')
@@ -64,9 +67,14 @@ class PayRegController extends Controller
             $departments = Department::whereIn('id',$department_companies)->where('status','1')
                     ->orderBy('name')
                     ->get();
-
-            $payroll_registers->whereHas('employee',function($q) use($company){
-                $q->where('company_id',$company);
+            
+            $payroll_registers->whereHas('employee',function($q) use($company,$allowed_companies){
+                $q->when($company != "All", function($q2) use($company){
+                    $q2->where('company_id',$company);
+                })
+                ->when($company == "All", function($q2) use($allowed_companies){
+                    $q2->whereIn('company_id',$allowed_companies);
+                });
             });
 
         }else{
@@ -356,6 +364,7 @@ class PayRegController extends Controller
                         //Total Taxable
                         $payroll_register->total_taxable = $total_taxable;
                         $payroll_register->minimum_wage = $employee->tax_application === "Non-Minimum" ? 0 : 1;
+                        $payroll_register->tax_application = $employee->tax_application;
 
                         //Government contributions number
                         $payroll_register->sss_no = $employee->sss_number;
@@ -554,6 +563,7 @@ class PayRegController extends Controller
                     if (isset($value['grosspay'])) $payroll_register->grosspay = $value['grosspay'];
                     if (isset($value['total_taxable'])) $payroll_register->total_taxable = $value['total_taxable'];
                     if (isset($value['minimum_wage'])) $payroll_register->minimum_wage = $value['minimum_wage'];
+                    if (isset($value['tax_application'])) $payroll_register->tax_application = $value['tax_application'];
                     if (isset($value['withholding_tax'])) $payroll_register->withholding_tax = $value['withholding_tax'];
                     if (isset($value['sss_reg_ee_15'])) $payroll_register->sss_reg_ee_15 = $value['sss_reg_ee_15'];
                     if (isset($value['sss_mpf_ee_15'])) $payroll_register->sss_mpf_ee_15 = $value['sss_mpf_ee_15'];
@@ -629,9 +639,16 @@ class PayRegController extends Controller
     }
 
     public function post(Request $request){
+        $company = $request->company;
+        $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
 
-       $count = PayrollRegister::whereHas('employee',function($q) use($request){
-                $q->where('company_id',$request->company);
+        $count = PayrollRegister::whereHas('employee',function($q) use($company,$allowed_companies){
+                $q->when($company != "All",function($q) use($company){
+                    $q->where('company_id',$company);
+                })
+                ->when($company == "All",function($q) use($allowed_companies){
+                    $q->whereIn('company_id',$allowed_companies);
+                });
             })
             ->where('payroll_period_id',$request->payroll_period)
             ->when(isset($request->department),function($q) use($request){
