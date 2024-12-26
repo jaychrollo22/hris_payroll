@@ -107,7 +107,7 @@ class PayrollAttendanceController extends Controller
                                             $q->where('department_id',$request->department);
                                         })
                                         ->where('status','Active')
-                                        // ->where('id','1') // My Id
+                                        // ->where('user_id','344') // My Id
                                         ->get();
 
         $count = 0;
@@ -156,6 +156,7 @@ class PayrollAttendanceController extends Controller
                         }
                     }
 
+                    // return $employee_attendance['total_work_day'];
 
                     $payroll_attendance->no_of_days_worked = $employee_attendance['total_work_day']; // Total Worked Days
                     $payroll_attendance->days_worked_amount = $daily_rate * $employee_attendance['total_work_day']; // Amount of Total Work Days
@@ -267,6 +268,8 @@ class PayrollAttendanceController extends Controller
         $total_absent = 0;
         $total_late = 0;
         $total_undertime = 0;
+
+        $total_leave_shift = 0;
 
         $vl = 0;
         $sl = 0;
@@ -879,7 +882,7 @@ class PayrollAttendanceController extends Controller
                 } 
             }
 
-
+            
             if ($time_in == null) {
                 if ($employee_schedule) {
                     $is_absent = '';
@@ -978,6 +981,8 @@ class PayrollAttendanceController extends Controller
                             else if($if_leave == 'SL With-Pay'){
                                 $check_leave_count_sl = employeeHasLeaveCount($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule, 'SL');
                                 $sl += $check_leave_count_sl;
+                            }else if($if_leave == 'VL First Shift Without-Pay' || $if_leave == 'VL Second Shift Without-Pay'){
+                                $total_leave_shift = 0.5;
                             }
                         }
                         
@@ -1053,7 +1058,7 @@ class PayrollAttendanceController extends Controller
             
                 if ($employee_schedule) {
                     
-                    $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
+                   $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
                     
                     if($if_leave){
                         if($if_leave == 'VL With-Pay'){
@@ -1063,6 +1068,8 @@ class PayrollAttendanceController extends Controller
                         else if($if_leave == 'SL With-Pay'){
                             $check_leave_count_sl = employeeHasLeaveCount($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule, 'SL');
                             $sl += $check_leave_count_sl;
+                        }else if($if_leave == 'VL First Shift Without-Pay' || $if_leave == 'VL Second Shift Without-Pay'){
+                            $total_leave_shift = 0.5;
                         }
                     }
 
@@ -1112,6 +1119,8 @@ class PayrollAttendanceController extends Controller
               
         }  
 
+        $total_work_day = ($total_work_day - $total_leave_shift);
+        $total_absent = $total_absent + $total_leave_shift;
 
         return $response = [
             'work'=>$work,
@@ -1132,7 +1141,8 @@ class PayrollAttendanceController extends Controller
             'total_work_day'=>$total_work_day,
             'vl' => $vl,
             'sl' => $sl,
-            'wfh' => $wfh
+            'wfh' => $wfh,
+            'total_leave_shift' => $total_leave_shift,
         ];
             
 
