@@ -78,6 +78,28 @@
                           </div>
                         </div>
                         @endif
+
+                        <div class="card">
+                          <div class="card-body">
+                            <p class="card-title ">Payslip</p>
+                            <div class="row">
+                              <div class='col-md-12'>
+
+                                  <div class="form-group">
+                                    <select data-placeholder="Select Payroll Period" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name="payroll_period" onchange="changePayrollPeriod(this.value)">
+                                      <option value="">-- Select Payroll Period --</option>
+                                      @foreach($payroll_periods as $payroll_period_item)
+                                      <option value="{{url('/payslip-print/'.$payroll_period_item->payrollRegisters[0]->id)}}" @if ($payroll_period_item->id == $payroll_period) selected @endif>{{$payroll_period_item->payroll_name}} ({{$payroll_period_item->start_date .'-'. $payroll_period_item->end_date}})</option>
+                                      @endforeach
+                                    </select>
+                                  </div>
+                                  <input type="hidden" id="payslipLink">
+                                  <button id="viewPayslip" type="button" class="btn btn-outline-primary btn-fw btn-sm float-right" onclick="viewPayslip()" style="display: none">View Payslip</button>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        
                     </div>
                     <div class="col-md-8">
                       <div class="card">
@@ -171,6 +193,17 @@
   }
 
   setInterval(time, 1000);
+
+  function changePayrollPeriod(link){
+    document.getElementById('viewPayslip').style.display = 'block';
+    document.getElementById("payslipLink").innerText = link;
+  }
+
+  function viewPayslip(){
+    // Open the URL in a new tab
+    window.open(document.getElementById("payslipLink").innerText , '_blank');
+  }
+
 </script>
 @endsection
 @section('footer')

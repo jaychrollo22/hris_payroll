@@ -14,5 +14,8 @@ class PayrollPeriod extends Model implements Auditable
     use SoftDeletes;
 
     protected $guareded = [];
-    
+
+    public function payrollRegisters(){
+        return $this->hasMany(PayrollRegister::class);
+    }
 }
