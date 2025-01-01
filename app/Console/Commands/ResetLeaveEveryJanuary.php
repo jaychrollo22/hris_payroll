@@ -48,7 +48,7 @@ class ResetLeaveEveryJanuary extends Command
 
         // $classifications = [1,2,3];
         $year = date('Y');
-        $classifications = [3];
+        $classifications = [2];
         // $companies = [14,11,7,2,1,4,16,5];
 
         $oneYearAgo = now()->subYear()->toDateString();
@@ -57,51 +57,54 @@ class ResetLeaveEveryJanuary extends Command
                                 ->where('status','Active')
                                 ->whereIn('classification',$classifications)
                                 // ->whereIn('company_id',$companies)
-                                ->where('user_id','1463')
+                                // ->where('user_id','1463')
                                 ->get();
 
         $count_employee = 0;
         foreach($employees as $employee){
 
-            $vl_id = 1;
-            $sl_id = 2;
+            if($employee->original_date_hired){                
+                
+                $vl_id = 1;
+                $sl_id = 2;
 
-            $additional_leave = $this->earnedAdditionalLeave($employee->original_date_hired);
-            return $this->info($additional_leave);
-            $leave_type_balance_vl = EmployeeLeaveTypeBalance::where('user_id',$employee->user_id)
-                                                                    ->where('year',$year)
-                                                                    ->where('leave_type','VL')
-                                                                    ->first();
-            if(empty($leave_type_balance_vl)){
-                $leave_type_balance_vl = new EmployeeLeaveTypeBalance;
+                $additional_leave = $this->earnedAdditionalLeave($employee->original_date_hired);
+        
+                $leave_type_balance_vl = EmployeeLeaveTypeBalance::where('user_id',$employee->user_id)
+                                                                        ->where('year',$year)
+                                                                        ->where('leave_type','VL')
+                                                                        ->first();
+                if(empty($leave_type_balance_vl)){
+                    $leave_type_balance_vl = new EmployeeLeaveTypeBalance;
+                }
+
+                $leave_type_balance_vl->user_id = $employee->user_id;
+                $leave_type_balance_vl->year = $year;
+                $leave_type_balance_vl->leave_type = 'VL';
+                $leave_type_balance_vl->balance = 10 + $additional_leave;
+                $leave_type_balance_vl->status = 'Active';
+                $leave_type_balance_vl->save();
+                
+
+                $leave_type_balance_sl = EmployeeLeaveTypeBalance::where('user_id',$employee->user_id)
+                                                                        ->where('year',$year)
+                                                                        ->where('leave_type','SL')
+                                                                        ->first();
+
+                if(empty($leave_type_balance_sl)){
+                    $leave_type_balance_sl = new EmployeeLeaveTypeBalance;
+                }
+
+                $leave_type_balance_sl->user_id = $employee->user_id;
+                $leave_type_balance_sl->year = $year;
+                $leave_type_balance_sl->leave_type = 'SL';
+                $leave_type_balance_sl->balance = 10 + $additional_leave;
+                $leave_type_balance_sl->status = 'Active';
+                $leave_type_balance_sl->save();
+                
+
+                $count_employee++;
             }
-
-            $leave_type_balance_vl->user_id = $employee->user_id;
-            $leave_type_balance_vl->year = $year;
-            $leave_type_balance_vl->leave_type = 'VL';
-            $leave_type_balance_vl->balance = 10 + $additional_leave;
-            $leave_type_balance_vl->status = 'Active';
-            $leave_type_balance_vl->save();
-            
-
-            $leave_type_balance_sl = EmployeeLeaveTypeBalance::where('user_id',$employee->user_id)
-                                                                    ->where('year',$year)
-                                                                    ->where('leave_type','SL')
-                                                                    ->first();
-
-            if(empty($leave_type_balance_sl)){
-                $leave_type_balance_sl = new EmployeeLeaveTypeBalance;
-            }
-
-            $leave_type_balance_sl->user_id = $employee->user_id;
-            $leave_type_balance_sl->year = $year;
-            $leave_type_balance_sl->leave_type = 'SL';
-            $leave_type_balance_sl->balance = 10 + $additional_leave;
-            $leave_type_balance_sl->status = 'Active';
-            $leave_type_balance_sl->save();
-            
-
-            $count_employee++;
         }
 
         return $this->info('New Year Leaves for Regular Employee has been credited ' . $count_employee);
