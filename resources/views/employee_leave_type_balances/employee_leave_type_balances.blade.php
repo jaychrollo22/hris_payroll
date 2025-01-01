@@ -116,7 +116,7 @@
                           </td>
                           <td>{{ $balance }}</td>
                           <td>
-                            <a href="employee-used-leaves/{{$item->user->id}}?leave_type={{$leave_type}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
+                            <a href="employee-used-leaves/{{$item->user->id}}?leave_type={{$leave_type}}&year={{$item->year}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
                           </td>
                           <td>{{ $remaining > 0 ? $remaining : 0 }}</td>
                           <td>
