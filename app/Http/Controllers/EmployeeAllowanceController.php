@@ -84,7 +84,7 @@ class EmployeeAllowanceController extends Controller
             'allowance_type' => 'required',
             'user_id' => 'required',
             'amount' => 'required', 'min:1',
-            'effective_date' => 'required',
+            // 'effective_date' => 'required',
             'is_taxable' => 'required'
         ]);
 
