@@ -171,7 +171,7 @@ class PayrollAttendanceController extends Controller
                     $payroll_attendance->undertime_amount = $hourly_rate * $employee_attendance['undertime']; // Amount of Undertime
 
                     $payroll_attendance->reg_ot_hours = $employee_attendance['reg_ot_hours']; // OT Hours
-                    $payroll_attendance->reg_ot_amount = $hourly_rate * $employee_attendance['reg_ot_hours']; // Amount of Total Absent
+                    $payroll_attendance->reg_ot_amount = $hourly_rate * $employee_attendance['reg_ot_hours'] * 1.25; // Amount of Total Absent
 
                     $payroll_attendance->rest_day_hours = $employee_attendance['rest_day_hours']; // OT Hours
                     $payroll_attendance->rest_day_amount = $hourly_rate * $employee_attendance['rest_day_hours'] * 1.3; // Amount of Total Absent
