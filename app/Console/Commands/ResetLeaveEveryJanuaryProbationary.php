@@ -50,7 +50,7 @@ class ResetLeaveEveryJanuaryProbationary extends Command
         $year = date('Y');
         $previousYear = Carbon::now()->subYear()->year;
 
-        $classifications = [2,3];
+        $classifications = [1];
         $oneYearAgo = now()->subYear()->format('Y-m-d');
 
         $employees = Employee::whereYear('original_date_hired','>=', Carbon::now()->subYear())
