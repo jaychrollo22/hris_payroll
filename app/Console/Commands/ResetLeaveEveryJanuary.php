@@ -98,7 +98,7 @@ class ResetLeaveEveryJanuary extends Command
                 $leave_type_balance_sl->user_id = $employee->user_id;
                 $leave_type_balance_sl->year = $year;
                 $leave_type_balance_sl->leave_type = 'SL';
-                $leave_type_balance_sl->balance = 10 + $additional_leave;
+                $leave_type_balance_sl->balance = 10;
                 $leave_type_balance_sl->status = 'Active';
                 $leave_type_balance_sl->save();
                 
