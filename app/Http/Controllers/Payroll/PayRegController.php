@@ -11,6 +11,7 @@ use App\Employee;
 use App\Company;
 use App\Department;
 use App\PayrollEmployeeContribution;
+use App\User;
 
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Crypt;
@@ -18,9 +19,9 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use Excel;
 use App\Exports\PayrollRegisterExport;
 use Carbon\Carbon;
-
 use App\Imports\PayrollRegisterImport;
-
+use App\Mail\PayslipNotification;
+use Illuminate\Support\Facades\Mail;
 class PayRegController extends Controller
 {
     /**
@@ -642,7 +643,7 @@ class PayRegController extends Controller
         $company = $request->company;
         $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
 
-        $count = PayrollRegister::whereHas('employee',function($q) use($company,$allowed_companies){
+        $payroll_registers = PayrollRegister::whereHas('employee',function($q) use($company,$allowed_companies){
                 $q->when($company != "All",function($q) use($company){
                     $q->where('company_id',$company);
                 })
@@ -659,12 +660,20 @@ class PayRegController extends Controller
             ->when(isset($request->payreg_id),function($q) use($request){
                 $q->where('id',$request->payreg_id);
             })
-            ->update([
-                'posting_status' => $request->posting_status,
-                'posting_date' => Carbon::now()
-            ]);
+            ->get();
 
-            Alert::success('Payroll Register Successfully '. $request->posting_status. ' (' . $count. ')')->persistent('Dismiss');
+            foreach($payroll_registers as $payroll_register){
+                $user = User::findOrFail($payroll_register->user_id);
+                //Send email notif for the payslip            
+                if($request->posting_status == 'Posted') Mail::to($user->email)->send(new PayslipNotification($payroll_register->id,$payroll_register->cut_from,$payroll_register->cut_to));
+
+                $payroll_register->update([
+                    'posting_status' => $request->posting_status,
+                    'posting_date' => Carbon::now()
+                ]);
+            }
+
+            Alert::success('Payroll Register Successfully '. $request->posting_status. ' (' . $payroll_registers->count(). ')')->persistent('Dismiss');
             return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company . '&department=' .$request->department);
     }
 }
