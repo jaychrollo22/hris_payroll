@@ -44,14 +44,14 @@
 							<input type="text" class="form-control form-control-sm" name="description" id="description"
 								value="{{ old('description') }}" placeholder="Any Remarks">
 						</div>
-						{{-- <div class="col-lg-6 form-group">
+						<div class="col-lg-6 form-group">
 							<label for="application">Application</label>
-							<select id="application" class="form-control form-control-sm" name="application">
+							<select id="application" class="form-control form-control-sm" name="application" required>
 								<option value="">Choose Application</option>
 								<option value="Daily">Daily</option>
 								<option value="Fixed">Fixed</option>
 							</select>
-						</div> --}}
+						</div>
 						<div class="col-lg-6 form-group">
 							<label for="type">Type</label>
 							<select id="type" class="form-control form-control-sm" name="type">

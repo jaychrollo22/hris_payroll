@@ -14,6 +14,7 @@ use App\EmployeeOvertime;
 use App\EmployeeWfh;
 use App\EmployeeOb;
 use App\EmployeeDtr;
+use App\PayrollPeriod;
 
 class HomeController extends Controller
 {
@@ -74,6 +75,16 @@ class HomeController extends Controller
             $query->where('status',null)->whereYear('holiday_date', '=', date('Y'));
         })
         ->orderBy('holiday_date','asc')->get();
+
+        $payroll_periods = PayrollPeriod::whereHas('payrollRegisters', function($q){
+            $q->where('posting_status', 'Posted')
+            ->where('user_id',auth()->user()->id);
+        })
+        ->with(['payrollRegisters' => function($q){
+            $q->where('posting_status', 'Posted')
+            ->where('user_id',auth()->user()->id);
+        }])
+        ->get();
         
         return view('dashboards.home',
         array(
@@ -87,6 +98,8 @@ class HomeController extends Controller
             'announcements' => $announcements ,
             'attendance_employees' => $attendance_employees ,
             'holidays' => $holidays ,
+            'payroll_period' => '',
+            'payroll_periods' => $payroll_periods,
         ));
     }
 

@@ -147,37 +147,39 @@ class SssMatrixContributionController extends Controller
             $save_count = 0;
             $not_save = [];
             foreach($data[0] as $key => $value){
-                $contribution = SssMatrixContribution::where('min_salary',$value['min_salary'])
-                    ->where('max_salary',$value['max_salary'])
-                    ->first();
+                    if($value['min_salary']){
+                        $contribution = SssMatrixContribution::where('min_salary',$value['min_salary'])
+                        ->where('max_salary',$value['max_salary'])
+                        ->first();
 
-                if($contribution){
-                    if(isset($value['min_salary'])) $contribution->min_salary = $value['min_salary'];
-                    if(isset($value['max_salary'])) $contribution->max_salary = $value['max_salary'];
-                    if(isset($value['employee_share_ee'])) $contribution->employee_share_ee = $value['employee_share_ee'];
-                    if(isset($value['employer_share_er'])) $contribution->employer_share_er = $value['employer_share_er'];
-                    if(isset($value['total_contribution'])) $contribution->total_contribution = $value['total_contribution'];
-                    if(isset($value['mpf_ee'])) $contribution->mpf_ee = $value['mpf_ee'];
-                    if(isset($value['mpf_er'])) $contribution->mpf_er = $value['mpf_er'];
-                    if(isset($value['total_mpf'])) $contribution->total_mpf = $value['total_mpf'];
-                    if(isset($value['is_no_limit'])) $contribution->is_no_limit = $value['is_no_limit'];
-                
-                    $contribution->save();
-                    $save_count+=1;
-                }else{
-                    $contribution = new SssMatrixContribution;
-                    $contribution->min_salary = $value['min_salary'];
-                    $contribution->max_salary = $value['max_salary'];
-                    $contribution->employee_share_ee = $value['employee_share_ee'];
-                    $contribution->employer_share_er = $value['employer_share_er'];
-                    $contribution->total_contribution = $value['total_contribution'];
-                    $contribution->mpf_ee = $value['mpf_ee'];
-                    $contribution->mpf_er = $value['mpf_er'];
-                    $contribution->total_mpf = $value['total_mpf'];
-                    $contribution->is_no_limit = $value['is_no_limit'];
-                    $contribution->save();
-                    $save_count+=1;
-                }                                         
+                    if($contribution){
+                        if(isset($value['min_salary'])) $contribution->min_salary = $value['min_salary'];
+                        if(isset($value['max_salary'])) $contribution->max_salary = $value['max_salary'];
+                        if(isset($value['employee_share_ee'])) $contribution->employee_share_ee = $value['employee_share_ee'];
+                        if(isset($value['employer_share_er'])) $contribution->employer_share_er = $value['employer_share_er'];
+                        if(isset($value['total_contribution'])) $contribution->total_contribution = $value['total_contribution'];
+                        if(isset($value['mpf_ee'])) $contribution->mpf_ee = $value['mpf_ee'];
+                        if(isset($value['mpf_er'])) $contribution->mpf_er = $value['mpf_er'];
+                        if(isset($value['total_mpf'])) $contribution->total_mpf = $value['total_mpf'];
+                        if(isset($value['is_no_limit'])) $contribution->is_no_limit = $value['is_no_limit'];
+                    
+                        $contribution->save();
+                        $save_count+=1;
+                    }else{
+                        $contribution = new SssMatrixContribution;
+                        $contribution->min_salary = $value['min_salary'];
+                        $contribution->max_salary = $value['max_salary'];
+                        $contribution->employee_share_ee = $value['employee_share_ee'];
+                        $contribution->employer_share_er = $value['employer_share_er'];
+                        $contribution->total_contribution = $value['total_contribution'];
+                        $contribution->mpf_ee = $value['mpf_ee'];
+                        $contribution->mpf_er = $value['mpf_er'];
+                        $contribution->total_mpf = $value['total_mpf'];
+                        $contribution->is_no_limit = $value['is_no_limit'];
+                        $contribution->save();
+                        $save_count+=1;
+                    }
+                }                                      
             }
 
             Alert::success('Successfully Import SSS Matrix Contributions (' . $save_count. ')')->persistent('Dismiss');
