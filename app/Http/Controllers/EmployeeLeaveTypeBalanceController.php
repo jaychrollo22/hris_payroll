@@ -35,6 +35,7 @@ class EmployeeLeaveTypeBalanceController extends Controller
                                 ->get();
 
         $search = isset($request->search) ? $request->search : "";
+        $search_year = isset($request->search_year) ? $request->search_year : date('Y');
         $status = isset($request->status) ? $request->status : "Active";
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
@@ -67,6 +68,10 @@ class EmployeeLeaveTypeBalanceController extends Controller
                                             ->whereHas('employee',function($q) use($department){
                                                 $q->where('department_id',$department);
                                             });
+        }
+        if($search_year){
+            $employee_leave_type_balances = $employee_leave_type_balances
+                                            ->where('year',$search_year);
         }
         if($search | $company | $department){
             $employee_leave_type_balances = $employee_leave_type_balances->get();
@@ -102,6 +107,7 @@ class EmployeeLeaveTypeBalanceController extends Controller
             'employees_selection' => $employees_selection,
             'leave_types' => $leave_types,
             'search' => $search,
+            'search_year' => $search_year,
             'status' => $status,
         ));
     }
@@ -119,6 +125,7 @@ class EmployeeLeaveTypeBalanceController extends Controller
         $new->year = $request->year;
         $new->leave_type = $request->leave_type;
         $new->balance = $request->balance;
+        $new->validity_end = $request->validity_end;
         $new->status = 'Active';
         $new->save();
 
@@ -171,6 +178,7 @@ class EmployeeLeaveTypeBalanceController extends Controller
         $update->leave_type = $request->leave_type;
         $update->balance = $request->balance;
         $update->status = $request->status;
+        $update->validity_end = $request->validity_end;
         $update->save();
 
         Alert::success('Successfully Updated')->persistent('Dismiss');
@@ -197,11 +205,13 @@ class EmployeeLeaveTypeBalanceController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $status = isset($request->status) ? $request->status : "Active";
+        $search = isset($request->search) ? $request->search : "";
+        $search_year = isset($request->search_year) ? $request->search_year : "";
 
         $company_info = Company::where('id',$company)->first();
         $company_name = $company_info ? $company_info->company_code : "";
 
-        return Excel::download(new EmployeeLeaveTypeBalanceExport($company,$department,$allowed_companies,$status), 'Employee Leave Management '. $company_name .' .xlsx');
+        return Excel::download(new EmployeeLeaveTypeBalanceExport($company,$department,$allowed_companies,$status,$search,$search_year), 'Employee Leave Management '. $company_name .' .xlsx');
     }
 
     public function import(Request $request){
@@ -219,29 +229,45 @@ class EmployeeLeaveTypeBalanceController extends Controller
             $not_save = [];
             foreach($data[0] as $key => $value)
             {
-                $leave_balance = EmployeeLeaveTypeBalance::where('user_id',$value['user_id'])
-                                                                ->where('year',$value['year'])
-                                                                ->where('leave_type',$value['leave_type'])
-                                                                ->first();
-                if($leave_balance){
+                    $leave_balance = '';
+                    if(isset($value['validity_end'])){
+                        if($value['validity_end']){
+                            $leave_balance = EmployeeLeaveTypeBalance::where('user_id',$value['user_id'])
+                                                                        ->where('year',$value['year'])
+                                                                        ->where('leave_type',$value['leave_type'])
+                                                                        ->whereNotNull('validity_end')
+                                                                        ->first();
+                        }
+                    }else{
+                        $leave_balance = EmployeeLeaveTypeBalance::where('user_id',$value['user_id'])
+                                                                        ->where('year',$value['year'])
+                                                                        ->where('leave_type',$value['leave_type'])
+                                                                        ->first();
+                    }
+
+                    if(empty($leave_balance)){
+                        $leave_balance = new  EmployeeLeaveTypeBalance;
+                    }
+
                     $leave_balance->user_id = $value['user_id'];
                     $leave_balance->year = $value['year'];
                     $leave_balance->leave_type = $value['leave_type'];
                     $leave_balance->balance = $value['leave_balance'];
+                    $leave_balance->status = 'Active';
+
+                    if(isset($value['validity_end'])){
+                        $validity_end = $value['validity_end'];
+                        if($validity_end > 0){
+                            $convert_date = ($validity_end - 25569) * 86400;
+                            
+                            $leave_balance->validity_end = date('Y-m-d', $convert_date);
+                        }
+                    }
+
                     $leave_balance->save();
 
                     $save_count+=1;
-                }else{
-                    $new_leave_balance = new  EmployeeLeaveTypeBalance;
-                    $new_leave_balance->user_id = $value['user_id'];
-                    $new_leave_balance->year = $value['year'];
-                    $new_leave_balance->leave_type = $value['leave_type'];
-                    $new_leave_balance->balance = $value['leave_balance'];
-                    $new_leave_balance->status = 'Active';
-                    $new_leave_balance->save();
-
-                    $save_count+=1;
-                }                                         
+                                                       
             }
 
             Alert::success('Successfully Import Employees (' . $save_count. ')')->persistent('Dismiss');

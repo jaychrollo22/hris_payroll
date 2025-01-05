@@ -38,14 +38,18 @@ class EmployeeLeaveController extends Controller
                                         ->where('user_id',auth()->user()->id)
                                         ->first();
 
-        $employee_leave_type_balance = EmployeeLeaveTypeBalance::select('leave_type','year', DB::raw('SUM(balance) as total_balance'))
-                                                                    ->groupBy('leave_type','year')
+        $employee_leave_type_balance = EmployeeLeaveTypeBalance::select('leave_type','balance','year','validity_end')
                                                                     ->where('user_id',auth()->user()->id)
                                                                     ->where('year',$year)
                                                                     ->with('leave_type_info')
-                                                                    ->where('status','Active')
-                                                                    ->get();
+                                                                    ->where('status','Active');
         
+        $employee_leave_type_balance->where(function($q){
+            $q->whereNull('validity_end')->orWhere('validity_end','>=', date('Y-m-d'));
+        });
+
+        $employee_leave_type_balance = $employee_leave_type_balance->get();
+
         $leave_types = Leave::all(); //masterfile
         $employee_leaves = EmployeeLeave::with('user','leave','schedule')
                                             ->where('user_id',auth()->user()->id)
@@ -129,6 +133,7 @@ class EmployeeLeaveController extends Controller
                 $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
                 $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
                 $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : "" ; 
+                $new_leave->has_validity = $request->has_validity; 
 
                 if($request->file('attachment')){
                     $logo = $request->file('attachment');
@@ -168,6 +173,7 @@ class EmployeeLeaveController extends Controller
             $new_leave->withpay = $request->withpay == 'on' ? 1 : 0 ;
             $new_leave->halfday = (isset($request->halfday)) ? $request->halfday : 0 ; 
             $new_leave->halfday_status = $request->halfday == '1' && (isset($request->halfday_status)) ? $request->halfday_status : "" ; 
+            $new_leave->has_validity = $request->has_validity; 
 
             if($request->file('attachment')){
                 $logo = $request->file('attachment');

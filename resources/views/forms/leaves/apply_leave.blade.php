@@ -36,15 +36,16 @@
 
                             if($leave_type->leave_type_info){
                               $additional_leave = checkEmployeeEarnedLeaveAdditional(auth()->user()->id,$leave_type->leave_type_info->id,$leave_type->year);
-                              $used_leave = checkUsedLeave(auth()->user()->id,$leave_type->leave_type_info->id,$leave_type->year);
+                              $used_leave = checkUsedLeave(auth()->user()->id,$leave_type->leave_type_info->id,$leave_type->year,$leave_type->validity_end);
                             }
                             
-                            $total_balance = $leave_type->total_balance + round($additional_leave);
+                            // $total_balance = $leave_type->total_balance + round($additional_leave);
+                            $total_balance = $leave_type->balance + round($additional_leave);
                             $remaining = $total_balance - $used_leave;
                             
                           @endphp
                           @if($leave_type->leave_type_info)
-                            <option value="{{$leave_type->leave_type_info->id}}" data-balance="{{$remaining}}">{{$leave_type->leave_type_info->leave_type}}</option>
+                            <option value="{{$leave_type->leave_type_info->id}}" data-balance="{{$remaining}}" has-validity="{{$leave_type->validity_end ? '1' : ""}}">{{$leave_type->leave_type_info->leave_type}} {{$leave_type->validity_end ? '(' . $leave_type->validity_end . ')' : "" }}</option>
                           @endif
                         @endforeach
                       </select>
@@ -53,6 +54,7 @@
                       <div class='row'>
                         <div class='col-md-6'>
                           <input type="hidden" id="leave_balances" name="leave_balances" value="">
+                          <input type="hidden" id="has_validity" name="has_validity" value="">
                           <div>
                             <label class="form-check-label ">
                               <input type="checkbox" name="withpay" class="form-check-input" id="withPayCheckBox" disabled>

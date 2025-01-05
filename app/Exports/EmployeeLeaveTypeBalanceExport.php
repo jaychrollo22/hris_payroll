@@ -12,12 +12,14 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 class EmployeeLeaveTypeBalanceExport implements FromQuery, WithHeadings, WithMapping
 {
 
-    public function __construct($company,$department,$allowed_companies,$status)
+    public function __construct($company,$department,$allowed_companies,$status,$search,$search_year)
     {
         $this->company = $company;
         $this->department = $department;
         $this->allowed_companies = $allowed_companies;
         $this->status = $status;
+        $this->search = $search;
+        $this->search_year = $search_year;
     }
 
     public function query()
@@ -26,6 +28,8 @@ class EmployeeLeaveTypeBalanceExport implements FromQuery, WithHeadings, WithMap
         $department = $this->department;
         $allowed_companies = json_decode($this->allowed_companies);
         $status = $this->status;
+        $search = $this->search;
+        $search_year = $this->search_year;
         
 
         $employee_leave_type_balances = EmployeeLeaveTypeBalance::with('user','employee.company','employee.department','leave_type_info')
@@ -33,6 +37,22 @@ class EmployeeLeaveTypeBalanceExport implements FromQuery, WithHeadings, WithMap
                                                     $q->whereIn('company_id',$allowed_companies);
                                                 })
                                                 ->where('status',$status);
+        
+        if($search){
+            $employee_leave_type_balances = $employee_leave_type_balances
+                                            ->whereHas('employee',function($q) use($search){
+                                                $q->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')
+                                                ->orWhere('employee_number', 'like' , '%' .  $search . '%')
+                                                ->orWhere('user_id', 'like' , '%' .  $search . '%')
+                                                ->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"])
+                                                ->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);;
+                                            });
+        }
+
+        if($search_year){
+            $employee_leave_type_balances = $employee_leave_type_balances
+                                            ->where('year',$search_year);
+        }
 
         if($company){
             $employee_leave_type_balances = $employee_leave_type_balances

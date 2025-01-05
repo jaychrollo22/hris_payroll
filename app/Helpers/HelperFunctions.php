@@ -683,17 +683,18 @@ function checkUsedServiceIncentiveLeave($user_id){
     return $count;
 }
 
-function checkUsedLeave($user_id,$leave_type,$year){
-
+function checkUsedLeave($user_id,$leave_type,$year,$validity_end = null){
 
     $employee_leave = EmployeeLeave::with('schedule')
                                     ->where('user_id',$user_id)
                                     ->where('leave_type',$leave_type)
                                     ->where('status','Approved')
                                     ->whereYear('date_from', '=', $year);
-    if($year == 2024){
-        $date_validate = date($year . '-02-27'); // Start of Leave Date Validation in 2024
-        $employee_leave = $employee_leave->where('date_from' , '>', $date_validate);
+
+    if($validity_end){
+        $employee_leave->where('has_validity','1')->where('date_from','<=',$validity_end);
+    }else{
+        $employee_leave->whereNull('has_validity');
     }
 
     $employee_leave = $employee_leave->get();
@@ -701,25 +702,9 @@ function checkUsedLeave($user_id,$leave_type,$year){
     $count = 0;
     if($employee_leave){
         foreach($employee_leave as $leave){
-
             if($leave->withpay == 1){
                 $count += get_count_days_leave_count($leave->schedule,$leave->date_from,$leave->date_to,$leave->halfday);
             }
-
-            // if($leave->withpay == 1 && $leave->halfday == 1){
-            //     $count += 0.5;
-            // }else{
-            
-                // return get_count_days($leave->schedule,$leave->date_from,$leave->date_to,$leave->halfday)
-                // $date_range = dateRangeHelper($leave->date_from,$leave->date_to);
-                // if($date_range){
-                //     foreach($date_range as $date_r){
-                //         if($leave->withpay == 1){
-                //             $count += 1;
-                //         }
-                //     }
-                // }
-            // }
         }
     }
 

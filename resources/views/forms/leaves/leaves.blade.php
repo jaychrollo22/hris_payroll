@@ -21,22 +21,25 @@
                         @foreach($employee_leave_type_balance as $leave_balance)
 
                           @php
-                            
                             $additional_leave = 0;
                             $used_leave = 0;
 
                             if($leave_balance->leave_type_info){
-                              $additional_leave = checkEmployeeEarnedLeaveAdditional(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
-                              $used_leave = checkUsedLeave(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
+                              if($leave_balance->validity_end == null){
+                                $additional_leave = checkEmployeeEarnedLeaveAdditional(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year);
+                              }
+                              $used_leave = checkUsedLeave(auth()->user()->id,$leave_balance->leave_type_info->id,$leave_balance->year,$leave_balance->validity_end);
                             }
                             
-                            $total_balance = $leave_balance->total_balance + round($additional_leave);
+                            // $total_balance = $leave_balance->total_balance + round($additional_leave);
+
+                            $total_balance = $leave_balance->balance + round($additional_leave);
                             $remaining = $total_balance - $used_leave;
                             
                           @endphp
 
                           <tr>
-                            <td>{{$leave_balance->leave_type}} {{$leave_balance->leave_type_info ? $leave_balance->leave_type_info->leave_type : "" }}</td>
+                            <td>{{$leave_balance->leave_type}} {{$leave_balance->leave_type_info ? $leave_balance->leave_type_info->leave_type : "" }} {{$leave_balance->validity_end ? '(' . $leave_balance->validity_end . ')' : "" }}</td>
                             <td>{{ $total_balance }}</td>
                             <td>{{ $used_leave }}</td>
                             <td>{{$remaining > 0 ? $remaining : 0}}</td>
@@ -376,17 +379,23 @@ function get_count_days($data,$date_from,$date_to,$halfday)
       var selectedOption = this.options[this.selectedIndex];
       // console.log(selectedOption)
       var balanceValue = selectedOption.getAttribute('data-balance');
+      var hasValidityValue = selectedOption.getAttribute('has-validity');
       // alert(balanceValue)
       if (balanceValue !== null) {
         var checkbox = document.getElementById('withPayCheckBox');
         if(Number(balanceValue) > 0){
           checkbox.disabled = false;
           var leave_balances = document.getElementById('leave_balances');
+          var has_validity = document.getElementById('has_validity');
           leave_balances.value = balanceValue;
+          has_validity.value = hasValidityValue;
+
         }else{
           checkbox.disabled = true;
           var leave_balances = document.getElementById('leave_balances');
+          var has_validity = document.getElementById('has_validity');
           leave_balances.value = 0;
+          has_validity.value = hasValidityValue;
         }
       }
     });

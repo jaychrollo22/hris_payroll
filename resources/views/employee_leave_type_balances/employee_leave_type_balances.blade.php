@@ -8,7 +8,7 @@
               <div class="card-body">
                 <h4 class="card-title">
                   Employee Leave Management
-                  <a href="/export-employee-leave-type-balances?company={{$company}}&department={{$department}}&status={{$status}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right mr-2" title="Export"><i class="ti-arrow-down btn-icon-prepend"></i></a>
+                  <a href="/export-employee-leave-type-balances?search={{$search}}&search_year={{$search_year}}&company={{$company}}&department={{$department}}&status={{$status}}" class="btn btn-outline-primary btn-icon-text btn-sm text-center float-right mr-2" title="Export"><i class="ti-arrow-down btn-icon-prepend"></i></a>
                 </h4>
                 <p class="card-description">
                     <button type="button" class="btn btn-outline-success btn-icon-text" data-toggle="modal" data-target="#newEmployeeLeaveTypeBalance">
@@ -25,6 +25,11 @@
                         <div class="col-md-2">
                           <div class="form-group">
                             <input type="text" name="search" id="search" class="form-control" placeholder="Search by Name or ID" value="{{$search}}"/>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <input type="text" name="search_year" id="search_year" class="form-control" placeholder="Search Year" value="{{$search_year}}"/>
                           </div>
                         </div>
                         <div class='col-md-2'>
@@ -80,6 +85,7 @@
                         <th>Total</th> 
                         <th>Used</th> 
                         <th>Remaining</th> 
+                        <th>Validity End</th> 
                         <th>Action</th> 
                       </tr>
                     </thead>
@@ -93,7 +99,7 @@
                             $used_leave = 0;
                             if($item->leave_type_info){
                               $additional_leave = checkEmployeeEarnedLeaveAdditional($item->user_id,$item->leave_type_info->id,$item->year);
-                              $used_leave = checkUsedLeave($item->user_id,$item->leave_type_info->id,$item->year);
+                              $used_leave = checkUsedLeave($item->user_id,$item->leave_type_info->id,$item->year,$item->validity_end);
                               $leave_type = $item->leave_type_info->id;
                             }
                             
@@ -119,6 +125,7 @@
                             <a href="employee-used-leaves/{{$item->user->id}}?leave_type={{$leave_type}}&year={{$item->year}}" target="_blank" title="View Used Leaves">{{$used_leave}}</a>
                           </td>
                           <td>{{ $remaining > 0 ? $remaining : 0 }}</td>
+                          <td>{{ $item->validity_end }}</td>
                           <td>
                             <a href="edit-employee-leave-type-balances/{{$item->id}}?search={{$search}}&company={{$company}}&department={{$department}}&status={{$status}}" class="btn btn-sm btn-primary">Edit</a>
                           </td>

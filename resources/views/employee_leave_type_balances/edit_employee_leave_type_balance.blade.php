@@ -49,6 +49,14 @@
                                                 <option value="Inactive" {{ $employee_leave_type_balance->status == 'Inactive' ? 'selected' : "" }}>Inactive</option>
                                             </select>
                                         </div>
+
+
+                                        <div class="col-lg-12 form-group">
+                                            <label for="validity_end">Validity End</label>
+                                            <input type="date" class="form-control form-control-sm" name="validity_end" id="validity_end" required
+                                                 value="{{$employee_leave_type_balance->validity_end}}">
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="modal-footer">

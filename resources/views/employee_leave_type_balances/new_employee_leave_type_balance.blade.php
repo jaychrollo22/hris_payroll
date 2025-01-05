@@ -48,6 +48,11 @@
 							<input type="number" class="form-control form-control-sm" name="year" id="year" required
 								value="{{ old('year') }}" placeholder="0000" >
 						</div>
+						<div class="col-lg-12 form-group">
+							<label for="validity_end">Validity End</label>
+							<input type="date" class="form-control form-control-sm" name="validity_end" id="validity_end" required
+								value="{{ old('validity_end') }}">
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
