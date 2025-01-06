@@ -219,16 +219,17 @@ class PayRegController extends Controller
                                 $month_15_phic_ee = $previous_contribution->phic_ee;
                                 $month_15_hdmf_ee = $previous_contribution->hdmf_ee;
                             }
-
+                        }else{
+                            $phic_ee = computePHICContribution($rate,'employee_share_ee');
+                            $hdmf_ee = computePagibigContribution($rate,'employee_share_ee');
                         }
+
                         // SSS contribution
                         $sss_reg_ee = computeSSSContribution($total_accumulated,$cut_off,'employee_share_ee',$reg_ee);
                         $sss_mpf_ee = computeSSSContribution($total_accumulated,$cut_off,'mpf_ee',$mpf_ee);
                         $sss_reg_er = computeSSSContribution($total_accumulated,$cut_off,'employee_share_er',$reg_er);
                         $sss_mpf_er = computeSSSContribution($total_accumulated,$cut_off,'mpf_er',$mpf_er);
                         $sss_ec = computeSSSecContribution($total_accumulated,$cut_off,'sss_ec',$ec);
-                        $phic_ee = computePHICContribution($rate,'employee_share_ee') - $month_15_phic_ee;
-                        $hdmf_ee = computePagibigContribution($rate,'employee_share_ee') - $month_15_hdmf_ee;
 
                         $ot_amount = 0;
                         $meal_allowances = 0;
