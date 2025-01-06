@@ -161,9 +161,10 @@ class PayRegController extends Controller
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
                     $basic_pay = 0;
                     $daily_rate = 0;
+                    $is_monthly = ($employee->work_description == 'Monthly') ? true : false;
 
                     if($rate){
-                        if($employee->work_description == 'Monthly'){
+                        if($is_monthly){
                             $basic_pay = $rate / 2;
                             $daily_rate = ((($rate*12)/313)/8)*9.5;
                         }else{
@@ -221,7 +222,7 @@ class PayRegController extends Controller
                             }
                         }else{
                             $phic_ee = computePHICContribution($rate,'employee_share_ee');
-                            $hdmf_ee = computePagibigContribution($rate,'employee_share_ee');
+                            $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
                         }
 
                         // SSS contribution
