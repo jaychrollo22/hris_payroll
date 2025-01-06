@@ -50,7 +50,7 @@
 						</div>
 						<div class="col-lg-12 form-group">
 							<label for="validity_end">Validity End</label>
-							<input type="date" class="form-control form-control-sm" name="validity_end" id="validity_end" required
+							<input type="date" class="form-control form-control-sm" name="validity_end" id="validity_end"
 								value="{{ old('validity_end') }}">
 						</div>
 					</div>

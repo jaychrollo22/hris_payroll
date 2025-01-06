@@ -53,7 +53,7 @@
 
                                         <div class="col-lg-12 form-group">
                                             <label for="validity_end">Validity End</label>
-                                            <input type="date" class="form-control form-control-sm" name="validity_end" id="validity_end" required
+                                            <input type="date" class="form-control form-control-sm" name="validity_end" id="validity_end"
                                                  value="{{$employee_leave_type_balance->validity_end}}">
                                         </div>
 
