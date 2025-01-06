@@ -235,6 +235,7 @@ function getPreviousPayrollPeriod($payment_date){
             ->whereMonth('payment_date',$payment_date->month)
             ->where('payroll_cutoff','First Cut-Off');
         })
+        ->orderBy('id','desc')
         ->first();
 }
 
