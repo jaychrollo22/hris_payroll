@@ -203,14 +203,14 @@ class PayRegController extends Controller
                             $payment_date = Carbon::parse($payroll_period->payment_date);
                             $month_30 = $accumulated_amount;
                             //Get previous payroll accumulated amount
-                            if($previous_payreg = getPreviousPayrollPeriod($payment_date)){
+                            if($previous_payreg = getPreviousPayrollPeriod($payment_date,$employee->user_id)){
                                 $month_15 = $previous_payreg->accumulated;
                                 $total_accumulated += $previous_payreg->accumulated;
                             }else{
                                 $month_15 = 0;
                             }
                             //Get previous contributions
-                            if($previous_contribution = getPreviousPayrollContribution($payment_date)){
+                            if($previous_contribution = getPreviousPayrollContribution($payment_date,$employee->user_id)){
                                 $reg_ee = $previous_contribution->sss_reg_ee;
                                 $mpf_ee = $previous_contribution->sss_mpf_ee;
                                 $reg_er = $previous_contribution->sss_reg_er;
@@ -227,7 +227,7 @@ class PayRegController extends Controller
                         // SSS contribution
                         $sss_reg_ee = computeSSSContribution($total_accumulated,$cut_off,'employee_share_ee',$reg_ee);
                         $sss_mpf_ee = computeSSSContribution($total_accumulated,$cut_off,'mpf_ee',$mpf_ee);
-                        $sss_reg_er = computeSSSContribution($total_accumulated,$cut_off,'employee_share_er',$reg_er);
+                        $sss_reg_er = computeSSSContribution($total_accumulated,$cut_off,'employer_share_er',$reg_er);
                         $sss_mpf_er = computeSSSContribution($total_accumulated,$cut_off,'mpf_er',$mpf_er);
                         $sss_ec = computeSSSecContribution($total_accumulated,$cut_off,'sss_ec',$ec);
 
