@@ -171,11 +171,13 @@ function getHDMFEr($user_id,$cutoff){
 function computeSSSContribution($accumulated_amount,$cutoff,$field,$firstcutoff_contribution ){
     $highest_contribution = SssMatrixContribution::orderBy('min_salary','desc')->first();
 
-    if($accumulated_amount >= $highest_contribution->min_salary) return $highest_contribution->$field;
-
-    $sss_contribution = SssMatrixContribution::where('max_salary','>=',$accumulated_amount)
-        ->where('min_salary','<=',$accumulated_amount)
-        ->first();
+    if($accumulated_amount >= $highest_contribution->min_salary){
+        $sss_contribution = $highest_contribution;
+    }else{
+        $sss_contribution = SssMatrixContribution::where('max_salary','>=',$accumulated_amount)
+            ->where('min_salary','<=',$accumulated_amount)
+            ->first();
+    }
 
     if(!$sss_contribution) return 0;
     if ($cutoff == 'Second Cut-Off') return $sss_contribution->$field - $firstcutoff_contribution;
@@ -233,6 +235,7 @@ function getPreviousPayrollPeriod($payment_date){
             ->whereMonth('payment_date',$payment_date->month)
             ->where('payroll_cutoff','First Cut-Off');
         })
+        ->orderBy('id','desc')
         ->first();
 }
 
