@@ -216,8 +216,8 @@ class PayRegController extends Controller
                                 $reg_er = $previous_contribution->sss_reg_er;
                                 $mpf_er = $previous_contribution->sss_mpf_er;
                                 $ec = $previous_contribution->sss_ec;
-                                $month_15_phic_ee = $previous_contribution->phic_er;
-                                $month_15_hdmf_ee = $previous_contribution->hdmf_er;
+                                $month_15_phic_ee = $previous_contribution->phic_ee;
+                                $month_15_hdmf_ee = $previous_contribution->hdmf_ee;
                             }
 
                         }
