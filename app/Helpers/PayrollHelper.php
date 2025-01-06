@@ -229,20 +229,22 @@ function computePHICContribution($monthly_basicpay,$field){
     return $contribution / 2;
 }
 
-function getPreviousPayrollPeriod($payment_date){
-    return PayrollRegister::whereHas('payrollPeriod',function($q) use($payment_date){
+function getPreviousPayrollPeriod($payment_date,$user_id){
+    return PayrollRegister::whereHas('payrollPeriod',function($q) use($payment_date,$user_id){
             $q->whereYear('payment_date',$payment_date->year)
             ->whereMonth('payment_date',$payment_date->month)
+            ->where('user_id',$user_id)
             ->where('payroll_cutoff','First Cut-Off');
         })
         ->orderBy('id','desc')
         ->first();
 }
 
-function getPreviousPayrollContribution($payment_date){
-    return PayrollEmployeeContribution::whereHas('payrollPeriod',function($q) use($payment_date){
+function getPreviousPayrollContribution($payment_date,$user_id){
+    return PayrollEmployeeContribution::whereHas('payrollPeriod',function($q) use($payment_date,$user_id){
             $q->whereYear('payment_date',$payment_date->year)
-            ->whereMonth('payment_date',$payment_date->month);
+            ->whereMonth('payment_date',$payment_date->month)
+            ->where('user_id',$user_id);
         })
         ->where('payment_schedule','First Cut-Off')
         ->orderBy('id','desc')   
