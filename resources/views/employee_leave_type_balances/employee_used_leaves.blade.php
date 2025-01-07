@@ -49,6 +49,7 @@
 
 								<div class="col-md-2">
 									<div class="form-group">
+									  <label class="text-right">Year</label>
 									  <input type="text" name="year" id="year" class="form-control" placeholder="Year" value="{{$year}}"/>
 									</div>
 								  </div>
