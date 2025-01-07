@@ -69,12 +69,19 @@ class PayRegController extends Controller
                     ->orderBy('name')
                     ->get();
             
-            $payroll_registers->whereHas('employee',function($q) use($company,$allowed_companies){
+            $payroll_registers->whereHas('employee',function($q) use($company,$allowed_companies,$search){
                 $q->when($company != "All", function($q2) use($company){
                     $q2->where('company_id',$company);
                 })
                 ->when($company == "All", function($q2) use($allowed_companies){
                     $q2->whereIn('company_id',$allowed_companies);
+                })
+                ->when($search, function($q2) use($search){
+                    $q2->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')
+                        ->orWhere('employee_number', 'like' , '%' .  $search . '%')
+                        ->orWhere('user_id', 'like' , '%' .  $search . '%')
+                        ->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"])
+                        ->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
                 });
             });
 

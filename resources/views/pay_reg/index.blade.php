@@ -49,6 +49,11 @@
                       <div class=row>
                         <div class='col-md-4'>
                           <div class="form-group">
+                            <input type="text" name="search" id="search" class="form-control" placeholder="Search by Name or ID" value="{{$search}}"/>
+                          </div>
+                        </div>
+                        <div class='col-md-4'>
+                          <div class="form-group">
                             <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
                               <option value="">-- Select Company --</option>
                               <option value="All" @if ($company == "All") selected @endif>All</option>
