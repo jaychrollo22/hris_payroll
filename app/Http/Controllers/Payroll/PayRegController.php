@@ -269,6 +269,7 @@ class PayRegController extends Controller
                         $coop_mescco = getUserDeductionAmount($employee->user_id,11,$payroll_period->payroll_cutoff);
                         $petty_cash_mescco = getUserDeductionAmount($employee->user_id,12,$payroll_period->payroll_cutoff);
                         $others = getUserDeductionAmount($employee->user_id,13,$payroll_period->payroll_cutoff);
+
                         $total_taxable = getUserTotalTaxableAmount(
                             $basic_pay,
                             $payroll_register->absences_amount,
@@ -282,6 +283,7 @@ class PayRegController extends Controller
                             $hdmf_ee,
                             $salary_deduction_taxable
                         );
+                        $total_taxable = $total_taxable < 0 ?  0 : $total_taxable;
 
                         //Witholding tax
                         $withholding_tax = getUserWitholdingTaxAmount(
