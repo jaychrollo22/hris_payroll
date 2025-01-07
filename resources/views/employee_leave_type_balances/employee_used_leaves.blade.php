@@ -46,6 +46,13 @@
 										</select>
 									</div>
 								</div>
+
+								<div class="col-md-2">
+									<div class="form-group">
+									  <input type="text" name="year" id="year" class="form-control" placeholder="Year" value="{{$year}}"/>
+									</div>
+								  </div>
+
 								<div class='col-md-2'>
 									<button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
 								</div>

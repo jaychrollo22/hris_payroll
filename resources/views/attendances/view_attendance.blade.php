@@ -81,8 +81,6 @@
 
                                 $check_if_has_leave_shift = employeeHasLeaveShift($emp->approved_leaves,date('Y-m-d',strtotime($date_r)),$employee_schedule);
 
-                                $if_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule);
-
                             @endphp
                             <tr>
                                 <td>{{$emp->employee_number}}</td>
@@ -234,28 +232,9 @@
                                     <td>
                                         {{-- Lates --}}
                                         @if(empty($check_if_holiday))
-                                            @if($if_leave)
-                                                @if($if_leave == 'VL Second Shift Without-Pay' || $if_leave == 'SL Second Shift Without-Pay' || $if_leave == 'SL Second Shift With-Pay' || $if_leave == 'SL Second Shift With-Pay')
-                                                    {{  $late_diff_hours }} hrs
-                                                @else
-                                                    0 hrs
-                                                @endif
-                                            @else
-                                                {{  $late_diff_hours }} hrs
-                                            @endif
-                                            
+                                            {{  $late_diff_hours }} hrs
                                             @php
-                                                if ($if_leave) {
-                                                    if($if_leave == 'VL Second Shift Without-Pay' || $if_leave == 'SL Second Shift Without-Pay' || $if_leave == 'SL Second Shift With-Pay' || $if_leave == 'SL Second Shift With-Pay'){
-                                                        if (empty($check_if_holiday)) {
-                                                            $lates = (double)$lates + $late_diff_hours;
-                                                        }
-                                                    }
-                                                    } else {
-                                                    if (empty($check_if_holiday)) {
-                                                        $lates = (double)$lates + $late_diff_hours;
-                                                    }
-                                                }
+                                                $lates = (double) $lates+$late_diff_hours;
                                             @endphp
                                         @endif
                                     </td>
@@ -264,30 +243,10 @@
                                         {{-- Undertime --}}
                                         @if(empty($check_if_holiday))
                                             @if($undertime_hrs > 0) 
-
-                                                @if($if_leave)
-                                                    @if($if_leave == 'VL First Shift Without-Pay' || $if_leave == 'SL First Shift Without-Pay' || $if_leave == 'SL First Shift With-Pay' || $if_leave == 'SL First Shift With-Pay')
-                                                        {{  $undertime_hrs }} hrs
-                                                    @else
-                                                        0 hrs
-                                                    @endif
-                                                @else
-                                                    {{  $undertime_hrs }} hrs
-                                                @endif
-
-                                                @php
-                                                    if ($if_leave) {
-                                                        if($if_leave == 'VL First Shift Without-Pay' || $if_leave == 'SL First Shift Without-Pay' || $if_leave == 'SL First Shift With-Pay' || $if_leave == 'SL First Shift With-Pay'){
-                                                            if (empty($check_if_holiday)) {
-                                                                $undertimes = (double)$undertimes + $undertime_hrs;
-                                                            }
-                                                        }
-                                                    } else {
-                                                        if (empty($check_if_holiday)) {
-                                                            $undertimes = (double)$undertimes + $undertime_hrs;
-                                                        }
-                                                    }
-                                                @endphp
+                                                {{$undertime_hrs}} hrs 
+                                                @php 
+                                                    $undertimes=$undertimes + $undertime_hrs; 
+                                                @endphp 
                                             @else 
                                                 0 hrs 
                                             @endif 
@@ -638,20 +597,8 @@
                                                         }
                                                     }
                                                 @endphp
-
-                                                {{-- DTR CORRECTION --}}
-                                                @php
-                                                    if($dtr_correction_time_in && $dtr_correction_time_out){
-                                                        $time_in_data = $dtr_correction_time_in;
-                                                        $time_out_data = $dtr_correction_time_out;
-                                                        $start_dtr_correction_time_in = new DateTime($dtr_correction_time_in); 
-                                                        if($dtr_correction_time_out){
-                                                            $diff = $start_dtr_correction_time_in->diff(new DateTime($dtr_correction_time_out)); 
-                                                        }
-                                                    }
-                                                @endphp
-
                                                 @if($time_in_data && $time_out_data)
+                                                    
                                                     @php
                                                         $work_diff_hours = round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);
                                                         $work = (double) $work+$work_diff_hours;
@@ -1112,9 +1059,9 @@ function night_difference($start_work,$end_work)
 
 @endphp
 <script>
-  function get_min(value)
-  {
-    document.getElementById("to").min = value;
-  }
-</script>
+    function get_min(value)
+    {
+      document.getElementById("to").min = value;
+    }
+  </script>
 @endsection
