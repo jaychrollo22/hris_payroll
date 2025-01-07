@@ -184,15 +184,20 @@ function employeeSchedule($schedules = array(), $check_date, $schedule_id){
     }
 }
 
-function isRestDay( $date ) {
-    
-    $check_day = date('D',strtotime($date));
+function isRestDay( $date , $employee_schedule) {
     $check = 0;
-    if ($check_day == 'Sat' || $check_day == 'Sun') {
-        $check = 1;
-    }else{
+    if($employee_schedule){
         $check = 0;
+    }else{
+        $check = 1;
     }
+    // $check_day = date('D',strtotime($date));
+    // $check = 0;
+    // if ($check_day == 'Sat' || $check_day == 'Sun') {
+    //     $check = 1;
+    // }else{
+    //     $check = 0;
+    // }
     return $check;
 }
 
@@ -840,52 +845,52 @@ function checkIfHoliday($date,$location){
     }
 }
 
-function checkHasAttendanceHoliday($date,$employee_code,$location){
+function checkHasAttendanceHoliday($date,$employee_code,$location,$employee_schedule){
 
     $date_attendance = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date) ) ));
     $check_if_holiday = checkIfHoliday($date_attendance,$location);
-    $check_if_restday = isRestDay($date_attendance);
+    $check_if_restday = isRestDay($date_attendance,$employee_schedule);
 
     if($check_if_holiday){ //Holiday
         $date_attendance_1 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance) ) ));
         $check_if_holiday_1 = checkIfHoliday($date_attendance_1,$location);
-        $check_if_restday_1 = isRestDay($date_attendance_1);
+        $check_if_restday_1 = isRestDay($date_attendance_1,$employee_schedule);
 
         if($check_if_holiday_1){ //Holiday
             
             $date_attendance_2 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_1) ) ));
             $check_if_holiday_2 = checkIfHoliday($date_attendance_2,$location);
-            $check_if_restday_2 = isRestDay($date_attendance_2);
+            $check_if_restday_2 = isRestDay($date_attendance_2,$employee_schedule);
 
             if($check_if_holiday_2){ //Holiday
 
                 $date_attendance_3 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_2) ) ));
                 $check_if_holiday_3 = checkIfHoliday($date_attendance_3,$location);
-                $check_if_restday_3 = isRestDay($date_attendance_3);
+                $check_if_restday_3 = isRestDay($date_attendance_3,$employee_schedule);
 
                 if($check_if_holiday_3){ //Holiday
 
                     $date_attendance_4 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_3) ) ));
                     $check_if_holiday_4 = checkIfHoliday($date_attendance_4,$location);
-                    $check_if_restday_4 = isRestDay($date_attendance_4);
+                    $check_if_restday_4 = isRestDay($date_attendance_4,$employee_schedule);
 
                     if($check_if_holiday_4){ //Holiday
 
                         $date_attendance_5 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_4) ) ));
                         $check_if_holiday_5 = checkIfHoliday($date_attendance_5,$location);
-                        $check_if_restday_5 = isRestDay($date_attendance_5);
+                        $check_if_restday_5 = isRestDay($date_attendance_5,$employee_schedule);
 
                         if($check_if_holiday_5){ //Holiday
 
                             $date_attendance_6 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_5) ) ));
                             $check_if_holiday_6 = checkIfHoliday($date_attendance_6,$location);
-                            $check_if_restday_6 = isRestDay($date_attendance_6);
+                            $check_if_restday_6 = isRestDay($date_attendance_6,$employee_schedule);
 
                             if($check_if_holiday_6){ //Holiday
 
                                 $date_attendance_7 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance_6) ) ));
                                 $check_if_holiday_7 = checkIfHoliday($date_attendance_7,$location);
-                                $check_if_restday_7 = isRestDay($date_attendance_7);
+                                $check_if_restday_7 = isRestDay($date_attendance_7,$employee_schedule);
 
                                 if($check_if_holiday_7){ //Holiday
 
