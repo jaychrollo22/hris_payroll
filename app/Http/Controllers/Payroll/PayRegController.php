@@ -373,9 +373,10 @@ class PayRegController extends Controller
                             $payroll_register->transport_allowance,
                             $payroll_register->load_allowance
                         );
+                        $netpay = ($grosspay - $total_deduction);
                         $payroll_register->grosspay = $grosspay;
                         $payroll_register->total_deduction = $total_deduction;
-                        $payroll_register->netpay = ($grosspay - $total_deduction);
+                        $payroll_register->netpay = $netpay < 0 ? 0 : $netpay;
 
                         //Total Taxable
                         $payroll_register->total_taxable = $total_taxable;
