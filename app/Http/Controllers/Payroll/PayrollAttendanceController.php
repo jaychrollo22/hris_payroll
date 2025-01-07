@@ -107,7 +107,7 @@ class PayrollAttendanceController extends Controller
                                             $q->where('department_id',$request->department);
                                         })
                                         ->where('status','Active')
-                                        // ->where('user_id','344') // My Id
+                                        // ->where('user_id','4128') // My Id
                                         ->get();
 
         $count = 0;
@@ -898,7 +898,9 @@ class PayrollAttendanceController extends Controller
                             $if_attendance_holiday_status = 'Without-Pay';
                             $is_absent = 'Absent';
                         } else {
-                            $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d', strtotime($date_r)), $emp->employee_number, $emp->location,$employee_schedule);
+                            
+                            $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d', strtotime($date_r)), $emp->employee_number, $emp->location,$schedules,$emp->schedule_id);
+                            
             
                             if ($if_attendance_holiday) {
                                 $check_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($if_attendance_holiday)), $employee_schedule);
@@ -932,7 +934,7 @@ class PayrollAttendanceController extends Controller
                                     }
                                 }
                             } else {
-                                $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d', strtotime($date_r . '-1 day')), $emp->employee_number, $emp->location,$employee_schedule);
+                                $if_attendance_holiday = checkHasAttendanceHoliday(date('Y-m-d', strtotime($date_r . '-1 day')), $emp->employee_number, $emp->location,$schedules,$emp->schedule_id);
             
                                 if ($if_attendance_holiday) {
                                     $check_leave = employeeHasLeave($emp->approved_leaves, date('Y-m-d', strtotime($if_attendance_holiday)), $employee_schedule);

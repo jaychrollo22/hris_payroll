@@ -845,11 +845,16 @@ function checkIfHoliday($date,$location){
     }
 }
 
-function checkHasAttendanceHoliday($date,$employee_code,$location,$employee_schedule){
+function checkHasAttendanceHoliday($date,$employee_code,$location,$schedules,$schedule_id){
 
     $date_attendance = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date) ) ));
     $check_if_holiday = checkIfHoliday($date_attendance,$location);
+    
+    $employee_schedule = employeeSchedule($schedules,$date_attendance,$schedule_id);
+
     $check_if_restday = isRestDay($date_attendance,$employee_schedule);
+
+    
 
     if($check_if_holiday){ //Holiday
         $date_attendance_1 = date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $date_attendance) ) ));
