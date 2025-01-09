@@ -1126,6 +1126,11 @@ class PayrollAttendanceController extends Controller
         $total_work_day = ($total_work_day - $total_leave_shift);
         $total_absent = $total_absent + $total_leave_shift;
 
+        if($emp->level > 2){
+            $lates = 0;
+            $undertimes = 0;
+        }
+
         return $response = [
             'work'=>$work,
             'late'=>$lates,
