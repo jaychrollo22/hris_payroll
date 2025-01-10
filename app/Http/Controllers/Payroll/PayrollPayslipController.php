@@ -9,13 +9,15 @@ use App\PayrollRegister;
 use App\Employee;
 use App\Company;
 use App\Department;
+use App\User;
 use PDF;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Hash;
 
 class PayrollPayslipController extends Controller
 {
     public function index(Request $request){
-        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
 
         $companies = Company::whereHas('employee_has_company')
                                 ->whereIn('id',$allowed_companies)
@@ -26,8 +28,6 @@ class PayrollPayslipController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $payroll_period = isset($request->payroll_period) ? $request->payroll_period : "";
-
-        $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
         
         $departments = [];
         
@@ -83,7 +83,51 @@ class PayrollPayslipController extends Controller
         );
     }
 
-    public function generate(PayrollRegister $payrollRegister)
+    public function showPasswordForm(PayrollRegister $payrollRegister){
+        return view('payroll_payslip.password',array(
+            'header' => 'payslip',
+            'payrollRegister' => $payrollRegister
+        ));
+    }
+
+
+    // Validate the password and allow access to the PDF
+    public function validatePassword(Request $request)
+    {
+        $request->validate([
+            'payslip_id' => 'required',
+            'password' => 'required',
+        ]);
+
+        $payrollRegister = PayrollRegister::find($request->payslip_id);
+        $user = User::find($payrollRegister->user_id);
+     
+        $access_granted = false;
+
+        if(Hash::check($request->password, $user->password)) $access_granted = true;
+        if(!$access_granted && checkUserPrivilege('payslip_filter_per_company',auth()->user()->id) == 'yes'){
+            $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
+            $company_names = Company::whereIn('id',$allowed_companies)
+                ->get()
+                ->pluck('company_name')
+                ->toArray();
+
+            if(in_array($payrollRegister->company,$company_names) && Hash::check($request->password, auth()->user()->password)) $access_granted = true;
+        }
+
+        if ($access_granted) {
+            // Store a session variable to track access
+            session(['payslip_access_granted' => true]);
+            // Password matches
+            return redirect()->route('payslip.view',['payrollRegister' => $request->payslip_id])->with('success', 'Password is correct!');
+        } else {
+            // Password does not match
+            return back()->withErrors(['password' => 'Incorrect password.']);
+        }
+    }
+
+
+    public function view(PayrollRegister $payrollRegister)
     {
         $authorize = true;
         if(checkUserPrivilege('payslip_filter_per_company',auth()->user()->id) != 'yes'){
@@ -92,10 +136,17 @@ class PayrollPayslipController extends Controller
 
         if(!$authorize){
             Alert::warning('Warning : Permission Denied!')->persistent('Dismiss');
-            return back();
+            return redirect()->route('payslip.password.form',['payrollRegister' => $payrollRegister->id]);
+        }
+
+        if (!session('payslip_access_granted')) {
+            Alert::warning('Warning : You must enter the correct password first!')->persistent('Dismiss');
+            return redirect()->route('payslip.password.form',['payrollRegister' => $payrollRegister->id]);
         }
 
         $pdf = PDF::loadView('payroll_payslip.print', compact('payrollRegister'));
+        // Removes a session variable to track access
+        session()->forget('payslip_access_granted');
         return $pdf->stream('payroll_payslip.print');
     }    
 }

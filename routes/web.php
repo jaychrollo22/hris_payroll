@@ -474,7 +474,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Payslip
     Route::get('payslip', 'Payroll\PayrollPayslipController@index');
-    Route::get('payslip-print/{payrollRegister}', 'Payroll\PayrollPayslipController@generate');
+    Route::get('payslip/password-form/{payrollRegister}', 'Payroll\PayrollPayslipController@showPasswordForm')->name('payslip.password.form');
+    Route::post('payslip/password/validate', 'Payroll\PayrollPayslipController@validatePassword')->name('payslip.password.validate');
+    Route::get('payslip/view/{payrollRegister}', 'Payroll\PayrollPayslipController@view')->name('payslip.view');
     
 });
 Route::post('new-employee', 'EmployeeController@new');
