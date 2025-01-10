@@ -107,7 +107,7 @@ class PayrollAttendanceController extends Controller
                                             $q->where('department_id',$request->department);
                                         })
                                         ->where('status','Active')
-                                        // ->where('user_id','4128') // My Id
+                                        // ->where('user_id','340') // My Id
                                         ->get();
 
         $count = 0;
@@ -763,8 +763,9 @@ class PayrollAttendanceController extends Controller
 
                 //Late
                 if ($if_leave) {
-
                     if($if_leave == 'VL Second Shift Without-Pay' || $if_leave == 'SL Second Shift Without-Pay' || $if_leave == 'SL Second Shift With-Pay' || $if_leave == 'SL Second Shift With-Pay'){
+                    // if($check_if_has_leave_shift){
+                    //     if($check_if_has_leave_shift == 'First Shift'){
                         if (empty($check_if_holiday)) {
                             $lates = (double)$lates + $late_diff_hours;
                         }
@@ -775,9 +776,12 @@ class PayrollAttendanceController extends Controller
                     }
                 }
 
+                
+
                 //Undertime
-                if ($if_leave) {
-                    if($if_leave == 'VL First Shift Without-Pay' || $if_leave == 'SL First Shift Without-Pay' || $if_leave == 'SL First Shift With-Pay' || $if_leave == 'SL First Shift With-Pay'){
+                if($check_if_has_leave_shift){
+                    if($check_if_has_leave_shift == 'First Shift'){
+                    // if($if_leave == 'VL First Shift Without-Pay' || $if_leave == 'SL First Shift Without-Pay' || $if_leave == 'SL First Shift With-Pay' || $if_leave == 'SL First Shift With-Pay'){
                         if (empty($check_if_holiday)) {
                             if ($undertime_hrs > 0) {
                                 $undertimes = $undertimes + $undertime_hrs;
