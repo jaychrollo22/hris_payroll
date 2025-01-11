@@ -681,7 +681,7 @@ class PayRegController extends Controller
             foreach($payroll_registers as $payroll_register){
                 $user = User::findOrFail($payroll_register->user_id);
                 //Send email notif for the payslip            
-                if($request->posting_status == 'Posted') Mail::to($user->email)->send(new PayslipNotification($payroll_register->id,$payroll_register->cut_from,$payroll_register->cut_to));
+                // if($request->posting_status == 'Posted') Mail::to($user->email)->send(new PayslipNotification($payroll_register->id,$payroll_register->cut_from,$payroll_register->cut_to));
 
                 $payroll_register->update([
                     'posting_status' => $request->posting_status,
