@@ -128,7 +128,7 @@
                     <tbody>
                       @foreach ($payroll_registers as $payroll)
                       <tr>
-                          <td> <a href="/payslip-print/{{$payroll->id}}" title="Print" class="btn btn-sm btn-success">Print </a> </td>
+                          <td> <a href="/payslip/password-form/{{$payroll->id}}" title="Print" class="btn btn-sm btn-primary" target="_blank">View </a> </td>
                           <td>{{ $payroll->user_id }}</td>
                           <td>{{ $payroll->bank_account }}</td>
                           <td>{{ $payroll->name }}</td>
