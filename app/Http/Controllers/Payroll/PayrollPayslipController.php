@@ -130,14 +130,14 @@ class PayrollPayslipController extends Controller
     public function view(PayrollRegister $payrollRegister)
     {
         $authorize = true;
-        if(checkUserPrivilege('payslip_filter_per_company',auth()->user()->id) != 'yes'){
-            $authorize = auth()->user()->id == $payrollRegister->user_id ? true : false;
-        }
+        // if(checkUserPrivilege('payslip_filter_per_company',auth()->user()->id) != 'yes'){
+        //     $authorize = auth()->user()->id == $payrollRegister->user_id ? true : false;
+        // }
 
-        if(!$authorize){
-            Alert::warning('Warning : Permission Denied!')->persistent('Dismiss');
-            return redirect()->route('payslip.password.form',['payrollRegister' => $payrollRegister->id]);
-        }
+        // if(!$authorize){
+        //     Alert::warning('Warning : Permission Denied!')->persistent('Dismiss');
+        //     return redirect()->route('payslip.password.form',['payrollRegister' => $payrollRegister->id]);
+        // }
 
         if (!session('payslip_access_granted')) {
             Alert::warning('Warning : You must enter the correct password first!')->persistent('Dismiss');
