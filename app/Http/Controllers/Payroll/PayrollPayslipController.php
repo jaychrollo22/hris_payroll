@@ -129,7 +129,7 @@ class PayrollPayslipController extends Controller
 
     public function view(PayrollRegister $payrollRegister)
     {
-        $authorize = true;
+        // $authorize = true;
         // if(checkUserPrivilege('payslip_filter_per_company',auth()->user()->id) != 'yes'){
         //     $authorize = auth()->user()->id == $payrollRegister->user_id ? true : false;
         // }
