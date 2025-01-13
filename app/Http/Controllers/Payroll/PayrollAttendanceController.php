@@ -107,7 +107,7 @@ class PayrollAttendanceController extends Controller
                                             $q->where('department_id',$request->department);
                                         })
                                         ->where('status','Active')
-                                        // ->where('user_id','340') // My Id
+                                        // ->where('user_id','949') // My Id
                                         ->get();
 
         $count = 0;
@@ -1158,6 +1158,10 @@ class PayrollAttendanceController extends Controller
             $lates = 0;
             $undertimes = 0;
             $night_diff_hours = 0;
+        }
+
+        if($emp->work_description == 'Non-Monthly'){
+            $total_absent = 0;
         }
 
         return $response = [
