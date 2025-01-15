@@ -108,7 +108,19 @@ class PayrollAttendanceController extends Controller
                                         })
                                         ->where('status','Active')
                                         ->whereIn('level',['1','2','3']) // R&F, Supervisor and Manager
-                                        // ->where('user_id','949') // My Id
+                                        ->with(['approved_dtrs' => function ($query) use ($payroll_period) {
+                                                $query->where('approved_date', '<=', $payroll_period->cut_off_date);
+                                        },'approved_leaves' => function ($query) use ($payroll_period) {
+                                                $query->where('approved_date', '>=', $payroll_period->start_date)
+                                                        ->where('approved_date', '<=', $payroll_period->cut_off_date);
+                                        },'approved_obs' => function ($query) use ($payroll_period) {
+                                            $query->where('approved_date', '>=', $payroll_period->start_date)
+                                                    ->where('approved_date', '<=', $payroll_period->cut_off_date);
+                                        },'approved_wfhs' => function ($query) use ($payroll_period) {
+                                            $query->where('approved_date', '>=', $payroll_period->start_date)
+                                                    ->where('approved_date', '<=', $payroll_period->cut_off_date);
+                                        }])
+                                        // ->where('user_id','4183') // My Id
                                         ->get();
 
         $count = 0;
@@ -116,7 +128,7 @@ class PayrollAttendanceController extends Controller
             if($employees){
                 foreach($employees as $employee){
 
-                    $employee_attendance = $this->getEmployeeAttendance($employee->user_id,$payroll_period->start_date,$payroll_period->end_date);
+                    $employee_attendance = $this->getEmployeeAttendance($employee->user_id,$payroll_period->start_date,$payroll_period->end_date,$payroll_period);
 
                     $payroll_attendance = PayrollAttendance::where('payroll_period_id',$payroll_period->id)
                                                             ->where('user_id',$employee->user_id)
@@ -228,7 +240,7 @@ class PayrollAttendanceController extends Controller
     }
 
 
-    public function getEmployeeAttendance($user_id,$from_date,$to_date){
+    public function getEmployeeAttendance($user_id,$from_date,$to_date,$payroll_period){
         
         $schedules = ScheduleData::all();
 
@@ -239,6 +251,18 @@ class PayrollAttendanceController extends Controller
                                         ->orderBy('time_in','asc')
                                         ->orderby('time_out','desc')
                                         ->orderBy('id','asc');
+                                },'approved_dtrs' => function ($query) use ($payroll_period) {
+                                        $query->where('approved_date', '>=', $payroll_period->start_date)
+                                                ->where('approved_date', '<=', $payroll_period->cut_off_date);
+                                },'approved_leaves' => function ($query) use ($payroll_period) {
+                                        $query->where('approved_date', '>=', $payroll_period->start_date)
+                                                ->where('approved_date', '<=', $payroll_period->cut_off_date);
+                                },'approved_obs' => function ($query) use ($payroll_period) {
+                                    $query->where('approved_date', '>=', $payroll_period->start_date)
+                                            ->where('approved_date', '<=', $payroll_period->cut_off_date);
+                                },'approved_wfhs' => function ($query) use ($payroll_period) {
+                                    $query->where('approved_date', '>=', $payroll_period->start_date)
+                                            ->where('approved_date', '<=', $payroll_period->cut_off_date);
                                 }])
                                 ->where('user_id', $user_id)
                                 ->where('status','Active')
@@ -293,6 +317,7 @@ class PayrollAttendanceController extends Controller
             $if_has_ob = employeeHasOBDetails($emp->approved_obs,date('Y-m-d',strtotime($date_r)));
             $if_has_wfh = employeeHasWFHDetails($emp->approved_wfhs,date('Y-m-d',strtotime($date_r)));
             $if_has_dtr = employeeHasDTRDetails($emp->approved_dtrs,date('Y-m-d',strtotime($date_r)));
+
             $if_dtr_correction = '';
             $time_in_out = 0;
             $time_in = ($emp->fix_attendances)->whereBetween('time_in',[$date_r." 00:00:00", $date_r." 23:59:59"])->first();
