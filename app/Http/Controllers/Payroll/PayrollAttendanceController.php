@@ -108,18 +108,6 @@ class PayrollAttendanceController extends Controller
                                         })
                                         ->where('status','Active')
                                         ->whereIn('level',['1','2','3']) // R&F, Supervisor and Manager
-                                        ->with(['approved_dtrs' => function ($query) use ($payroll_period) {
-                                                $query->where('approved_date', '<=', $payroll_period->cut_off_date);
-                                        },'approved_leaves' => function ($query) use ($payroll_period) {
-                                                $query->where('approved_date', '>=', $payroll_period->start_date)
-                                                        ->where('approved_date', '<=', $payroll_period->cut_off_date);
-                                        },'approved_obs' => function ($query) use ($payroll_period) {
-                                            $query->where('approved_date', '>=', $payroll_period->start_date)
-                                                    ->where('approved_date', '<=', $payroll_period->cut_off_date);
-                                        },'approved_wfhs' => function ($query) use ($payroll_period) {
-                                            $query->where('approved_date', '>=', $payroll_period->start_date)
-                                                    ->where('approved_date', '<=', $payroll_period->cut_off_date);
-                                        }])
                                         // ->where('user_id','4183') // My Id
                                         ->get();
 
@@ -252,17 +240,13 @@ class PayrollAttendanceController extends Controller
                                         ->orderby('time_out','desc')
                                         ->orderBy('id','asc');
                                 },'approved_dtrs' => function ($query) use ($payroll_period) {
-                                        $query->where('approved_date', '>=', $payroll_period->start_date)
-                                                ->where('approved_date', '<=', $payroll_period->cut_off_date);
+                                        $query->where('approved_date', '<=', $payroll_period->cut_off_date);
                                 },'approved_leaves' => function ($query) use ($payroll_period) {
-                                        $query->where('approved_date', '>=', $payroll_period->start_date)
-                                                ->where('approved_date', '<=', $payroll_period->cut_off_date);
+                                        $query->where('approved_date', '<=', $payroll_period->cut_off_date);
                                 },'approved_obs' => function ($query) use ($payroll_period) {
-                                    $query->where('approved_date', '>=', $payroll_period->start_date)
-                                            ->where('approved_date', '<=', $payroll_period->cut_off_date);
+                                    $query->where('approved_date', '<=', $payroll_period->cut_off_date);
                                 },'approved_wfhs' => function ($query) use ($payroll_period) {
-                                    $query->where('approved_date', '>=', $payroll_period->start_date)
-                                            ->where('approved_date', '<=', $payroll_period->cut_off_date);
+                                    $query->where('approved_date', '<=', $payroll_period->cut_off_date);
                                 }])
                                 ->where('user_id', $user_id)
                                 ->where('status','Active')
