@@ -139,6 +139,8 @@ class PayRegController extends Controller
             if($employees){
 
                 foreach($employees as $employee){
+                    $is_executive = $employee->level == 4 ? true : false;
+                    $is_consultant = $employee->level == 5 ? true : false;
                     $is_payroll_register_exist = 0;
                     $payroll_register = PayrollRegister::where('payroll_period_id',$payroll_period->id)
                                                             ->where('user_id',$employee->user_id)
@@ -162,9 +164,7 @@ class PayRegController extends Controller
                     $payroll_register->cut_from = $payroll_period->start_date;
                     $payroll_register->cut_to = $payroll_period->end_date;
                     
-                    $absences_amount = getUserAbsencesAmount($employee->user_id,$payroll_period->id);
                     $no_of_days_worked = getUserNoOfDaysWorked($employee->user_id,$payroll_period->id);
-
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
                     $basic_pay = 0;
                     $daily_rate = 0;
@@ -180,12 +180,20 @@ class PayRegController extends Controller
                         }
                     }
                     
-                    if($no_of_days_worked > 5){
+                    if($no_of_days_worked > 5 || $is_executive || $is_consultant){
+                        $absences_amount = 0;
+                        $lates_amount = 0;
+                        $undertime_amount = 0;
+                        $salary_adjustment = 0;
+                        $overtime_amount = 0;
 
-                        $lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
-                        $undertime_amount = getUserUndertimeAmount($employee->user_id,$payroll_period->id);
-                        $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
-                        $overtime_amount = getUserOvertime($employee->user_id,$payroll_period->id);
+                        if(!$is_executive && !$is_consultant){
+                            $lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
+                            $undertime_amount = getUserUndertimeAmount($employee->user_id,$payroll_period->id);
+                            $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
+                            $overtime_amount = getUserOvertime($employee->user_id,$payroll_period->id);
+                        }
+
                         $accumulated_amount = ($basic_pay-$absences_amount-$lates_amount-$undertime_amount+$salary_adjustment+$overtime_amount);
                         $total_accumulated = $accumulated_amount;
                         $cut_off = $payroll_period->payroll_cutoff;
@@ -232,28 +240,11 @@ class PayRegController extends Controller
                             $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
                         }
 
-                        // SSS contribution
-                        $sss_reg_ee = computeSSSContribution($total_accumulated,$cut_off,'employee_share_ee',$reg_ee);
-                        $sss_mpf_ee = computeSSSContribution($total_accumulated,$cut_off,'mpf_ee',$mpf_ee);
-                        $sss_reg_er = computeSSSContribution($total_accumulated,$cut_off,'employer_share_er',$reg_er);
-                        $sss_mpf_er = computeSSSContribution($total_accumulated,$cut_off,'mpf_er',$mpf_er);
-                        $sss_ec = computeSSSecContribution($total_accumulated,$cut_off,'sss_ec',$ec);
-
-                        $ot_amount = 0;
-                        $meal_allowances = 0;
-                        $salary_allowances = 0;
-                        $out_allowances = 0;
-                        $incentives_allowances = 0;
-                        $reallocation_allowances = 0;
-                        $discretionary_allowances = 0;
-                        $transpo_allowances = 0;
-                        $load_allowances = 0;
-
                         //Loans&deductions
-                        $hdmf_salary_loan = 0;
-                        $hdmf_calamity_loan = 0;
                         $sss_salary_loan = 0;
                         $sss_calamity_loan = 0;
+                        $hdmf_salary_loan = 0;
+                        $hdmf_calamity_loan = 0;
                         $salary_deduction_taxable = 0;
                         $salary_deduction_nontaxable = 0;
                         $company_loan = 0;
@@ -263,10 +254,18 @@ class PayRegController extends Controller
                         $petty_cash_mescco = 0;
                         $others = 0;
 
-                        $sss_salary_loan = getUserDeductionAmount($employee->user_id,1,$payroll_period->payroll_cutoff);
-                        $sss_calamity_loan = getUserDeductionAmount($employee->user_id,2,$payroll_period->payroll_cutoff);
-                        $hdmf_salary_loan = getUserDeductionAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
-                        $hdmf_calamity_loan = getUserDeductionAmount($employee->user_id,4,$payroll_period->payroll_cutoff);
+                        if(!$is_consultant){
+                            // SSS contribution
+                            $sss_reg_ee = computeSSSContribution($total_accumulated,$cut_off,'employee_share_ee',$reg_ee);
+                            $sss_mpf_ee = computeSSSContribution($total_accumulated,$cut_off,'mpf_ee',$mpf_ee);
+                            $sss_reg_er = computeSSSContribution($total_accumulated,$cut_off,'employer_share_er',$reg_er);
+                            $sss_mpf_er = computeSSSContribution($total_accumulated,$cut_off,'mpf_er',$mpf_er);
+                            $sss_ec = computeSSSecContribution($total_accumulated,$cut_off,'sss_ec',$ec);
+                            $sss_salary_loan = getUserDeductionAmount($employee->user_id,1,$payroll_period->payroll_cutoff);
+                            $sss_calamity_loan = getUserDeductionAmount($employee->user_id,2,$payroll_period->payroll_cutoff);
+                            $hdmf_salary_loan = getUserDeductionAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
+                            $hdmf_calamity_loan = getUserDeductionAmount($employee->user_id,4,$payroll_period->payroll_cutoff);
+                        }
                         $salary_deduction_taxable = getUserDeductionAmount($employee->user_id,6,$payroll_period->payroll_cutoff);
                         $salary_deduction_nontaxable = getUserDeductionAmount($employee->user_id,7,$payroll_period->payroll_cutoff);
                         $company_loan = getUserDeductionAmount($employee->user_id,5,$payroll_period->payroll_cutoff);
