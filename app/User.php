@@ -113,4 +113,9 @@ class User extends Authenticatable implements Auditable
     {
         return $this->hasOne(UserAllowedPayrollCompany::class);
     }    
+
+    public function user_allowed_payroll_level()
+    {
+        return $this->hasOne(UserAllowedPayrollLevel::class);
+    }    
 }

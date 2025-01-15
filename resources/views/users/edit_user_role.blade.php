@@ -603,6 +603,21 @@
                                                     <br>
                                                     <br>
 
+                                                    <div class="col-md-12 form-group">
+                                                        Payroll Register Level
+                                                        @php
+                                                            $user_allowed_payroll_levels = $user->user_allowed_payroll_level ? json_decode($user->user_allowed_payroll_level->level_ids) : [];
+                                                        @endphp
+                                                        <select data-placeholder="Select Level" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payroll_level[]' multiple>
+                                                            <option value="">-- Select Payroll Register Level --</option>
+                                                                @foreach($levels as $level)
+                                                                <option value="{{$level->id}}" @if (in_array($level->id,$user_allowed_payroll_levels)) selected @endif>{{$level->name}}</option>
+                                                                @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <br>
+                                                    <br>
+
                                                     @if($user->user_privilege)
                                                         @if($user->user_privilege->payroll_attendance == 'on')
                                                             <input type="checkbox" name="payroll_attendance" id="payroll_attendance{{$user->id}}" value="{{ $user->user_privilege->payroll_attendance }}" checked>

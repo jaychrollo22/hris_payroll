@@ -47,12 +47,12 @@
                         </div>
                       </div>
                       <div class=row>
-                        <div class='col-md-4'>
+                        <div class='col-md-3'>
                           <div class="form-group">
                             <input type="text" name="search" id="search" class="form-control" placeholder="Search by Name or ID" value="{{$search}}"/>
                           </div>
                         </div>
-                        <div class='col-md-4'>
+                        <div class='col-md-3'>
                           <div class="form-group">
                             <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
                               <option value="">-- Select Company --</option>
@@ -73,7 +73,18 @@
                             </select>
                           </div>
                         </div>
-                        <div class='col-md-4'>
+                        <div class='col-md-3'>
+                          <div class="form-group">
+                            <select data-placeholder="Select Level" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='level' required>
+                              <option value="">-- Select Level --</option>
+                              <option value="All" @if ($level == "All") selected @endif>All</option>
+                              @foreach($levels as $level_item)
+                              <option value="{{$level_item->id}}" @if ($level_item->id == $level) selected @endif>{{$level_item->name}}</option>
+                              @endforeach
+                            </select>
+                          </div>
+                        </div>
+                        <div class='col-md-3'>
                           <button type="submit" class="btn btn-primary">Filter</button>
                           <a href="/pay-reg" class="btn btn-warning">Reset Filter</a>
                           @if($payreg_for_postings->isNotEmpty())
@@ -89,7 +100,7 @@
                     </form>
                   </p>
                     
-                <div class="table-responsive">
+                <div class="table-responsive mt-5">
                   <table id="table-payroll" class="table table-hover table-bordered">
                     <thead>
                         <tr>

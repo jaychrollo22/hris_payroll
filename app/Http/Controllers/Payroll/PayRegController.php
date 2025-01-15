@@ -12,6 +12,7 @@ use App\Company;
 use App\Department;
 use App\PayrollEmployeeContribution;
 use App\User;
+use App\Level;
 
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Crypt;
@@ -33,14 +34,18 @@ class PayRegController extends Controller
     {
 
         $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
+        $allowed_levels = getUserAllowedPayrollLevels(auth()->user()->id);
 
         $companies = Company::whereHas('employee_has_company')
                                 ->whereIn('id',$allowed_companies)
                                 ->get();
 
+        $levels = Level::whereIn('id',$allowed_levels)->get();
+
         $search = isset($request->search) ? $request->search : "";
         $status = isset($request->status) ? $request->status : "Active";
         $company = isset($request->company) ? $request->company : "";
+        $level = isset($request->level) ? $request->level : "";
         $department = isset($request->department) ? $request->department : "";
         $payroll_period = isset($request->payroll_period) ? $request->payroll_period : "";
         
@@ -69,7 +74,7 @@ class PayRegController extends Controller
                     ->orderBy('name')
                     ->get();
             
-            $payroll_registers->whereHas('employee',function($q) use($company,$allowed_companies,$search){
+            $payroll_registers->whereHas('employee',function($q) use($company,$allowed_companies,$allowed_levels,$search){
                 $q->when($company != "All", function($q2) use($company){
                     $q2->where('company_id',$company);
                 })
@@ -82,7 +87,8 @@ class PayRegController extends Controller
                         ->orWhere('user_id', 'like' , '%' .  $search . '%')
                         ->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"])
                         ->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
-                });
+                })
+                ->whereIn('level',$allowed_levels);
             });
 
         }else{
@@ -101,6 +107,8 @@ class PayRegController extends Controller
                 'payroll_period' => $payroll_period,
                 'payroll_period_detail' => $payroll_period_detail,
                 'companies' => $companies,
+                'level' => $level,
+                'levels' => $levels,
                 'company' => $company,
                 'departments' => $departments,
                 'department' => $department,
