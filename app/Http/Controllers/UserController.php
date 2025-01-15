@@ -8,6 +8,7 @@ use App\UserAllowedCompany;
 use App\UserAllowedPayrollCompany;
 use App\UserAllowedProject;
 use App\UserAllowedLocation;
+use App\UserAllowedPayrollLevel;
 
 use App\Level;
 use App\Company;
@@ -112,6 +113,7 @@ class UserController extends Controller
         $companies = Company::orderBy('company_name','ASC')->get();
         $projects = Project::orderBy('project_id','ASC')->get();
         $locations = Location::orderBy('location','ASC')->get();
+        $levels = Level::orderBy('id','ASC')->get();
         $user = User::with('user_allowed_company','user_privilege','user_allowed_payroll_company')
                         ->where('id',$user->id)
                         ->first();
@@ -123,6 +125,7 @@ class UserController extends Controller
             'companies' => $companies,
             'projects' => $projects,
             'locations' => $locations,
+            'levels' => $levels,
         ));
 
     }
@@ -177,6 +180,21 @@ class UserController extends Controller
                 }
             }else{
                 $user_allowed_payroll_company = UserAllowedPayrollCompany::where('user_id',$user->id)->delete();
+            }
+
+            if($request->payroll_level){
+                $user_allowed_payroll_level = UserAllowedPayrollLevel::where('user_id',$user->id)->first(); 
+                if($user_allowed_payroll_level){
+                    $user_allowed_payroll_level->level_ids = json_encode($request->payroll_level,true);
+                    $user_allowed_payroll_level->save();
+                }else{
+                    $new_user_allowed_payroll_level = new UserAllowedPayrollLevel;
+                    $new_user_allowed_payroll_level->user_id = $user->id;
+                    $new_user_allowed_payroll_level->level_ids = json_encode($request->payroll_level,true);
+                    $new_user_allowed_payroll_level->save();
+                }
+            }else{
+                $user_allowed_payroll_level = UserAllowedPayrollLevel::where('user_id',$user->id)->delete();
             }
 
             if($request->location){

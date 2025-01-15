@@ -107,6 +107,7 @@ class PayrollAttendanceController extends Controller
                                             $q->where('department_id',$request->department);
                                         })
                                         ->where('status','Active')
+                                        ->whereIn('level',['1','2','3']) // R&F, Supervisor and Manager
                                         // ->where('user_id','949') // My Id
                                         ->get();
 

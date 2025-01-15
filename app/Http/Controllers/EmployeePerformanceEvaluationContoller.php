@@ -70,8 +70,8 @@ class EmployeePerformanceEvaluationContoller extends Controller
                                                                                 ->with('user','employee','ppr_score','customized_ppr_approver.first_approver_info','customized_ppr_approver.second_approver_info')
                                                                                 ->orderBy('review_date','DESC')
                                                                                 ->whereHas('employee',function($q) use($allowed_companies){
-                                                                                    $q->whereIn('company_id',$allowed_companies)
-                                                                                        ->where('status','Active');
+                                                                                    $q->whereIn('company_id',$allowed_companies);
+                                                                                        // ->where('status','Active');
                                                                                 });
         if($status){
             if($status == 'Pending Self Ratings' || $status == 'Ongoing Self Ratings' || $status == 'For Approval' || $status == 'For Acceptance' || $status == 'Accepted' || $status == 'Summary of Ratings' || $status == 'Completed'){
