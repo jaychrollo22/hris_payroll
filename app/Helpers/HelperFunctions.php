@@ -2,6 +2,7 @@
 use App\ApplicantSystemNotification;
 use App\UserAllowedCompany;
 use App\UserAllowedPayrollCompany;
+use App\UserAllowedPayrollLevel;
 use App\UserAllowedLocation;
 use App\UserAllowedProject;
 use App\UserPrivilege;
@@ -413,6 +414,16 @@ function getUserAllowedPayrollCompanies($user_id){
     }
 }
 
+function getUserAllowedPayrollLevels($user_id){
+    $user_allowed_payroll_levels = UserAllowedPayrollLevel::where('user_id',$user_id)->first();
+
+    if($user_allowed_payroll_levels){
+        return json_decode($user_allowed_payroll_levels->level_ids);
+    }else{
+        return [];
+    }
+}
+
 function getUserAllowedLocations($user_id){
     $user_allowed_locations = UserAllowedLocation::where('user_id',$user_id)->first();
 
@@ -429,6 +440,18 @@ function getUserAllowedProjects($user_id){
         return json_decode($user_allowed_projects->project_ids);
     }else{
         return [];
+    }
+}
+
+function checkValidatePayrollPeriodCutoff($check_date,$payroll_period_id){
+    $payroll_period = PayrollPeriod::where('id',$payroll_period_id)->first();
+
+    if($payroll_period){
+        if($payroll_period->cutoff_date >= $check_date){
+            return 'pasok pa';
+        }else{
+            return 'hindi na';
+        }
     }
 }
 
