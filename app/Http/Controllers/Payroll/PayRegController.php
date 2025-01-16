@@ -131,6 +131,7 @@ class PayRegController extends Controller
     {
         $payroll_period = PayrollPeriod::where('id',$request->payroll_period)->first();
         $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
+        $allowed_levels = getUserAllowedPayrollLevels(auth()->user()->id);
         
         $employees = Employee::with('company','department')
                                         ->whereIn('company_id',$allowed_companies)
@@ -139,6 +140,7 @@ class PayRegController extends Controller
                                             $q->where('department_id',$request->department);
                                         })
                                         ->where('status','Active')
+                                        ->whereIn('level',$allowed_levels)
                                         //->where('id','1') // My Id
                                         ->get();
         $count = 0;
