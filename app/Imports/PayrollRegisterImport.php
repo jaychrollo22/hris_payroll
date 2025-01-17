@@ -16,7 +16,7 @@ class PayrollRegisterImport implements ToModel,WithHeadingRow
     public function model(array $row)
     {
         return new PayrollRegister([
-            'id'  => $row['id'],
+            'id'  => $row['payroll_register_id'],
         ]);
     }
 }

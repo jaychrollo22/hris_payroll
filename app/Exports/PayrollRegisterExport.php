@@ -59,7 +59,7 @@ class PayrollRegisterExport implements FromQuery, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'ID', 'USER ID', 'BANK ACCOUNT', 'NAME', 'POSITION', 'EMPLOYMENT STATUS', 'COMPANY', 'DEPARTMENT', 
+            'PAYROLL PERIOD ID', 'USER ID', 'BANK ACCOUNT', 'NAME', 'POSITION', 'EMPLOYMENT STATUS', 'COMPANY', 'DEPARTMENT', 
             'PROJECT', 'DATE HIRED', 'CUT FROM', 'CUT TO', 'MONTHLY BASIC PAY', 'DAILY RATE', 'BASIC PAY',
             'ABSENCES AMOUNT', 'LATES AMOUNT', 'UNDERTIME AMOUNT', 'SALARY ADJUSTMENT', 'OVERTIME PAY', 
             'MEAL ALLOWANCE', 'SALARY ALLOWANCE', 'OUT OF TOWN ALLOWANCE', 'INCENTIVES ALLOWANCE', 
@@ -77,7 +77,7 @@ class PayrollRegisterExport implements FromQuery, WithHeadings, WithMapping
     public function map($payroll_register): array
     {
         return [
-            $payroll_register->id,
+            $payroll_register->payroll_period_id,
             $payroll_register->user_id,
             $payroll_register->bank_account,
             $payroll_register->name,

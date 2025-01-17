@@ -1523,3 +1523,11 @@ function summarOfRatingScale($total_rating){
     }
 }
 
+function isValidDateFormat($date, $format = 'Y-m-d') {
+    $parsedDate = DateTime::createFromFormat($format, $date);
+    return $parsedDate && $parsedDate->format($format) === $date;
+}
+
+function stringToDateConversion($string) {
+    return  ($string - 25569) * 86400;
+}

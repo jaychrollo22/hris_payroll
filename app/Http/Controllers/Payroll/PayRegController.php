@@ -559,27 +559,24 @@ class PayRegController extends Controller
                     
                     if(isset($value['date_hired'])){
                         $date_hired = $value['date_hired'];
-                        if($date_hired > 0){
-                            $convert_date = ($date_hired - 25569) * 86400;
-                            $payroll_register->date_hired = date('Y-m-d', $date_hired);
-                        }
+
+                        if($date_hired_validation = isValidDateFormat($date_hired)) $payroll_register->date_hired = $date_hired;
+                        if(!$date_hired_validation && $date_hired > 0) $payroll_register->date_hired = date('Y-m-d', stringToDateConversion($date_hired));
                     }
 
-                    if (isset($value['payroll_period_id'])) $payroll_register->payroll_period_id = $value['payroll_period_id'];
+                    if(isset($value['payroll_period_id'])) $payroll_register->payroll_period_id = $value['payroll_period_id'];
                     if(isset($value['cut_from'])){
                         $cut_from = $value['cut_from'];
-                        if($cut_from > 0){
-                            $convert_date = ($cut_from - 25569) * 86400;
-                            $payroll_register->cut_from = date('Y-m-d', $cut_from);
-                        }
+
+                        if($cut_from_validation = isValidDateFormat($cut_from)) $payroll_register->cut_from = $cut_from;
+                        if(!$cut_from_validation && $cut_from > 0) $payroll_register->cut_from = date('Y-m-d', stringToDateConversion($cut_from));
                     }
 
                     if(isset($value['cut_to'])){
                         $cut_to = $value['cut_to'];
-                        if($cut_to > 0){
-                            $convert_date = ($cut_to - 25569) * 86400;
-                            $payroll_register->cut_to = date('Y-m-d', $cut_to);
-                        }
+
+                        if($cut_to_validation = isValidDateFormat($cut_to)) $payroll_register->cut_to = $cut_to;
+                        if(!$cut_to_validation && $cut_to > 0) $payroll_register->cut_to = date('Y-m-d', stringToDateConversion($cut_to));
                     }
 
                     if (isset($value['monthly_basic_pay'])) $payroll_register->monthly_basic_pay = $value['monthly_basic_pay'];
