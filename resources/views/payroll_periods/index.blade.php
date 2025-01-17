@@ -21,6 +21,7 @@
                   <table id="table-payroll" class="table table-hover table-bordered">
                     <thead>
                         <tr>
+                            <th>Payroll ID</th>
                             <th>Payroll Name</th>
                             <th>Start Date</th>
                             <th>End Date</th>
@@ -38,6 +39,7 @@
                         @foreach($payroll_periods as $payroll_period)
                         <tr>
                             
+                            <td>{{$payroll_period->id}}</td>
                             <td>{{$payroll_period->payroll_name}}</td>
                             <td>{{$payroll_period->start_date}}</td>
                             <td>{{$payroll_period->end_date}}</td>
