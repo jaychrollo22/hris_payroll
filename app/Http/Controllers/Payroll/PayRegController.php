@@ -139,6 +139,9 @@ class PayRegController extends Controller
                                         ->when($request->department,function($q) use($request){
                                             $q->where('department_id',$request->department);
                                         })
+                                        ->when($request->level,function($q) use($request){
+                                            $q->where('level',$request->level);
+                                        })
                                         ->where('status','Active')
                                         ->whereIn('level',$allowed_levels)
                                         //->where('id','1') // My Id
