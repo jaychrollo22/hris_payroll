@@ -76,10 +76,12 @@ class PayRegController extends Controller
             
             $payroll_registers->whereHas('employee',function($q) use($company,$allowed_companies,$allowed_levels,$search){
                 $q->when($company != "All", function($q2) use($company){
-                    $q2->where('company_id',$company);
+                    $q2->where('company_id',$company)
+                            ->whereNotIn('level',['4','5']); //Except Consultants and Executives
                 })
                 ->when($company == "All", function($q2) use($allowed_companies){
-                    $q2->whereIn('company_id',$allowed_companies);
+                    $q2->whereIn('company_id',$allowed_companies)
+                            ->whereNotIn('level',['4','5']); //Except Consultants and Executives
                 })
                 ->when($search, function($q2) use($search){
                     $q2->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')
