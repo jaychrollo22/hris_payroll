@@ -345,8 +345,8 @@ class PayrollAttendanceController extends Controller
 
                 if($if_has_ob->date_from && $if_has_ob->date_to && $employee_schedule){
                     //Lates
-                    $time_in->time_in = $if_has_ob->date_from;
-                    $time_in->time_out = $if_has_ob->date_to;
+                    $time_in_data = $if_has_ob->date_from;
+                    $time_out_data = $if_has_ob->date_to;
                     
 
                     $time_in_data_full =  date('Y-m-d H:i:s',strtotime($if_has_ob->date_from));
@@ -635,7 +635,7 @@ class PayrollAttendanceController extends Controller
                 }
             }
 
-            if($time_in || $if_has_dtr){
+            if($time_in || $if_has_dtr || $if_has_ob){
 
                 $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
                 $time_in_from = $employee_schedule ? $employee_schedule['time_in_from'] : "08:00";
