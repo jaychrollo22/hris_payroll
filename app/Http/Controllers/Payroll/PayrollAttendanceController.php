@@ -108,7 +108,7 @@ class PayrollAttendanceController extends Controller
                                         })
                                         ->where('status','Active')
                                         ->whereIn('level',['1','2','3']) // R&F, Supervisor and Manager
-                                        // ->where('user_id','4183') // My Id
+                                        // ->where('user_id','344') // My Id
                                         ->get();
 
         $count = 0;
@@ -283,8 +283,6 @@ class PayrollAttendanceController extends Controller
         $vl = 0;
         $sl = 0;
         $wfh = 0;
-        
-
         foreach($date_range as $k => $date_r){
 
             $employee_schedule = employeeSchedule($schedules,$date_r,$emp->schedule_id);
@@ -347,6 +345,10 @@ class PayrollAttendanceController extends Controller
 
                 if($if_has_ob->date_from && $if_has_ob->date_to && $employee_schedule){
                     //Lates
+                    $time_in->time_in = $if_has_ob->date_from;
+                    $time_in->time_out = $if_has_ob->date_to;
+                    
+
                     $time_in_data_full =  date('Y-m-d H:i:s',strtotime($if_has_ob->date_from));
                     $time_in_data_date =  date('Y-m-d',strtotime($if_has_ob->date_from));
                     $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
@@ -355,7 +357,7 @@ class PayrollAttendanceController extends Controller
                     $schedule_time_in =  date('Y-m-d H:i:s',strtotime($schedule_time_in));
                     $schedule_time_in_final =  new DateTime($schedule_time_in);
                     
-                    if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
+                    if($emp->level == '1'){
                         if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
                             if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
                                 //IF Attendance Exceed in Grace Period
