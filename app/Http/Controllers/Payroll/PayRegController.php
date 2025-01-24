@@ -194,13 +194,13 @@ class PayRegController extends Controller
                     }
                     
                     if($no_of_days_worked > 5 || $is_executive || $is_consultant){
-                        $absences_amount = 0;
-                        $lates_amount = 0;
-                        $undertime_amount = 0;
-                        $salary_adjustment = 0;
-                        $overtime_amount = 0;
-
-                        if(!$is_executive && !$is_consultant){
+                        if($is_executive || $is_consultant){
+                            $absences_amount = 0;
+                            $lates_amount = 0;
+                            $undertime_amount = 0;
+                            $salary_adjustment = 0;
+                            $overtime_amount = 0;
+                        }else{
                             $lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
                             $undertime_amount = getUserUndertimeAmount($employee->user_id,$payroll_period->id);
                             $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
