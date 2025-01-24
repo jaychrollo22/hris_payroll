@@ -687,6 +687,9 @@ class PayRegController extends Controller
                         if (isset($value['created_by'])) $payroll_register->created_by = $value['created_by'];
 
                         $payroll_register->save();
+
+                        $this->generateEmployeeContribution($payroll_register,$payroll_period->payroll_cutoff);
+
                         $save_count+=1;  
                     }   
                 }                                   
