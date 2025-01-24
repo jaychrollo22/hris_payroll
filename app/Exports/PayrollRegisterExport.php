@@ -70,7 +70,7 @@ class PayrollRegisterExport implements FromQuery, WithHeadings, WithMapping
             'OMHAS', 'COOP CBU', 'COOP REGULAR LOAN', 'COOP MESCCO', 'PETTY CASH MESCCO', 'OTHERS', 
             'TOTAL DEDUCTION', 'NETPAY', 'SSS REG ER', 'SSS MPF ER', 'SSS EC', 'PHIC ER', 'HDMF ER', 
             'BANK', 'STATUS', 'REMARKS', 'STATUS LAST PAYROLL', 'SSS NO.', 'PHILHEALTH NO.', 'PAG-IBIG NO.', 
-            'TIN NO.', 'BIR TAGGING', '15', '30', 'ACCUMULATED', 'NUMBER', 'CREATED AT', 'UPDATED AT'
+            'TIN NO.', 'BIR TAGGING', 'MONTH 15', 'MONTH 30', 'ACCUMULATED', 'NUMBER', 'CREATED AT', 'UPDATED AT'
         ];
     }
 
