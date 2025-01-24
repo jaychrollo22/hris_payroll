@@ -670,12 +670,19 @@ class PayrollAttendanceController extends Controller
                     }
                 }
 
+                if($if_has_ob){
+                    $time_in_data = $if_has_ob->date_from;
+                    $time_out_data = $if_has_ob->date_to;
+                }
+                
                 if($time_in_data){
                     $start_datetime = new DateTime($time_in_data); 
                     if($time_out_data){
                         $diff = $start_datetime->diff(new DateTime($time_out_data)); 
                     }
                 }
+                
+                
 
                 if($time_in_data && $time_out_data)
                 {
