@@ -219,8 +219,7 @@ class EmployeeController extends Controller
         $vessels = Vessel::where('status','Active')->get();
 
         
-        $companies = Company::whereIn('id',$allowed_companies)
-                                    ->orderBy('company_name','ASC')
+        $companies = Company::orderBy('company_name','ASC')
                                     ->get();
 
        
