@@ -131,23 +131,57 @@ class PayRegController extends Controller
      */
     public function generate(Request $request)
     {
+
+        // return $request->all();
         $payroll_period = PayrollPeriod::where('id',$request->payroll_period)->first();
         $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
         $allowed_levels = getUserAllowedPayrollLevels(auth()->user()->id);
         
         $employees = Employee::with('company','department')
-                                        ->whereIn('company_id',$allowed_companies)
-                                        ->where('company_id',$request->company)
-                                        ->when($request->department,function($q) use($request){
-                                            $q->where('department_id',$request->department);
-                                        })
-                                        ->when($request->level,function($q) use($request){
-                                            $q->where('level',$request->level);
-                                        })
-                                        ->where('status','Active')
-                                        ->whereIn('level',$allowed_levels)
+                                        // ->when($request->company,function($q) use($request,$allowed_companies){
+                                        //     if($request['company'] == 'All'){
+                                        //         return $q->whereIn('company_id',$allowed_companies);
+                                        //     }else{
+                                        //         return $q->where('company_id',$request->level);
+                                        //     }
+                                        // })
+                                        // ->when($request->department,function($q) use($request){
+                                        //     $q->where('department_id',$request->department);
+                                        // })
+                                        // ->when($request->level,function($q) use($request,$allowed_levels){
+                                        //     if($request['level'] == 'All'){
+                                        //         return $q->whereIn('level',$allowed_levels);
+                                        //     }else{
+                                        //         return $q->where('level',$request->level);
+                                        //     }
+                                        // })
+                                        ->where('status','Active');
                                         //->where('id','1') // My Id
-                                        ->get();
+                                        // ->get();
+        if($request->company){
+            if($request->company == 'All'){
+                $employees->whereIn('company_id',$allowed_companies);
+            }else{
+                $employees->where('company_id',$request->company)->whereIn('company_id',$allowed_companies);
+            }
+        }
+        if($request->department){
+            if($request->department == 'All'){
+                $employees->whereIn('department_id',$allowed_companies);
+            }else{
+                $employees->where('department_id',$request->department)->whereIn('department_id',$allowed_companies);
+            }
+        }
+        if($request->level){
+            if($request->level == 'All'){
+                $employees->whereIn('level',$allowed_levels);
+            }else{
+                $employees->where('level',$request->level)->whereIn('level',$allowed_levels);
+            }
+        }
+
+        $employees = $employees->get();
+                            
         $count = 0;
         if($employees && $payroll_period){ 
 
@@ -445,7 +479,7 @@ class PayRegController extends Controller
         }
 
         Alert::success('Successfully Generated (' . $count. ')')->persistent('Dismiss');
-        return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company . '&department=' .$request->department);
+        return redirect('/pay-reg?payroll_period=' . $request->payroll_period . '&company=' .$request->company . '&department=' .$request->department . '&level=' .$request->level);
 
     }
 
