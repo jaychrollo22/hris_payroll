@@ -174,8 +174,9 @@ function computeSSSContribution($accumulated_amount,$cutoff,$field,$firstcutoff_
     // if($accumulated_amount >= $highest_contribution->min_salary){
     //     $sss_contribution = $highest_contribution;
     // }else{
-        $sss_contribution = SssMatrixContribution::where('min_salary','>=',$accumulated_amount)
-            ->where('max_salary','<=',$accumulated_amount)
+    // return $accumulated_amount . $field;
+        $sss_contribution = SssMatrixContribution::where('min_salary','<=',$accumulated_amount)
+            ->where('max_salary','>=',$accumulated_amount)
             ->first();
     // }
 

@@ -156,7 +156,7 @@ class PayRegController extends Controller
                                         //     }
                                         // })
                                         ->where('status','Active');
-                                        //->where('id','1') // My Id
+                                        // ->where('user_id','4342'); // My Id
                                         // ->get();
         if($request->company){
             if($request->company == 'All'){
@@ -311,7 +311,7 @@ class PayRegController extends Controller
                         $coop_mescco = 0;
                         $petty_cash_mescco = 0;
                         $others = 0;
-
+                        // return $total_accumulated;
                         if(!$is_consultant){
                             // SSS contribution
                             $sss_reg_ee = computeSSSContribution($total_accumulated,$cut_off,'employee_share_ee',$reg_ee);
