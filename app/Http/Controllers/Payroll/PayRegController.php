@@ -213,6 +213,13 @@ class PayRegController extends Controller
                     $payroll_register->cut_from = $payroll_period->start_date;
                     $payroll_register->cut_to = $payroll_period->end_date;
                     
+                    if($is_executive || $is_consultant){
+                        $absences_amount = 0;
+                    }else{
+                        $absences_amount = getUserAbsencesAmount($employee->user_id,$payroll_period->id);
+                    }
+                    
+
                     $no_of_days_worked = getUserNoOfDaysWorked($employee->user_id,$payroll_period->id);
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
                     $basic_pay = 0;
@@ -230,7 +237,7 @@ class PayRegController extends Controller
                     }
                     
                     if($no_of_days_worked > 5 || $is_executive || $is_consultant){
-                        $absences_amount = 0;
+                        
                         $lates_amount = 0;
                         $undertime_amount = 0;
                         $salary_adjustment = 0;
