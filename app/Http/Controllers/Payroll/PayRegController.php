@@ -283,10 +283,10 @@ class PayRegController extends Controller
                             }
                             //Get previous contributions
                             if($previous_contribution = getPreviousPayrollContribution($payment_date,$employee->user_id)){
-                                $reg_ee = $previous_contribution->sss_reg_ee;
-                                $mpf_ee = $previous_contribution->sss_mpf_ee;
-                                $reg_er = $previous_contribution->sss_reg_er;
-                                $mpf_er = $previous_contribution->sss_mpf_er;
+                                $reg_ee = $previous_contribution->sss_reg_ee_15;
+                                $mpf_ee = $previous_contribution->sss_mpf_ee_15;
+                                $reg_er = $previous_contribution->sss_reg_er_15;
+                                $mpf_er = $previous_contribution->sss_mpf_er_15;
                                 $ec = $previous_contribution->sss_ec;
                                 $month_15_phic_ee = $previous_contribution->phic_ee;
                                 $month_15_hdmf_ee = $previous_contribution->hdmf_ee;
