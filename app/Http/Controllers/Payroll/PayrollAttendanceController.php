@@ -108,7 +108,7 @@ class PayrollAttendanceController extends Controller
                                         })
                                         ->where('status','Active')
                                         ->whereIn('level',['1','2','3']) // R&F, Supervisor and Manager
-                                        // ->where('user_id','4183') // My Id
+                                        // ->where('user_id','345') // My Id
                                         ->get();
 
         $count = 0;
@@ -283,7 +283,8 @@ class PayrollAttendanceController extends Controller
         $vl = 0;
         $sl = 0;
         $wfh = 0;
-        
+
+        $undertime_hrs_arr = [];
 
         foreach($date_range as $k => $date_r){
 
@@ -347,6 +348,10 @@ class PayrollAttendanceController extends Controller
 
                 if($if_has_ob->date_from && $if_has_ob->date_to && $employee_schedule){
                     //Lates
+                    $time_in_data = $if_has_ob->date_from;
+                    $time_out_data = $if_has_ob->date_to;
+                    
+
                     $time_in_data_full =  date('Y-m-d H:i:s',strtotime($if_has_ob->date_from));
                     $time_in_data_date =  date('Y-m-d',strtotime($if_has_ob->date_from));
                     $schedule_time_in =  $time_in_data_date . ' ' . $employee_schedule['time_in_to'];
@@ -355,7 +360,7 @@ class PayrollAttendanceController extends Controller
                     $schedule_time_in =  date('Y-m-d H:i:s',strtotime($schedule_time_in));
                     $schedule_time_in_final =  new DateTime($schedule_time_in);
                     
-                    if($emp->level == '1'){ // Lates Only for Rank and File and Supervisor
+                    if($emp->level == '1'){
                         if($emp->schedule_info->is_with_grace_period == 1){ //With Grace Period Schedule
                             if(date('Y-m-d H:i',strtotime($schedule_time_in_with_grace)) < date('Y-m-d H:i',strtotime($time_in_data_full))){
                                 //IF Attendance Exceed in Grace Period
@@ -394,6 +399,8 @@ class PayrollAttendanceController extends Controller
                                     }else{
                                         $undertime_hrs = $undertime;
                                     }
+
+                                    $undertime_hrs_arr[] = $undertime_hrs . ' ' . $date_r;
                                 }  
                             }
                         }else{
@@ -418,6 +425,8 @@ class PayrollAttendanceController extends Controller
                                         $new_diff = $time_out_datetime->diff(new DateTime($schedule_time_out));
                                         $work_ut_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
                                         $undertime_hrs = (double) number_format($work_ut_diff_hours,2); 
+
+                                        $undertime_hrs_arr[] = $undertime_hrs . ' ' . $date_r;
                                     }
                                 }
                             }
@@ -426,22 +435,24 @@ class PayrollAttendanceController extends Controller
 
                 }
 
-                if(empty($check_if_holiday)){
-                    $lates = (double) $lates+$late_diff_hours;
-                }
-                if(empty($check_if_holiday)){
+                // if(empty($check_if_holiday)){
+                //     $lates = (double) $lates+$late_diff_hours;
+                // }
+                // if(empty($check_if_holiday)){
 
-                    // $undertimes = $undertimes + $undertime_hrs; 
+                //     // $undertimes = $undertimes + $undertime_hrs; 
 
-                    if ($emp->level == '1') {
-                        if ($undertime_hrs >= 4.5) {
-                            $total_absent += 0.5;    
-                        }else{
-                            $undertimes = $undertimes + $undertime_hrs;
-                        }
-                    }
+                //     if ($emp->level == '1') {
+                //         if ($undertime_hrs >= 4.5) {
+                //             $total_absent += 0.5;    
+                //         }else{
+                //             $undertimes = $undertimes + $undertime_hrs;
+
+                //             $undertime_hrs_arr[] = $undertime_hrs . ' ' . $date_r;
+                //         }
+                //     }
                     
-                }
+                // }
     
                 $approved_overtime_hrs = $emp->approved_ots ? employeeHasOTDetails($emp->approved_ots,date('Y-m-d',strtotime($date_r))) : "";
                 if($approved_overtime_hrs){
@@ -633,7 +644,7 @@ class PayrollAttendanceController extends Controller
                 }
             }
 
-            if($time_in || $if_has_dtr){
+            if($time_in || $if_has_dtr || $if_has_ob){
 
                 $id = array_search(date('l',strtotime($date_r)),$schedules->pluck('name')->toArray());
                 $time_in_from = $employee_schedule ? $employee_schedule['time_in_from'] : "08:00";
@@ -668,12 +679,19 @@ class PayrollAttendanceController extends Controller
                     }
                 }
 
+                if($if_has_ob){
+                    $time_in_data = $if_has_ob->date_from;
+                    $time_out_data = $if_has_ob->date_to;
+                }
+
                 if($time_in_data){
                     $start_datetime = new DateTime($time_in_data); 
                     if($time_out_data){
                         $diff = $start_datetime->diff(new DateTime($time_out_data)); 
                     }
                 }
+                
+                
 
                 if($time_in_data && $time_out_data)
                 {
@@ -749,14 +767,17 @@ class PayrollAttendanceController extends Controller
                                 $undertime = $employee_schedule['working_hours'] - $total_with_has_leave_shift_hrs;
                                 if($undertime > 0){
                                     $undertime_hrs = $undertime;
+                                    $undertime_hrs_arr[] = $undertime_hrs . ' ' . $date_r;
                                 }  
                             }else{
                                 $undertime = (double) number_format($employee_schedule['working_hours'] - $work_diff_hours,2);
                                 if($undertime > 0){
                                     if($late_diff_hours > 0){
                                         $undertime_hrs = $undertime - $late_diff_hours;
+                                        $undertime_hrs_arr[] = $undertime_hrs . ' ' . $date_r;
                                     }else{
                                         $undertime_hrs = $undertime;
+                                        $undertime_hrs_arr[] = $undertime_hrs . ' ' . $date_r;
                                     }
                                 }  
                             }
@@ -781,6 +802,7 @@ class PayrollAttendanceController extends Controller
                                     $new_diff = $time_out_datetime->diff(new DateTime($schedule_time_out));
                                     $work_ut_diff_hours = round($new_diff->s / 3600 + $new_diff->i / 60 + $new_diff->h + $new_diff->days * 24, 2);
                                     $undertime_hrs = (double) number_format($work_ut_diff_hours,2); 
+                                    $undertime_hrs_arr[] = $undertime_hrs . ' ' . $date_r;
                                 }
                             }
                         }
@@ -825,6 +847,7 @@ class PayrollAttendanceController extends Controller
                                 $total_absent += 0.5;   
                             }else{
                                 $undertimes = $undertimes + $undertime_hrs;
+                                $undertime_hrs_arr[] = $undertime_hrs . ' ' . $date_r;
                             }
                         }
                     }
@@ -1195,6 +1218,7 @@ class PayrollAttendanceController extends Controller
             'sl' => $sl,
             'wfh' => $wfh,
             'total_leave_shift' => $total_leave_shift,
+            'undertime_hrs_arr' => $undertime_hrs_arr,
         ];
             
 
@@ -1326,6 +1350,8 @@ class PayrollAttendanceController extends Controller
                 if (isset($value['night_diff_amount'])) $payroll_attendance->night_diff_amount = $value['night_diff_amount'];
                 if (isset($value['overtime_adjustment'])) $payroll_attendance->overtime_adjustment = $value['overtime_adjustment'];
                 if (isset($value['total_overtime_pay'])) $payroll_attendance->total_overtime_pay = $value['total_overtime_pay'];
+                // if (isset($value['month_15'])) $payroll_attendance->month_15 = $value['month_15'];
+                // if (isset($value['month_30'])) $payroll_attendance->month_30 = $value['month_30'];
                 if (isset($value['time_keeper_id'])) $payroll_attendance->timekeeper = $value['time_keeper_id'];
                 $payroll_attendance->save();
                 $save_count+=1;                                 

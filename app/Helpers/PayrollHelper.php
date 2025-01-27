@@ -169,20 +169,32 @@ function getHDMFEr($user_id,$cutoff){
 }
 
 function computeSSSContribution($accumulated_amount,$cutoff,$field,$firstcutoff_contribution ){
+
     $highest_contribution = SssMatrixContribution::orderBy('min_salary','desc')->first();
 
     if($accumulated_amount >= $highest_contribution->min_salary){
         $sss_contribution = $highest_contribution;
     }else{
-        $sss_contribution = SssMatrixContribution::where('max_salary','>=',$accumulated_amount)
-            ->where('min_salary','<=',$accumulated_amount)
+    // return $accumulated_amount . $field;
+        $sss_contribution = SssMatrixContribution::where('min_salary','<=',$accumulated_amount)
+            ->where('max_salary','>=',$accumulated_amount)
             ->first();
     }
-
     if(!$sss_contribution) return 0;
-    if ($cutoff == 'Second Cut-Off') return $sss_contribution->$field - $firstcutoff_contribution;
+    if($cutoff == 'Second Cut-Off'){
+        if($field == 'employee_share_ee' || $field == 'employee_share_er'){
+            return $sss_contribution->$field - $firstcutoff_contribution;
+        }else{
+            return $sss_contribution->$field;
+        }
+    }else{
+        return $sss_contribution->$field;
+    }
 
-    return  $sss_contribution->$field;
+    // if(!$sss_contribution) return 0;
+    // if ($cutoff == 'Second Cut-Off') return $sss_contribution->$field - $firstcutoff_contribution;
+
+    // return  $sss_contribution->$field;
 }
 
 function computeSSSecContribution($accumulated_amount,$cutoff,$field,$firstcutoff_amount){

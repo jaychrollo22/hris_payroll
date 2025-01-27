@@ -75,7 +75,7 @@
                         </div>
                         <div class='col-md-3'>
                           <div class="form-group">
-                            <select data-placeholder="Select Level" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='level' required>
+                            <select data-placeholder="Select Level" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='level'>
                               <option value="">-- Select Level --</option>
                               <option value="All" @if ($level == "All") selected @endif>All</option>
                               @foreach($levels as $level_item)
