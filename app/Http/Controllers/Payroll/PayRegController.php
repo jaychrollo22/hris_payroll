@@ -290,6 +290,11 @@ class PayRegController extends Controller
                                 $ec = $previous_contribution->sss_ec;
                                 $month_15_phic_ee = $previous_contribution->phic_ee;
                                 $month_15_hdmf_ee = $previous_contribution->hdmf_ee;
+                            }else{
+                                if(!$is_consultant){
+                                    $phic_ee = computePHICContribution($rate,'employee_share_ee');
+                                    $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
+                                }
                             }
                         }else{
                             if(!$is_consultant){
@@ -477,9 +482,6 @@ class PayRegController extends Controller
                             $count++;
                             $this->generateEmployeeContribution($payroll_register,$cut_off);   
                         }
-                        
-                        
-                       
                     }
                 }
             }
@@ -596,6 +598,7 @@ class PayRegController extends Controller
 
                     if(!$payroll_register) $payroll_register = new PayrollRegister();
 
+                        if (isset($value['user_id'])) $payroll_register->user_id = $value['user_id'];
                         if (isset($value['bank_account'])) $payroll_register->bank_account = $value['bank_account'];
                         if (isset($value['name'])) $payroll_register->name = $value['name'];
                         if (isset($value['position'])) $payroll_register->position = $value['position'];
