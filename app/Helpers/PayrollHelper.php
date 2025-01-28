@@ -182,7 +182,7 @@ function computeSSSContribution($accumulated_amount,$cutoff,$field,$firstcutoff_
     }
     if(!$sss_contribution) return 0;
     if($cutoff == 'Second Cut-Off'){
-        if($field == 'employee_share_ee' || $field == 'employee_share_er' || $field == 'sss_mpf_ee' || $field == 'sss_mpf_er'){
+        if($field == 'employee_share_ee' || $field == 'employee_share_er' || $field == 'mpf_ee' || $field == 'mpf_er'){
             return $sss_contribution->$field - $firstcutoff_contribution;
         }else{
             return $sss_contribution->$field;
