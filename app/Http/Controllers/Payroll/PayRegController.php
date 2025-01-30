@@ -282,7 +282,8 @@ class PayRegController extends Controller
                                 $month_15 = 0;
                             }
                             //Get previous contributions
-                            if($previous_contribution = getPreviousPayrollContribution($payment_date,$employee->user_id)){
+                            $previous_contribution = getPreviousPayrollContribution($payment_date,$employee->user_id);
+                            if($previous_contribution){
                                 $reg_ee = $previous_contribution->sss_reg_ee;
                                 $mpf_ee = $previous_contribution->sss_mpf_ee;
                                 $reg_er = $previous_contribution->sss_reg_er;
@@ -290,12 +291,13 @@ class PayRegController extends Controller
                                 $ec = $previous_contribution->sss_ec;
                                 $month_15_phic_ee = $previous_contribution->phic_ee;
                                 $month_15_hdmf_ee = $previous_contribution->hdmf_ee;
-                            }else{
-                                if(!$is_consultant){
-                                    $phic_ee = computePHICContribution($rate,'employee_share_ee');
-                                    $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
-                                }
                             }
+
+                            if(!$is_consultant && (!$previous_contribution || !$previous_contribution->phic_er == 0)){
+                                $phic_ee = computePHICContribution($rate,'employee_share_ee');
+                                $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
+                            }
+
                         }else{
                             if(!$is_consultant){
                                 $phic_ee = computePHICContribution($rate,'employee_share_ee');
