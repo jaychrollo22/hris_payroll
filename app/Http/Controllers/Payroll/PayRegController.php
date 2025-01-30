@@ -293,7 +293,7 @@ class PayRegController extends Controller
                                 $month_15_hdmf_ee = $previous_contribution->hdmf_ee;
                             }
 
-                            if(!$is_consultant && (!$previous_contribution || !$previous_contribution->phic_er == 0)){
+                            if(!$is_consultant && (!$previous_contribution || $previous_contribution->phic_er == 0)){
                                 $phic_ee = computePHICContribution($rate,'employee_share_ee');
                                 $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
                             }
