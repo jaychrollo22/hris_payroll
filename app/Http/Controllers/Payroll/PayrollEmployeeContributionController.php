@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\PayrollEmployeeContribution;
+use App\PayrollPeriod;
 use App\Employee;
 use App\Company;
 use App\Imports\PayrollEmployeeContributionImport;
@@ -28,19 +29,29 @@ class PayrollEmployeeContributionController extends Controller
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
 
+
         $companies = Company::whereHas('employee_has_company')
                                 ->whereIn('id',$allowed_companies)
                                 ->get();
 
+        $payroll_periods = PayrollPeriod::get();
+
         $company = isset($request->company) ? $request->company : "";
+        $payroll_period = isset($request->payroll_period) ? $request->payroll_period : "";
 
         $contributions = PayrollEmployeeContribution::whereHas('employee',function($q) use($allowed_companies){
                                                         $q->whereIn('company_id',$allowed_companies);
                                                     })
-                                                    ->with('employee.company');
+                                                    ->with('employee.company','payrollPeriod');
         if($company){
             $contributions = $contributions->whereHas('employee',function($q) use($company){
                 $q->where('company_id',$company);
+            });
+        }
+
+        if($payroll_period){
+            $contributions = $contributions->whereHas('employee',function($q) use($payroll_period){
+                $q->where('payroll_period_id',$payroll_period);
             });
         }
 
@@ -55,6 +66,8 @@ class PayrollEmployeeContributionController extends Controller
                 'header' => 'contributions',
                 'contributions' => $contributions,
                 'employees' => $employees,
+                'payroll_periods' => $payroll_periods,
+                'payroll_period' => $payroll_period,
                 'companies' => $companies,
                 'company' => $company
             )

@@ -55,6 +55,17 @@
                         </div>
                       </div>
 
+                      <div class='col-md-4'>
+                        <div class="form-group">
+                          <select data-placeholder="Select Payroll Period" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payroll_period' required>
+                            <option value="">-- Select Payroll Period --</option>
+                            @foreach($payroll_periods as $payroll_period_item)
+                            <option value="{{$payroll_period_item->id}}" @if ($payroll_period_item->id == $payroll_period) selected @endif>{{$payroll_period_item->payroll_name}} ({{$payroll_period_item->start_date .'-'. $payroll_period_item->end_date}})</option>
+                            @endforeach
+                          </select>
+                        </div>
+                      </div>
+
                       <div class='col-md-2'>
                         <button type="submit" class="form-control form-control-sm btn btn-primary mb-2 btn-sm">Filter</button>
                       </div>
@@ -66,6 +77,7 @@
                   <table id="table-payroll" class="table table-hover table-bordered">
                     <thead>
                         <tr>
+                            <th>Payroll Period</th>
                             <th>User ID</th>
                             <th>Employee</th>
                             <th>Company</th>
@@ -85,6 +97,7 @@
                     <tbody>
                       @foreach ($contributions as $contribution)
                       <tr>
+                          <td>{{ $contribution->payrollPeriod ? $contribution->payrollPeriod->payroll_name : "" }}</td>
                           <td>{{ $contribution->user_id }}</td>
                           <td>{{ $contribution->employee->first_name . ' ' . $contribution->employee->last_name }}</td>
                           <td>{{ $contribution->employee->company->company_name }}</td>
