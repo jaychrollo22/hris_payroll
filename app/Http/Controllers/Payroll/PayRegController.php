@@ -155,8 +155,8 @@ class PayRegController extends Controller
                                         //         return $q->where('level',$request->level);
                                         //     }
                                         // })
-                                        ->where('status','Active');
-                                        // ->where('user_id','4342'); // My Id
+                                        ->where('status','Active')
+                                        // ->where('user_id','949'); // My Id
                                         // ->get();
         if($request->company){
             if($request->company == 'All'){
@@ -293,9 +293,15 @@ class PayRegController extends Controller
                                 $month_15_hdmf_ee = $previous_contribution->hdmf_ee;
                             }
 
-                            if(!$is_consultant && (!$previous_contribution || !$previous_contribution->phic_er == 0)){
-                                $phic_ee = computePHICContribution($rate,'employee_share_ee');
-                                $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
+                            // if(!$is_consultant && (!$previous_contribution || !$previous_contribution->phic_er == 0)){
+
+                            if(!$is_consultant && $previous_contribution){
+                                if($previous_contribution->phic_ee == 0){ //Previous cutoff PHIC is 0
+                                    $phic_ee = computePHICContribution($rate,'employee_share_ee');
+                                }
+                                if($previous_contribution->hdmf_ee == 0){ //Previous cutoff HDMF is 0
+                                    $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
+                                }                                 
                             }
 
                         }else{
