@@ -155,7 +155,7 @@ class PayRegController extends Controller
                                         //         return $q->where('level',$request->level);
                                         //     }
                                         // })
-                                        ->where('status','Active')
+                                        ->where('status','Active');
                                         // ->where('user_id','949'); // My Id
                                         // ->get();
         if($request->company){
