@@ -713,7 +713,7 @@
                                     @endif
                                     
                                     {{-- Timekeeper Role --}}
-                                    @if(auth()->user()->id == '351')
+                                    @if(auth()->user()->id == '1')
                                         <div class="col-md-12 form-group">
                                             Company
                                             @php
@@ -915,6 +915,7 @@
                                             <br>
                                         </div>
                                     @endif
+                                    
                                 </div>
                             
                                 <a href='/users' type="button" class="btn btn-secondary">Close</a>
