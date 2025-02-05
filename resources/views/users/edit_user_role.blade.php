@@ -714,7 +714,7 @@
                                     @endif
                                     
                                     {{-- Timekeeper Role --}}
-                                    @if(auth()->user()->id == '1')
+                                    @if(auth()->user()->id == '351')
                                         <div class="col-md-12 form-group">
                                             Company
                                             @php
