@@ -95,6 +95,9 @@ class PayrollAttendanceController extends Controller
     }
 
     public function generate(Request $request){
+
+        ini_set('memory_limit','-1');
+
         $user_id = auth()->user()->id;
         $allowed_companies = getUserAllowedCompanies($user_id);
 
