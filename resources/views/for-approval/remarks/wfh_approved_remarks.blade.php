@@ -19,6 +19,7 @@
                             Approve WFH Percentage:
                             <select name="approve_percentage" id="" class="form-control" required>
                                 <option value="60" {{$wfh->approve_percentage == '60' ? 'selected' : "" }}>WFH 60%</option>
+                                <option value="70" {{$wfh->approve_percentage == '70' ? 'selected' : "" }}>WFH 70%</option>
                                 <option value="100" {{$wfh->approve_percentage == '100' ? 'selected' : "" }}>WFH 100%</option>
                             </select>
                         </div>
