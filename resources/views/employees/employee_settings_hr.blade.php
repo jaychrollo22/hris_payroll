@@ -21,6 +21,9 @@
                         <button class="btn btn-info btn-sm mt-3" data-toggle="modal" data-target="#uploadSignature">
                             Upload Signature
                         </button>
+                        <a href="/change-user-email/{{$user->id}}" target="_blank" class="btn btn-success btn-sm mt-3">
+                            Update Email
+                        </a>
                     </div>
                 </div>
                 <div class="card mt-3">

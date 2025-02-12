@@ -21,15 +21,16 @@
                                         <input type="email" name="email" value="{{$user->email}}" class="form-control">
                                     </div>
 
-                                    <div class='col-md-12 form-group'>
-                                        Role
-                                        <select class="form-control" name="role">
-                                            <option value="">Choose Role</option>
-                                            <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
-                                        </select>
-                                    </div>
+                                    
                                     {{-- Super User  --}}
                                     @if(auth()->user()->id == '353' || auth()->user()->id == '1' || auth()->user()->id == '5361')
+                                        <div class='col-md-12 form-group'>
+                                            Role
+                                            <select class="form-control" name="role">
+                                                <option value="">Choose Role</option>
+                                                <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                            </select>
+                                        </div>
                                         <div class="col-md-12 form-group">
                                             Company
                                             @php
@@ -915,6 +916,7 @@
                                             <br>
                                         </div>
                                     @endif
+
                                 </div>
                             
                                 <a href='/users' type="button" class="btn btn-secondary">Close</a>

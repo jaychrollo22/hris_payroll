@@ -46,7 +46,7 @@ class UserController extends Controller
             $companies = Company::whereHas('employee_has_company')->orderBy('company_name','ASC')->get();
 
             $rank_and_file_users = [];
-            if(auth()->user()->id == '351' || auth()->user()->id == '1166'){
+            if(auth()->user()->id == '351'){
                 $rank_and_file_users = Employee::where('level','=',1)
                                             ->pluck('user_id')
                                             ->toArray();
@@ -129,6 +129,7 @@ class UserController extends Controller
         ));
 
     }
+
     public function changePassword(User $user){
 
         
@@ -137,6 +138,22 @@ class UserController extends Controller
                         ->first();
 
         return view('users.change_password',
+        array(
+            'header' => 'users',
+            'user' => $user
+        ));
+
+    }
+
+    public function changeEmail(User $user){
+
+        
+        
+        $user = User::with('user_allowed_company','user_privilege')
+                        ->where('id',$user->id)
+                        ->first();
+
+        return view('users.change_email',
         array(
             'header' => 'users',
             'user' => $user
@@ -536,6 +553,21 @@ class UserController extends Controller
 
         Alert::success('Successfully Updated')->persistent('Dismiss');
         return redirect('/users');
+
+    }
+
+    public function updateUserEmail(Request $request,User $user){
+
+        $validator = $request->validate([
+            'email' => 'required',
+        ]);
+    
+        $user = User::findOrFail($user->id);
+        $user->email = $request->input('email');
+        $user->save();
+
+        Alert::success('Successfully Updated')->persistent('Dismiss');
+        return redirect('change-user-email/' . $user->id);
 
     }
 }

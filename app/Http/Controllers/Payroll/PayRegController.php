@@ -156,7 +156,7 @@ class PayRegController extends Controller
                                         //     }
                                         // })
                                         ->where('status','Active');
-                                        // ->where('user_id','4342'); // My Id
+                                        // ->where('user_id','949'); // My Id
                                         // ->get();
         if($request->company){
             if($request->company == 'All'){
@@ -222,6 +222,7 @@ class PayRegController extends Controller
 
                     $no_of_days_worked = getUserNoOfDaysWorked($employee->user_id,$payroll_period->id);
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
+                    $monthly_basic_pay = 0;
                     $basic_pay = 0;
                     $daily_rate = 0;
                     $is_monthly = ($employee->work_description == 'Monthly') ? true : false;
@@ -230,9 +231,11 @@ class PayRegController extends Controller
                         if($is_monthly){
                             $basic_pay = $rate / 2;
                             $daily_rate = ((($rate*12)/313)/8)*9.5;
+                            $monthly_basic_pay = $rate;
                         }else{
                             $basic_pay = $rate * $no_of_days_worked;
                             $daily_rate = $rate;
+                            $monthly_basic_pay = ($daily_rate*313)/12;
                         }
                     }
                     
@@ -293,15 +296,18 @@ class PayRegController extends Controller
                                 $month_15_hdmf_ee = $previous_contribution->hdmf_ee;
                             }
 
-                            if(!$is_consultant && (!$previous_contribution || $previous_contribution->phic_er == 0)){
-                                $phic_ee = computePHICContribution($rate,'employee_share_ee');
-                                $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
+                            if(!$is_consultant && (!$previous_contribution || $previous_contribution->phic_ee == 0 || $previous_contribution->hdmf_ee == 0)){
+                                if($previous_contribution->phic_ee == 0){ //Previous cutoff PHIC is 0
+                                    $phic_ee = computePHICContribution($monthly_basic_pay,'employee_share_ee');
+                                }
+                                if($previous_contribution->hdmf_ee == 0){ //Previous cutoff HDMF is 0
+                                    $hdmf_ee = $is_monthly ? computePagibigContribution($monthly_basic_pay,'employee_share_ee') : 200;
+                                }                                 
                             }
-
                         }else{
                             if(!$is_consultant){
-                                $phic_ee = computePHICContribution($rate,'employee_share_ee');
-                                $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
+                                $phic_ee = computePHICContribution($monthly_basic_pay,'employee_share_ee');
+                                $hdmf_ee = $is_monthly ? computePagibigContribution($monthly_basic_pay,'employee_share_ee') : 200;
                             }
                         }
 
@@ -383,7 +389,7 @@ class PayRegController extends Controller
                         );
 
 
-                        $payroll_register->monthly_basic_pay = $rate ? $rate : 0;
+                        $payroll_register->monthly_basic_pay = $monthly_basic_pay ? $monthly_basic_pay : 0;
                         $payroll_register->daily_rate = $daily_rate;
                         $payroll_register->basic_pay = $basic_pay;
                         

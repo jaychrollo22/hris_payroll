@@ -77,11 +77,12 @@
                                                 Edit
                                                 <i class="ti-file btn-icon-append"></i>
                                             </a>
-                                           
-                                            <a href="/change-password/{{$user->id}}" target="_blank" class="btn btn-outline-info btn-icon-text btn-sm">
-                                                Change Password
-                                                <i class="ti-key btn-icon-append"></i>
-                                            </a>
+                                            @if(auth()->user()->id == '1' || auth()->user()->id == '351')
+                                                <a href="/change-password/{{$user->id}}" target="_blank" class="btn btn-outline-info btn-icon-text btn-sm">
+                                                    Change Password
+                                                    <i class="ti-key btn-icon-append"></i>
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
