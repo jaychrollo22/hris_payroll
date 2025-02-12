@@ -286,6 +286,7 @@ class PayRegController extends Controller
                             }
                             //Get previous contributions
                             $previous_contribution = getPreviousPayrollContribution($payment_date,$employee->user_id);
+                            $no_1stcutoff_deduction = false;
                             if($previous_contribution){
                                 $reg_ee = $previous_contribution->sss_reg_ee;
                                 $mpf_ee = $previous_contribution->sss_mpf_ee;
@@ -294,9 +295,12 @@ class PayRegController extends Controller
                                 $ec = $previous_contribution->sss_ec;
                                 $month_15_phic_ee = $previous_contribution->phic_ee;
                                 $month_15_hdmf_ee = $previous_contribution->hdmf_ee;
+                                $no_1stcutoff_deduction = ($previous_contribution->phic_ee == 0 || $previous_contribution->hdmf_ee == 0);
+                            }else{
+                                $no_1stcutoff_deduction = true;
                             }
 
-                            if(!$is_consultant && (!$previous_contribution || $previous_contribution->phic_ee == 0 || $previous_contribution->hdmf_ee == 0)){
+                            if(!$is_consultant && $no_1stcutoff_deduction){
                                 if($previous_contribution->phic_ee == 0){ //Previous cutoff PHIC is 0
                                     $phic_ee = computePHICContribution($monthly_basic_pay,'employee_share_ee');
                                 }
