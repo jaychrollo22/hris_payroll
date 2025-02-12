@@ -99,7 +99,7 @@ class PayRegController extends Controller
 
         $payroll_periods = PayrollPeriod::all();
         $payroll_period_detail = PayrollPeriod::where('id',$payroll_period)->first();
-        $payroll_registers = $payroll_registers->get();
+            $payroll_registers = $payroll_registers->get();
 
         return view(
             'pay_reg.index',
@@ -156,7 +156,7 @@ class PayRegController extends Controller
                                         //     }
                                         // })
                                         ->where('status','Active');
-                                        // ->where('user_id','949'); // My Id
+                                        // ->where('user_id','979'); // My Id
                                         // ->get();
         if($request->company){
             if($request->company == 'All'){
@@ -228,10 +228,10 @@ class PayRegController extends Controller
 
                     if($rate){
                         if($is_monthly){
-                            $basic_pay = $rate / 2;
+                            $basic_pay = $rate / 2; //Monthly
                             $daily_rate = ((($rate*12)/313)/8)*9.5;
                         }else{
-                            $basic_pay = $rate * $no_of_days_worked;
+                            $basic_pay = ($rate*313) / 12; //Non Monthly
                             $daily_rate = $rate;
                         }
                     }
@@ -297,7 +297,7 @@ class PayRegController extends Controller
 
                             if(!$is_consultant && $previous_contribution){
                                 if($previous_contribution->phic_ee == 0){ //Previous cutoff PHIC is 0
-                                    $phic_ee = computePHICContribution($total_accumulated,'employee_share_ee');
+                                    $phic_ee = computePHICContribution($basic_pay,'employee_share_ee');
                                 }
                                 if($previous_contribution->hdmf_ee == 0){ //Previous cutoff HDMF is 0
                                     $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
@@ -306,7 +306,7 @@ class PayRegController extends Controller
 
                         }else{
                             if(!$is_consultant){
-                                $phic_ee = computePHICContribution($total_accumulated,'employee_share_ee');
+                                $phic_ee = computePHICContribution($basic_pay,'employee_share_ee');
                                 $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
                             }
                         }

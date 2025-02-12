@@ -219,26 +219,37 @@ function computePagibigContribution($monthly_basicpay,$field){
 }
 
 function computePHICContribution($monthly_basicpay,$field){
-    $lowest_contribution = PhicMatrixContribution::orderBy('min_salary','asc')->first();
-    $highest_contribution = PhicMatrixContribution::orderBy('min_salary','desc')->first();
-    $contribution = 0;
+    // $lowest_contribution = PhicMatrixContribution::orderBy('min_salary','asc')->first();
+    // $highest_contribution = PhicMatrixContribution::orderBy('min_salary','desc')->first();
+    // $contribution = 0;
     
-    if($monthly_basicpay > 0){
-        if($monthly_basicpay <= $lowest_contribution->max_salary) $contribution += $lowest_contribution->total_contribution;
+    // if($monthly_basicpay > 0){
+    //     if($monthly_basicpay <= $lowest_contribution->max_salary) $contribution += $lowest_contribution->total_contribution;
         
-        if($contribution == 0){
-            if($monthly_basicpay >= $highest_contribution->min_salary){
-                $contribution += $highest_contribution->total_contribution;
-            }else{
-                $phic = PhicMatrixContribution::where('max_salary','>=',$monthly_basicpay)
-                    ->where('min_salary','<=',$monthly_basicpay)
-                    ->first();
+    //     if($contribution == 0){
+    //         if($monthly_basicpay >= $highest_contribution->min_salary){
+    //             $contribution += $highest_contribution->total_contribution;
+    //         }else{
+    //             $phic = PhicMatrixContribution::where('max_salary','>=',$monthly_basicpay)
+    //                 ->where('min_salary','<=',$monthly_basicpay)
+    //                 ->first();
     
-                $contribution += ($monthly_basicpay * $phic->$field);
-            }
-        }
-    }
-    return $contribution / 2;
+    //             $contribution += ($monthly_basicpay * $phic->$field);
+    //         }
+    //     }
+    // }
+    // return $contribution / 2;
+
+    $minSalary = 10000;
+    $maxSalary = 100000;
+    $rate = 0.05; // 5.0% in 2025
+
+    // Ensure salary is within the allowed range
+    $salary = max(min($monthly_basicpay, $maxSalary), $minSalary);
+
+    // Compute contribution
+    $totalContribution = $salary * $rate;
+    return $totalContribution / 2;
 }
 
 function getPreviousPayrollPeriod($payment_date,$user_id){
