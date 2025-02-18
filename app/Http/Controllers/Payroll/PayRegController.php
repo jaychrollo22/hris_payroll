@@ -224,6 +224,7 @@ class PayRegController extends Controller
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
                     $monthly_basic_pay = 0;
                     $monthly_basic_pay_original = 0;
+                    $basic_pay_original = 0;
                     $basic_pay = 0;
                     $daily_rate = 0;
                     $is_monthly = ($employee->work_description == 'Monthly') ? true : false;
@@ -233,12 +234,16 @@ class PayRegController extends Controller
                             $basic_pay = $rate / 2; //Monthly
                             $daily_rate = ((($rate*12)/313)/8)*9.5;
                             $monthly_basic_pay = $rate;
+
                             $monthly_basic_pay_original = $rate;
+                            $basic_pay_original = $rate / 2;
                         }else{
                             $basic_pay = ($rate*313) / 12; //Non Monthly
                             $daily_rate = $rate;
                             $monthly_basic_pay = ($daily_rate*313)/12;
-                            $monthly_basic_pay_original = $rate * $no_of_days_worked;
+
+                            $monthly_basic_pay_original = $rate;
+                            $basic_pay_original = $rate * $no_of_days_worked;
                         }
                     }
                     
@@ -400,9 +405,9 @@ class PayRegController extends Controller
                         );
 
 
-                        $payroll_register->monthly_basic_pay = $monthly_basic_pay_original ? $monthly_basic_pay_original : 0;
+                        $payroll_register->monthly_basic_pay = $monthly_basic_pay_original;
                         $payroll_register->daily_rate = $daily_rate;
-                        $payroll_register->basic_pay = $basic_pay;
+                        $payroll_register->basic_pay = $basic_pay_original;
                         
                         $payroll_register->absences_amount = $absences_amount;
                         $payroll_register->lates_amount = $lates_amount;
