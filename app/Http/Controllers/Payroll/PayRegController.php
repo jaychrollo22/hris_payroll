@@ -222,6 +222,8 @@ class PayRegController extends Controller
 
                     $no_of_days_worked = getUserNoOfDaysWorked($employee->user_id,$payroll_period->id);
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
+                    $monthly_basic_pay = 0;
+                    $monthly_basic_pay_original = 0;
                     $basic_pay = 0;
                     $daily_rate = 0;
                     $is_monthly = ($employee->work_description == 'Monthly') ? true : false;
@@ -230,9 +232,13 @@ class PayRegController extends Controller
                         if($is_monthly){
                             $basic_pay = $rate / 2; //Monthly
                             $daily_rate = ((($rate*12)/313)/8)*9.5;
+                            $monthly_basic_pay = $rate;
+                            $monthly_basic_pay_original = $rate;
                         }else{
                             $basic_pay = ($rate*313) / 12; //Non Monthly
                             $daily_rate = $rate;
+                            $monthly_basic_pay = ($daily_rate*313)/12;
+                            $monthly_basic_pay_original = $rate * $no_of_days_worked;
                         }
                     }
                     
@@ -283,6 +289,7 @@ class PayRegController extends Controller
                             }
                             //Get previous contributions
                             $previous_contribution = getPreviousPayrollContribution($payment_date,$employee->user_id);
+                            $no_1stcutoff_deduction = false;
                             if($previous_contribution){
                                 $reg_ee = $previous_contribution->sss_reg_ee;
                                 $mpf_ee = $previous_contribution->sss_mpf_ee;
@@ -291,23 +298,27 @@ class PayRegController extends Controller
                                 $ec = $previous_contribution->sss_ec;
                                 $month_15_phic_ee = $previous_contribution->phic_ee;
                                 $month_15_hdmf_ee = $previous_contribution->hdmf_ee;
+                                $no_1stcutoff_deduction = ($previous_contribution->phic_ee == 0 || $previous_contribution->hdmf_ee == 0);
+                            }else{
+                                $no_1stcutoff_deduction = true;
                             }
 
-                            // if(!$is_consultant && (!$previous_contribution || !$previous_contribution->phic_er == 0)){
+                            if(!$is_consultant && $no_1stcutoff_deduction){
 
-                            if(!$is_consultant && $previous_contribution){
-                                if($previous_contribution->phic_ee == 0){ //Previous cutoff PHIC is 0
-                                    $phic_ee = computePHICContribution($basic_pay,'employee_share_ee');
-                                }
-                                if($previous_contribution->hdmf_ee == 0){ //Previous cutoff HDMF is 0
-                                    $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
-                                }                                 
+                                $phic_ee = computePHICContribution($monthly_basic_pay,'employee_share_ee');
+                                $hdmf_ee = $is_monthly ? computePagibigContribution($monthly_basic_pay,'employee_share_ee') : 200;
+
+                                // if($previous_contribution->phic_ee == 0){ //Previous cutoff PHIC is 0
+                                //     $phic_ee = computePHICContribution($monthly_basic_pay,'employee_share_ee');
+                                // }
+                                // if($previous_contribution->hdmf_ee == 0){ //Previous cutoff HDMF is 0
+                                    
+                                // }                                 
                             }
-
                         }else{
                             if(!$is_consultant){
-                                $phic_ee = computePHICContribution($basic_pay,'employee_share_ee');
-                                $hdmf_ee = $is_monthly ? computePagibigContribution($rate,'employee_share_ee') : 200;
+                                $phic_ee = computePHICContribution($monthly_basic_pay,'employee_share_ee');
+                                $hdmf_ee = $is_monthly ? computePagibigContribution($monthly_basic_pay,'employee_share_ee') : 200;
                             }
                         }
 
@@ -389,7 +400,7 @@ class PayRegController extends Controller
                         );
 
 
-                        $payroll_register->monthly_basic_pay = $rate ? $rate : 0;
+                        $payroll_register->monthly_basic_pay = $monthly_basic_pay_original ? $monthly_basic_pay_original : 0;
                         $payroll_register->daily_rate = $daily_rate;
                         $payroll_register->basic_pay = $basic_pay;
                         
