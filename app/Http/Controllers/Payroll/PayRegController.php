@@ -451,7 +451,7 @@ class PayRegController extends Controller
 
                         //Gross Pay
                         $grosspay = getUserGrossPayAmount(
-                            $basic_pay,
+                            $basic_pay_original,
                             $payroll_register->absences_amount,
                             $payroll_register->lates_amount,
                             $payroll_register->undertime_amount,
