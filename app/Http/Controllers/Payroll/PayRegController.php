@@ -261,7 +261,7 @@ class PayRegController extends Controller
                             $overtime_amount = getUserOvertime($employee->user_id,$payroll_period->id);
                         }
 
-                        $accumulated_amount = ($basic_pay-$absences_amount-$lates_amount-$undertime_amount+$salary_adjustment+$overtime_amount);
+                        $accumulated_amount = ($basic_pay_original-$absences_amount-$lates_amount-$undertime_amount+$salary_adjustment+$overtime_amount);
                         $total_accumulated = $accumulated_amount;
                         $cut_off = $payroll_period->payroll_cutoff;
                         $reg_ee = 0;
@@ -364,7 +364,7 @@ class PayRegController extends Controller
                         $others = getUserDeductionAmount($employee->user_id,13,$payroll_period->payroll_cutoff);
 
                         $total_taxable = getUserTotalTaxableAmount(
-                            $basic_pay,
+                            $basic_pay_original,
                             $payroll_register->absences_amount,
                             $payroll_register->lates_amount,
                             $payroll_register->undertime_amount,
