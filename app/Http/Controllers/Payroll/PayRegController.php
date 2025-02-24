@@ -74,7 +74,7 @@ class PayRegController extends Controller
                     ->orderBy('name')
                     ->get();
             
-            $payroll_registers->whereHas('employee',function($q) use($company,$allowed_companies,$allowed_levels,$search){
+            $payroll_registers->whereHas('employee',function($q) use($company,$allowed_companies,$allowed_levels,$search,$level){
                 $q->when($company != "All", function($q2) use($company){
                     $q2->where('company_id',$company)
                             ->whereNotIn('level',['4','5']); //Except Consultants and Executives
@@ -90,7 +90,13 @@ class PayRegController extends Controller
                         ->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"])
                         ->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
                 })
-                ->whereIn('level',$allowed_levels);
+                ->when($level == "All", function($q2) use($allowed_levels){
+                    $q2->whereIn('level',$allowed_levels); //All Allowed Levels
+                })
+                ->when($level != "All", function($q2) use($level,$allowed_levels){
+                    $q2->where('level',$level)
+                            ->whereIn('level',$allowed_levels); //All Allowed Levels
+                });
             });
 
         }else{
@@ -174,7 +180,8 @@ class PayRegController extends Controller
         }
         if($request->level){
             if($request->level == 'All'){
-                $employees->whereIn('level',$allowed_levels);
+                $employees->whereIn('level',$allowed_levels)
+                            ->whereNotIn('level',['4','5']); //Exclude Consultant and Executives
             }else{
                 $employees->where('level',$request->level)->whereIn('level',$allowed_levels);
             }
@@ -342,12 +349,14 @@ class PayRegController extends Controller
                         $others = 0;
                         // return $total_accumulated;
                         if(!$is_consultant){
+                            
                             // SSS contribution
                             $sss_reg_ee = computeSSSContribution($total_accumulated,$cut_off,'employee_share_ee',$reg_ee);
                             $sss_mpf_ee = computeSSSContribution($total_accumulated,$cut_off,'mpf_ee',$mpf_ee);
                             $sss_reg_er = computeSSSContribution($total_accumulated,$cut_off,'employer_share_er',$reg_er);
                             $sss_mpf_er = computeSSSContribution($total_accumulated,$cut_off,'mpf_er',$mpf_er);
                             $sss_ec = computeSSSecContribution($total_accumulated,$cut_off,'sss_ec',$ec);
+
                             $sss_salary_loan = getUserDeductionAmount($employee->user_id,1,$payroll_period->payroll_cutoff);
                             $sss_calamity_loan = getUserDeductionAmount($employee->user_id,2,$payroll_period->payroll_cutoff);
                             $hdmf_salary_loan = getUserDeductionAmount($employee->user_id,3,$payroll_period->payroll_cutoff);
