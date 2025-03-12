@@ -13,20 +13,23 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 class PayrollRegisterExport implements FromQuery, WithHeadings, WithMapping
 {
 
-    public function __construct($company,$department,$payroll_period)
+    public function __construct($company,$department,$payroll_period,$level)
     {
         $this->company = $company;
         $this->department = $department;
         $this->payroll_period = $payroll_period;
+        $this->level = $level;
     }
 
     public function query()
     {
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
+        $allowed_levels = getUserAllowedPayrollLevels(auth()->user()->id);
 
         $company = $this->company ? $this->company : "";
         $department = $this->department ? $this->department : "";
         $payroll_period = $this->payroll_period ? $this->payroll_period : "";
+        $level = $this->level ? $this->level : "";
 
         $payroll_registers = PayrollRegister::with('payrollPeriod')->where('payroll_period_id',$payroll_period)->orderBy('name','ASC');
         
@@ -43,6 +46,17 @@ class PayrollRegisterExport implements FromQuery, WithHeadings, WithMapping
                 })
                 ->when($company == "All", function($q2) use($allowed_companies){
                     $q2->whereIn('company_id',$allowed_companies);
+                });
+            });
+
+        }
+        if($level){
+            $payroll_registers->whereHas('employee',function($q) use($level,$allowed_levels){
+                $q->when($level != "All", function($q2) use($level){
+                    $q2->where('level',$level);
+                })
+                ->when($level == "All", function($q2) use($allowed_levels){
+                    $q2->whereIn('level',$allowed_levels);
                 });
             });
 

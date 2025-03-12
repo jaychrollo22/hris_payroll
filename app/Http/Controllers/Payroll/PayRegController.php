@@ -76,12 +76,12 @@ class PayRegController extends Controller
             
             $payroll_registers->whereHas('employee',function($q) use($company,$allowed_companies,$allowed_levels,$search,$level){
                 $q->when($company != "All", function($q2) use($company){
-                    $q2->where('company_id',$company)
-                            ->whereNotIn('level',['4','5']); //Except Consultants and Executives
+                    $q2->where('company_id',$company);
+                            // ->whereNotIn('level',['4','5']); //Except Consultants and Executives
                 })
                 ->when($company == "All", function($q2) use($allowed_companies){
-                    $q2->whereIn('company_id',$allowed_companies)
-                            ->whereNotIn('level',['4','5']); //Except Consultants and Executives
+                    $q2->whereIn('company_id',$allowed_companies);
+                            // ->whereNotIn('level',['4','5']); //Except Consultants and Executives
                 })
                 ->when($search, function($q2) use($search){
                     $q2->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')
@@ -94,12 +94,12 @@ class PayRegController extends Controller
                 //     $q2->whereIn('level',$allowed_levels); //All Allowed Levels
                 // })
                 ->when($level, function($q2) use($level,$allowed_levels){
-                    if($level == "All"){
-                        $q2->whereIn('level',$allowed_levels); //All Allowed Levels
-                    }else{
-                        $q2->where('level',$level)
-                            ->whereIn('level',$allowed_levels); //All Allowed Levels
-                    }   
+                    $q->when($level != "All", function($q2) use($level){
+                        $q2->where('level',$level);
+                    })
+                    ->when($level == "All", function($q2) use($allowed_levels){
+                        $q2->whereIn('level',$allowed_levels);
+                    });
                     
                 });
             });
@@ -603,11 +603,12 @@ class PayRegController extends Controller
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $payroll_period = isset($request->payroll_period) ? $request->payroll_period : "";
+        $level = isset($request->level) ? $request->level : "";
         $company_detail = Company::where('id',$company)->first();
 
         $company_code = $company_detail ? $company_detail->company_code : "";
         $payroll_period_detail = PayrollPeriod::where('id',$payroll_period)->first();
-        return Excel::download(new PayrollRegisterExport($company,$department,$payroll_period), $company_code. ' Payroll Register Export '.$payroll_period_detail->payroll_name.'.xlsx');
+        return Excel::download(new PayrollRegisterExport($company,$department,$payroll_period,$level), $company_code. ' Payroll Register Export '.$payroll_period_detail->payroll_name.'.xlsx');
     }
 
 
