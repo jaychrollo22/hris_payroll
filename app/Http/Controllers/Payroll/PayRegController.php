@@ -264,7 +264,7 @@ class PayRegController extends Controller
                             $absences_amount = 0;
                             $lates_amount = 0;
                             $undertime_amount = 0;
-                            $salary_adjustment = 0;
+                            $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
                             $overtime_amount = 0;
                         }else{
                             $lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
