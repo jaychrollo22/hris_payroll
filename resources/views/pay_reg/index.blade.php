@@ -30,7 +30,7 @@
                     @endif
 
                   </p>
-                  <h4 class="card-title">Payroll Register <a href="/payreg-export?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}" title="Export" class="btn btn-outline-primary btn-icon-text btn-sm text-center"><i class="ti-arrow-down btn-icon-prepend"></i></a></h4>
+                  <h4 class="card-title">Payroll Register <a href="/payreg-export?company={{$company}}&payroll_period={{$payroll_period}}&department={{$department}}&level={{$level}}" title="Export" class="btn btn-outline-primary btn-icon-text btn-sm text-center"><i class="ti-arrow-down btn-icon-prepend"></i></a></h4>
                   <h4 class="card-title">Filter</h4>
                     <p class="card-description">
                     <form method='get' onsubmit='show();' enctype="multipart/form-data">
