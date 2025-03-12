@@ -93,7 +93,7 @@ class PayRegController extends Controller
                 // ->when($level == "All", function($q2) use($allowed_levels){
                 //     $q2->whereIn('level',$allowed_levels); //All Allowed Levels
                 // })
-                ->when($level, function($q2) use($level,$allowed_levels){
+                ->when($level, function($q) use($level,$allowed_levels){
                     $q->when($level != "All", function($q2) use($level){
                         $q2->where('level',$level);
                     })
