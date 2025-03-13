@@ -93,14 +93,14 @@ class PayrollSalaryAdjustmentController extends Controller
             'reason' => 'required'
         ]);
 
-        $validate_adjustment = PayrollSalaryAdjustment::where('user_id',$request->employee)
-            ->where('payroll_period_id',$request->payroll_period)
-            ->first();
+        // $validate_adjustment = PayrollSalaryAdjustment::where('user_id',$request->employee)
+        //     ->where('payroll_period_id',$request->payroll_period)
+        //     ->first();
 
-        if($validate_adjustment){
-            Alert::warning('Warning : Adjustment Already Exist!')->persistent('Dismiss');
-            return back();
-        }
+        // if($validate_adjustment){
+        //     Alert::warning('Warning : Adjustment Already Exist!')->persistent('Dismiss');
+        //     return back();
+        // }
 
         $adjustment = new PayrollSalaryAdjustment;
         $adjustment->user_id = $request->employee;

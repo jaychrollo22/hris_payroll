@@ -39,12 +39,31 @@ function getUserWitholdingTaxAmount($user_id,$total_taxable){
 }
 
 function getUserSalaryAdjustmentAmount($user_id,$payroll_period_id){
-    $adjustment = PayrollSalaryAdjustment::where('payroll_period_id',$payroll_period_id)
+    $adjustments = PayrollSalaryAdjustment::where('payroll_period_id',$payroll_period_id)
         ->where('user_id',$user_id)
         ->where('status','Active')
-        ->first();
+        ->get();
 
-    return $adjustment ? ($adjustment->type == "Addition" ? $adjustment->amount : $adjustment->amount * -1) : 0;
+    $total_adjustment = 0;
+    if($adjustments){
+        $addition = 0;
+        $deduction = 0;
+        foreach($adjustments as $item){
+            if($item->type == "Addition"){
+                $addition += $item->amount;
+            }else{
+                $deduction += $item->amount;
+            }
+        }
+
+        $total_deduction = $deduction > 0 ? $deduction * -1 : 0;
+
+        $total_adjustment = $addition + $total_deduction;
+    }
+
+    return $total_adjustment;
+
+    // return $adjustment ? ($adjustment->type == "Addition" ? $adjustment->amount : $adjustment->amount * -1) : 0;
 }
 
 function getUserGrossPayAmount($basic_pay,$absences_amount,$lates_amount,$undertime_amount,$salary_adjustment,$ot_amount,

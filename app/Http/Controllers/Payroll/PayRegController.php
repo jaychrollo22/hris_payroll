@@ -90,9 +90,6 @@ class PayRegController extends Controller
                         ->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"])
                         ->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
                 })
-                // ->when($level == "All", function($q2) use($allowed_levels){
-                //     $q2->whereIn('level',$allowed_levels); //All Allowed Levels
-                // })
                 ->when($level, function($q) use($level,$allowed_levels){
                     $q->when($level != "All", function($q2) use($level){
                         $q2->where('level',$level);
