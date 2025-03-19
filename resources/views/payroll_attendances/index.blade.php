@@ -116,6 +116,9 @@
                             <th>Night Diff Amount</th>
                             <th>Overtime Adjustment</th>
                             <th>Total Overtime Pay</th>
+                            <th>WFH 60</th>
+                            <th>WFH 70</th>
+                            <th>TOTAL WFH DEDUCTION</th>
                             <th>Time Keeper</th>
                             <th>OT approver</th>
                             <th>Status</th>
@@ -167,6 +170,9 @@
                             <td>{{ $payroll_attendance->night_diff_amount }}</td>
                             <td>{{ $payroll_attendance->overtime_adjustment }}</td>
                             <td>{{ $payroll_attendance->total_overtime_pay }}</td>
+                            <td>{{ $payroll_attendance->total_wfh_60 }}</td>
+                            <td>{{ $payroll_attendance->total_wfh_70 }}</td>
+                            <td>{{ $payroll_attendance->total_wfh_deduction }}</td>
                             <td>{{ $payroll_attendance->timeKeeper ? $payroll_attendance->timeKeeper->first_name . ' ' . $payroll_attendance->timeKeeper->last_name : '' }}</td>
                             <td>{{ $payroll_attendance->overtimeApprover ? $payroll_attendance->overtimeApprover->first_name . ' ' . $payroll_attendance->overtimeApprover->last_name : '' }}</td>
                             <td>{{ $payroll_attendance->status }}</td>

@@ -164,7 +164,7 @@ class PayRegController extends Controller
                                         //     }
                                         // })
                                         ->where('status','Active');
-                                        // ->where('user_id','979'); // My Id
+                                        // ->where('user_id','4342'); // My Id
                                         // ->get();
         if($request->company){
             if($request->company == 'All'){
@@ -230,6 +230,7 @@ class PayRegController extends Controller
                     
 
                     $no_of_days_worked = getUserNoOfDaysWorked($employee->user_id,$payroll_period->id);
+                    $total_wfh_deduction = getUserTotalWFHDeductionAmount($employee->user_id,$payroll_period->id);
                     $rate = $employee->rate ? Crypt::decryptString($employee->rate) : "";
                     $monthly_basic_pay = 0;
                     $monthly_basic_pay_original = 0;
@@ -246,6 +247,12 @@ class PayRegController extends Controller
 
                             $monthly_basic_pay_original = $rate;
                             $basic_pay_original = $rate / 2;
+                            
+                            if($total_wfh_deduction > 0){
+                                $new_basic_pay_original = $basic_pay_original - $total_wfh_deduction; //Deduction for WFH
+                                $basic_pay_original = $new_basic_pay_original;
+                            }
+
                         }else{
                             $basic_pay = ($rate*313) / 12; //Non Monthly
                             $daily_rate = $rate;
@@ -253,6 +260,10 @@ class PayRegController extends Controller
 
                             $monthly_basic_pay_original = $rate;
                             $basic_pay_original = $rate * $no_of_days_worked;
+                            if($total_wfh_deduction > 0){
+                                $new_basic_pay_original = $basic_pay_original - $total_wfh_deduction; //Deduction for WFH
+                                $basic_pay_original = $new_basic_pay_original;
+                            }
                         }
                     }
                     
@@ -261,12 +272,12 @@ class PayRegController extends Controller
                             $absences_amount = 0;
                             $lates_amount = 0;
                             $undertime_amount = 0;
-                            $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
+                            $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id,'');
                             $overtime_amount = 0;
                         }else{
                             $lates_amount = getUserLatesAmount($employee->user_id,$payroll_period->id);
                             $undertime_amount = getUserUndertimeAmount($employee->user_id,$payroll_period->id);
-                            $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id);
+                            $salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id,'');
                             $overtime_amount = getUserOvertime($employee->user_id,$payroll_period->id);
                         }
 
@@ -374,12 +385,15 @@ class PayRegController extends Controller
                         $petty_cash_mescco = getUserDeductionAmount($employee->user_id,12,$payroll_period->payroll_cutoff);
                         $others = getUserDeductionAmount($employee->user_id,13,$payroll_period->payroll_cutoff);
 
+
+                        $taxable_salary_adjustment = getUserSalaryAdjustmentAmount($employee->user_id,$payroll_period->id,'Yes');
+
                         $total_taxable = getUserTotalTaxableAmount(
                             $basic_pay_original,
                             $payroll_register->absences_amount,
                             $payroll_register->lates_amount,
                             $payroll_register->undertime_amount,
-                            $payroll_register->salary_adjustment,
+                            $taxable_salary_adjustment,
                             $payroll_register->overtime_pay,
                             $sss_reg_ee,
                             $sss_mpf_ee,

@@ -38,9 +38,12 @@ function getUserWitholdingTaxAmount($user_id,$total_taxable){
     return $witholding_tax;
 }
 
-function getUserSalaryAdjustmentAmount($user_id,$payroll_period_id){
+function getUserSalaryAdjustmentAmount($user_id,$payroll_period_id,$is_taxable){
     $adjustments = PayrollSalaryAdjustment::where('payroll_period_id',$payroll_period_id)
         ->where('user_id',$user_id)
+        ->when($is_taxable,function($q) use($is_taxable){
+            return $q->where('is_taxable',$is_taxable);
+        })
         ->where('status','Active')
         ->get();
 
@@ -117,6 +120,22 @@ function getUserNoOfDaysWorked($user_id,$payroll_period_id){
                                                 ->where('user_id',$user_id)->first();
     if($payroll_attendance){
         return $payroll_attendance->no_of_days_worked;
+    }
+}
+
+function getUserNoOfDaysWorkedAmount($user_id,$payroll_period_id){
+    $payroll_attendance = PayrollAttendance::select('days_worked_amount')->where('payroll_period_id',$payroll_period_id)
+                                                ->where('user_id',$user_id)->first();
+    if($payroll_attendance){
+        return $payroll_attendance->days_worked_amount;
+    }
+}
+
+function getUserTotalWFHDeductionAmount($user_id,$payroll_period_id){
+    $payroll_attendance = PayrollAttendance::select('total_wfh_deduction')->where('payroll_period_id',$payroll_period_id)
+                                                ->where('user_id',$user_id)->first();
+    if($payroll_attendance){
+        return $payroll_attendance->total_wfh_deduction;
     }
 }
 

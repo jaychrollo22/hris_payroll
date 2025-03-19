@@ -73,6 +73,18 @@
             </div>
             <div class="row">
               <div class='col-md-12 form-group'>
+                Is Taxable?
+                <div class="form-group">
+                  <select data-placeholder="Select" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='is_taxable' id="is_taxable"  required>
+                      <option value="">-- Select --</option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class='col-md-12 form-group'>
                 Reason
                 <input type="text" class="form-control form-control-sm" name="reason" id="reason"  required>
               </div>

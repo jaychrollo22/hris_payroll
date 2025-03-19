@@ -145,7 +145,7 @@ class PayrollAttendanceController extends Controller
 
                             $daily_rate = $rate ? ((($rate*12)/313)/8)*9.5 : 0;
                             $hourly_rate = $rate ? (($rate*12)/313)/8 : 0; //Hourly Rate
-
+                            
                             $payroll_attendance->basic_pay =  $rate ? $rate / 2 : 0; //Basic Pay Computation
                             $payroll_attendance->daily_rate = $daily_rate; //Daily Rate Computation
                             $payroll_attendance->hourly_rate = $hourly_rate; //Hourly Rate Computation
@@ -163,6 +163,32 @@ class PayrollAttendanceController extends Controller
                     // return $employee_attendance['total_work_day'];
 
                     $payroll_attendance->no_of_days_worked = $employee_attendance['total_work_day']; // Total Worked Days
+
+
+                    //WFH Deduction
+                    $total_wfh_deduction = 0;
+                    $total_wfh_60 = 0;
+                    $total_wfh_70 = 0;
+                    if($employee_attendance['wfh_60'] > 0){
+                        $total_wfh_60 = ($daily_rate * $employee_attendance['wfh_60']) * 0.60;
+                        $total_wfh_60_original = $daily_rate * $employee_attendance['wfh_60'];
+                        if($total_wfh_60 && $total_wfh_60_original){
+                            $total_wfh_deduction += ($total_wfh_60_original - $total_wfh_60);
+                        }
+                    }
+                    if($employee_attendance['wfh_70'] > 0){
+                        $total_wfh_70 = ($daily_rate * $employee_attendance['wfh_70']) * 0.70;
+                        $total_wfh_70_original = $daily_rate * $employee_attendance['wfh_70'];
+                        if($total_wfh_70 && $total_wfh_70_original){
+                            $total_wfh_deduction += ($total_wfh_70_original - $total_wfh_70);
+                        }
+                        
+                    }
+
+                    $payroll_attendance->total_wfh_60 = $employee_attendance['wfh_60']; // 60 Wfh Deduction
+                    $payroll_attendance->total_wfh_70 = $employee_attendance['wfh_70']; // 70 Wfh Deduction
+                    $payroll_attendance->total_wfh_deduction = $total_wfh_deduction; // Wfh Deduction
+
                     $payroll_attendance->days_worked_amount = $daily_rate * $employee_attendance['total_work_day']; // Amount of Total Work Days
 
                     $payroll_attendance->absences_days = $employee_attendance['absent']; // Total Absent
@@ -286,6 +312,9 @@ class PayrollAttendanceController extends Controller
         $vl = 0;
         $sl = 0;
         $wfh = 0;
+        $wfh_60 = 0;
+        $wfh_70 = 0;
+
 
         $undertime_hrs_arr = [];
 
@@ -487,6 +516,14 @@ class PayrollAttendanceController extends Controller
                 if($if_has_wfh->date_from && $if_has_wfh->date_to && $employee_schedule){
 
                     $wfh+=1;
+                    if($if_has_wfh->approve_percentage == '60'){
+                        $wfh_60 +=1;
+                    }
+                    else if($if_has_wfh->approve_percentage == '70'){
+                        $wfh_70 +=1;
+                    }
+
+                    
 
                     //Lates
                     $time_in_data_full =  date('Y-m-d H:i:s',strtotime($if_has_wfh->date_from));
@@ -1220,6 +1257,8 @@ class PayrollAttendanceController extends Controller
             'vl' => $vl,
             'sl' => $sl,
             'wfh' => $wfh,
+            'wfh_60' => $wfh_60,
+            'wfh_70' => $wfh_70,
             'total_leave_shift' => $total_leave_shift,
             'undertime_hrs_arr' => $undertime_hrs_arr,
         ];

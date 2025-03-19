@@ -107,6 +107,7 @@ class PayrollSalaryAdjustmentController extends Controller
         $adjustment->payroll_period_id = $request->payroll_period;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
+        $adjustment->is_taxable = $request->is_taxable;
         $adjustment->status = "Active";
         $adjustment->reason = $request->reason;
         $adjustment->save();
@@ -161,6 +162,7 @@ class PayrollSalaryAdjustmentController extends Controller
         $adjustment->payroll_period_id = $request->payroll_period;
         $adjustment->amount = $request->amount;
         $adjustment->type = $request->type;
+        $adjustment->is_taxable = $request->is_taxable;
         $adjustment->reason = $request->reason;
         $adjustment->save();
 

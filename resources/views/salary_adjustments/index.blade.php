@@ -78,6 +78,7 @@
                         <th>Type</th>
                         <th>Status</th>
                         <th>Reason</th> 
+                        <th>Is Taxable</th> 
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -97,6 +98,7 @@
                             <td>{{$salary_adjustment->type}}</td>
                             <td>{{$salary_adjustment->status}}</td>
                             <td>{{$salary_adjustment->reason}}</td>
+                            <td>{{$salary_adjustment->is_taxable}}</td>
                             <td>
                               @if (checkUserPrivilege('settings_edit',auth()->user()->id) == 'yes')
                               <button type="button" class="btn btn-info btn-rounded btn-icon" href="#editSalaryAdjustment{{$salary_adjustment->id}}" data-toggle="modal" title='EDIT'>

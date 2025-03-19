@@ -69,6 +69,18 @@
             </div>
             <div class="row">
               <div class='col-md-12 form-group'>
+                Is Taxable?
+                <div class="form-group">
+                  <select data-placeholder="Select Status" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='is_taxable' id="is_taxable"  required>
+                      <option value="">-- Select Status --</option>
+                      <option value="Yes" {{$salary_adjustment->is_taxable == 'Yes' ? 'selected' : ""}}>Yes</option>
+                      <option value="No" {{$salary_adjustment->is_taxable == 'No' ? 'selected' : ""}}>No</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class='col-md-12 form-group'>
                 Reason
                 <input type="text" class="form-control form-control-sm" name="reason" id="reason"  required value="{{$salary_adjustment->reason}}">
               </div>
