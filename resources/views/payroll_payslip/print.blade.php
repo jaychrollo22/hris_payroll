@@ -113,7 +113,7 @@
             </tr>
             <tr>
                 <td>Rest Day Pay</td>
-                <td>{{ $payrollRegister->hdmf_salary_loan }}</td>
+                <td></td>
                 <td>Pag-IBIG Calamity Loan</td>
                 <td>{{ $payrollRegister->hdmf_calamity_loan }}</td>
             </tr>
