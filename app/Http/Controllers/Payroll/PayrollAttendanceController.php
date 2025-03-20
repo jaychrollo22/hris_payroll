@@ -77,7 +77,6 @@ class PayrollAttendanceController extends Controller
             $departments = Department::orderBy('name')->get();
         }
 
-
         return view(
             'payroll_attendances.index',
             array(
@@ -103,7 +102,7 @@ class PayrollAttendanceController extends Controller
 
         $payroll_period = PayrollPeriod::where('id',$request->payroll_period)->first();
 
-        $employees = Employee::with('company','department')
+        $employees = Employee::with('company','department','level_info')
                                         ->whereIn('company_id',$allowed_companies)
                                         ->where('company_id',$request->company)
                                         ->when($request->department,function($q) use($request){
@@ -245,6 +244,7 @@ class PayrollAttendanceController extends Controller
 
 
                     $payroll_attendance->total_overtime_pay = $total_overtime_payroll;
+                    $payroll_attendance->level = $employee->level_info ? $employee->level_info->name : null;
                     $payroll_attendance->save();
                     $count++;
                     
@@ -1392,6 +1392,7 @@ class PayrollAttendanceController extends Controller
                 if (isset($value['night_diff_amount'])) $payroll_attendance->night_diff_amount = $value['night_diff_amount'];
                 if (isset($value['overtime_adjustment'])) $payroll_attendance->overtime_adjustment = $value['overtime_adjustment'];
                 if (isset($value['total_overtime_pay'])) $payroll_attendance->total_overtime_pay = $value['total_overtime_pay'];
+                if (isset($value['level'])) $payroll_attendance->level = $value['level'];
                 // if (isset($value['month_15'])) $payroll_attendance->month_15 = $value['month_15'];
                 // if (isset($value['month_30'])) $payroll_attendance->month_30 = $value['month_30'];
                 if (isset($value['time_keeper_id'])) $payroll_attendance->timekeeper = $value['time_keeper_id'];

@@ -53,7 +53,7 @@ class PayrollAttendanceExport implements FromQuery, WithHeadings, WithMapping
     public function headings(): array
     {
         return [
-            'ID','USER_ID','PAYROLL_PERIOD_ID','FULL_NAME','COMPANY','DEPARTMENT', 'LOCATION', 'BASIC_PAY', 'DAILY_RATE', 'HOURLY_RATE',
+            'ID','USER_ID','PAYROLL_PERIOD_ID','FULL_NAME','COMPANY','DEPARTMENT','LEVEL','LOCATION', 'BASIC_PAY', 'DAILY_RATE', 'HOURLY_RATE',
             'NO_OF_DAYS_WORKED', 'DAYS_WORKED_AMOUNT', 'SICK_LEAVE_DAYS', 'SICK_LEAVE_AMOUNT', 'VACATION_LEAVE_DAYS','VACATION_LEAVE_AMOUNT',
             'ABSENCES_DAYS', 'ABSENCES_AMOUNT','LATE_HOURS', 'LATES_AMOUNT', 'UNDERTIME_HOURS', 'UNDERTIME_AMOUNT', 
             'REGULAR_OT_HOURS', 'REGULAR_OT_AMOUNT', 'REST_DAY_HOURS','REST_DAY_HOURS_AMOUNT','RDOD_SHOT_HOURS','RDOT_SHOT_AMOUNT',
@@ -89,6 +89,7 @@ class PayrollAttendanceExport implements FromQuery, WithHeadings, WithMapping
             $payroll_register->full_name,
             $payroll_register->company,
             $payroll_register->department,
+            $payroll_register->level,
             $payroll_register->location,
             $payroll_register->basic_pay,
             $payroll_register->daily_rate,

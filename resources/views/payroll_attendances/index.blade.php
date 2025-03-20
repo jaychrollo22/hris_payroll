@@ -78,6 +78,7 @@
                             <th>Full Name</th>
                             <th>Company</th>
                             <th>Department</th>
+                            <th>Level</th>
                             <th>Location</th>
                             <th>Basic Pay</th>
                             <th>Daily Rate</th>
@@ -132,6 +133,7 @@
                             <td>{{ $payroll_attendance->full_name }}</td>
                             <td>{{ $payroll_attendance->company }}</td>
                             <td>{{ $payroll_attendance->department }}</td>
+                            <td>{{ $payroll_attendance->level }}</td>
                             <td>{{ $payroll_attendance->location }}</td>
                             <td>{{ $payroll_attendance->basic_pay }}</td>
                             <td>{{ $payroll_attendance->daily_rate }}</td>
