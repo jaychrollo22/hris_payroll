@@ -55,9 +55,9 @@ class UserController extends Controller
             
             $users = User::select('id','name','email','status','role','updated_at')
                             ->with('employee.company','user_allowed_company','user_allowed_company')
-                            ->whereHas('employee',function($q){
-                                $q->where('status','Active');
-                            })
+                            // ->whereHas('employee',function($q){
+                            //     $q->where('status','Active');
+                            // })
                             ->when($search,function($q) use($search){
                                 $q->whereHas('employee',function($w) use($search){
                                     $w->where('first_name', 'like' , '%' .  $search . '%')->orWhere('last_name', 'like' , '%' .  $search . '%')
@@ -65,6 +65,10 @@ class UserController extends Controller
                                     $w->orWhereRaw("CONCAT(`first_name`, ' ', `last_name`) LIKE ?", ["%{$search}%"]);
                                     $w->orWhereRaw("CONCAT(`last_name`, ' ', `first_name`) LIKE ?", ["%{$search}%"]);
                                     $w->orWhere('user_id','=', $search);
+                                })
+                                ->orWhere(function($q) use($search){
+                                    $q->where('name', 'like' , '%' .  $search . '%')
+                                        ->orWhere('email', 'like' , '%' .  $search . '%');
                                 });
                             })
                             ->when(count($rank_and_file_users) > 0,function($q) use($rank_and_file_users){
