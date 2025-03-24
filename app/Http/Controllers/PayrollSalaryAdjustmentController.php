@@ -152,10 +152,10 @@ class PayrollSalaryAdjustmentController extends Controller
             ->where('id','!=',$id)
             ->first();
 
-        if($validate_adjustment){
-            Alert::warning('Warning : Adjustment Already Exist!')->persistent('Dismiss');
-            return back();
-        }
+        // if($validate_adjustment){
+        //     Alert::warning('Warning : Adjustment Already Exist!')->persistent('Dismiss');
+        //     return back();
+        // }
 
         $adjustment = PayrollSalaryAdjustment::findOrfail($id);
         $adjustment->user_id = $request->employee;
