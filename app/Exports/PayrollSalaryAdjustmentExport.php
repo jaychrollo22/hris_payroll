@@ -64,6 +64,7 @@ class PayrollSalaryAdjustmentExport implements FromQuery, WithHeadings, WithMapp
             // 'EFFECTIVITY DATE',
             'AMOUNT',
             'TYPE',
+            'IS TAXABLE',
             'STATUS',
             'REASON',
             'PAYROLL CUT-OFF'
@@ -86,6 +87,7 @@ class PayrollSalaryAdjustmentExport implements FromQuery, WithHeadings, WithMapp
             // $salary_adjustment->effectivity_date,
             $salary_adjustment->amount,
             $salary_adjustment->type,
+            $salary_adjustment->is_taxable,
             $salary_adjustment->status,
             $salary_adjustment->reason,
             $salary_adjustment->payroll_cutoff,

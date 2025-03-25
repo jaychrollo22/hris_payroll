@@ -222,6 +222,7 @@ class PayrollSalaryAdjustmentController extends Controller
                     if(isset($value['type'])) $salary_adjustment->type = $value['type'];
                     if(isset($value['status'])) $salary_adjustment->status = $value['status'];
                     if(isset($value['reason'])) $salary_adjustment->reason = $value['reason'];
+                    if(isset($value['is_taxable'])) $salary_adjustment->is_taxable = $value['is_taxable'];
                 
                     $salary_adjustment->save();
                     $save_count+=1;
@@ -233,6 +234,7 @@ class PayrollSalaryAdjustmentController extends Controller
                     $salary_adjustment->type = $value['type'];
                     $salary_adjustment->status = $value['status'];
                     $salary_adjustment->reason = $value['reason'];
+                    $salary_adjustment->is_taxable = $value['is_taxable'];
                     $salary_adjustment->save();
                     $save_count+=1;
                 }                                         
