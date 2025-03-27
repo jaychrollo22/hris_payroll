@@ -43,27 +43,31 @@ class PayrollAttendanceController extends Controller
 
         $payroll_periods = PayrollPeriod::orderBy('cut_off_date','DESC')->get();
 
-        $payroll_attendances = PayrollAttendance::with('timeKeeper','overtimeApprover')
-            ->whereHas('employee',function($q) use($allowed_companies){
-                $q->whereIn('company_id',$allowed_companies);
-            })
-            ->with('employee.company');
-        if($company){
-            $payroll_attendances = $payroll_attendances->whereHas('employee',function($q) use($company){
-                $q->where('company_id',$company);
-            });
-        }
-        if($department){
-            $payroll_attendances = $payroll_attendances->whereHas('employee',function($q) use($department){
-                $q->where('department_id',$department);
-            });
-        }
+        $payroll_attendances = [];
 
         if($payroll_period){
-            $payroll_attendances = $payroll_attendances->where('payroll_period_id',$payroll_period);
-        }
+            $payroll_attendances = PayrollAttendance::with('timeKeeper','overtimeApprover')
+                ->whereHas('employee',function($q) use($allowed_companies){
+                    $q->whereIn('company_id',$allowed_companies);
+                })
+                ->with('employee.company');
+            if($company){
+                $payroll_attendances = $payroll_attendances->whereHas('employee',function($q) use($company){
+                    $q->where('company_id',$company);
+                });
+            }
+            if($department){
+                $payroll_attendances = $payroll_attendances->whereHas('employee',function($q) use($department){
+                    $q->where('department_id',$department);
+                });
+            }
 
-        $payroll_attendances = $payroll_attendances->get();
+            if($payroll_period){
+                $payroll_attendances = $payroll_attendances->where('payroll_period_id',$payroll_period);
+            }
+
+            $payroll_attendances = $payroll_attendances->get();
+        }
 
         if($company){
             $department_companies = Employee::when($company,function($q) use($company){
