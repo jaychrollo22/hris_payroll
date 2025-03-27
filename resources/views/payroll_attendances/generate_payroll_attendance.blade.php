@@ -45,6 +45,20 @@
                     </select>
                     </div>
                 </div>
+
+                <div class='col-md-12'>
+                  <div class="form-group">
+                    <label for="payroll_register">Level:</label>
+                    <select data-placeholder="Select Level" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='level'>
+                      <option value="">-- Select Level --</option>
+                      <option value="All" @if ($level == "All") selected @endif>All</option>
+                      @foreach($levels as $level_item)
+                      <option value="{{$level_item->id}}" @if ($level_item->id == $level) selected @endif>{{$level_item->name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+                
             </div>
         </div>
   

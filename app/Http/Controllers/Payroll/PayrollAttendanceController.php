@@ -10,6 +10,7 @@ use App\Department;
 use App\Employee;
 use App\PayrollPeriod;
 use App\PayrollAttendance;
+use App\Level;
 use App\ScheduleData;
 
 use DateTime;
@@ -27,17 +28,20 @@ class PayrollAttendanceController extends Controller
 
         $allowed_companies = getUserAllowedCompanies(auth()->user()->id);
 
+        $allowed_levels = getUserAllowedPayrollLevels(auth()->user()->id);
         $company = isset($request->company) ? $request->company : "";
         $department = isset($request->department) ? $request->department : "";
         $payroll_period = isset($request->payroll_period) ? $request->payroll_period : "";
+        $level = isset($request->level) ? $request->level : "";
 
         $companies = Company::whereHas('employee_has_company')
                                 ->whereIn('id',$allowed_companies)
                                 ->get();
 
         
+        $levels = Level::whereIn('id',$allowed_levels)->get();
 
-        $payroll_periods = PayrollPeriod::orderBy('created_at','DESC')->get();
+        $payroll_periods = PayrollPeriod::orderBy('cut_off_date','DESC')->get();
 
         $payroll_attendances = PayrollAttendance::with('timeKeeper','overtimeApprover')
             ->whereHas('employee',function($q) use($allowed_companies){
@@ -84,8 +88,10 @@ class PayrollAttendanceController extends Controller
                 'payroll_attendances' => $payroll_attendances,
                 'company' => $company,
                 'department' => $department,
+                'level' => $level,
                 'companies' => $companies,
                 'departments' => $departments,
+                'levels' => $levels,
                 'payroll_period' => $payroll_period,
                 'payroll_periods' => $payroll_periods,
             )
@@ -109,7 +115,13 @@ class PayrollAttendanceController extends Controller
                                             $q->where('department_id',$request->department);
                                         })
                                         ->where('status','Active')
-                                        ->whereIn('level',['1','2','3']) // R&F, Supervisor and Manager
+                                        ->where(function($q) use($request){
+                                            if($request->level){
+                                                $q->where('level',$request->level);
+                                            }else{
+                                                $q->whereIn('level',['1','2','3']); // R&F, Supervisor and Manager
+                                            }
+                                        })
                                         // ->where('user_id','345') // My Id
                                         ->get();
 
@@ -253,7 +265,7 @@ class PayrollAttendanceController extends Controller
         }
 
         Alert::success('Successfully Generated (' . $count. ')')->persistent('Dismiss');
-        return redirect('/payroll-attendances?payroll_period=' . $request->payroll_period . '&company=' .$request->company );
+        return redirect('/payroll-attendances?payroll_period=' . $request->payroll_period . '&company=' .$request->company . '&department=' .$request->department . '&level=' .$request->level );
     }
 
 

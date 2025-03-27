@@ -31,7 +31,7 @@
                   <p class="card-description">
                   <form method='get' onsubmit='show();' enctype="multipart/form-data">
                     <div class=row>
-                      <div class='col-md-3'>
+                      <div class='col-md-2'>
                         <div class="form-group">
                           <select data-placeholder="Select Payroll Period" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='payroll_period' required>
                             <option value="">-- Select Payroll Period --</option>
@@ -52,12 +52,24 @@
                         </div>
                       </div>
 
-                      <div class='col-md-3'>
+                      <div class='col-md-2'>
                         <div class="form-group">
                           <select data-placeholder="Select Department" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='department'>
                             <option value="">-- Select Department --</option>
                             @foreach($departments as $dept)
                             <option value="{{$dept->id}}" @if ($dept->id == $department) selected @endif>{{$dept->name}}</option>
+                            @endforeach
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class='col-md-2'>
+                        <div class="form-group">
+                          <select data-placeholder="Select Level" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='level'>
+                            <option value="">-- Select Level --</option>
+                            <option value="All" @if ($level == "All") selected @endif>All</option>
+                            @foreach($levels as $level_item)
+                            <option value="{{$level_item->id}}" @if ($level_item->id == $level) selected @endif>{{$level_item->name}}</option>
                             @endforeach
                           </select>
                         </div>

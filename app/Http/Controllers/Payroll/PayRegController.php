@@ -105,7 +105,7 @@ class PayRegController extends Controller
             $departments = Department::where('status','1')->orderBy('name')->get();
         }
 
-        $payroll_periods = PayrollPeriod::all();
+        $payroll_periods = PayrollPeriod::orderBy('cut_off_date','DESC')->get();
         $payroll_period_detail = PayrollPeriod::where('id',$payroll_period)->first();
             $payroll_registers = $payroll_registers->get();
 
