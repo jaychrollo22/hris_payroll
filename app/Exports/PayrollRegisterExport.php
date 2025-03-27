@@ -74,7 +74,7 @@ class PayrollRegisterExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             'PAYROLL PERIOD ID', 'USER ID', 'BANK ACCOUNT', 'NAME', 'POSITION', 'EMPLOYMENT STATUS', 'COMPANY', 'DEPARTMENT', 
-            'PROJECT', 'DATE HIRED', 'CUT FROM', 'CUT TO', 'MONTHLY BASIC PAY', 'DAILY RATE', 'BASIC PAY',
+            'CLASSIFICATION', 'PROJECT', 'DATE HIRED', 'CUT FROM', 'CUT TO', 'MONTHLY BASIC PAY', 'DAILY RATE', 'BASIC PAY',
             'ABSENCES AMOUNT', 'LATES AMOUNT', 'UNDERTIME AMOUNT', 'SALARY ADJUSTMENT', 'OVERTIME PAY', 
             'MEAL ALLOWANCE', 'SALARY ALLOWANCE', 'OUT OF TOWN ALLOWANCE', 'INCENTIVES ALLOWANCE', 
             'RELOCATION ALLOWANCE', 'DISCRETIONARY ALLOWANCE', 'TRANSPORT ALLOWANCE', 'LOAD ALLOWANCE', 
@@ -99,6 +99,7 @@ class PayrollRegisterExport implements FromQuery, WithHeadings, WithMapping
             $payroll_register->employment_status,
             $payroll_register->company,
             $payroll_register->department,
+            $payroll_register->classification,
             $payroll_register->project,
             $payroll_register->date_hired,
             $payroll_register->payrollPeriod->start_date,

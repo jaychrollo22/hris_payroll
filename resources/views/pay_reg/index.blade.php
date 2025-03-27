@@ -113,6 +113,7 @@
                           <th>EMPLOYMENT STATUS</th>
                           <th>COMPANY</th>
                           <th>DEPARTMENT</th>
+                          <th>CLASSIFICATION</th>
                           <th>PROJECT</th>
                           <th>DATE HIRED</th>
                           <th>CUT FROM</th>
@@ -199,6 +200,7 @@
                           <td>{{ $payroll->employment_status }}</td>
                           <td>{{ $payroll->company }}</td>
                           <td>{{ $payroll->department }}</td>
+                          <td>{{ $payroll->classification }}</td>
                           <td>{{ $payroll->project }}</td>
                           <td>{{ $payroll->date_hired }}</td>
                           <td>{{ $payroll->cut_from }}</td>

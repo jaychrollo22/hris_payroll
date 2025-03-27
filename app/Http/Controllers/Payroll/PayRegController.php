@@ -145,7 +145,7 @@ class PayRegController extends Controller
         $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
         $allowed_levels = getUserAllowedPayrollLevels(auth()->user()->id);
         
-        $employees = Employee::with('company','department')
+        $employees = Employee::with('company','department','classification_info')
                                         // ->when($request->company,function($q) use($request,$allowed_companies){
                                         //     if($request['company'] == 'All'){
                                         //         return $q->whereIn('company_id',$allowed_companies);
@@ -217,6 +217,7 @@ class PayRegController extends Controller
                     $payroll_register->employment_status = $employee->status;
                     $payroll_register->company =  $employee->company ? $employee->company->company_name : null;
                     $payroll_register->department = $employee->department ? $employee->department->name : null;
+                    $payroll_register->classification = $employee->classification_info ? $employee->classification_info->name : null;
                     $payroll_register->project = $employee->project;
                     $payroll_register->date_hired = $employee->original_date_hired;
                     $payroll_register->cut_from = $payroll_period->start_date;
@@ -655,6 +656,7 @@ class PayRegController extends Controller
                         if (isset($value['employment_status'])) $payroll_register->employment_status = $value['employment_status'];
                         if (isset($value['company'])) $payroll_register->company = $value['company'];
                         if (isset($value['department'])) $payroll_register->department = $value['department'];
+                        if (isset($value['classification'])) $payroll_register->classification = $value['classification'];
                         if (isset($value['project'])) $payroll_register->project = $value['project'];
                         
                         if(isset($value['date_hired'])){
