@@ -9,10 +9,14 @@ use App\PagibigMatrixContribution;
 use App\PhicMatrixContribution;
 use App\PayrollRegister;
 
-function getUserWitholdingTaxAmount($user_id,$total_taxable){
+function getUserWitholdingTaxAmount($user_id,$total_taxable,$is_consultant){
     $user = Employee::where('user_id',$user_id)
         ->first();
     $witholding_tax = 0;
+
+    if($is_consultant){
+        return $witholding_tax += $total_taxable * 0.05;
+    }
 
     if ($user->tax_application === "Non-Minimum") {
         if ($total_taxable <= 10417) {

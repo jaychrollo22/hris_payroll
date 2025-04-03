@@ -407,7 +407,8 @@ class PayRegController extends Controller
                         //Witholding tax
                         $withholding_tax = getUserWitholdingTaxAmount(
                             $employee->user_id,
-                            $total_taxable
+                            $total_taxable,
+                            $is_consultant
                         );
 
                         $total_deduction = (
