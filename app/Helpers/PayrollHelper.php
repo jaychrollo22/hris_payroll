@@ -14,9 +14,8 @@ function getUserWitholdingTaxAmount($user_id,$total_taxable,$is_consultant){
         ->first();
     $witholding_tax = 0;
 
-    if($is_consultant){
-        return $witholding_tax += $total_taxable * 0.05;
-    }
+    //Fixed 5% percentage for consultant
+    if($is_consultant) return $witholding_tax += $total_taxable * 0.05;
 
     if ($user->tax_application === "Non-Minimum") {
         if ($total_taxable <= 10417) {
