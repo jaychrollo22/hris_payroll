@@ -120,9 +120,9 @@ class PayrollAttendanceController extends Controller
                                         })
                                         ->where('status','Active')
                                         ->where(function($q) use($request){
-                                            if($request->level){
+                                            if($request->level != 'All'){
                                                 $q->where('level',$request->level);
-                                            }else{
+                                            }else if($request->level == 'All'){
                                                 $q->whereIn('level',['1','2','3']); // R&F, Supervisor and Manager
                                             }
                                         })
