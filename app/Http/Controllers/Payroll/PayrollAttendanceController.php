@@ -867,7 +867,12 @@ class PayrollAttendanceController extends Controller
 
                 //Late
                 if ($if_leave) {
-                    if($if_leave == 'VL Second Shift Without-Pay' || $if_leave == 'SL Second Shift Without-Pay' || $if_leave == 'SL Second Shift With-Pay' || $if_leave == 'SL Second Shift With-Pay'){
+                    if(
+                        $if_leave == 'VL Second Shift Without-Pay' 
+                        || $if_leave == 'VL Second Shift With-Pay'
+                        || $if_leave == 'SL Second Shift Without-Pay' 
+                        || $if_leave == 'SL Second Shift With-Pay'
+                    ){
                     // if($check_if_has_leave_shift){
                     //     if($check_if_has_leave_shift == 'First Shift'){
                         if (empty($check_if_holiday)) {
