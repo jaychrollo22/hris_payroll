@@ -8,14 +8,22 @@ use App\SssMatrixContribution;
 use App\PagibigMatrixContribution;
 use App\PhicMatrixContribution;
 use App\PayrollRegister;
+use App\ConsultantSetting;
 
 function getUserWitholdingTaxAmount($user_id,$total_taxable,$is_consultant){
     $user = Employee::where('user_id',$user_id)
         ->first();
     $witholding_tax = 0;
 
-    //Fixed 5% percentage for consultant
-    if($is_consultant) return $witholding_tax += $total_taxable * 0.05;
+    //Tax computation for consultant
+    if($is_consultant) {
+        //Fixed 5% percent for consultant
+        $witholding_tax += $total_taxable * 0.05;
+        //Check if consultant is non taxable
+        if(ConsultantSetting::where('user_id',$user_id)->first()) $witholding_tax = 0;
+
+        return $witholding_tax;
+    }
 
     if ($user->tax_application === "Non-Minimum") {
         if ($total_taxable <= 10417) {

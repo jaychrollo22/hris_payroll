@@ -127,5 +127,10 @@ class Employee extends Model implements Auditable
     public function customized_ppr_approver()
     {
         return $this->hasOne(EmployeeCustomizedPprApprover::class,'user_id','user_id');
+    }
+
+    public function non_taxable__consultant()
+    {
+        return $this->hasOne(ConsultantSetting::class,'user_id','user_id');
     } 
 }
