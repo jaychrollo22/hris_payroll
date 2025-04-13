@@ -524,6 +524,11 @@ Route::get('consultant-settings', 'ConsultantSettingController@index');
 Route::post('new-consultant', 'ConsultantSettingController@store');
 Route::get('delete-consultant/{id}', 'ConsultantSettingController@destroy');
 
+Route::get('pagibig-contribution-settings', 'PagibigContributionSettingController@index');
+Route::post('new-pagibig-contribution', 'PagibigContributionSettingController@store');
+Route::post('edit-pagibig-contribution/{id}', 'PagibigContributionSettingController@update');
+Route::get('delete-pagibig-contribution/{id}', 'PagibigContributionSettingController@destroy');
+
 Route::get('hik-logs', function(){
     return HikAttLog2::orderBy('authDate')->get()->take(5);
 });

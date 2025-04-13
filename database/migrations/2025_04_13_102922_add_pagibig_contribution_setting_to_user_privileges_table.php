@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddConsultantSettingToUserPrivilegesTable extends Migration
+class AddPagibigContributionSettingToUserPrivilegesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddConsultantSettingToUserPrivilegesTable extends Migration
     public function up()
     {
         Schema::table('user_privileges', function (Blueprint $table) {
-            $table->string('consultant_setting',20)->nullable()->after('deduction_setting');
+            $table->string('pagibig_contribution_setting',20)->nullable()->after('consultant_setting');
         });
     }
 
@@ -26,7 +26,7 @@ class AddConsultantSettingToUserPrivilegesTable extends Migration
     public function down()
     {
         Schema::table('user_privileges', function (Blueprint $table) {
-            $table->dropColumn('consultant_setting');
+            $table->dropColumn('pagibig_contribution_setting');
         });
     }
 }

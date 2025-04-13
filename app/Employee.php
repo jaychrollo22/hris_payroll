@@ -132,5 +132,9 @@ class Employee extends Model implements Auditable
     public function non_taxable__consultant()
     {
         return $this->hasOne(ConsultantSetting::class,'user_id','user_id');
-    } 
+    }
+
+    public function pagibig_contribution(){
+        return $this->hasOne(PagibigContributionSetting::class,'user_id','user_id');
+    }
 }

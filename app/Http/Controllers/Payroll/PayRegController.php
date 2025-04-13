@@ -145,7 +145,7 @@ class PayRegController extends Controller
         $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
         $allowed_levels = getUserAllowedPayrollLevels(auth()->user()->id);
         
-        $employees = Employee::with('company','department','classification_info')
+        $employees = Employee::with('company','department','classification_info','pagibig_contribution')
                                         // ->when($request->company,function($q) use($request,$allowed_companies){
                                         //     if($request['company'] == 'All'){
                                         //         return $q->whereIn('company_id',$allowed_companies);
@@ -333,19 +333,18 @@ class PayRegController extends Controller
 
                                 $phic_ee = computePHICContribution($monthly_basic_pay,'employee_share_ee');
                                 $hdmf_ee = $is_monthly ? computePagibigContribution($monthly_basic_pay,'employee_share_ee') : 200;
-
-                                // if($previous_contribution->phic_ee == 0){ //Previous cutoff PHIC is 0
-                                //     $phic_ee = computePHICContribution($monthly_basic_pay,'employee_share_ee');
-                                // }
-                                // if($previous_contribution->hdmf_ee == 0){ //Previous cutoff HDMF is 0
-                                    
-                                // }                                 
+                                
                             }
                         }else{
                             if(!$is_consultant){
                                 $phic_ee = computePHICContribution($monthly_basic_pay,'employee_share_ee');
                                 $hdmf_ee = $is_monthly ? computePagibigContribution($monthly_basic_pay,'employee_share_ee') : 200;
                             }
+                        }
+                        //Override pag ibig contributions
+                        if($employee->pagibig_contribution && !$is_consultant){
+                            if(($employee->pagibig_contribution->payroll_cutoff == $cut_off) || 
+                                ($employee->pagibig_contribution->payroll_cutoff == 'Every Cut-Off')) $hdmf_ee = $employee->pagibig_contribution->amount;
                         }
 
                         //Loans&deductions

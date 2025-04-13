@@ -740,6 +740,12 @@
                             <a class="nav-link" href="{{ url('/consultant-settings') }}">Consultant Settings</a>
                         </li>
                     @endif
+
+                    @if (checkUserPrivilege('pagibig_contribution_setting',auth()->user()->id) == 'yes')
+                        <li class="nav-item"> 
+                            <a class="nav-link" href="{{ url('/pagibig-contribution-settings') }}">Pagibig Contri Settings</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </li>
