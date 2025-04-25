@@ -18,10 +18,12 @@ class ConsultantSettingController extends Controller
     {
         $consultants = Employee::doesntHave('non_taxable__consultant')
             ->where('classification',7)
+            ->where('status','Active')
             ->get();
         
         $nontaxable_consultants = Employee::whereHas('non_taxable__consultant')
             ->where('classification',7)
+            ->where('status','Active')
             ->get();
 
         return view('consultant_settings.index', array(
