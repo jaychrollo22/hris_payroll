@@ -694,6 +694,32 @@
                                                         <input type="checkbox" name="deduction_setting" id="deduction_setting{{$user->id}}">
                                                     @endif
                                                     Deduction Setting
+                                                    <br>
+                                                    <br>
+
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->consultant_setting == 'on')
+                                                            <input type="checkbox" name="consultant_setting" id="consultant_setting{{$user->id}}" value="{{ $user->user_privilege->consultant_setting }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="consultant_setting" id="consultant_setting{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="consultant_setting" id="consultant_setting{{$user->id}}">
+                                                    @endif
+                                                    Consultant Setting
+                                                    <br>
+                                                    <br>
+
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->pagibig_contribution_setting == 'on')
+                                                            <input type="checkbox" name="pagibig_contribution_setting" id="pagibig_contribution_setting{{$user->id}}" value="{{ $user->user_privilege->pagibig_contribution_setting }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="pagibig_contribution_setting" id="pagibig_contribution_setting{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="pagibig_contribution_setting" id="pagibig_contribution_setting{{$user->id}}">
+                                                    @endif
+                                                    Pagibig Contribution Setting
 
                                                 </div>
                                                 <div class="col-md-12 form-group">
