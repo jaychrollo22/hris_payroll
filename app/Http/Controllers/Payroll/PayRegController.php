@@ -25,6 +25,20 @@ use App\Mail\PayslipNotification;
 use Illuminate\Support\Facades\Mail;
 class PayRegController extends Controller
 {
+
+    public function getLevels(Request $request){
+        $allowed_levels = getUserAllowedPayrollLevels(auth()->user()->id);
+
+        if($request->company == "All"){
+            $allowed_levels = array_filter($allowed_levels, function($value) {
+                return $value == 4 || $value == 5; // Executive and consultant 4 and 5
+            });
+
+        }
+
+        return Level::whereIn('id',$allowed_levels)->get();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,6 +49,13 @@ class PayRegController extends Controller
 
         $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
         $allowed_levels = getUserAllowedPayrollLevels(auth()->user()->id);
+
+        if($request->company == "All"){
+            $allowed_levels = array_filter($allowed_levels, function($value) {
+                return $value == 4 || $value == 5; // Executive and consultant 4 and 5
+            });
+
+        }
 
         $companies = Company::whereHas('employee_has_company')
                                 ->whereIn('id',$allowed_companies)
@@ -107,7 +128,7 @@ class PayRegController extends Controller
 
         $payroll_periods = PayrollPeriod::all();
         $payroll_period_detail = PayrollPeriod::where('id',$payroll_period)->first();
-            $payroll_registers = $payroll_registers->get();
+        $payroll_registers = $payroll_registers->get();
 
         return view(
             'pay_reg.index',
@@ -139,7 +160,6 @@ class PayRegController extends Controller
      */
     public function generate(Request $request)
     {
-
         // return $request->all();
         $payroll_period = PayrollPeriod::where('id',$request->payroll_period)->first();
         $allowed_companies = getUserAllowedPayrollCompanies(auth()->user()->id);
@@ -168,6 +188,10 @@ class PayRegController extends Controller
                                         // ->get();
         if($request->company){
             if($request->company == 'All'){
+                $allowed_levels = array_filter($allowed_levels, function($value) {
+                    return $value == 4 || $value == 5; // Executive and consultant 4 and 5
+                });
+
                 $employees->whereIn('company_id',$allowed_companies);
             }else{
                 $employees->where('company_id',$request->company)->whereIn('company_id',$allowed_companies);
@@ -183,7 +207,9 @@ class PayRegController extends Controller
         if($request->level){
             if($request->level == 'All'){
                 $employees->whereIn('level',$allowed_levels)
-                            ->whereNotIn('level',['4','5']); //Exclude Consultant and Executives
+                    ->when($request->company != 'All',function($q){
+                        $q->whereNotIn('level',['4','5']); //Exclude Consultant and Executives
+                    });
             }else{
                 $employees->where('level',$request->level)->whereIn('level',$allowed_levels);
             }

@@ -26,8 +26,9 @@
                 <div class='col-md-12'>
                     <div class="form-group">
                     <label for="payroll_register">Company:</label>
-                    <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required>
+                    <select data-placeholder="Select Company" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='company' required onchange="changeCompany(this.value)">
                         <option value="">-- Select Company --</option>
+                        <option value="All" @if ($company == "All") selected @endif>All</option>
                         @foreach($companies as $comp)
                         <option value="{{$comp->id}}" @if ($comp->id == $company) selected @endif>{{$comp->company_name}} - {{$comp->company_code}}</option>
                         @endforeach
@@ -49,7 +50,7 @@
                 <div class='col-md-12'>
                   <div class="form-group">
                     <label for="payroll_register">Level:</label>
-                    <select data-placeholder="Select Level" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='level'>
+                    <select data-placeholder="Select Level" class="form-control form-control-sm required js-example-basic-single" style='width:100%;' name='level' id="level" required>
                       <option value="">-- Select Level --</option>
                       <option value="All" @if ($level == "All") selected @endif>All</option>
                       @foreach($levels as $level_item)
@@ -70,3 +71,32 @@
       </div>
     </div>
   </div>
+
+<script>
+function changeCompany(company){
+    $.ajax({
+          url: '{{ route('get.levels') }}',
+          method: 'POST',
+          data: {
+              company: company,
+              _token: '{{ csrf_token() }}'
+          },
+          success: function(response) {
+              // Once data is returned, populate the levels dropdown
+              let levelOptions = '<option value="">Select a level</option>';
+              levelOptions += `<option value="All">All</option>`;
+
+              if (response.length > 0) {
+                  // Populate the levels dynamically
+                  response.forEach(function(level) {
+                      levelOptions += `<option value="${level.id}">${level.name}</option>`;
+                  });
+
+                  document.getElementById('level').innerHTML = levelOptions;
+              } else {
+                  document.getElementById('level').innerHTML = '<option value="">No levels available</option>';
+              }
+          }
+      });
+}
+</script>
