@@ -126,7 +126,7 @@ class PayrollAttendanceController extends Controller
                                                 $q->whereIn('level',['1','2','3']); // R&F, Supervisor and Manager
                                             }
                                         })
-                                        // ->where('user_id','345') // My Id
+                                        // ->where('user_id','4183') // My Id
                                         ->get();
 
         $count = 0;
@@ -333,6 +333,7 @@ class PayrollAttendanceController extends Controller
 
 
         $undertime_hrs_arr = [];
+        $absent_arr = [];
 
         foreach($date_range as $k => $date_r){
 
@@ -366,6 +367,7 @@ class PayrollAttendanceController extends Controller
 
             
             if($if_has_dtr){
+
                 if($if_has_dtr->time_in){
                     $dtr_correction_time_in = $if_has_dtr->correction == 'Time-in' ? $if_has_dtr->time_in : "";
                 }
@@ -625,7 +627,8 @@ class PayrollAttendanceController extends Controller
                 if(empty($check_if_holiday)){
                     if ($emp->level == '1') {
                         if ($undertime_hrs >= 4.5) {
-                            $total_absent += 0.5;    
+                            $total_absent += 0.5;  
+                            $absent_arr[] = $total_absent . ' ' . $date_r;  
                         }else{
                             $undertimes = $undertimes + $undertime_hrs;
                         }
@@ -895,6 +898,7 @@ class PayrollAttendanceController extends Controller
                             if ($emp->level == '1') {
                                 if ($undertime_hrs >= 4.5) {
                                     $total_absent += 0.5;    
+                                    $absent_arr[] = $total_absent . ' ' . $date_r;  
                                 }else{
                                     $undertimes = $undertimes + $undertime_hrs;
                                 }
@@ -906,6 +910,7 @@ class PayrollAttendanceController extends Controller
                         if ($emp->level == '1') {
                             if ($undertime_hrs >= 4.5) {
                                 $total_absent += 0.5;   
+                                $absent_arr[] = $total_absent . ' ' . $date_r;  
                             }else{
                                 $undertimes = $undertimes + $undertime_hrs;
                                 $undertime_hrs_arr[] = $undertime_hrs . ' ' . $date_r;
@@ -1107,7 +1112,7 @@ class PayrollAttendanceController extends Controller
                             else if($if_leave == 'SL With-Pay'){
                                 $check_leave_count_sl = employeeHasLeaveCount($emp->approved_leaves, date('Y-m-d', strtotime($date_r)), $employee_schedule, 'SL');
                                 $sl += $check_leave_count_sl;
-                            }else if($if_leave == 'VL First Shift Without-Pay' || $if_leave == 'VL Second Shift Without-Pay'){
+                            }else if($if_leave == 'VL First Shift Without-Pay' || $if_leave == 'VL Second Shift Without-Pay' || $if_leave == 'VL First Shift With-Pay' || $if_leave == 'VL Second Shift With-Pay'){
                                 $total_leave_shift = 0.5;
                             }
                         }
@@ -1147,13 +1152,16 @@ class PayrollAttendanceController extends Controller
                             if($if_leave){
                                 if($if_leave == 'VL Without-Pay'){
                                     $total_absent += 1;
+                                    $absent_arr[] = $total_absent . ' ' . $date_r;  
                                 }
                                 else if($if_leave == 'SL Without-Pay'){
                                     $total_absent += 1;
+                                    $absent_arr[] = $total_absent . ' ' . $date_r;  
                                 }
                             }else{
                                 if($is_absent == 'Absent'){
                                     $total_absent += 1;
+                                    $absent_arr[] = $total_absent . ' ' . $date_r;  
                                 }else{
                                     $total_work_day++;
                                 }
@@ -1163,6 +1171,7 @@ class PayrollAttendanceController extends Controller
                         }else{
                             if($is_absent == 'Absent'){
                                 $total_absent++;
+                                $absent_arr[] = $total_absent . ' ' . $date_r;  
                             }else{
                                 $total_work_day++;
                             }
@@ -1171,6 +1180,7 @@ class PayrollAttendanceController extends Controller
                     }else{
                         if($is_absent == 'Absent'){
                             $total_absent++;
+                            $absent_arr[] = $total_absent . ' ' . $date_r;  
                         }else{
                             $total_work_day++;
                         }
@@ -1215,13 +1225,16 @@ class PayrollAttendanceController extends Controller
                             if($if_leave){
                                 if($if_leave == 'VL Without-Pay'){
                                     $total_absent += 1;
+                                    $absent_arr[] = $total_absent . ' ' . $date_r;  
                                 }
                                 else if($if_leave == 'SL Without-Pay'){
                                     $total_absent += 1;
+                                    $absent_arr[] = $total_absent . ' ' . $date_r;  
                                 }
                             }else{
                                 if($is_absent == 'Absent'){
                                     $total_absent += 1;
+                                    $absent_arr[] = $total_absent . ' ' . $date_r;  
                                 }else{
                                     $total_work_day++;
                                 }
@@ -1229,6 +1242,7 @@ class PayrollAttendanceController extends Controller
                         }else{
                             if($is_absent == 'Absent'){
                                 $total_absent++;
+                                $absent_arr[] = $total_absent . ' ' . $date_r;  
                             }else{
                                 $total_work_day++;
                             }
@@ -1236,6 +1250,7 @@ class PayrollAttendanceController extends Controller
                     }else{
                         if($is_absent == 'Absent'){
                             $total_absent++;
+                            $absent_arr[] = $total_absent . ' ' . $date_r;  
                         }else{
                             $total_work_day++;
                         }
@@ -1274,6 +1289,7 @@ class PayrollAttendanceController extends Controller
             'lhrd_ot_hours' => $lhrd_ot_hours,
             'night_diff_hours' => $night_diff_hours,
             'absent'=>$total_absent,
+            'absent_arr'=>$absent_arr,
             'total_work_day'=>$total_work_day,
             'vl' => $vl,
             'sl' => $sl,
