@@ -79,7 +79,7 @@ class UserController extends Controller
                             ->when(count($rank_and_file_users) > 0,function($q) use($rank_and_file_users){
                                 $q->whereIn('id',$rank_and_file_users);
                             })
-                            ->where('user_id','!=','1');
+                            ->where('id','!=','1');
 
             if($role){
                 $users->where('role','Admin');
