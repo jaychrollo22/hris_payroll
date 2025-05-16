@@ -38,7 +38,12 @@ class UserController extends Controller
     //
     public function index(Request $request){
 
-        if(auth()->user()->id == '353' || auth()->user()->id == '1' || auth()->user()->id == '5361' || auth()->user()->id == '351' || auth()->user()->id == '1166'){
+        if(auth()->user()->id == '353' || //Victor Jonee Mabaquiao
+           auth()->user()->id == '1' || //Administrator
+           auth()->user()->id == '5361' || //Bryan Del Rosario
+           auth()->user()->id == '351' || //Cesario Becite Iii
+           auth()->user()->id == '1202' //Aileen Bautista
+        ){
             $search = isset($request->search) ? $request->search : "";
             $role = isset($request->role) ? $request->role : "";
             $access_role = isset($request->access_role) ? $request->access_role : "";

@@ -23,7 +23,11 @@
 
                                     
                                     {{-- Super User  --}}
-                                    @if(auth()->user()->id == '353' || auth()->user()->id == '1' || auth()->user()->id == '5361')
+                                    @if(auth()->user()->id == '353' ||  //Victor Jonee Mabaquiao
+                                        auth()->user()->id == '1' || //Administrator
+                                        auth()->user()->id == '1202' || //Aileen Bautista
+                                        auth()->user()->id == '5361'//Bryan Del Rosario
+                                    )
                                         <div class='col-md-12 form-group'>
                                             Role
                                             <select class="form-control" name="role">
