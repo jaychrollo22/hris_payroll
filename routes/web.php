@@ -12,6 +12,7 @@
 |
 */
 use App\HikAttLog2;
+use App\Http\Controllers\Payroll\PayRegController;
 
 
 // Route::get('qr/{employee_id}', 'QrCodeController@viewQrCode');
