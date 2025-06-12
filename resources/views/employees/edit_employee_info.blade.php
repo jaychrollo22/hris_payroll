@@ -231,6 +231,11 @@
                   </select>
                 </div>
 
+                <div class='col-md-4'>
+                  Salary Grade
+                  <input type="text" class="form-control" name="salary_grade" value="{{$user->employee->salary_grade}}" placeholder="Salary Grade" required>
+                </div>
+
               </div>
               <hr>
               <div class='row mb-2'>

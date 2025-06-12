@@ -142,6 +142,7 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
             'TAX ADVANCE FSC',
 
             'WORK COMPUTATION',
+            'SALARY GRADE'
         ];
     }
 
@@ -246,6 +247,7 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
         $tax_advance_fsc = '';
 
         $work_computation = $employee->work_computation;
+        $salary_grade = $employee->salary_grade;
      
 
         if($employee->ScheduleData){
@@ -595,8 +597,8 @@ class EmployeeAssociateExport implements FromQuery, WithHeadings, WithMapping
             $additional_exemption_description,
             $tax_advance,
             $tax_advance_fsc,
-            $work_computation
-
+            $work_computation,
+            $salary_grade
         ];
 
     }

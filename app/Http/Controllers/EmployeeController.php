@@ -561,6 +561,7 @@ class EmployeeController extends Controller
                                 $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
                                 $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
                                 $employee->work_computation = isset($value['work_computation']) ? $value['work_computation'] : "";
+                                $employee->salary_grade = isset($value['salary_grade']) ? $value['salary_grade'] : "";
                                 
                                 $employee->status = "Active";
                                 $employee->save();
@@ -728,6 +729,12 @@ class EmployeeController extends Controller
                                     $check_if_exist->work_computation =  $value['work_computation'];
                                 }
                             }
+
+                            if(isset($value['salary_grade'])){
+                                if($value['salary_grade']){
+                                    $check_if_exist->salary_grade =  $value['salary_grade'];
+                                }
+                            }
                     
                             $check_if_exist->status = "Active";
                             $check_if_exist->save();
@@ -803,6 +810,7 @@ class EmployeeController extends Controller
                                 $employee->work_description = isset($value['work_description']) ? $value['work_description'] : "";
                                 $employee->rate = isset($value['rate']) ? Crypt::encryptString($value['rate']) : "";
                                 $employee->work_computation = isset($value['work_computation']) ? $value['work_computation'] : "";
+                                $employee->salary_grade = isset($value['salary_grade']) ? $value['salary_grade'] : "";
 
                                 $employee->status = "Active";
                                 $employee->save();
@@ -943,6 +951,7 @@ class EmployeeController extends Controller
         $employee->cost_center = $request->cost_center;
         $employee->branch_code = $request->branch_code;
         $employee->work_computation = $request->work_computation;
+        $employee->salary_grade = $request->salary_grade;
 
         if(checkUserPrivilege('employees_rate',auth()->user()->id) == 'yes'){
             $employee->work_description = $request->work_description;
