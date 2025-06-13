@@ -80,11 +80,15 @@
                             <th>Department</th>
                             <th>Level</th>
                             <th>Location</th>
-                            <th>Basic Pay</th>
-                            <th>Daily Rate</th>
-                            <th>Hourly Rate</th>
-                            <th>Days Worked</th>
-                            <th>Days Worked Amount</th>
+
+                            @if (checkUserPrivilege('payroll_attendance',auth()->user()->id) == 'yes')
+                              <th>Basic Pay</th>
+                              <th>Daily Rate</th>
+                              <th>Hourly Rate</th>
+                              <th>Days Worked</th>
+                              <th>Days Worked Amount</th>
+                            @endif
+
                             <th>Sick Leave Days</th>
                             <th>Sick Leave Amount</th>
                             <th>Vacation Leave Days</th>
@@ -135,11 +139,15 @@
                             <td>{{ $payroll_attendance->department }}</td>
                             <td>{{ $payroll_attendance->level }}</td>
                             <td>{{ $payroll_attendance->location }}</td>
-                            <td>{{ $payroll_attendance->basic_pay }}</td>
-                            <td>{{ $payroll_attendance->daily_rate }}</td>
-                            <td>{{ $payroll_attendance->hourly_rate }}</td>
-                            <td>{{ $payroll_attendance->no_of_days_worked }}</td>
-                            <td>{{ $payroll_attendance->days_worked_amount }}</td>
+
+                            @if (checkUserPrivilege('payroll_attendance',auth()->user()->id) == 'yes')
+                              <td>{{ $payroll_attendance->basic_pay }}</td>
+                              <td>{{ $payroll_attendance->daily_rate }}</td>
+                              <td>{{ $payroll_attendance->hourly_rate }}</td>
+                              <td>{{ $payroll_attendance->no_of_days_worked }}</td>
+                              <td>{{ $payroll_attendance->days_worked_amount }}</td>
+                            @endif
+
                             <td>{{ $payroll_attendance->sl_with_pay_days }}</td>
                             <td>{{ $payroll_attendance->sl_with_pay_amount }}</td>
                             <td>{{ $payroll_attendance->vl_with_pay_days }}</td>

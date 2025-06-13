@@ -675,6 +675,15 @@
             </li>
         @endif
 
+        @if (checkUserPrivilege('time_keeping_hr_payroll_attendance',auth()->user()->id) == 'yes')
+            <li class="nav-item @if ($header == 'payroll_attendances') active @endif">
+                <a class="nav-link" href="{{ url('/payroll-attendances') }}" onclick='show()'>
+                    <i class="ti-calendar menu-icon"></i>
+                    <span class="menu-title">Payroll Attendance</span>
+                </a>
+            </li>
+        @endif
+
         @if(checkUserPrivilege('payroll_payreg',auth()->user()->id) == 'yes' || 
         checkUserPrivilege('payroll_payreg_post',auth()->user()->id) == 'yes' || 
         checkUserPrivilege('payroll_payreg_unpost',auth()->user()->id) == 'yes')

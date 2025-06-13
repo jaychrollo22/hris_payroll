@@ -301,6 +301,7 @@ class UserController extends Controller
                 $user_privilege->deduction_setting = $request->deduction_setting;
                 $user_privilege->consultant_setting = $request->consultant_setting;
                 $user_privilege->pagibig_contribution_setting = $request->pagibig_contribution_setting;
+                 $user_privilege->time_keeping_hr_payroll_attendance = $request->time_keeping_hr_payroll_attendance;
 
                 $user_privilege->save();
                 Alert::success('Successfully Updated')->persistent('Dismiss');
@@ -363,6 +364,7 @@ class UserController extends Controller
                 $new_user_privilege->deduction_setting = isset($request->deduction_setting) ? $request->deduction_setting : null;
                 $new_user_privilege->consultant_setting = isset($request->consultant_setting) ? $request->consultant_setting : null;
                 $new_user_privilege->pagibig_contribution_setting = isset($request->pagibig_contribution_setting) ? $request->pagibig_contribution_setting : null;
+                $new_user_privilege->time_keeping_hr_payroll_attendance = isset($request->time_keeping_hr_payroll_attendance) ? $request->time_keeping_hr_payroll_attendance : null;
 
                 $new_user_privilege->save();
                 Alert::success('Successfully Updated')->persistent('Dismiss');
