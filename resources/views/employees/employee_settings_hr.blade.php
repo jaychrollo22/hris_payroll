@@ -364,6 +364,14 @@
                                     {{$user->employee->bank_account_number}}
                                 </div>
                             </div>
+                            <div class='row  m-2 border-bottom'>
+                                <div class='col-md-3'>
+                                    <small> Salary Grade </small>
+                                </div>
+                                <div class='col-md-9'>
+                                    {{$user->employee->salary_grade}}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -89,6 +89,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             'Company ID',
             'Company',
             'Work Computation',
+            'Salary Grade',
             'Created At',
             'Updated At'
             
@@ -143,6 +144,7 @@ class EmployeeHRExport implements FromQuery, WithHeadings, WithMapping
             $employee->company_id,
             $company,
             $employee->work_computation,
+            $employee->salary_grade,
             date('d/m/Y h:i A',strtotime($employee->created_at)),
             date('d/m/Y h:i A',strtotime($employee->updated_at))
         ];

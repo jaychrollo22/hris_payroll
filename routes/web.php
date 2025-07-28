@@ -12,6 +12,7 @@
 |
 */
 use App\HikAttLog2;
+use App\Http\Controllers\Payroll\PayRegController;
 
 
 // Route::get('qr/{employee_id}', 'QrCodeController@viewQrCode');
@@ -528,6 +529,8 @@ Route::get('pagibig-contribution-settings', 'PagibigContributionSettingControlle
 Route::post('new-pagibig-contribution', 'PagibigContributionSettingController@store');
 Route::post('edit-pagibig-contribution/{id}', 'PagibigContributionSettingController@update');
 Route::get('delete-pagibig-contribution/{id}', 'PagibigContributionSettingController@destroy');
+
+Route::post('/get-levels', [PayRegController::class, 'getLevels'])->name('get.levels');
 
 Route::get('hik-logs', function(){
     return HikAttLog2::orderBy('authDate')->get()->take(5);

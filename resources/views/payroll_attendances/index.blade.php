@@ -92,46 +92,70 @@
                             <th>Department</th>
                             <th>Level</th>
                             <th>Location</th>
-                            <th>Basic Pay</th>
-                            <th>Daily Rate</th>
-                            <th>Hourly Rate</th>
-                            <th>Days Worked</th>
-                            <th>Days Worked Amount</th>
-                            <th>Sick Leave Days</th>
-                            <th>Sick Leave Amount</th>
-                            <th>Vacation Leave Days</th>
-                            <th>Vacation Leave Amount</th>
-                            <th>Absences Days</th>
-                            <th>Absences Amount</th>
-                            <th>Lates Hours</th>
-                            <th>Lates Amount</th>
-                            <th>Undertime Hours</th>
-                            <th>Undertime Amount</th>
-                            <th>Regular OT Hours</th>
-                            <th>Regular OT Amount</th>
-                            <th>Rest Day Hours</th>
-                            <th>Rest Day Amount</th>
-                            <th>Rdot/Shot Hours</th>
-                            <th>Rdot/Shot Amount</th>
-                            <th>Special Holiday Hours</th>
-                            <th>Special Holiday Amount</th>
-                            <th>Shrd Hours</th>
-                            <th>Shrd Amount</th>
-                            <th>Sh and Rd OT Hours</th>
-                            <th>Sh and Rd OT Amount</th>
-                            <th>Regular Holiday Hours</th>
-                            <th>Regular Holiday Amount</th>
-                            <th>Sh and Rd or Rh OT Hours</th>
-                            <th>Sh and Rd or Rh OT Amount</th>
-                            <th>Lhrd OT Hours</th>
-                            <th>Lhrd OT Amount</th>
-                            <th>Night Diff Hours</th>
-                            <th>Night Diff Amount</th>
-                            <th>Overtime Adjustment</th>
-                            <th>Total Overtime Pay</th>
-                            <th>WFH 60</th>
-                            <th>WFH 70</th>
-                            <th>TOTAL WFH DEDUCTION</th>
+
+                            @if (checkUserPrivilege('payroll_attendance',auth()->user()->id) == 'yes')
+                              <th>Basic Pay</th>
+                              <th>Daily Rate</th>
+                              <th>Hourly Rate</th>
+                              <th>Days Worked</th>
+                              <th>Days Worked Amount</th>
+                              <th>Sick Leave Days</th>
+                              <th>Sick Leave Amount</th>
+                              <th>Vacation Leave Days</th>
+                              <th>Vacation Leave Amount</th>
+                              <th>Absences Days</th>
+                              <th>Absences Amount</th>
+                              <th>Lates Hours</th>
+                              <th>Lates Amount</th>
+                              <th>Undertime Hours</th>
+                              <th>Undertime Amount</th>
+                              <th>Regular OT Hours</th>
+                              <th>Regular OT Amount</th>
+                              <th>Rest Day Hours</th>
+                              <th>Rest Day Amount</th>
+                              <th>Rdot/Shot Hours</th>
+                              <th>Rdot/Shot Amount</th>
+                              <th>Special Holiday Hours</th>
+                              <th>Special Holiday Amount</th>
+                              <th>Shrd Hours</th>
+                              <th>Shrd Amount</th>
+                              <th>Sh and Rd OT Hours</th>
+                              <th>Sh and Rd OT Amount</th>
+                              <th>Regular Holiday Hours</th>
+                              <th>Regular Holiday Amount</th>
+                              <th>Sh and Rd or Rh OT Hours</th>
+                              <th>Sh and Rd or Rh OT Amount</th>
+                              <th>Lhrd OT Hours</th>
+                              <th>Lhrd OT Amount</th>
+                              <th>Night Diff Hours</th>
+                              <th>Night Diff Amount</th>
+                              <th>Overtime Adjustment</th>
+                              <th>Total Overtime Pay</th>
+                              <th>WFH 60</th>
+                              <th>WFH 70</th>
+                              <th>TOTAL WFH DEDUCTION</th>
+                            @endif
+
+                            @if (checkUserPrivilege('payroll_attendance',auth()->user()->id) != 'yes')
+                              <th>Days Worked</th>
+                              <th>Sick Leave Days</th>
+                              <th>Vacation Leave Days</th>
+                              <th>Absences Days</th>
+                              <th>Lates Hours</th>
+                              <th>Undertime Hours</th>
+                              <th>Regular OT Hours</th>
+                              <th>Rest Day Hours</th>
+                              <th>Rdot/Shot Hours</th>
+                              <th>Special Holiday Hours</th>
+                              <th>Shrd Hours</th>
+                              <th>Sh and Rd OT Hours</th>
+                              <th>Regular Holiday Hours</th>
+                              <th>Sh and Rd or Rh OT Hours</th>
+                              <th>Lhrd OT Hours</th>
+                              <th>Night Diff Hours</th>
+                            @endif
+
+
                             <th>Time Keeper</th>
                             <th>OT approver</th>
                             <th>Status</th>
@@ -147,46 +171,69 @@
                             <td>{{ $payroll_attendance->department }}</td>
                             <td>{{ $payroll_attendance->level }}</td>
                             <td>{{ $payroll_attendance->location }}</td>
-                            <td>{{ $payroll_attendance->basic_pay }}</td>
-                            <td>{{ $payroll_attendance->daily_rate }}</td>
-                            <td>{{ $payroll_attendance->hourly_rate }}</td>
-                            <td>{{ $payroll_attendance->no_of_days_worked }}</td>
-                            <td>{{ $payroll_attendance->days_worked_amount }}</td>
-                            <td>{{ $payroll_attendance->sl_with_pay_days }}</td>
-                            <td>{{ $payroll_attendance->sl_with_pay_amount }}</td>
-                            <td>{{ $payroll_attendance->vl_with_pay_days }}</td>
-                            <td>{{ $payroll_attendance->vl_with_pay_amount }}</td>
-                            <td>{{ $payroll_attendance->absences_days }}</td>
-                            <td>{{ $payroll_attendance->absences_amount }}</td>
-                            <td>{{ $payroll_attendance->lates_hours }}</td>
-                            <td>{{ $payroll_attendance->lates_amount }}</td>
-                            <td>{{ $payroll_attendance->undertime_hours }}</td>
-                            <td>{{ $payroll_attendance->undertime_amount }}</td>
-                            <td>{{ $payroll_attendance->reg_ot_hours }}</td>
-                            <td>{{ $payroll_attendance->reg_ot_amount }}</td>
-                            <td>{{ $payroll_attendance->rest_day_hours }}</td>
-                            <td>{{ $payroll_attendance->rest_day_amount }}</td>
-                            <td>{{ $payroll_attendance->rdot_shot_hours }}</td>
-                            <td>{{ $payroll_attendance->rdot_shot_amount }}</td>
-                            <td>{{ $payroll_attendance->special_holiday_hours }}</td>
-                            <td>{{ $payroll_attendance->special_holiday_amount }}</td>
-                            <td>{{ $payroll_attendance->shrd_hours }}</td>
-                            <td>{{ $payroll_attendance->shrd_amount }}</td>
-                            <td>{{ $payroll_attendance->sh_rd_ot_hours }}</td>
-                            <td>{{ $payroll_attendance->sh_rd_ot_amount }}</td>
-                            <td>{{ $payroll_attendance->regular_holiday_hours }}</td>
-                            <td>{{ $payroll_attendance->regular_holiday_amount }}</td>
-                            <td>{{ $payroll_attendance->rh_rd_or_lh_ot_hours }}</td>
-                            <td>{{ $payroll_attendance->rh_rd_or_lh_ot_amount }}</td>
-                            <td>{{ $payroll_attendance->lhrd_ot_hours }}</td>
-                            <td>{{ $payroll_attendance->lhrd_ot_amount }}</td>
-                            <td>{{ $payroll_attendance->night_diff_hours }}</td>
-                            <td>{{ $payroll_attendance->night_diff_amount }}</td>
-                            <td>{{ $payroll_attendance->overtime_adjustment }}</td>
-                            <td>{{ $payroll_attendance->total_overtime_pay }}</td>
-                            <td>{{ $payroll_attendance->total_wfh_60 }}</td>
-                            <td>{{ $payroll_attendance->total_wfh_70 }}</td>
-                            <td>{{ $payroll_attendance->total_wfh_deduction }}</td>
+
+                            @if (checkUserPrivilege('payroll_attendance',auth()->user()->id) == 'yes')
+                              <td>{{ $payroll_attendance->basic_pay }}</td>
+                              <td>{{ $payroll_attendance->daily_rate }}</td>
+                              <td>{{ $payroll_attendance->hourly_rate }}</td>
+                              <td>{{ $payroll_attendance->no_of_days_worked }}</td>
+                              <td>{{ $payroll_attendance->days_worked_amount }}</td>
+                              <td>{{ $payroll_attendance->sl_with_pay_days }}</td>
+                              <td>{{ $payroll_attendance->sl_with_pay_amount }}</td>
+                              <td>{{ $payroll_attendance->vl_with_pay_days }}</td>
+                              <td>{{ $payroll_attendance->vl_with_pay_amount }}</td>
+                              <td>{{ $payroll_attendance->absences_days }}</td>
+                              <td>{{ $payroll_attendance->absences_amount }}</td>
+                              <td>{{ $payroll_attendance->lates_hours }}</td>
+                              <td>{{ $payroll_attendance->lates_amount }}</td>
+                              <td>{{ $payroll_attendance->undertime_hours }}</td>
+                              <td>{{ $payroll_attendance->undertime_amount }}</td>
+                              <td>{{ $payroll_attendance->reg_ot_hours }}</td>
+                              <td>{{ $payroll_attendance->reg_ot_amount }}</td>
+                              <td>{{ $payroll_attendance->rest_day_hours }}</td>
+                              <td>{{ $payroll_attendance->rest_day_amount }}</td>
+                              <td>{{ $payroll_attendance->rdot_shot_hours }}</td>
+                              <td>{{ $payroll_attendance->rdot_shot_amount }}</td>
+                              <td>{{ $payroll_attendance->special_holiday_hours }}</td>
+                              <td>{{ $payroll_attendance->special_holiday_amount }}</td>
+                              <td>{{ $payroll_attendance->shrd_hours }}</td>
+                              <td>{{ $payroll_attendance->shrd_amount }}</td>
+                              <td>{{ $payroll_attendance->sh_rd_ot_hours }}</td>
+                              <td>{{ $payroll_attendance->sh_rd_ot_amount }}</td>
+                              <td>{{ $payroll_attendance->regular_holiday_hours }}</td>
+                              <td>{{ $payroll_attendance->regular_holiday_amount }}</td>
+                              <td>{{ $payroll_attendance->rh_rd_or_lh_ot_hours }}</td>
+                              <td>{{ $payroll_attendance->rh_rd_or_lh_ot_amount }}</td>
+                              <td>{{ $payroll_attendance->lhrd_ot_hours }}</td>
+                              <td>{{ $payroll_attendance->lhrd_ot_amount }}</td>
+                              <td>{{ $payroll_attendance->night_diff_hours }}</td>
+                              <td>{{ $payroll_attendance->night_diff_amount }}</td>
+                              <td>{{ $payroll_attendance->overtime_adjustment }}</td>
+                              <td>{{ $payroll_attendance->total_overtime_pay }}</td>
+                              <td>{{ $payroll_attendance->total_wfh_60 }}</td>
+                              <td>{{ $payroll_attendance->total_wfh_70 }}</td>
+                              <td>{{ $payroll_attendance->total_wfh_deduction }}</td>
+                            @endif
+
+                            @if (checkUserPrivilege('payroll_attendance',auth()->user()->id) != 'yes')
+                              <td>{{ $payroll_attendance->no_of_days_worked }}</td>
+                              <td>{{ $payroll_attendance->sl_with_pay_days }}</td>
+                              <td>{{ $payroll_attendance->vl_with_pay_days }}</td>
+                              <td>{{ $payroll_attendance->absences_days }}</td>
+                              <td>{{ $payroll_attendance->lates_hours }}</td>
+                              <td>{{ $payroll_attendance->undertime_hours }}</td>
+                              <td>{{ $payroll_attendance->reg_ot_hours }}</td>
+                              <td>{{ $payroll_attendance->rest_day_hours }}</td>
+                              <td>{{ $payroll_attendance->rdot_shot_hours }}</td>
+                              <td>{{ $payroll_attendance->special_holiday_hours }}</td>
+                              <td>{{ $payroll_attendance->shrd_hours }}</td>
+                              <td>{{ $payroll_attendance->sh_rd_ot_hours }}</td>
+                              <td>{{ $payroll_attendance->regular_holiday_hours }}</td>
+                              <td>{{ $payroll_attendance->rh_rd_or_lh_ot_hours }}</td>
+                              <td>{{ $payroll_attendance->lhrd_ot_hours }}</td>
+                              <td>{{ $payroll_attendance->night_diff_hours }}</td>
+                            @endif
+
                             <td>{{ $payroll_attendance->timeKeeper ? $payroll_attendance->timeKeeper->first_name . ' ' . $payroll_attendance->timeKeeper->last_name : '' }}</td>
                             <td>{{ $payroll_attendance->overtimeApprover ? $payroll_attendance->overtimeApprover->first_name . ' ' . $payroll_attendance->overtimeApprover->last_name : '' }}</td>
                             <td>{{ $payroll_attendance->status }}</td>

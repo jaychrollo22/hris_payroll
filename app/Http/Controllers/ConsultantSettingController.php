@@ -17,6 +17,7 @@ class ConsultantSettingController extends Controller
     public function index()
     {
         $consultants = Employee::doesntHave('non_taxable__consultant')
+            ->where('status','Active')
             ->where('classification',7)
             ->where('status','Active')
             ->get();

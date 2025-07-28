@@ -698,13 +698,39 @@
                                                         <input type="checkbox" name="deduction_setting" id="deduction_setting{{$user->id}}">
                                                     @endif
                                                     Deduction Setting
+                                                    <br>
+                                                    <br>
+
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->consultant_setting == 'on')
+                                                            <input type="checkbox" name="consultant_setting" id="consultant_setting{{$user->id}}" value="{{ $user->user_privilege->consultant_setting }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="consultant_setting" id="consultant_setting{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="consultant_setting" id="consultant_setting{{$user->id}}">
+                                                    @endif
+                                                    Consultant Setting
+                                                    <br>
+                                                    <br>
+
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->pagibig_contribution_setting == 'on')
+                                                            <input type="checkbox" name="pagibig_contribution_setting" id="pagibig_contribution_setting{{$user->id}}" value="{{ $user->user_privilege->pagibig_contribution_setting }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="pagibig_contribution_setting" id="pagibig_contribution_setting{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="pagibig_contribution_setting" id="pagibig_contribution_setting{{$user->id}}">
+                                                    @endif
+                                                    Pagibig Contribution Setting
 
                                                 </div>
                                                 <div class="col-md-12 form-group">
                                                     <h5>Payslip</h5>
                                                     @if($user->user_privilege)
                                                         @if($user->user_privilege->payslip_filter_per_company == 'on')
-                                                            <input type="checkbox" name="payslip_filter_per_company" id="payslip_filter_per_company{{$user->id}}" value="{{ $user->user_privilege->masterfiles_early_cutoffs }}" checked>
+                                                            <input type="checkbox" name="payslip_filter_per_company" id="payslip_filter_per_company{{$user->id}}" value="{{ $user->user_privilege->payslip_filter_per_company }}" checked>
                                                         @else
                                                             <input type="checkbox" name="payslip_filter_per_company" id="payslip_filter_per_company{{$user->id}}">
                                                         @endif
@@ -712,6 +738,19 @@
                                                         <input type="checkbox" name="payslip_filter_per_company" id="payslip_filter_per_company{{$user->id}}">
                                                     @endif
                                                     Filter per Company
+                                                </div>
+
+                                                <div class="col-md-12 form-group">
+                                                    @if($user->user_privilege)
+                                                        @if($user->user_privilege->time_keeping_hr_payroll_attendance == 'on')
+                                                            <input type="checkbox" name="time_keeping_hr_payroll_attendance" id="time_keeping_hr_payroll_attendance{{$user->id}}" value="{{ $user->user_privilege->time_keeping_hr_payroll_attendance }}" checked>
+                                                        @else
+                                                            <input type="checkbox" name="time_keeping_hr_payroll_attendance" id="time_keeping_hr_payroll_attendance{{$user->id}}">
+                                                        @endif
+                                                    @else
+                                                        <input type="checkbox" name="time_keeping_hr_payroll_attendance" id="time_keeping_hr_payroll_attendance{{$user->id}}">
+                                                    @endif
+                                                    Time Keeping HR Payroll Attendance
                                                 </div>
                                             </div>
                                         </div>
