@@ -880,15 +880,10 @@ class PayrollAttendanceController extends Controller
                             $lates = (double)$lates + $late_diff_hours;
                         }
                     }else{
-                        if (empty($check_if_holiday)) {
-
-                            $lates = (double)$lates + $late_diff_hours;
-
-                            if($if_leave == 'SL First Shift Without-Pay' || $if_leave == 'VL First Shift Without-Pay'){
-                                if ($late_diff_hours >= 2) {   
-                                    $total_absent += 0.5;    
-                                    $absent_arr[] = $total_absent . ' ' . $date_r;
-                                }
+                        if($if_leave == 'SL First Shift Without-Pay' || $if_leave == 'VL First Shift Without-Pay'){
+                            if ($late_diff_hours >= 2) {   
+                                $total_absent += 0.5;    
+                                $absent_arr[] = $total_absent . ' ' . $date_r;
                             }
                         }
                     }
