@@ -73,7 +73,8 @@ class PayrollSalaryAdjustmentExport implements FromQuery, WithHeadings, WithMapp
 
     public function map($salary_adjustment): array
     {
-        $employee_number = $salary_adjustment->employee ? $salary_adjustment->employee->employee_number : "";
+        $user_id = $salary_adjustment->employee ? $salary_adjustment->employee->user_id : "";
+        $payroll_period_id = $salary_adjustment->payroll_period_id;
         $employee_name = $salary_adjustment->employee ? $salary_adjustment->employee->last_name . ', ' . $salary_adjustment->employee->first_name . ' ' . $salary_adjustment->employee->middle_name : "";
         $company = '';
         if($salary_adjustment->employee){
@@ -81,7 +82,8 @@ class PayrollSalaryAdjustmentExport implements FromQuery, WithHeadings, WithMapp
         }
 
         return [
-            $employee_number,
+            $user_id,
+            $payroll_period_id,
             $employee_name,
             $company,
             // $salary_adjustment->effectivity_date,
