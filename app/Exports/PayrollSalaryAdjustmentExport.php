@@ -59,6 +59,7 @@ class PayrollSalaryAdjustmentExport implements FromQuery, WithHeadings, WithMapp
     {
         return [
             'USER ID',
+            'PAYROLL PERIOD ID',
             'NAME',
             'COMPANY',
             // 'EFFECTIVITY DATE',
