@@ -254,7 +254,7 @@
                           <select data-placeholder="Approver" class="form-control form-control-sm js-example-basic-single" style='width:100%;' name='approver[{{$k}}][approver_id]' required>
                             <option value="">-- Approver --</option>
                               @foreach($users as $user)
-                                <option value="{{$user->id}}" @if($user->id == $approver->approver_id) selected @endif>{{$user->name}}</option>
+                                <option value="{{$user->id}}" @if($user->id == $approver->approver_id) selected @endif>{{$user->name}} - {{$user->email}}</option>
                               @endforeach
                           </select>
                           @if($approver->as_final == 'on')
